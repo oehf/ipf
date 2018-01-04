@@ -54,8 +54,7 @@ abstract public class AbstractWebService {
     protected Exchange process(
             Object body, 
             Map<String, Object> additionalHeaders,
-            ExchangePattern exchangePattern)
-    {
+            ExchangePattern exchangePattern) {
         Validate.notNull(consumer);
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);

@@ -36,10 +36,12 @@ import org.apache.commons.lang3.Validate;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
@@ -57,13 +59,12 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
-public abstract class MllpEndpoint
-        <
-            ConfigType extends MllpEndpointConfiguration,
-            ComponentType extends MllpComponent<ConfigType>
-        >
+public abstract class MllpEndpoint<
+        ConfigType extends MllpEndpointConfiguration,
+        AuditDatasetType extends MllpAuditDataset,
+        ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
     extends DefaultEndpoint
-        implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint
+    implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint
 {
 
     @Getter(AccessLevel.PROTECTED) private final ConfigType config;
@@ -151,7 +152,8 @@ public abstract class MllpEndpoint
         public void run(IoSession session) {
             if (config.isAudit()) {
                 String hostAddress = session.getRemoteAddress().toString();
-                MllpAuditUtils.auditAuthenticationNodeFailure(hostAddress);
+                AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(config.getAuditContext(), hostAddress);
+                config.getAuditContext().audit(auditMessage);
             }
         }
     }
@@ -325,7 +327,7 @@ public abstract class MllpEndpoint
     @Override
     public boolean equals(Object object) {
         if (object instanceof MllpEndpoint) {
-            MllpEndpoint<?, ?> that = (MllpEndpoint<?, ?>) object;
+            MllpEndpoint<?, ?, ?> that = (MllpEndpoint<?, ?, ?>) object;
             return wrappedEndpoint.equals(that.getWrappedEndpoint());
         }
         return false;

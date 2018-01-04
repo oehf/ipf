@@ -16,53 +16,67 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 
 import java.util.Map;
 
-public abstract class Iti8AuditStrategy extends AuditStrategySupport<Iti8AuditDataset> {
+public class Iti8AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
 
     public Iti8AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
-
     @Override
-    public Iti8AuditDataset enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
-        Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message)msg);
+    public FeedAuditDataset enrichAuditDatasetFromRequest(FeedAuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
+        Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message) msg);
         return auditDataset;
     }
 
+    @Override
+    public FeedAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new FeedAuditDataset(auditContext, isServerSide());
+    }
 
     @Override
-    public void doAudit(Iti8AuditDataset auditDataset) {
-        if("A08".equals(auditDataset.getMessageType())) {
-            callUpdateAuditRoutine(auditDataset, true);
-        } else if("A40".equals(auditDataset.getMessageType())) {
-            callDeleteAuditRoutine(auditDataset, false);
-            callUpdateAuditRoutine(auditDataset, true);
-        } else {        
-            // A01, A04, A05
-            callCreateAuditRoutine(auditDataset, true);
+    public AuditMessage[] makeAuditMessage(FeedAuditDataset auditDataset) {
+        switch (auditDataset.getMessageType()) {
+            case "A01":
+            case "A04":
+            case "A05":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Create, true)
+                };
+            case "A08":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                };
+            case "A40":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                };
+            default:
+                throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());
         }
+
     }
 
+    protected AuditMessage patientRecordAuditMessage(final FeedAuditDataset auditDataset,
+                                                     EventActionCode eventActionCode,
+                                                     boolean newPatientId) {
+        return new IHEPatientRecordBuilder<>(auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityFeed)
 
-    protected abstract void callCreateAuditRoutine(
-            Iti8AuditDataset auditDataset,
-            boolean newPatientId);
-
-    protected abstract void callUpdateAuditRoutine(
-            Iti8AuditDataset auditDataset,
-            boolean newPatientId);
-    
-    protected abstract void callDeleteAuditRoutine(
-            Iti8AuditDataset auditDataset,
-            boolean newPatientId);    
-
-    @Override
-    public Iti8AuditDataset createAuditDataset() {
-        return new Iti8AuditDataset(isServerSide());
+                // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
+                .addPatients(
+                        "MSH-10", auditDataset.getMessageControlId(),
+                        newPatientId ? auditDataset.getPatientId() : auditDataset.getOldPatientId())
+                .getMessage();
     }
-
 }

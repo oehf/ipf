@@ -15,27 +15,29 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.atna;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.EventTypeCode;
+import org.openehealth.ipf.commons.audit.event.SecurityAlertBuilder;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 
-/**
- * ATNA audit strategy base for MLLP-based transactions. This strategy is accompanied with a
- * dedicated subclass of {@link MllpAuditDataset} containing the data for the audit record.
- * 
- * @author Dmytro Rud
- * @since 3.1
- */
 abstract public class MllpAuditUtils {
 
     /**
      * Audits an authentication node failure.
-     * @param hostAddress
-     *          the address of the node that is responsible for the failure.
+     *
+     * @param hostAddress the address of the node that is responsible for the failure.
      */
-    public static void auditAuthenticationNodeFailure(String hostAddress) {
-        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
-            true, null, "IPF MLLP Component", null, hostAddress, null);
+    public static AuditMessage auditAuthenticationNodeFailure(AuditContext auditContext, String hostAddress) {
+        // TODO : This is a reimplementation of AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure, but we can
+        // probably do better
+        return new SecurityAlertBuilder(EventOutcomeIndicator.SeriousFailure, EventTypeCode.NodeAuthentication)
+                .setAuditSourceId(auditContext.getSourceId(), auditContext.getEnterpriseSiteId())
+                .addReportingActiveParticipant("IPF MLLP Component", null, null, null, null, false)
+                .addAlertUriSubjectParticipantObject(hostAddress, null, null)
+                .getMessage();
     }
-    
-    
+
+
 }

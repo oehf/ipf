@@ -17,50 +17,124 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
+
+import java.util.Collections;
+import java.util.List;
 
 
 /**
  * Generic audit dataset for MLLP-based IHE transactions.
- * 
+ *
  * @author Dmytro Rud
  */
-abstract public class MllpAuditDataset extends AuditDataset {
+public abstract class MllpAuditDataset extends AuditDataset {
+
     private static final long serialVersionUID = -4427222097816361541L;
 
-    /** Sending application from MSH-3 */
-    @Getter @Setter private String sendingApplication;
-    
-    /** Sending facility from MSH-4 */
-    @Getter @Setter private String sendingFacility;
+    /**
+     * Sending application from MSH-3
+     */
+    @Getter @Setter
+    private String sendingApplication;
 
-    /** Receiving application from MSH-5 */
-    @Getter @Setter private String receivingApplication;
+    /**
+     * Sending facility from MSH-4
+     */
+    @Getter @Setter
+    private String sendingFacility;
 
-    /** Receiving facility from MSH-6 */
-    @Getter @Setter private String receivingFacility;
-    
-    /** Message type from MSH-9 */
-    @Getter @Setter private String messageType;
-    
-    /** Message control ID from MSH-10 */
-    @Getter @Setter private String messageControlId;
+    /**
+     * Receiving application from MSH-5
+     */
+    @Getter @Setter
+    private String receivingApplication;
 
-    /** Local address from MINA session */
-    @Getter @Setter private String localAddress;
+    /**
+     * Receiving facility from MSH-6
+     */
+    @Getter @Setter
+    private String receivingFacility;
 
-    /** Remote address from MINA session */
-    @Getter @Setter private String remoteAddress;
+    /**
+     * Message type from MSH-9
+     */
+    @Getter @Setter
+    private String messageType;
+
+    /**
+     * Message control ID from MSH-10
+     */
+    @Getter @Setter
+    private String messageControlId;
+
+    /**
+     * Local address from MINA session
+     */
+    @Setter
+    private String localAddress;
+
+    /**
+     * Remote address from MINA session
+     */
+    @Setter @Getter
+    private String remoteAddress;
 
 
     /**
      * Constructor.
-     * @param serverSide
-     *      Where we are&nbsp;&mdash; server side
-     *      ({@code true}) or client side ({@code false}).
+     *
+     * @param serverSide Where we are&nbsp;&mdash; server side
+     *                   ({@code true}) or client side ({@code false}).
+     * @deprecated to be removed
      */
     public MllpAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
+    public MllpAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
+    }
+
+    /**
+     * The identity of the Source Actor facility and sending application
+     * from the HL7 message; concatenated together, separated by the | character.
+     *
+     * @return identity of the Source Actor facility
+     */
+    @Override
+    public String getSourceUserId() {
+        return String.format("%s|%s", sendingFacility, sendingApplication);
+    }
+
+    /**
+     * The identity of the Destination Actor facility and receiving application
+     *
+     * from the HL7 message; concatenated together, separated by the | character
+     * @return identity of the Destination Actor facility
+     */
+    @Override
+    public String getDestinationUserId() {
+        return String.format("%s|%s", receivingFacility, receivingApplication);
+    }
+
+    /**
+     * @return The machine name or IP address
+     */
+    public String getLocalAddress() {
+        return localAddress != null ? localAddress : AuditUtils.getLocalIPAddress();
+    }
+
+    @Override
+    public String getUserName() {
+        return null;
+    }
+
+    @Override
+    public List<ActiveParticipantRoleId> getUserRoles() {
+        return Collections.emptyList();
+    }
 }

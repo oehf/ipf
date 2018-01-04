@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
@@ -34,27 +35,30 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
-        extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
+        extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> {
 
     public XdsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, ? extends XdsInteractionId> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends XdsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
     @Override
     public JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory() {
-        return new JaxWsRequestClientFactory<AuditDatasetType>(
+        return new JaxWsRequestClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
@@ -68,6 +72,7 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

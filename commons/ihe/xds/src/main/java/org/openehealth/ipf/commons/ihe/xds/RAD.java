@@ -19,10 +19,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75PortType;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.asyncresponse.Rad75AsyncResponsePortType;
 
 import javax.xml.namespace.QName;
@@ -43,7 +48,7 @@ public class RAD implements XdsIntegrationProfile {
         RAD_75(RAD_75_WS_CONFIG),
         RAD_75_ASYNC_RESPONSE(RAD_75_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -66,12 +71,12 @@ public class RAD implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration RAD_69_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_69_WS_CONFIG = new WsTransactionConfiguration<>(
             "xdsi-rad69",
             "Retrieve Imaging Document Set",
             false,
-            new Rad69AuditStrategy(false),
-            new Rad69AuditStrategy(true),
+            new Rad69ClientAuditStrategy(),
+            new Rad69ServerAuditStrategy(),
             new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_Service", "iherad"),
             Rad69PortType.class,
             new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_Binding_Soap12", "iherad"),
@@ -82,12 +87,12 @@ public class RAD implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration RAD_75_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_75_WS_CONFIG = new WsTransactionConfiguration<>(
             "xcai-rad75",
             "Cross Gateway Retrieve Imaging Document Set",
             false,
-            new Rad75AuditStrategy(false),
-            new Rad75AuditStrategy(true),
+            new Rad75ClientAuditStrategy(),
+            new Rad75ServerAuditStrategy(),
             new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_Service", "iherad"),
             Rad75PortType.class,
             new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_Binding_Soap12", "iherad"),
@@ -98,12 +103,12 @@ public class RAD implements XdsIntegrationProfile {
             false,
             true);
 
-    private final static WsTransactionConfiguration RAD_75_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_75_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
             "xcai-rad75-async-response",
             "Cross Gateway Retrieve Imaging Document Set",
             false,
             null,
-            new Rad75AuditStrategy(false),      // really!
+            new Rad75ClientAuditStrategy(),      // really!
             new QName("urn:ihe:rad:xdsi-b:2009", "InitiatingGateway_Service", "iherad"),
             Rad75AsyncResponsePortType.class,
             new QName("urn:ihe:rad:xdsi-b:2009", "InitiatingGateway_Binding", "iherad"),

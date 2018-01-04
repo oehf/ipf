@@ -103,23 +103,25 @@ public final class FhirCamelValidators {
     public static Processor itiRequestValidator() {
         return exchange -> {
             FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
-            if (context != null && exchange.getIn().getBody() instanceof IBaseResource) {
-                if (ValidatorAdapter.validationEnabled(exchange)) {
-                    Integer mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
-                    if (mode == null) mode = SCHEMA;
-                    if (isValidateSchema(mode) || isValidateSchematron(mode)) {
-                        validate(exchange, context, isValidateSchema(mode), isValidateSchematron(mode));
-                    }
-                    if (isValidateModel(mode)) {
-                        FhirInteractionId fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
-                        if (fhirInteractionId != null) {
-                            FhirTransactionValidator validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
-                            validator.validateRequest(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
-                        } else {
-                            LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
-                        }
-                    }
-                }
+            if (context != null) {
+             if (exchange.getIn().getBody() instanceof IBaseResource) {
+                 if (ValidatorAdapter.validationEnabled(exchange)) {
+                     Integer mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
+                     if (mode == null) mode = SCHEMA;
+                     if (isValidateSchema(mode) || isValidateSchematron(mode)) {
+                         validate(exchange, context, isValidateSchema(mode), isValidateSchematron(mode));
+                     }
+                     if (isValidateModel(mode)) {
+                         FhirInteractionId fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
+                         if (fhirInteractionId != null) {
+                             FhirTransactionValidator validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
+                             validator.validateRequest(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+                         } else {
+                             LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
+                         }
+                     }
+                 }
+             }
             } else {
                 LOG.warn("Could not validate request because FHIR Context is unknown");
             }

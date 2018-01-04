@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
@@ -50,10 +51,11 @@ public class Hl7v3AsyncResponseServiceFactory extends JaxWsAsyncResponseServiceF
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
+            AuditContext auditContext,
             AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
             InterceptorProvider customInterceptors)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, correlator);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext, customInterceptors, correlator);
     }
 
     @Override

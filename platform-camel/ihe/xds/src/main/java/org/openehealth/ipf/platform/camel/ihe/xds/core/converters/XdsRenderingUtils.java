@@ -46,7 +46,7 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsRenderingUtils {
+public abstract class XdsRenderingUtils {
 
     /**
      * Correspondence between relevant XDS data types from
@@ -104,12 +104,7 @@ abstract public class XdsRenderingUtils {
                     RetrieveImagingDocumentSetRequestType.class,
                     AdhocQueryResponse.class,
                     RegistryResponseType.class,
-                    RetrieveDocumentSetResponseType.class,
-
-                    org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.class,
-                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest.class,
-                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,
-                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest.class
+                    RetrieveDocumentSetResponseType.class
             );
         } catch (JAXBException e) {
             throw new RuntimeException(e);

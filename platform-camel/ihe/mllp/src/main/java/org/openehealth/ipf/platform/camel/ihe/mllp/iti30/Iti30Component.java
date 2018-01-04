@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
  *
  * @author Christian Ohr
  */
-public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> {
+public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
 
 
     public Iti30Component() {

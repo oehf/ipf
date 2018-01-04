@@ -17,14 +17,17 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 
 /**
  * Generic audit dataset for IHE PIX/PDQ v3 transactions.
+ *
  * @author Dmytro Rud
  */
 public class Hl7v3AuditDataset extends WsAuditDataset {
+
     private static final long serialVersionUID = -7303748425104562452L;
 
     /** HL7v3 message ID. */
@@ -45,15 +48,8 @@ public class Hl7v3AuditDataset extends WsAuditDataset {
     /** Old patient ID. */
     @Getter @Setter private String oldPatientId;
 
-
-    /**
-     * Constructor.
-     * @param serverSide
-     *      Where we are&nbsp;&mdash; server side
-     *      (<code>true</code>) or client side (<code>false</code>).
-     */
-    public Hl7v3AuditDataset(boolean serverSide) {
-        super(serverSide);
+    public Hl7v3AuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
 
     public String getPatientId() {

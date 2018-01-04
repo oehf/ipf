@@ -23,9 +23,11 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 
 import javax.xml.namespace.QName;
@@ -42,9 +44,9 @@ public class PCD implements IntegrationProfile {
     public enum Interactions implements Hl7v2WsInteractionId {
         PCD_01(PCD_01_HL7V2_CONFIG, PCD_01_NAK_FACTORY, PCD_01_WS_CONFIG);
 
-        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter private NakFactory nakFactory;
-        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private Hl7v2TransactionConfiguration<? extends MllpAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<? extends MllpAuditDataset> nakFactory;
+        @Getter private WsTransactionConfiguration<? extends WsAuditDataset> wsTransactionConfiguration;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class PCD implements IntegrationProfile {
     }
 
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
-    private static final WsTransactionConfiguration PCD_01_WS_CONFIG = new WsTransactionConfiguration(
+    private static final WsTransactionConfiguration<WsAuditDataset> PCD_01_WS_CONFIG = new WsTransactionConfiguration<>(
             "pcd-pcd01",
             "Communicate PCD Data",
             false,
@@ -69,7 +71,7 @@ public class PCD implements IntegrationProfile {
             false,
             false);
 
-    private static final Hl7v2TransactionConfiguration PCD_01_HL7V2_CONFIG = new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<MllpAuditDataset> PCD_01_HL7V2_CONFIG = new Hl7v2TransactionConfiguration<>(
             "pcd-pcd01",
             "Communicate PCD Data",
             false,
@@ -88,5 +90,5 @@ public class PCD implements IntegrationProfile {
             null,
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1));
 
-    private static final NakFactory PCD_01_NAK_FACTORY = new NakFactory(PCD_01_HL7V2_CONFIG, false, "ACK^R01^ACK");
+    private static final NakFactory<MllpAuditDataset> PCD_01_NAK_FACTORY = new NakFactory<>(PCD_01_HL7V2_CONFIG, false, "ACK^R01^ACK");
 }

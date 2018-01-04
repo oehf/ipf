@@ -41,7 +41,7 @@ abstract class Hl7v3ContinuationUtils {
     static int parseInt(String s) {
         try {
             return Integer.parseInt(s.trim())
-        } catch (Exception e) {  // NullPointerException, NumberFormatException
+        } catch (Exception ignored) {  // NullPointerException, NumberFormatException
             return -1
         }
     }

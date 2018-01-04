@@ -30,16 +30,17 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-abstract public class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+abstract class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
 
-    public AbstractIti44Component(Hl7v3InteractionId interactionId) {
+    AbstractIti44Component(Hl7v3InteractionId<Hl7v3WsTransactionConfiguration> interactionId) {
         super(interactionId);
     }
 
     @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

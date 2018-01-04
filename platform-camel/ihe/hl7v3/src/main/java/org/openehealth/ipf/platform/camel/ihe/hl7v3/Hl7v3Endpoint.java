@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
@@ -43,12 +44,14 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
             String endpointUri,
             String address,
             AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends Hl7v3InteractionId> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
     @Override
@@ -70,6 +73,7 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

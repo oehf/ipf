@@ -45,7 +45,7 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    List<Interceptor> getAdditionalConsumerInterceptors();
+    List<Interceptor<?>> getAdditionalConsumerInterceptors();
 
     /**
      * Returns a list of component-specific (i.e. transaction-specific)
@@ -65,5 +65,5 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    List<Interceptor> getAdditionalProducerInterceptors();
+    List<Interceptor<?>> getAdditionalProducerInterceptors();
 }

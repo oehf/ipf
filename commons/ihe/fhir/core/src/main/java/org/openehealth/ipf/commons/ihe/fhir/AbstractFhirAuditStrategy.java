@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.Map;
 
@@ -49,16 +49,16 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
         if (response instanceof IBaseResource) {
-            RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
-            auditDataset.setEventOutcomeCode(outcomeCodes);
-            return outcomeCodes == RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+            EventOutcomeIndicator eventOutcomeIndicator = getEventOutcomeIndicator(response);
+            auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);
+            return eventOutcomeIndicator == EventOutcomeIndicator.Success;
         }
         return true;
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        return getEventOutcomeCodeFromResource((IBaseResource) pojo);
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
+        return getEventOutcomeCodeFromResource((IBaseResource) response);
     }
 
     /**
@@ -67,10 +67,10 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @param resource FHIR resource
      * @return event outcome code
      */
-    protected RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromResource(IBaseResource resource) {
+    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(IBaseResource resource) {
         return resource instanceof IBaseOperationOutcome ?
                 getEventOutcomeCodeFromOperationOutcome((O)resource) :
-                RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+                EventOutcomeIndicator.Success;
     }
 
     /**
@@ -81,6 +81,6 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @param response {@link IBaseOperationOutcome} to be analyzed
      * @return ATNA outcome code
      */
-    public abstract RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromOperationOutcome(O response);
+    public abstract EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(O response);
 
 }

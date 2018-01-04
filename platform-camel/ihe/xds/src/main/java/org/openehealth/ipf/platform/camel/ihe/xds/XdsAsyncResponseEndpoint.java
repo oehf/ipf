@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
@@ -36,19 +37,20 @@ import java.util.Map;
  * which have only a single Web Service operation.
  * @author Dmytro Rud
  */
-public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
+public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> {
 
     public XdsAsyncResponseEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, ? extends XdsInteractionId> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends XdsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
-            Class<? extends AbstractWebService> serviceClass)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
@@ -64,12 +66,13 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getCorrelator());
     }
 
     @Override
-    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> endpoint,
+    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> endpoint,
                                           JaxWsClientFactory<AuditDatasetType> clientFactory) {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");
     }

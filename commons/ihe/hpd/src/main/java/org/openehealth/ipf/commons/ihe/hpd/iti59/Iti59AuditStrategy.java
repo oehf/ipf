@@ -16,6 +16,9 @@
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
 import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
@@ -26,10 +29,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 /**
  * Audit strategy for the ITI-59 transaction.
+ *
  * @author Dmytro Rud
  */
 @Slf4j
@@ -42,8 +47,8 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
     }
 
     @Override
-    public Iti59AuditDataset createAuditDataset() {
-        return new Iti59AuditDataset(isServerSide());
+    public Iti59AuditDataset createAuditDataset(AuditContext auditContext) {
+        return new Iti59AuditDataset(auditContext, isServerSide());
     }
 
     @Override
@@ -125,8 +130,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                 } else {
                     byRequestId.put(ldapResult.getRequestID(), ldapResult);
                 }
-            }
-            else if (value instanceof ErrorResponse) {
+            } else if (value instanceof ErrorResponse) {
                 ErrorResponse errorResponse = (ErrorResponse) value;
                 if (isEmpty(errorResponse.getRequestID())) {
                     byNumber[i] = errorResponse;
@@ -166,20 +170,23 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
             requestItem.setOutcomeCode((ldapResult.getResultCode() != null) && (ldapResult.getResultCode().getCode() == 0)
                     ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
                     : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
-        }
-        else if (value instanceof ErrorResponse) {
+        } else if (value instanceof ErrorResponse) {
             requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
-        }
-        else {
+        } else {
             requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE);
             log.debug(failureLogMessage, failureLogArgs);
         }
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object responseObject) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
         // is not used because individual outcome codes are determined for each sub-request
         return null;
+    }
+
+    @Override
+    public AuditMessage[] makeAuditMessage(Iti59AuditDataset auditDataset) {
+        return new AuditMessage[0];
     }
 
     @Override

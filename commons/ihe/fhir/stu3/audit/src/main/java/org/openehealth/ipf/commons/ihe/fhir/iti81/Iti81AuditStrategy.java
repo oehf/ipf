@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
@@ -33,7 +34,7 @@ public class Iti81AuditStrategy extends NoAuditStrategy<FhirQueryAuditDataset> {
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
+    public FhirQueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new FhirQueryAuditDataset(auditContext, isServerSide());
     }
 }

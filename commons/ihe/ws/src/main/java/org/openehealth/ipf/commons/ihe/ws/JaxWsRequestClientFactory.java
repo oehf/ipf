@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
@@ -33,15 +34,17 @@ import java.util.Map;
 public class JaxWsRequestClientFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsClientFactory<AuditDatasetType> {
 
     public JaxWsRequestClientFactory(
-            WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<AuditDatasetType> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
             AsynchronyCorrelator<AuditDatasetType> correlator)
     {
-        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties, correlator);
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
+                customInterceptors, features, properties, correlator);
     }
 
     @Override
@@ -55,10 +58,10 @@ public class JaxWsRequestClientFactory<AuditDatasetType extends WsAuditDataset> 
             }
 
             client.getOutInterceptors().add(new AuditOutRequestInterceptor<>(
-                    auditStrategy, correlator, getWsTransactionConfiguration()));
+                    auditStrategy, auditContext, correlator, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                    new AuditResponseInterceptor<>(auditStrategy, false, correlator, false);
+                    new AuditResponseInterceptor<>(auditStrategy, auditContext, false, correlator, false);
             client.getInInterceptors().add(auditInterceptor);
             client.getInFaultInterceptors().add(auditInterceptor);
         }

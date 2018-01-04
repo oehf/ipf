@@ -25,6 +25,8 @@ import java.net.UnknownHostException;
 
 /**
  * Access synchronizer for OHT ATNA Auditor singletons.
+ *
+ * @deprecated to be removed
  */
 public abstract class AuditorManager {
     private static final Object sync = new Object();

@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.io.Serializable;
@@ -58,24 +60,25 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
 
     @Getter private final List<Document> documents = new ArrayList<>();
 
-    public XdsNonconstructiveDocumentSetRequestAuditDataset(boolean serverSide) {
-        super(serverSide);
+    public XdsNonconstructiveDocumentSetRequestAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
 
     public boolean hasDocuments(Status status) {
         return documents.stream().anyMatch(x -> x.status == status);
     }
 
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Status status) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Status status) {
         return (status == Status.SUCCESSFUL)
-                ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
-                : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                ? EventOutcomeIndicator.Success
+                : EventOutcomeIndicator.SeriousFailure;
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode() {
-        throw new RuntimeException("Please call #getEventOutcomeCode(Status status) instead");
+    public EventOutcomeIndicator getEventOutcomeIndicator() {
+        throw new UnsupportedOperationException("Call #getEventOutcomeIndicator(Status status) instead");
     }
+
 
     public void registerProcessedDocument(String documentUniqueId, String repositoryUniqueId, String homeCommunityId) {
         documents.stream()

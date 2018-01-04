@@ -39,7 +39,7 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     private static final Logger LOG = LoggerFactory.getLogger(CustomMllpComponent.class);
 
     @Setter
-    private Hl7v2TransactionConfiguration transactionConfiguration;
+    private Hl7v2TransactionConfiguration<AuditDatasetType> transactionConfiguration;
 
     public CustomMllpComponent() {
         super(null);
@@ -74,7 +74,7 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     }
 
     @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration<AuditDatasetType> getHl7v2TransactionConfiguration() {
         return transactionConfiguration;
     }
 
@@ -89,7 +89,7 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     }
 
     @Override
-    public NakFactory getNakFactory() {
+    public NakFactory<AuditDatasetType> getNakFactory() {
         return new NakFactory(transactionConfiguration);
     }
 

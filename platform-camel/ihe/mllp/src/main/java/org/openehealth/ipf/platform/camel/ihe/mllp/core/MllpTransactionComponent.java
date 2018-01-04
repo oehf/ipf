@@ -30,16 +30,16 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAuditDataset>
-        extends MllpComponent<MllpTransactionEndpointConfiguration> implements AuditableComponent<AuditDatasetType> {
+        extends MllpComponent<MllpTransactionEndpointConfiguration, AuditDatasetType> implements AuditableComponent<AuditDatasetType> {
 
-    private final Hl7v2InteractionId interactionId;
+    private final Hl7v2InteractionId<AuditDatasetType> interactionId;
 
-    protected MllpTransactionComponent(Hl7v2InteractionId interactionId) {
+    protected MllpTransactionComponent(Hl7v2InteractionId<AuditDatasetType> interactionId) {
         super();
         this.interactionId = interactionId;
     }
 
-    protected MllpTransactionComponent(CamelContext camelContext, Hl7v2InteractionId interactionId) {
+    protected MllpTransactionComponent(CamelContext camelContext, Hl7v2InteractionId<AuditDatasetType> interactionId) {
         super(camelContext);
         this.interactionId = interactionId;
     }
@@ -50,7 +50,7 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    protected MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
         return new MllpTransactionEndpoint<>(this, wrappedEndpoint, config);
     }
 
@@ -65,7 +65,7 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    public Hl7v2InteractionId getInteractionId() {
+    public Hl7v2InteractionId<AuditDatasetType> getInteractionId() {
         return interactionId;
     }
 }

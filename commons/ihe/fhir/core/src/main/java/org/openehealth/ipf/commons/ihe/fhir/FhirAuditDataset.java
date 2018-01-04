@@ -17,9 +17,14 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -34,29 +39,37 @@ public abstract class FhirAuditDataset extends AuditDataset {
     /**
      * Request payload.
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String requestPayload;
 
     /**
      * Client user ID
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String userId;
 
     /**
      * Client IP address
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String clientIpAddress;
+
+    /**
+     * Local address
+     */
+    @Setter
+    private String localAddress;
+
+    /**
+     * Remote address
+     */
+    @Setter @Getter
+    private String remoteAddress;
 
     /**
      * Service endpoint URL
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String serviceEndpointUrl;
 
     /**
@@ -65,15 +78,24 @@ public abstract class FhirAuditDataset extends AuditDataset {
     @Getter
     private final Set<String> patientIds = new LinkedHashSet<>();
 
-
     /**
-     * Constructor.
-     *
-     * @param serverSide Where we are&nbsp;&mdash; server side
-     *                   ({@code true}) or client side ({@code false}).
+     * Access Control role(s) the human user holds that allows this transaction.
      */
-    public FhirAuditDataset(boolean serverSide) {
-        super(serverSide);
+    @Getter
+    private final List<ActiveParticipantRoleId> userRoles = new ArrayList<>();
+
+
+    @Getter @Setter
+    private String userName;
+
+    @Getter @Setter
+    private String sourceUserId;
+
+    @Getter @Setter
+    private String destinationUserId;
+
+    public FhirAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
 
     /**
@@ -83,4 +105,12 @@ public abstract class FhirAuditDataset extends AuditDataset {
     public String getPatientId() {
         return patientIds.isEmpty() ? null : patientIds.iterator().next();
     }
+
+    /**
+     * @return The machine name or IP address
+     */
+    public String getLocalAddress() {
+        return localAddress != null ? localAddress : AuditUtils.getLocalIPAddress();
+    }
+
 }

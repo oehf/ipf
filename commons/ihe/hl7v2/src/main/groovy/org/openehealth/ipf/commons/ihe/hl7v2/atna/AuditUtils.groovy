@@ -54,43 +54,6 @@ class AuditUtils {
         auditDataset.messageType          = msg.MSH[9][2].value ?: ''
         auditDataset.messageControlId     = msg.MSH[10].value ?: ''
     }
-    
-    
-    /**
-     * Checks whether auditing is possible and whether it should 
-     * be performed.  If both anwers are positive, performs it.
-     * <p>
-     * Unified for server and client sides.
-     * 
-     * @param auditDataset
-     *      The pre-filled audit dataset instance. 
-     * @param auditStrategy
-     *      The actual auditing functionality holder.  
-     * @param fault
-     *      {@code true}, when the event outcome should be 
-     *      <tt>[MAJOR_]FAILURE<tt> instead of <tt>SUCCESS</tt>.
-     */
-    static void finalizeAudit(
-            MllpAuditDataset auditDataset,
-            AuditStrategy<? extends MllpAuditDataset> auditStrategy,
-            boolean fault)
-    {
-        if(auditDataset == null) {
-            LOG.warn('Audit dataset is not initialized')
-            return
-        }
-        
-        try {
-            auditDataset.eventOutcomeCode = fault ?
-                    RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                    RFC3881EventOutcomeCodes.SUCCESS
-            auditStrategy.doAudit(auditDataset)
-
-        } catch (Exception e) {
-            LOG.error('ATNA auditing failed', e)
-        }
-    }
-    
 
     /**
      * Returns <code>true</code> when the given {@link Message}

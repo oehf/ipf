@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
 /**
@@ -28,6 +28,13 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * @author Dmytro Rud
  */
 public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
+
+    public static final String IHE_HOME_COMMUNITY_ID = "ihe:homeCommunityID";
+    public static final String URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID = "urn:ihe:iti:xca:2010:homeCommunityId";
+    public static final String QUERY_ENCODING = "QueryEncoding";
+    public static final String REPOSITORY_UNIQUE_ID = "Repository Unique Id";
+    public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
+    public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
 
     /**
      * Constructs an XDS audit strategy.
@@ -39,43 +46,37 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
         super(serverSide);
     }
 
-
     /**
      * A helper method that analyzes the given registry response and 
      * determines the corresponding RFC 3881 event outcome code.
-     * @param response
-     *          registry to analyze.
+     * @param response registry to analyze.
      * @return outcome code.
      */
-    public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+    protected static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
         try {
             if (response.getStatus() == Status.SUCCESS) {
-                return RFC3881EventOutcomeCodes.SUCCESS;
+                return EventOutcomeIndicator.Success;
             }
-
             if (response.getErrors().isEmpty()) {
-                return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                return EventOutcomeIndicator.SeriousFailure;
             }
-
             // determine the highest error severity
             for (EbXMLRegistryError error : response.getErrors()) {
                 if (error.getSeverity() == Severity.ERROR) {
-                    return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                    return EventOutcomeIndicator.SeriousFailure;
                 }
             }
-
-            return RFC3881EventOutcomeCodes.MINOR_FAILURE;
+            return EventOutcomeIndicator.MinorFailure;
         } catch (Exception e) {
-            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+            return EventOutcomeIndicator.SeriousFailure;
         }
     }
 
-
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
-        RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
-        auditDataset.setEventOutcomeCode(outcomeCodes);
-        return outcomeCodes == RFC3881EventOutcomeCodes.SUCCESS;
+        EventOutcomeIndicator outcomeCodes = getEventOutcomeIndicator(response);
+        auditDataset.setEventOutcomeIndicator(outcomeCodes);
+        return outcomeCodes == EventOutcomeIndicator.Success;
     }
 
 }

@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
  */
 public class SimpleWsProducer<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration,
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>,
         InType, OutType> extends AbstractWsProducer<AuditDatasetType, ConfigType, InType, OutType> {
     private final String operationName;
 

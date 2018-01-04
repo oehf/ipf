@@ -19,8 +19,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuPortType;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -39,7 +42,7 @@ public class XCMU implements XdsIntegrationProfile {
 		CH_XCMU(CH_XCMU_WS_CONFIG);
 
 		@Getter
-		private WsTransactionConfiguration wsTransactionConfiguration;
+		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {
@@ -62,12 +65,12 @@ public class XCMU implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration CH_XCMU_WS_CONFIG = new WsTransactionConfiguration(
+	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> CH_XCMU_WS_CONFIG = new WsTransactionConfiguration<>(
 		"ch-xcmu",
 		"Cross Gateway Update Document Set",
 		false,
-		new ChXcmuAuditStrategy(false),
-		new ChXcmuAuditStrategy(true),
+		new ChXcmuClientAuditStrategy(),
+		new ChXcmuServerAuditStrategy(),
 		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Service", "ihe"),
 		ChXcmuPortType.class,
 		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Binding_Soap12", "ihe"),

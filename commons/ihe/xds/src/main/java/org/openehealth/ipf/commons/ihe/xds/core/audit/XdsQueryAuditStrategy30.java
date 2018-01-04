@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
@@ -23,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,14 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
+public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
+
+
 
     /**
      * Constructs an XDS query audit strategy.
      *
-     * @param serverSide
-     *      whether this is a server-side or a client-side strategy.
+     * @param serverSide whether this is a server-side or a client-side strategy.
      */
     public XdsQueryAuditStrategy30(boolean serverSide) {
         super(serverSide);
@@ -64,17 +66,16 @@ abstract public class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
         return auditDataset;
     }
 
-
     @Override
-    public XdsQueryAuditDataset createAuditDataset() {
-        return new XdsQueryAuditDataset(isServerSide());
+    public XdsQueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new XdsQueryAuditDataset(auditContext, isServerSide());
     }
 
-
     @Override
-    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
         RegistryResponseType response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
+
 }

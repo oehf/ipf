@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
@@ -32,13 +33,14 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsServiceFactory<AuditDatasetType> {
 
     public JaxWsRequestServiceFactory(
-            WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, rejectionHandlingStrategy);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext, customInterceptors, rejectionHandlingStrategy);
     }
 
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
@@ -51,10 +53,10 @@ public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset>
             }
 
             svrFactory.getInInterceptors().add(new AuditInRequestInterceptor<>(
-                    auditStrategy, wsTransactionConfiguration));
+                    auditStrategy, auditContext, wsTransactionConfiguration));
 
             AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                    new AuditResponseInterceptor<>(auditStrategy, true, null, false);
+                    new AuditResponseInterceptor<>(auditStrategy, auditContext, true, null, false);
             svrFactory.getOutInterceptors().add(auditInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditInterceptor);
         }

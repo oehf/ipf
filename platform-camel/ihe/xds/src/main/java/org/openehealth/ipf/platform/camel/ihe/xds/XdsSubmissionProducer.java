@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, InType, OutType> {
+abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, InType, OutType> {
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
 
@@ -47,11 +47,10 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
     public static final QName  TARGET_HCID_HEADER_NAME = new QName(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART, TARGET_HCID_NS_PREFIX);
 
     public XdsSubmissionProducer(
-            AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+            AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
             JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory,
             Class<InType> requestClass,
-            Class<OutType> responseClass)
-    {
+            Class<OutType> responseClass) {
         super(endpoint, clientFactory, requestClass, responseClass);
     }
 

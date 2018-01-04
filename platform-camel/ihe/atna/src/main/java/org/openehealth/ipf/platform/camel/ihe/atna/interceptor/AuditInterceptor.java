@@ -39,7 +39,5 @@ public interface AuditInterceptor<T extends AuditDataset, E extends AuditableEnd
      * Determines local and remote network addresses on the basis of the
      * given exchange and stores them into the given audit dataset.
      */
-    void determineParticipantsAddresses(
-            Exchange exchange,
-            T auditDataset) throws Exception;
+    void determineParticipantsAddresses(Exchange exchange, T auditDataset);
 }

@@ -16,16 +16,16 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.Interactions.ITI_8_PIX;
+import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.FeedInteractions.ITI_8_PIX;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
-public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
+public class Iti8Component extends MllpTransactionComponent<FeedAuditDataset> {
 
     
     public Iti8Component() {

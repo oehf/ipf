@@ -16,22 +16,33 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.pdqcore;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Generic audit strategy for ITI-21 and ITI-22 (PDQ).
+ *
  * @author Dmytro Rud
  */
 public abstract class PdqAuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
-    
-    
-    public PdqAuditStrategy(boolean serverSide) {
-        super(serverSide);
-    }
 
+    private final MllpEventTypeCode eventTypeCode;
+    private final ParticipantObjectIdType participantObjectIdType;
+    
+    public PdqAuditStrategy(boolean serverSide, MllpEventTypeCode eventTypeCode, ParticipantObjectIdType participantObjectIdType) {
+        super(serverSide);
+        this.eventTypeCode = requireNonNull(eventTypeCode, "eventTypeCode must be not null");
+        this.participantObjectIdType = requireNonNull(participantObjectIdType, "participantObjectIdType must be not null");
+    }
     
     @Override
     public QueryAuditDataset enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
@@ -46,8 +57,19 @@ public abstract class PdqAuditStrategy extends AuditStrategySupport<QueryAuditDa
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset() {
-        return new QueryAuditDataset(isServerSide());
+    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new QueryAuditDataset(auditContext, isServerSide());
     }
-    
+
+    @Override
+    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder(auditDataset, eventTypeCode)
+                .setQueryParameters(
+                        auditDataset.getMessageControlId(),
+                        participantObjectIdType,
+                        auditDataset.getPayload(),
+                        "MSH-10", auditDataset.getMessageControlId())
+                .addPatients(auditDataset.getPatientIds())
+                .getMessages();
+    }
 }

@@ -24,15 +24,10 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti66AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti66AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti66AuditStrategy(boolean serverSide) {
         super(serverSide);
-    }
-
-    @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
     }
 
     @Override

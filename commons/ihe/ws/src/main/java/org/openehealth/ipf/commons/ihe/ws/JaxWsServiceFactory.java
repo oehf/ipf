@@ -20,6 +20,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.RejectionHandlerInterceptor;
@@ -40,7 +41,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
     /**
      * Transaction configuration.
      */
-    protected final WsTransactionConfiguration wsTransactionConfiguration;
+    protected final WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration;
     /**
      * Service endpoint address.
      */
@@ -58,6 +59,8 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
      */
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
 
+    protected final AuditContext auditContext;
+
     /**
      * Constructs the factory.
      * @param wsTransactionConfiguration
@@ -73,15 +76,16 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
      *
      */
     public JaxWsServiceFactory(
-            WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
-            WsRejectionHandlingStrategy rejectionHandlingStrategy)
-    {
+            WsRejectionHandlingStrategy rejectionHandlingStrategy) {
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceAddress = serviceAddress;
         this.auditStrategy = auditStrategy;
+        this.auditContext = auditContext;
         this.customInterceptors = customInterceptors;
         this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }

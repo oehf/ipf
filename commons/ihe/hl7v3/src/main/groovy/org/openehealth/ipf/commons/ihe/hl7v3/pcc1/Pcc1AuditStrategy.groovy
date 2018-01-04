@@ -16,11 +16,15 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.pcc1
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.QueryExistingData
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
 /**
  * @author Dmytro Rud
@@ -30,7 +34,7 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
     Pcc1AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
-    
+
 
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
@@ -43,28 +47,19 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
         // patient IDs from request
         def patientIds = [] as Set<String>
         addPatientIds(qbp.parameterList.patientId.value, patientIds)
-        auditDataset.patientIds = patientIds.toArray() ?: null
+        auditDataset.setPatientIds(patientIds.toArray(new String[patientIds.size()]) ?: null)
 
         // dump of the "queryByParameter" element
         auditDataset.requestPayload = render(qbp)
         auditDataset
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditPcc1(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
-                auditDataset.requestPayload,
-                auditDataset.queryId,
-                auditDataset.patientIds,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
+    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.QueryExistingData)
+                .setQueryParameters(auditDataset.messageId, QueryExistingData, auditDataset.requestPayload)
+                .addPatients(auditDataset.patientIds)
+                .getMessages()
     }
 
 }

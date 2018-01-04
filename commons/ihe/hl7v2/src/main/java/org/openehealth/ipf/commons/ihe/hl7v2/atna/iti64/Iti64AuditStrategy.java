@@ -19,8 +19,9 @@ import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.group.ADT_A43_PATIENT;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.message.ADT_A43;
 
 import java.util.Map;
@@ -35,7 +36,7 @@ import java.util.Map;
 public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> {
 
     private static final EncodingCharacters ENCODING_CHARACTERS =
-            new EncodingCharacters('|', '^', '~', '\\', '&');
+            new EncodingCharacters('|', null);
 
 
     public Iti64AuditStrategy(boolean serverSide) {
@@ -67,30 +68,23 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
         return auditDataset;
     }
 
-
     @Override
-    public void doAudit(Iti64AuditDataset auditDataset) {
-        AuditorManager.getCustomPixAuditor().auditIti64(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                isServerSide() ? auditDataset.getRemoteAddress() : auditDataset.getLocalAddress(),
-                auditDataset.getSendingFacility(),
-                auditDataset.getSendingApplication(),
-                isServerSide() ? auditDataset.getLocalAddress() : auditDataset.getRemoteAddress(),
-                auditDataset.getReceivingFacility(),
-                auditDataset.getReceivingApplication(),
-                auditDataset.getMessageControlId(),
-                auditDataset.getLocalPatientId(),
-                auditDataset.getSubsumedLocalPatientId(),
-                auditDataset.getNewPatientId(),
-                auditDataset.getPreviousPatientId(),
-                auditDataset.getSubmissionSetUuid()
-        );
+    public AuditMessage[] makeAuditMessage(Iti64AuditDataset auditDataset) {
+        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder(auditDataset)
+                .setLocalPatientId(auditDataset);
+        if (auditDataset.getSubsumedLocalPatientId() != null) {
+            builder.setSubsumedLocalPatientId(auditDataset);
+        }
+        return builder
+                .setNewPatientId(auditDataset)
+                .setPreviousPatientId(auditDataset)
+                .setSubmissionSet(auditDataset)
+                .getMessages();
     }
 
 
     @Override
-    public Iti64AuditDataset createAuditDataset() {
-        return new Iti64AuditDataset(isServerSide());
+    public Iti64AuditDataset createAuditDataset(AuditContext auditContext) {
+        return new Iti64AuditDataset(auditContext, isServerSide());
     }
 }

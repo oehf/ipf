@@ -29,30 +29,4 @@ public class Iti78ClientAuditStrategy extends Iti78AuditStrategy {
         super(false);
     }
 
-    /**
-     * Enrich patients IDs. Response is either a Bundle or a Patient
-     *
-     * @param auditDataset audit dataset
-     * @param response response resource
-     * @return audit dataset enriched with patient resource IDs
-     */
-    @Override
-    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        /* Pending https://github.com/oehf/ipf/issues/124
-        if (result) {
-            if (response instanceof Patient) {
-                Patient patient = (Patient) response;
-                auditDataset.getPatientIds().add(patient.getIdElement().getValue());
-            } else if (response instanceof Bundle) {
-                Bundle bundle = (Bundle) response;
-                auditDataset.getPatientIds().addAll(
-                        bundle.getEntry().stream()
-                                .map(Bundle.BundleEntryComponent::getResource)
-                                .map(r -> r.getIdElement().getValue())
-                                .collect(Collectors.toList()));
-            }
-        }
-        */
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
-    }
 }

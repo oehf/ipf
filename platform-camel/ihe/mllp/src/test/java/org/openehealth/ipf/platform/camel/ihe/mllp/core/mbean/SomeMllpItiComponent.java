@@ -20,15 +20,16 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
  * Test MLLP Component implementation
  */
-public class SomeMllpItiComponent extends MllpTransactionComponent {
+public class SomeMllpItiComponent extends MllpTransactionComponent<MllpAuditDataset> {
     
-    public static final Hl7v2TransactionConfiguration CONFIGURATION =
-        new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<MllpAuditDataset> CONFIGURATION =
+        new Hl7v2TransactionConfiguration<>(
                 "foo",
                 "Some MLLP Component",
                 false,
@@ -51,15 +52,15 @@ public class SomeMllpItiComponent extends MllpTransactionComponent {
         super(null);
     }
 
-    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
+    private static final NakFactory<MllpAuditDataset> NAK_FACTORY = new NakFactory<>(CONFIGURATION);
 
     @Override
-    public NakFactory getNakFactory() {
+    public NakFactory<MllpAuditDataset> getNakFactory() {
         return NAK_FACTORY;
     }
     
     @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration<MllpAuditDataset> getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
     }
     

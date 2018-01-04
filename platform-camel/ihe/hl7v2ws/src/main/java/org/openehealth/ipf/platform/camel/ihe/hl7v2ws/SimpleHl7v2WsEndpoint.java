@@ -23,6 +23,7 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
@@ -64,12 +65,14 @@ public abstract class SimpleHl7v2WsEndpoint<
             String endpointUri,
             String address,
             AbstractHl7v2WsComponent<AuditDatasetType> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
@@ -122,6 +125,7 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

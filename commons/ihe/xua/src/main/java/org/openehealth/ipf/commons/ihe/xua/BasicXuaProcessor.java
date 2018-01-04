@@ -19,10 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.XuaProcessor;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.opensaml.core.config.ConfigurationService;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
@@ -41,16 +42,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
-
 import javax.xml.namespace.QName;
 import java.util.*;
 
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.SOAP_NS_URIS;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS;
+
 /**
+ * @author Dmytro Rud
  * @see <a href="http://docs.oasis-open.org/xacml/xspa/v1.0/xacml-xspa-1.0-os.html">Cross-Enterprise Security
  * and Privacy Authorization (XSPA) Profile of XACML v2.0 for Healthcare Version 1.0</a>
- *
- * @author Dmytro Rud
  */
 @Slf4j
 public class BasicXuaProcessor implements XuaProcessor {
@@ -62,18 +63,18 @@ public class BasicXuaProcessor implements XuaProcessor {
      * does not contain a SAML assertion, IPF will parse the WS-Security header
      * and store the assertion extracted from there (if any) under this key.
      */
-    public static final String XUA_SAML_ASSERTION = AbstractAuditInterceptor.class.getName() + ".XUA_SAML_ASSERTION";
+    private static final String XUA_SAML_ASSERTION = AbstractAuditInterceptor.class.getName() + ".XUA_SAML_ASSERTION";
 
-    public static final Set<String> WSSE_NS_URIS = new HashSet<>(Arrays.asList(
+    private static final Set<String> WSSE_NS_URIS = new HashSet<>(Arrays.asList(
             WSSecurityConstants.WSSE_NS,
             WSSecurityConstants.WSSE11_NS));
 
-    public static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
-    public static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = "urn:oasis:names:tc:xacml:2.0:subject:role";
-    public static final String PATIENT_ID_ATTRIBUTE_NAME     = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
+    private static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
+    private static final String SUBJECT_ROLE_ATTRIBUTE_NAME = "urn:oasis:names:tc:xacml:2.0:subject:role";
+    private static final String PATIENT_ID_ATTRIBUTE_NAME = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
 
-    public static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
-    public static final QName SUBJECT_ROLE_ELEMENT_NAME   = new QName("urn:hl7-org:v3", "Role");
+    private static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
+    private static final QName SUBJECT_ROLE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "Role");
 
     private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
 
@@ -91,8 +92,7 @@ public class BasicXuaProcessor implements XuaProcessor {
         Header header = message.getHeader(new QName(WSSecurityConstants.WSSE_NS, "Security"));
         if (!((header != null) &&
                 headerDirection.equals(header.getDirection()) &&
-                (header.getObject() instanceof Element)))
-        {
+                (header.getObject() instanceof Element))) {
             return null;
         }
 
@@ -122,8 +122,7 @@ public class BasicXuaProcessor implements XuaProcessor {
     public void extractXuaUserNameFromSaml2Assertion(
             SoapMessage message,
             Header.Direction headerDirection,
-            WsAuditDataset auditDataset)
-    {
+            WsAuditDataset auditDataset) {
         Assertion assertion = null;
 
         // check whether someone has already parsed the SAML2 assertion
@@ -169,16 +168,15 @@ public class BasicXuaProcessor implements XuaProcessor {
         for (AttributeStatement statement : assertion.getAttributeStatements()) {
             for (Attribute attribute : statement.getAttributes()) {
                 if (PURPOSE_OF_USE_ATTRIBUTE_NAME.equals(attribute.getName())) {
-                    extractCodes(attribute, PURPOSE_OF_USE_ELEMENT_NAME, auditDataset.getPurposesOfUse());
+                    extractPurposeOfUse(attribute, PURPOSE_OF_USE_ELEMENT_NAME, auditDataset.getPurposesOfUse());
                 } else if (SUBJECT_ROLE_ATTRIBUTE_NAME.equals(attribute.getName())) {
-                    extractCodes(attribute, SUBJECT_ROLE_ELEMENT_NAME, auditDataset.getUserRoles());
+                    extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME, auditDataset.getUserRoles());
                 } else if (PATIENT_ID_ATTRIBUTE_NAME.equals(attribute.getName())) {
                     List<XMLObject> attributeValues = attribute.getAttributeValues();
                     if ((attributeValues != null)
                             && (!attributeValues.isEmpty())
                             && (attributeValues.get(0) != null)
-                            && (attributeValues.get(0).getDOM() != null))
-                    {
+                            && (attributeValues.get(0).getDOM() != null)) {
                         auditDataset.setXuaPatientId(attributeValues.get(0).getDOM().getTextContent());
                     }
                 }
@@ -186,23 +184,43 @@ public class BasicXuaProcessor implements XuaProcessor {
         }
     }
 
-    private static void extractCodes(Attribute attribute, QName valueElementName, List<CodedValueType> targetCollection) {
+    private static void extractPurposeOfUse(Attribute attribute, QName valueElementName, List<PurposeOfUse> targetCollection) {
         for (XMLObject value : attribute.getAttributeValues()) {
             if (value.getDOM() != null) {
                 NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
                 for (int i = 0; i < nodeList.getLength(); ++i) {
                     Element elem = (Element) nodeList.item(i);
-                    targetCollection.add(elementToCode(elem));
+                    targetCollection.add(elementToPurposeOfUse(elem));
                 }
             }
         }
     }
 
-    private static CodedValueType elementToCode(Element element) {
-        CodedValueType cvt = new CodedValueType();
-        cvt.setCode(element.getAttribute("code"));
-        cvt.setCodeSystemName(element.getAttribute("codeSystem"));
-        cvt.setOriginalText(element.getAttribute("displayName"));
-        return cvt;
+    private static PurposeOfUse elementToPurposeOfUse(Element element) {
+        return PurposeOfUse.of(
+                element.getAttribute("code"),
+                element.getAttribute("codeSystem"),
+                element.getAttribute("displayName")
+        );
+    }
+
+    private static void extractActiveParticipantRoleId(Attribute attribute, QName valueElementName, List<ActiveParticipantRoleId> targetCollection) {
+        for (XMLObject value : attribute.getAttributeValues()) {
+            if (value.getDOM() != null) {
+                NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
+                for (int i = 0; i < nodeList.getLength(); ++i) {
+                    Element elem = (Element) nodeList.item(i);
+                    targetCollection.add(elementToActiveParticipantRoleId(elem));
+                }
+            }
+        }
+    }
+
+    private static ActiveParticipantRoleId elementToActiveParticipantRoleId(Element element) {
+        return ActiveParticipantRoleId.of(
+                element.getAttribute("code"),
+                element.getAttribute("codeSystem"),
+                element.getAttribute("displayName")
+        );
     }
 }

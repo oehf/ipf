@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_41;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**

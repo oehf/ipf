@@ -34,13 +34,4 @@ public class XdsRenderingUtilsTest {
         assertTrue(renderedPnr.contains("ProvideAndRegisterDocumentSetRequest"));
     }
 
-    @Test
-    public void testRenderProvideAndRegisterDocumentSet21() {
-        ProvideAndRegisterDocumentSet pnr = SampleData.createProvideAndRegisterDocumentSet();
-        org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType converted =
-                EbXML21Converters.convert(pnr);
-        String renderedPnr = XdsRenderingUtils.renderEbxml(converted);
-        assertNotNull(renderedPnr);
-        assertTrue(renderedPnr.contains("ProvideAndRegisterDocumentSetRequest"));
-    }
 }

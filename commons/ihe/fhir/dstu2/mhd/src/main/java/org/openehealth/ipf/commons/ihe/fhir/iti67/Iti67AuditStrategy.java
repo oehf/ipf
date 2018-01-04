@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti67AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti67AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti67AuditStrategy(boolean serverSide) {
         super(serverSide);
@@ -38,10 +38,5 @@ public class Iti67AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDat
                 auditDataset.getClientIpAddress(),
                 auditDataset.getQueryString(),
                 auditDataset.getPatientIds());
-    }
-
-    @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
     }
 }

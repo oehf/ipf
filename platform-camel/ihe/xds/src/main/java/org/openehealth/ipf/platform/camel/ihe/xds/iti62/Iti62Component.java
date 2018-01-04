@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 
 /**
  * The Camel component for the ITI-62 transaction.
@@ -41,15 +41,16 @@ public class Iti62Component extends XdsComponent<XdsRemoveMetadataAuditDataset> 
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<XdsRemoveMetadataAuditDataset>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 Iti62Service.class) {
             @Override
-            public AbstractWsProducer<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>> endpoint,
                                                                                                                    JaxWsClientFactory<XdsRemoveMetadataAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RemoveObjectsRequest.class, RegistryResponseType.class);

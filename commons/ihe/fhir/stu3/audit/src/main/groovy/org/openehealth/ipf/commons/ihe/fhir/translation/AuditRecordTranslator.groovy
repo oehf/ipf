@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.fhir.translation
 
 import org.hl7.fhir.dstu3.model.*
+import org.hl7.fhir.dstu3.model.codesystems.AuditSourceTypeEnumFactory
+import org.hl7.fhir.dstu3.model.codesystems.ObjectRoleEnumFactory
+import org.hl7.fhir.dstu3.model.codesystems.ObjectTypeEnumFactory
 import org.joda.time.format.ISODateTimeFormat
-import org.openehealth.ipf.commons.ihe.fhir.AuditSourceTypeEnumFactory
-import org.openehealth.ipf.commons.ihe.fhir.ObjectRoleEnumFactory
-import org.openehealth.ipf.commons.ihe.fhir.ObjectTypeEnumFactory
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
 

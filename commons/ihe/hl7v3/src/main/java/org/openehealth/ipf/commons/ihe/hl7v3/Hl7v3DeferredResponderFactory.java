@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -37,11 +38,13 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3Audit
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties)
     {
-        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties, null);
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
+                customInterceptors, features, properties, null);
     }
 
 
@@ -52,7 +55,7 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3Audit
 
         if (auditStrategy != null) {
             AuditResponseInterceptor<Hl7v3AuditDataset> auditInterceptor =
-                new AuditResponseInterceptor<>(auditStrategy, true, null, false);
+                new AuditResponseInterceptor<>(auditStrategy, auditContext, true, null, false);
             client.getOutInterceptors().add(auditInterceptor);
             client.getOutFaultInterceptors().add(auditInterceptor);
         }

@@ -19,7 +19,7 @@ import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.Interactions.ITI_10;
+import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.QueryInteractions.ITI_10;
 
 /**
  * Camel component for ITI-10 (PIX Update Notification).

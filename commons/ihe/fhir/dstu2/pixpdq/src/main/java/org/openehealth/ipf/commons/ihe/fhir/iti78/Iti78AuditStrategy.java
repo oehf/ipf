@@ -28,22 +28,17 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     protected Iti78AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
-    }
-
-    @Override
     public void doAudit(FhirQueryAuditDataset auditDataset) {
         AuditorManager.getFhirAuditor().auditIti78(
                 isServerSide(),
-                auditDataset.getEventOutcomeCode(),
+                auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getQueryString(),

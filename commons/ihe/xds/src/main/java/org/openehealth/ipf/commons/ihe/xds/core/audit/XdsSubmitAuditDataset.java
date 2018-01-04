@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
  * XDS audit dataset specific for submission-related transactions.
@@ -28,14 +29,7 @@ public class XdsSubmitAuditDataset extends XdsAuditDataset {
     @Getter @Setter private String submissionSetUuid;
     @Getter @Setter private String homeCommunityId;
 
-    /**
-     * @param serverSide
-     *            specifies whether this audit dataset will be used on the
-     *            server side (<code>true</code>) or on the client side
-     *            (<code>false</code>)
-     */
-    public XdsSubmitAuditDataset(boolean serverSide) {
-        super(serverSide);
+    public XdsSubmitAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
-
 }

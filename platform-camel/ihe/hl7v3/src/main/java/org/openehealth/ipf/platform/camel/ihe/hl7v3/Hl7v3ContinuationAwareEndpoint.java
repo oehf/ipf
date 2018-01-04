@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
@@ -61,7 +62,7 @@ public class Hl7v3ContinuationAwareEndpoint
     /**
      * Consumer-side only: Storage bean for continuation fragments.
      */
-    private org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage continuationStorage = null;
+    private Hl7v3ContinuationStorage continuationStorage = null;
 
     /**
      * Whether the system should validate messages which are internally handled
@@ -74,11 +75,12 @@ public class Hl7v3ContinuationAwareEndpoint
             String endpointUri,
             String address,
             Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, null);
+        super(endpointUri, address, component, auditContext, customInterceptors, features, schemaLocations, properties, null);
     }
 
     @Override
@@ -183,6 +185,7 @@ public class Hl7v3ContinuationAwareEndpoint
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isManualAudit() ? null : getComponent().getServerAuditStrategy(),
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

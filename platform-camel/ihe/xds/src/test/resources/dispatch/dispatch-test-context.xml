@@ -52,7 +52,8 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd
     <bean id="auditInRequestInterceptor"
           class="org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor">
         <constructor-arg index="0" ref="dispatchAuditStrategy"/>
-        <constructor-arg index="1" ref="documentRegistryTransactionConfiguration"/>
+        <constructor-arg index="1" ref="auditContext"/>
+        <constructor-arg index="2" ref="documentRegistryTransactionConfiguration"/>
     </bean>
 
     <bean id="auditResponseInterceptor"

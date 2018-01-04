@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
@@ -36,20 +37,21 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType>
-{
+        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> {
 
     public Hl7v3AsyncResponseEndpoint(
             String endpointUri,
             String address,
             Hl7v3Component<ConfigType> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
             Class<? extends AbstractWebService> serviceClass)
     {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 

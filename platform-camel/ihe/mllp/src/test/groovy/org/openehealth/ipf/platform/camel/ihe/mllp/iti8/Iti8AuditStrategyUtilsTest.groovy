@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditStrategyUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
@@ -37,7 +37,7 @@ class Iti8AuditStrategyUtilsTest {
         Message message = load(HapiContextFactory.createHapiContext(
                 CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8),
                 'iti8/iti8-a40.hl7')
-        Iti8AuditDataset dataset = new Iti8AuditDataset(true);
+        FeedAuditDataset dataset = new FeedAuditDataset(null, true);
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message);
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'
                 + '~7200117317^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO'

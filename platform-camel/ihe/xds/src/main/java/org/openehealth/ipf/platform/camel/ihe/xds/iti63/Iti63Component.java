@@ -43,22 +43,23 @@ public class Iti63Component extends XdsComponent<XdsQueryAuditDataset> {
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 null) {
             @Override
-            public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint,
                                                                                                           JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }
 
             @Override
-            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint) {
                 return new Iti63Service(endpoint.getHomeCommunityId());
             }
         };

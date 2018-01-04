@@ -16,35 +16,51 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 import java.util.Map;
 
-public abstract class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
+import static org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpParticipantObjectIdTypeCode.PIXQuery;
 
-    protected Iti9AuditStrategy(boolean serverSide) {
+public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
+
+    public Iti9AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset() {
-        return new QueryAuditDataset(isServerSide());
+    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new QueryAuditDataset(auditContext, isServerSide());
     }
 
     @Override
     public QueryAuditDataset enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset,
-            Object msg, Map<String, Object> parameters) {
-        Iti9AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message)msg, parameters);
+                                                           Object msg, Map<String, Object> parameters) {
+        Iti9AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message) msg, parameters);
         return auditDataset;
     }
 
     @Override
     public boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset,
-            Object msg) {
-        return Iti9AuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message)msg);
+                                                  Object msg) {
+        return Iti9AuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message) msg);
     }
 
-    
+    @Override
+    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder(auditDataset, MllpEventTypeCode.PIXQuery)
+                .setQueryParameters(
+                        auditDataset.getMessageControlId(),
+                        PIXQuery,
+                        auditDataset.getPayload(),
+                        "MSH-10", auditDataset.getMessageControlId())
+                .addPatients(auditDataset.getPatientIds())
+                .getMessages();
+    }
 
 }

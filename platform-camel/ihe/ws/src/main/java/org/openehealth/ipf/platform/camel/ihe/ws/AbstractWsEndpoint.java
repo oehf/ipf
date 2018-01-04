@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,7 @@ import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -53,7 +54,7 @@ import java.util.Map;
 @ManagedResource(description = "Managed IPF eHealth Web Service Endpoint")
 public abstract class AbstractWsEndpoint<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration>
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>>
         extends DefaultEndpoint implements AuditableEndpoint<AuditDatasetType> {
 
     private static final String ENDPOINT_PROTOCOL = "http://";
@@ -107,9 +108,9 @@ public abstract class AbstractWsEndpoint<
     private String serviceAddress;
     private String serviceUrl;
 
-    private boolean audit = true;
+    private AuditContext auditContext;
     private AsynchronyCorrelator<AuditDatasetType> correlator = null;
-    private InterceptorProvider customInterceptors = null;
+    private InterceptorProvider customInterceptors;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
     private List<AbstractFeature> features;
@@ -130,19 +131,22 @@ public abstract class AbstractWsEndpoint<
      * @param endpointUri        the URI of the endpoint.
      * @param address            the endpoint address from the URI.
      * @param component          the component creating this endpoint.
+     * @param auditContext       the audit context
      * @param customInterceptors user-defined set of additional CXF interceptors.
      * @param features           user-defined list of CXF features.
      */
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId> component,
+            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
             Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, component);
+        this.auditContext = auditContext;
         this.address = address;
         this.customInterceptors = customInterceptors;
         this.features = features;
@@ -237,14 +241,23 @@ public abstract class AbstractWsEndpoint<
     @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
-        return audit;
+        return getAuditContext().isAuditEnabled();
     }
 
     /**
-     * @param audit <code>true</code> if auditing is turned on.
+     * @param audit <code>true</code> if auditing shall be turned on.
      */
     public void setAudit(boolean audit) {
-        this.audit = audit;
+        getAuditContext().setAuditEnabled(audit);
+    }
+
+    @Override
+    public AuditContext getAuditContext() {
+        return auditContext;
+    }
+
+    public void setAuditContext(AuditContext auditContext) {
+        this.auditContext = auditContext;
     }
 
     /**

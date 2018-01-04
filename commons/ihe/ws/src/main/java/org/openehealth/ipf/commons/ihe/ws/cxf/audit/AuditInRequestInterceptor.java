@@ -19,6 +19,7 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
@@ -31,13 +32,14 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  * @author Dmytro Rud
  */
 public class AuditInRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
-    private final WsTransactionConfiguration wsTransactionConfiguration;
+
+    private final WsTransactionConfiguration<T> wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
-    public AuditInRequestInterceptor(AuditStrategy<T> auditStrategy, WsTransactionConfiguration wsTransactionConfiguration) {
-        super(Phase.UNMARSHAL, auditStrategy);
+    public AuditInRequestInterceptor(AuditStrategy<T> auditStrategy, AuditContext auditContext, WsTransactionConfiguration<T> wsTransactionConfiguration) {
+        super(Phase.UNMARSHAL, auditStrategy, auditContext);
         addAfter(DocLiteralInInterceptor.class.getName());
         this.wsTransactionConfiguration = wsTransactionConfiguration;
     }

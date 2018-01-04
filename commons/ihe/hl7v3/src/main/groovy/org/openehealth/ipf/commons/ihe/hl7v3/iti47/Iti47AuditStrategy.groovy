@@ -16,9 +16,13 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti47
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PatientDemographicsQuery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
 /**
@@ -29,7 +33,6 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
     Iti47AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
-    
 
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
@@ -37,9 +40,9 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
         GPathResult qbp = request.controlActProcess.queryByParameter
 
         // patient IDs from request
-        def patientIds = [] as Set<String>
+        Set<String> patientIds = [] as Set<String>
         addPatientIds(qbp.parameterList.livingSubjectId.value, patientIds)
-        auditDataset.patientIds = patientIds.toArray() ?: null
+        auditDataset.setPatientIds(patientIds.toArray(new String[patientIds.size()]) ?: null)
 
         // dump of the "queryByParameter" element
         auditDataset.requestPayload = render(qbp)
@@ -51,31 +54,23 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
     boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
         response = slurp(response)
         boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
-        
+
         // patient IDs from response
-        def patientIds = [] as Set<String>
+        Set<String> patientIds = [] as Set<String>
         addPatientIds(response.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
         if (auditDataset.patientIds) {
             patientIds.addAll(auditDataset.patientIds)
         }
-        auditDataset.patientIds = patientIds.toArray() ?: null
+        auditDataset.patientIds = patientIds as String[] ?: null
         result
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti47(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
-                auditDataset.requestPayload,
-                auditDataset.patientIds,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
+    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.PatientDemographicsQuery, auditDataset.getPurposesOfUse())
+                .setQueryParameters(auditDataset.messageId, PatientDemographicsQuery, auditDataset.requestPayload)
+                .addPatients(auditDataset.patientIds)
+                .getMessages()
     }
 
 }

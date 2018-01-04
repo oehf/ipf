@@ -21,7 +21,6 @@ import org.apache.camel.Consumer;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
@@ -62,7 +61,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public Producer doCreateProducer() throws Exception {
+    public Producer doCreateProducer() {
         return new FhirProducer<AuditDatasetType>(this);
     }
 
@@ -105,7 +104,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<>());
+            initialChain.add(new ConsumerAuditInterceptor<>(getAuditContext()));
         }
         return initialChain;
     }
@@ -120,18 +119,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public List<Interceptor> createInitialProducerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ProducerAuditInterceptor<>());
+            initialChain.add(new ProducerAuditInterceptor<>(getAuditContext()));
         }
         return initialChain;
-    }
-
-    /**
-     * Returns <tt>true</tt> when ATNA auditing should be performed.
-     */
-    @Override
-    @ManagedAttribute(description = "Audit Enabled")
-    public boolean isAudit() {
-        return config.isAudit();
     }
 
     @Override
@@ -161,7 +151,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public Consumer doCreateConsumer(Processor processor) throws Exception {
+    public Consumer doCreateConsumer(Processor processor) {
         return new FhirConsumer<>(this, processor);
     }
 

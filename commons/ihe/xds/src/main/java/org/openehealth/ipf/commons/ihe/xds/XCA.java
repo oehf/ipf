@@ -19,9 +19,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39PortType;
@@ -47,7 +50,8 @@ public class XCA implements XdsIntegrationProfile {
         ITI_39(ITI_39_WS_CONFIG),
         ITI_39_ASYNC_RESPONSE(ITI_39_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter
+        private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -70,12 +74,12 @@ public class XCA implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration ITI_38_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_38_WS_CONFIG = new WsTransactionConfiguration<>(
             "xca-iti38",
             "Cross Gateway Query",
             true,
-            new Iti38ClientAuditStrategy(),
-            new Iti38ServerAuditStrategy(),
+            new Iti38AuditStrategy(false),
+            new Iti38AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
             Iti38PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
@@ -86,12 +90,12 @@ public class XCA implements XdsIntegrationProfile {
             true,
             true);
 
-    private final static WsTransactionConfiguration ITI_38_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_38_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
             "xca-iti38-async-response",
             "Cross Gateway Query",
             true,
             null,
-            new Iti38ClientAuditStrategy(),     // really!
+            new Iti38AuditStrategy(false),     // really!
             new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
             Iti38AsyncResponsePortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),
@@ -102,7 +106,7 @@ public class XCA implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI_39_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_39_WS_CONFIG = new WsTransactionConfiguration<>(
             "xca-iti39",
             "Cross Gateway Retrieve",
             false,
@@ -118,7 +122,7 @@ public class XCA implements XdsIntegrationProfile {
             false,
             true);
 
-    private final static WsTransactionConfiguration ITI_39_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_39_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
             "xca-iti39-async-response",
             "Cross Gateway Retrieve",
             false,

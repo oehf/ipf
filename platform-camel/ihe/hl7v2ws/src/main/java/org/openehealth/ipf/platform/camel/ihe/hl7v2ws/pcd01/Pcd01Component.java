@@ -45,6 +45,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
                 uri,
                 remaining,
                 this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

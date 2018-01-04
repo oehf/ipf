@@ -16,11 +16,18 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti31;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 
 import java.util.Map;
 
-public abstract class Iti31AuditStrategy extends AuditStrategySupport<Iti31AuditDataset> {
+public class Iti31AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
 
 
     public Iti31AuditStrategy(boolean serverSide) {
@@ -28,40 +35,76 @@ public abstract class Iti31AuditStrategy extends AuditStrategySupport<Iti31Audit
     }
 
     @Override
-    public Iti31AuditDataset enrichAuditDatasetFromRequest(Iti31AuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
-        Iti31AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message)msg);
+    public FeedAuditDataset enrichAuditDatasetFromRequest(FeedAuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
+        Iti31AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message) msg);
         return auditDataset;
     }
 
     @Override
-    public void doAudit(Iti31AuditDataset auditDataset) {
-        if (auditDataset.isUpdate()) {
-            callUpdateAuditRoutine(auditDataset, true);
-        } else if (auditDataset.isDelete()) {
-            callDeleteAuditRoutine(auditDataset, false);
-        } else if (auditDataset.isMerge()) {
-            callDeleteAuditRoutine(auditDataset, false);
-            callUpdateAuditRoutine(auditDataset, true);
-        } else if (auditDataset.isCreate()) {
-            callCreateAuditRoutine(auditDataset, true);
+    public AuditMessage[] makeAuditMessage(FeedAuditDataset auditDataset) {
+        switch (auditDataset.getMessageType()) {
+            case "A01":
+            case "A04":
+            case "A05":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Create, true)
+                };
+            case "A02":
+            case "A03":
+            case "A06":
+            case "A07":
+            case "A08":
+            case "A09":
+            case "A10":
+            case "A12":
+            case "A13":
+            case "A14":
+            case "A15":
+            case "A16":
+            case "A25":
+            case "A26":
+            case "A27":
+            case "A32":
+            case "A33":
+            case "A38":
+            case "A44":
+            case "A52":
+            case "A53":
+            case "A54":
+            case "A55":
+            case "Z99":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                };
+            case "A40":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                };
+            case "A41":
+                return new AuditMessage[]{
+                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, true)
+                };
+            default:
+                throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());
         }
     }
 
-    protected abstract void callCreateAuditRoutine(
-            Iti31AuditDataset auditDataset,
-            boolean newPatientId);
+    protected AuditMessage patientRecordAuditMessage(final FeedAuditDataset auditDataset,
+                                                     EventActionCode eventActionCode,
+                                                     boolean newPatientId) {
+        return new IHEPatientRecordBuilder<>(auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityManagement)
 
-    protected abstract void callUpdateAuditRoutine(
-            Iti31AuditDataset auditDataset,
-            boolean newPatientId);
-
-    protected abstract void callDeleteAuditRoutine(
-            Iti31AuditDataset auditDataset,
-            boolean newPatientId);
-
-    @Override
-    public Iti31AuditDataset createAuditDataset() {
-        return new Iti31AuditDataset(isServerSide());
+                // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
+                .addPatients(
+                        "MSH-10", auditDataset.getMessageControlId(),
+                        newPatientId ? auditDataset.getPatientId() : auditDataset.getOldPatientId()
+                )
+                .getMessage();
     }
 
+    @Override
+    public FeedAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new FeedAuditDataset(auditContext, isServerSide());
+    }
 }

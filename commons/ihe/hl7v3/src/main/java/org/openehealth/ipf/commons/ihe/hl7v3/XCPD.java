@@ -42,7 +42,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZEL
 public class XCPD implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v3InteractionId {
+    public enum Interactions implements Hl7v3InteractionId<Hl7v3WsTransactionConfiguration> {
         ITI_55                  (ITI_55_WS_CONFIG),
         ITI_55_ASYNC_RESPONSE   (ITI_55_ASYNC_RESPONSE_WS_CONFIG),
         ITI_55_DEFERRED_RESPONSE(ITI_55_DEFERRED_RESPONSE_WS_CONFIG),

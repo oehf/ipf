@@ -91,7 +91,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @throws Exception
      */
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
         ClientRequestFactory<?> requestFactory = getEndpoint().getClientRequestFactory();
         IClientExecutable<?, ?> executableClient = requestFactory.getClientExecutable(
                 getClient(exchange),

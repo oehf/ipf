@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class DefaultWsConsumer<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration> extends DefaultConsumer {
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>> extends DefaultConsumer {
     private final Server server;
 
     /**

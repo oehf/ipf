@@ -16,10 +16,13 @@
 package org.openehealth.ipf.commons.ihe.hl7v3
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
 /**
  * @author Dmytro Rud
@@ -31,12 +34,10 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
         super(serverSide)
     }
 
-
     @Override
-    Hl7v3AuditDataset createAuditDataset() {
-        return new Hl7v3AuditDataset(serverSide)
+    Hl7v3AuditDataset createAuditDataset(AuditContext auditContext) {
+        return new Hl7v3AuditDataset(auditContext, serverSide)
     }
-
 
     /**
      * Returns ATNA response code on the basis of Acknowledgement.typeCode
@@ -52,34 +53,33 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
      *      response message as {@link GPathResult}.
      */
     @Override
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Object gpath) {
         try {
             String code = gpath.acknowledgement[0].typeCode.@code.text()
-            if (! code) {
+            if (!code) {
                 // code not found -- bad XML
-                return RFC3881EventOutcomeCodes.MAJOR_FAILURE
+                return EventOutcomeIndicator.MajorFailure
             }
             return ((code == 'AA') || (code == 'CA')) ?
-                    RFC3881EventOutcomeCodes.SUCCESS :
-                    RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+                    EventOutcomeIndicator.Success :
+                    EventOutcomeIndicator.SeriousFailure
 
         } catch (Exception e) {
             LOG.error('Exception in audit strategy', e)
-            return RFC3881EventOutcomeCodes.MAJOR_FAILURE
+            return EventOutcomeIndicator.MajorFailure
         }
     }
 
-
     @Override
     boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
-        auditDataset.eventOutcomeCode = getEventOutcomeCode(slurp(response))
-        auditDataset.eventOutcomeCode == RFC3881EventOutcomeCodes.SUCCESS
+        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(slurp(response))
+        auditDataset.eventOutcomeIndicator == EventOutcomeIndicator.Success
     }
 
 
     static void addPatientIds(GPathResult source, Set<String> target) {
         for (node in source) {
-            target << Hl7v3Utils.iiToCx(node)
+            target << iiToCx(node)
         }
     }
 

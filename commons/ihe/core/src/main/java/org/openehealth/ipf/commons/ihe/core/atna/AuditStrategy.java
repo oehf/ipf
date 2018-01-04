@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * ATNA audit strategy base for transactions. This strategy is accompanied with a
@@ -26,13 +29,12 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public interface AuditStrategy<T extends AuditDataset> {
+public interface AuditStrategy<T extends AuditDataset> extends Consumer<T> {
 
     /**
      * Creates a new audit dataset instance.
      */
-    T createAuditDataset();
-
+    T createAuditDataset(AuditContext auditContext);
 
     /**
      * Enriches the given audit dataset with transaction-specific
@@ -63,28 +65,27 @@ public interface AuditStrategy<T extends AuditDataset> {
      */
     void doAudit(T auditDataset);
 
+    @Override
+    default void accept(T t) {
+        doAudit(t);
+    }
+
     /**
      * Determines whether the given response finalizes the interaction
      * and thus the ATNA auditing should be finalized as well.
      * <p>
      * Per default always returns <code>true</code>.
      *
-     * @param response
-     *      response in transaction-specific format (POJO, XML string, etc.).
-     * @return
-     *      <code>true</code> when this response finalizes the interaction.
+     * @param response response in transaction-specific format (POJO, XML string, etc.).
+     * @return <code>true</code> when this response finalizes the interaction.
      */
     boolean isAuditableResponse(Object response);
 
-
     /**
-     * Determines which RFC 3881 event outcome code corresponds to the
-     * given response POJO.
-     * @param response
-     *      response ebXML POJO.
-     * @return
-     *      RFC 3881 event outcome code.
+     * Determines which event outcome corresponds with the provided response POJO
+     *
+     * @param response POJO
+     * @return event outcome code
      */
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object response);
-
+    EventOutcomeIndicator getEventOutcomeIndicator(Object response);
 }

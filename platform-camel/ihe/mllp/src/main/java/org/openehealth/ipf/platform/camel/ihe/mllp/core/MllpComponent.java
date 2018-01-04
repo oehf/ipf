@@ -20,6 +20,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
@@ -39,8 +40,8 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration>
-        extends Mina2Component implements InterceptableComponent, Hl7v2ConfigurationHolder {
+public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration, AuditDatasetType extends MllpAuditDataset>
+        extends Mina2Component implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
 
@@ -89,7 +90,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      * @param config          endpoint configuration.
      * @return configured MLLP endpoint instance which wraps the MINA2 one.
      */
-    protected abstract MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
+    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
 
 
     /**
@@ -138,12 +139,12 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     }
 
     @Override
-    public List<Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<Interceptor> getAdditionalProducerInterceptors() {
+    public List<Interceptor<?>> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 

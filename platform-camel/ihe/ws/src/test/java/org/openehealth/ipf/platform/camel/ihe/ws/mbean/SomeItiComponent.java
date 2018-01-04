@@ -24,11 +24,11 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import javax.xml.namespace.QName;
 import java.util.Map;
 
-public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
 
     private static final String NS_URI = "urn:iti:some:mai:2011";
 
-    public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
+    public static final WsTransactionConfiguration<WsAuditDataset> WS_CONFIG = new WsTransactionConfiguration<>(
             "foo",
             "Some Component",
             false,
@@ -49,13 +49,14 @@ public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTran
     }
 
     @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
+    public WsTransactionConfiguration<WsAuditDataset> getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 
     @SuppressWarnings("unchecked")
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new SomeItiEndpoint(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

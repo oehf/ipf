@@ -102,12 +102,12 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     }
 
     @Override
-    public List<Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<Interceptor> getAdditionalProducerInterceptors() {
+    public List<Interceptor<?>> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 

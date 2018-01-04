@@ -21,9 +21,12 @@ import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
+import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.util.jsse.SSLContextParameters;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
@@ -57,10 +60,8 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private FhirContext context;
 
     // Consumer only
-
     @Getter
-    @UriParam(defaultValue = "false")
-    private boolean audit = false;
+    private AuditContext auditContext;
 
     @Getter
     @UriParam(defaultValue = "FhirServlet")
@@ -108,7 +109,25 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         super(component, parameters);
         this.path = path;
         this.context = component.initializeFhirContext();
-        audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
+
+        Boolean audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
+        auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
+
+        if (auditContext == null) {
+            auditContext = ContextFacade.getBean(AuditContext.class);
+            if (auditContext != null) {
+                if (audit != null) {
+                    auditContext.setAuditEnabled(audit);
+                }
+            } else {
+                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
+            }
+        } else {
+            if (audit != null) {
+                auditContext.setAuditEnabled(audit);
+            }
+        }
+
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "resourceProvider", AbstractPlainProvider.class, null);

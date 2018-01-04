@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
@@ -56,12 +57,13 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<>();
-    protected final WsTransactionConfiguration wsTransactionConfiguration;
+    protected final WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
     protected final List<AbstractFeature> features;
     protected final Map<String, Object> properties;
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
+    protected final AuditContext auditContext;
     protected final AsynchronyCorrelator<AuditDatasetType> correlator;
 
     /**
@@ -72,21 +74,21 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      * @param auditStrategy              client-side ATNA audit strategy.
      * @param customInterceptors         user-defined custom CXF interceptors.
      * @param correlator                 optional asynchrony correlator.
-
      */
     public JaxWsClientFactory(
-            WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<AuditDatasetType> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<AuditDatasetType> correlator)
-    {
+            AsynchronyCorrelator<AuditDatasetType> correlator) {
         notNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
         this.auditStrategy = auditStrategy;
+        this.auditContext = auditContext;
         this.customInterceptors = customInterceptors;
         this.features = features;
         this.properties = properties;
@@ -125,7 +127,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     /**
      * @return the service info of this factory.
      */
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
+    public WsTransactionConfiguration<AuditDatasetType> getWsTransactionConfiguration() {
         return wsTransactionConfiguration;
     }
 

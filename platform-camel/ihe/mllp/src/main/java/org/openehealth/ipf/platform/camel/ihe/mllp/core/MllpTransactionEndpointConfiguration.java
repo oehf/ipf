@@ -19,6 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import lombok.Getter;
 
 import java.util.Map;
+
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 
@@ -41,11 +43,11 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     /**
      * @deprecated
      */
-    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, Map<String, Object> parameters) throws Exception {
+    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }
 
-    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);
 
         supportUnsolicitedFragmentation = component.getAndRemoveParameter(

@@ -29,12 +29,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer;
  */
 public class ChXcmuProducer extends XdsSubmissionProducer<SubmitObjectsRequest, RegistryResponseType> {
 
-    public ChXcmuProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+    public ChXcmuProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
     }
 
     @Override
-    protected RegistryResponseType callService(Object client, SubmitObjectsRequest request) throws Exception {
+    protected RegistryResponseType callService(Object client, SubmitObjectsRequest request) {
         injectTargetHomeCommunityId(client, request);
         return ((ChXcmuPortType) client).documentRegistryUpdateDocumentSet(request);
     }

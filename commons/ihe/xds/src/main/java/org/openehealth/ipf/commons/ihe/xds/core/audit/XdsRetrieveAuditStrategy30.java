@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
  *
  * @author Dmytro Rud
  */
-abstract public class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
+public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
 
     public XdsRetrieveAuditStrategy30(boolean serverSide) {
         super(serverSide);

@@ -17,6 +17,9 @@
 package org.openehealth.ipf.commons.ihe.core.atna;
 
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+
 public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySupport<T> {
 
     public NoAuditStrategy(boolean serverSide) {
@@ -24,7 +27,7 @@ public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySuppor
     }
 
     @Override
-    public T createAuditDataset() {
+    public T createAuditDataset(AuditContext auditContext) {
         return null;
     }
 
@@ -33,4 +36,8 @@ public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySuppor
         // no audit
     }
 
+    @Override
+    public AuditMessage[] makeAuditMessage(T auditDataset) {
+        return new AuditMessage[0];
+    }
 }

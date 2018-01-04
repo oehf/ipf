@@ -17,13 +17,15 @@ package org.openehealth.ipf.commons.ihe.xds;
 
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface XdsInteractionId<ConfigType extends WsTransactionConfiguration> extends WsInteractionId<ConfigType>, ValidationProfile {
+public interface XdsInteractionId<ConfigType extends WsTransactionConfiguration<? extends XdsAuditDataset>> extends WsInteractionId<ConfigType>, ValidationProfile {
 
     @Override
     default XdsInteractionId getInteractionId() {

@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent
 import java.util.Collections;
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.Interactions.ITI_9;
+import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.QueryInteractions.ITI_9;
 
 /**
  * Camel component for ITI-9 (PIX Query).

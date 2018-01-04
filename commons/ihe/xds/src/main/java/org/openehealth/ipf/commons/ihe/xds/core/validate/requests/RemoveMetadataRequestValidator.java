@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_REFERENCE_LIST;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.OBJECT_SHALL_NOT_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 
 /**
  * HL7v2 Transaction ID
@@ -23,11 +24,11 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v2InteractionId extends InteractionId {
+public interface Hl7v2InteractionId<T extends MllpAuditDataset> extends InteractionId {
 
-    Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
+    Hl7v2TransactionConfiguration<T> getHl7v2TransactionConfiguration();
 
-    NakFactory getNakFactory();
+    NakFactory<T> getNakFactory();
 
     /**
      * Optional initialization with dynamic TransactionOptions

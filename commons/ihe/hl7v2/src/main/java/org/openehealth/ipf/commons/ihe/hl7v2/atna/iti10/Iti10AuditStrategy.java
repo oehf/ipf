@@ -16,27 +16,45 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordNotificationBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 import java.util.Map;
 
-public abstract class Iti10AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
+public class Iti10AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
 
     public Iti10AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset() {
-        return new QueryAuditDataset(isServerSide());
+    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new QueryAuditDataset(auditContext, isServerSide());
     }
 
     @Override
     public QueryAuditDataset enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
-        Iti10AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message)msg);
+        Iti10AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (Message) msg);
         return auditDataset;
     }
- 
+
+    @Override
+    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
+        return new IHEPatientRecordNotificationBuilder(
+                auditDataset,
+                isServerSide() ? EventActionCode.Update : EventActionCode.Read,
+                MllpEventTypeCode.PIXUpdateNotification)
+
+                // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
+                .addPatients("MSH-10", auditDataset.getMessageControlId(), auditDataset.getPatientIds())
+                .getMessages();
+
+    }
+
 
 }

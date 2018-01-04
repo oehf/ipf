@@ -16,14 +16,19 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti56
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
+ *
  * @author Dmytro Rud
  */
 class Iti56AuditStrategy extends Hl7v3AuditStrategy {
@@ -31,50 +36,40 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
     Iti56AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
-    
-    
+
     /**
      * Returns ATNA response code -- SUCCESS if the name of the root element
      * is "PatientLocationQueryResponse", SERIOUS_FAILURE otherwise,
      * MAJOR_FAILURE on exception.
-     * 
+     *
      * @param gpath
      *      response message as {@link GPathResult}.
      */
     @Override
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Object gpath) {
         try {
             return ((gpath.name() == 'PatientLocationQueryResponse') &&
                     (gpath.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
-                            RFC3881EventOutcomeCodes.SUCCESS : RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+                    EventOutcomeIndicator.Success : EventOutcomeIndicator.SeriousFailure
         } catch (Exception e) {
             LOG.error('Exception in ITI-56 audit strategy', e)
-            return RFC3881EventOutcomeCodes.MAJOR_FAILURE
+            return EventOutcomeIndicator.MajorFailure
         }
     }
-
 
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         GPathResult patientId = slurp(request).RequestedPatientId
-        auditDataset.patientIds = [iiToCx(patientId)]
+        auditDataset.setPatientIds([iiToCx(patientId)] as String[])
         auditDataset
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti56(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
-                auditDataset.requestPayload,
-                auditDataset.patientId,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
+    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.PatientLocationQuery)
+                .addPatients(auditDataset.patientIds)
+                .setQueryParameters("PatientLocationQueryRequest", PatientLocationQuery, auditDataset.requestPayload)
+                .getMessages()
     }
 
 }

@@ -24,6 +24,7 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
@@ -37,6 +38,7 @@ import javax.xml.ws.handler.MessageContext;
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions.
+ *
  * @author Dmytro Rud
  */
 @Slf4j
@@ -98,23 +100,25 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     }
 
 
-    protected Hl7v3AuditDataset startAtnaAuditing(String requestString, Hl7v3AuditStrategy auditStrategy) {
+    protected Hl7v3AuditDataset startAtnaAuditing(String requestString, Hl7v3AuditStrategy auditStrategy, AuditContext auditContext) {
         Hl7v3AuditDataset auditDataset = null;
         if (auditStrategy != null) {
             try {
-                auditDataset = auditStrategy.createAuditDataset();
+                auditDataset = auditStrategy.createAuditDataset(auditContext);
                 MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
                 HttpServletRequest servletRequest =
                         (HttpServletRequest) messageContext.get(AbstractHTTPDestination.HTTP_REQUEST);
                 if (servletRequest != null) {
-                    auditDataset.setClientIpAddress(servletRequest.getRemoteAddr());
+                    auditDataset.setRemoteAddress(servletRequest.getRemoteAddr());
                 }
-                auditDataset.setServiceEndpointUrl((String) messageContext.get(Message.REQUEST_URL));
+
+                // The SOAP endpoint URL
+                auditDataset.setDestinationUserId((String) messageContext.get(Message.REQUEST_URL));
 
                 AddressingProperties apropos = (AddressingProperties) messageContext.get(
                                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
                 if ((apropos != null) && (apropos.getReplyTo() != null) && (apropos.getReplyTo().getAddress() != null)) {
-                    auditDataset.setUserId(apropos.getReplyTo().getAddress().getValue());
+                    auditDataset.setSourceUserId(apropos.getReplyTo().getAddress().getValue());
                 }
 
                 if (wsTransactionConfiguration.isAuditRequestPayload()) {
@@ -133,8 +137,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     protected void finalizeAtnaAuditing(
             Object response,
             Hl7v3AuditStrategy auditStrategy,
-            Hl7v3AuditDataset auditDataset)
-    {
+            Hl7v3AuditDataset auditDataset) {
         if (auditStrategy != null) {
             try {
                 auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);

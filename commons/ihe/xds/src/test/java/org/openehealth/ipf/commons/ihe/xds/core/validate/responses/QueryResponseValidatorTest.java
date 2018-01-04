@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
@@ -44,7 +44,7 @@ public class QueryResponseValidatorTest {
     @Before
     public void setUp() {
         validator = new QueryResponseValidator();
-        EbXMLFactory factory = new EbXMLFactory21();
+        EbXMLFactory factory = new EbXMLFactory30();
         
         response = SampleData.createQueryResponseWithLeafClass();
         transformer = new QueryResponseTransformer(factory);

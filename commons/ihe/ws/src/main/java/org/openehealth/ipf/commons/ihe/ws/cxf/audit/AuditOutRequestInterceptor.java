@@ -22,6 +22,7 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.apache.cxf.ws.addressing.Names;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
@@ -37,17 +38,18 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  */
 public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
     private final AsynchronyCorrelator<T> correlator;
-    private final WsTransactionConfiguration wsTransactionConfiguration;
+    private final WsTransactionConfiguration<T> wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
     public AuditOutRequestInterceptor(
             AuditStrategy<T> auditStrategy,
+            AuditContext auditContext,
             AsynchronyCorrelator<T> correlator,
-            WsTransactionConfiguration wsTransactionConfiguration)
+            WsTransactionConfiguration<T> wsTransactionConfiguration)
     {
-        super(Phase.PRE_PROTOCOL_ENDING, auditStrategy);
+        super(Phase.PRE_PROTOCOL_ENDING, auditStrategy, auditContext);
         addAfter(OutPayloadExtractorInterceptor.class.getName());
         this.correlator = correlator;
         this.wsTransactionConfiguration = wsTransactionConfiguration;
@@ -61,7 +63,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
         }
 
         T auditDataset = getAuditDataset(message);
-        auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
+        auditDataset.setRemoteAddress((String) message.get(Message.ENDPOINT_ADDRESS));
         extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
         Object request = extractPojo(message);

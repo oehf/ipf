@@ -18,13 +18,14 @@ package org.openehealth.ipf.commons.ihe.core;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 /**
  * @author Dmytro Rud
  */
 @AllArgsConstructor
-abstract public class TransactionConfiguration {
+abstract public class TransactionConfiguration<T extends AuditDataset> {
 
     /**
      * name of the transaction
@@ -48,12 +49,12 @@ abstract public class TransactionConfiguration {
      * {@link AuditStrategy} to be used on client side to accomplish ATNA audit
      */
     @Getter
-    private final AuditStrategy clientAuditStrategy;
+    private final AuditStrategy<T> clientAuditStrategy;
 
     /**
      * {@link AuditStrategy} to be used on server side to accomplish ATNA audit
      */
     @Getter
-    private final AuditStrategy serverAuditStrategy;
+    private final AuditStrategy<T> serverAuditStrategy;
 
 }

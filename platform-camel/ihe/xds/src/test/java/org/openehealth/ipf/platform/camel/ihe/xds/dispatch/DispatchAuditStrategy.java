@@ -17,23 +17,28 @@ package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
@@ -55,9 +60,9 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
         super(true);
         map = new HashMap<>();
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegistryStoredQuery"),
-                new Iti18ServerAuditStrategy());
+                new Iti18AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayQuery"),
-                new Iti38ServerAuditStrategy());
+                new Iti38AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayRetrieve"),
                 new Iti39ServerAuditStrategy());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_ProvideAndRegisterDocumentSet-b"),
@@ -69,27 +74,32 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_MultiPatientStoredQuery"),
                 new Iti51AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_UpdateDocumentSet"),
-                new Iti57AuditStrategy(true));
+                new Iti57ServerAuditStrategy());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterOnDemandDocumentEntry"),
-                new Iti61AuditStrategy(true));
+                new Iti61ServerAuditStrategy());
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_DeleteDocumentSet"),
                 new Iti62AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayFetch"),
                 new Iti63AuditStrategy(true));
+        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_CrossGatewayDocumentProvide"),
+                new Iti80ServerAuditStrategy());
+        map.put(new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_RemoveDocuments"),
+                new Iti86AuditStrategy(true));
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_RetrieveImagingDocumentSet"),
-                new Rad69AuditStrategy(true));
+                new Rad69ServerAuditStrategy());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet"),
-                new Rad75AuditStrategy(true));
-
+                new Rad75ServerAuditStrategy());
+        map.put(new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_CrossGatewayUpdateDocumentSet"),
+                new ChXcmuServerAuditStrategy());
         if (additionalMappings != null) {
             map.putAll(additionalMappings);
         }
     }
 
     @Override
-    public T createAuditDataset() {
+    public T createAuditDataset(AuditContext auditContext) {
         XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
-        return (strategy != null) ? (T)strategy.createAuditDataset() : null;
+        return (strategy != null) ? (T)strategy.createAuditDataset(auditContext) : null;
     }
 
     @Override
@@ -119,9 +129,15 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object response) {
+    public AuditMessage[] makeAuditMessage(T auditDataset) {
+        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        return (strategy != null) ? strategy.makeAuditMessage(auditDataset) : null;
+    }
+
+    @Override
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
         XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
-        return (strategy != null) ? strategy.getEventOutcomeCode(response) : null;
+        return (strategy != null) ? strategy.getEventOutcomeIndicator(response) : null;
     }
 
     private XdsAuditStrategy<? extends XdsAuditDataset> getAuditStrategy() {

@@ -35,8 +35,9 @@ public class Iti55AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

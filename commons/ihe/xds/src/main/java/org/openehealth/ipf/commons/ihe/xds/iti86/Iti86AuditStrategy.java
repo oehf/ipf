@@ -15,16 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti86;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveDocumentAuditStrategy30;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveDocumentAuditStrategy30;
 
-import static org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset.DEFAULT_USER_ROLES;
+import java.util.stream.Stream;
 
 /**
  * @author Dmytro Rud
- *
  * @since 3.3
  */
 public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
@@ -34,23 +38,21 @@ public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
-        for (Status status : Status.values()) {
-            if (auditDataset.hasDocuments(status)) {
-                AuditorManager.getCustomXdsAuditor().auditIti86(
-                        isServerSide(),
-                        auditDataset.getEventOutcomeCode(status),
-                        auditDataset.getUserId(),
-                        auditDataset.getUserName(),
-                        auditDataset.getClientIpAddress(),
-                        auditDataset.getServiceEndpointUrl(),
-                        auditDataset.getPatientId(),
-                        auditDataset.getDocumentIds(status),
-                        auditDataset.getRepositoryIds(status),
-                        auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPurposesOfUse(),
-                        auditDataset.getUserRoles().isEmpty() ? DEFAULT_USER_ROLES : auditDataset.getUserRoles());
-            }
-        }
+    public AuditMessage[] makeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+        return Stream.of(Status.values())
+                .filter(auditDataset::hasDocuments)
+                .map(s -> doMakeAuditMessage(auditDataset, s))
+                .toArray(AuditMessage[]::new);
     }
+
+    private AuditMessage doMakeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsPatientRecordBuilder(auditDataset, EventActionCode.Delete, XdsEventTypeCode.RemoveDocuments, auditDataset.getPurposesOfUse())
+                .addPatients(auditDataset.getPatientIds())
+                .addDocumentIds(auditDataset,
+                        status,
+                        ParticipantObjectIdTypeCode.ReportNumber,
+                        ParticipantObjectDataLifeCycle.PermanentErasure)
+                .getMessage();
+    }
+
 }

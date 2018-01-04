@@ -61,7 +61,7 @@ import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserD
  */
 public abstract class AbstractWsProducer<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration, InType, OutType> extends DefaultProducer {
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>, InType, OutType> extends DefaultProducer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractWsProducer.class);
 
     private final JaxWsClientFactory<AuditDatasetType> clientFactory;

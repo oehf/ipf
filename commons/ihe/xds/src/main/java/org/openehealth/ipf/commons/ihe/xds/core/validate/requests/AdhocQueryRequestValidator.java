@@ -30,9 +30,8 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
@@ -113,7 +112,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 GET_RELATED_DOCUMENTS);
 
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
-        ALLOWED_QUERY_TYPES.put(ITI_16, EnumSet.of(SQL));
         ALLOWED_QUERY_TYPES.put(ITI_18, storedQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_38, storedQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));

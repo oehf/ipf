@@ -15,13 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti63;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditStrategy30;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 
 /**
  * Audit strategy for the XCF ITI-63 transaction.
+ *
  * @author Dmytro Rud
+ * @author Christian Ohr
  */
 public class Iti63AuditStrategy extends XdsQueryAuditStrategy30 {
 
@@ -30,20 +31,11 @@ public class Iti63AuditStrategy extends XdsQueryAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsQueryAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditIti63(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryUuid(),
-                auditDataset.getRequestPayload(),
-                auditDataset.getHomeCommunityId(),
-                auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse(),
-                auditDataset.getUserRoles());
+    public AuditMessage[] makeAuditMessage(XdsQueryAuditDataset auditDataset) {
+        return new XdsQueryBuilder(auditDataset, XdsEventTypeCode.CrossCommunityFetch, auditDataset.getPurposesOfUse())
+                .addPatients(auditDataset.getPatientId())
+                .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.CrossCommunityFetch)
+                .getMessages();
     }
 
 }

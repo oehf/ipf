@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
  * Contains information about a Web Service-based transaction.
  * All parameters are static, i. e. do not depend on the endpoint configuration.
  */
-public class WsTransactionConfiguration extends TransactionConfiguration {
+public class WsTransactionConfiguration<T extends WsAuditDataset> extends TransactionConfiguration<T> {
     private final QName bindingName;
     private final Class<?> sei;
     private final QName serviceName;
@@ -75,8 +75,8 @@ public class WsTransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends WsAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends WsAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             QName serviceName,
             Class<?> sei,
             QName bindingName,

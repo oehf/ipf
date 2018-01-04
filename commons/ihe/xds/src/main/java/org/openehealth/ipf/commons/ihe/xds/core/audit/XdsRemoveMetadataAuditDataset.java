@@ -17,9 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
  * XDS audit dataset specific for transactions related to XDS Metadata removal.
+ *
  * @author Boris Stanojevic
  */
 public class XdsRemoveMetadataAuditDataset extends XdsAuditDataset {
@@ -27,14 +29,8 @@ public class XdsRemoveMetadataAuditDataset extends XdsAuditDataset {
 
     @Getter @Setter private String[] objectIds;
 
-    /**
-     * @param serverSide
-     *            specifies whether this audit dataset will be used on the
-     *            server side (<code>true</code>) or on the client side (
-     *            <code>false</code>)
-     */
-    public XdsRemoveMetadataAuditDataset(boolean serverSide) {
-        super(serverSide);
-    }
 
+    public XdsRemoveMetadataAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
+    }
 }

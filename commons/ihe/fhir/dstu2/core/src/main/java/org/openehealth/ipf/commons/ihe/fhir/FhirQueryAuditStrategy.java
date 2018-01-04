@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.param.TokenParam;
+import org.openehealth.ipf.commons.audit.AuditContext;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class FhirQueryAuditStrategy<T extends FhirQueryAuditDataset> extends FhirAuditStrategy<T> {
+public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset> {
 
     protected FhirQueryAuditStrategy(boolean serverSide) {
         super(serverSide);
@@ -49,8 +50,8 @@ public abstract class FhirQueryAuditStrategy<T extends FhirQueryAuditDataset> ex
      * @return enriched audit dataset
      */
     @Override
-    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
-        T dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+    public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
+        FhirQueryAuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
         String url = (String) parameters.get(HTTP_URL);
         String query = (String) parameters.get(HTTP_QUERY);
@@ -70,4 +71,8 @@ public abstract class FhirQueryAuditStrategy<T extends FhirQueryAuditDataset> ex
         return dataset;
     }
 
+    @Override
+    public FhirQueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new FhirQueryAuditDataset(auditContext, isServerSide());
+    }
 }

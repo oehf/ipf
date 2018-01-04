@@ -32,15 +32,10 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti83AuditStrategy(boolean serverSide) {
         super(serverSide);
-    }
-
-    @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
     }
 
     @Override
@@ -78,22 +73,4 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDat
         return dataset;
     }
 
-    @Override
-    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        /* Pending https://github.com/oehf/ipf/issues/124
-        if (result) {
-            if (response instanceof Parameters) {
-                Parameters parameters = (Parameters) response;
-                auditDataset.getPatientIds().addAll(
-                        parameters.getParameter().stream()
-                                .map(Parameters.ParametersParameterComponent::getValue)
-                                .filter(Identifier.class::isInstance)
-                                .map(Identifier.class::cast)
-                                .map(id -> String.format("%s|%s", id.getSystem(), id.getValue()))
-                                .collect(Collectors.toList()));
-            }
-        }
-        */
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
-    }
 }

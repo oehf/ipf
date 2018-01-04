@@ -19,12 +19,11 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
@@ -39,12 +38,12 @@ import java.util.List;
 public class PDQ implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v2InteractionId {
+    public enum Interactions implements Hl7v2InteractionId<QueryAuditDataset> {
         ITI_21(ITI_21_CONFIGURATION, ITI_21_NAK_FACTORY),
         ITI_22(ITI_22_CONFIGURATION, ITI_22_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter private NakFactory nakFactory;
+        @Getter private Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<QueryAuditDataset> nakFactory;
     }
 
     @Override
@@ -52,13 +51,13 @@ public class PDQ implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v2TransactionConfiguration ITI_21_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_21_CONFIGURATION =
             new PdqTransactionConfiguration(
                     "pdq-iti21",
                     "Patient Demographics Query",
                     true,
-                    new Iti21ClientAuditStrategy(),
-                    new Iti21ServerAuditStrategy(),
+                    new Iti21AuditStrategy(false),
+                    new Iti21AuditStrategy(true),
                     new Version[] {Version.V25},
                     "PDQ adapter",
                     "IPF",
@@ -74,16 +73,16 @@ public class PDQ implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI21));
 
-    private static final NakFactory ITI_21_NAK_FACTORY =
+    private static final NakFactory<QueryAuditDataset> ITI_21_NAK_FACTORY =
             new QpdAwareNakFactory(ITI_21_CONFIGURATION, "RSP", "K22");
 
-    private static final Hl7v2TransactionConfiguration ITI_22_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_22_CONFIGURATION =
             new PdqTransactionConfiguration(
                     "pdq-iti22",
                     "Patient Demographics And Visit Query",
                     true,
-                    new Iti22ClientAuditStrategy(),
-                    new Iti22ServerAuditStrategy(),
+                    new Iti22AuditStrategy(false),
+                    new Iti22AuditStrategy(true),
                     new Version[] {Version.V25},
                     "PDQ adapter",
                     "IPF",
@@ -99,6 +98,6 @@ public class PDQ implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI22));
 
-    private static final NakFactory ITI_22_NAK_FACTORY =
+    private static final NakFactory<QueryAuditDataset> ITI_22_NAK_FACTORY =
             new QpdAwareNakFactory(ITI_22_CONFIGURATION, "RSP", "ZV2");
 }

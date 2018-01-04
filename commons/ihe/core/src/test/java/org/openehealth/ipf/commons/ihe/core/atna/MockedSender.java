@@ -33,7 +33,7 @@ public class MockedSender extends AbstractMockedAuditSender<AuditEventMessage> {
 
     private static final String OLD_VALIDATION_SCHEMA = "/dicomModified.xsd";
     private static final String NEW_VALIDATION_SCHEMA = "/atna2.xsd";
-    XsdValidator validator = new XsdValidator();
+    private XsdValidator validator = new XsdValidator();
 
     public MockedSender() {
         super(true);

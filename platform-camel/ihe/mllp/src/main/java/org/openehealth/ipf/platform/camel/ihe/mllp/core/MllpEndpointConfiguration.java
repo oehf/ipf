@@ -17,10 +17,13 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
+import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.jsse.ClientAuthentication;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
@@ -45,7 +48,7 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
     @Getter
     private final ProtocolCodecFactory codecFactory;
     @Getter
-    private final boolean audit;
+    private AuditContext auditContext;
     @Getter
     private final SSLContext sslContext;
     @Getter
@@ -66,14 +69,31 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
     /**
      * @deprecated
      */
-    protected MllpEndpointConfiguration(MllpComponent<?> component, Map<String, Object> parameters) throws Exception {
+    protected MllpEndpointConfiguration(MllpComponent<?, ?> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }
 
-    protected MllpEndpointConfiguration(MllpComponent<?> component, String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);
-        audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
+
+        Boolean audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
+        auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
+
+        if (auditContext == null) {
+            auditContext = ContextFacade.getBean(AuditContext.class);
+            if (auditContext != null) {
+                if (audit != null) {
+                    auditContext.setAuditEnabled(audit);
+                }
+            } else {
+                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
+            }
+        } else {
+            if (audit != null) {
+                auditContext.setAuditEnabled(audit);
+            }
+        }
 
         // Will only be effective if sslContext is set and overrides
         String sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
@@ -134,6 +154,10 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
 
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 
+    }
+
+    public boolean isAudit() {
+        return auditContext.isAuditEnabled();
     }
 
 }

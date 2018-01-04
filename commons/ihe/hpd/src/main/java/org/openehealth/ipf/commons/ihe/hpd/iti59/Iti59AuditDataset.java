@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
@@ -40,8 +41,7 @@ public class Iti59AuditDataset extends WsAuditDataset {
 
     @Getter @Setter private RequestItem[] requestItems;
 
-    public Iti59AuditDataset(boolean serverSide) {
-        super(serverSide);
+    public Iti59AuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
-
 }

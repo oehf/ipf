@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
@@ -26,6 +28,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
@@ -41,6 +44,11 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
 
+    private final AuditContext auditContext;
+
+    public ConsumerAuditInterceptor(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
+    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -63,9 +71,9 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         } finally {
             if (auditDataset != null) {
                 try {
-                    auditDataset.setEventOutcomeCode(failed ?
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS);
+                    auditDataset.setEventOutcomeIndicator(failed ?
+                            EventOutcomeIndicator.MajorFailure :
+                            EventOutcomeIndicator.Success);
                     getAuditStrategy().doAudit(auditDataset);
                 } catch (Exception e) {
                     LOG.error("ATNA auditing failed", e);
@@ -75,7 +83,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     }
 
     @Override
-    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) throws Exception {
+    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) {
         // auditDataset.setClientIpAddress(exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class).getRemoteAddr());
         // auditDataset.setLocalAddress
     }
@@ -93,7 +101,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset();
+            AuditDatasetType auditDataset = strategy.createAuditDataset(auditContext);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.util.ArrayList;
@@ -27,21 +28,15 @@ import java.util.List;
  * @author Dmytro Rud
  */
 abstract public class XdsAuditDataset extends WsAuditDataset {
+
     private static final long serialVersionUID = 652866992858926778L;
 
     // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
-    @Getter private final List<String> patientIds = new ArrayList<>();
+    @Getter
+    private final List<String> patientIds = new ArrayList<>();
 
-    /**
-     * Constructor.
-     * 
-     * @param serverSide
-     *            specifies whether this audit dataset will be used on the
-     *            server side (<code>true</code>) or on the client side (
-     *            <code>false</code>)
-     */
-    public XdsAuditDataset(boolean serverSide) {
-        super(serverSide);
+    public XdsAuditDataset(AuditContext auditContext, boolean serverSide) {
+        super(auditContext, serverSide);
     }
 
     /**

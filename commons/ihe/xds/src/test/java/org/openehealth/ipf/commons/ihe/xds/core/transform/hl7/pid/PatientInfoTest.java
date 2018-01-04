@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.XDS_B;
+import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
@@ -47,7 +47,7 @@ public class PatientInfoTest {
     private static void assertValidationFailure(RegisterDocumentSet request, ValidationMessage expectedValidationMessage) {
         boolean failed = false;
         try {
-            SUBMIT_OBJECTS_REQUEST_VALIDATOR.validate(REGISTER_DOCUMENT_SET_TRANSFORMER.toEbXML(request), XDS_B.Interactions.ITI_42);
+            SUBMIT_OBJECTS_REQUEST_VALIDATOR.validate(REGISTER_DOCUMENT_SET_TRANSFORMER.toEbXML(request), XDS.Interactions.ITI_42);
         } catch (XDSMetaDataException e) {
             assertEquals(expectedValidationMessage, e.getValidationMessage());
             failed = true;

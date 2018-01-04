@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 import javax.xml.namespace.QName;
 
@@ -25,7 +26,7 @@ import javax.xml.namespace.QName;
  *
  * @author Dmytro Rud
  */
-public class DocumentRegistryTransactionConfiguration extends WsTransactionConfiguration {
+public class DocumentRegistryTransactionConfiguration extends WsTransactionConfiguration<XdsAuditDataset> {
 
     public DocumentRegistryTransactionConfiguration() {
         super("dummy",

@@ -29,32 +29,4 @@ public class Iti78ServerAuditStrategy extends Iti78AuditStrategy {
         super(true);
     }
 
-    /**
-     * Enrich patients IDs. Response is either a List of Patients or a Patient
-     *
-     * @param auditDataset audit dataset
-     * @param response response resource
-     * @return audit dataset enriched with patient resource IDs
-     */
-    @Override
-    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        /* Pending https://github.com/oehf/ipf/issues/124
-        if (result) {
-            if (response instanceof Patient) {
-                Patient patient = (Patient) response;
-                auditDataset.getPatientIds().add(patient.getIdElement().getValue());
-            } else if (response instanceof List) {
-                List<Patient> patients = (List<Patient>) response;
-                auditDataset.getPatientIds().addAll(
-                        patients.stream()
-                                .map(r -> r.getIdElement().getValue())
-                                .collect(Collectors.toList()));
-            } else {
-                // Something else...?
-                return false;
-            }
-        }
-        */
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
-    }
 }

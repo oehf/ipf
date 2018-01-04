@@ -38,18 +38,18 @@ public class ChXcmuComponent extends XdsComponent<XdsSubmitAuditDataset> {
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 ChXcmuService.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
-                    AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
-                    JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory)
-            {
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(
+                    AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
+                    JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new ChXcmuProducer(endpoint, clientFactory);
             }
         };

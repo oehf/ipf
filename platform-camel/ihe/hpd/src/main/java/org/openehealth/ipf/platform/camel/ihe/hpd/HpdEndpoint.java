@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.*;
@@ -27,19 +28,20 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-abstract public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
+public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
 
-    public HpdEndpoint(
+    protected HpdEndpoint(
             String endpointUri,
             String address,
             AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, ? extends WsInteractionId> component,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
-            Class<? extends AbstractWebService> serviceClass)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, auditContext,
+                customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
     @Override
@@ -60,6 +62,7 @@ abstract public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

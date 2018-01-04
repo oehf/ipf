@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -37,7 +40,10 @@ import java.util.Map;
  * @param <ConfigType>       configuration type
  * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId<ConfigType>>
+abstract public class AbstractWsComponent<
+        AuditDatasetType extends WsAuditDataset,
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>,
+        InteractionIdType extends WsInteractionId<ConfigType>>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
 
     private final InteractionIdType interactionId;
@@ -61,8 +67,28 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
                 parameters, "outInterceptors", Interceptor.class)));
         provider.setOutFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "outFaultInterceptors", Interceptor.class)));
-
         return provider;
+    }
+
+    protected AuditContext getAuditContext(Map<String, Object> parameters) {
+        Boolean audit = getAndRemoveParameter(parameters, "audit", Boolean.class, true);
+        AuditContext auditContext = resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
+
+        if (auditContext == null) {
+            auditContext = ContextFacade.getBean(AuditContext.class);
+            if (auditContext != null) {
+                if (audit != null) {
+                    auditContext.setAuditEnabled(audit);
+                }
+            } else {
+                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
+            }
+        } else {
+            if (audit != null) {
+                auditContext.setAuditEnabled(audit);
+            }
+        }
+        return auditContext;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -86,12 +112,12 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return interactionId.getWsTransactionConfiguration().getClientAuditStrategy();
+        return getWsTransactionConfiguration().getClientAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return interactionId.getWsTransactionConfiguration().getServerAuditStrategy();
+        return getWsTransactionConfiguration().getServerAuditStrategy();
     }
 
     /**

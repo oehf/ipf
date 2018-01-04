@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
@@ -26,6 +25,7 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.config.Lookup;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
@@ -36,11 +36,14 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Base class for all ATNA audit-related CXF interceptors.
  * @author Dmytro Rud
  */
 abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
+
     private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
 
 
@@ -60,6 +63,8 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      */
     private final AuditStrategy<T> auditStrategy;
 
+    private final AuditContext auditContext;
+
     /**
      * Constructor which sets a strategy.
      * 
@@ -69,10 +74,10 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      *          an audit strategy instance. <p><code>null</code> values are
      *          explicitly prohibited. 
      */
-    protected AbstractAuditInterceptor(String phase, AuditStrategy<T> auditStrategy) {
+    protected AbstractAuditInterceptor(String phase, AuditStrategy<T> auditStrategy, AuditContext auditContext) {
         super(phase);
-        Validate.notNull(auditStrategy);
-        this.auditStrategy = auditStrategy;
+        this.auditStrategy = requireNonNull(auditStrategy);
+        this.auditContext = requireNonNull(auditContext);
     }
 
 
@@ -92,7 +97,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     protected T getAuditDataset(SoapMessage message) {
         T auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
-            auditDataset = getAuditStrategy().createAuditDataset();
+            auditDataset = getAuditStrategy().createAuditDataset(auditContext);
             if (auditDataset == null) {
                 LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
@@ -134,8 +139,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             SoapMessage message, 
             boolean isInbound, 
             boolean inverseWsaDirection,
-            WsAuditDataset auditDataset)
-    {
+            WsAuditDataset auditDataset) {
         AddressingProperties wsaProperties = (AddressingProperties) message.get(isInbound ?
                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND :
                 JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
@@ -174,8 +178,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     protected static void extractXuaUserNameFromSaml2Assertion(
             SoapMessage message,
             Header.Direction headerDirection,
-            WsAuditDataset auditDataset)
-    {
+            WsAuditDataset auditDataset) {
         xuaProcessor.extractXuaUserNameFromSaml2Assertion(message, headerDirection, auditDataset);
     }
 
@@ -185,12 +188,11 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      */
     protected static void extractAddressesFromServletRequest(
             SoapMessage message,
-            WsAuditDataset auditDataset)
-    {
+            WsAuditDataset auditDataset) {
         HttpServletRequest request = 
             (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
-        auditDataset.setClientIpAddress(request.getRemoteAddr());
-        auditDataset.setServiceEndpointUrl(request.getRequestURL().toString());
+        auditDataset.setRemoteAddress(request.getRemoteAddr());
+        auditDataset.setLocalAddress(request.getRequestURL().toString());
     }
 
 

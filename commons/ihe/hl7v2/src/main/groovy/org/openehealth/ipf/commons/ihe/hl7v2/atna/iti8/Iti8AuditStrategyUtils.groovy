@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8
 
 import ca.uhn.hl7v2.model.Message
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset
 
 /**
  * Audit Strategy Groovy Utils
@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditDataset
  */
 final class Iti8AuditStrategyUtils  {
 
-    static void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Message msg) {
+    static void enrichAuditDatasetFromRequest(FeedAuditDataset auditDataset, Message msg) {
         auditDataset.patientId = msg.findPID()[3].encodeRepetitions()
         if(msg.MSH[9][2].value == 'A40') {
             auditDataset.oldPatientId = msg.PATIENT.MRG[1].encodeRepetitions()

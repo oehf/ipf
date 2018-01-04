@@ -29,7 +29,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.easymock.EasyMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;

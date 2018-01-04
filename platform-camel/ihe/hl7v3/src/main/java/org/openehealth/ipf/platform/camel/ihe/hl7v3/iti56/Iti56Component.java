@@ -39,8 +39,9 @@ public class Iti56Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
+                getAuditContext(parameters),
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -47,13 +48,15 @@ public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDa
      *          correlator for asynchronous interactions.
      */
     public JaxWsAsyncResponseServiceFactory(
-            WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             AsynchronyCorrelator<AuditDatasetType> correlator)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, null);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext,
+                customInterceptors, null);
 
         Validate.notNull(correlator, "Correlator for asynchronous processing must be set.");
         this.correlator = correlator;
@@ -70,7 +73,7 @@ public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDa
             }
 
             AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                    new AuditResponseInterceptor<>(auditStrategy, false, correlator, true);
+                    new AuditResponseInterceptor<>(auditStrategy, auditContext,false, correlator, true);
             svrFactory.getInInterceptors().add(auditInterceptor);
             svrFactory.getInFaultInterceptors().add(auditInterceptor);
         }
