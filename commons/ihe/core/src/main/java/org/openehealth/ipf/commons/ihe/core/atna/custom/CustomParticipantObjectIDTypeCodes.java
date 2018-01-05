@@ -23,6 +23,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 public class CustomParticipantObjectIDTypeCodes extends CodedValueType {
 
     public static final CodedValueType ISO21091_IDENTIFIER = new CustomParticipantObjectIDTypeCodes("99SupHPD-ISO21091", "ISO 21091 Identifier", "IHE");
+    public static final CodedValueType LDAP_DN = new CustomParticipantObjectIDTypeCodes("DN", "Distinguished Name", "RFC-4517");
 
     private CustomParticipantObjectIDTypeCodes(String code, String originalText, String codeSystemName) {
         setCode(code);

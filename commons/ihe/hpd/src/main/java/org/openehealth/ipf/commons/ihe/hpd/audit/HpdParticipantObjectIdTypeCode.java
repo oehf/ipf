@@ -27,13 +27,14 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
  */
 public enum HpdParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 
-    ProviderIdentifier("99SupHPD-ISO21091", "ISO 21091 Identifier");
+    ProviderIdentifier("99SupHPD-ISO21091", "IHE", "ISO 21091 Identifier"),
+    DistinguishedName("DN", "RFC-4517", "Distinguished Name");
 
     @Getter
     private ParticipantObjectIdType value;
 
-    HpdParticipantObjectIdTypeCode(String code, String displayName) {
-        this.value = ParticipantObjectIdType.of(code, "IHE", displayName);
+    HpdParticipantObjectIdTypeCode(String code, String codeSystemName, String displayName) {
+        this.value = ParticipantObjectIdType.of(code, codeSystemName, displayName);
     }
 
 }

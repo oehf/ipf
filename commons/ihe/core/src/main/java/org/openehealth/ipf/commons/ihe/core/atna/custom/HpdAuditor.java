@@ -50,6 +50,8 @@ public class HpdAuditor extends IHEAuditor {
             String directoryUri,
             String clientIpAddress,
             Collection<String> providerIds,
+            String dn,
+            String newRdn,
             List<CodedValueType> purposesOfUse,
             List<CodedValueType> userRoles)
     {
@@ -65,8 +67,14 @@ public class HpdAuditor extends IHEAuditor {
 
         configureEvent(this, serverSide, event, replyToUri, userName, directoryUri,
                 directoryUri, clientIpAddress, userRoles);
-        if (! EventUtils.isEmptyOrNull(providerIds)) {
+        if (!EventUtils.isEmptyOrNull(providerIds)) {
             providerIds.forEach(event::addProviderParticipantObject);
+        }
+        if (!EventUtils.isEmptyOrNull(dn)) {
+            event.addEntryParticipantObject(dn);
+        }
+        if (!EventUtils.isEmptyOrNull(newRdn)) {
+            event.addEntryParticipantObject(newRdn);
         }
         audit(event);
     }

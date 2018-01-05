@@ -56,4 +56,17 @@ public class HpdEvent extends GenericIHEAuditEventMessage {
                 null);
     }
 
+    public void addEntryParticipantObject(String dn) {
+        addParticipantObjectIdentification(
+                CustomParticipantObjectIDTypeCodes.LDAP_DN,
+                null,
+                null,
+                null,
+                dn,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.RESOURCE,
+                null,
+                null);
+    }
+
 }

@@ -45,7 +45,8 @@ public abstract class Vocabulary {
 
 
     public enum DisplayNameUsage {REQUIRED, OPTIONAL}
-    
+    public enum NodeRepresentationUsage {REQUIRED, PROHIBITED}
+
     /** Author External Classification Scheme of the Document Entry */
     public static final String DOC_ENTRY_AUTHOR_CLASS_SCHEME =
         "urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d";

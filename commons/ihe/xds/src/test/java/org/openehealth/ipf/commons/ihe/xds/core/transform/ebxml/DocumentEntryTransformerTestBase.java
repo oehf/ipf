@@ -162,7 +162,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "20150208");
         assertSlot(SLOT_NAME_SIZE, slots, "174");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^&uni 4&uniType 4");
-        assertSlot(SLOT_NAME_URI, slots, "1|uri");
+        assertSlot(SLOT_NAME_URI, slots, "uri");
         assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^degree 2^^&uni 2&uniType 2");
         assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, "repo1");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots,

@@ -23,7 +23,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
@@ -50,18 +52,22 @@ public class ChoiceValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        long count = Arrays.stream(params)
-                .map(param -> request.getSingleSlotValue(param.getSlotName()))
+        List<String> paramSlotNames = Arrays.stream(params)
+                .map(QueryParameter::getSlotName)
+                .collect(Collectors.toList());
+
+        long count = paramSlotNames.stream()
+                .map(request::getSingleSlotValue)
                 .filter(Objects::nonNull)
                 .count();
 
         if (count == 0L) {
-            throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, new Object[] {params});
+            throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, "one of " + paramSlotNames);
         }
         if (count > 1L) {
             throw new XdsRuntimeException(
                     ErrorCode.STORED_QUERY_PARAM_NUMBER,
-                    String.format(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER.getText(), new Object[] {params}),
+                    String.format(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER.getText(), paramSlotNames),
                     Severity.ERROR,
                     null);
         }

@@ -40,7 +40,7 @@ public class AuthorClassificationValidation extends ClassificationValidation {
     }
 
     public AuthorClassificationValidation(String classScheme, SlotValueValidation[] slotValidations) {
-        super(classScheme, 0, Integer.MAX_VALUE, Vocabulary.DisplayNameUsage.OPTIONAL, slotValidations);
+        super(classScheme, 0, Integer.MAX_VALUE, Vocabulary.DisplayNameUsage.OPTIONAL, Vocabulary.NodeRepresentationUsage.PROHIBITED, slotValidations);
     }
 
     @Override

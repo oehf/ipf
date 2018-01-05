@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -37,8 +38,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
@@ -160,18 +160,34 @@ public class AdhocQueryRequestValidatorTest {
         expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
     }
     
-    @Test(expected = XdsRuntimeException.class)
+    @Test
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
-        expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, ITI_18);
+        boolean exceptionOccurred = false;
+        try {
+            validator.validate(transformer.toEbXML(request), ITI_18);
+        } catch (XdsRuntimeException e) {
+            exceptionOccurred = true;
+            assertEquals(e.getErrorCode(), ErrorCode.STORED_QUERY_PARAM_NUMBER);
+            assertTrue(e.getMessage().contains("[$XDSDocumentEntryEntryUUID, $XDSDocumentEntryUniqueId, $XDSDocumentEntryLogicalID]"));
+        }
+        assertTrue(exceptionOccurred);
     }
 
     @Test
     public void testQueryParametersEitherOrChoiceMissing() {
         request = SampleData.createGetDocumentsQuery();
         ((GetDocumentsQuery)request.getQuery()).setUuids(null);
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ITI_18);
+        boolean exceptionOccurred = false;
+        try {
+            validator.validate(transformer.toEbXML(request), ITI_18);
+        } catch (XDSMetaDataException e) {
+            exceptionOccurred = true;
+            assertEquals(ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER, e.getValidationMessage());
+            assertTrue(e.getMessage().contains("one of [$XDSDocumentEntryEntryUUID, $XDSDocumentEntryUniqueId, $XDSDocumentEntryLogicalID]"));
+        }
+        assertTrue(exceptionOccurred);
     }
 
     /*

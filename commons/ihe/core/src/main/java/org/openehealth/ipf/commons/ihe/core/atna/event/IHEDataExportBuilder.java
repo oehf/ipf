@@ -79,13 +79,22 @@ public class IHEDataExportBuilder<T extends IHEDataExportBuilder<T>> extends IHE
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
+        return addExportedEntity(objectId, participantObjectIdType, ParticipantObjectTypeCode.System, participantObjectTypeCodeRole, details);
+    }
+
+    public T addExportedEntity(
+            String objectId,
+            ParticipantObjectIdType participantObjectIdType,
+            ParticipantObjectTypeCode participantObjectTypeCode,
+            ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+            List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
                 participantObjectIdType,
                 null,
                 null,
                 details,
                 objectId,
-                ParticipantObjectTypeCode.System,
+                participantObjectTypeCode,
                 participantObjectTypeCodeRole,
                 null,
                 null);

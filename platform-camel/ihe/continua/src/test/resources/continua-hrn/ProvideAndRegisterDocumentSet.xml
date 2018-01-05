@@ -57,7 +57,6 @@
 				<rim:Description />
 				<rim:Classification id="cl01"
 					classificationScheme="urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d"
-                    nodeRepresentation="unknown"
 					classifiedObject="Document01">
 					<rim:Slot name="authorPerson">
 						<rim:ValueList>
@@ -182,7 +181,7 @@
 				</rim:Description>
 				<rim:Classification id="cl08"
 					classificationScheme="urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d"
-					classifiedObject="SubmissionSet01" nodeRepresentation="unknown">
+					classifiedObject="SubmissionSet01" nodeRepresentation="">
 					<rim:Slot name="authorPerson">
 						<rim:ValueList>
 							<rim:Value>^Dopplemeyer^Sherry</rim:Value>

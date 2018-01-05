@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.NodeRepresentationUsage;
 
 import java.util.List;
 
@@ -35,28 +37,12 @@ public class ClassificationValidation implements RegistryObjectValidator {
     private final int min;
     private final int max;
     private final DisplayNameUsage displayNameUsage;
+    private final NodeRepresentationUsage nodeRepresentationUsage;
     private final SlotValueValidation[] slotValidations;
 
-    
-    /**
-     * Constructs the validation with exactly one classification with the given <code>classScheme</code>
-     *  no checks for name.
-     * @param classScheme
-     *          the class scheme of the classification to check.
-     *          the maximum number of classifications allowed for the given scheme.
-     * @param displayNameUsage
-     *          the usage of the display name element.  
-     * @param slotValidations
-     *          validations to apply to the slots of the classification.
-     * @see DisplayNameUsage
-     */
-    public ClassificationValidation(String classScheme, DisplayNameUsage displayNameUsage, SlotValueValidation[] slotValidations) {
-        this (classScheme, 1, 1, displayNameUsage, slotValidations);
-    }
-    
     /**
      * Constructs the validation for classifications with the given <code>classScheme</code>.
-     *  
+     *
      * @param classScheme
      *          the class scheme of the classification to check.
      * @param min
@@ -67,14 +53,39 @@ public class ClassificationValidation implements RegistryObjectValidator {
      *          the usage of the display name element.
      * @param slotValidations
      *          validations to apply to the slots of the classification.
-     *          
+     *
      * @see DisplayNameUsage
      */
     public ClassificationValidation(String classScheme, int min, int max, DisplayNameUsage displayNameUsage, SlotValueValidation[] slotValidations) {
+        this(classScheme, min, max, displayNameUsage, NodeRepresentationUsage.REQUIRED, slotValidations);
+    }
+
+    /**
+     * Constructs the validation for classifications with the given <code>classScheme</code>.
+     *
+     * @param classScheme
+     *          the class scheme of the classification to check.
+     * @param min
+     *          the minimum number of classifications allowed for the given scheme.
+     * @param max
+     *          the maximum number of classifications allowed for the given scheme.
+     * @param displayNameUsage
+     *          the usage of the display name element.
+     * @param nodeRepresentationUsage
+     *          optionality of the attribute {@code nodeRepresentation}.
+     * @param slotValidations
+     *          validations to apply to the slots of the classification.
+     *
+     * @see DisplayNameUsage
+     */
+    public ClassificationValidation(String classScheme, int min, int max, DisplayNameUsage displayNameUsage,
+                                    NodeRepresentationUsage nodeRepresentationUsage, SlotValueValidation[] slotValidations)
+    {
         this.classScheme = Validate.notNull(classScheme);
         this.min = min;
         this.max = max;
         this.displayNameUsage = Validate.notNull(displayNameUsage);
+        this.nodeRepresentationUsage = nodeRepresentationUsage;
         this.slotValidations = slotValidations;
     }
 
@@ -89,10 +100,18 @@ public class ClassificationValidation implements RegistryObjectValidator {
 
             metaDataAssert(classification.getClassifiedObject().equals(obj.getId()), 
                     WRONG_CLASSIFIED_OBJ, obj.getId(), classification.getClassifiedObject());
-            
-            metaDataAssert(classification.getNodeRepresentation() != null,
-                    WRONG_NODE_REPRESENTATION, classScheme);
-            
+
+            switch (nodeRepresentationUsage) {
+                case REQUIRED:
+                    metaDataAssert(StringUtils.isNotEmpty(classification.getNodeRepresentation()), NODE_REPRESENTATION_MISSING, classScheme);
+                    break;
+                case PROHIBITED:
+                    metaDataAssert(StringUtils.isEmpty(classification.getNodeRepresentation()), NODE_REPRESENTATION_PROHIBITED, classScheme);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported node representation optionality " + nodeRepresentationUsage);
+            }
+
             switch(displayNameUsage){
                 case OPTIONAL:
                     break;
@@ -102,6 +121,7 @@ public class ClassificationValidation implements RegistryObjectValidator {
                 default :
                     throw new IllegalArgumentException("Unsupported display name usage " + displayNameUsage);
             }
+
             if (slotValidations != null) {
                 for (SlotValueValidation slotValidation : slotValidations) {
                     slotValidation.validate(classification);

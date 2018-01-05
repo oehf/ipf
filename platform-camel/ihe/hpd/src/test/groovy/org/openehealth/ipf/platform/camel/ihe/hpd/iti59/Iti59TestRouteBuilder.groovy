@@ -17,6 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
 
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.LDAPResult
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ResultCode
 
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti59RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti59ResponseValidator
@@ -26,11 +29,19 @@ import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti5
  */
 class Iti59TestRouteBuilder extends RouteBuilder {
 
+    private static final ObjectFactory FACTORY = new ObjectFactory()
+
     void configure() throws Exception {
         from('hpd-iti59:hpd-service1')
             .process(iti59RequestValidator())
             .process {
-                it.out.body = new BatchResponse()
+                it.out.body = new BatchResponse(
+                        batchResponses: [
+                                FACTORY.createBatchResponseDelResponse(new LDAPResult(resultCode: new ResultCode(code: 0), requestID: 'id-2')),
+                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0), requestID: 'id-1')),
+                                FACTORY.createBatchResponseModDNResponse(new LDAPResult(resultCode: new ResultCode(code: 666), requestID: 'id-3')),
+                        ],
+                )
             }
             .process(iti59ResponseValidator())
     }

@@ -35,6 +35,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
@@ -87,8 +88,8 @@ public class ClassificationDisplayNameValidatorTest {
     
     
     private void doValidation(String classScheme, DisplayNameUsage displayNameUsage){
-        ClassificationValidation validator = new ClassificationValidation(
-                classScheme, displayNameUsage, NO_SLOT_VALUE_VALIDATION);
+        ClassificationValidation validator = new ClassificationValidation(classScheme, 1, 1, displayNameUsage,
+                Vocabulary.NodeRepresentationUsage.REQUIRED, NO_SLOT_VALUE_VALIDATION);
         validator.validate(extrinsicObject);
     }
     
@@ -97,9 +98,10 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     private ClassificationValidation buildEventListValidator(){
-        SlotValueValidation [] eventCodeListValidator = new SlotValueValidation [] {
-                new SlotValueValidation(SLOT_NAME_CODING_SCHEME, new NopValidator())};
-        return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, OPTIONAL, eventCodeListValidator);
+        SlotValueValidation [] eventCodeListValidator =
+                new SlotValueValidation [] {new SlotValueValidation(SLOT_NAME_CODING_SCHEME, new NopValidator())};
+        return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 1, 1,
+                OPTIONAL, Vocabulary.NodeRepresentationUsage.REQUIRED, eventCodeListValidator);
     }
     
     
