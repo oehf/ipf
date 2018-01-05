@@ -2,6 +2,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.AbstractFhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Comparator;
 

@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.param.TokenParam;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +42,6 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
     /**
      * Further enrich the audit dataset: add query string and patient IDs in the search parameter
      * (if available).
-     *
-     * TODO independent of FHIR version, put somewhere else?
      *
      * @param auditDataset audit dataset
      * @param request      request object
@@ -70,4 +70,8 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
         return dataset;
     }
 
+    @Override
+    public FhirQueryAuditDataset createAuditDataset(AuditContext auditContext) {
+        return new FhirQueryAuditDataset(auditContext, isServerSide());
+    }
 }

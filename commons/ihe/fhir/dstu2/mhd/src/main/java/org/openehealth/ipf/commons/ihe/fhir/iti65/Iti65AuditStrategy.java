@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
@@ -31,26 +33,15 @@ import java.util.stream.Collectors;
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
+abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
 
     public Iti65AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public Iti65AuditDataset createAuditDataset() {
-        return new Iti65AuditDataset(isServerSide());
-    }
-
-    @Override
-    public void doAudit(Iti65AuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti65(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getPatientId(),
-                auditDataset.getDocumentManifestUuid());
+    public Iti65AuditDataset createAuditDataset(AuditContext auditContext) {
+        return new Iti65AuditDataset(auditContext, isServerSide());
     }
 
     @Override
@@ -87,7 +78,7 @@ public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
      * @return RFC3881EventOutcomeCode
      */
     @Override
-    protected RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromResource(IBaseResource resource) {
+    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(IBaseResource resource) {
         Bundle bundle = (Bundle) resource;
         Set<String> responseStatus = bundle.getEntry().stream()
                 .map(Bundle.BundleEntryComponent::getResponse)
@@ -95,8 +86,8 @@ public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
                 .collect(Collectors.toSet());
 
         if (responseStatus.stream().anyMatch(s -> s.startsWith("4") || s.startsWith("5"))) {
-            return RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE;
+            return EventOutcomeIndicator.MajorFailure;
         }
-        return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+        return EventOutcomeIndicator.Success;
     }
 }

@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
  * @author Dmytro Rud
  */
-public class ConsumerStringProcessingInterceptor extends InterceptorSupport<MllpEndpoint<?,?>> {
+public class ConsumerStringProcessingInterceptor extends InterceptorSupport<MllpEndpoint<?,?,?>> {
 
     @Override
     public void process(Exchange exchange) throws Exception {

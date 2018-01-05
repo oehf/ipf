@@ -17,13 +17,14 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface FhirInteractionId extends InteractionId {
+public interface FhirInteractionId<T extends FhirAuditDataset> extends InteractionId {
 
-    FhirTransactionConfiguration getFhirTransactionConfiguration();
+    FhirTransactionConfiguration<T> getFhirTransactionConfiguration();
 
 }

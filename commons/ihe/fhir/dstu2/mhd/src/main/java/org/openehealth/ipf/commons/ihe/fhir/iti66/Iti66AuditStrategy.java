@@ -15,8 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 
@@ -31,14 +35,13 @@ public class Iti66AuditStrategy extends FhirQueryAuditStrategy {
     }
 
     @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti66(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString(),
-                auditDataset.getPatientIds());
+    public AuditMessage[] makeAuditMessage(FhirQueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder(auditDataset, FhirEventTypeCode.MobileDocumentManifestQuery)
+                .addPatients(auditDataset.getPatientIds())
+                .setQueryParameters("MobileDocumentManifestQuery",
+                        FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery,
+                        auditDataset.getQueryString())
+                .getMessages();
     }
 
 }

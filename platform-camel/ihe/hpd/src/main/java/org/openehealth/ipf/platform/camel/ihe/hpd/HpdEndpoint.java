@@ -28,12 +28,12 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
+public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> {
 
     protected HpdEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, ? extends WsInteractionId> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends WsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
             AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
@@ -50,6 +50,7 @@ public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
@@ -61,7 +62,7 @@ public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
         return new JaxWsRequestServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy() : null,
+                isAudit() ? getServerAuditStrategy() : null,
                 getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());

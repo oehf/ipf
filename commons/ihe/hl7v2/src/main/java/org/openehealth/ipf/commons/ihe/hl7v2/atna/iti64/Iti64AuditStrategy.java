@@ -70,7 +70,7 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(Iti64AuditDataset auditDataset) {
-        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder(auditDataset)
+        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder<>(auditDataset)
                 .setLocalPatientId(auditDataset);
         if (auditDataset.getSubsumedLocalPatientId() != null) {
             builder.setSubsumedLocalPatientId(auditDataset);

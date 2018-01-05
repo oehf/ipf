@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
-
 /**
  * Strategy for auditing ITI-78 transactions on the server side
  *

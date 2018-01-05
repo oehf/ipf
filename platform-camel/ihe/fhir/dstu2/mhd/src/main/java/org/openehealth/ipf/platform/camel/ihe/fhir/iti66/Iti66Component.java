@@ -17,11 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.MHD.Interactions.ITI_66;
+import static org.openehealth.ipf.commons.ihe.fhir.MHD.QueryInteractions.ITI_66;
 
 /**
  * Component for MHD Retrieve Document Manifest (ITI-66)

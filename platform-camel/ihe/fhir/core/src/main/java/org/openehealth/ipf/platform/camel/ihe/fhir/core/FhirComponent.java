@@ -23,7 +23,7 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
@@ -123,7 +123,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     /**
      * @return static component-specific configuration
      */
-    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
+    public FhirTransactionConfiguration<AuditDatasetType> getFhirTransactionConfiguration() {
         return fhirInteractionId.getFhirTransactionConfiguration();
     }
 

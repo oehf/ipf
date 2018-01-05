@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
@@ -48,7 +48,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     @Before
     public void setUp() {
         validator = new ProvideAndRegisterDocumentSetRequestValidator();
-        EbXMLFactory factory = new EbXMLFactory21();
+        EbXMLFactory factory = new EbXMLFactory30();
         
         request = SampleData.createProvideAndRegisterDocumentSet();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);

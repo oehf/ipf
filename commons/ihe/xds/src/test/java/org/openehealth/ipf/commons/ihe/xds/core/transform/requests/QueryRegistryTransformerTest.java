@@ -35,8 +35,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumen
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 
 /**
  * Tests for {@link QueryRegistryTransformer}.
@@ -65,7 +63,6 @@ public class QueryRegistryTransformerTest {
         checkForQuery(new GetRelatedDocumentsQuery());
         checkForQuery(new GetSubmissionSetAndContentsQuery());
         checkForQuery(new GetSubmissionSetsQuery());
-        checkForQuery(new SqlQuery());
     }
     
     @Test

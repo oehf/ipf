@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -28,10 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Michael Ottati
  */
 @XmlType(name = "QueryType")
-@XmlEnum(String.class)
+@XmlEnum
 public enum QueryType {
-    /** Runs a SQL query. */
-    @XmlEnumValue("Sql") SQL("sql", SqlQuery.class),
     /** Searches for documents. */
     @XmlEnumValue("FindDocuments") FIND_DOCUMENTS("urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d", FindDocumentsQuery.class),
     /** Searches for documents (Multi Patient Variety). */

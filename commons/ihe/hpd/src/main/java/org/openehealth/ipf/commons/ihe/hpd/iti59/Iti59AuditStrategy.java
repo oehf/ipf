@@ -17,16 +17,16 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -38,11 +38,11 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
  * @author Dmytro Rud
  */
 @Slf4j
-public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> {
+abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> {
 
     private static final String ATTR_NAME = "hcIdentifier";
 
-    public Iti59AuditStrategy(boolean serverSide) {
+    protected Iti59AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
@@ -68,7 +68,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                 AddRequest addRequest = (AddRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(addRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
+                        EventActionCode.Create,
                         addRequest.getAttr().stream()
                                 .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
                                 .flatMap(x -> x.getValue().stream())
@@ -78,7 +78,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
+                        EventActionCode.Update,
                         modifyRequest.getModification().stream()
                                 .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
                                 .flatMap(x -> x.getValue().stream())
@@ -111,7 +111,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         if ((batchResponse == null) || (batchResponse.getBatchResponses() == null)) {
             for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
                 if (requestItem != null) {
-                    requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+                    requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
                 }
             }
             return false;
@@ -168,12 +168,12 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         if (value instanceof LDAPResult) {
             LDAPResult ldapResult = (LDAPResult) value;
             requestItem.setOutcomeCode((ldapResult.getResultCode() != null) && (ldapResult.getResultCode().getCode() == 0)
-                    ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
-                    : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+                    ? EventOutcomeIndicator.Success
+                    : EventOutcomeIndicator.SeriousFailure);
         } else if (value instanceof ErrorResponse) {
-            requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+            requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
         } else {
-            requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE);
+            requestItem.setOutcomeCode(EventOutcomeIndicator.MajorFailure);
             log.debug(failureLogMessage, failureLogArgs);
         }
     }
@@ -186,26 +186,11 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(Iti59AuditDataset auditDataset) {
-        return new AuditMessage[0];
+        return Stream.of(auditDataset.getRequestItems())
+                .map(requestItem -> makeAuditMessage(auditDataset, requestItem))
+                .toArray(AuditMessage[]::new);
     }
 
-    @Override
-    public void doAudit(Iti59AuditDataset auditDataset) {
-        for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
-            if (requestItem != null) {
-                AuditorManager.getHpdAuditor().auditIti59(
-                        isServerSide(),
-                        requestItem.getActionCode(),
-                        requestItem.getOutcomeCode(),
-                        auditDataset.getUserId(),
-                        auditDataset.getUserName(),
-                        auditDataset.getServiceEndpointUrl(),
-                        auditDataset.getClientIpAddress(),
-                        requestItem.getProviderIds(),
-                        auditDataset.getPurposesOfUse(),
-                        auditDataset.getUserRoles());
-            }
-        }
-    }
+    protected abstract AuditMessage makeAuditMessage(Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem);
 
 }

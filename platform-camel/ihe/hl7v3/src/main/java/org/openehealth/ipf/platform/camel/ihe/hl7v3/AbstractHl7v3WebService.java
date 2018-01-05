@@ -18,23 +18,20 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 import groovy.util.slurpersupport.GPathResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.handler.MessageContext;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions.
@@ -46,13 +43,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
 
     private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
-    public AbstractHl7v3WebService(Hl7v3InteractionId hl7v3InteractionId) {
-        this((Hl7v3WsTransactionConfiguration)hl7v3InteractionId.getWsTransactionConfiguration());
-    }
-
-    public AbstractHl7v3WebService(Hl7v3WsTransactionConfiguration wsTransactionConfiguration) {
-        Validate.notNull(wsTransactionConfiguration);
-        this.wsTransactionConfiguration = wsTransactionConfiguration;
+    public AbstractHl7v3WebService(Hl7v3InteractionId<? extends Hl7v3WsTransactionConfiguration> hl7v3InteractionId) {
+        this.wsTransactionConfiguration = requireNonNull(hl7v3InteractionId.getWsTransactionConfiguration(), "TransactionConfiguration is null");
     }
     
     /**

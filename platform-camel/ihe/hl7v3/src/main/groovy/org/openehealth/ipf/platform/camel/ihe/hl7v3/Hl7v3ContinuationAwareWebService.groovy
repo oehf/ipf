@@ -60,7 +60,7 @@ abstract class Hl7v3ContinuationAwareWebService
 
     
     Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {
-        super(endpoint.component.wsTransactionConfiguration)
+        super(endpoint.component.interactionId)
 
         Validate.notNull(endpoint.continuationStorage)
 

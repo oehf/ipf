@@ -43,7 +43,7 @@ public class Iti9Component extends MllpTransactionComponent<QueryAuditDataset> {
     }
 
     @Override
-    public List<Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
         return Collections.singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

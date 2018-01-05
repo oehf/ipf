@@ -19,6 +19,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  * Static configuration for FHIR transaction components
@@ -26,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public class FhirTransactionConfiguration extends TransactionConfiguration {
+public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
 
     private final FhirContext fhirContext;
     private final AbstractPlainProvider staticResourceProvider;
@@ -39,13 +40,12 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             FhirContext fhirContext,
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator)
-    {
+            FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirContext = fhirContext;
         this.staticResourceProvider = resourceProvider;

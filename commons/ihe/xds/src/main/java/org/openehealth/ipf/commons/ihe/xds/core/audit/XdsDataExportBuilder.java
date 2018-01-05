@@ -19,21 +19,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
-import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataExportBuilder;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.IHE_HOME_COMMUNITY_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsBuilderUtils.makeDocumentDetail;
 
 /**

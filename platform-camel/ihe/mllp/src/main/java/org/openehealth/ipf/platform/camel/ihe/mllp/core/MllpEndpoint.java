@@ -64,7 +64,7 @@ public abstract class MllpEndpoint<
         AuditDatasetType extends MllpAuditDataset,
         ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
     extends DefaultEndpoint
-    implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint
+    implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType>
 {
 
     @Getter(AccessLevel.PROTECTED) private final ConfigType config;
@@ -164,7 +164,7 @@ public abstract class MllpEndpoint<
      * Returns transaction configuration.
      */
     @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration<AuditDatasetType> getHl7v2TransactionConfiguration() {
         return mllpComponent.getHl7v2TransactionConfiguration();
     }
 
@@ -172,12 +172,12 @@ public abstract class MllpEndpoint<
      * Returns transaction-specific ACK and NAK factory.
      */
     @Override
-    public NakFactory getNakFactory() {
+    public NakFactory<AuditDatasetType> getNakFactory() {
         return mllpComponent.getNakFactory();
     }
 
     @Override
-    public Hl7v2InteractionId getInteractionId() {
+    public Hl7v2InteractionId<AuditDatasetType> getInteractionId() {
         return mllpComponent.getInteractionId();
     }
 

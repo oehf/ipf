@@ -37,15 +37,23 @@ import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeC
  *
  * @author Christian Ohr
  */
-class IHEPatientRecordChangeLinkBuilder extends IHEAuditMessageBuilder<IHEPatientRecordBuilder, PatientRecordBuilder> {
+class IHEPatientRecordChangeLinkBuilder<T extends IHEPatientRecordBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
 
     private static final String URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE = "urn:ihe:iti:xpid:2017:patientIdentifierType";
 
     IHEPatientRecordChangeLinkBuilder(AuditDataset auditDataset) {
         super(new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
         setAuditSource(auditDataset);
-        setLocalParticipant(auditDataset);
-        setRemoteParticipant(auditDataset);
+        // First the source, then the destination
+        if (auditDataset.isServerSide()) {
+            setRemoteParticipant(auditDataset);
+            addHumanRequestor(auditDataset);
+            setLocalParticipant(auditDataset);
+        } else {
+            setLocalParticipant(auditDataset);
+            addHumanRequestor(auditDataset);
+            setRemoteParticipant(auditDataset);
+        }
     }
 
     public IHEPatientRecordChangeLinkBuilder setLocalPatientId(Iti64AuditDataset auditDataset) {

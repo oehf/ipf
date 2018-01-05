@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLog
  *
  * @author Dmytro Rud
  */
-public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpEndpoint<?, ?>> {
+public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpEndpoint<?,?,?>> {
     @Delegate private final MllpPayloadLoggerBase base = new MllpPayloadLoggerBase();
 
     /**
@@ -64,7 +64,7 @@ public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
         }
     }
 
-    public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?, ?>, ProducerInPayloadLoggerInterceptor> {
+    public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?,?,?>, ProducerInPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
         private boolean locallyEnabled = true;

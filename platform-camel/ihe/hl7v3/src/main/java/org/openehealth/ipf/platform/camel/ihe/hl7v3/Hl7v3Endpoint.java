@@ -43,7 +43,7 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
     public Hl7v3Endpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends Hl7v3InteractionId> component,
+            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, Hl7v3InteractionId<ConfigType>> component,
             AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
@@ -60,6 +60,7 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getClientAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),

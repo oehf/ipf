@@ -22,10 +22,11 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -134,20 +135,19 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return config;
     }
 
-    /**
-     * Returns client-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return fhirComponent.getClientAuditStrategy();
     }
 
-    /**
-     * Returns server-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
         return fhirComponent.getServerAuditStrategy();
+    }
+
+    @Override
+    public AuditContext getAuditContext() {
+        return getInterceptableConfiguration().getAuditContext();
     }
 
     @Override

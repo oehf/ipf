@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * ITI-81 audit strategy: none

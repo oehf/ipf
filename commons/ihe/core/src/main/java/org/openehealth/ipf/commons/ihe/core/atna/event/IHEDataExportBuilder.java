@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.DataExportBuilder;
@@ -43,8 +44,12 @@ public class IHEDataExportBuilder<T extends IHEDataExportBuilder<T>> extends IHE
     }
 
     public IHEDataExportBuilder(AuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        this(auditDataset, auditDataset.getEventOutcomeIndicator(), eventActionCode, eventType, purposesOfUse);
+    }
+
+    public IHEDataExportBuilder(AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
         super(new DataExportBuilder(
-                auditDataset.getEventOutcomeIndicator(),
+                eventOutcomeIndicator,
                 eventActionCode,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));

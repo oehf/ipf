@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,6 +63,14 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
         if (patientIds != null) {
             Arrays.stream(patientIds)
                     .forEach(patientId -> delegate.addPatientParticipantObject(patientId, null, null, null));
+        }
+        return self();
+    }
+
+    public T addPatients(Collection<String> patientIds) {
+        if (patientIds != null) {
+            patientIds.forEach(patientId ->
+                    delegate.addPatientParticipantObject(patientId, null, null, null));
         }
         return self();
     }

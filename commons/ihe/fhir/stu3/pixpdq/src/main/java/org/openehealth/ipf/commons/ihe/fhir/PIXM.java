@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83TransactionConfiguration;
 
 import java.util.Arrays;
@@ -31,11 +32,11 @@ import java.util.List;
 public class PIXM implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements FhirInteractionId {
+    public enum Interactions implements FhirInteractionId<FhirQueryAuditDataset> {
 
         ITI_83(ITI_83_CONFIG);
 
-        @Getter FhirTransactionConfiguration fhirTransactionConfiguration;
+        @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 
     @Override

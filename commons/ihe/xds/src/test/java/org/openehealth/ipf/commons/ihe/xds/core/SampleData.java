@@ -394,15 +394,6 @@ public abstract class SampleData {
 
         return request;
     }
-
-    /**
-     * @return a sample sql query.
-     */
-    public static QueryRegistry createSqlQuery() {
-        SqlQuery query = new SqlQuery();        
-        query.setSql("SELECT * FROM INTERNET");
-        return new QueryRegistry(query);
-    }
     
     /**
      * @return a sample stored query for get documents.

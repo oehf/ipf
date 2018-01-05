@@ -34,10 +34,10 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
 
     public Iti58Component() {
-        super(HPD.Interactions.ITI_58);
+        super(HPD.ReadInteractions.ITI_58);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
                 getProperties(parameters),
                 Iti58Service.class) {
             @Override
-            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
             }
         };

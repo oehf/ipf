@@ -17,9 +17,6 @@
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.event.AuditMessageBuilder;
-import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
-import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
@@ -27,12 +24,10 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import java.util.Collections;
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.*;
-
 /**
  * @author Christian Ohr
  */
-public class IHEPatientRecordNotificationBuilder extends IHEPatientRecordBuilder {
+public class IHEPatientRecordNotificationBuilder extends IHEPatientRecordBuilder<IHEPatientRecordNotificationBuilder> {
 
 
     public IHEPatientRecordNotificationBuilder(AuditDataset auditDataset, EventActionCode action, EventType eventType) {

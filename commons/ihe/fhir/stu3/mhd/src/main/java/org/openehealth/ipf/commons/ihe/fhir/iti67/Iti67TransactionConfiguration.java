@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 
@@ -25,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti67TransactionConfiguration extends FhirTransactionConfiguration {
+public class Iti67TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
 
     public Iti67TransactionConfiguration() {
         super("mhd-iti67",

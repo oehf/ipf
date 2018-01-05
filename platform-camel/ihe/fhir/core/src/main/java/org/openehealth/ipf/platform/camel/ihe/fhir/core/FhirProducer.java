@@ -26,7 +26,7 @@ import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.camel.spi.HeaderFilterStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
