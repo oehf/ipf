@@ -16,6 +16,10 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+
 import java.util.*;
 
 /**
@@ -24,20 +28,21 @@ import java.util.*;
  *
  * @author Christian Ohr
  */
-public class AuditMessageRecorder implements AuditTransmissionProtocol {
+public class AuditMessageRecorder implements AuditMessageQueue {
 
-    private List<String> messages = new ArrayList<>();
+    private List<AuditMessage> messages = new ArrayList<>();
 
     @Override
-    public void send(String... auditMessage) {
-        messages.addAll(Arrays.asList(auditMessage));
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception {
+        messages.addAll(Arrays.asList(auditMessages));
     }
 
-    public List<String> getMessages() {
+
+    public List<AuditMessage> getMessages() {
         return Collections.unmodifiableList(messages);
     }
 
-    public Optional<String> getFirstMessages() {
+    public Optional<AuditMessage> getFirstMessage() {
         return getMessages().stream().findFirst();
     }
 

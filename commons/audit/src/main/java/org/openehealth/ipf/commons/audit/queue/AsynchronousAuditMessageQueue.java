@@ -70,8 +70,16 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
         }
     }
 
-    private Runnable runnable(AuditContext auditContext,String... auditRecords) {
-        return () -> auditContext.getAuditTransmissionProtocol().send(auditRecords);
+    private Runnable runnable(AuditContext auditContext, String... auditRecords) {
+        return () -> {
+            try {
+                auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+            } catch (Exception e) {
+                LOG.warn(String.format("Failed to send ATNA event to destination [%s:%d]",
+                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryPort()), e);
+            }
+        };
     }
 
     @Override

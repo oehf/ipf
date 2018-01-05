@@ -16,11 +16,14 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+
 /**
  * @author Christian Ohr
  */
 public interface AuditTransmissionProtocol {
 
-    void send(String... auditMessage);
+    void send(AuditContext auditContext, String... auditMessage) throws Exception;
 
+    String getTransport();
 }

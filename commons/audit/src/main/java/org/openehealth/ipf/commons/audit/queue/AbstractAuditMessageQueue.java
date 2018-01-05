@@ -22,27 +22,31 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import java.util.stream.Stream;
 
 /**
- * Abstract base class for message queues
+ * <p>
+ * Abstract base class for message queues that serialize the AuditRecord into a wire format
+ * by using the configured {@link org.openehealth.ipf.commons.audit.marshal.SerializationStrategy SerializationStrategy}
+ * and send it to an ATNA repository using the configured {@link org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol},
+ * </p>
+ * <p>
+ * There may be other use cases such as forwarding AuditMessages as object into a Camel Route or in-memory storage
+ * or convert them into FHIR AuditEvents. In this case, implement your own {@link AuditMessageQueue}.
+ * </p>
+ *
+ * @author Christian Ohr
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
     @Override
-    public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception {
+
         String[] auditRecords = Stream.of(auditMessages)
                 .map(msg -> auditContext.getSerializationStrategy().marshal(msg, false))
                 .toArray(value -> new String[auditMessages.length]);
-        handle(auditContext,auditRecords);
+
+        handle(auditContext, auditRecords);
     }
 
-    protected abstract void handle(AuditContext auditContext, String... auditRecords);
+    protected abstract void handle(AuditContext auditContext, String... auditRecords) throws Exception;
 
-
-    @Override
-    public void flush() {
-    }
-
-    @Override
-    public void shutdown() {
-    }
 
 }

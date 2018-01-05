@@ -105,7 +105,7 @@ public class AuditUtils {
         return address;
     }
 
-    private static Optional<InetAddress> inetAddress() {
+    public static Optional<InetAddress> inetAddress() {
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             return Optional.of(socket.getLocalAddress());

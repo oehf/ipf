@@ -19,14 +19,31 @@ package org.openehealth.ipf.commons.audit;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
+import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
+import org.openehealth.ipf.commons.audit.protocol.AuditMessageRecorder;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
+import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
+import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * @author Christian Ohr
  */
 public class DefaultAuditContext implements AuditContext {
+
+    @Getter
+    private String auditRepositoryHostName = "localhost";
+
+    @Getter
+    private InetAddress auditRepositoryAddress = AuditUtils.inetAddress().orElse(null);
+
+    @Getter @Setter
+    private int auditRepositoryPort = 514;
 
     @Getter @Setter
     private boolean auditEnabled = false;
@@ -38,12 +55,35 @@ public class DefaultAuditContext implements AuditContext {
     private AuditMessageQueue auditMessageQueue = new SynchronousAuditMessageQueue();
 
     @Getter @Setter
-    private String sourceId = "IPF";
+    private String sendingApplication = "IPF";
 
     @Getter @Setter
-    private String enterpriseSiteId = "IPF";
+    private String auditSourceId = "IPF";
+
+    @Getter @Setter
+    private String auditEnterpriseSiteId = "IPF";
 
     @Getter @Setter
     private AuditSourceType auditSourceType = AuditSourceType.Other;
+
+    @Getter @Setter
+    private SerializationStrategy serializationStrategy;
+
+    public void setAuditRepositoryHost(String auditRepositoryHost) throws UnknownHostException {
+        this.auditRepositoryHostName = auditRepositoryHost;
+        this.auditRepositoryAddress = InetAddress.getByName(auditRepositoryHost);
+    }
+
+    public String getAuditRepositoryTransport() {
+        return auditTransmissionProtocol.getTransport();
+    }
+
+    public void setAuditRepositoryTransport(String transport) {
+        switch (transport) {
+            case "UDP": setAuditTransmissionProtocol(new UDPSyslogSenderImpl());
+            case "TLS": setAuditTransmissionProtocol(new TLSSyslogSenderImpl());
+            default: throw new IllegalArgumentException("Unknown transport :" + transport);
+        }
+    }
 
 }

@@ -33,7 +33,7 @@ abstract public class MllpAuditUtils {
         // TODO : This is a reimplementation of AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure, but we can
         // probably do better
         return new SecurityAlertBuilder(EventOutcomeIndicator.SeriousFailure, EventTypeCode.NodeAuthentication)
-                .setAuditSourceId(auditContext.getSourceId(), auditContext.getEnterpriseSiteId())
+                .setAuditSourceId(auditContext.getAuditSourceId(), auditContext.getAuditEnterpriseSiteId())
                 .addReportingActiveParticipant("IPF MLLP Component", null, null, null, null, false)
                 .addAlertUriSubjectParticipantObject(hostAddress, null, null)
                 .getMessage();

@@ -40,8 +40,8 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
 
     protected final T setAuditSource(AuditDataset auditDataset) {
         delegate.setAuditSourceId(
-                auditDataset.getAuditContext().getSourceId(),
-                auditDataset.getAuditContext().getEnterpriseSiteId(),
+                auditDataset.getAuditContext().getAuditSourceId(),
+                auditDataset.getAuditContext().getAuditEnterpriseSiteId(),
                 auditDataset.getAuditContext().getAuditSourceType());
         return self();
     }

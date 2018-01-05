@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
@@ -43,10 +43,8 @@ public class RFC5424Protocol {
 
     private final String senderHostName;
     private final String senderProcessId;
-    private final String sendingApplication;
 
-    public RFC5424Protocol(String sendingApplication, String senderHostName, String senderProcessId) {
-        this.sendingApplication = requireNonNull(sendingApplication);
+    public RFC5424Protocol(String senderHostName, String senderProcessId) {
         this.senderHostName = requireNonNull(senderHostName);
         this.senderProcessId = requireNonNull(senderProcessId);
     }
@@ -57,7 +55,7 @@ public class RFC5424Protocol {
      * @param auditMessage Message to prepare
      * @return serialized message
      */
-    protected byte[] getTransportPayload(String auditMessage) throws UnsupportedEncodingException {
+    protected byte[] getTransportPayload(String sendingApplication, String auditMessage) {
         String msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
                 TRANSPORT_PRI,
                 Instant.now(),
@@ -66,7 +64,7 @@ public class RFC5424Protocol {
                 senderProcessId,
                 TRANSPORT_MSGID,
                 auditMessage);
-        return msg.trim().getBytes("UTF-8");
+        return msg.trim().getBytes(StandardCharsets.UTF_8);
     }
 
 }

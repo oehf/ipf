@@ -19,49 +19,49 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- ATNA Auditing Infrastructure -->
+    <!-- ATNA Auditing Infrastructure. Everything simply goes into the AuditContext -->
 
-    <bean id="auditorModuleContext"
-          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext"
-          factory-method="getContext">
-    </bean>
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
 
-    <bean id="auditorModuleConfig"
-          factory-bean="auditorModuleContext"
-          factory-method="getConfig">
-        <property name="auditorEnabled" value="${atna.audit.enabled}" />
-        <property name="auditRepositoryTransport" value="${atna.audit.transport}" />
-        <property name="auditRepositoryHost" value="${atna.audit.host}" />
-        <property name="auditRepositoryPort" value="${atna.audit.port}" />
+        <!-- Whether auditing is enabled. Default is false -->
+        <property name="auditEnabled" value="${atna.audit.enabled}" />
+        <!-- Audit Source ID. Default is "IPF" -->
         <property name="auditSourceId" value="${atna.audit.sourceId}" />
+        <!-- Enterprise Site ID. Default is "IPF" -->
         <property name="auditEnterpriseSiteId" value="${atna.audit.enterpriseSiteId}" />
+        <!-- Default is "localhost" -->
+        <property name="auditRepositoryHost" value="${atna.audit.host}" />
+        <!-- Default is 514 -->
+        <property name="auditRepositoryPort" value="${atna.audit.port}" />
+        <!-- Audit Transport (TEST, UDP, TLS). Default is "UDP" -->
+        <property name="auditRepositoryTransport" value="${atna.audit.transport}" />
+        <!-- Audit Source Type. Default is "Other" -->
+        <property name="auditSourceType" value="ApplicationServerProcess"/>
+        <!-- Sending Application for SYSLOG frame. Default is "IPF" -->
+        <property name="sendingApplication" value="demo"/>
+
+        <!-- Advanced -->
+
+        <!-- Adding a custom sender implementation, e.g. CamelEndpointSender. Overrules auditRepositoryTransport.
+
+        <property name="auditTransmissionProtocol" ref="xyz"/>
+        -->
+
+        <!-- Setting if the message is sent synchronously (default), asynchronously, via JMS,  or whatever
+
+        <property name="auditMessageQueue" ref="xyz"/>
+        -->
+
+        <!-- Setting the strategy to serialize an AuditMessage. By default, the latest DICOM Audit
+             standard is used, but you may choose an older one (e.g. Dicom2016c). Or write your own that
+             is maybe not even DICOM based, e.g. rending FHIR AuditEvents.
+
+        <property name="serializationStrategy">
+            <bean class="org.openehealth.ipf.commons.audit.marshal.dicom.Current"/>
+        </property>
+        -->
+
     </bean>
 
-    <bean id="auditorTLSConfig" class="org.openehealth.ipf.platform.camel.ihe.atna.util.AuditorTLSConfig" init-method="init">
-        <constructor-arg ref="auditorModuleConfig"/>
-        <property name="securityDomainName" value="mpi-atna-tls"/>
-    </bean>
-
-    <!-- ATNA Client-Side Auditing Auditors (OpenHealthTools) -->
-
-    <bean id="pixConsumerAuditor" class="org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor"
-          factory-method="getAuditor">
-        <property name="config" ref="auditorModuleConfig" />
-    </bean>
-
-    <bean id="pixSourceAuditor" class="org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor"
-          factory-method="getAuditor">
-        <property name="config" ref="auditorModuleConfig" />
-    </bean>
-
-    <bean id="xdsSourceAuditor" class="org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor"
-          factory-method="getAuditor">
-        <property name="config" ref="auditorModuleConfig" />
-    </bean>
-
-    <bean id="xdsConsumerAuditor" class="org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor"
-          factory-method="getAuditor">
-        <property name="config" ref="auditorModuleConfig" />
-    </bean>
 
 </beans>

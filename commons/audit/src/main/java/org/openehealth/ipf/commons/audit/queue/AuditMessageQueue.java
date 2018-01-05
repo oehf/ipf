@@ -27,16 +27,16 @@ import java.util.function.Consumer;
  */
 public interface AuditMessageQueue {
 
-    void audit(AuditContext auditContext, AuditMessage... auditMessages);
+    void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception;
 
     /**
      * Forces all unsent messages in the queue to be sent
      */
-    void flush();
+    default void flush() {}
 
     /**
      * Flushes the queue and shutdown any associated runtime daemons that
      * may be handling queue inflow/outflow
      */
-    void shutdown();
+    default void shutdown() {}
 }

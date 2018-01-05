@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 
+import java.net.InetAddress;
+
 /**
  * AuditContext is the central location where all aspects of serializing and sending out
  * Audit messages are defined. This includes
@@ -46,6 +48,13 @@ public interface AuditContext {
 
     void setAuditEnabled(boolean auditEnabled);
 
+    String getAuditRepositoryHostName();
+
+    InetAddress getAuditRepositoryAddress();
+
+    String getSendingApplication();
+
+    int getAuditRepositoryPort();
 
     /**
      * @return the wire protocol to be used
@@ -69,19 +78,21 @@ public interface AuditContext {
      *
      * @param messages audit messages to be sent
      */
-    default void audit(AuditMessage... messages) {
+    default void audit(AuditMessage... messages) throws Exception {
+        // TODO where should serialization and sending happen? Different senders may require different wire formats
+        // like String, AuditMessage objects or FHIR resources...
         getAuditMessageQueue().audit(this, messages);
     }
 
     /**
      * @return sourceID attribute of the audit event
      */
-    String getSourceId();
+    String getAuditSourceId();
 
     /**
      * @return Enterprise site ID attribute of the audit event
      */
-    String getEnterpriseSiteId();
+    String getAuditEnterpriseSiteId();
 
     /**
      * @return type of audit source
