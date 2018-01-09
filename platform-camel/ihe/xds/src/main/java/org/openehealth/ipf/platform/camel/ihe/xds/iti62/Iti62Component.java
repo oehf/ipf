@@ -42,13 +42,7 @@ public class Iti62Component extends XdsComponent<XdsRemoveMetadataAuditDataset> 
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsRemoveMetadataAuditDataset>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti62Service.class) {
+        return new XdsEndpoint<XdsRemoveMetadataAuditDataset>(uri, remaining, this, parameters, Iti62Service.class) {
             @Override
             public AbstractWsProducer<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>> endpoint,
                                                                                                                    JaxWsClientFactory<XdsRemoveMetadataAuditDataset> clientFactory) {

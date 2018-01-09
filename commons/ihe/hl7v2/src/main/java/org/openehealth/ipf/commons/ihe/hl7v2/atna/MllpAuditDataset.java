@@ -89,15 +89,11 @@ public abstract class MllpAuditDataset extends AuditDataset {
      *
      * @param serverSide Where we are&nbsp;&mdash; server side
      *                   ({@code true}) or client side ({@code false}).
-     * @deprecated to be removed
      */
     public MllpAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
-    public MllpAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
-    }
 
     /**
      * The identity of the Source Actor facility and sending application

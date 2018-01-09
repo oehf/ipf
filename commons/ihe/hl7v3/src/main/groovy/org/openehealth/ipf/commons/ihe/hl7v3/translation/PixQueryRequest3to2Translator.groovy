@@ -63,7 +63,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
     Message translateV3toV2(String xmlText, Message dummy = null) {
         def xml = slurp(xmlText)
-        def qry = PIX.Interactions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
+        def qry = PIX.QueryInteractions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
         // Segment MSH
         fillMshFromSlurper(xml, qry, this.useSenderDeviceName, this.useReceiverDeviceName)                       

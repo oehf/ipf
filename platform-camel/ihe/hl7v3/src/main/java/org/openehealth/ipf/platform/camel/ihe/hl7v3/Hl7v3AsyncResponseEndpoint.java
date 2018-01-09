@@ -24,7 +24,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
@@ -42,18 +44,11 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
     public Hl7v3AsyncResponseEndpoint(
             String endpointUri,
             String address,
-            Hl7v3Component<ConfigType> component,
-            AuditContext auditContext,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            List<String> schemaLocations,
-            Map<String, Object> properties,
-            Class<? extends AbstractWebService> serviceClass)
-    {
-        super(endpointUri, address, component, auditContext,
-                customInterceptors, features, schemaLocations, properties, serviceClass);
+            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            Map<String, Object> parameters,
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, parameters, serviceClass);
     }
-
 
     // currently is used for deferred response receivers only!
     @Override

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
@@ -41,6 +42,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters)
 
         // query ID
+        auditDataset.messageId = idString(request.id)
         auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
         // home community ID
@@ -50,8 +52,8 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
     }
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
-        IHEQueryBuilder builder = new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery);
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        IHEQueryBuilder builder = new IHEQueryBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery)
         // No patient identifiers are included for the Initiating Gateway
         if (isServerSide()) {
             builder.addPatients(auditDataset.patientIds)

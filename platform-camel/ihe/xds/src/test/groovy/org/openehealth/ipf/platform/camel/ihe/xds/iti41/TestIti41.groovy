@@ -15,24 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
-
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.xml.XmlUtils
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Unmarshaller
 import javax.xml.ws.soap.SOAPFaultException
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
@@ -42,7 +42,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-class TestIti41 extends StandardTestContainer {
+class TestIti41 extends XdsStandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'iti-41.xml'
 
@@ -58,7 +58,7 @@ class TestIti41 extends StandardTestContainer {
     DocumentEntry docEntry
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass
@@ -125,7 +125,7 @@ class TestIti41 extends StandardTestContainer {
     }
 
     void checkAudit(outcome) {
-        def message = getAudit('C', SERVICE2_ADDR)[0]
+        def message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2
@@ -138,7 +138,7 @@ class TestIti41 extends StandardTestContainer {
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
         
-        message = getAudit('R', SERVICE2_ADDR)[0]
+        message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2

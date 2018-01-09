@@ -30,8 +30,6 @@ abstract public class MllpAuditUtils {
      * @param hostAddress the address of the node that is responsible for the failure.
      */
     public static AuditMessage auditAuthenticationNodeFailure(AuditContext auditContext, String hostAddress) {
-        // TODO : This is a reimplementation of AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure, but we can
-        // probably do better
         return new SecurityAlertBuilder(EventOutcomeIndicator.SeriousFailure, EventTypeCode.NodeAuthentication)
                 .setAuditSourceId(auditContext.getAuditSourceId(), auditContext.getAuditEnterpriseSiteId())
                 .addReportingActiveParticipant("IPF MLLP Component", null, null, null, null, false)

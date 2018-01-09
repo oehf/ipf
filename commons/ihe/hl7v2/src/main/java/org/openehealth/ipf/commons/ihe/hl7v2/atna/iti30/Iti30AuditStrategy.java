@@ -40,33 +40,34 @@ public class Iti30AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(FeedAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FeedAuditDataset auditDataset) {
         switch (auditDataset.getMessageType()) {
             case "A28":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Create, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Create, true)
                 };
             case "A31":
             case "A47":
             case "A24":
             case "A37":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
                 };
             case "A40":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, false),
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
                 };
             default:
                 throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());
         }
     }
 
-    protected AuditMessage patientRecordAuditMessage(final FeedAuditDataset auditDataset,
+    protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
+                                                     final FeedAuditDataset auditDataset,
                                                      EventActionCode eventActionCode,
                                                      boolean newPatientId) {
-        return new IHEPatientRecordBuilder<>(auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityManagement)
+        return new IHEPatientRecordBuilder<>(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityManagement)
 
                 // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
                 .addPatients(
@@ -76,7 +77,7 @@ public class Iti30AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
     }
 
     @Override
-    public FeedAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new FeedAuditDataset(auditContext, isServerSide());
+    public FeedAuditDataset createAuditDataset() {
+        return new FeedAuditDataset(isServerSide());
     }
 }

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 
 /**
@@ -34,7 +33,7 @@ public class Iti64AuditDataset extends MllpAuditDataset {
     // TODO: mechanism for obtaining this value
     @Getter @Setter private String submissionSetUuid;
 
-    public Iti64AuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public Iti64AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 }

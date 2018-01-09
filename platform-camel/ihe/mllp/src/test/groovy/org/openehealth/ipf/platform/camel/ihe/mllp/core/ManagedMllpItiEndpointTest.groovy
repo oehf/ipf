@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiCompone
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull
 
-public class ManagedMllpItiEndpointTest extends MllpTestContainer {
+class ManagedMllpItiEndpointTest extends MllpTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
 

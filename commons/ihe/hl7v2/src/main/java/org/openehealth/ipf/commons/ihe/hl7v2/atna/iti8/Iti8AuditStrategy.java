@@ -16,9 +16,9 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8;
 
 import ca.uhn.hl7v2.model.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
@@ -40,27 +40,27 @@ public class Iti8AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
     }
 
     @Override
-    public FeedAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new FeedAuditDataset(auditContext, isServerSide());
+    public FeedAuditDataset createAuditDataset() {
+        return new FeedAuditDataset(isServerSide());
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(FeedAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FeedAuditDataset auditDataset) {
         switch (auditDataset.getMessageType()) {
             case "A01":
             case "A04":
             case "A05":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Create, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Create, true)
                 };
             case "A08":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
                 };
             case "A40":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, false),
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
                 };
             default:
                 throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());
@@ -68,10 +68,11 @@ public class Iti8AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
 
     }
 
-    protected AuditMessage patientRecordAuditMessage(final FeedAuditDataset auditDataset,
+    protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
+                                                     final FeedAuditDataset auditDataset,
                                                      EventActionCode eventActionCode,
                                                      boolean newPatientId) {
-        return new IHEPatientRecordBuilder<>(auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityFeed)
+        return new IHEPatientRecordBuilder<>(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityFeed)
 
                 // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
                 .addPatients(

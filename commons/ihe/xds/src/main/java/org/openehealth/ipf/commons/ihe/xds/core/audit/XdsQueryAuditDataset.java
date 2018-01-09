@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
  * XDS audit dataset specific for query-related transactions.
@@ -30,7 +29,7 @@ public class XdsQueryAuditDataset extends XdsAuditDataset {
     @Getter @Setter private String homeCommunityId;
 
 
-    public XdsQueryAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public XdsQueryAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 }

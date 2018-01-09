@@ -56,7 +56,7 @@ public class Iti8AuditStrategyTest extends AuditorTestBase {
     private void testRequest(boolean serverSide, EventActionCode eventActionCode) {
         Iti8AuditStrategy strategy = new Iti8AuditStrategy(serverSide);
         FeedAuditDataset auditDataset = getHl7v2AuditDataset(strategy, eventActionCode);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditDataset);
+        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -69,7 +69,7 @@ public class Iti8AuditStrategyTest extends AuditorTestBase {
     }
 
     private FeedAuditDataset getHl7v2AuditDataset(Iti8AuditStrategy strategy, EventActionCode eventActionCode) {
-        FeedAuditDataset auditDataset = strategy.createAuditDataset(auditContext);
+        FeedAuditDataset auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

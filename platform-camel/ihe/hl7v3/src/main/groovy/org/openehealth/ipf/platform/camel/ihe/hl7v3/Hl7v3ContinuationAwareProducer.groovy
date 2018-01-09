@@ -135,8 +135,10 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
         Hl7v3AuditDataset auditDataset = null
         // fill request-related ATNA audit fields
         try {
-            auditDataset = auditStrategy.createAuditDataset(auditContext)
+            auditDataset = auditStrategy.createAuditDataset()
+            auditDataset.setSourceUserId("unknown")
             Map<String, Object> requestContext = ((BindingProvider) client).requestContext
+            auditDataset.setDestinationUserId(requestContext.get(Message.ENDPOINT_ADDRESS)?.toString())
             auditDataset.setRemoteAddress(requestContext.get(Message.ENDPOINT_ADDRESS)?.toString())
             auditStrategy.enrichAuditDatasetFromRequest(auditDataset, request, null)
         } catch (Exception e) {
@@ -157,7 +159,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             } else {
                 auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString)
             }
-            auditStrategy.doAudit(auditDataset)
+            auditStrategy.doAudit(auditContext, auditDataset)
         } catch (Exception e) {
             LOG.error("Phase 2 of client-side ATNA auditing failed", e)
         } finally {

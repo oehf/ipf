@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
@@ -35,25 +36,24 @@ import java.util.List;
  */
 public class IHEDataImportBuilder<T extends IHEDataImportBuilder<T>> extends IHEAuditMessageBuilder<T, DataImportBuilder> {
 
-    public IHEDataImportBuilder(AuditDataset auditDataset, EventType eventType) {
-        this(auditDataset, eventType, Collections.emptyList());
+    public IHEDataImportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
+        this(auditContext, auditDataset, eventType, Collections.emptyList());
     }
 
-    public IHEDataImportBuilder(AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        this(auditDataset, EventActionCode.Create, eventType, purposesOfUse);
+    public IHEDataImportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        this(auditContext, auditDataset, EventActionCode.Create, eventType, purposesOfUse);
     }
 
-    public IHEDataImportBuilder(AuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        this(auditDataset, auditDataset.getEventOutcomeIndicator(), eventActionCode, eventType, purposesOfUse);
+    public IHEDataImportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(), eventActionCode, eventType, purposesOfUse);
     }
 
-    public IHEDataImportBuilder(AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(new DataImportBuilder(
+    public IHEDataImportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, new DataImportBuilder(
                 eventOutcomeIndicator,
                 eventActionCode,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
-        setAuditSource(auditDataset);
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
@@ -33,8 +32,8 @@ public class Iti65AuditDataset extends FhirAuditDataset {
     @Getter @Setter
     private String documentManifestUuid;
 
-    public Iti65AuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public Iti65AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
 

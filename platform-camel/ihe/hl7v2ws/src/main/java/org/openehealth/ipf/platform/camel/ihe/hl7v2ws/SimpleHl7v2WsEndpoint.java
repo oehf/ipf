@@ -37,6 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerM
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
 
@@ -51,29 +52,14 @@ public abstract class SimpleHl7v2WsEndpoint<
         ComponentType extends AbstractHl7v2WsComponent>
         extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> implements HL7v2Endpoint<MllpAuditDataset> {
 
-    /**
-     * Constructs the endpoint.
-     *
-     * @param endpointUri        the endpoint URI.
-     * @param address            the endpoint address from the URI.
-     * @param component          the component creating this endpoint.
-     * @param customInterceptors user-defined CXF interceptors.
-     * @param features           user-defined list of CXF features.
-     */
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            AbstractHl7v2WsComponent component,
-            AuditContext auditContext,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            List<String> schemaLocations,
-            Map<String, Object> properties,
+            AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> component,
+            Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, auditContext,
-                customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, parameters, serviceClass);
     }
-
 
     protected List<Interceptor> getProducerInterceptorChain() {
         return Arrays.asList(

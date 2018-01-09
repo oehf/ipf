@@ -23,7 +23,7 @@ import org.hl7.fhir.instance.model.Conformance;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
@@ -57,7 +57,7 @@ public class FhirTestContainer extends StandardTestContainer {
 
     protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
         assertEquals(
@@ -73,7 +73,7 @@ public class FhirTestContainer extends StandardTestContainer {
         Assert.assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         Assert.assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
         Assert.assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),

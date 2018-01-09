@@ -38,15 +38,8 @@ public class FeedAuditDataset extends MllpAuditDataset {
     @Getter @Setter
     private String oldPatientId;
 
-
-    /**
-     * @deprecated to be removed
-     */
     public FeedAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
-    public FeedAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
-    }
 }

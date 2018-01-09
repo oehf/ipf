@@ -32,6 +32,13 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <camel:jmxAgent id="agent" disabled="false"/>
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
+
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="auditMessageQueue" ref="mockedSender"/>
+    </bean>
+
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
     
 	<ipf:globalContext id="globalContext"/>    
 

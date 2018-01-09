@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
@@ -37,8 +38,8 @@ import java.util.stream.Stream;
  */
 public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientRecordBuilder> {
 
-    public XdsPatientRecordBuilder(XdsAuditDataset auditDataset, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditDataset, action, eventType, purposesOfUse);
+    public XdsPatientRecordBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, action, eventType, purposesOfUse);
     }
 
     public XdsPatientRecordBuilder addPatients(List<String> patientIds) {

@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
@@ -35,12 +36,12 @@ import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsBuilderUtils.mak
  */
 public class XdsDataExportBuilder extends IHEDataExportBuilder<XdsDataExportBuilder> {
 
-    public XdsDataExportBuilder(XdsAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        this(auditDataset, EventActionCode.Read, eventType, purposesOfUse);
+    public XdsDataExportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        this(auditContext, auditDataset, EventActionCode.Read, eventType, purposesOfUse);
     }
 
-    public XdsDataExportBuilder(XdsAuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditDataset, eventActionCode, eventType, purposesOfUse);
+    public XdsDataExportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
     public XdsDataExportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {

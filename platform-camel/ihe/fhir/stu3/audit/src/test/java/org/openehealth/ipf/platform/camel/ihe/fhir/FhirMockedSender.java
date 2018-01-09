@@ -19,18 +19,28 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.SingleValidationMessage;
 import ca.uhn.fhir.validation.ValidationResult;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.dstu3.model.AuditEvent;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditSender;
+import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.translation.AuditRecordTranslator;
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Dmytro Rud
  */
 @Slf4j
-public class FhirMockedSender extends AbstractMockedAuditSender<AuditEvent> {
+public class FhirMockedSender extends AbstractMockedAuditMessageQueue<AuditEvent> {
+
+    @Getter
+    protected List<AuditEvent> messages = Collections.synchronizedList(new ArrayList<>());
 
     private final FhirContext fhirContext;
     private final AuditRecordTranslator translator = new AuditRecordTranslator();
@@ -41,10 +51,9 @@ public class FhirMockedSender extends AbstractMockedAuditSender<AuditEvent> {
     }
 
     @Override
-    public void sendAuditEvent(AuditEventMessage[] msg) throws Exception {
-        for (AuditEventMessage atnaMessage : msg) {
-            log.debug(atnaMessage.toString());
-            AuditEvent auditEventResource = translator.translate(atnaMessage);
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
+        for (AuditMessage message : auditMessages) {
+            AuditEvent auditEventResource = translator.translate(message);
             log.debug(fhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEventResource));
             if (needValidation) {
                 FhirValidator validator = fhirContext.newValidator();

@@ -16,12 +16,12 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
-import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
@@ -41,9 +41,9 @@ class IHEPatientRecordChangeLinkBuilder<T extends IHEPatientRecordBuilder<T>> ex
 
     private static final String URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE = "urn:ihe:iti:xpid:2017:patientIdentifierType";
 
-    IHEPatientRecordChangeLinkBuilder(AuditDataset auditDataset) {
-        super(new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
-        setAuditSource(auditDataset);
+    IHEPatientRecordChangeLinkBuilder(AuditContext auditContext, AuditDataset auditDataset) {
+        super(auditContext, new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
+
         // First the source, then the destination
         if (auditDataset.isServerSide()) {
             setRemoteParticipant(auditDataset);
@@ -108,16 +108,18 @@ class IHEPatientRecordChangeLinkBuilder<T extends IHEPatientRecordBuilder<T>> ex
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubmissionSet(Iti64AuditDataset auditDataset) {
-        delegate.addParticipantObjectIdentification(
-                ParticipantObjectIdTypeCode.XdsMetadata,
-                null,
-                null,
-                null,
-                auditDataset.getSubmissionSetUuid(),
-                ParticipantObjectTypeCode.System,
-                ParticipantObjectTypeCodeRole.Job,
-                null,
-                null);
+        if (auditDataset.getSubmissionSetUuid() != null) {
+            delegate.addParticipantObjectIdentification(
+                    ParticipantObjectIdTypeCode.XdsMetadata,
+                    null,
+                    null,
+                    null,
+                    auditDataset.getSubmissionSetUuid(),
+                    ParticipantObjectTypeCode.System,
+                    ParticipantObjectTypeCodeRole.Job,
+                    null,
+                    null);
+        }
         return this;
     }
 

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti47
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
@@ -23,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PatientDemographicsQuery
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
 /**
@@ -38,6 +40,10 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         request = slurp(request)
         GPathResult qbp = request.controlActProcess.queryByParameter
+
+        // query IDs from request
+        auditDataset.messageId = idString(request.id)
+        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
         // patient IDs from request
         Set<String> patientIds = [] as Set<String>
@@ -55,7 +61,7 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
         response = slurp(response)
         boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
 
-        // patient IDs from response
+        // patient IDs from response FIXME really?
         Set<String> patientIds = [] as Set<String>
         addPatientIds(response.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
         if (auditDataset.patientIds) {
@@ -66,8 +72,8 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
     }
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
-        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.PatientDemographicsQuery, auditDataset.getPurposesOfUse())
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientDemographicsQuery, auditDataset.getPurposesOfUse())
                 .setQueryParameters(auditDataset.messageId, PatientDemographicsQuery, auditDataset.requestPayload)
                 .addPatients(auditDataset.patientIds)
                 .getMessages()

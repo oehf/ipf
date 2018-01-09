@@ -94,8 +94,8 @@ public abstract class FhirAuditDataset extends AuditDataset {
     @Getter @Setter
     private String destinationUserId;
 
-    public FhirAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public FhirAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     /**

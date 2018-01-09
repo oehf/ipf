@@ -25,6 +25,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
@@ -77,23 +78,7 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
         super(component, parameters);
         codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);
 
-        Boolean audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
-        auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
-
-        if (auditContext == null) {
-            auditContext = ContextFacade.getBean(AuditContext.class);
-            if (auditContext != null) {
-                if (audit != null) {
-                    auditContext.setAuditEnabled(audit);
-                }
-            } else {
-                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
-            }
-        } else {
-            if (audit != null) {
-                auditContext.setAuditEnabled(audit);
-            }
-        }
+        auditContext = AuditConfiguration.obtainAuditContext(component, parameters);
 
         // Will only be effective if sslContext is set and overrides
         String sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);

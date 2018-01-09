@@ -78,7 +78,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
                     auditDataset.setEventOutcomeIndicator(failed ?
                             EventOutcomeIndicator.MajorFailure :
                             EventOutcomeIndicator.Success);
-                    getAuditStrategy().accept(auditDataset);
+                    getAuditStrategy().doAudit(auditContext, auditDataset);
                 } catch (Exception e) {
                     LOG.error("ATNA auditing failed", e);
                 }
@@ -97,7 +97,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(Exchange exchange, Message msg) {
         try {
-            AuditDatasetType auditDataset = getAuditStrategy().createAuditDataset(auditContext);
+            AuditDatasetType auditDataset = getAuditStrategy().createAuditDataset();
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             return getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
@@ -126,10 +126,9 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
         try {
             // no audit for fragments 2..n
             Terser terser = new Terser(message);
-            if (ArrayUtils.contains(message.getNames(), "DSC") && StringUtils.isNotEmpty(terser.get("DSC-1"))) {
-                return false;
-            }
-            return getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
+            return (!ArrayUtils.contains(message.getNames(), "DSC") ||
+                    !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
+                    getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
             LOG.error("Exception when determining message auditability, no audit will be performed", e);
             return false;

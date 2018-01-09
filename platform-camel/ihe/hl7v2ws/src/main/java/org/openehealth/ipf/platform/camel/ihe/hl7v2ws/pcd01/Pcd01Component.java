@@ -41,16 +41,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new SimpleHl7v2WsEndpoint<Pcd01Component>(
-                uri,
-                remaining,
-                this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Pcd01Service.class) {
+        return new SimpleHl7v2WsEndpoint<Pcd01Component>(uri, remaining, this, parameters, Pcd01Service.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(
                     AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint,

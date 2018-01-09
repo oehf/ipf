@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
@@ -56,8 +55,8 @@ public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
     }
 
     @Override
-    public XdsRemoveMetadataAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new XdsRemoveMetadataAuditDataset(auditContext, isServerSide());
+    public XdsRemoveMetadataAuditDataset createAuditDataset() {
+        return new XdsRemoveMetadataAuditDataset(isServerSide());
     }
 
     @Override

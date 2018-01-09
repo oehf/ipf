@@ -92,11 +92,11 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     }
 
 
-    protected Hl7v3AuditDataset startAtnaAuditing(String requestString, Hl7v3AuditStrategy auditStrategy, AuditContext auditContext) {
+    protected Hl7v3AuditDataset startAtnaAuditing(String requestString, Hl7v3AuditStrategy auditStrategy) {
         Hl7v3AuditDataset auditDataset = null;
         if (auditStrategy != null) {
             try {
-                auditDataset = auditStrategy.createAuditDataset(auditContext);
+                auditDataset = auditStrategy.createAuditDataset();
                 MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
                 HttpServletRequest servletRequest =
                         (HttpServletRequest) messageContext.get(AbstractHTTPDestination.HTTP_REQUEST);
@@ -129,11 +129,12 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     protected void finalizeAtnaAuditing(
             Object response,
             Hl7v3AuditStrategy auditStrategy,
+            AuditContext auditContext,
             Hl7v3AuditDataset auditDataset) {
         if (auditStrategy != null) {
             try {
                 auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
-                auditStrategy.doAudit(auditDataset);
+                auditStrategy.doAudit(auditContext, auditDataset);
             } catch (Exception e) {
                 log.error("Phase 2 of server-side ATNA auditing failed", e);
             }

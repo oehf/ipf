@@ -68,7 +68,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
     @Override
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         Parameters inParams = (Parameters) request
-        QBP_Q21 qry = PIX.Interactions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
+        QBP_Q21 qry = PIX.QueryInteractions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
         qry.MSH[3] = senderDeviceName
         qry.MSH[4] = senderFacilityName

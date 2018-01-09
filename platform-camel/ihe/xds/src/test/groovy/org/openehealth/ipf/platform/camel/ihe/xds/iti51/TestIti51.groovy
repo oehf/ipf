@@ -21,20 +21,20 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import static org.junit.Assert.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 
 /**
  * Tests the ITI-51 component with the Web Service and the client defined within the URI.
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
-class TestIti51 extends StandardTestContainer {
+class TestIti51 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-51.xml'
     

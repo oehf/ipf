@@ -15,24 +15,25 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 
+import org.apache.camel.Exchange
+import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.XdsRenderingUtils
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.XdsRenderingUtils
-import org.apache.camel.impl.DefaultExchange
-import org.apache.camel.Exchange
 
 /**
  * Tests the RAD-69 transaction with a webservice and client adapter defined via URIs.
  * @author Clay Sebourn
  */
-class TestRad69 extends StandardTestContainer {
+class TestRad69 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'rad-69.xml'
     def SERVICE1 = "xdsi-rad69://localhost:${port}/xdsi-rad69-service1"

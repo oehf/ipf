@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti56
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
@@ -65,8 +66,8 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
     }
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
-        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.PatientLocationQuery)
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery)
                 .addPatients(auditDataset.patientIds)
                 .setQueryParameters("PatientLocationQueryRequest", PatientLocationQuery, auditDataset.requestPayload)
                 .getMessages()

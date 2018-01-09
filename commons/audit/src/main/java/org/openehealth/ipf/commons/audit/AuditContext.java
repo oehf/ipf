@@ -17,8 +17,8 @@
 package org.openehealth.ipf.commons.audit;
 
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
-import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
+import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
@@ -39,7 +39,6 @@ import java.net.InetAddress;
  * @author Christian Ohr
  */
 public interface AuditContext {
-
 
     /**
      * @return true if auditing is enabled, false otherwise
@@ -79,13 +78,11 @@ public interface AuditContext {
      * @param messages audit messages to be sent
      */
     default void audit(AuditMessage... messages) throws Exception {
-        // TODO where should serialization and sending happen? Different senders may require different wire formats
-        // like String, AuditMessage objects or FHIR resources...
         getAuditMessageQueue().audit(this, messages);
     }
 
     /**
-     * @return sourceID attribute of the audit event
+     * @return Source ID attribute of the audit event
      */
     String getAuditSourceId();
 
@@ -98,4 +95,8 @@ public interface AuditContext {
      * @return type of audit source
      */
     AuditSourceType getAuditSourceType();
+
+    static AuditContext noAudit() {
+        return DefaultAuditContext.NO_AUDIT;
+    }
 }

@@ -1,5 +1,5 @@
 <!--
-    Copyright 2014 the original author or authors.
+    Copyright 2017 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="auditRepositoryHost" value="${atna.audit.host}" />
         <!-- Default is 514 -->
         <property name="auditRepositoryPort" value="${atna.audit.port}" />
-        <!-- Audit Transport (TEST, UDP, TLS). Default is "UDP" -->
+        <!-- Audit Transport (UDP, TLS). Default is "UDP" -->
         <property name="auditRepositoryTransport" value="${atna.audit.transport}" />
         <!-- Audit Source Type. Default is "Other" -->
         <property name="auditSourceType" value="ApplicationServerProcess"/>
@@ -42,7 +42,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
         <!-- Advanced -->
 
-        <!-- Adding a custom sender implementation, e.g. CamelEndpointSender. Overrules auditRepositoryTransport.
+        <!-- Adding a custom sender implementation. Overrules auditRepositoryTransport.
 
         <property name="auditTransmissionProtocol" ref="xyz"/>
         -->

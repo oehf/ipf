@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10;
 
 import ca.uhn.hl7v2.model.Message;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordNotificationBuilder;
@@ -33,8 +33,8 @@ public class Iti10AuditStrategy extends AuditStrategySupport<QueryAuditDataset> 
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new QueryAuditDataset(auditContext, isServerSide());
+    public QueryAuditDataset createAuditDataset() {
+        return new QueryAuditDataset(isServerSide());
     }
 
     @Override
@@ -44,8 +44,9 @@ public class Iti10AuditStrategy extends AuditStrategySupport<QueryAuditDataset> 
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
         return new IHEPatientRecordNotificationBuilder(
+                auditContext,
                 auditDataset,
                 isServerSide() ? EventActionCode.Update : EventActionCode.Read,
                 MllpEventTypeCode.PIXUpdateNotification)

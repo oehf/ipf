@@ -23,17 +23,15 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_SUCCESS
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 /**
  * Tests the ITI-86 transaction with a webservice and client adapter defined via URIs.
  * @author Dmytro Rud
  */
-class TestIti86 extends StandardTestContainer {
+class TestIti86 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-86.xml'
     
@@ -83,9 +81,7 @@ class TestIti86 extends StandardTestContainer {
     }
 
     def checkAudit(List<String> successfulDocuments, List<String> failedDocuments) {
-        def messages = auditSender.messages.collect { getMessage(it) }
-
-        messages.each {
+        auditSender.messages.each {
             assert it.AuditSourceIdentification.size() == 1
             assert it.EventIdentification.size() == 1
             assert it.ActiveParticipant.size() == 2

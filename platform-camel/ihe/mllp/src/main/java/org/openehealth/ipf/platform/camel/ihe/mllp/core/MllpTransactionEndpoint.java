@@ -111,6 +111,15 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         return getConfig().getAuditContext();
     }
 
+    /**
+     * Returns <tt>true</tt> when ATNA auditing should be performed.
+     */
+    @Override
+    @ManagedAttribute(description = "Audit Enabled")
+    public boolean isAudit() {
+        return getAuditContext().isAuditEnabled();
+    }
+
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return getMllpComponent().getClientAuditStrategy();

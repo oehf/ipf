@@ -15,28 +15,28 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
-
-import static org.junit.Assert.fail
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-
 import org.apache.camel.RuntimeCamelException
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
+
+import static org.junit.Assert.fail
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
  * @author Jens Riemschneider
  */
-class TestIti18 extends StandardTestContainer {
+class TestIti18 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-18.xml'
     
@@ -106,13 +106,12 @@ class TestIti18 extends StandardTestContainer {
     }
     
     def checkAudit(outcome) {
-        def messages = getAudit('E', SERVICE2_ADDR)
+        def messages = getAudit(EventActionCode.Execute, SERVICE2_ADDR)
         assert messages.size() == 2
         messages.each { message ->
-            assert message.AuditSourceIdentification.size() == 1
-            assert message.ActiveParticipant.size() == 2
-            assert message.ParticipantObjectIdentification.size() == 2
-            assert message.children().size() == 6
+            assert message.auditSourceIdentification.size() == 1
+            assert message.activeParticipant.size() == 2
+            assert message.participantObjectIdentification.size() == 2
             
             checkEvent(message.EventIdentification, '110112', 'ITI-18', 'E', outcome)
             checkSource(message.ActiveParticipant[0], 'true')

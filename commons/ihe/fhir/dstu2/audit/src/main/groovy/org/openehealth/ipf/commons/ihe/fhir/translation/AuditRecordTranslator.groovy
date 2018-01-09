@@ -20,9 +20,10 @@ import org.hl7.fhir.instance.model.AuditEvent.AuditEventSourceComponent
 import org.hl7.fhir.instance.model.valuesets.AuditSourceTypeEnumFactory
 import org.hl7.fhir.instance.model.valuesets.ObjectRoleEnumFactory
 import org.hl7.fhir.instance.model.valuesets.ObjectTypeEnumFactory
-import org.joda.time.format.ISODateTimeFormat
-import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
+import org.openehealth.ipf.commons.audit.model.*
+import org.openehealth.ipf.commons.audit.types.CodedValueType
+
+import java.time.Instant
 
 /**
  * Translates ATNA audit records into FHIR AuditEvent resources.
@@ -30,90 +31,90 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
  * @author Dmytro Rud
  * @since 3.1
  */
-class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
+class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
 
-    static Coding coding(CodedValueType atna) {
+    static Coding coding(CodedValueType codedValueType) {
         return new Coding(
-                code: atna.code,
-                display: atna.originalText,
-                system: atna.codeSystemName.mapAtnaCodingSystem())
+                code: codedValueType.code,
+                display: codedValueType.originalText,
+                system: codedValueType.codeSystemName.mapAtnaCodingSystem())
     }
 
     /**
      * For codes returned from FHIR *EnumFactory instances.
      */
-    static Coding coding(Enum type) {
+    static Coding codingEnum(Enum type) {
         return new Coding(
                 code: type.toCode(),
                 display: type.display,
                 system: type.system)
     }
 
-    static CodeableConcept codeableConcept(CodedValueType atna) {
-        return new CodeableConcept().addCoding(coding(atna))
+    static CodeableConcept codeableConcept(CodedValueType codedValueType) {
+        return new CodeableConcept().addCoding(coding(codedValueType))
     }
 
-    static InstantType timestamp(String s) {
-        return new InstantType(ISODateTimeFormat.dateTime().parseDateTime(s).toDate())
+    static InstantType timestamp(Instant instant) {
+        return new InstantType(Date.from(instant))
     }
 
-    static AuditEvent.AuditEventEventComponent eventIdentification(EventIdentificationType atna) {
-        AuditEvent.AuditEventEventComponent fhir = new AuditEvent.AuditEventEventComponent(coding(atna.eventID), timestamp(atna.eventDateTime))
-        atna.eventTypeCode.each { fhir.addSubtype(coding(it)) }
-        fhir.action = new AuditEvent.AuditEventActionEnumFactory().fromCode(atna.eventActionCode)
-        fhir.outcome = new AuditEvent.AuditEventOutcomeEnumFactory().fromCode(Integer.toString(atna.eventOutcomeIndicator))
-        atna.purposesOfUse.each { fhir.addPurposeOfEvent(coding(it)) }
+    static AuditEvent.AuditEventEventComponent eventIdentification(EventIdentificationType event) {
+        AuditEvent.AuditEventEventComponent fhir = new AuditEvent.AuditEventEventComponent(coding(event.eventID), timestamp(event.eventDateTime))
+        event.eventTypeCode.each { fhir.addSubtype(coding(it)) }
+        fhir.action = new AuditEvent.AuditEventActionEnumFactory().fromCode(event.eventActionCode.value)
+        fhir.outcome = new AuditEvent.AuditEventOutcomeEnumFactory().fromCode(Integer.toString(event.eventOutcomeIndicator.value))
+        event.purposesOfUse.each { fhir.addPurposeOfEvent(coding(it)) }
         return fhir
     }
 
-    static AuditEventSourceComponent auditSourceIdentification(AuditSourceIdentificationType atna) {
+    static AuditEventSourceComponent auditSourceIdentification(AuditSourceIdentificationType auditSource) {
         AuditEventSourceComponent fhir = new AuditEventSourceComponent(
-                site: atna.auditEnterpriseSiteID,
-                identifier: new Identifier(value: atna.auditSourceID))
-        if (atna.auditSourceTypeCode?.code) {
-            fhir.addType(coding(new AuditSourceTypeEnumFactory().fromCode(atna.auditSourceTypeCode.code)))
+                site: auditSource.auditEnterpriseSiteID,
+                identifier: new Identifier(value: auditSource.auditSourceID))
+        auditSource.auditSourceType.each {
+            fhir.addType(codingEnum(new AuditSourceTypeEnumFactory().fromCode(it.code)))
         }
         return fhir
     }
 
-    static AuditEvent.AuditEventParticipantComponent participant(ActiveParticipantType atna) {
-        AuditEvent.AuditEventParticipantComponent fhir = new AuditEvent.AuditEventParticipantComponent(new BooleanType(atna.userIsRequestor))
-        atna.roleIDCode.each { fhir.addRole(codeableConcept(it)) }
-        fhir.userId = new Identifier(value: atna.userID)
-        fhir.altId = atna.alternativeUserID
-        fhir.name = atna.userName
-        if (atna.networkAccessPointID) {
+    static AuditEvent.AuditEventParticipantComponent participant(ActiveParticipantType ap) {
+        AuditEvent.AuditEventParticipantComponent fhir = new AuditEvent.AuditEventParticipantComponent(new BooleanType(ap.userIsRequestor))
+        ap.roleIDCodes.each { fhir.addRole(codeableConcept(it)) }
+        fhir.userId = new Identifier(value: ap.userID)
+        fhir.altId = ap.alternativeUserID
+        fhir.name = ap.userName
+        if (ap.networkAccessPointID) {
             fhir.network = new AuditEvent.AuditEventParticipantNetworkComponent(
-                    address: atna.networkAccessPointID,
-                    type: new AuditEvent.AuditEventParticipantNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode)))
+                    address: ap.networkAccessPointID,
+                    type: new AuditEvent.AuditEventParticipantNetworkTypeEnumFactory().fromCode(Short.toString(ap.networkAccessPointTypeCode.value)))
         }
         return fhir
     }
 
-    static AuditEvent.AuditEventObjectComponent participantObject(ParticipantObjectIdentificationType atna) {
+    static AuditEvent.AuditEventObjectComponent participantObject(ParticipantObjectIdentificationType poi) {
         AuditEvent.AuditEventObjectComponent fhir = new AuditEvent.AuditEventObjectComponent()
         fhir.identifier = new Identifier(
-                value: atna.participantObjectID,
+                value: poi.participantObjectID,
                 /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)
-        fhir.type = coding(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode)))
-        fhir.role = coding(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole)))
-        atna.participantObjectDetail.each {
+        fhir.type = codingEnum(new ObjectTypeEnumFactory().fromCode(Short.toString(poi.participantObjectTypeCode.value)))
+        fhir.role = codingEnum(new ObjectRoleEnumFactory().fromCode(Short.toString(poi.participantObjectTypeCodeRole.value)))
+        poi.participantObjectDetail.each {
             fhir.addDetail(new AuditEvent.AuditEventObjectDetailComponent(type: it.type, value: it.value))
         }
         fhir
     }
 
-    AuditEvent translate(AuditEventMessage atna) {
+    AuditEvent translate(AuditMessage atna) {
         translateToFhir(atna, null)
     }
 
     @Override
-    AuditEvent translateToFhir(AuditEventMessage atna, Map<String, Object> parameters) {
+    AuditEvent translateToFhir(AuditMessage auditMessage, Map<String, Object> parameters) {
         AuditEvent fhir = new AuditEvent(
-                eventIdentification(atna.auditMessage.eventIdentification),
-                auditSourceIdentification(atna.auditMessage.auditSourceIdentification[0]))
-        atna.auditMessage.activeParticipant.each { fhir.addParticipant(participant(it)) }
-        atna.auditMessage.participantObjectIdentification.each { fhir.addObject(participantObject(it)) }
+                eventIdentification(auditMessage.eventIdentification),
+                auditSourceIdentification(auditMessage.auditSourceIdentification))
+        auditMessage.activeParticipants.each { fhir.addParticipant(participant(it)) }
+        auditMessage.participantObjectIdentifications.each { fhir.addObject(participantObject(it)) }
         fhir
     }
 }

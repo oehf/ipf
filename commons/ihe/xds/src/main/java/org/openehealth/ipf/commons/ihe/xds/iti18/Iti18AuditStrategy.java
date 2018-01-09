@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
@@ -37,8 +38,8 @@ public class Iti18AuditStrategy extends XdsQueryAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsQueryAuditDataset auditDataset) {
-        return new XdsQueryBuilder(auditDataset, XdsEventTypeCode.RegistryStoredQuery, auditDataset.getPurposesOfUse())
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
+        return new XdsQueryBuilder(auditContext,auditDataset, XdsEventTypeCode.RegistryStoredQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.RegistryStoredQuery)
                 .getMessages();

@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
+
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-class TestIti43 extends StandardTestContainer {
+class TestIti43 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-43.xml'
     

@@ -18,7 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
@@ -28,7 +30,7 @@ import javax.xml.transform.stream.StreamSource
  * Tests for ITI-45.
  * @author Dmytro Rud
  */
-class TestIti45 extends StandardTestContainer {
+class TestIti45 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-45.xml'
     
@@ -52,8 +54,8 @@ class TestIti45 extends StandardTestContainer {
         def response = send(SERVICE1, REQUEST, String.class)
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventActionCode="E"')
-            assert it.toString().contains('EventOutcomeIndicator="0"')
+            assert it.eventIdentification.eventActionCode == EventActionCode.Execute
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
         }
     }
 

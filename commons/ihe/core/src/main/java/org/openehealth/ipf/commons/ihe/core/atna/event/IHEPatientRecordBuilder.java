@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
@@ -28,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -40,19 +42,17 @@ public class IHEPatientRecordBuilder<T extends IHEPatientRecordBuilder<T>> exten
 
     private static final Pattern PATIENT_ID_PATTERN = Pattern.compile("^.+?\\^\\^\\^.*?&.+?&ISO(\\^.*){0,4}$");
 
-    public IHEPatientRecordBuilder(AuditDataset auditDataset, EventActionCode action, EventType eventType) {
-        this(auditDataset, action, eventType, Collections.emptyList());
+    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType) {
+        this(auditContext, auditDataset, action, eventType, Collections.emptyList());
     }
 
-    public IHEPatientRecordBuilder(AuditDataset auditDataset, EventActionCode action, EventType eventType,
+    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
                                    List<PurposeOfUse> purposesOfUse) {
-        super(new PatientRecordBuilder(
+        super(auditContext, new PatientRecordBuilder(
                 auditDataset.getEventOutcomeIndicator(),
                 action,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
-
-        setAuditSource(auditDataset);
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {
@@ -76,10 +76,12 @@ public class IHEPatientRecordBuilder<T extends IHEPatientRecordBuilder<T>> exten
      */
     public T addPatients(String requestIdDesignator, String requestId, String... patientIds) {
         if (patientIds != null)
-            Arrays.stream(patientIds).forEach(patientId -> delegate.addPatient(patientId, null,
-                    requestIdDesignator != null && requestId != null ?
-                            Arrays.asList(getTypeValuePair(requestIdDesignator, requestId)) :
-                            Collections.emptyList()));
+            Arrays.stream(patientIds)
+                    .filter(Objects::nonNull)
+                    .forEach(patientId -> delegate.addPatient(patientId, null,
+                            requestIdDesignator != null && requestId != null ?
+                                    Arrays.asList(getTypeValuePair(requestIdDesignator, requestId)) :
+                                    Collections.emptyList()));
         return self();
     }
 

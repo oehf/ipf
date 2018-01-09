@@ -18,6 +18,9 @@ package org.openehealth.ipf.commons.core.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Facade to an active registry, providing static access to their registered
  * beans.
@@ -48,6 +51,15 @@ public class ContextFacade {
      */
     public static <B> B getBean(Class<B> requiredType) {
         return instance.bean(requiredType);
+    }
+
+    /**
+     * @param requiredType required bean type
+     * @return bean of the required type
+     * @since 3.5
+     */
+    public static <B> Collection<B> getBeans(Class<B> requiredType) {
+        return instance.beans(requiredType).values();
     }
 
     /**

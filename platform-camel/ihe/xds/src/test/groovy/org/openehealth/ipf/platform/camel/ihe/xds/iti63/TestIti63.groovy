@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti63
 
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -25,10 +25,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 /**
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeUnit
  * @author Dmytro Rud
  */
 @DirtiesContext
-class TestIti63 extends StandardTestContainer {
+class TestIti63 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-63.xml'
     

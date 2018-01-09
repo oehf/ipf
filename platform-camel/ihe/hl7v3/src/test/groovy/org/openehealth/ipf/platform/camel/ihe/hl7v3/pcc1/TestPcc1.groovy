@@ -18,27 +18,29 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 /**
  * Tests for PCC-1.
  * @author Dmytro Rud
  */
-class TestPcc1 extends StandardTestContainer {
-    
+class TestPcc1 extends HL7v3StandardTestContainer {
+
     def static CONTEXT_DESCRIPTOR = 'pcc-1.xml'
-    
+
     def SERVICE1 = "qed-pcc1://localhost:${port}/qed-pcc1-service1";
-    
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
     @Test
     void testPcc1() {
         String request = readFile('pcc1/pcc1-sample-request.xml')
@@ -46,10 +48,9 @@ class TestPcc1 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            def xml = new XmlSlurper().parseText(it.toString())
-            assert xml.EventIdentification.@EventActionCode.text() == 'E'
-            assert xml.EventIdentification.@EventOutcomeIndicator.text() == '0'
-            assert xml.ParticipantObjectIdentification.size() == 3
+            assert it.eventIdentification.eventActionCode == EventActionCode.Execute
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            assert it.participantObjectIdentification.size() == 3
         }
     }
 }

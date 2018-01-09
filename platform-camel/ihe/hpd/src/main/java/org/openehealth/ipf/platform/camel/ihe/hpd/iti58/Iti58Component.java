@@ -42,13 +42,7 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti58Service.class) {
+        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this, parameters, Iti58Service.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);

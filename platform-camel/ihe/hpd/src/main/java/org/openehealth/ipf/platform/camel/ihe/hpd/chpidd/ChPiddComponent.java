@@ -42,13 +42,7 @@ public class ChPiddComponent extends AbstractWsComponent<WsAuditDataset, WsTrans
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                ChPiddService.class) {
+        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this, parameters, ChPiddService.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, DownloadRequest.class, DownloadResponse.class);

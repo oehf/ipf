@@ -38,12 +38,7 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters)) {
+        return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this, parameters) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
                 Hl7v3ContinuationAwareEndpoint continuationAwareEndpoint = (Hl7v3ContinuationAwareEndpoint) endpoint;

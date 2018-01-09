@@ -19,7 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
@@ -35,7 +35,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor, boolean secure) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
-        startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+        startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, "FhirServlet");
 
     }
 

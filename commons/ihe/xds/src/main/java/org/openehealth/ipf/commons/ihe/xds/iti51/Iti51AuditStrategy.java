@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti51;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 
@@ -37,16 +38,16 @@ public class Iti51AuditStrategy extends XdsQueryAuditStrategy30 {
 
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsQueryAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
         return auditDataset.getPatientIds().isEmpty() ?
-                new AuditMessage[]{doMakeAuditMessage(auditDataset, null)} :
+                new AuditMessage[]{doMakeAuditMessage(auditContext, auditDataset, null)} :
                 auditDataset.getPatientIds().stream()
-                        .map(patientId -> doMakeAuditMessage(auditDataset, patientId))
+                        .map(patientId -> doMakeAuditMessage(auditContext, auditDataset, patientId))
                         .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(XdsQueryAuditDataset auditDataset, String pid) {
-        return new XdsQueryBuilder(auditDataset, XdsEventTypeCode.MultiPatientStoredQuery, auditDataset.getPurposesOfUse())
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset, String pid) {
+        return new XdsQueryBuilder(auditContext, auditDataset, XdsEventTypeCode.MultiPatientStoredQuery, auditDataset.getPurposesOfUse())
                 .addPatients(pid)
                 .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.MultiPatientStoredQuery)
                 .getMessage();

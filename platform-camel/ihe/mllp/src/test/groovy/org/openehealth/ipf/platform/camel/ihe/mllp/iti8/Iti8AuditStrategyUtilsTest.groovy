@@ -37,7 +37,7 @@ class Iti8AuditStrategyUtilsTest {
         Message message = load(HapiContextFactory.createHapiContext(
                 CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8),
                 'iti8/iti8-a40.hl7')
-        FeedAuditDataset dataset = new FeedAuditDataset(null, true);
+        FeedAuditDataset dataset = new FeedAuditDataset(true);
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message);
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'
                 + '~7200117317^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO'

@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.impl.DefaultExchange
+import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.apache.cxf.binding.soap.SoapFault
 import org.springframework.test.annotation.DirtiesContext
 
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
  */
 @DirtiesContext
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class TestIti56 extends StandardTestContainer {
+class TestIti56 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti56/iti-56.xml'
     

@@ -34,14 +34,8 @@ public class Rad75AsyncResponseComponent extends XdsComponent<XdsNonconstructive
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Rad75AsyncResponseService.class);
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new XdsAsyncResponseEndpoint<>(uri, remaining, this, parameters, Rad75AsyncResponseService.class);
     }
 
 

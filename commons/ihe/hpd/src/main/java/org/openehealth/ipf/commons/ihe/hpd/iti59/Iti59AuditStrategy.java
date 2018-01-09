@@ -48,8 +48,8 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     }
 
     @Override
-    public Iti59AuditDataset createAuditDataset(AuditContext auditContext) {
-        return new Iti59AuditDataset(auditContext, isServerSide());
+    public Iti59AuditDataset createAuditDataset() {
+        return new Iti59AuditDataset(isServerSide());
     }
 
     @Override
@@ -205,12 +205,12 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(Iti59AuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset) {
         return Stream.of(auditDataset.getRequestItems())
-                .map(requestItem -> makeAuditMessage(auditDataset, requestItem))
+                .map(requestItem -> makeAuditMessage(auditContext, auditDataset, requestItem))
                 .toArray(AuditMessage[]::new);
     }
 
-    protected abstract AuditMessage makeAuditMessage(Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem);
+    protected abstract AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem);
 
 }

@@ -20,7 +20,7 @@ import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
@@ -87,7 +87,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
         // Check ATNA Audit
 
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
@@ -153,7 +153,7 @@ public class TestIti78Success extends AbstractTestIti78 {
                 .execute();
         assertEquals("Test", p.getName().get(0).getFamily().get(0).getValue());
         assertEquals(String.format("http://localhost:%d/Patient/4711", DEMO_APP_PORT), p.getId());
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
@@ -171,7 +171,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         // printAsXML(result);
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
     }
@@ -182,7 +182,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         // printAsXML(result);
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
     }

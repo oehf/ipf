@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.rad75;
-
+package org.openehealth.ipf.platform.camel.ihe.xds.rad75
 
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -27,16 +26,17 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import java.util.concurrent.TimeUnit
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
+
+import java.util.concurrent.TimeUnit
 
 /**
  * Tests for RAD-75.
  * @author Clay Sebourn
  */
 @DirtiesContext
-class TestRad75 extends StandardTestContainer {
+class TestRad75 extends XdsStandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'rad-75.xml'
     final String SERVICE1_URI =

@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,13 +47,15 @@ import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.util.List;
 import java.util.Map;
 
 /**
- * A wrapper for standard camel-mina endpoint 
+ * A wrapper for standard camel-mina endpoint
  * which provides support for IHE PIX/PDQ-related extensions.
  *
  * @author Dmytro Rud
@@ -63,28 +65,29 @@ public abstract class MllpEndpoint<
         ConfigType extends MllpEndpointConfiguration,
         AuditDatasetType extends MllpAuditDataset,
         ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
-    extends DefaultEndpoint
-    implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType>
-{
+        extends DefaultEndpoint
+        implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType> {
 
-    @Getter(AccessLevel.PROTECTED) private final ConfigType config;
-    @Getter(AccessLevel.PROTECTED) private final ComponentType mllpComponent;
-    @Getter(AccessLevel.PROTECTED) private final Mina2Endpoint wrappedEndpoint;
+    private static final Logger LOG = LoggerFactory.getLogger(MllpEndpoint.class);
+
+    @Getter(AccessLevel.PROTECTED)
+    private final ConfigType config;
+    @Getter(AccessLevel.PROTECTED)
+    private final ComponentType mllpComponent;
+    @Getter(AccessLevel.PROTECTED)
+    private final Mina2Endpoint wrappedEndpoint;
 
     /**
      * Constructor.
-     * @param mllpComponent
-     *      MLLP Component instance which is creating this endpoint.
-     * @param wrappedEndpoint
-     *      The original camel-mina endpoint instance.
-     * @param config
-     *      Configuration parameters.
+     *
+     * @param mllpComponent   MLLP Component instance which is creating this endpoint.
+     * @param wrappedEndpoint The original camel-mina endpoint instance.
+     * @param config          Configuration parameters.
      */
     public MllpEndpoint(
             ComponentType mllpComponent,
             Mina2Endpoint wrappedEndpoint,
-            ConfigType config)
-    {
+            ConfigType config) {
         super(wrappedEndpoint.getEndpointUri(), mllpComponent);
         this.mllpComponent = Validate.notNull(mllpComponent);
         this.wrappedEndpoint = Validate.notNull(wrappedEndpoint);
@@ -107,7 +110,7 @@ public abstract class MllpEndpoint<
      */
     @Override
     public Producer doCreateProducer() throws Exception {
-        Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
+        Mina2Producer producer = (Mina2Producer) wrappedEndpoint.createProducer();
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -125,6 +128,7 @@ public abstract class MllpEndpoint<
     /**
      * Returns the original starting point of the camel-mina2 route which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createConsumer(Processor)}.
+     *
      * @param processor The original consumer processor.
      */
     @Override
@@ -132,7 +136,7 @@ public abstract class MllpEndpoint<
         Mina2Consumer consumer = (Mina2Consumer) wrappedEndpoint.createConsumer(processor);
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
-            if (! filterChain.contains("ssl")) {
+            if (!filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
                 filter.setNeedClientAuth(config.getClientAuthType() == ClientAuthType.MUST);
                 filter.setWantClientAuth(config.getClientAuthType() == ClientAuthType.WANT);
@@ -153,7 +157,11 @@ public abstract class MllpEndpoint<
             if (config.isAudit()) {
                 String hostAddress = session.getRemoteAddress().toString();
                 AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(config.getAuditContext(), hostAddress);
-                config.getAuditContext().audit(auditMessage);
+                try {
+                    config.getAuditContext().audit(auditMessage);
+                } catch (Exception e) {
+                    LOG.warn("Could not log TLS authentication node failure");
+                }
             }
         }
     }
@@ -190,7 +198,7 @@ public abstract class MllpEndpoint<
     }
 
     /**
-     * Returns threshold for segment fragmentation. 
+     * Returns threshold for segment fragmentation.
      */
     @ManagedAttribute(description = "Segment Fragmentation Threshold")
     public int getSegmentFragmentationThreshold() {
@@ -298,7 +306,7 @@ public abstract class MllpEndpoint<
 
 
     /* ----- dumb delegation, nothing interesting below ----- */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void configureProperties(Map options) {
         wrappedEndpoint.configureProperties(options);

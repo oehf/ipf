@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
@@ -30,12 +31,12 @@ import java.util.List;
 public class IHEPatientRecordNotificationBuilder extends IHEPatientRecordBuilder<IHEPatientRecordNotificationBuilder> {
 
 
-    public IHEPatientRecordNotificationBuilder(AuditDataset auditDataset, EventActionCode action, EventType eventType) {
-        this(auditDataset, action, eventType, null, Collections.emptyList(), Collections.emptyList());
+    public IHEPatientRecordNotificationBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType) {
+        this(auditContext,auditDataset, action, eventType, null, Collections.emptyList(), Collections.emptyList());
     }
-    public IHEPatientRecordNotificationBuilder(AuditDataset auditDataset, EventActionCode action, EventType eventType,
+    public IHEPatientRecordNotificationBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
                                                String userName, List<PurposeOfUse> purposesOfUse, List<String> userRoles) {
-        super(auditDataset, action, eventType, purposesOfUse);
+        super(auditContext,auditDataset, action, eventType, purposesOfUse);
         // TODO userName?
     }
 

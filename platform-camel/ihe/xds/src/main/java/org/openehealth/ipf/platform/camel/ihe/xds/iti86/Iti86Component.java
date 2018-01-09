@@ -44,13 +44,7 @@ public class Iti86Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti86Service.class)
+        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this, parameters, Iti86Service.class)
         {
             @Override
             public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>, ?, ?> getProducer(

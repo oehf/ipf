@@ -55,6 +55,9 @@ public class WsAuditDataset extends AuditDataset {
         DEFAULT_USER_ROLES = Collections.singletonList(role);
     }
 
+    /**
+     * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
+     */
     @Getter
     @Setter
     private String sourceUserId;
@@ -69,12 +72,6 @@ public class WsAuditDataset extends AuditDataset {
     @Getter
     private String requestPayload;
 
-    /**
-     * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
-     */
-    @Getter
-    @Setter
-    private String userId;
 
     /**
      * Client user name (WS-Security &lt;Username&gt; header).
@@ -135,14 +132,9 @@ public class WsAuditDataset extends AuditDataset {
      * @param serverSide specifies whether this audit dataset will be used on the
      *                   server side (<code>true</code>) or on the client side (
      *                   <code>false</code>)
-     * @deprecated to be removed
      */
     public WsAuditDataset(boolean serverSide) {
         super(serverSide);
-    }
-
-    public WsAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
     }
 
     /**

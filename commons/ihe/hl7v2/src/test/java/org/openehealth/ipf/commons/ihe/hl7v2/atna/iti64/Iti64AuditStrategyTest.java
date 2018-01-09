@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10.Iti10AuditStrategy;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -45,7 +43,7 @@ public class Iti64AuditStrategyTest extends AuditorTestBase {
     private void testRequest(boolean serverSide) {
         Iti64AuditStrategy strategy = new Iti64AuditStrategy(serverSide);
         Iti64AuditDataset auditDataset = getHl7v2AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditDataset);
+        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -58,11 +56,11 @@ public class Iti64AuditStrategyTest extends AuditorTestBase {
 
         // TODO check all the special participantObjectIdentifications
 
-        System.out.println(printAuditMessage(auditMessage));
+        // System.out.println(printAuditMessage(auditMessage));
     }
 
     private Iti64AuditDataset getHl7v2AuditDataset(Iti64AuditStrategy strategy) {
-        Iti64AuditDataset auditDataset = strategy.createAuditDataset(auditContext);
+        Iti64AuditDataset auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
  * @author Dmytro Rud
@@ -33,7 +32,7 @@ public class QueryAuditDataset extends MllpAuditDataset {
     /** Request payload. */
     @Getter @Setter private String payload;
 
-    public QueryAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public QueryAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 }

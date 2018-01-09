@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
 
@@ -38,8 +37,8 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
     }
 
     @Override
-    public Iti65AuditDataset createAuditDataset(AuditContext auditContext) {
-        return new Iti65AuditDataset(auditContext, isServerSide());
+    public Iti65AuditDataset createAuditDataset() {
+        return new Iti65AuditDataset(isServerSide());
     }
 
     @Override

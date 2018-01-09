@@ -34,8 +34,8 @@ public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new QueryAuditDataset(auditContext, isServerSide());
+    public QueryAuditDataset createAuditDataset() {
+        return new QueryAuditDataset(isServerSide());
     }
 
     @Override
@@ -52,8 +52,8 @@ public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
-        return new IHEQueryBuilder(auditDataset, MllpEventTypeCode.PIXQuery)
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder(auditContext,auditDataset, MllpEventTypeCode.PIXQuery)
                 .setQueryParameters(
                         auditDataset.getMessageControlId(),
                         PIXQuery,

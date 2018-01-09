@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordNotificationBuilder
@@ -49,8 +50,9 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
     }
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
         new IHEPatientRecordNotificationBuilder(
+                auditContext,
                 auditDataset,
                 isServerSide() ? EventActionCode.Update : EventActionCode.Read,
                 Hl7v3EventTypeCode.PIXUpdateNotification,

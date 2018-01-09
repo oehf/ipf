@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.event.DelegatingAuditMessageBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
@@ -34,15 +35,16 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         extends DelegatingAuditMessageBuilder<T, D> {
 
 
-    public IHEAuditMessageBuilder(D delegate) {
+    public IHEAuditMessageBuilder(AuditContext auditContext, D delegate) {
         super(delegate);
+        setAuditSource(auditContext);
     }
 
-    protected final T setAuditSource(AuditDataset auditDataset) {
+    private final T setAuditSource(AuditContext auditContext) {
         delegate.setAuditSourceId(
-                auditDataset.getAuditContext().getAuditSourceId(),
-                auditDataset.getAuditContext().getAuditEnterpriseSiteId(),
-                auditDataset.getAuditContext().getAuditSourceType());
+                auditContext.getAuditSourceId(),
+                auditContext.getAuditEnterpriseSiteId(),
+                auditContext.getAuditSourceType());
         return self();
     }
 

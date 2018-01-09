@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti38
 
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
 /**
@@ -33,7 +33,7 @@ import org.springframework.test.annotation.DirtiesContext
  * @author Dmytro Rud
  */
 @DirtiesContext
-class TestIti38 extends StandardTestContainer {
+class TestIti38 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-38.xml'
     

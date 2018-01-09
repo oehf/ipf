@@ -69,8 +69,8 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(Iti64AuditDataset auditDataset) {
-        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder<>(auditDataset)
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti64AuditDataset auditDataset) {
+        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder<>(auditContext, auditDataset)
                 .setLocalPatientId(auditDataset);
         if (auditDataset.getSubsumedLocalPatientId() != null) {
             builder.setSubsumedLocalPatientId(auditDataset);
@@ -84,7 +84,7 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
 
     @Override
-    public Iti64AuditDataset createAuditDataset(AuditContext auditContext) {
-        return new Iti64AuditDataset(auditContext, isServerSide());
+    public Iti64AuditDataset createAuditDataset() {
+        return new Iti64AuditDataset(isServerSide());
     }
 }

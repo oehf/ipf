@@ -45,7 +45,7 @@ public class Iti22AuditStrategyTest extends AuditorTestBase {
     private void testRequest(boolean serverSide) {
         Iti22AuditStrategy strategy = new Iti22AuditStrategy(serverSide);
         QueryAuditDataset auditDataset = getHl7v2AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditDataset);
+        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -58,7 +58,7 @@ public class Iti22AuditStrategyTest extends AuditorTestBase {
     }
 
     private QueryAuditDataset getHl7v2AuditDataset(Iti22AuditStrategy strategy) {
-        QueryAuditDataset auditDataset = strategy.createAuditDataset(auditContext);
+        QueryAuditDataset auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

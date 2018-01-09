@@ -36,6 +36,8 @@ import java.net.UnknownHostException;
  */
 public class DefaultAuditContext implements AuditContext {
 
+    static final AuditContext NO_AUDIT = new DefaultAuditContext();
+
     @Getter
     private String auditRepositoryHostName = "localhost";
 

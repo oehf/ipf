@@ -63,6 +63,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      */
     private final AuditStrategy<T> auditStrategy;
 
+    @Getter
     private final AuditContext auditContext;
 
     /**
@@ -97,7 +98,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     protected T getAuditDataset(SoapMessage message) {
         T auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
-            auditDataset = getAuditStrategy().createAuditDataset(auditContext);
+            auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
                 LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
@@ -156,10 +157,12 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             }
             
             if (address != null) {
-                auditDataset.setUserId(address.getValue());
+                auditDataset.setSourceUserId(address.getValue());
             }
-        } else {
-            LOG.warn("Missing WS-Addressing headers, userId is not contained in audit record");
+        }
+        if (auditDataset.getSourceUserId() == null) {
+            LOG.info("Missing WS-Addressing headers");
+            auditDataset.setSourceUserId("unknown");
         }
     }
 
@@ -193,6 +196,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
         auditDataset.setRemoteAddress(request.getRemoteAddr());
         auditDataset.setLocalAddress(request.getRequestURL().toString());
+        auditDataset.setDestinationUserId(request.getRequestURL().toString());
     }
 
 

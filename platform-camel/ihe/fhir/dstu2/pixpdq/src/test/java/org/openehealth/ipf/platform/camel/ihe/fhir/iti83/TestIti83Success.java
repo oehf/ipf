@@ -21,7 +21,7 @@ import org.hl7.fhir.instance.model.Identifier;
 import org.hl7.fhir.instance.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
@@ -74,7 +74,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
         assertEquals(
@@ -144,7 +144,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
@@ -156,7 +156,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

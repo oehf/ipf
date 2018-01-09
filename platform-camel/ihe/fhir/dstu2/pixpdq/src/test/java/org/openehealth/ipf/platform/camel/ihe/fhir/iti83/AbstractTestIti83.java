@@ -22,7 +22,7 @@ import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.StringType;
 import org.hl7.fhir.instance.model.UriType;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
@@ -39,7 +39,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU2_HL7ORG);
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 

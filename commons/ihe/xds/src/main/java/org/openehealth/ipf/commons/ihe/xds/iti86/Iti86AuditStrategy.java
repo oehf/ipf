@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti86;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
@@ -38,15 +39,15 @@ public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
-                .map(s -> doMakeAuditMessage(auditDataset, s))
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsPatientRecordBuilder(auditDataset, EventActionCode.Delete, XdsEventTypeCode.RemoveDocuments, auditDataset.getPurposesOfUse())
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsPatientRecordBuilder(auditContext, auditDataset, EventActionCode.Delete, XdsEventTypeCode.RemoveDocuments, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientIds())
                 .addDocumentIds(auditDataset,
                         status,

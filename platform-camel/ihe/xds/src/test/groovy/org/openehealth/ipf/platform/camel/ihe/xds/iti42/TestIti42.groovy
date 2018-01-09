@@ -28,8 +28,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
 import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -47,7 +47,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-class TestIti42 extends StandardTestContainer {
+class TestIti42 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-42.xml'
     

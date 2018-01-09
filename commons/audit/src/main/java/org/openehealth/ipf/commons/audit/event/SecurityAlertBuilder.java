@@ -103,7 +103,9 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
                                                                      String reason) {
         return addParticipantObjectIdentification(ParticipantObjectIdTypeCode.NodeID,
                 null, null,
-                Collections.singletonList(getTypeValuePair("Alert Description", reason)),
+                reason != null ?
+                        Collections.singletonList(getTypeValuePair("Alert Description", reason)) :
+                        Collections.emptyList(),
                 node,
                 ParticipantObjectTypeCode.System,
                 role,
@@ -122,7 +124,9 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
                                                                     String reason) {
         return addParticipantObjectIdentification(ParticipantObjectIdTypeCode.URI,
                 null, null,
-                Collections.singletonList(getTypeValuePair("Alert Description", reason)),
+                reason != null ?
+                        Collections.singletonList(getTypeValuePair("Alert Description", reason)) :
+                        Collections.emptyList(),
                 uri,
                 ParticipantObjectTypeCode.System,
                 role,

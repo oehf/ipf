@@ -26,4 +26,5 @@ public interface AuditTransmissionProtocol {
     void send(AuditContext auditContext, String... auditMessage) throws Exception;
 
     String getTransport();
+
 }

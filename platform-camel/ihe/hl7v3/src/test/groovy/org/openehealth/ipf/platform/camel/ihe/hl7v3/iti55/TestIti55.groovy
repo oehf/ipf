@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
-
-import java.util.concurrent.atomic.AtomicInteger
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
 import org.apache.camel.Exchange
 import org.apache.camel.component.mock.MockEndpoint
@@ -27,18 +25,19 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
-
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
+
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Tests for ITI-55.
  * @author Dmytro Rud
  */
 @DirtiesContext
-class TestIti55 extends StandardTestContainer {
+class TestIti55 extends HL7v3StandardTestContainer {
     enum RequestType {REGULAR, ASYNC, DEFERRED}
 
     def static CONTEXT_DESCRIPTOR = 'iti55/iti-55.xml'

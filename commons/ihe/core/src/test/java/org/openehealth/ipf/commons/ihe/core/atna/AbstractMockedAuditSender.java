@@ -26,6 +26,8 @@ import java.util.List;
 
 /**
  * @author Dmytro Rud
+ *
+ * @deprecated
  */
 abstract public class AbstractMockedAuditSender<AuditMessageType> implements AuditMessageSender {
 

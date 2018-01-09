@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.rad69;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDataImportBuilder;
@@ -38,15 +39,15 @@ public class Rad69ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
-                .map(s -> doMakeAuditMessage(auditDataset, s))
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsDataImportBuilder(auditDataset, XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsDataImportBuilder(auditContext, auditDataset, XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .addDocumentIds(auditDataset, status, ParticipantObjectIdTypeCode.ReportNumber)
                 .getMessage();

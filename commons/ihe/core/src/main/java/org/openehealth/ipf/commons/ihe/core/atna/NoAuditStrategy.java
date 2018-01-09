@@ -27,17 +27,17 @@ public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySuppor
     }
 
     @Override
-    public T createAuditDataset(AuditContext auditContext) {
+    public T createAuditDataset() {
         return null;
     }
 
     @Override
-    public void doAudit(T auditDataset) {
+    public void doAudit(AuditContext auditContext, T auditDataset) {
         // no audit
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(T auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
         return new AuditMessage[0];
     }
 }

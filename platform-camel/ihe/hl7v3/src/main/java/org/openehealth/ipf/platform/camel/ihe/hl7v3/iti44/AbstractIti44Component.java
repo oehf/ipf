@@ -39,13 +39,7 @@ abstract class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionC
     @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
-                getAuditContext(parameters),
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti44Service.class) {
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, parameters, Iti44Service.class) {
             @Override
             public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
                                                                                                                             JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {

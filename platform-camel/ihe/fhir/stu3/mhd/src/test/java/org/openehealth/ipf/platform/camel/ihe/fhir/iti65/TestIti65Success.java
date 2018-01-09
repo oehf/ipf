@@ -22,7 +22,7 @@ import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
@@ -65,7 +65,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         printAsXML(result);
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
@@ -126,7 +126,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         // printAsXML(result);
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

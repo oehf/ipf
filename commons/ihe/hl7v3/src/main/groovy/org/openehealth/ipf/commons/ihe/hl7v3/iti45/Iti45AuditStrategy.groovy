@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti45
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
@@ -23,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PIXQuery
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
@@ -41,6 +43,10 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
         request = slurp(request)
         GPathResult qbp = request.controlActProcess.queryByParameter
 
+        // message ID
+        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
+        auditDataset.messageId = idString(request.id)
+
         // patient ID from request
         auditDataset.setPatientIds([iiToCx(qbp.parameterList.patientIdentifier[0].value)] as String[])
 
@@ -55,7 +61,7 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
         response = slurp(response)
         boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
 
-        // patient IDs from response
+        // patient IDs from response FIXME really?
         Set<String> patientIds = [] as Set<String>
         addPatientIds(response.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
         if (auditDataset.patientIds) {
@@ -66,8 +72,8 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
     }
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
-        new IHEQueryBuilder(auditDataset, Hl7v3EventTypeCode.PIXQuery, auditDataset.getPurposesOfUse())
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        new IHEQueryBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PIXQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.patientIds)
                 .setQueryParameters(auditDataset.messageId, PIXQuery, auditDataset.requestPayload)
                 .getMessages()

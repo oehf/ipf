@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
@@ -35,8 +36,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.UR
  */
 public class XdsQueryBuilder extends IHEQueryBuilder<XdsQueryBuilder> {
 
-    public XdsQueryBuilder(XdsQueryAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditDataset, eventType, purposesOfUse);
+    public XdsQueryBuilder(AuditContext auditContext, XdsQueryAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventType, purposesOfUse);
     }
 
     public XdsQueryBuilder setQueryParameters(XdsQueryAuditDataset auditDataset, XdsParticipantObjectIdTypeCode participantObjectIdTypeCode) {

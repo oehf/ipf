@@ -20,12 +20,15 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlot30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
@@ -37,6 +40,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
  * @author Jens Riemschneider
  */
 public class SubmitObjectsRequestValidatorTest {
+
     private SubmitObjectsRequestValidator validator;    
     private EbXMLFactory factory;
     private ProvideAndRegisterDocumentSet request;
@@ -227,7 +231,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Test    
     public void testNoClassifiedObject() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject("lol");
+        ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject(null);
         expectFailure(NO_CLASSIFIED_OBJ, ebXML);
     }
     
@@ -400,7 +404,9 @@ public class SubmitObjectsRequestValidatorTest {
     
     @Test    
     public void testSlotValueTooLong() {
-        docEntry.setHash("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456");
+        char[] chars = new char[EbXMLSlot30.MAX_SLOT_LENGTH + 1];
+        Arrays.fill(chars, 'x');
+        docEntry.setHash(String.valueOf(chars));
         expectFailure(SLOT_VALUE_TOO_LONG);
     }
     

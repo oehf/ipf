@@ -33,19 +33,12 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public abstract class AuditDataset implements Serializable {
-    private static final long serialVersionUID = -2919172035448943710L;
 
     /**
      * whether we audit on server (true) or on client (false)
      */
     @Getter
     private final boolean serverSide;
-
-    /**
-     * the {@link AuditContext} under which this dataset will be audited
-     */
-    @Getter
-    private final AuditContext auditContext;
 
     /**
      * Overall outcome of the transaction that causes this audit event
@@ -55,23 +48,11 @@ public abstract class AuditDataset implements Serializable {
     private EventOutcomeIndicator eventOutcomeIndicator;
 
     /**
-     * @param serverSide specifies whether this audit dataset will be used on the
-     *                   server side (<code>true</code>) or on the client side
-     *                   (<code>false</code>)
-     * @deprecated to be removed
-     */
-    public AuditDataset(boolean serverSide) {
-        this(null, serverSide);
-    }
-
-    /**
-     * @param auditContext audit context used for this audit data set
      * @param serverSide   specifies whether this audit dataset will be used on the
      *                     server side (<code>true</code>) or on the client side
      *                     (<code>false</code>)
      */
-    public AuditDataset(AuditContext auditContext, boolean serverSide) {
-        this.auditContext = auditContext;
+    public AuditDataset(boolean serverSide) {
         this.serverSide = serverSide;
     }
 

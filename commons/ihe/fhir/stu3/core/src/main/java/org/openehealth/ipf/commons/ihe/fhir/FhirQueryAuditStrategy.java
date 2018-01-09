@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.param.TokenParam;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.List;
@@ -71,7 +70,7 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new FhirQueryAuditDataset(auditContext, isServerSide());
+    public FhirQueryAuditDataset createAuditDataset() {
+        return new FhirQueryAuditDataset(isServerSide());
     }
 }

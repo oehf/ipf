@@ -54,4 +54,5 @@ public interface AuditableEndpoint<AuditDatasetType extends AuditDataset> extend
      * @return audit context to be used for this endpoint
      */
     AuditContext getAuditContext();
+
 }

@@ -73,7 +73,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
                     auditDataset.setEventOutcomeIndicator(failed ?
                             EventOutcomeIndicator.MajorFailure :
                             EventOutcomeIndicator.Success);
-                    getAuditStrategy().doAudit(auditDataset);
+                    getAuditStrategy().doAudit(auditContext, auditDataset);
                 } catch (Exception e) {
                     LOG.error("ATNA auditing failed", e);
                 }

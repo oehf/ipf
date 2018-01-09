@@ -15,7 +15,7 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
     
-    <import resource="common-beans.xml" />
+    <import resource="common-hl7v3-beans.xml" />
 
     <bean id="routeBuilder" 
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47.CamelOnlyRouteBuilder" />

@@ -27,11 +27,11 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
+import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -144,8 +144,8 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(3, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
-        assertTrue(messages[1] instanceof SecurityAlertEvent)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
+        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID());
     }
 
     @Test
@@ -173,7 +173,7 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(2, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -188,7 +188,8 @@ class TestIti21 extends MllpTestContainer {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
         def messages = auditSender.messages
         assertEquals(3, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        LOG.warn("{}", messages)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
     }
 
     @Test

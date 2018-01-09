@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti57;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDataExportBuilder;
@@ -36,8 +37,8 @@ public class Iti57ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
 
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsSubmitAuditDataset auditDataset) {
-        return new XdsDataExportBuilder(auditDataset, EventActionCode.Update,
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsSubmitAuditDataset auditDataset) {
+        return new XdsDataExportBuilder(auditContext, auditDataset, EventActionCode.Update,
                 XdsEventTypeCode.UpdateDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .setSubmissionSet(auditDataset)

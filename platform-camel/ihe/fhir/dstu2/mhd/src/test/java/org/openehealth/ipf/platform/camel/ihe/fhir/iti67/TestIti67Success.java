@@ -21,7 +21,7 @@ import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
@@ -70,7 +70,7 @@ public class TestIti67Success extends AbstractTestIti67 {
 
         // Check ATNA Audit
 
-        MockedSender sender = getAuditSender();
+        MockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 

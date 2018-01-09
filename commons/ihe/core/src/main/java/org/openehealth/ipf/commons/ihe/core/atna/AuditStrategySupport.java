@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
@@ -42,17 +43,18 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
 
 
     @Override
-    public void doAudit(T auditDataset) {
-        auditDataset.getAuditContext().audit(makeAuditMessage(auditDataset));
+    public void doAudit(AuditContext auditContext, T auditDataset) throws Exception {
+        auditContext.audit(makeAuditMessage(auditContext, auditDataset));
     }
 
     /**
      * Constructs an {@link AuditMessage} from a provided {@link AuditDataset}
      *
+     * @param auditContext audit context
      * @param auditDataset audit dataset
      * @return audit message
      */
-    public abstract AuditMessage[] makeAuditMessage(T auditDataset);
+    public abstract AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset);
 
 
     @Override

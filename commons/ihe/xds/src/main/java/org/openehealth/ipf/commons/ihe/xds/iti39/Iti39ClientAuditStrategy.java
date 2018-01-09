@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
@@ -34,15 +35,15 @@ public class Iti39ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
-                .map(s -> doMakeAuditMessage(auditDataset, s))
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsDataImportBuilder(auditDataset, XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsDataImportBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .addDocumentIds(auditDataset, status, XdsParticipantObjectIdTypeCode.CrossGatewayRetrieve)
                 .getMessage();

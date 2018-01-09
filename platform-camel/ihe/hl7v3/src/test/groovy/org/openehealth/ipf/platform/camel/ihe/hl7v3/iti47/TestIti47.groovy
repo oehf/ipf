@@ -15,26 +15,27 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
-import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
-import org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
-
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
-
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
+
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
 /**
  * Tests for ITI-47.
  * @author Dmytro Rud
  */
-class TestIti47 extends StandardTestContainer {
+class TestIti47 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-47.xml'
     
@@ -73,10 +74,9 @@ class TestIti47 extends StandardTestContainer {
         String responseString = send(SERVICE_1, REQUEST, String.class)
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            def xml = new XmlSlurper().parseText(it.toString())
-            assert xml.EventIdentification.@EventActionCode.text() == 'E'
-            assert xml.EventIdentification.@EventOutcomeIndicator.text() == '0'
-            assert xml.ParticipantObjectIdentification.size() == 9
+            assert it.eventIdentification.eventActionCode == EventActionCode.Execute
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            assert it.participantObjectIdentifications.size() == 9
         }
     }
 
@@ -103,10 +103,9 @@ class TestIti47 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            def xml = new XmlSlurper().parseText(it.toString())
-            assert xml.EventIdentification.@EventActionCode.text() == 'E'
-            assert xml.EventIdentification.@EventOutcomeIndicator.text() == '0'
-            assert xml.ParticipantObjectIdentification.size() == 9
+            assert it.eventIdentification.eventActionCode == EventActionCode.Execute
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            assert it.participantObjectIdentifications.size() == 9
         }
     }
     
@@ -140,7 +139,7 @@ class TestIti47 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventOutcomeIndicator="8"')
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
     
@@ -162,7 +161,7 @@ class TestIti47 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventOutcomeIndicator="8"')
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
     
@@ -181,7 +180,7 @@ class TestIti47 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventOutcomeIndicator="8"')
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
     

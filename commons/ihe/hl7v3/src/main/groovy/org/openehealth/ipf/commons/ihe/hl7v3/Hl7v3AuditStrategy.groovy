@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v3
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport
 import org.slf4j.Logger
@@ -35,8 +34,8 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
     }
 
     @Override
-    Hl7v3AuditDataset createAuditDataset(AuditContext auditContext) {
-        return new Hl7v3AuditDataset(auditContext, serverSide)
+    Hl7v3AuditDataset createAuditDataset() {
+        return new Hl7v3AuditDataset(serverSide)
     }
 
     /**

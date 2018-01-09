@@ -190,7 +190,9 @@ class Hl7v3Utils {
      *      "extension @ root".
      */
     static String idString(GPathResult id) {
-        return "${id.@extension.text()}@${id.@root.text()}"
+        return "${id.@extension.text()}" ?
+                "${id.@extension.text()}@${id.@root.text()}" :
+                "${id.@root.text()}"
     }
 
 

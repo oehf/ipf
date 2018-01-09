@@ -28,7 +28,7 @@ import org.hl7.fhir.instance.model.Reference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
@@ -50,7 +50,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU2_HL7ORG);
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 

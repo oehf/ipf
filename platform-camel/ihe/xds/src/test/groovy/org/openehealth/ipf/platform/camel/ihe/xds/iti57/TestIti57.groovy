@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import javax.xml.namespace.QName
 
@@ -38,7 +38,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-57 transaction with a webservice and client adapter defined via URIs.
  * @author Boris Stanojevic
  */
-class TestIti57 extends StandardTestContainer {
+class TestIti57 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-57.xml'
     

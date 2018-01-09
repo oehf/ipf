@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
-import static org.easymock.EasyMock.*
-
+import ca.uhn.hl7v2.parser.DefaultModelClassFactory
+import ca.uhn.hl7v2.parser.ModelClassFactory
 import org.apache.camel.Exchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Assert
@@ -27,18 +27,17 @@ import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
-import ca.uhn.hl7v2.parser.DefaultModelClassFactory
-import ca.uhn.hl7v2.parser.ModelClassFactory
+import static org.easymock.EasyMock.*
 
-class Testiti47CamelOnly extends StandardTestContainer {
+class Testiti47CamelOnly extends HL7v3StandardTestContainer {
 
     private static String requestMessage, responseMessage;
 
 
     @BeforeClass
-    public static void setUpClass() {
+    static void setUpClass() {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.setMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
         ModelClassFactory mcf = new DefaultModelClassFactory()
@@ -55,7 +54,7 @@ class Testiti47CamelOnly extends StandardTestContainer {
 
 
     @Test
-    public void testCamelOnly() {
+    void testCamelOnly() {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service";
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage());
         String response = Exchanges.resultMessage(responseExchange).getBody(String.class);
@@ -63,12 +62,12 @@ class Testiti47CamelOnly extends StandardTestContainer {
     }
 
 
-    public static String getRequestMessage() {
+    static String getRequestMessage() {
         return requestMessage;
     }
 
 
-    public static String getResponseMessage() {
+    static String getResponseMessage() {
         return responseMessage;
     }
 }

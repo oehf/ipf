@@ -138,6 +138,7 @@
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
         <tomcat-version>8.5.20</tomcat-version>
+        <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -320,63 +321,6 @@
                 <artifactId>ipf-platform-camel-core-legacy</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-commons</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-jms</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-log</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-atna</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-hl7v2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-hl7v3</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-xds</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-extender-basic</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-extender-spring</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-manager</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-repository</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
@@ -394,11 +338,6 @@
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j-version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.osgi.core</artifactId>
-                <version>${osgi-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
@@ -707,6 +646,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.woodstox</groupId>
+                <artifactId>woodstox-core-asl</artifactId>
+                <version>${woodstox-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

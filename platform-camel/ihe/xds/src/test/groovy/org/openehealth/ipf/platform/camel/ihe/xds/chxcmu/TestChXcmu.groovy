@@ -21,6 +21,8 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
@@ -28,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import javax.xml.namespace.QName
 
@@ -38,7 +41,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-57 transaction with a webservice and client adapter defined via URIs.
  * @author Boris Stanojevic
  */
-class TestChXcmu extends StandardTestContainer {
+class TestChXcmu extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'ch-xcmu.xml'
     
@@ -108,13 +111,12 @@ class TestChXcmu extends StandardTestContainer {
     }
 
     void checkAudit(outcome) {
-        def message = getAudit('U', SERVICE2_ADDR)[0]
+        AuditMessage message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[0]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.eventIdentification.size() == 1
+        assert message.auditSourceIdentification.size() == 1
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
         checkEvent(message.EventIdentification, '110107', 'ITI-X1', 'U', outcome)
         checkSource(message.ActiveParticipant[0], 'true')

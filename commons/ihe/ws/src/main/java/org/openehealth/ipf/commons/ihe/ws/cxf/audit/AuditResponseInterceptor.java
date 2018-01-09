@@ -91,7 +91,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
     
 
     @Override
-    protected void process(SoapMessage message) {
+    protected void process(SoapMessage message) throws Exception {
         if (isGET(message)) {
             return;
         }
@@ -155,7 +155,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         }
         
         // perform transaction-specific auditing
-        auditStrategy.doAudit(auditDataset);
+        auditStrategy.doAudit(getAuditContext(), auditDataset);
     }
     
 }

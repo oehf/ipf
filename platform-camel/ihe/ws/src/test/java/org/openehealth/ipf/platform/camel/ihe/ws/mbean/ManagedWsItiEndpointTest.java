@@ -62,7 +62,7 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
         MBeanServer mbeanServer = getMBeanServer();
         
         Set<ObjectName> s = CastUtils.cast(mbeanServer.queryNames(new ObjectName(
-            "org.apache.camel:*,type=endpoints,name=\"some-ws-iti://data\""), null));
+            "org.apache.camel:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
         ObjectName on = (ObjectName) s.toArray()[0];
         assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
             ((Boolean) mbeanServer.getAttribute(on, "Addressing")).booleanValue());
@@ -73,11 +73,11 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
     }
     
     @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
+    protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
-                from("some-ws-iti:data").to("mock:result");
+            public void configure() {
+                from("some-ws-iti:data?audit=false").to("mock:result");
             }
         };
     }

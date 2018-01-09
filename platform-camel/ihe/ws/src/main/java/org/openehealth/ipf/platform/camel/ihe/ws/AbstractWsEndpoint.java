@@ -125,6 +125,21 @@ public abstract class AbstractWsEndpoint<
     private String password;
 
 
+    protected AbstractWsEndpoint(
+            String endpointUri,
+            String address,
+            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            Map<String, Object> parameters,
+            Class<? extends AbstractWebService> serviceClass) {
+        this(endpointUri, address, component,
+                component.getAuditContext(parameters),
+                component.getCustomInterceptors(parameters),
+                component.getFeatures(parameters),
+                component.getSchemaLocations(parameters),
+                component.getProperties(parameters),
+                serviceClass);
+    }
+
     /**
      * Constructs the endpoint.
      *

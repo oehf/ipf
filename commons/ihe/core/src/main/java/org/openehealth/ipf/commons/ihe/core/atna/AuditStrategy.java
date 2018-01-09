@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * ATNA audit strategy base for transactions. This strategy is accompanied with a
@@ -29,12 +27,12 @@ import java.util.function.Consumer;
  * @author Christian Ohr
  * @since 3.1
  */
-public interface AuditStrategy<T extends AuditDataset> extends Consumer<T> {
+public interface AuditStrategy<T extends AuditDataset> {
 
     /**
      * Creates a new audit dataset instance.
      */
-    T createAuditDataset(AuditContext auditContext);
+    T createAuditDataset();
 
     /**
      * Enriches the given audit dataset with transaction-specific
@@ -61,14 +59,11 @@ public interface AuditStrategy<T extends AuditDataset> extends Consumer<T> {
     /**
      * Performs the actual ATNA audit.
      *
+     * @param auditContext audit context used for auditing
      * @param auditDataset Collected audit dataset.
      */
-    void doAudit(T auditDataset);
+    void doAudit(AuditContext auditContext, T auditDataset) throws Exception;
 
-    @Override
-    default void accept(T t) {
-        doAudit(t);
-    }
 
     /**
      * Determines whether the given response finalizes the interaction

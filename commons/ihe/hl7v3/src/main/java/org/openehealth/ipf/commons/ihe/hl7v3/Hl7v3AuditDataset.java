@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 
@@ -48,8 +47,8 @@ public class Hl7v3AuditDataset extends WsAuditDataset {
     /** Old patient ID. */
     @Getter @Setter private String oldPatientId;
 
-    public Hl7v3AuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public Hl7v3AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     public String getPatientId() {

@@ -19,6 +19,7 @@ import org.hl7.fhir.instance.model.Identifier;
 import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.StringType;
 import org.hl7.fhir.instance.model.Type;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -42,8 +43,8 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(FhirQueryAuditDataset auditDataset) {
-        return new IHEQueryBuilder<>(auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         "PIXmQuery",

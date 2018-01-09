@@ -87,7 +87,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                         socket.set(null);
                         doSend(auditContext, syslogFrame, msgBytes);
                     } catch (Exception exception) {
-                        LOG.error("Still exception trying to audit to TLS socket. Cannot audit to repository - this audit message will be lost.");
+                        LOG.error("Failed to audit using new TLS socket, giving up - this audit message will be lost.");
                         socket.set(null);
                         // rethrow the exception so caller knows what happened
                         throw exception;

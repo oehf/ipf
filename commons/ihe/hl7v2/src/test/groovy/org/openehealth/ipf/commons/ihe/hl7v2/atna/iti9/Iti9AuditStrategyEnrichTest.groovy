@@ -43,7 +43,7 @@ class Iti9AuditStrategyEnrichTest {
     @Test
     void testEnrichResponse() {
         Iti9AuditStrategy strategy = new Iti9AuditStrategy(false)
-        QueryAuditDataset dataset = new QueryAuditDataset(null, false)
+        QueryAuditDataset dataset = new QueryAuditDataset(false)
         Message message = PARSER.parse(msg)
         strategy.enrichAuditDatasetFromResponse(dataset, message)
         // println dataset

@@ -73,7 +73,10 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
      * @return this
      */
     public BeginTransferringDicomInstancesBuilder setPatientParticipantObject(String patientId, String patientName) {
-        return addPatientParticipantObject(patientId, patientName, null, null);
+        if (patientId != null) {
+            addPatientParticipantObject(patientId, patientName, null, null);
+        }
+        return self();
     }
 
     /**

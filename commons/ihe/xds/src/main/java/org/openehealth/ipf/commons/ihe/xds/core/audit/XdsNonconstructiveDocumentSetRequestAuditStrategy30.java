@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
@@ -61,8 +60,8 @@ public abstract class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extend
     }
 
     @Override
-    public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new XdsNonconstructiveDocumentSetRequestAuditDataset(auditContext, isServerSide());
+    public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
+        return new XdsNonconstructiveDocumentSetRequestAuditDataset(isServerSide());
     }
 
     /**

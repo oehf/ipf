@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -25,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjects
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.List;
 import java.util.Map;
@@ -76,7 +74,7 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
     }
 
     @Override
-    public XdsSubmitAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new XdsSubmitAuditDataset(auditContext, isServerSide());
+    public XdsSubmitAuditDataset createAuditDataset() {
+        return new XdsSubmitAuditDataset(isServerSide());
     }
 }

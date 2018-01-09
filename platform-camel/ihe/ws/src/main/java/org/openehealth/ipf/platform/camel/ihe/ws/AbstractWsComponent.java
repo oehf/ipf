@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 
 import java.util.List;
 import java.util.Map;
@@ -71,24 +72,7 @@ abstract public class AbstractWsComponent<
     }
 
     protected AuditContext getAuditContext(Map<String, Object> parameters) {
-        Boolean audit = getAndRemoveParameter(parameters, "audit", Boolean.class, true);
-        AuditContext auditContext = resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
-
-        if (auditContext == null) {
-            auditContext = ContextFacade.getBean(AuditContext.class);
-            if (auditContext != null) {
-                if (audit != null) {
-                    auditContext.setAuditEnabled(audit);
-                }
-            } else {
-                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
-            }
-        } else {
-            if (audit != null) {
-                auditContext.setAuditEnabled(audit);
-            }
-        }
-        return auditContext;
+        return AuditConfiguration.obtainAuditContext(this, parameters);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

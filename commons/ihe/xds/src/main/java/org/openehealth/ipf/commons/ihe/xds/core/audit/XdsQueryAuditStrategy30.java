@@ -67,8 +67,8 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
     }
 
     @Override
-    public XdsQueryAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new XdsQueryAuditDataset(auditContext, isServerSide());
+    public XdsQueryAuditDataset createAuditDataset() {
+        return new XdsQueryAuditDataset(isServerSide());
     }
 
     @Override

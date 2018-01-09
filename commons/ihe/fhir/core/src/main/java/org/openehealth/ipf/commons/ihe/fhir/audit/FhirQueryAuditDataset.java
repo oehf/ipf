@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  * Generic Audit Dataset for FHIR Query transactions
@@ -32,7 +30,7 @@ public class FhirQueryAuditDataset extends FhirAuditDataset {
     @Getter @Setter
     private String queryString;
 
-    public FhirQueryAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public FhirQueryAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 }

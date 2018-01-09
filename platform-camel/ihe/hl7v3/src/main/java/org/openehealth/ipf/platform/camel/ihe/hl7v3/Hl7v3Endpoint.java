@@ -15,21 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.apache.cxf.feature.AbstractFeature;
-import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,18 +36,13 @@ import java.util.Map;
 public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
         extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> {
 
-    public Hl7v3Endpoint(
+    protected Hl7v3Endpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, Hl7v3InteractionId<ConfigType>> component,
-            AuditContext auditContext,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            List<String> schemaLocations,
-            Map<String, Object> properties,
+            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, auditContext,
-                customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, parameters, serviceClass);
     }
 
     @Override

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> {
-    
+
     @SuppressWarnings("unchecked")
     public SomeItiEndpoint(
             String endpointUri,
@@ -42,8 +42,7 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransa
             InterceptorProvider interceptorProvider,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
+            Map<String, Object> properties) {
         super(endpointUri, address, someItiComponent, auditContext,
                 interceptorProvider, features, schemaLocations, properties, null);
     }

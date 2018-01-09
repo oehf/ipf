@@ -19,25 +19,20 @@ import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
-import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
 import org.junit.After
 import org.junit.AfterClass
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditSender
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
-import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.*
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
-
 import org.springframework.web.context.support.WebApplicationContextUtils
 
 /**
@@ -46,12 +41,13 @@ import org.springframework.web.context.support.WebApplicationContextUtils
  * placed within the root of the test resources.
  * @author Jens Riemschneider
  */
-class StandardTestContainer {
+class StandardTestContainer<T> {
      private static final transient Logger log = LoggerFactory.getLogger(StandardTestContainer.class)
      
      static ProducerTemplate producerTemplate
      static ServletServer servletServer
      static ApplicationContext appContext
+     private static AbstractMockedAuditMessageQueue<T> auditSender
 
      static CamelContext camelContext
      
@@ -62,7 +58,8 @@ class StandardTestContainer {
       */
      public static int DEMO_APP_PORT = 8999
      
-     static void startServer(servlet, String appContextName, boolean secure, int serverPort, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
+     static void startServer(servlet, String appContextName, boolean secure, int serverPort,
+                             String servletName = null) {
          URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
          
          port = serverPort
@@ -87,6 +84,7 @@ class StandardTestContainer {
          appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
          producerTemplate = appContext.getBean('template', ProducerTemplate.class)
          camelContext = appContext.getBean('camelContext', CamelContext.class)
+         auditSender = appContext.getBean('auditContext', AuditContext.class).getAuditMessageQueue()
 
          def auditPort = 514
          
@@ -117,10 +115,6 @@ class StandardTestContainer {
          XDSRepositoryAuditor.auditor.config.auditRepositoryPort = auditPort
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
-             
-         Hl7v3Auditor.auditor.config = new AuditorModuleConfig()
-         Hl7v3Auditor.auditor.config.auditRepositoryHost = 'localhost'
-         Hl7v3Auditor.auditor.config.auditRepositoryPort = auditPort
 
          CustomXdsAuditor.auditor.config = new AuditorModuleConfig()
          CustomXdsAuditor.auditor.config.auditSourceId = 'customXdsSourceId'
@@ -144,20 +138,19 @@ class StandardTestContainer {
          XCARespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
          XCARespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
 
-         AuditorModuleContext.context.sender = auditSender
      }
 
-     static <T extends AbstractMockedAuditSender> T getAuditSender() {
-         return (T) AuditorModuleContext.context.sender
+     static <T> AbstractMockedAuditMessageQueue<T> getAuditSender() {
+         return auditSender
      }
 
-     static int startServer(servlet, String appContextName, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
-         startServer(servlet, appContextName, false, auditSender, servletName)
+     static int startServer(servlet, String appContextName, String servletName = null) {
+         startServer(servlet, appContextName, false, servletName)
      }
      
-     static int startServer(servlet, String appContextName, boolean secure, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
+     static int startServer(servlet, String appContextName, boolean secure, String servletName = null) {
          int port = JettyServer.freePort
-         startServer(servlet, appContextName, secure, port, auditSender, servletName)
+         startServer(servlet, appContextName, secure, port, servletName)
          port
      }
 
@@ -217,152 +210,6 @@ class StandardTestContainer {
              throw result.exception
          }
          return result
-     }
-
-     def getAudit(actionCode, addr) {
-         auditSender.messages.collect { getMessage(it) }.findAll {
-             it.EventIdentification.@EventActionCode == actionCode
-         }.findAll {
-             it.ActiveParticipant.any { obj -> obj.@UserID == addr } ||
-             it.ParticipantObjectIdentification.any { obj -> obj.@ParticipantObjectID == addr }
-         }
-     }
-     
-     def getMessage(rawMessage) {
-         def xmlText = rawMessage.auditMessage.toString()
-         new XmlSlurper().parseText(xmlText)         
-     }
-     
-     def checkCode(actual, code, scheme) {
-         assert actual.'@csd-code' == code && actual.@codeSystemName == scheme
-     }
-
-     def checkEvent(event, code, iti, actionCode, outcome) {
-         checkCode(event.EventID, code, 'DCM')
-         checkCode(event.EventTypeCode, iti, 'IHE Transactions')         
-         assert event.@EventActionCode == actionCode
-         assert event.@EventDateTime != null && event.@EventDateTime != ''
-         assert event.@EventOutcomeIndicator == outcome
-     }
-     
-     def checkSource(source, String httpAddr, String requestor) {
-         checkSource(source, requestor, true)
-         assert source.@UserID == httpAddr
-     }
-     
-     def checkSource(source, String requestor, boolean userIdRequired = false) {
-         // This should be something useful, but it isn't fully specified yet (see CP-402)
-         if (userIdRequired) {
-             assert source.@UserID != null && source.@UserID != ''
-         }
-         assert source.@UserIsRequestor == requestor
-         assert source.@NetworkAccessPointTypeCode == '2' || source.@NetworkAccessPointTypeCode == '1'
-         assert source.@NetworkAccessPointID != null && source.@NetworkAccessPointID != '' 
-         // This will be required soon:
-         // assert source.@AlternativeUserID != null && source.@AlternativeUserID != ''
-         checkCode(source.RoleIDCode, '110153', 'DCM')
-     }
-
-     def checkDestination(destination, String httpAddr, String requestor) {
-         checkDestination(destination, requestor, true)
-         assert destination.@UserID == httpAddr
-     }
-     
-     def checkDestination(destination, String requestor, boolean userIdRequired = true) {
-         // This should be something useful, but it isn't fully specified yet (see CP-402)
-         if (userIdRequired) {
-             assert destination.@UserID != null && destination.@UserID != ''
-         }
-         assert destination.@UserIsRequestor == requestor
-         assert destination.@NetworkAccessPointTypeCode == '1' || destination.@NetworkAccessPointTypeCode == '2'
-         assert destination.@NetworkAccessPointID != null && destination.@NetworkAccessPointID != '' 
-         // This will be required soon:
-         // assert source.@AlternativeUserID != null && source.@AlternativeUserID != ''
-         checkCode(destination.RoleIDCode, '110152', 'DCM')
-     }
-     
-     def checkAuditSource(auditSource, String sourceId) {
-         assert auditSource.@AuditSourceID == sourceId 
-     }
-     
-     def checkHumanRequestor(human, String name, List<CodedValueType> roles = []) {
-         assert human.@UserIsRequestor == 'true'
-         assert human.@UserID == name
-         assert human.@UserName == name
-         assert human.RoleIDCode.size() == roles.size()
-         roles.eachWithIndex { CodedValueType cvt, int i ->
-             assert human.RoleIDCode[i].'@csd-code' == cvt.code
-             assert human.RoleIDCode[i].@codeSystemName == cvt.codeSystemName
-             assert human.RoleIDCode[i].@originalText== cvt.originalText
-         }
-     }
-     
-     def checkPatient(patient, String... allowedIds = ['id3^^^&1.3&ISO']) {
-         assert patient.@ParticipantObjectTypeCode == '1'
-         assert patient.@ParticipantObjectTypeCodeRole == '1'
-         checkCode(patient.ParticipantObjectIDTypeCode, '2', 'RFC-3881')
-         assert patient.@ParticipantObjectID in allowedIds
-     }
-     
-     def checkQuery(query, String iti, String queryText, String queryUuid) {
-         assert query.@ParticipantObjectTypeCode == '2'
-         assert query.@ParticipantObjectTypeCodeRole == '24'
-         checkCode(query.ParticipantObjectIDTypeCode, iti, 'IHE Transactions')
-         assert query.@ParticipantObjectID == queryUuid
-         def base64 = query.ParticipantObjectQuery.text().getBytes('UTF8')
-         def decoded = new String(Base64.decodeBase64(base64))
-         assert decoded.contains(queryText)
-     }
-     
-     def checkUri(uri, String docUri, String docUniqueId) {
-         assert uri.@ParticipantObjectTypeCode == '2'
-         assert uri.@ParticipantObjectTypeCodeRole == '3'
-         checkCode(uri.ParticipantObjectIDTypeCode, '12', 'RFC-3881')
-         assert uri.@ParticipantObjectID == docUri
-         assert uri.@ParticipantObjectDetail == docUniqueId
-     }
-     
-    def checkDocument(uri, String docUniqueId, String homeId, String repoId) {
-        assert uri.@ParticipantObjectTypeCode == '2'
-        assert uri.@ParticipantObjectTypeCodeRole == '3'
-        checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
-        assert uri.@ParticipantObjectID == docUniqueId
-
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Repository Unique Id', repoId)
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
-    }
-
-    def checkImageDocument(uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
-        assert uri.@ParticipantObjectTypeCode == '2'
-        assert uri.@ParticipantObjectTypeCodeRole == '3'
-        checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
-        assert uri.@ParticipantObjectID == docUniqueId
-
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Study Instance Unique Id', studyId)
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'Series Instance Unique Id', seriesId)
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[2], 'Repository Unique Id', repoId)
-        checkParticipantObjectDetail(uri.ParticipantObjectDetail[3], 'ihe:homeCommunityID', homeId)
-    }
-
-     def checkParticipantObjectDetail(detail, String expectedType, String expectedValue) {
-         assert detail.@type == expectedType
-         String base64Expected = new String(Base64.encodeBase64(expectedValue.getBytes('UTF8')))
-         String base64Actual = detail.@value
-         assert base64Actual == base64Expected  
-     }
-     
-     def checkSubmissionSet(submissionSet) {
-         assert submissionSet.@ParticipantObjectTypeCode == '2'
-         assert submissionSet.@ParticipantObjectTypeCodeRole == '20'
-         checkCode(submissionSet.ParticipantObjectIDTypeCode, 'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd', 'IHE XDS Metadata')
-         assert submissionSet.@ParticipantObjectID == '123'
-     }
-
-     def checkRegistryObjectParticipantObjectDetail(detail, String typeCode, String registryObjectUuid) {
-         assert detail.@ParticipantObjectTypeCode == '2'
-         assert detail.@ParticipantObjectTypeCodeRole == '3'
-         checkCode(detail.ParticipantObjectIDTypeCode, typeCode, 'IHE XDS Metadata')
-         assert detail.@ParticipantObjectID == registryObjectUuid
      }
 
      static String readFile(String fn) {

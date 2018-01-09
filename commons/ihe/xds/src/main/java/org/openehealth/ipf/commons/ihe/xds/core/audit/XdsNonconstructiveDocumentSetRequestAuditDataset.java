@@ -19,9 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,8 +58,8 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
 
     @Getter private final List<Document> documents = new ArrayList<>();
 
-    public XdsNonconstructiveDocumentSetRequestAuditDataset(AuditContext auditContext, boolean serverSide) {
-        super(auditContext, serverSide);
+    public XdsNonconstructiveDocumentSetRequestAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     public boolean hasDocuments(Status status) {

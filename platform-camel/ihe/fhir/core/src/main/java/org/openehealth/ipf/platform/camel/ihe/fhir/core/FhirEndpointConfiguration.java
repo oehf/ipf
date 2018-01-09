@@ -32,10 +32,12 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
+import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
 import javax.net.ssl.HostnameVerifier;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -110,23 +112,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         this.path = path;
         this.context = component.initializeFhirContext();
 
-        Boolean audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
-        auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
-
-        if (auditContext == null) {
-            auditContext = ContextFacade.getBean(AuditContext.class);
-            if (auditContext != null) {
-                if (audit != null) {
-                    auditContext.setAuditEnabled(audit);
-                }
-            } else {
-                throw new NoSuchBeanException("auditContext", "No bean defined of type " + AuditContext.class.getName());
-            }
-        } else {
-            if (audit != null) {
-                auditContext.setAuditEnabled(audit);
-            }
-        }
+        auditContext = AuditConfiguration.obtainAuditContext(component, parameters);
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(

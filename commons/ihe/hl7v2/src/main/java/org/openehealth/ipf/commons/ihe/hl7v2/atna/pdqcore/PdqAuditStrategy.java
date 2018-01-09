@@ -57,13 +57,13 @@ public abstract class PdqAuditStrategy extends AuditStrategySupport<QueryAuditDa
     }
 
     @Override
-    public QueryAuditDataset createAuditDataset(AuditContext auditContext) {
-        return new QueryAuditDataset(auditContext, isServerSide());
+    public QueryAuditDataset createAuditDataset() {
+        return new QueryAuditDataset(isServerSide());
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(QueryAuditDataset auditDataset) {
-        return new IHEQueryBuilder(auditDataset, eventTypeCode)
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
+        return new IHEQueryBuilder(auditContext, auditDataset, eventTypeCode)
                 .setQueryParameters(
                         auditDataset.getMessageControlId(),
                         participantObjectIdType,

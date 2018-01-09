@@ -25,8 +25,7 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
 http://cxf.apache.org/configuration/security 
 http://cxf.apache.org/schemas/configuration/security.xsd">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    <import resource="common-xds-beans.xml"/>
 
     <http:conduit name="*.http-conduit">
         <http:tlsClientParameters disableCNCheck="true">
@@ -50,10 +49,6 @@ http://cxf.apache.org/schemas/configuration/security.xsd">
         </http:tlsClientParameters>
     </http:conduit>
 
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>  
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti41.Iti41TestRouteBuilder">

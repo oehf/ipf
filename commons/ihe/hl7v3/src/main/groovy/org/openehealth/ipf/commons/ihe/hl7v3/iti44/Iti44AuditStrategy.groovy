@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti44
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.AuditException
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -61,31 +62,32 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    AuditMessage[] makeAuditMessage(Hl7v3AuditDataset auditDataset) {
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
         switch (auditDataset.requestType) {
             case 'PRPA_IN201301UV02':
                 return [
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Create, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Create, true)
                 ] as AuditMessage[]
             case 'PRPA_IN201302UV02':
                 return [
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
                 ] as AuditMessage[]
             case 'PRPA_IN201304UV02':
                 return [
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Delete, false),
-                        patientRecordAuditMessage(auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
                 ] as AuditMessage[]
             default:
                 throw new AuditException("Cannot create audit message for event " + auditDataset.requestType)
         }
     }
 
-    protected AuditMessage patientRecordAuditMessage(final Hl7v3AuditDataset auditDataset,
+    protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
+                                                     final Hl7v3AuditDataset auditDataset,
                                                      EventActionCode eventActionCode,
                                                      boolean newPatientId) {
         String[] patientIds = newPatientId ? auditDataset.patientIds : [ auditDataset.oldPatientId ] as String[]
-        return new IHEPatientRecordBuilder<>(auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
+        return new IHEPatientRecordBuilder<>(auditContext, auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
 
         // Type=II (the literal string), Value=the value of the message ID (from the message content, base64 encoded)
                 .addPatients("II", auditDataset.messageId, patientIds)

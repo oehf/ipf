@@ -44,7 +44,7 @@ public class Iti46AuditStrategyTest extends AuditorTestBase {
     private void testRequest(boolean serverSide) {
         Iti46AuditStrategy strategy = new Iti46AuditStrategy(serverSide);
         Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditDataset);
+        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -57,14 +57,13 @@ public class Iti46AuditStrategyTest extends AuditorTestBase {
     }
 
     private Hl7v3AuditDataset getHl7v3AuditDataset(Iti46AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset(auditContext);
+        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
         auditDataset.setMessageId(MESSAGE_ID);
         auditDataset.setPatientIds(PATIENT_IDS);
         auditDataset.setUserName(USER_NAME);
-        auditDataset.setUserId(REPLY_TO_URI); // ?
         auditDataset.setSourceUserId(REPLY_TO_URI);
         auditDataset.setDestinationUserId(SERVER_URI);
         auditDataset.getPurposesOfUse().addAll(NEW_PURPOSES_OF_USE);

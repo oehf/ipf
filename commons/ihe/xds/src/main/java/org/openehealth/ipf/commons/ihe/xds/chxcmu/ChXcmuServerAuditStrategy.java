@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.chxcmu;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDataImportBuilder;
@@ -35,8 +36,8 @@ public class ChXcmuServerAuditStrategy extends XdsSubmitAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsSubmitAuditDataset auditDataset) {
-        return new XdsDataImportBuilder(auditDataset, EventActionCode.Update,
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsSubmitAuditDataset auditDataset) {
+        return new XdsDataImportBuilder(auditContext, auditDataset, EventActionCode.Update,
                 XdsEventTypeCode.CrossGatewayUpdateDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .setSubmissionSet(auditDataset)

@@ -80,57 +80,61 @@ public class DICOM2016a implements SerializationStrategy {
 
     protected Element eventIdentification(EventIdentificationType eventIdentification) {
         Element element = new Element("EventIdentification");
-        element.setAttribute("EventActionCode", eventIdentification.getEventActionCode().getValue());
-        element.setAttribute("EventDateTime", eventIdentification.getEventDateTime().toString());
-        element.setAttribute("EventOutcomeIndicator", eventIdentification.getEventOutcomeIndicator().getValue().toString());
-        if (eventIdentification.getEventID() != null) {
-            element.addContent(codedValueType("EventID", eventIdentification.getEventID()));
+        if (eventIdentification != null) {
+            element.setAttribute("EventActionCode", eventIdentification.getEventActionCode().getValue());
+            element.setAttribute("EventDateTime", eventIdentification.getEventDateTime().toString());
+            element.setAttribute("EventOutcomeIndicator", eventIdentification.getEventOutcomeIndicator().getValue().toString());
+            if (eventIdentification.getEventID() != null) {
+                element.addContent(codedValueType("EventID", eventIdentification.getEventID()));
+            }
+            eventIdentification.getEventTypeCode().stream()
+                    .map(eventTypeCode -> codedValueType("EventTypeCode", eventTypeCode))
+                    .forEach(element::addContent);
+            eventIdentification.getPurposesOfUse().stream()
+                    .map(purposeOfUse -> codedValueType("PurposeOfUse", purposeOfUse))
+                    .forEach(element::addContent);
         }
-        eventIdentification.getEventTypeCode().stream()
-                .map(eventTypeCode -> codedValueType("EventTypeCode", eventTypeCode))
-                .forEach(element::addContent);
-        eventIdentification.getPurposesOfUse().stream()
-                .map(purposeOfUse -> codedValueType("PurposeOfUse", purposeOfUse))
-                .forEach(element::addContent);
         return element;
     }
 
     protected Element participantObjectIdentification(ParticipantObjectIdentificationType poi) {
         Element element = new Element("ParticipantObjectIdentification");
-        element.setAttribute("ParticipantObjectID", poi.getParticipantObjectID());
-        element.setAttribute("ParticipantObjectTypeCode", poi.getParticipantObjectTypeCode().getValue().toString());
-        conditionallyAddAttribute(element, "ParticipantObjectTypeCodeRole", poi.getParticipantObjectTypeCodeRole());
-        conditionallyAddAttribute(element, "ParticipantObjectDataLifeCycle", poi.getParticipantObjectDataLifeCycle());
-        conditionallyAddAttribute(element, "ParticipantObjectSensitivity", poi.getParticipantObjectSensitivity());
-        if (poi.getParticipantObjectIDTypeCode() != null) {
-            element.addContent(codedValueType("ParticipantObjectIDTypeCode", poi.getParticipantObjectIDTypeCode()));
-        }
-        if (poi.getParticipantObjectName() != null) {
-            element.addContent(new Element("ParticipantObjectName")
-                    .addContent(poi.getParticipantObjectName()));
-        }
-        if (poi.getParticipantObjectQuery() != null) {
-            element.addContent(new Element("ParticipantObjectQuery")
-                    .addContent(Base64.getEncoder().encodeToString(poi.getParticipantObjectQuery())));
-        }
-        poi.getParticipantObjectDetail().stream()
-                .map(participantObjectDetail -> typeValuePairType("ParticipantObjectDetail", participantObjectDetail))
-                .forEach(element::addContent);
+        if (poi != null) {
+            conditionallyAddAttribute(element, "ParticipantObjectID", poi.getParticipantObjectID());
+            conditionallyAddAttribute(element, "ParticipantObjectTypeCode", poi.getParticipantObjectTypeCode().getValue().toString());
+            conditionallyAddAttribute(element, "ParticipantObjectTypeCodeRole", poi.getParticipantObjectTypeCodeRole());
+            conditionallyAddAttribute(element, "ParticipantObjectDataLifeCycle", poi.getParticipantObjectDataLifeCycle());
+            conditionallyAddAttribute(element, "ParticipantObjectSensitivity", poi.getParticipantObjectSensitivity());
+            if (poi.getParticipantObjectIDTypeCode() != null) {
+                element.addContent(codedValueType("ParticipantObjectIDTypeCode", poi.getParticipantObjectIDTypeCode()));
+            }
+            if (poi.getParticipantObjectName() != null) {
+                element.addContent(new Element("ParticipantObjectName")
+                        .addContent(poi.getParticipantObjectName()));
+            }
+            if (poi.getParticipantObjectQuery() != null) {
+                element.addContent(new Element("ParticipantObjectQuery")
+                        .addContent(Base64.getEncoder().encodeToString(poi.getParticipantObjectQuery())));
+            }
+            poi.getParticipantObjectDetail().stream()
+                    .map(participantObjectDetail -> typeValuePairType("ParticipantObjectDetail", participantObjectDetail))
+                    .forEach(element::addContent);
 
-        // TODO imaging attributes missing
-
+            // TODO imaging attributes missing
+        }
         return element;
     }
 
     protected Element auditSourceIdentification(AuditSourceIdentificationType auditSourceIdentification) {
         Element element = new Element("AuditSourceIdentification");
-        conditionallyAddAttribute(element, "AuditEnterpriseSiteID", auditSourceIdentification.getAuditEnterpriseSiteID());
-        element.setAttribute("AuditSourceID", auditSourceIdentification.getAuditSourceID());
+        if (auditSourceIdentification != null) {
+            conditionallyAddAttribute(element, "AuditEnterpriseSiteID", auditSourceIdentification.getAuditEnterpriseSiteID());
+            conditionallyAddAttribute(element, "AuditSourceID", auditSourceIdentification.getAuditSourceID());
 
-        auditSourceIdentification.getAuditSourceType().stream()
-                .map(this::auditSourceType)
-                .forEach(element::addContent);
-
+            auditSourceIdentification.getAuditSourceType().stream()
+                    .map(this::auditSourceType)
+                    .forEach(element::addContent);
+        }
         return element;
     }
 

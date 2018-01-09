@@ -132,7 +132,7 @@ abstract class Hl7v3ContinuationAwareWebService
         }
 
         // prepare ATNA audit, if necessary
-        WsAuditDataset auditDataset = startAtnaAuditing(requestString, auditStrategy, auditContext)
+        WsAuditDataset auditDataset = startAtnaAuditing(requestString, auditStrategy)
 
         // validate request, if necessary
         if (validation) {
@@ -141,7 +141,7 @@ abstract class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid request', e)
                 String nak = createNak(requestString, e)
-                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
             }
         }
@@ -156,13 +156,13 @@ abstract class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid response', e)
                 String nak = createNak(requestString, e)
-                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
             }
         }
 
         // finalize ATNA auditing
-        finalizeAtnaAuditing(responseString, auditStrategy, auditDataset)
+        finalizeAtnaAuditing(responseString, auditStrategy, auditContext, auditDataset)
 
         // process continuations
         GPathResult request = slurp(requestString)

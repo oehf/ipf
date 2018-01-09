@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataImportBuilder;
@@ -31,8 +32,9 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
         super(true);
     }
 
-    protected AuditMessage makeAuditMessage(Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem) {
+    protected AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem) {
         IHEDataImportBuilder builder = new IHEDataImportBuilder<>(
+                auditContext,
                 auditDataset,
                 requestItem.getOutcomeCode(),
                 requestItem.getActionCode(),

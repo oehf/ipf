@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.QueryBuilder;
@@ -26,26 +27,22 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Christian Ohr
  */
 public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
 
-    public IHEQueryBuilder(AuditDataset auditDataset, EventType eventType) {
-        this(auditDataset, eventType, Collections.emptyList());
+    public IHEQueryBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
+        this(auditContext, auditDataset, eventType, Collections.emptyList());
     }
 
-    public IHEQueryBuilder(AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(new QueryBuilder(
+    public IHEQueryBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, new QueryBuilder(
                 auditDataset.getEventOutcomeIndicator(),
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
-        setAuditSource(auditDataset);
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {
@@ -62,6 +59,7 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
     public T addPatients(String... patientIds) {
         if (patientIds != null) {
             Arrays.stream(patientIds)
+                    .filter(Objects::nonNull)
                     .forEach(patientId -> delegate.addPatientParticipantObject(patientId, null, null, null));
         }
         return self();
@@ -69,8 +67,10 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
 
     public T addPatients(Collection<String> patientIds) {
         if (patientIds != null) {
-            patientIds.forEach(patientId ->
-                    delegate.addPatientParticipantObject(patientId, null, null, null));
+            patientIds.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(patientId ->
+                            delegate.addPatientParticipantObject(patientId, null, null, null));
         }
         return self();
     }

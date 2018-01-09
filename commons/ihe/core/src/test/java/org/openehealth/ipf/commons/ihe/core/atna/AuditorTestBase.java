@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 
 import org.junit.After;
 import org.junit.Before;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
@@ -126,7 +127,7 @@ public class AuditorTestBase {
 
         auditContext = new DefaultAuditContext();
         recorder = new AuditMessageRecorder();
-        auditContext.setAuditTransmissionProtocol(recorder);
+        auditContext.setAuditMessageQueue(recorder);
     }
 
     @After
@@ -218,19 +219,19 @@ public class AuditorTestBase {
         */
     }
 
-    protected static <T extends AuditDataset> AuditMessage[] makeAuditMessages(AuditStrategySupport<T> auditStrategy, T auditDataset) {
-        return auditStrategy.makeAuditMessage(auditDataset);
+    protected static <T extends AuditDataset> AuditMessage[] makeAuditMessages(AuditStrategySupport<T> auditStrategy, AuditContext auditContext, T auditDataset) {
+        return auditStrategy.makeAuditMessage(auditContext, auditDataset);
     }
 
-    protected static <T extends AuditDataset> AuditMessage makeAuditMessage(AuditStrategySupport<T> auditStrategy, T auditDataset) {
-        return makeAuditMessages(auditStrategy, auditDataset)[0];
+    protected static <T extends AuditDataset> AuditMessage makeAuditMessage(AuditStrategySupport<T> auditStrategy, AuditContext auditContext, T auditDataset) {
+        return makeAuditMessages(auditStrategy, auditContext, auditDataset)[0];
     }
 
-    protected static <T extends AuditDataset> String printAuditMessage(AuditStrategySupport<T> auditStrategy, T auditDataset) {
-        return Current.toString(makeAuditMessages(auditStrategy, auditDataset)[0], true);
+    protected static <T extends AuditDataset> String printAuditMessage(AuditStrategySupport<T> auditStrategy, AuditContext auditContext, T auditDataset) {
+        return Current.toString(makeAuditMessages(auditStrategy, auditContext, auditDataset)[0], true);
     }
 
-    protected static <T extends AuditDataset> String printAuditMessage(AuditMessage auditMessage) {
+    protected static String printAuditMessage(AuditMessage auditMessage) {
         return Current.toString(auditMessage, true);
     }
 }

@@ -64,6 +64,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
 
         T auditDataset = getAuditDataset(message);
         auditDataset.setRemoteAddress((String) message.get(Message.ENDPOINT_ADDRESS));
+        auditDataset.setDestinationUserId((String) message.get(Message.ENDPOINT_ADDRESS));
         extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
         Object request = extractPojo(message);

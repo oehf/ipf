@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.xds.iti38;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
@@ -36,8 +37,8 @@ public class Iti38AuditStrategy extends XdsQueryAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(XdsQueryAuditDataset auditDataset) {
-        return new XdsQueryBuilder(auditDataset, XdsEventTypeCode.CrossGatewayQuery, auditDataset.getPurposesOfUse())
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
+        return new XdsQueryBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossGatewayQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.CrossGatewayQuery)
                 .getMessages();
