@@ -31,6 +31,19 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
         super(serverSide);
     }
 
+    /**
+     * These transactions defines the source user NOT as being the requestor. This could be a
+     * specification mistake.
+     *
+     * @return audit dataset
+     */
+    @Override
+    public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
+        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = super.createAuditDataset();
+        auditDataset.setSourceUserIsRequestor(false);
+        return auditDataset;
+    }
+
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo) {
         RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
@@ -42,6 +55,12 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
                         documentResponse.getHomeCommunityId());
             }
         }
+
+        // These transactions define source and destination userID the inverted way. This could be a
+        // specification mistake.
+        String sourceUserId = auditDataset.getSourceUserId();
+        auditDataset.setSourceUserId(auditDataset.getDestinationUserId());
+        auditDataset.setDestinationUserId(sourceUserId);
         return true;
     }
 

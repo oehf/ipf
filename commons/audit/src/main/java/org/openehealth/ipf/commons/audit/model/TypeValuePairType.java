@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import static java.util.Objects.requireNonNull;
@@ -32,6 +33,10 @@ public class TypeValuePairType implements Serializable {
 
     @Getter
     private final byte[] value;
+
+    public TypeValuePairType(String type, String value) {
+        this(type, value.getBytes(StandardCharsets.UTF_8));
+    }
 
     public TypeValuePairType(String type, byte[] value) {
         this.type = requireNonNull(type, "Type of TypeValuePairType must be not null");

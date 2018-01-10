@@ -78,7 +78,7 @@ class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
 
     void checkDestination(ActiveParticipantType destination, String httpAddr, boolean requestor) {
         checkDestination(destination, requestor, true)
-        assert destination.@UserID == httpAddr
+        assert destination.userID == httpAddr
     }
 
     void checkDestination(ActiveParticipantType destination, boolean requestor, boolean userIdRequired = true) {
@@ -159,9 +159,9 @@ class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {
         assert detail.type == expectedType
-        byte[] base64Expected = Base64.getEncoder().encode(expectedValue.getBytes('UTF8'))
-        byte[] base64Actual = detail.value
-        Assert.assertArrayEquals(base64Expected, base64Actual)
+        byte[] decodedActualValue = Base64.getDecoder().decode(detail.value)
+        String actualValue = new String(decodedActualValue, StandardCharsets.UTF_8)
+        assert expectedValue == actualValue
     }
 
     void checkSubmissionSet(ParticipantObjectIdentificationType submissionSet) {

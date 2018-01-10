@@ -16,12 +16,8 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig;
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -41,72 +37,50 @@ public class IpfAtnaAutoConfiguration {
 
 
     @Bean
-    @ConditionalOnMissingBean
-    public AuditorModuleContext atnaAuditorModuleContext(IpfAtnaConfigurationProperties config)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        AuditorModuleContext auditorModuleContext = AuditorModuleContext.getContext();
-        auditorModuleContext.setQueue(config.getAuditQueueClass().newInstance());
-        auditorModuleContext.setSender(config.getAuditSenderClass().newInstance());
-        return auditorModuleContext;
-    }
-
-    @Bean
     @ConfigurationProperties(prefix = "ipf.atna")
     @ConditionalOnMissingBean
-    public AuditorModuleConfig atnaAuditorModuleConfig(AuditorModuleContext auditorModuleContext,
-                                                       IpfAtnaConfigurationProperties config,
-                                                       @Value("${spring.application.name}") String appName) {
-        AuditorModuleConfig auditorModuleConfig = auditorModuleContext.getConfig();
+    public AuditContext atnaAuditorModuleConfig(IpfAtnaConfigurationProperties config,
+                                                @Value("${spring.application.name}") String appName) throws Exception {
+        DefaultAuditContext auditContext = new DefaultAuditContext();
+        auditContext.setAuditEnabled(config.isAuditEnabled());
+        auditContext.setAuditSourceId(appName);
+        auditContext.setAuditEnterpriseSiteId(config.getAuditEnterpriseSiteId());
+        auditContext.setAuditRepositoryHost(config.getAuditRepositoryHost());
+        auditContext.setAuditRepositoryPort(config.getAuditRepositoryPort());
+        auditContext.setAuditSource(config.getAuditSourceType());
+        auditContext.setSendingApplication(config.getAuditSendingApplication());
 
-        // Set a few defaults that can be overwritten by ipf.atna.* properties
-        auditorModuleConfig.setAuditSourceId(appName);
-        auditorModuleConfig.setAuditRepositoryHost(config.getRepositoryHost());
-        auditorModuleConfig.setAuditRepositoryPort(config.getRepositoryPort());
-        return auditorModuleConfig;
-    }
+        auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
+        auditContext.setAuditMessageQueue(config.getAuditQueueClass().newInstance());
 
-    @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
-    @ConditionalOnMissingBean
-    AuditorTLSConfig atnaAuditorTLSConfig(AuditorModuleConfig auditorModuleConfig, IpfAtnaConfigurationProperties config) {
-        try {
-            AuditorTLSConfig auditorTLSConfig = new AuditorTLSConfig(auditorModuleConfig);
-            auditorTLSConfig.setSecurityDomainName(config.getSecurityDomainName());
-            auditorTLSConfig.init();
-            return auditorTLSConfig;
-        } catch (Exception e) {
-            throw new BeanCreationException("Could not create AuditorTLSConfig", e);
+        if (config.getAuditSenderClass() != null) {
+            auditContext.setAuditTransmissionProtocol(config.getAuditSenderClass().newInstance());
         }
+
+        return auditContext;
     }
+
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
-    public IHEAuditor basicAuditor(AuditorModuleConfig config) {
-        IHEAuditor auditor = IHEAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
+    @ConditionalOnMissingBean
+    ApplicationStartEventListener applicationStartEventListener(AuditContext auditContext) {
+        return new ApplicationStartEventListener(auditContext);
     }
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
     @ConditionalOnMissingBean
-    ApplicationStartEventListener applicationStartEventListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
-        return new ApplicationStartEventListener(auditor);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
-    @ConditionalOnMissingBean
-    ApplicationStopEventListener applicationStopEventListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
-        return new ApplicationStopEventListener(auditor);
+    ApplicationStopEventListener applicationStopEventListener(AuditContext auditContext) {
+        return new ApplicationStopEventListener(auditContext);
     }
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
     @ConditionalOnClass(name = "org.springframework.security.authentication.event.AbstractAuthenticationEvent")
     @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
-    AuthenticationListener loginListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
-        return new AuthenticationListener(auditor);
+    AuthenticationListener loginListener(AuditContext auditContext) {
+        return new AuthenticationListener(auditContext);
     }
 
 

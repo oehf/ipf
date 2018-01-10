@@ -41,7 +41,7 @@ public class ChXcmuClientAuditStrategy extends XdsSubmitAuditStrategy30 {
         return new XdsDataExportBuilder(auditContext, auditDataset, EventActionCode.Update,
                 XdsEventTypeCode.CrossGatewayUpdateDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .setSubmissionSet(auditDataset)
+                .setSubmissionSetWithHomeCommunityId(auditDataset)
                 .getMessages();
     }
 }

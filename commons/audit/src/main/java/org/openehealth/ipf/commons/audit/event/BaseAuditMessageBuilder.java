@@ -19,7 +19,6 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.*;
 import org.openehealth.ipf.commons.audit.types.*;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -340,7 +339,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return The Type Value Pair instance
      */
     public TypeValuePairType getTypeValuePair(String type, Object value) {
-        return new TypeValuePairType(requireNonNull(type), requireNonNull(value).toString().getBytes(StandardCharsets.UTF_8));
+        return new TypeValuePairType(requireNonNull(type), requireNonNull(value).toString());
     }
 
 

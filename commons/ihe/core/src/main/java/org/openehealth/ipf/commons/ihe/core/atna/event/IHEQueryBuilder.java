@@ -110,7 +110,7 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
         delegate.addParticipantObjectIdentification(
                 participantObjectIdType,
                 null,
-                queryMessage.getBytes(StandardCharsets.UTF_8),
+                Base64.getEncoder().encode(queryMessage.getBytes(StandardCharsets.UTF_8)),
                 details,
                 queryMessageIdentifier,
                 ParticipantObjectTypeCode.System,

@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.core.atna.event;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
@@ -48,8 +49,19 @@ public class IHEPatientRecordBuilder<T extends IHEPatientRecordBuilder<T>> exten
 
     public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
                                    List<PurposeOfUse> purposesOfUse) {
-        super(auditContext, new PatientRecordBuilder(
+        this(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(),
+                action,
+                eventType,
+                purposesOfUse);
+    }
+
+    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset,
+                                   EventOutcomeIndicator eventOutcomeIndicator,
+                                   EventActionCode action, EventType eventType,
+                                   List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, new PatientRecordBuilder(
+                eventOutcomeIndicator,
                 action,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
@@ -80,7 +92,7 @@ public class IHEPatientRecordBuilder<T extends IHEPatientRecordBuilder<T>> exten
                     .filter(Objects::nonNull)
                     .forEach(patientId -> delegate.addPatient(patientId, null,
                             requestIdDesignator != null && requestId != null ?
-                                    Arrays.asList(getTypeValuePair(requestIdDesignator, requestId)) :
+                                    Collections.singletonList(getTypeValuePair(requestIdDesignator, requestId)) :
                                     Collections.emptyList()));
         return self();
     }

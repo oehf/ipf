@@ -21,6 +21,9 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
@@ -53,7 +56,7 @@ class TestIti57 extends XdsStandardTestContainer {
     def folder
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -79,7 +82,7 @@ class TestIti57 extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
 
-        checkAudit("0")
+        checkAudit(EventOutcomeIndicator.Success)
     }
 
     @Test
@@ -107,36 +110,30 @@ class TestIti57 extends XdsStandardTestContainer {
         assert auditSender.messages.size() == 2
     }
 
-    void checkAudit(outcome) {
-        def message = getAudit('U', SERVICE2_ADDR)[0]
+    void checkAudit(EventOutcomeIndicator outcome) {
+        AuditMessage message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[0]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110107', 'ITI-57', 'U', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkEvent(message.eventIdentification, '110107', 'ITI-57', EventActionCode.Update, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
 
-        message = getAudit('U', SERVICE2_ADDR)[1]
+        message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[1]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110106', 'ITI-57', 'U', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkEvent(message.eventIdentification, '110106', 'ITI-57', EventActionCode.Update, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
     }
 
     def sendIt(endpoint, value, soapHeaders = null) {

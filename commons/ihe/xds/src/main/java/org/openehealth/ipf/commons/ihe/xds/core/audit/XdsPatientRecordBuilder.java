@@ -17,14 +17,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
 
 import java.nio.charset.StandardCharsets;
@@ -37,6 +35,11 @@ import java.util.stream.Stream;
  * @author Christian Ohr
  */
 public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientRecordBuilder> {
+
+
+    public XdsPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventOutcomeIndicator, action, eventType, purposesOfUse);
+    }
 
     public XdsPatientRecordBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
         super(auditContext, auditDataset, action, eventType, purposesOfUse);
@@ -89,7 +92,7 @@ public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientR
 
     private List<TypeValuePairType> makeDetail(String repositoryId) {
         List<TypeValuePairType> tvp = new LinkedList<>();
-        tvp.add(new TypeValuePairType(XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repositoryId.getBytes(StandardCharsets.UTF_8)));
+        tvp.add(new TypeValuePairType(XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repositoryId));
         return tvp;
     }
 }

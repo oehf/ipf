@@ -48,7 +48,7 @@ class TestIti63 extends XdsStandardTestContainer {
     static final long AWAIT_DELAY = 20 * 1000L
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

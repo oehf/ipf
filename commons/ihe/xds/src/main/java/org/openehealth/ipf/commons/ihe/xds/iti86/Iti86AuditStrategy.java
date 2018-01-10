@@ -47,7 +47,9 @@ public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
     }
 
     private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsPatientRecordBuilder(auditContext, auditDataset, EventActionCode.Delete, XdsEventTypeCode.RemoveDocuments, auditDataset.getPurposesOfUse())
+        return new XdsPatientRecordBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), EventActionCode.Delete,
+                XdsEventTypeCode.RemoveDocuments, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientIds())
                 .addDocumentIds(auditDataset,
                         status,

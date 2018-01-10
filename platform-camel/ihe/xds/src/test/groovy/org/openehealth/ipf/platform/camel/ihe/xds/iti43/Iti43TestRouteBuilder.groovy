@@ -30,9 +30,9 @@ import javax.activation.DataHandler;
 /**
  * @author Jens Riemschneider
  */
-public class Iti43TestRouteBuilder extends SpringRouteBuilder {
+class Iti43TestRouteBuilder extends SpringRouteBuilder {
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         from('xds-iti43:xds-iti43-service1')
             .process(iti43RequestValidator())
             .process { checkValue(it, 'service 1') } 

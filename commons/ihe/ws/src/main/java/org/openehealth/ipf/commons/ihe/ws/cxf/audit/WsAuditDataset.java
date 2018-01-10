@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -62,6 +61,9 @@ public class WsAuditDataset extends AuditDataset {
     @Setter
     private String sourceUserId;
 
+    /**
+     * Server user ID (SOAP endpoint)
+     */
     @Getter
     @Setter
     private String destinationUserId;
@@ -125,6 +127,14 @@ public class WsAuditDataset extends AuditDataset {
     @Setter
     @Getter
     private String remoteAddress;
+
+    @Setter
+    @Getter
+    private boolean sourceUserIsRequestor = true;
+
+    @Setter
+    @Getter
+    private boolean destinationUserIsRequestor;
 
     /**
      * Constructor.

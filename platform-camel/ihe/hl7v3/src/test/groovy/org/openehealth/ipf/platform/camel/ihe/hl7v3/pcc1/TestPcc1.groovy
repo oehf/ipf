@@ -30,10 +30,10 @@ class TestPcc1 extends HL7v3StandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'pcc-1.xml'
 
-    def SERVICE1 = "qed-pcc1://localhost:${port}/qed-pcc1-service1";
+    def SERVICE1 = "qed-pcc1://localhost:${port}/qed-pcc1-service1"
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass
@@ -50,7 +50,7 @@ class TestPcc1 extends HL7v3StandardTestContainer {
         auditSender.messages.each {
             assert it.eventIdentification.eventActionCode == EventActionCode.Execute
             assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
-            assert it.participantObjectIdentification.size() == 3
+            assert it.participantObjectIdentifications.size() == 3
         }
     }
 }

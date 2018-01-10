@@ -16,6 +16,13 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.EventTypeCode;
+import org.openehealth.ipf.commons.audit.event.SecurityAlertBuilder;
+import org.openehealth.ipf.commons.audit.event.UserAuthenticationBuilder;
 import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
@@ -25,16 +32,18 @@ import org.springframework.security.authentication.event.AbstractAuthenticationF
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  */
 public class AuthenticationListener extends AbstractAuthenticationAuditListener {
 
-    private final IHEAuditor actorAuditor;
+    private final AuditContext auditContext;
     private final AuthenticationAuditListener delegateListener;
 
-    public AuthenticationListener(IHEAuditor actorAuditor) {
-        this.actorAuditor = actorAuditor;
+    public AuthenticationListener(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
         this.delegateListener = new AuthenticationAuditListener();
     }
 
@@ -42,21 +51,36 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
     public void onApplicationEvent(AbstractAuthenticationEvent authenticationEvent) {
         delegateListener.onApplicationEvent(authenticationEvent);
 
-        RFC3881EventOutcomeCodes outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
-                RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                RFC3881EventOutcomeCodes.SUCCESS;
+        EventOutcomeIndicator outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
+                EventOutcomeIndicator.MajorFailure :
+                EventOutcomeIndicator.Success;
+
         Object details = authenticationEvent.getAuthentication().getDetails();
         if (details instanceof WebAuthenticationDetails) {
             WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) details;
             Object principal = authenticationEvent.getAuthentication().getPrincipal();
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
-                actorAuditor.auditUserAuthenticationLoginEvent(
-                        outcome,
-                        false,
-                        userDetails.getUsername(),
-                        webAuthenticationDetails.getRemoteAddress(),
-                        webAuthenticationDetails.getRemoteAddress());
+
+                UserAuthenticationBuilder builder = new UserAuthenticationBuilder(outcome, EventTypeCode.Login)
+                                .setAuditSourceId(
+                                        auditContext.getAuditSourceId(),
+                                        auditContext.getAuditEnterpriseSiteId(),
+                                        auditContext.getAuditSource());
+                if (userDetails.getUsername() != null) {
+                    builder.setAuthenticatedParticipant(userDetails.getUsername(), null, null, true,
+                            null, webAuthenticationDetails.getRemoteAddress());
+                };
+                if (webAuthenticationDetails.getRemoteAddress() != null) {
+                    builder.setAuthenticatingSystemParticipant(auditContext.getSendingApplication(), null, null, false,
+                            null, webAuthenticationDetails.getRemoteAddress());
+                }
+
+                try {
+                    auditContext.audit(builder.getMessage());
+                } catch (Exception e) {
+                    throw new AuditException("Auditing failed: ", e);
+                }
             }
         }
     }

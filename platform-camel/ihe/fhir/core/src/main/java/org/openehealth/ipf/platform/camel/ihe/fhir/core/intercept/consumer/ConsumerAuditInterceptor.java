@@ -100,7 +100,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset(auditContext);
+            AuditDatasetType auditDataset = strategy.createAuditDataset();
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

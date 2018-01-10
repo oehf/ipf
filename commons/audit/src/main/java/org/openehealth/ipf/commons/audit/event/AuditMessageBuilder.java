@@ -46,6 +46,6 @@ public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends V
     default TypeValuePairType getTypeValuePair(String type, Object value) {
         return new TypeValuePairType(
                 requireNonNull(type),
-                requireNonNull(value).toString().getBytes(StandardCharsets.UTF_8));
+                requireNonNull(value).toString());
     }
 }

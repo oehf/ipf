@@ -44,12 +44,12 @@ public class XdsQueryBuilder extends IHEQueryBuilder<XdsQueryBuilder> {
         // Add QueryEncoding and HomeCommunityId as details, if applicable
         List<TypeValuePairType> tvp = new LinkedList<>();
         if (auditDataset.getQueryUuid() != null && !auditDataset.getQueryUuid().isEmpty()) {
-            tvp.add(new TypeValuePairType(QUERY_ENCODING, Charset.defaultCharset().toString().getBytes(StandardCharsets.UTF_8)));
+            tvp.add(new TypeValuePairType(QUERY_ENCODING, Charset.defaultCharset().toString()));
         }
         if (auditDataset.getHomeCommunityId() != null) {
             tvp.add(new TypeValuePairType(
                     URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID,
-                    auditDataset.getHomeCommunityId().getBytes(StandardCharsets.UTF_8)));
+                    auditDataset.getHomeCommunityId()));
         }
         return setQueryParameters(
                 auditDataset.getQueryUuid(),

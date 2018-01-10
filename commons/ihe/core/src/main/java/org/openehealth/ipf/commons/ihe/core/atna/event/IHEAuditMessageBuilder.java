@@ -44,7 +44,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         delegate.setAuditSourceId(
                 auditContext.getAuditSourceId(),
                 auditContext.getAuditEnterpriseSiteId(),
-                auditContext.getAuditSourceType());
+                auditContext.getAuditSource());
         return self();
     }
 
@@ -61,13 +61,13 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     getProcessId(),
                     null,
                     auditDataset.getLocalAddress(),
-                    false);
+                    auditDataset.isDestinationUserIsRequestor());
         else
             delegate.addSourceActiveParticipant(auditDataset.getSourceUserId(),
                     getProcessId(),
                     null,
                     auditDataset.getLocalAddress(),
-                    true);
+                    auditDataset.isSourceUserIsRequestor());
         return self();
     }
 
@@ -84,13 +84,13 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     null,
                     null,
                     getHostFromUrl(auditDataset.getRemoteAddress()),
-                    true);
+                    auditDataset.isSourceUserIsRequestor());
         else
             delegate.addDestinationActiveParticipant(auditDataset.getDestinationUserId(),
                     null,
                     null,
                     getHostFromUrl(auditDataset.getRemoteAddress()),
-                    false);
+                    auditDataset.isDestinationUserIsRequestor());
         return self();
     }
 

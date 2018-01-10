@@ -18,11 +18,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.types.EventType;
-import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataExportBuilder;
 
 import java.util.Collections;
@@ -44,6 +45,10 @@ public class XdsDataExportBuilder extends IHEDataExportBuilder<XdsDataExportBuil
         super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
+    public XdsDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventOutcomeIndicator, eventActionCode, eventType, purposesOfUse);
+    }
+
     public XdsDataExportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
@@ -51,9 +56,15 @@ public class XdsDataExportBuilder extends IHEDataExportBuilder<XdsDataExportBuil
                 Collections.emptyList());
     }
 
+    public XdsDataExportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
+        return addExportedEntity(auditDataset.getSubmissionSetUuid(),
+                ParticipantObjectIdTypeCode.XdsMetadata,
+                ParticipantObjectTypeCodeRole.Job,
+                makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null));
+    }
+
     public XdsDataExportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
-                                               XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
-                                               ParticipantObjectIdType participantObjectIdType) {
+                                               XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
         String[] documentIds = auditDataset.getDocumentIds(status);
         String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
         String[] repositoryIds = auditDataset.getRepositoryIds(status);
@@ -62,7 +73,7 @@ public class XdsDataExportBuilder extends IHEDataExportBuilder<XdsDataExportBuil
         IntStream.range(0, documentIds.length).forEach(i ->
                 addExportedEntity(
                         documentIds[i],
-                        participantObjectIdType,
+                        ParticipantObjectIdTypeCode.ReportNumber,
                         ParticipantObjectTypeCodeRole.Report,
                         makeDocumentDetail(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i], studyInstanceIds[i])));
         return self();

@@ -42,17 +42,17 @@ public class AuditMessage implements Serializable, Validateable {
     @Getter @Setter
     private EventIdentificationType eventIdentification;
 
-    private List<ActiveParticipantType> activeParticipant;
+    private List<ActiveParticipantType> activeParticipants;
 
     @Getter @Setter
     private AuditSourceIdentificationType auditSourceIdentification;
-    private List<ParticipantObjectIdentificationType> participantObjectIdentification;
+    private List<ParticipantObjectIdentificationType> participantObjectIdentifications;
 
     public List<ActiveParticipantType> getActiveParticipants() {
-        if (activeParticipant == null) {
-            activeParticipant = new ArrayList<>();
+        if (activeParticipants == null) {
+            activeParticipants = new ArrayList<>();
         }
-        return this.activeParticipant;
+        return this.activeParticipants;
     }
 
     public List<ActiveParticipantType> findActiveParticipants(Predicate<ActiveParticipantType> selector) {
@@ -62,10 +62,10 @@ public class AuditMessage implements Serializable, Validateable {
     }
 
     public List<ParticipantObjectIdentificationType> getParticipantObjectIdentifications() {
-        if (participantObjectIdentification == null) {
-            participantObjectIdentification = new ArrayList<>();
+        if (participantObjectIdentifications == null) {
+            participantObjectIdentifications = new ArrayList<>();
         }
-        return this.participantObjectIdentification;
+        return this.participantObjectIdentifications;
     }
 
     public List<ParticipantObjectIdentificationType> findParticipantObjectIdentifications(Predicate<ParticipantObjectIdentificationType> selector) {
@@ -94,8 +94,8 @@ public class AuditMessage implements Serializable, Validateable {
 
         eventIdentification.validate();
         auditSourceIdentification.validate();
-        activeParticipant.forEach(ActiveParticipantType::validate);
-        participantObjectIdentification.forEach(ParticipantObjectIdentificationType::validate);
+        activeParticipants.forEach(ActiveParticipantType::validate);
+        participantObjectIdentifications.forEach(ParticipantObjectIdentificationType::validate);
     }
 
     /* (non-Javadoc)

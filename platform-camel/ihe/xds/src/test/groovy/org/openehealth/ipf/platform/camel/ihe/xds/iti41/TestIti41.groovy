@@ -21,6 +21,8 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
@@ -79,14 +81,14 @@ class TestIti41 extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE1, 'service 1', 'urn:oid:1.2.1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2', 'urn:oid:1.2.2').status
         assert auditSender.messages.size() == 4
-        checkAudit('0')
+        checkAudit(EventOutcomeIndicator.Success)
     }
 
     @Test
     void testIti41FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch', 'urn:oid:1.2.2').status
         assert auditSender.messages.size() == 2
-        checkAudit('8')
+        checkAudit(EventOutcomeIndicator.SeriousFailure)
     }
 
     @Test
@@ -124,31 +126,27 @@ class TestIti41 extends XdsStandardTestContainer {
         assert MyRejectionHandlingStrategy.count == 1
     }
 
-    void checkAudit(outcome) {
-        def message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+    void checkAudit(EventOutcomeIndicator outcome) {
+        AuditMessage message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
         
-        checkEvent(message.EventIdentification, '110107', 'ITI-41', 'C', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkEvent(message.eventIdentification, '110107', 'ITI-41', EventActionCode.Create, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
         
         message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
         
-        checkEvent(message.EventIdentification, '110106', 'ITI-41', 'R', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkEvent(message.eventIdentification, '110106', 'ITI-41', EventActionCode.Read, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
     }
 
     def sendIt(String endpoint, String value, String targetHomeCommunityId) {

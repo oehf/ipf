@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.rad69;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDataImportBuilder;
@@ -47,9 +48,11 @@ public class Rad69ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
     }
 
     private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsDataImportBuilder(auditContext, auditDataset, XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
+        return new XdsDataImportBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), EventActionCode.Create,
+                XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status, ParticipantObjectIdTypeCode.ReportNumber)
+                .addDocumentIds(auditDataset, status)
                 .getMessage();
     }
 

@@ -18,13 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.IHE_HOME_COMMUNITY_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.*;
 
 /**
  * @author Christian Ohr
@@ -32,16 +29,18 @@ import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.ST
 interface XdsBuilderUtils {
 
     static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
-        List<TypeValuePairType> tvp = new LinkedList<>();
+        List<TypeValuePairType> tvp = new ArrayList<>();
         if (studyInstanceId != null) {
-            tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId.getBytes(StandardCharsets.UTF_8)));
+            tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
         }
         if (seriesInstanceId != null) {
-            tvp.add(new TypeValuePairType(SERIES_INSTANCE_UNIQUE_ID, homeCommunityId.getBytes(StandardCharsets.UTF_8)));
+            tvp.add(new TypeValuePairType(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
         }
-        tvp.add(new TypeValuePairType(XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repositoryId.getBytes(StandardCharsets.UTF_8)));
+        if (repositoryId != null) {
+            tvp.add(new TypeValuePairType(XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repositoryId));
+        }
         if (homeCommunityId != null) {
-            tvp.add(new TypeValuePairType(IHE_HOME_COMMUNITY_ID, homeCommunityId.getBytes(StandardCharsets.UTF_8)));
+            tvp.add(new TypeValuePairType(IHE_HOME_COMMUNITY_ID, homeCommunityId));
         }
         return tvp;
     }

@@ -21,6 +21,9 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
@@ -43,11 +46,11 @@ class TestRad69 extends XdsStandardTestContainer {
     def doc
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
-    public static void classSetUp() throws Exception {
+    static void classSetUp() throws Exception {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
@@ -76,7 +79,7 @@ class TestRad69 extends XdsStandardTestContainer {
         checkForMTOM(response2)
         assert auditSender.messages.size() == 4
         
-        checkAudit('0', 'service 2')
+        checkAudit(EventOutcomeIndicator.Success, 'service 2')
     }
     
     @Test
@@ -85,50 +88,44 @@ class TestRad69 extends XdsStandardTestContainer {
         assert FAILURE == response2.status
         assert auditSender.messages.size() == 2
         
-        checkAudit('8', 'falsch')
+        checkAudit(EventOutcomeIndicator.SeriousFailure, 'falsch')
     }
     
-    def checkAudit(outcome, docIdValue) {
-        def message = getAudit('R', SERVICE2_ADDR)[0]
-        
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.EventIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 8
-        assert message.children().size() == 12
-        
-        checkEvent(message.EventIdentification, '110106', 'RAD-69', 'R', outcome)
-        checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
-        checkDestination(message.ActiveParticipant[1], 'true', false)
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+    def checkAudit(EventOutcomeIndicator outcome, String docIdValue) {
+        AuditMessage message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
 
-        message = getAudit('C', SERVICE2_ADDR)[0]
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 8
         
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.EventIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 8
-        assert message.children().size() == 12
+        checkEvent(message.eventIdentification, '110106', 'RAD-69', EventActionCode.Read, outcome)
+        checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
+        checkDestination(message.activeParticipants[1], false, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkImageDocument(message.participantObjectIdentifications[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[1], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[3], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[5], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[7], 'doc2','urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+
+        message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
+
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.EventIdentification, '110107', 'RAD-69', 'C', outcome)
-        checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
-        checkDestination(message.ActiveParticipant[1], 'true', false)
-        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkEvent(message.eventIdentification, '110107', 'RAD-69', EventActionCode.Create, outcome)
+        checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
+        checkDestination(message.activeParticipants[1], false, false)
+        checkImageDocument(message.participantObjectIdentifications[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.participantObjectIdentifications[6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.participantObjectIdentifications[7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
     }
     
     void checkForMTOM(response) {

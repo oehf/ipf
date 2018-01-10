@@ -98,7 +98,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset(auditContext);
+            AuditDatasetType auditDataset = strategy.createAuditDataset();
             // TODO set client-side headers
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {

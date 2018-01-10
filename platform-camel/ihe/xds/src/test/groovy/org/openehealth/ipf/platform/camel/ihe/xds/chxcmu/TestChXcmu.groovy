@@ -22,6 +22,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
@@ -29,7 +30,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import javax.xml.namespace.QName
@@ -56,7 +56,7 @@ class TestChXcmu extends XdsStandardTestContainer {
     def folder
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -82,7 +82,7 @@ class TestChXcmu extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
 
-        checkAudit("0")
+        checkAudit(EventOutcomeIndicator.Success)
     }
 
     @Test
@@ -110,37 +110,32 @@ class TestChXcmu extends XdsStandardTestContainer {
         assert auditSender.messages.size() == 2
     }
 
-    void checkAudit(outcome) {
+    void checkAudit(EventOutcomeIndicator outcome) {
         AuditMessage message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[0]
 
-        assert message.eventIdentification.size() == 1
-        assert message.auditSourceIdentification.size() == 1
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110107', 'ITI-X1', 'U', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
-        checkParticipantObjectDetail(message.ParticipantObjectIdentification[1].ParticipantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
+        checkEvent(message.eventIdentification, '110107', 'ITI-X1', EventActionCode.Update, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
+        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
 
-        message = getAudit('U', SERVICE2_ADDR)[1]
+        message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[1]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110106', 'ITI-X1', 'U', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
-        checkParticipantObjectDetail(message.ParticipantObjectIdentification[1].ParticipantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
+        checkEvent(message.eventIdentification, '110106', 'ITI-X1', EventActionCode.Update, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
+        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
     }
 
     def sendIt(endpoint, value, soapHeaders = null) {

@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+import org.openehealth.ipf.commons.audit.types.AuditSource;
 
 import java.net.InetAddress;
 
@@ -94,7 +95,7 @@ public interface AuditContext {
     /**
      * @return type of audit source
      */
-    AuditSourceType getAuditSourceType();
+    AuditSource getAuditSource();
 
     static AuditContext noAudit() {
         return DefaultAuditContext.NO_AUDIT;

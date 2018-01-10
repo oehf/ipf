@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
@@ -43,9 +44,11 @@ public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
     }
 
     private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsDataExportBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
+        return new XdsDataExportBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), EventActionCode.Read,
+                XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status, XdsParticipantObjectIdTypeCode.CrossGatewayRetrieve)
+                .addDocumentIds(auditDataset, status)
                 .getMessage();
     }
 

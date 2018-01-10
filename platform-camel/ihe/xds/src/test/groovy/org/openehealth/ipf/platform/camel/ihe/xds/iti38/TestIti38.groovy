@@ -34,24 +34,24 @@ import org.springframework.test.annotation.DirtiesContext
  */
 @DirtiesContext
 class TestIti38 extends XdsStandardTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'iti-38.xml'
-    
+
     final String SERVICE1_URI = "xca-iti38://localhost:${port}/iti38service?correlator=#correlator"
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti38service-response"
     final String SERVICE2_URI = "xca-iti38://localhost:${port}/iti38service2"
-    
+
     static final QueryRegistry REQUEST = SampleData.createFindDocumentsQuery()
-    
+
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
     /**
      * Test whether:
      * <ol>
@@ -68,57 +68,56 @@ class TestIti38 extends XdsStandardTestContainer {
     void testIti38() {
         final int N = 5
         int i = 0
-        
+
         N.times {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-        
+
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti38TestRouteBuilder.ASYNC_DELAY)
 
         assert Iti38TestRouteBuilder.responseCount.get() == N * 2
         assert Iti38TestRouteBuilder.asyncResponseCount.get() == N
-        
+
         assert auditSender.messages.size() == N * 4
-        
-        assert ! Iti38TestRouteBuilder.errorOccurred
+
+        assert !Iti38TestRouteBuilder.errorOccurred
     }
-    
-    
+
+
     private void send(
             String endpointUri,
             int n,
-            String responseEndpointUri = null)
-    {
+            String responseEndpointUri = null) {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
-        
+
         // set WSA ReplyTo header, when necessary
         if (responseEndpointUri) {
             requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
         }
-        
+
         // set correlation key
         requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
-        
+
         // set request HTTP headers
         requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                 ['MyRequestHeader': "Number ${n}".toString()]
-        
+
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
         def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti38TestRouteBuilder.ASYNC_DELAY)
-        
+
         // for sync messages -- check acknowledgement code and incoming TTL header
         if (!responseEndpointUri) {
             assert resultMessage.getBody(QueryResponse.class).status == Status.SUCCESS
-            
+
             def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }
-    
+
 }

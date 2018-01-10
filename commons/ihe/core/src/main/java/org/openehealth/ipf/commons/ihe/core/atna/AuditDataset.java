@@ -19,7 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -92,4 +91,18 @@ public abstract class AuditDataset implements Serializable {
      * @return the role(s) of a (human) user
      */
     public abstract List<ActiveParticipantRoleId> getUserRoles();
+
+    /**
+     * @return true if the source user is the requestor of the event
+     */
+    public boolean isSourceUserIsRequestor() {
+        return true;
+    }
+
+    /**
+     * @return true if the source user is the requestor of the event
+     */
+    public boolean isDestinationUserIsRequestor() {
+        return false;
+    }
 }

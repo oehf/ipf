@@ -36,9 +36,9 @@ import java.util.Collections;
  *
  * @author Christian Ohr
  */
-public class UserAuthentication extends BaseAuditMessageBuilder<UserAuthentication> {
+public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthenticationBuilder> {
 
-    public UserAuthentication(EventOutcomeIndicator outcome, EventTypeCode eventTypeCode, PurposeOfUse... purposesOfUse) {
+    public UserAuthenticationBuilder(EventOutcomeIndicator outcome, EventTypeCode eventTypeCode, PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
                 EventActionCode.Execute,
@@ -57,18 +57,18 @@ public class UserAuthentication extends BaseAuditMessageBuilder<UserAuthenticati
      * @param userName  The Active Participant's UserName
      * @param networkId The Active Participant's Network Access Point ID
      */
-    public UserAuthentication setAuthenticatedParticipant(String userId,
-                                                   String altUserId,
-                                                   String userName,
-                                                   boolean userIsRequestor,
-                                                   ActiveParticipantRoleIdCode roleId,
-                                                   String networkId) {
+    public UserAuthenticationBuilder setAuthenticatedParticipant(String userId,
+                                                                 String altUserId,
+                                                                 String userName,
+                                                                 boolean userIsRequestor,
+                                                                 ActiveParticipantRoleIdCode roleId,
+                                                                 String networkId) {
         return addActiveParticipant(
                         userId,
                         altUserId,
                         userName,
                         userIsRequestor,
-                        Collections.singletonList(roleId),
+                        roleId != null ? Collections.singletonList(roleId) : Collections.emptyList(),
                         networkId);
     }
 
@@ -80,12 +80,12 @@ public class UserAuthentication extends BaseAuditMessageBuilder<UserAuthenticati
      * @param userName  The Active Participant's UserName
      * @param networkId The Active Participant's Network Access Point ID
      */
-    public UserAuthentication setAuthenticatingSystemParticipant(String userId,
-                                                          String altUserId,
-                                                          String userName,
-                                                          boolean userIsRequestor,
-                                                          ActiveParticipantRoleIdCode roleId,
-                                                          String networkId) {
+    public UserAuthenticationBuilder setAuthenticatingSystemParticipant(String userId,
+                                                                        String altUserId,
+                                                                        String userName,
+                                                                        boolean userIsRequestor,
+                                                                        ActiveParticipantRoleIdCode roleId,
+                                                                        String networkId) {
         return addActiveParticipant(
                         userId,
                         altUserId,
@@ -95,13 +95,13 @@ public class UserAuthentication extends BaseAuditMessageBuilder<UserAuthenticati
                         networkId);
     }
 
-    public static class Login extends UserAuthentication {
+    public static class Login extends UserAuthenticationBuilder {
         public Login(EventOutcomeIndicator outcome, PurposeOfUse purposeOfUse) {
             super(outcome, EventTypeCode.Login, purposeOfUse);
         }
     }
 
-    public static class Logout extends UserAuthentication {
+    public static class Logout extends UserAuthenticationBuilder {
         public Logout(EventOutcomeIndicator outcome, PurposeOfUse purposeOfUse) {
             super(outcome, EventTypeCode.Logout, purposeOfUse);
         }

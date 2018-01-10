@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.net.InetAddress;
@@ -66,7 +67,7 @@ public class DefaultAuditContext implements AuditContext {
     private String auditEnterpriseSiteId = "IPF";
 
     @Getter @Setter
-    private AuditSourceType auditSourceType = AuditSourceType.Other;
+    private AuditSource auditSource = AuditSourceType.Other;
 
     @Getter @Setter
     private SerializationStrategy serializationStrategy;

@@ -16,27 +16,49 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  */
 public class ApplicationStartEventListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final IHEAuditor actorAuditor;
+    private final AuditContext auditContext;
 
-    public ApplicationStartEventListener(IHEAuditor actorAuditor) {
-        this.actorAuditor = actorAuditor;
+    public ApplicationStartEventListener(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        actorAuditor.auditActorStartEvent(
-                RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS,
-                contextRefreshedEvent.getApplicationContext().getApplicationName(),
-                System.getProperty("user.name"));
+        if (auditContext.isAuditEnabled()) {
+            try {
+                auditContext.audit(
+                        new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
+                                .setAuditSourceId(
+                                        auditContext.getAuditSourceId(),
+                                        auditContext.getAuditEnterpriseSiteId(),
+                                        auditContext.getAuditSource())
+                                .setApplicationParticipant(
+                                        contextRefreshedEvent.getApplicationContext().getApplicationName(),
+                                        null,
+                                        null,
+                                        AuditUtils.getLocalHostName())
+                                .addApplicationStarterParticipant(System.getProperty("user.name"))
+                                .getMessages()
+                );
+            } catch (Exception e) {
+                throw new AuditException("Auditing failed: ", e);
+            }
+        }
+
     }
 }

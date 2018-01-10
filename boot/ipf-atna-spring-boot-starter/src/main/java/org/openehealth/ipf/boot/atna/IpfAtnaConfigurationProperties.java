@@ -18,10 +18,12 @@ package org.openehealth.ipf.boot.atna;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openhealthtools.ihe.atna.auditor.queue.AuditMessageQueue;
-import org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue;
-import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
-import org.openhealthtools.ihe.atna.auditor.sender.UDPSyslogSenderImpl;
+import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
+import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
+import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
+import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -30,34 +32,51 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "ipf.atna")
 public class IpfAtnaConfigurationProperties {
 
+
+
+    @Getter @Setter
+    private boolean auditEnabled = true;
+
+    @Getter @Setter
+    private AuditSource auditSourceType = AuditSourceType.ApplicationServerProcess;
+
+    @Getter @Setter
+    private String auditSendingApplication;
+
     /**
-     * Security Domain name
+     * Sets the Audit transport (UDP, TLS)
      */
     @Getter @Setter
-    private String securityDomainName = "bootSecurityDomain";
+    private String auditRepositoryTransport = "UDP";
+
+    /**
+     * Sets the host of the audit repository. Deprecated, set ipf.atna.audit-repository-host
+     */
+    @Getter @Setter
+    private String auditRepositoryHost = "localhost";
+
+    /**
+     * Sets the port of the audit repository. Deprecated, set ipf.atna.audit-repository-port
+     */
+    @Getter @Setter
+    private int auditRepositoryPort = 514;
+
+    /**
+     * Enterprise Site Id
+     */
+    @Getter @Setter
+    private String auditEnterpriseSiteId = "enterpriseSiteId";
 
     /**
      * Sets the Audit Message Queue class to be used for sending ATNA records
      */
     @Getter @Setter
-    private Class<? extends AuditMessageQueue> auditQueueClass = SynchronousAuditQueue.class;
+    private Class<? extends AuditMessageQueue> auditQueueClass = SynchronousAuditMessageQueue.class;
 
     /**
      * Sets the Audit Sender class to be used for sending ATNA records
      */
     @Getter @Setter
-    private Class<? extends AuditMessageSender> auditSenderClass = UDPSyslogSenderImpl.class;
-
-    /**
-     * Sets the host of the audit repository. Deprecated, set ipf.atna.audit-repository-host
-     */
-    @Getter @Setter @Deprecated
-    private String repositoryHost = "localhost";
-
-    /**
-     * Sets the port of the audit repository. Deprecated, set ipf.atna.audit-repository-port
-     */
-    @Getter @Setter @Deprecated
-    private int repositoryPort = 514;
+    private Class<? extends AuditTransmissionProtocol> auditSenderClass;
 
 }
