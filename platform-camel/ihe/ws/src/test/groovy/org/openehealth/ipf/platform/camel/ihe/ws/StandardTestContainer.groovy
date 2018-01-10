@@ -85,7 +85,7 @@ class StandardTestContainer {
 
     }
 
-    static <T> AbstractMockedAuditMessageQueue<T> getAuditSender() {
+    static AbstractMockedAuditMessageQueue getAuditSender() {
         return auditSender
     }
 
