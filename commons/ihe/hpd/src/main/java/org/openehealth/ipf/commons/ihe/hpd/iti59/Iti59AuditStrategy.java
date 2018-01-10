@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -96,7 +97,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyDNRequest.getRequestID()),
                         EventActionCode.Update,
-                        null,
+                        Collections.emptySet(),
                         modifyDNRequest.getDn(),
                         modifyDNRequest.getNewrdn());
 
@@ -105,7 +106,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(delRequest.getRequestID()),
                         EventActionCode.Delete,
-                        null,
+                        Collections.emptySet(),
                         delRequest.getDn(),
                         null);
             } else {

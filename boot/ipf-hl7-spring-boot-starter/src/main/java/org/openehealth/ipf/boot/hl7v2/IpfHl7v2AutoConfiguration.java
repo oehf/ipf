@@ -31,18 +31,11 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.openhealthtools.ihe.atna.auditor.PAMSourceAuditor;
-import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -176,65 +169,4 @@ public class IpfHl7v2AutoConfiguration {
         return new CachingUnsolicitedFragmentionStorage(cacheManager);
     }
 
-
-    // Some ATNA auditors
-
-    @Bean
-    @ConditionalOnMissingBean(PIXManagerAuditor.class)
-    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public PIXManagerAuditor pixManagerAuditor(AuditorModuleConfig config) {
-        PIXManagerAuditor auditor = PIXManagerAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(PIXConsumerAuditor.class)
-    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public PIXConsumerAuditor pixConsumerAuditor(AuditorModuleConfig config) {
-        PIXConsumerAuditor auditor = PIXConsumerAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(PIXSourceAuditor.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public PIXSourceAuditor pixSourceAuditor(AuditorModuleConfig config) {
-        PIXSourceAuditor auditor = PIXSourceAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(PDQConsumerAuditor.class)
-    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public PDQConsumerAuditor pdqConsumerAuditor(AuditorModuleConfig config) {
-        PDQConsumerAuditor auditor = PDQConsumerAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(PAMSourceAuditor.class)
-    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public PAMSourceAuditor pamSourceAuditor(AuditorModuleConfig config) {
-        PAMSourceAuditor auditor = PAMSourceAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(CustomPixAuditor.class)
-    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
-    public CustomPixAuditor customPixAuditor(AuditorModuleConfig config) {
-        CustomPixAuditor auditor = CustomPixAuditor.getAuditor();
-        auditor.setConfig(config);
-        return auditor;
-    }
 }

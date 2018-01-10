@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets
 class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
 
     List<AuditMessage> getAudit(EventActionCode actionCode, String addr) {
-        auditSender.messages.findAll {
+        getAuditSender().messages.findAll {
             it.eventIdentification.eventActionCode == actionCode
         }.findAll {
             it.activeParticipants.any { obj -> obj.userID == addr } ||

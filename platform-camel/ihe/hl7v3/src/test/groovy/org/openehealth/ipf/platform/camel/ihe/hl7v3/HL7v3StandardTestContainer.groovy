@@ -16,11 +16,10 @@
 
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Christian Ohr
  */
-class HL7v3StandardTestContainer extends StandardTestContainer<AuditMessage> {
+class HL7v3StandardTestContainer extends StandardTestContainer {
 }

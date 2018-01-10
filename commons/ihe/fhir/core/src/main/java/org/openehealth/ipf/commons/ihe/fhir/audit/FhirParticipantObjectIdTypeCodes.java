@@ -18,12 +18,14 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 
 /**
+ * ParticipantObjectIdTypeCodes for the XDS transactions in this module
+ *
  * @author Christian Ohr
  */
-public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
+public enum FhirParticipantObjectIdTypeCodes implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 
     ProvideDocumentBundle("ITI-65", "Provide Document Bundle"),
     MobileDocumentManifestQuery("ITI-66", "Mobile Document Manifest Query"),
@@ -33,10 +35,12 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query");
 
     @Getter
-    private EventType value;
+    private ParticipantObjectIdType value;
 
-    FhirEventTypeCode(String code, String displayName) {
-        this.value = EventType.of(code, "IHE Transactions", displayName);
+    FhirParticipantObjectIdTypeCodes(String code, String displayName) {
+        this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);
     }
 
 }
+
+

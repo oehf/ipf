@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.core.atna;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * @author Dmytro Rud
  */
- public abstract class AbstractMockedAuditMessageQueue<T> implements AuditMessageQueue {
+ public abstract class AbstractMockedAuditMessageQueue implements AuditMessageQueue {
 
     @Getter protected boolean needValidation;
 
@@ -31,5 +32,5 @@ import java.util.List;
         this.needValidation = needValidation;
     }
 
-    public abstract List<T> getMessages();
+    public abstract List<AuditMessage> getMessages();
 }

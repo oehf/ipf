@@ -33,14 +33,11 @@ class TestIti59 extends StandardTestContainer {
     final String SERVICE1 = "hpd-iti59://localhost:${port}/hpd-service1"
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass
     static void classSetUp() {
-        HpdAuditor.auditor.config = new AuditorModuleConfig()
-        HpdAuditor.auditor.config.setAuditRepositoryHost('localhost')
-        HpdAuditor.auditor.config.setAuditRepositoryPort(514)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 

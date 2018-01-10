@@ -77,9 +77,9 @@ public class TransactedRouteTest extends StandardTestContainer {
     public void testTransactedRoute () throws Exception {
         // setup the transaction mock        
         EasyMock.reset(txManager);
-        txManager.getTransaction((TransactionDefinition) EasyMock.anyObject());
+        txManager.getTransaction(EasyMock.anyObject());
         EasyMock.expectLastCall().andReturn(new SimpleTransactionStatus()).atLeastOnce();
-        txManager.rollback((SimpleTransactionStatus) (EasyMock.anyObject()));
+        txManager.rollback(EasyMock.anyObject());
         EasyMock.expectLastCall().asStub();
                 
         EasyMock.replay(txManager);

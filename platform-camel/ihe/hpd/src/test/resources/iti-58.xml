@@ -24,13 +24,7 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
 http://cxf.apache.org/configuration/security 
 http://cxf.apache.org/schemas/configuration/security.xsd">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>  
+    <import resource="common-hpd-beans.xml"/>
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hpd.iti58.Iti58TestRouteBuilder">
