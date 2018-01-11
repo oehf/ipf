@@ -89,16 +89,18 @@ public class IHEDataImportBuilder<T extends IHEDataImportBuilder<T>> extends IHE
             ParticipantObjectTypeCode participantObjectTypeCode,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
-        delegate.addParticipantObjectIdentification(
-                participantObjectIdType,
-                null,
-                null,
-                details,
-                objectId,
-                participantObjectTypeCode,
-                participantObjectTypeCodeRole,
-                null,
-                null);
+        if (objectId != null) {
+            delegate.addParticipantObjectIdentification(
+                    participantObjectIdType,
+                    null,
+                    null,
+                    details,
+                    objectId,
+                    participantObjectTypeCode,
+                    participantObjectTypeCodeRole,
+                    null,
+                    null);
+        }
         return self();
     }
 

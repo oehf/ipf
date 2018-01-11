@@ -23,7 +23,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <import resource="common-beans.xml" />
+    <import resource="common-fhir-beans.xml" />
 
     <camel:sslContextParameters id="myContext" secureSocketProtocol="TLSv1.2">
         <camel:keyManagers keyPassword="changeit">

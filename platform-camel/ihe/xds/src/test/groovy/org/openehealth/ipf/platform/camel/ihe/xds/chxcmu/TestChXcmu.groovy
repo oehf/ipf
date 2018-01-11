@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
@@ -122,7 +123,8 @@ class TestChXcmu extends XdsStandardTestContainer {
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
-        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
+        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0],
+                XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
 
         message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[1]
 
@@ -135,7 +137,8 @@ class TestChXcmu extends XdsStandardTestContainer {
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
-        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0], 'ihe:homeCommunityID', 'urn:oid:1.2.3.4.5.6.2333.23')
+        checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetail[0],
+                XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
     }
 
     def sendIt(endpoint, value, soapHeaders = null) {

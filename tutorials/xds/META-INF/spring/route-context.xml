@@ -37,4 +37,13 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     <!-- The store that contains all the in-memory documents and their meta data -->    
     <bean id="dataStore" class="org.openehealth.ipf.tutorials.xds.DataStore" />
 
+    <!-- Auditing -->
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="auditMessageQueue" ref="mockedSender"/>
+        <property name="auditSourceId" value="sourceId"/>
+    </bean>
+
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
+
 </beans>

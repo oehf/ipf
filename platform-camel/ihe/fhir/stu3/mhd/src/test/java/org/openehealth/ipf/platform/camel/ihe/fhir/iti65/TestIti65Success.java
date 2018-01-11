@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
 
@@ -85,7 +86,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         ActiveParticipantType destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/", destination.getUserID());
-        assertEquals("localhost", destination.getNetworkAccessPointID());
+        assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Patient
         ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(0);

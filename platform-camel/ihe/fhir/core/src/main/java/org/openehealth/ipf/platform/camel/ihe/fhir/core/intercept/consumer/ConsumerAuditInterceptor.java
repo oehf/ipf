@@ -19,6 +19,7 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
@@ -83,8 +84,6 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) {
-        // auditDataset.setClientIpAddress(exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class).getRemoteAddr());
-        // auditDataset.setLocalAddress
     }
 
     @Override
@@ -101,6 +100,8 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
+            auditDataset.setSourceUserId("unknown");
+            auditDataset.setDestinationUserId(exchange.getIn().getHeader(Constants.HTTP_URL, String.class));
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

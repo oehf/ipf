@@ -31,6 +31,7 @@ import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy.IHE_HOME_COMMUNITY_ID;
 
 /**
  * @author Christian Ohr
@@ -64,7 +65,7 @@ public class Iti55AuditStrategyTest extends AuditorTestBase {
         TypeValuePairType detail = auditMessage.findParticipantObjectIdentifications(poi -> ParticipantObjectTypeCode.System.equals(poi.getParticipantObjectTypeCode()))
                 .get(0).getParticipantObjectDetail().get(0);
         assertNotNull(detail);
-        assertEquals("ihe:homeCommunityID", detail.getType());
+        assertEquals(IHE_HOME_COMMUNITY_ID, detail.getType());
         assertEquals(HOME_COMMUNITY_ID, new String(Base64.getDecoder().decode(detail.getValue()), StandardCharsets.UTF_8));
     }
 

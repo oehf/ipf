@@ -44,6 +44,10 @@
             <artifactId>ipf-commons-spring</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-xds</artifactId>
         </dependency>

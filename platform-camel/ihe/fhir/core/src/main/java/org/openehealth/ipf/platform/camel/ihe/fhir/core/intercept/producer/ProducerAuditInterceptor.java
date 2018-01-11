@@ -82,7 +82,6 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) {
-
     }
 
     @Override
@@ -99,6 +98,9 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
+            auditDataset.setSourceUserId("unknown");
+            auditDataset.setDestinationUserId(exchange.getProperty("CamelToEndpoint").toString());
+
             // TODO set client-side headers
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {

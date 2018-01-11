@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
-import org.openehealth.ipf.commons.audit.protocol.AuditMessageRecorder;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
@@ -83,8 +82,8 @@ public class DefaultAuditContext implements AuditContext {
 
     public void setAuditRepositoryTransport(String transport) {
         switch (transport) {
-            case "UDP": setAuditTransmissionProtocol(new UDPSyslogSenderImpl());
-            case "TLS": setAuditTransmissionProtocol(new TLSSyslogSenderImpl());
+            case "UDP": setAuditTransmissionProtocol(new UDPSyslogSenderImpl()); break;
+            case "TLS": setAuditTransmissionProtocol(new TLSSyslogSenderImpl()); break;
             default: throw new IllegalArgumentException("Unknown transport :" + transport);
         }
     }

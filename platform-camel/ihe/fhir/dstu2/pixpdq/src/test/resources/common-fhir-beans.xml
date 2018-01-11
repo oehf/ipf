@@ -33,7 +33,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     
 	<ipf:globalContext id="globalContext"/>
 
-    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forDstu3"/>
+    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forDstu2Hl7Org"/>
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
         <property name="mappingResources">
@@ -56,13 +56,11 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     </bean>
 
     <!-- Set dummy context -->
-    <bean id="auditModuleContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
-        <property name="auditRepositoryHost" value="0.0.0.0" />
-        <property name="auditRepositoryPort" value="0" />
-        <property name="auditEnabled" value="true" />
-        <property name="auditRepositoryTransport" value="UDP" />
-        <property name="auditSourceId" value="IPF" />
-        <property name="auditEnterpriseSiteId" value="IPF" />
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="auditMessageQueue" ref="mockedSender"/>
     </bean>
+
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
 
 </beans>

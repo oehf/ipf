@@ -42,7 +42,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
         auditDataset.setUserId((String) parameters.get(HTTP_URI));
         auditDataset.setServiceEndpointUrl((String)parameters.get(HTTP_URL));
-        auditDataset.setClientIpAddress((String) parameters.get(HTTP_CLIENT_IP_ADDRESS));
+        auditDataset.setRemoteAddress((String) parameters.get(HTTP_CLIENT_IP_ADDRESS));
         return auditDataset;
     }
 

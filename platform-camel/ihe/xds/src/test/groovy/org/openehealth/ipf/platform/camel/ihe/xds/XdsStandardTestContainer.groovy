@@ -16,18 +16,13 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds
 
-import org.junit.Assert
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType
-import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType
-import org.openehealth.ipf.commons.audit.model.EventIdentificationType
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType
-import org.openehealth.ipf.commons.audit.model.TypeValuePairType
+import org.openehealth.ipf.commons.audit.model.*
 import org.openehealth.ipf.commons.audit.types.CodedValueType
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import java.nio.charset.StandardCharsets
@@ -35,7 +30,7 @@ import java.nio.charset.StandardCharsets
 /**
  * @author Christian Ohr
  */
-class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
+class XdsStandardTestContainer extends StandardTestContainer {
 
     List<AuditMessage> getAudit(EventActionCode actionCode, String addr) {
         getAuditSender().messages.findAll {
@@ -141,8 +136,8 @@ class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetail[0], 'Repository Unique Id', repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[1], 'ihe:homeCommunityID', homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[0], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[1], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkImageDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
@@ -151,10 +146,10 @@ class XdsStandardTestContainer extends StandardTestContainer<AuditMessage> {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetail[0], 'Study Instance Unique Id', studyId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[1], 'Series Instance Unique Id', seriesId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[2], 'Repository Unique Id', repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[3], 'ihe:homeCommunityID', homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[0], XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID, studyId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[1], XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID, seriesId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[2], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetail[3], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {

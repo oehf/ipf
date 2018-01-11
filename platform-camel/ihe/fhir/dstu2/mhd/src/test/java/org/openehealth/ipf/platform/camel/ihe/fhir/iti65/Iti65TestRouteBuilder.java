@@ -75,7 +75,7 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
                 Bundle.BundleEntryResponseComponent response = new Bundle.BundleEntryResponseComponent()
                         .setStatus("201 Created")
                         .setLastModified(new Date())
-                        .setLocation("blabla");
+                        .setLocation(requestEntry.getResource().getClass().getSimpleName() + "/" + 4711);
                 responseBundle.addEntry()
                         .setResponse(response)
                         .setResource(responseResource(requestEntry.getResource()));

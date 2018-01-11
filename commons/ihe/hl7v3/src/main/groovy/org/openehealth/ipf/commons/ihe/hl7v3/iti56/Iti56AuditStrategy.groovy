@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
@@ -33,6 +35,8 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
  * @author Dmytro Rud
  */
 class Iti56AuditStrategy extends Hl7v3AuditStrategy {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Iti56AuditStrategy)
 
     Iti56AuditStrategy(boolean serverSide) {
         super(serverSide)

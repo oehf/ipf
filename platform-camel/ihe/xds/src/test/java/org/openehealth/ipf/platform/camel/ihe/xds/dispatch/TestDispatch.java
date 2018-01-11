@@ -48,7 +48,7 @@ public class TestDispatch extends XdsStandardTestContainer {
     public void testXdsDispatch() {
         send(ITI_42_SERVICE_URI, SampleData.createRegisterDocumentSet());
         send(ITI_18_SERVICE_URI, SampleData.createFindDocumentsQuery());
-        AbstractMockedAuditMessageQueue<AuditMessage> queue = getAuditSender();
+        AbstractMockedAuditMessageQueue queue = getAuditSender();
         List<AuditMessage> messages = queue.getMessages();
         assertEquals(4, messages.size());
     }

@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirParticipantObjectIdTypeCodes;
@@ -92,7 +93,7 @@ public class TestIti67Success extends AbstractTestIti67 {
         ActiveParticipantType destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/DocumentReference", destination.getUserID());
-        assertEquals("localhost", destination.getNetworkAccessPointID());
+        assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Audit Source
         AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();

@@ -62,7 +62,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
                 auditDataset.messageId,
                 CrossGatewayPatientDiscovery,
                 auditDataset.requestPayload,
-                "ihe:homeCommunityID", auditDataset.homeCommunityId
+                IHE_HOME_COMMUNITY_ID, auditDataset.homeCommunityId
         )
 
         builder.getMessages()

@@ -47,7 +47,9 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <!-- Audit Transport (UDP, TLS). Default is "UDP" -->
         <property name="auditRepositoryTransport" value="TLS" />
         <!-- Audit Source Type. Default is "Other" -->
-        <property name="auditSourceType" value="ApplicationServerProcess"/>
+        <property name="auditSource">
+            <value type="org.openehealth.ipf.commons.audit.codes.AuditSourceType">ApplicationServerProcess</value>
+        </property>
         <!-- Sending Application for SYSLOG frame. Default is "IPF" -->
         <property name="sendingApplication" value="demo"/>
 

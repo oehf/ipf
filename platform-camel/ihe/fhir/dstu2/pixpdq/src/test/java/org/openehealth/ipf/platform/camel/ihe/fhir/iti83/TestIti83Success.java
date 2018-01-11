@@ -21,23 +21,22 @@ import org.hl7.fhir.instance.model.Identifier;
 import org.hl7.fhir.instance.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
+import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirParticipantObjectIdTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
-import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
 
 import javax.servlet.ServletException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -47,13 +46,13 @@ public class TestIti83Success extends AbstractTestIti83 {
     private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
     @Test
     public void testGetConformance() {
-        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
+        Conformance conf = client.capabilities().ofType(Conformance.class).execute();
 
         assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
@@ -74,59 +73,52 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedAuditMessageQueue sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+        AuditMessage event = sender.getMessages().get(0);
+
         assertEquals(
-                RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS.getCode().intValue(),
+                EventOutcomeIndicator.Success,
                 event.getEventIdentification().getEventOutcomeIndicator());
         assertEquals(
-                RFC3881EventCodes.RFC3881EventActionCodes.EXECUTE.getCode(),
+                EventActionCode.Execute,
                 event.getEventIdentification().getEventActionCode());
-        CodedValueType eventId = event.getEventIdentification().getEventID();
-        CodedValueType expectedEventId = new DICOMEventIdCodes.Query();
-        assertEquals(expectedEventId.getCode(), eventId.getCode());
-        assertEquals(expectedEventId.getCodeSystemName(), eventId.getCodeSystemName());
-        assertEquals(expectedEventId.getOriginalText(), eventId.getOriginalText());
-        CodedValueType eventTypeCode = event.getEventIdentification().getEventTypeCode().get(0);
-        CodedValueType expectedEventTypeCode = new CustomIHETransactionEventTypeCodes.PIXMQuery();
-        assertEquals(expectedEventTypeCode.getCode(), eventTypeCode.getCode());
-        assertEquals(expectedEventTypeCode.getCodeSystemName(), eventTypeCode.getCodeSystemName());
-        assertEquals(expectedEventTypeCode.getOriginalText(), eventTypeCode.getOriginalText());
+
+        assertEquals(EventIdCode.Query, event.getEventIdentification().getEventID());
+        assertEquals(FhirEventTypeCodes.MobilePatientIdentifierCrossReferenceQuery, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipant().get(0);
+        ActiveParticipantType source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
-        assertEquals(RFC3881ActiveParticipantCodes.RFC3881NetworkAccessPointTypeCodes.IP_ADDRESS.getCode(), source.getNetworkAccessPointTypeCode());
+        assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipant().get(1);
+        ActiveParticipantType destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$ihe-pix", destination.getUserID());
-        assertEquals("localhost", destination.getNetworkAccessPointID());
+        assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
+
+        // Audit Source
+        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
         // Patient (going in)
-        ParticipantObjectIdentificationType patientIn = event.getParticipantObjectIdentification().get(0);
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patientIn.getParticipantObjectTypeCode());
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patientIn.getParticipantObjectTypeCodeRole());
+        ParticipantObjectIdentificationType patientIn = event.getParticipantObjectIdentifications().get(0);
+        assertEquals(ParticipantObjectTypeCode.Person, patientIn.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Patient, patientIn.getParticipantObjectTypeCodeRole());
         assertEquals("urn:oid:1.2.3.4|0815", new String(patientIn.getParticipantObjectID()));
 
-        // Patient (going out)
-//        ParticipantObjectIdentificationType patientOut = event.getParticipantObjectIdentification().get(1);
-//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patientOut.getParticipantObjectTypeCode());
-//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patientOut.getParticipantObjectTypeCodeRole());
-//        assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/2|4711", new String(patientOut.getParticipantObjectID()));
+        // Query
+        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(1);
+        assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
+        assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815&targetSystem=urn%3Aoid%3A1.2.3.4.6",
+                new String(Base64.getDecoder().decode(patient.getParticipantObjectQuery()), StandardCharsets.UTF_8));
 
-        ParticipantObjectIdentificationType query = event.getParticipantObjectIdentification().get(1);
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), query.getParticipantObjectTypeCode());
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.QUERY.getCode(), query.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815&targetSystem=urn%3Aoid%3A1.2.3.4.6", new String(query.getParticipantObjectQuery()));
-        CodedValueType poitTypeCode = query.getParticipantObjectIDTypeCode();
-        assertEquals("ITI-83", poitTypeCode.getCode());
-        assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
-        assertEquals("Mobile Patient Identifier Cross-reference Query", poitTypeCode.getOriginalText());
-        assertEquals("PIXmQuery", query.getParticipantObjectID());
+        assertEquals(FhirParticipantObjectIdTypeCodes.MobilePatientIdentifierCrossReferenceQuery, patient.getParticipantObjectIDTypeCode());
+
     }
 
     @Test
@@ -144,7 +136,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedAuditMessageQueue sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
@@ -156,7 +148,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedAuditMessageQueue sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

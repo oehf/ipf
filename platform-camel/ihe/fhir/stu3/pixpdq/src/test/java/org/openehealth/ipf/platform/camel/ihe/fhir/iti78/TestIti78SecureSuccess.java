@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 
 import javax.servlet.ServletException;
@@ -43,7 +44,7 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
         // printAsXML(result);
 
         // Check ATNA Audit
-        MockedAuditMessageQueue sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
@@ -53,7 +54,7 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
         // printAsXML(result);
 
         // Check ATNA Audit
-        MockedAuditMessageQueue sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

@@ -34,11 +34,12 @@ import java.util.List;
 
 /**
  * @author Dmytro Rud
+ *
+ * FIXME
  */
 @Slf4j
 public class FhirMockedSender extends AbstractMockedAuditMessageQueue {
 
-    @Getter
     protected List<AuditEvent> messages = Collections.synchronizedList(new ArrayList<>());
 
     private final FhirContext fhirContext;
@@ -49,6 +50,10 @@ public class FhirMockedSender extends AbstractMockedAuditMessageQueue {
         this.fhirContext = fhirContext;
     }
 
+    @Override
+    public List<AuditMessage> getMessages() {
+        return null;
+    }
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
