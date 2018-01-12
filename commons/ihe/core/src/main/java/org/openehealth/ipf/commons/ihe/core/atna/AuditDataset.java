@@ -47,6 +47,13 @@ public abstract class AuditDataset implements Serializable {
     private EventOutcomeIndicator eventOutcomeIndicator;
 
     /**
+     * Description of the overall outcome of the transaction that causes this audit event
+     */
+    @Getter
+    @Setter
+    private String eventOutcomeDescription;
+
+    /**
      * @param serverSide   specifies whether this audit dataset will be used on the
      *                     server side (<code>true</code>) or on the client side
      *                     (<code>false</code>)

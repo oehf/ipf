@@ -38,7 +38,6 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.source;
 @Slf4j
 public class MockedAuditMessageQueue extends AbstractMockedAuditMessageQueue {
 
-    private static final String OLD_VALIDATION_SCHEMA = "/dicomModified.xsd";
     private static final String NEW_VALIDATION_SCHEMA = "/atna2.xsd";
     private XsdValidator validator = new XsdValidator();
 

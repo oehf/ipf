@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.audit.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.EventId;
@@ -30,6 +31,9 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author Christian Ohr
+ */
 @EqualsAndHashCode
 public class EventIdentificationType implements Serializable, Validateable {
 
@@ -48,6 +52,9 @@ public class EventIdentificationType implements Serializable, Validateable {
 
     @Getter
     private final EventOutcomeIndicator eventOutcomeIndicator;
+
+    @Getter @Setter
+    private String eventOutcomeDescription;
 
     @Getter
     private EventActionCode eventActionCode;

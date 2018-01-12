@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,13 +34,16 @@ import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.UR
 /**
  * @author Christian Ohr
  */
-public class XdsQueryBuilder extends IHEQueryBuilder<XdsQueryBuilder> {
+public class XdsQueryInformationBuilder extends QueryInformationBuilder<XdsQueryInformationBuilder> {
 
-    public XdsQueryBuilder(AuditContext auditContext, XdsQueryAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsQueryInformationBuilder(AuditContext auditContext,
+                                      XdsQueryAuditDataset auditDataset,
+                                      EventType eventType,
+                                      List<PurposeOfUse> purposesOfUse) {
         super(auditContext, auditDataset, eventType, purposesOfUse);
     }
 
-    public XdsQueryBuilder setQueryParameters(XdsQueryAuditDataset auditDataset, XdsParticipantObjectIdTypeCode participantObjectIdTypeCode) {
+    public XdsQueryInformationBuilder setQueryParameters(XdsQueryAuditDataset auditDataset, XdsParticipantObjectIdTypeCode participantObjectIdTypeCode) {
         // Add QueryEncoding and HomeCommunityId as details, if applicable
         List<TypeValuePairType> tvp = new LinkedList<>();
         if (auditDataset.getQueryUuid() != null && !auditDataset.getQueryUuid().isEmpty()) {

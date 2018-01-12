@@ -28,12 +28,12 @@ import org.openehealth.ipf.commons.audit.types.SecurityAlertType;
  */
 public enum SecurityAlertTypeCode implements EnumeratedCodedValue<SecurityAlertType>, SecurityAlertType {
 
-    ApplicationStart("110120", "Application Start"),
-    ApplicationStop("110121", "Application Stop"),
-    Login("110122", "Login"),
-    Logout("110123", "Logout"),
-    Attach("110124", "Attach"),
-    Detach("110125", "Detach"),
+    ApplicationStart("110120", "Application Entity has started"),
+    ApplicationStop("110121", "Application Entity has stopped"),
+    Login("110122", "User Login has been attempted"),
+    Logout("110123", "User Logout has been attempted"),
+    Attach("110124", "Node has been attached"),
+    Detach("110125", "Node has been detached"),
     NodeAuthentication("110126", "Node Authentication"),
     EmergencyOverrideStarted("110127", "Emergency Override Started"),
     NetworkConfiguration("110128", "Network Configuration"),

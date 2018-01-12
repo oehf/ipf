@@ -198,9 +198,9 @@ public class AuditorTestBase {
 
 
             // Feeds
-            if (!patient.getParticipantObjectDetail().isEmpty()) {
+            if (!patient.getParticipantObjectDetails().isEmpty()) {
                 assertEquals(MESSAGE_ID, new String(
-                        Base64.getDecoder().decode(patient.getParticipantObjectDetail().get(0).getValue()),
+                        Base64.getDecoder().decode(patient.getParticipantObjectDetails().get(0).getValue()),
                         StandardCharsets.UTF_8));
             }
 

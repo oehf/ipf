@@ -18,25 +18,31 @@ package org.openehealth.ipf.commons.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+
+import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Audit Log Used event as specified in
  * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.2
  * <p>
  * This message describes the event of a person or process reading a log of audit trail information.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBuilder> {
 
     public AuditLogUsedBuilder(EventOutcomeIndicator outcome) {
+        this(outcome, null);
+    }
+
+    public AuditLogUsedBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Read,
                 EventIdCode.AuditLogUsed,
-                null,
-                (PurposeOfUse[]) null
+                null
         );
     }
 
@@ -55,7 +61,7 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
                         altUserId,
                         userName,
                         userIsRequestor,
-                        null,
+                        Collections.emptyList(),
                         networkId);
     }
 
@@ -69,7 +75,7 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
                         ParticipantObjectIdTypeCode.URI,
                         "Security Audit Log",
                         null,
-                        null,
+                        Collections.emptyList(),
                         auditLogUri,
                         ParticipantObjectTypeCode.System,
                         ParticipantObjectTypeCodeRole.SecurityResource,

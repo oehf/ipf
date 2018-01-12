@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.audit.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
 import java.io.Serializable;
@@ -27,6 +26,9 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author Christian Ohr
+ */
 @EqualsAndHashCode
 public class AuditSourceIdentificationType implements Serializable, Validateable {
 

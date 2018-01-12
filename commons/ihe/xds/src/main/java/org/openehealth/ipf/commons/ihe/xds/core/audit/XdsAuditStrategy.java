@@ -19,8 +19,10 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 
 /**
@@ -52,7 +54,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
      * @param response registry to analyze.
      * @return outcome code.
      */
-    protected static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+    private static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
         try {
             if (response.getStatus() == Status.SUCCESS) {
                 return EventOutcomeIndicator.Success;
@@ -72,10 +74,38 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
         }
     }
 
+    private static String getEventOutcomeDescriptionFromRegistryResponse(EbXMLRegistryResponse response) {
+        if (response.getErrors().isEmpty()) {
+            return null;
+        }
+        for (EbXMLRegistryError error : response.getErrors()) {
+            if (error.getSeverity() == Severity.ERROR) {
+                return error.getCodeContext();
+            }
+        }
+        return response.getErrors().get(0).getCodeContext();
+    }
+
+
+        @Override
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        return getEventOutcomeCodeFromRegistryResponse(ebXML);
+    }
+
+    @Override
+    public String getEventOutcomeDescription(Object pojo) {
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
+    }
+
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
         EventOutcomeIndicator outcomeCodes = getEventOutcomeIndicator(response);
         auditDataset.setEventOutcomeIndicator(outcomeCodes);
+        auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
         return outcomeCodes == EventOutcomeIndicator.Success;
     }
 

@@ -29,9 +29,9 @@ abstract public class MllpAuditUtils {
      *
      * @param hostAddress the address of the node that is responsible for the failure.
      */
-    public static AuditMessage auditAuthenticationNodeFailure(AuditContext auditContext, String hostAddress) {
-        return new SecurityAlertBuilder(EventOutcomeIndicator.SeriousFailure, EventTypeCode.NodeAuthentication)
-                .setAuditSourceId(auditContext.getAuditSourceId(), auditContext.getAuditEnterpriseSiteId())
+    public static AuditMessage auditAuthenticationNodeFailure(AuditContext auditContext, String message, String hostAddress) {
+        return new SecurityAlertBuilder(EventOutcomeIndicator.SeriousFailure, message, EventTypeCode.NodeAuthentication)
+                .setAuditSource(auditContext.getAuditSourceId(), auditContext.getAuditEnterpriseSiteId())
                 .addReportingActiveParticipant("IPF MLLP Component", null, null, null, null, false)
                 .addAlertUriSubjectParticipantObject(hostAddress, null, null)
                 .getMessage();

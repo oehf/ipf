@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.audit;
 
-import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;

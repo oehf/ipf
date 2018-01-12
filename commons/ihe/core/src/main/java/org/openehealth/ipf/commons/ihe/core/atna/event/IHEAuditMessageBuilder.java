@@ -19,7 +19,11 @@ package org.openehealth.ipf.commons.ihe.core.atna.event;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.event.DelegatingAuditMessageBuilder;
+import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getHostFromUrl;
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
@@ -34,18 +38,16 @@ import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
 public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T, D>, D extends BaseAuditMessageBuilder<D>>
         extends DelegatingAuditMessageBuilder<T, D> {
 
+    public static final String IHE_HOME_COMMUNITY_ID = "ihe:homeCommunityID";
+    public static final String URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID = "urn:ihe:iti:xca:2010:homeCommunityId";
+    public static final String QUERY_ENCODING = "QueryEncoding";
+    public static final String REPOSITORY_UNIQUE_ID = "Repository Unique Id";
+    public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
+    public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
 
     public IHEAuditMessageBuilder(AuditContext auditContext, D delegate) {
         super(delegate);
-        setAuditSource(auditContext);
-    }
-
-    private final T setAuditSource(AuditContext auditContext) {
-        delegate.setAuditSourceId(
-                auditContext.getAuditSourceId(),
-                auditContext.getAuditEnterpriseSiteId(),
-                auditContext.getAuditSource());
-        return self();
+        delegate.setAuditSource(auditContext);
     }
 
     /**
@@ -102,4 +104,20 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         return self();
     }
 
+    protected static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
+        List<TypeValuePairType> tvp = new ArrayList<>();
+        if (studyInstanceId != null) {
+            tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
+        }
+        if (seriesInstanceId != null) {
+            tvp.add(new TypeValuePairType(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
+        }
+        if (repositoryId != null) {
+            tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
+        }
+        if (homeCommunityId != null) {
+            tvp.add(new TypeValuePairType(IHE_HOME_COMMUNITY_ID, homeCommunityId));
+        }
+        return tvp;
+    }
 }

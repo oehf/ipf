@@ -19,9 +19,11 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataImportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.HpdParticipantObjectIdTypeCode;
+
+import java.util.Collections;
 
 /**
  * @author Christian Ohr
@@ -33,10 +35,11 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
     }
 
     protected AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem) {
-        IHEDataImportBuilder builder = new IHEDataImportBuilder<>(
+        PHIImportBuilder builder = new PHIImportBuilder<>(
                 auditContext,
                 auditDataset,
                 requestItem.getOutcomeCode(),
+                requestItem.getOutcomeDescription(),
                 requestItem.getActionCode(),
                 HpdEventTypeCode.ProviderInformationFeed,
                 auditDataset.getPurposesOfUse());
@@ -46,7 +49,7 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
                         providerId,
                         HpdParticipantObjectIdTypeCode.ProviderIdentifier,
                         ParticipantObjectTypeCodeRole.Provider,
-                        null
+                        Collections.emptyList()
                 ));
 
         return builder.getMessage();

@@ -30,14 +30,27 @@ import java.util.List;
  * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4
  * <p>
  * This message describes the event of a patient record being created, modified, accessed, or deleted.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class PatientRecordBuilder extends BaseAuditMessageBuilder<PatientRecordBuilder> {
 
-    public PatientRecordBuilder(EventOutcomeIndicator outcome, EventActionCode action, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public PatientRecordBuilder(EventOutcomeIndicator outcome,
+                                EventActionCode action,
+                                EventType eventType,
+                                PurposeOfUse... purposesOfUse) {
+        this(outcome, null, action, eventType, purposesOfUse);
+    }
+
+    public PatientRecordBuilder(EventOutcomeIndicator outcome,
+                                String eventOutcomeDescription,
+                                EventActionCode action,
+                                EventType eventType,
+                                PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 action,
                 EventIdCode.PatientRecord,
                 eventType,
@@ -48,20 +61,20 @@ public class PatientRecordBuilder extends BaseAuditMessageBuilder<PatientRecordB
     /**
      * @param userId               The identity of the person or process manipulating the data. If both are known, then two active
      *                             participants shall be included (both the person and the process).
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
-     * @param roleIds              The Active Participant's Role ids
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
+     * @param roleIds              Role ids
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
      */
     public PatientRecordBuilder addUserParticipant(String userId,
-                                String altUserId,
-                                String userName,
-                                String networkAccessPointId,
-                                List<ActiveParticipantRoleId> roleIds,
-                                boolean userIsRequestor) {
+                                                   String altUserId,
+                                                   String userName,
+                                                   String networkAccessPointId,
+                                                   List<ActiveParticipantRoleId> roleIds,
+                                                   boolean userIsRequestor) {
         return addActiveParticipant(userId, altUserId, userName, userIsRequestor, roleIds,
                 networkAccessPointId);
     }

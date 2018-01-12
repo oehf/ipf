@@ -17,9 +17,9 @@
 package org.openehealth.ipf.commons.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
-import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 import java.util.Collections;
 
@@ -30,20 +30,37 @@ import java.util.Collections;
  * This message describes the event of a system beginning to transfer a set of DICOM instances
  * from one node to another node within control of the system's security domain.
  * This message may only include information about a single patient.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuilder<BeginTransferringDicomInstancesBuilder> {
 
+    public BeginTransferringDicomInstancesBuilder(
+            EventOutcomeIndicator outcome,
+            String eventOutcomeDescription,
+            EventType eventType,
+            PurposeOfUse... purposesOfUse) {
+        super();
+        setEventIdentification(outcome,
+                eventOutcomeDescription,
+                EventActionCode.Execute,
+                EventIdCode.BeginTransferringDICOMInstances,
+                eventType,
+                purposesOfUse
+        );
+    }
+
+
     /**
      * @param userId          The identity of the process sending the data
-     * @param altUserId       The Active Participant's Alternate UserID
-     * @param userName        The Active Participant's UserName
-     * @param networkId       The Active Participant's Network Access Point ID
+     * @param altUserId       Alternate UserID
+     * @param userName        UserName
+     * @param networkId       Network Access Point ID
      * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */
-    public BeginTransferringDicomInstancesBuilder setSendingProcessActiveParticipant(String userId,
+    public BeginTransferringDicomInstancesBuilder setSendingProcessParticipant(String userId,
                                                                                      String altUserId,
                                                                                      String userName,
                                                                                      String networkId,
@@ -53,13 +70,13 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
 
     /**
      * @param userId          The identity of the process receiving the data
-     * @param altUserId       The Active Participant's Alternate UserID
-     * @param userName        The Active Participant's UserName
-     * @param networkId       The Active Participant's Network Access Point ID
+     * @param altUserId       Alternate UserID
+     * @param userName        UserName
+     * @param networkId       Network Access Point ID
      * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */
-    public BeginTransferringDicomInstancesBuilder setReceivingProcessActiveParticipant(String userId,
+    public BeginTransferringDicomInstancesBuilder setReceivingProcessParticipant(String userId,
                                                                                        String altUserId,
                                                                                        String userName,
                                                                                        String networkId,
@@ -74,7 +91,7 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
      */
     public BeginTransferringDicomInstancesBuilder setPatientParticipantObject(String patientId, String patientName) {
         if (patientId != null) {
-            addPatientParticipantObject(patientId, patientName, null, null);
+            addPatientParticipantObject(patientId, patientName, Collections.emptyList(), null);
         }
         return self();
     }
@@ -90,24 +107,6 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
                 Collections.singletonList(getTypeValuePair("ContainsSOPClass", uids)));
     }
 
-    /**
-     * @param userId          The identity of any other participants that might be involved and known, especially third parties that are the requestor
-     * @param altUserId       The Active Participant's Alternate UserID
-     * @param userName        The Active Participant's UserName
-     * @param networkId       The Active Participant's Network Access Point ID
-     * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
-     * @return this
-     */
-    public BeginTransferringDicomInstancesBuilder addOtherActiveParticipant(String userId,
-                                                                            String altUserId,
-                                                                            String userName,
-                                                                            ActiveParticipantRoleId roleId,
-                                                                            String networkId,
-                                                                            boolean userIsRequestor) {
-        return addActiveParticipant(userId, altUserId, userName, userIsRequestor, Collections.singletonList(roleId), networkId);
-    }
-
-
     @Override
     public void validate() {
         super.validate();
@@ -118,7 +117,7 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
             throw new AuditException("Must have one ActiveParticipant with RoleIDCode Destination");
         }
         if (getMessage().findParticipantObjectIdentifications(poi -> poi.getParticipantObjectIDTypeCode() == ParticipantObjectIdTypeCode.PatientNumber).size() != 1) {
-            throw new AuditException("Must one ParticipantObjectIdentification with ParticipantObjectIDTypeCode PatientNumber");
+            throw new AuditException("Must have one ParticipantObjectIdentification with ParticipantObjectIDTypeCode PatientNumber");
         }
         if (getMessage().findParticipantObjectIdentifications(poi -> poi.getParticipantObjectIDTypeCode() == ParticipantObjectIdTypeCode.StudyInstanceUID).isEmpty()) {
             throw new AuditException("Must have one or more ParticipantObjectIdentification with ParticipantObjectIDTypeCode StudyInstanceUID");

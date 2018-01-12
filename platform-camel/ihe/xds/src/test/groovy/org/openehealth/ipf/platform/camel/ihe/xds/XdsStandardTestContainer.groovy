@@ -127,7 +127,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
         assert uri.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
         checkCode(uri.participantObjectIDTypeCode, '12', 'RFC-3881')
         assert uri.participantObjectID == docUri
-        checkParticipantObjectDetail(uri.participantObjectDetail[0], "bla", docUniqueId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[0], "bla", docUniqueId)
     }
 
     void checkDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId) {
@@ -136,8 +136,8 @@ class XdsStandardTestContainer extends StandardTestContainer {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetail[0], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[1], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[0], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[1], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkImageDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
@@ -146,10 +146,10 @@ class XdsStandardTestContainer extends StandardTestContainer {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetail[0], XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID, studyId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[1], XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID, seriesId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[2], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetail[3], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[0], XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID, studyId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[1], XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID, seriesId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[2], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[3], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {

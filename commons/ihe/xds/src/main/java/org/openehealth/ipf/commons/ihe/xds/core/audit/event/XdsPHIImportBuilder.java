@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
@@ -24,48 +24,63 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataImportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsBuilderUtils.makeDocumentDetail;
-
 /**
  * @author Christian Ohr
  */
-public class XdsDataImportBuilder extends IHEDataImportBuilder<XdsDataImportBuilder> {
+public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
 
 
-    public XdsDataImportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsPHIImportBuilder(AuditContext auditContext,
+                               XdsAuditDataset auditDataset,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Create, eventType, purposesOfUse);
     }
 
-    public XdsDataImportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsPHIImportBuilder(AuditContext auditContext,
+                               XdsAuditDataset auditDataset,
+                               EventActionCode eventActionCode,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
         super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
-    public XdsDataImportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditContext, auditDataset, eventOutcomeIndicator, eventActionCode, eventType, purposesOfUse);
+    public XdsPHIImportBuilder(AuditContext auditContext,
+                               AuditDataset auditDataset,
+                               EventOutcomeIndicator eventOutcomeIndicator,
+                               String eventOutcomeDescription,
+                               EventActionCode eventActionCode,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription,
+                eventActionCode, eventType, purposesOfUse);
     }
 
-    public XdsDataImportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {
+    public XdsPHIImportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {
         return addImportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
                 Collections.emptyList());
     }
 
-    public XdsDataImportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
+    public XdsPHIImportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
         return addImportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
                 makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null));
     }
 
-    public XdsDataImportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
-                                               XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
+    public XdsPHIImportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+                                              XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
         String[] documentIds = auditDataset.getDocumentIds(status);
         String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
         String[] repositoryIds = auditDataset.getRepositoryIds(status);

@@ -38,5 +38,11 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
 
     }
 
-
+    @Override
+    public String getEventOutcomeDescriptionFromOperationOutcome(OperationOutcome response) {
+        if (!response.hasIssue()) {
+            return null;
+        }
+        return response.getIssue().get(0).getDiagnostics();
+    }
 }

@@ -17,6 +17,10 @@
 package org.openehealth.ipf.commons.audit.types;
 
 /**
+ * The Audit Source Type values specify the type of source where an event originated.
+ * Codes from coded terminologies and implementation defined codes can also be used for the
+ * AuditSource.
+ *
  * @author Christian Ohr
  */
 public interface AuditSource extends CodedValueType {

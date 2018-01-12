@@ -30,17 +30,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
+ * Builder for building IHE-specific Query events.
+ * It automatically sets the AuditSource, local and remote ActiveParticipant and a Human Requestor
+ * and provides methods for adding patient IDs.
+ *
  * @author Christian Ohr
  */
-public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
+public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
 
-    public IHEQueryBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
+    public QueryInformationBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
         this(auditContext, auditDataset, eventType, Collections.emptyList());
     }
 
-    public IHEQueryBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public QueryInformationBuilder(AuditContext auditContext,
+                                   AuditDataset auditDataset,
+                                   EventType eventType,
+                                   List<PurposeOfUse> purposesOfUse) {
         super(auditContext, new QueryBuilder(
                 auditDataset.getEventOutcomeIndicator(),
+                auditDataset.getEventOutcomeDescription(),
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
 
@@ -60,7 +68,9 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
         if (patientIds != null) {
             Arrays.stream(patientIds)
                     .filter(Objects::nonNull)
-                    .forEach(patientId -> delegate.addPatientParticipantObject(patientId, null, null, null));
+                    .forEach(patientId ->
+                            delegate.addPatientParticipantObject(patientId, null,
+                                    Collections.emptyList(), null));
         }
         return self();
     }
@@ -70,7 +80,8 @@ public class IHEQueryBuilder<T extends IHEQueryBuilder<T>> extends IHEAuditMessa
             patientIds.stream()
                     .filter(Objects::nonNull)
                     .forEach(patientId ->
-                            delegate.addPatientParticipantObject(patientId, null, null, null));
+                            delegate.addPatientParticipantObject(patientId, null,
+                                    Collections.emptyList(), null));
         }
         return self();
     }

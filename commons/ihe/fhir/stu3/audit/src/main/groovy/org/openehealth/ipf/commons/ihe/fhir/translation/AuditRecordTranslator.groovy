@@ -100,7 +100,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
                 /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)
         fhir.type = codingEnum(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode.value)))
         fhir.role = codingEnum(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole.value)))
-        atna.participantObjectDetail.each {
+        atna.participantObjectDetails.each {
             fhir.addDetail(new AuditEvent.AuditEventEntityDetailComponent(type: it.type, value: it.value))
         }
         fhir

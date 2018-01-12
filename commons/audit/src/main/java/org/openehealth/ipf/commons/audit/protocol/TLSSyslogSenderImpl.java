@@ -48,7 +48,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
-
     private AtomicReference<Socket> socket = new AtomicReference<>();
 
     public TLSSyslogSenderImpl() {

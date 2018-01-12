@@ -28,6 +28,9 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author Christian Ohr
+ */
 @EqualsAndHashCode
 public class ActiveParticipantType implements Serializable, Validateable {
 

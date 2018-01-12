@@ -73,8 +73,15 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
     }
 
     @Override
+    String getEventOutcomeDescription(Object gpath) {
+        return gpath.acknowledgement[0].acknowledgementDetail[0].@text.text()
+    }
+
+    @Override
     boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
-        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(slurp(response))
+        Object gpath = slurp(response)
+        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(gpath)
+        auditDataset.eventOutcomeDescription = getEventOutcomeDescription(gpath)
         auditDataset.eventOutcomeIndicator == EventOutcomeIndicator.Success
     }
 

@@ -20,7 +20,6 @@ import org.hl7.fhir.instance.model.Bundle;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 
 import javax.servlet.ServletException;
 

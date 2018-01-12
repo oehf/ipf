@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
@@ -23,7 +22,6 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;

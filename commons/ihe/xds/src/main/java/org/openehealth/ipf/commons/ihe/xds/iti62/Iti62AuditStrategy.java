@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsEventTypeCode;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditStrategy30;
 
@@ -36,7 +36,7 @@ public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsRemoveMetadataAuditDataset auditDataset) {
-        return new XdsPatientRecordBuilder(auditContext, auditDataset, EventActionCode.Delete,
+        return new XdsPatientRecordEventBuilder(auditContext, auditDataset, EventActionCode.Delete,
                 XdsEventTypeCode.RemoveMetadata, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientIds())
                 .addObjectIds(auditDataset.getObjectIds())

@@ -34,14 +34,25 @@ import java.util.Collections;
  * This message describes the event of a Query being issued or received.
  * The message does NOT record the response to the query, but merely records the fact
  * that a query was issued.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
 
-    public QueryBuilder(EventOutcomeIndicator outcome, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public QueryBuilder(EventOutcomeIndicator outcome,
+                        EventType eventType,
+                        PurposeOfUse... purposesOfUse) {
+        this(outcome, null, eventType, purposesOfUse);
+    }
+
+    public QueryBuilder(EventOutcomeIndicator outcome,
+                        String eventOutcomeDescription,
+                        EventType eventType,
+                        PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Execute,
                 EventIdCode.Query,
                 eventType,
@@ -52,10 +63,10 @@ public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
     /**
      * Process Issuing the Query
      *
-     * @param userId               The Active Participant's UserID
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param userId               UserID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -68,10 +79,10 @@ public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
     /**
      * The process that will respond to the query
      *
-     * @param userId               The Active Participant's UserID
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param userId               UserID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -83,10 +94,10 @@ public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
 
 
     /**
-     * @param userId          The Active Participant's UserID
-     * @param altUserId       The Active Participant's Alternate UserID
-     * @param userName        The Active Participant's UserName
-     * @param networkId       The Active Participant's Network Access Point ID
+     * @param userId          UserID
+     * @param altUserId       Alternate UserID
+     * @param userName        UserName
+     * @param networkId       Network Access Point ID
      * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */

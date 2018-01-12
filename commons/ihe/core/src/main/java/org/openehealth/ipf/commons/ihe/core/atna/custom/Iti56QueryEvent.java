@@ -29,6 +29,8 @@ import java.util.List;
 /**
  * Special query event element type for ITI-56 (XCPD patient location query).
  * @author Dmytro Rud
+ *
+ * @deprecated
  */
 public class Iti56QueryEvent extends QueryEvent {
 

@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.atna.util;
 import org.apache.camel.impl.DefaultComponent;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 
 import java.util.Collection;

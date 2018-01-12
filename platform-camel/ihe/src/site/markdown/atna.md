@@ -96,13 +96,13 @@ it is usable.
 ### Specifiying a DICOM version
 
 [DICOM is versioned](http://www.dclunie.com/dicom-status/status.html), and each year a couple of updates are published. 
-Some updates also affect the way Audit messages are formatted (as specified in 
+Some updates also affect the way Audit messages are serialized (as specified in 
 [Part15](http://dicom.nema.org/medical/dicom/current/output/html/part15.html)).
 
 As IHE ATNA does not reference a specific DICOM version, in the past there have been interoperability issues where
-the Application Node sent ATNA events that the used ATNA repository was not yet capable to consume. To ensure
+the Application Node sent ATNA events that the repository actor was not yet capable to consume. To ensure
 a certain degree of backwards compatibility, the `serializationStrategy` can be configured to use a certain
-implementation, where `org.openehealth.ipf.commons.audit.marshal.dicom.Current` always references the latest
+implementation version, where `org.openehealth.ipf.commons.audit.marshal.dicom.Current` always references the latest
 relevant version.
 You can also provide a custom implementation of `org.openehealth.ipf.commons.audit.marshal.SerializationStrategy`
 that creates other representations of an `AuditMessage` (e.g. a JSON-serialized `AuditEvent` FHIR resource).    
@@ -129,16 +129,23 @@ Now an instance of `CamelEndpointSender` can be configured in the application co
     <beans xmlns="http://www.springframework.org/schema/beans"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns:camel="http://camel.apache.org/schema/spring"
+           xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
            xsi:schemaLocation="
-    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://camel.apache.org/schema/spring>
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://openehealth.org/schema/ipf-commons-core
+        http://openehealth.org/schema/ipf-commons-core.xsd">
+
+        <ipf:globalContext id="globalContext"/>
 
         <camel:camelContext id="camelContext">
            <camel:routeBuilder ref="..."/>
         </camel:camelContext>
     
         <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+            <property name="auditEnabled" value="true"/>
             <property name="auditMessageQueue" ref="camelEndpointSender"/>
         </bean>
     

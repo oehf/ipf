@@ -137,7 +137,7 @@ class TestIti18 extends XdsStandardTestContainer {
         [2, 3].each { i ->
             boolean found = false
             AuditMessage message = auditSender.messages[i]
-            for (detail in message.participantObjectIdentifications[0].participantObjectDetail) {
+            for (detail in message.participantObjectIdentifications[0].participantObjectDetails) {
                 if ((detail.type == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.value) {
                     found = true
                 }

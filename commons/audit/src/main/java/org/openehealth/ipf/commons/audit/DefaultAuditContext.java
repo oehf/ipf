@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
+import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
@@ -69,7 +70,7 @@ public class DefaultAuditContext implements AuditContext {
     private AuditSource auditSource = AuditSourceType.Other;
 
     @Getter @Setter
-    private SerializationStrategy serializationStrategy;
+    private SerializationStrategy serializationStrategy = new Current();
 
     public void setAuditRepositoryHost(String auditRepositoryHost) throws UnknownHostException {
         this.auditRepositoryHostName = auditRepositoryHost;

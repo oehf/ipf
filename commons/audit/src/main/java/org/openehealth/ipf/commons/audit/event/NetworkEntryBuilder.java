@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.audit.event;
 
 
+import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
@@ -26,14 +27,18 @@ import java.util.Collections;
  * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.9
  * <p>
  * This message describes the event of a system, such as a mobile device, intentionally entering or leaving the network.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class NetworkEntryBuilder extends BaseAuditMessageBuilder<NetworkEntryBuilder> {
 
-    public NetworkEntryBuilder(EventOutcomeIndicator outcome, EventTypeCode eventTypeCode) {
+    public NetworkEntryBuilder(EventOutcomeIndicator outcome,
+                               String eventOutcomeDescription,
+                               EventTypeCode eventTypeCode) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Read,
                 EventIdCode.NetworkEntry,
                 eventTypeCode,
@@ -46,9 +51,9 @@ public class NetworkEntryBuilder extends BaseAuditMessageBuilder<NetworkEntryBui
      *
      * @param userId    The person or process accessing the audit trail. If both are known,
      *                  then two active participants shall be included (both the person and the process).
-     * @param altUserId The Active Participant's Alternate UserID
-     * @param userName  The Active Participant's UserName
-     * @param networkId The Active Participant's Network Access Point ID
+     * @param altUserId Alternate UserID
+     * @param userName  UserName
+     * @param networkId Network Access Point ID
      */
     public NetworkEntryBuilder setSystemParticipant(String userId,
                                                     String altUserId,
@@ -56,29 +61,41 @@ public class NetworkEntryBuilder extends BaseAuditMessageBuilder<NetworkEntryBui
                                                     ActiveParticipantRoleIdCode roleId,
                                                     String networkId) {
         return addActiveParticipant(
-                        userId,
-                        altUserId,
-                        userName,
-                        false,
-                        Collections.singletonList(roleId),
-                        networkId);
+                userId,
+                altUserId,
+                userName,
+                false,
+                Collections.singletonList(roleId),
+                networkId);
     }
 
     public static class EnteringNetwork extends NetworkEntryBuilder {
+
         public EnteringNetwork(EventOutcomeIndicator outcome) {
-            super(outcome, EventTypeCode.Attach);
+            this(outcome, null);
+        }
+
+        public EnteringNetwork(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.Attach);
         }
     }
 
     public static class LeavingNetwork extends NetworkEntryBuilder {
+
         public LeavingNetwork(EventOutcomeIndicator outcome) {
-            super(outcome, EventTypeCode.Detach);
+            this(outcome, null);
+        }
+
+        public LeavingNetwork(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.Detach);
         }
     }
 
     @Override
     public void validate() {
         super.validate();
-        // no further rules
+        if (getMessage().getActiveParticipants().size() != 1) {
+            throw new AuditException("Must have one ActiveParticipant");
+        }
     }
 }

@@ -17,6 +17,8 @@
     </parent>
     
     <dependencies>
+
+        <!-- FIXME remove -->
         <dependency>
             <groupId>org.openehealth.ipf.oht.atna</groupId>
             <artifactId>ipf-oht-atna-auditor</artifactId>
@@ -25,23 +27,17 @@
             <groupId>org.openehealth.ipf.oht.atna</groupId>
             <artifactId>ipf-oht-atna-nodeauth</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-audit</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>

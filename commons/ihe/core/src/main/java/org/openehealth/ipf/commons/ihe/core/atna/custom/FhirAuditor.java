@@ -39,6 +39,7 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
  *
  * @author Christian Ohr
  * @since 3.1
+ * @deprecated
  */
 public class FhirAuditor extends IHEAuditor {
 

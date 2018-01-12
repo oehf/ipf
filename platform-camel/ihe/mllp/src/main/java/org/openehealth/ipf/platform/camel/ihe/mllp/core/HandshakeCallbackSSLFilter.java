@@ -43,7 +43,7 @@ public class HandshakeCallbackSSLFilter extends SslFilter {
          * @param session
          *          the session in which the handshake failure occurred.
          */
-        void run(IoSession session);
+        void run(IoSession session, String message);
     }
 
     private Callback handshakeExceptionCallback;
@@ -70,7 +70,7 @@ public class HandshakeCallbackSSLFilter extends SslFilter {
         try {
             super.messageReceived(nextFilter, session, message);
         } catch (SSLHandshakeException e) {
-            handshakeExceptionCallback.run(session);
+            handshakeExceptionCallback.run(session, e.getMessage());
             try {
                 exceptionCaught(nextFilter, session, e.getCause());
             } catch (Exception e1) {

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
@@ -22,10 +22,12 @@ import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -34,23 +36,36 @@ import java.util.stream.Stream;
 /**
  * @author Christian Ohr
  */
-public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientRecordBuilder> {
+public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsPatientRecordEventBuilder> {
 
 
-    public XdsPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditContext, auditDataset, eventOutcomeIndicator, action, eventType, purposesOfUse);
-    }
-
-    public XdsPatientRecordBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode action, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsPatientRecordEventBuilder(AuditContext auditContext,
+                                        XdsAuditDataset auditDataset,
+                                        EventActionCode action,
+                                        EventType eventType,
+                                        List<PurposeOfUse> purposesOfUse) {
         super(auditContext, auditDataset, action, eventType, purposesOfUse);
     }
 
-    public XdsPatientRecordBuilder addPatients(List<String> patientIds) {
+    public XdsPatientRecordEventBuilder(AuditContext auditContext,
+                                        XdsAuditDataset auditDataset,
+                                        EventOutcomeIndicator eventOutcomeIndicator,
+                                        String eventOutcomeDescription,
+                                        EventActionCode action,
+                                        EventType eventType,
+                                        List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription,
+                action, eventType, purposesOfUse);
+    }
+
+
+
+    public XdsPatientRecordEventBuilder addPatients(List<String> patientIds) {
         return addPatients(null, null,
                 patientIds.toArray(new String[patientIds.size()]));
     }
 
-    public XdsPatientRecordBuilder addObjectIds(String... objectIds) {
+    public XdsPatientRecordEventBuilder addObjectIds(String... objectIds) {
         if (objectIds != null) {
             Stream.of(objectIds).forEach(objectId ->
                     delegate.addParticipantObjectIdentification(
@@ -60,7 +75,7 @@ public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientR
                                     "registry object reference"),
                             null,
                             null,
-                            null,
+                            Collections.emptyList(),
                             objectId,
                             ParticipantObjectTypeCode.System,
                             ParticipantObjectTypeCodeRole.Report,
@@ -70,10 +85,10 @@ public class XdsPatientRecordBuilder extends IHEPatientRecordBuilder<XdsPatientR
         return self();
     }
 
-    public XdsPatientRecordBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
-                                                  XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
-                                                  ParticipantObjectIdType participantObjectIdType,
-                                                  ParticipantObjectDataLifeCycle lifeCycle) {
+    public XdsPatientRecordEventBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+                                                       XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
+                                                       ParticipantObjectIdType participantObjectIdType,
+                                                       ParticipantObjectDataLifeCycle lifeCycle) {
         String[] documentIds = auditDataset.getDocumentIds(status);
         String[] repositoryIds = auditDataset.getRepositoryIds(status);
         IntStream.range(0, documentIds.length).forEach(i ->

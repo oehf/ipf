@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.audit.codes;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
-import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 
 /**

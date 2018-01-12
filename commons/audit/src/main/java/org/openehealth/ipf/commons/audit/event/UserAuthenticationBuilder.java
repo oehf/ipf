@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.audit.event;
 
 
+import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
@@ -38,14 +39,22 @@ import java.util.Collections;
  */
 public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthenticationBuilder> {
 
-    public UserAuthenticationBuilder(EventOutcomeIndicator outcome, EventTypeCode eventTypeCode, PurposeOfUse... purposesOfUse) {
+    public UserAuthenticationBuilder(EventOutcomeIndicator outcome,
+                                     String eventOutcomeDescription,
+                                     EventTypeCode eventTypeCode,
+                                     PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Execute,
                 EventIdCode.UserAuthentication,
                 eventTypeCode,
                 purposesOfUse
         );
+    }
+
+    public UserAuthenticationBuilder setAuthenticatedParticipant(String userId, String networkId) {
+        return setAuthenticatedParticipant(userId, null, null, true, null, networkId);
     }
 
     /**
@@ -64,12 +73,16 @@ public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthe
                                                                  ActiveParticipantRoleIdCode roleId,
                                                                  String networkId) {
         return addActiveParticipant(
-                        userId,
-                        altUserId,
-                        userName,
-                        userIsRequestor,
-                        roleId != null ? Collections.singletonList(roleId) : Collections.emptyList(),
-                        networkId);
+                userId,
+                altUserId,
+                userName,
+                userIsRequestor,
+                roleId != null ? Collections.singletonList(roleId) : Collections.emptyList(),
+                networkId);
+    }
+
+    public UserAuthenticationBuilder setAuthenticatingSystemParticipant(String userId, String networkId) {
+        return setAuthenticatingSystemParticipant(userId, null, null, true, null, networkId);
     }
 
     /**
@@ -87,23 +100,42 @@ public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthe
                                                                         ActiveParticipantRoleIdCode roleId,
                                                                         String networkId) {
         return addActiveParticipant(
-                        userId,
-                        altUserId,
-                        userName,
-                        userIsRequestor,
-                        Collections.singletonList(roleId),
-                        networkId);
+                userId,
+                altUserId,
+                userName,
+                userIsRequestor,
+                Collections.singletonList(roleId),
+                networkId);
     }
 
     public static class Login extends UserAuthenticationBuilder {
-        public Login(EventOutcomeIndicator outcome, PurposeOfUse purposeOfUse) {
-            super(outcome, EventTypeCode.Login, purposeOfUse);
+
+        public Login(EventOutcomeIndicator outcome, PurposeOfUse... purposeOfUse) {
+            this(outcome, null, purposeOfUse);
+        }
+
+        public Login(EventOutcomeIndicator outcome, String eventOutcomeDescription, PurposeOfUse... purposeOfUse) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.Login, purposeOfUse);
         }
     }
 
     public static class Logout extends UserAuthenticationBuilder {
-        public Logout(EventOutcomeIndicator outcome, PurposeOfUse purposeOfUse) {
-            super(outcome, EventTypeCode.Logout, purposeOfUse);
+
+        public Logout(EventOutcomeIndicator outcome, PurposeOfUse... purposeOfUse) {
+            this(outcome, null, purposeOfUse);
+        }
+
+        public Logout(EventOutcomeIndicator outcome, String eventOutcomeDescription, PurposeOfUse... purposeOfUse) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.Logout, purposeOfUse);
+        }
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+        int participants = getMessage().getActiveParticipants().size();
+        if (participants < 1 || participants > 2) {
+            throw new AuditException("Must have one or two ActiveParticipants");
         }
     }
 }

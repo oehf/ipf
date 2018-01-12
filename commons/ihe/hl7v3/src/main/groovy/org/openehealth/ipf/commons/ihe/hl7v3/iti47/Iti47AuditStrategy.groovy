@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti47
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
@@ -73,7 +73,7 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new IHEQueryBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientDemographicsQuery, auditDataset.getPurposesOfUse())
+        new QueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientDemographicsQuery, auditDataset.getPurposesOfUse())
                 .setQueryParameters(auditDataset.messageId, PatientDemographicsQuery, auditDataset.requestPayload)
                 .addPatients(auditDataset.patientIds)
                 .getMessages()

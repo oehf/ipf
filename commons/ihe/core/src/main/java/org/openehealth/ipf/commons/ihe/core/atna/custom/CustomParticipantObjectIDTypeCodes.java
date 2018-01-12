@@ -19,6 +19,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 /**
  * @author Dmytro Rud
+ * @deprecated
  */
 public class CustomParticipantObjectIDTypeCodes extends CodedValueType {
 

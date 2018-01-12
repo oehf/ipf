@@ -43,10 +43,7 @@ public class ApplicationStopEventListener implements ApplicationListener<Context
             try {
                 auditContext.audit(
                         new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
-                                .setAuditSourceId(
-                                        auditContext.getAuditSourceId(),
-                                        auditContext.getAuditEnterpriseSiteId(),
-                                        auditContext.getAuditSource())
+                                .setAuditSource(auditContext)
                                 .setApplicationParticipant(
                                         contextClosedEvent.getApplicationContext().getApplicationName(),
                                         null,

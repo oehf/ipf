@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.rad75;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDataImportBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
@@ -47,8 +47,9 @@ public class Rad75ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
     }
 
     private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsDataImportBuilder(auditContext, auditDataset,
-                auditDataset.getEventOutcomeIndicator(status), EventActionCode.Create,
+        return new XdsPHIImportBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), null,
+                EventActionCode.Create,
                 XdsEventTypeCode.CrossGatewayRetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .addDocumentIds(auditDataset, status)

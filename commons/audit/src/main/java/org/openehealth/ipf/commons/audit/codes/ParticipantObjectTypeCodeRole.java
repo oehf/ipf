@@ -27,8 +27,17 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
  */
 public enum ParticipantObjectTypeCodeRole implements EnumeratedValueSet<Short> {
 
+    /**
+     * This object is the patient that is the subject of care related to this event.
+     * It is identifiable by patient ID or equivalent. The patient may be either human or animal.
+     */
     Patient(1),
+    /**
+     * This is a location identified as related to the event. This is usually the location where the event took place.
+     * Note that for shipping, the usual events are arrival at a location or departure from a location.
+     */
     Location(2),
+
     Report(3),
     Resource(4),
     MasterFile(5),
@@ -51,6 +60,9 @@ public enum ParticipantObjectTypeCodeRole implements EnumeratedValueSet<Short> {
     Table(22),
     RoutingCriteria(23),
     Query(24),
+
+    // Added recently
+
     DataSource(25),
     ProcessingElement(26);
 

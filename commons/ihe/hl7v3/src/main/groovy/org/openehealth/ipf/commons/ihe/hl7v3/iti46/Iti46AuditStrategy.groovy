@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordNotificationBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
@@ -51,12 +51,12 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new IHEPatientRecordNotificationBuilder(
+        new PatientRecordEventBuilder(
                 auditContext,
                 auditDataset,
                 isServerSide() ? EventActionCode.Update : EventActionCode.Read,
                 Hl7v3EventTypeCode.PIXUpdateNotification,
-                auditDataset.userName, auditDataset.purposesOfUse, auditDataset.userRoles)
+                auditDataset.purposesOfUse)
         // Type=II (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
                 .addPatients('II', auditDataset.messageId, auditDataset.getPatientIds())
                 .getMessages()

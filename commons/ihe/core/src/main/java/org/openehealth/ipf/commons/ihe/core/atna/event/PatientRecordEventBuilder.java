@@ -39,29 +39,34 @@ import java.util.regex.Pattern;
  *
  * @author Christian Ohr
  */
-public class IHEPatientRecordBuilder<T extends IHEPatientRecordBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
+public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
 
     private static final Pattern PATIENT_ID_PATTERN = Pattern.compile("^.+?\\^\\^\\^.*?&.+?&ISO(\\^.*){0,4}$");
 
-    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType) {
+    public PatientRecordEventBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType) {
         this(auditContext, auditDataset, action, eventType, Collections.emptyList());
     }
 
-    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
-                                   List<PurposeOfUse> purposesOfUse) {
+    public PatientRecordEventBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
+                                     List<PurposeOfUse> purposesOfUse) {
         this(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(),
+                auditDataset.getEventOutcomeDescription(),
                 action,
                 eventType,
                 purposesOfUse);
     }
 
-    public IHEPatientRecordBuilder(AuditContext auditContext, AuditDataset auditDataset,
-                                   EventOutcomeIndicator eventOutcomeIndicator,
-                                   EventActionCode action, EventType eventType,
-                                   List<PurposeOfUse> purposesOfUse) {
+    public PatientRecordEventBuilder(AuditContext auditContext,
+                                     AuditDataset auditDataset,
+                                     EventOutcomeIndicator eventOutcomeIndicator,
+                                     String eventOutcomeDescription,
+                                     EventActionCode action,
+                                     EventType eventType,
+                                     List<PurposeOfUse> purposesOfUse) {
         super(auditContext, new PatientRecordBuilder(
                 eventOutcomeIndicator,
+                eventOutcomeDescription,
                 action,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));

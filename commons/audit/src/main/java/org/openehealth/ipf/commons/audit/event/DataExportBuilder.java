@@ -34,18 +34,24 @@ import static java.util.Objects.requireNonNull;
  * is leaving control of the system's security domain. Examples of exporting include printing to paper,
  * recording on film, conversion to another format for storage in an EHR, writing to removable media,
  * or sending via e-mail. Multiple patients may be described in one event message.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder> {
 
     public DataExportBuilder(EventOutcomeIndicator outcome, EventType eventType, PurposeOfUse... purposesOfUse) {
-        this(outcome, EventActionCode.Read, eventType, purposesOfUse);
+        this(outcome, null, eventType, purposesOfUse);
     }
 
-    public DataExportBuilder(EventOutcomeIndicator outcome, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataExportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType eventType, PurposeOfUse... purposesOfUse) {
+        this(outcome, eventOutcomeDescription, EventActionCode.Read, eventType, purposesOfUse);
+    }
+
+    public DataExportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 eventActionCode,
                 EventIdCode.Export,
                 eventType,
@@ -55,9 +61,9 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
 
     /**
      * @param userId               The identity of the remote user or process receiving the data
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -70,9 +76,9 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
     /**
      * @param userId               The identity of the local user or process exporting the data. If both are known,
      *                             then two active participants shall be included (both the person and the process).
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -83,19 +89,19 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
     }
 
     /**
-     * @param userId
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
-     * @param mediaIdentifier
-     * @param mediaType
-     * @return
+     * @param userId               UserID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
+     * @param mediaIdentifier      Media Identifier
+     * @param mediaType            Media Type
+     * @return this
      */
     public DataExportBuilder setDestinationMediaParticipant(String userId, String altUserId, String userName,
-                                                               String networkAccessPointId,
-                                                               NetworkAccessPointTypeCode networkAccessPointTypeCode,
-                                                               String mediaIdentifier,
-                                                               MediaType mediaType) {
+                                                            String networkAccessPointId,
+                                                            NetworkAccessPointTypeCode networkAccessPointTypeCode,
+                                                            String mediaIdentifier,
+                                                            MediaType mediaType) {
         return addActiveParticipant(
                 userId,
                 altUserId,
@@ -106,23 +112,6 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
                 networkAccessPointTypeCode,
                 mediaIdentifier,
                 requireNonNull(mediaType));
-    }
-
-    /**
-     * @param studyId study ID
-     * @return this
-     */
-    public DataExportBuilder addStudyParticipantObject(String studyId) {
-        return addStudyParticipantObject(studyId, null);
-    }
-
-    /**
-     * @param patientId patient ID
-     * @param patientName patient name
-     * @return this
-     */
-    public DataExportBuilder addPatientParticipantObject(String patientId, String patientName) {
-        return addPatientParticipantObject(patientId, patientName);
     }
 
     @Override

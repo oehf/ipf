@@ -34,8 +34,8 @@ public class Current implements SerializationStrategy {
     }
 
     @Override
-    public void marshal(AuditMessage auditMessage, Writer writer, boolean pretty) {
-        marshal(auditMessage, writer, pretty);
+    public void marshal(AuditMessage auditMessage, Writer writer, boolean pretty) throws IOException {
+        INSTANCE.marshal(auditMessage, writer, pretty);
     }
 
 }

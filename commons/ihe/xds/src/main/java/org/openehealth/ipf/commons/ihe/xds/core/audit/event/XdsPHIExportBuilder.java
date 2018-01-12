@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
@@ -24,47 +24,61 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataExportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsBuilderUtils.makeDocumentDetail;
-
 /**
  * @author Christian Ohr
  */
-public class XdsDataExportBuilder extends IHEDataExportBuilder<XdsDataExportBuilder> {
+public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
 
-    public XdsDataExportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsPHIExportBuilder(AuditContext auditContext,
+                               XdsAuditDataset auditDataset,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Read, eventType, purposesOfUse);
     }
 
-    public XdsDataExportBuilder(AuditContext auditContext, XdsAuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public XdsPHIExportBuilder(AuditContext auditContext,
+                               XdsAuditDataset auditDataset,
+                               EventActionCode eventActionCode,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
         super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
-    public XdsDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        super(auditContext, auditDataset, eventOutcomeIndicator, eventActionCode, eventType, purposesOfUse);
+    public XdsPHIExportBuilder(AuditContext auditContext,
+                               AuditDataset auditDataset,
+                               EventOutcomeIndicator eventOutcomeIndicator,
+                               String eventOutcomeDescription,
+                               EventActionCode eventActionCode,
+                               EventType eventType,
+                               List<PurposeOfUse> purposesOfUse) {
+        super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription, eventActionCode, eventType, purposesOfUse);
     }
 
-    public XdsDataExportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {
+    public XdsPHIExportBuilder setSubmissionSet(XdsSubmitAuditDataset auditDataset) {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
                 Collections.emptyList());
     }
 
-    public XdsDataExportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
+    public XdsPHIExportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
                 makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null));
     }
 
-    public XdsDataExportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
-                                               XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
+    public XdsPHIExportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+                                              XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
         String[] documentIds = auditDataset.getDocumentIds(status);
         String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
         String[] repositoryIds = auditDataset.getRepositoryIds(status);

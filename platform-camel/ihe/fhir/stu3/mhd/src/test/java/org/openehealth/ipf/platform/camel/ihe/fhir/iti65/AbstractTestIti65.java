@@ -21,7 +21,6 @@ import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;

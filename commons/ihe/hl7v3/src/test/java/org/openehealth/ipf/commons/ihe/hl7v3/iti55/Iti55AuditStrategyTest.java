@@ -63,7 +63,7 @@ public class Iti55AuditStrategyTest extends AuditorTestBase {
                 serverSide);
 
         TypeValuePairType detail = auditMessage.findParticipantObjectIdentifications(poi -> ParticipantObjectTypeCode.System.equals(poi.getParticipantObjectTypeCode()))
-                .get(0).getParticipantObjectDetail().get(0);
+                .get(0).getParticipantObjectDetails().get(0);
         assertNotNull(detail);
         assertEquals(IHE_HOME_COMMUNITY_ID, detail.getType());
         assertEquals(HOME_COMMUNITY_ID, new String(Base64.getDecoder().decode(detail.getValue()), StandardCharsets.UTF_8));

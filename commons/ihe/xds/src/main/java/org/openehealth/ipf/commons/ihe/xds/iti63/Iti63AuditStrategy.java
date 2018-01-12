@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti63;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
 /**
  * Audit strategy for the XCF ITI-63 transaction.
@@ -33,7 +34,7 @@ public class Iti63AuditStrategy extends XdsQueryAuditStrategy30 {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
-        return new XdsQueryBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossCommunityFetch, auditDataset.getPurposesOfUse())
+        return new XdsQueryInformationBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossCommunityFetch, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.CrossCommunityFetch)
                 .getMessages();

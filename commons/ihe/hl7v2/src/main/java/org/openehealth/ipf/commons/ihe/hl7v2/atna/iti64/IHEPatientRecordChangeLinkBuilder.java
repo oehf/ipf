@@ -24,10 +24,11 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.LogicalDeletion;
 import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.Origination;
@@ -37,7 +38,7 @@ import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeC
  *
  * @author Christian Ohr
  */
-class IHEPatientRecordChangeLinkBuilder<T extends IHEPatientRecordBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
+class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
 
     private static final String URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE = "urn:ihe:iti:xpid:2017:patientIdentifierType";
 
@@ -113,7 +114,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends IHEPatientRecordBuilder<T>> ex
                     ParticipantObjectIdTypeCode.XdsMetadata,
                     null,
                     null,
-                    null,
+                    Collections.emptyList(),
                     auditDataset.getSubmissionSetUuid(),
                     ParticipantObjectTypeCode.System,
                     ParticipantObjectTypeCodeRole.Job,

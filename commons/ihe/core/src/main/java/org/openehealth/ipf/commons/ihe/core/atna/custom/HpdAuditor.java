@@ -33,6 +33,7 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
  * </ul>
  *
  * @author Dmytro Rud
+ * @deprecated
  */
 public class HpdAuditor extends IHEAuditor {
 

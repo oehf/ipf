@@ -67,12 +67,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- IPF Support -->
-
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-        </dependency>
 	</dependencies>
 
     <distributionManagement>

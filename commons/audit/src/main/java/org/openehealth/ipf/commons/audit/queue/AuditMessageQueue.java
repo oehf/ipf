@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.audit.queue;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
-import java.util.function.Consumer;
-
 /**
  * Determine the timing and priority in which audit messages are delivered to the
  * transmission protocol sender. Examples for implementations are synchronous,

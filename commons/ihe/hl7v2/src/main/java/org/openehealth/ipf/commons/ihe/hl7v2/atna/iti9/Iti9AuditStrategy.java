@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEQueryBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
@@ -53,7 +53,7 @@ public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
-        return new IHEQueryBuilder(auditContext,auditDataset, MllpEventTypeCode.PIXQuery)
+        return new QueryInformationBuilder(auditContext,auditDataset, MllpEventTypeCode.PIXQuery)
                 .setQueryParameters(
                         auditDataset.getMessageControlId(),
                         PIXQuery,

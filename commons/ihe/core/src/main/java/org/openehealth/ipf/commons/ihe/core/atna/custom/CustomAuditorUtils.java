@@ -24,6 +24,7 @@ import java.util.List;
 
 /**
  * @author Dmytro Rud
+ * @deprecated
  */
 abstract class CustomAuditorUtils {
 

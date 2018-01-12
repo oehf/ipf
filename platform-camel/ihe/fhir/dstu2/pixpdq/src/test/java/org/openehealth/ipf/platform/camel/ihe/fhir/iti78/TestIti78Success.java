@@ -31,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirParticipantObjectIdTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 
-import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 

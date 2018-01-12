@@ -152,11 +152,13 @@ public abstract class MllpEndpoint<
 
 
     private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
+
         @Override
-        public void run(IoSession session) {
+        public void run(IoSession session, String message) {
             if (config.isAudit()) {
                 String hostAddress = session.getRemoteAddress().toString();
-                AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(config.getAuditContext(), hostAddress);
+                AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
+                        config.getAuditContext(), message, hostAddress);
                 try {
                     config.getAuditContext().audit(auditMessage);
                 } catch (Exception e) {

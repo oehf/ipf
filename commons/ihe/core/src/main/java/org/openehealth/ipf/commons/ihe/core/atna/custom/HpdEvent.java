@@ -26,6 +26,8 @@ import java.util.List;
 /**
  * ATNA Audit event for ITI-59.
  * @author Dmytro Rud
+ *
+ * @deprecated
  */
 public class HpdEvent extends GenericIHEAuditEventMessage {
 

@@ -25,6 +25,17 @@ import java.util.Base64;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * The ValuePair is used in {@link ParticipantObjectIdentificationType} descriptions to capture
+ * parameters.
+ * All values (even those that are normally plain text) are encoded as Base64.
+ * This is to preserve details of encoding (e.g., nulls) and to protect against text
+ * contents that contain XML fragments. These are known attack points against applications,
+ * so security logs can be expected to need to capture them without modification by the
+ * audit encoding process.
+ *
+ * @author Christian Ohr
+ */
 @EqualsAndHashCode
 public class TypeValuePairType implements Serializable {
 

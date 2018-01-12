@@ -20,9 +20,11 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEDataExportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.HpdParticipantObjectIdTypeCode;
+
+import java.util.Collections;
 
 /**
  * @author Christian Ohr
@@ -33,11 +35,14 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
         super(false);
     }
 
-    protected AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem) {
-        IHEDataExportBuilder builder = new IHEDataExportBuilder<>(
+    protected AuditMessage makeAuditMessage(AuditContext auditContext,
+                                            Iti59AuditDataset auditDataset,
+                                            Iti59AuditDataset.RequestItem requestItem) {
+        PHIExportBuilder builder = new PHIExportBuilder<>(
                 auditContext,
                 auditDataset,
                 requestItem.getOutcomeCode(),
+                null,
                 requestItem.getActionCode(),
                 HpdEventTypeCode.ProviderInformationFeed,
                 auditDataset.getPurposesOfUse()
@@ -48,7 +53,7 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
                         HpdParticipantObjectIdTypeCode.ProviderIdentifier,
                         ParticipantObjectTypeCode.Organization,
                         ParticipantObjectTypeCodeRole.Provider,
-                        null
+                        Collections.emptyList()
                 )
         );
         if (requestItem.getDn() != null) {
@@ -57,7 +62,7 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
                     HpdParticipantObjectIdTypeCode.DistinguishedName,
                     ParticipantObjectTypeCode.System,
                     ParticipantObjectTypeCodeRole.Resource,
-                    null
+                    Collections.emptyList()
             );
         }
         if (requestItem.getNewRdn() != null) {
@@ -66,7 +71,7 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
                     HpdParticipantObjectIdTypeCode.DistinguishedName,
                     ParticipantObjectTypeCode.System,
                     ParticipantObjectTypeCodeRole.Resource,
-                    null
+                    Collections.emptyList()
             );
         }
 

@@ -34,18 +34,24 @@ import static java.util.Objects.requireNonNull;
  * is leaving control of the system's security domain. Examples of exporting include printing to paper,
  * recording on film, conversion to another format for storage in an EHR, writing to removable media,
  * or sending via e-mail. Multiple patients may be described in one event message.
+ * </p>
  *
  * @author Christian Ohr
  */
 public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder> {
 
     public DataImportBuilder(EventOutcomeIndicator outcome, EventType eventType, PurposeOfUse... purposesOfUse) {
-        this(outcome, EventActionCode.Create, eventType, purposesOfUse);
+        this(outcome, null, eventType, purposesOfUse);
     }
 
-    public DataImportBuilder(EventOutcomeIndicator outcome, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataImportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType eventType, PurposeOfUse... purposesOfUse) {
+        this(outcome, eventOutcomeDescription, EventActionCode.Create, eventType, purposesOfUse);
+    }
+
+    public DataImportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 eventActionCode,
                 EventIdCode.Import,
                 eventType,
@@ -55,9 +61,9 @@ public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder
 
     /**
      * @param userId               The identity of the local user or process importing the data.
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -68,10 +74,10 @@ public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder
     }
 
     /**
-     * @param userId               The Active Participant's UserID
-     * @param altUserId            The Active Participant's Alternate UserID
-     * @param userName             The Active Participant's UserName
-     * @param networkAccessPointId The Active Participant's Network Access Point ID
+     * @param userId               UserID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param networkAccessPointId Network Access Point ID
      * @param userIsRequestor      A single user (either local or remote) shall be identified as the requestor, i.e.,
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
@@ -96,23 +102,6 @@ public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder
                 networkAccessPointType,
                 mediaIdentifier,
                 requireNonNull(mediaType));
-    }
-
-    /**
-     * @param studyId study ID
-     * @return this
-     */
-    public DataImportBuilder addStudyParticipantObject(String studyId) {
-        return addStudyParticipantObject(studyId, null);
-    }
-
-    /**
-     * @param patientId patient ID
-     * @param patientName patient name
-     * @return this
-     */
-    public DataImportBuilder addPatientParticipantObject(String patientId, String patientName) {
-        return addPatientParticipantObject(patientId, patientName);
     }
 
     @Override

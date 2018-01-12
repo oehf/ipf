@@ -29,7 +29,6 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.VersionTransformer;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.w3c.dom.Element;
 
 

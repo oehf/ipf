@@ -43,10 +43,7 @@ public class ApplicationStartEventListener implements ApplicationListener<Contex
             try {
                 auditContext.audit(
                         new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
-                                .setAuditSourceId(
-                                        auditContext.getAuditSourceId(),
-                                        auditContext.getAuditEnterpriseSiteId(),
-                                        auditContext.getAuditSource())
+                                .setAuditSource(auditContext)
                                 .setApplicationParticipant(
                                         contextRefreshedEvent.getApplicationContext().getApplicationName(),
                                         null,

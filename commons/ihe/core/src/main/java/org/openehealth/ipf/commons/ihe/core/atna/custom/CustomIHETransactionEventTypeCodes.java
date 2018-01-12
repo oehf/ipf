@@ -20,6 +20,8 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 /**
  * Audit Event ID codes for custom eHealth Transactions
+ *
+ * @deprecated
  */
 public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType {
 

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.audit.event;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.*;
 import org.openehealth.ipf.commons.audit.types.*;
@@ -23,6 +24,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -35,6 +37,8 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<T>> implements AuditMessageBuilder<T> {
 
+    private static final Pattern IPV4 = Pattern.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
+    private static final Pattern IPV6 = Pattern.compile("^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$", Pattern.CASE_INSENSITIVE);
     private AuditMessage auditMessage;
 
     public BaseAuditMessageBuilder() {
@@ -57,9 +61,10 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * Sets a {@link org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType} for a given Audit Source ID
      *
      * @param sourceId The Audit Source ID to use
+     * @return this
      */
-    public T setAuditSourceId(String sourceId) {
-        return setAuditSourceId(sourceId, null);
+    public T setAuditSource(String sourceId) {
+        return setAuditSource(sourceId, null);
     }
 
     /**
@@ -68,9 +73,10 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      *
      * @param sourceId         The Audit Source ID to use
      * @param enterpriseSiteId The Audit Enterprise Site ID to use
+     * @return this
      */
-    public T setAuditSourceId(String sourceId, String enterpriseSiteId) {
-        return setAuditSourceId(sourceId, enterpriseSiteId, (AuditSource[]) null);
+    public T setAuditSource(String sourceId, String enterpriseSiteId) {
+        return setAuditSource(sourceId, enterpriseSiteId, (AuditSource[]) null);
     }
 
     /**
@@ -80,9 +86,23 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param sourceId         The Audit Source ID to use
      * @param enterpriseSiteId The Audit Enterprise Site ID to use
      * @param typeCodes        The RFC 3881 Audit Source Type codes to use
+     * @return this
      */
-    public T setAuditSourceId(String sourceId, String enterpriseSiteId, AuditSource... typeCodes) {
+    public T setAuditSource(String sourceId, String enterpriseSiteId, AuditSource... typeCodes) {
         return setAuditSourceIdentification(sourceId, enterpriseSiteId, typeCodes);
+    }
+
+    /**
+     * Sets the audit source from the audit context
+     *
+     * @param auditContext audit context
+     * @return this
+     */
+    public T setAuditSource(AuditContext auditContext) {
+        return setAuditSourceIdentification(
+                auditContext.getAuditSourceId(),
+                auditContext.getAuditEnterpriseSiteId(),
+                auditContext.getAuditSource());
     }
 
     /**
@@ -95,12 +115,14 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return this
      */
     public T setEventIdentification(EventOutcomeIndicator outcome,
-                                       EventActionCode action,
-                                       EventId id,
-                                       EventType type,
-                                       PurposeOfUse... purposesOfUse) {
+                                    String eventOutcomeDescription,
+                                    EventActionCode action,
+                                    EventId id,
+                                    EventType type,
+                                    PurposeOfUse... purposesOfUse) {
         EventIdentificationType eventIdentification = new EventIdentificationType(id, Instant.now(), outcome);
         eventIdentification.setEventActionCode(action);
+        eventIdentification.setEventOutcomeDescription(eventOutcomeDescription);
         if (type != null) {
             eventIdentification.getEventTypeCode().add(type);
         }
@@ -129,7 +151,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         if (typeCodes != null) {
             Stream.of(typeCodes)
                     .filter(Objects::nonNull)
-                    .forEach(typeCode ->  asi.getAuditSourceType().add(typeCode));
+                    .forEach(typeCode -> asi.getAuditSourceType().add(typeCode));
         }
         asi.setAuditEnterpriseSiteID(enterpriseSiteID);
         auditMessage.setAuditSourceIdentification(asi);
@@ -190,15 +212,22 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return this
      */
     public T addActiveParticipant(String userID,
-                                     String altUserID,
-                                     String userName,
-                                     Boolean userIsRequestor,
-                                     List<ActiveParticipantRoleId> roleIdCodes,
-                                     String networkAccessPointID) {
+                                  String altUserID,
+                                  String userName,
+                                  Boolean userIsRequestor,
+                                  List<ActiveParticipantRoleId> roleIdCodes,
+                                  String networkAccessPointID) {
         // Does lookup to see if using IP Address or hostname in Network Access Point ID
         return addActiveParticipant(
-                userID, altUserID, userName, userIsRequestor, roleIdCodes, networkAccessPointID,
-                getNetworkAccessPointCodeFromAddress(networkAccessPointID), null, null);
+                userID,
+                altUserID,
+                userName,
+                userIsRequestor,
+                roleIdCodes,
+                networkAccessPointID,
+                getNetworkAccessPointCodeFromAddress(networkAccessPointID),
+                null,
+                null);
     }
 
     /**
@@ -214,14 +243,14 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return this
      */
     public T addActiveParticipant(String userID,
-                                     String altUserID,
-                                     String userName,
-                                     Boolean userIsRequestor,
-                                     List<ActiveParticipantRoleId> roleIdCodes,
-                                     String networkAccessPointID,
-                                     NetworkAccessPointTypeCode networkAccessPointTypeCode,
-                                     String mediaIdentifier,
-                                     MediaType mediaType) {
+                                  String altUserID,
+                                  String userName,
+                                  Boolean userIsRequestor,
+                                  List<ActiveParticipantRoleId> roleIdCodes,
+                                  String networkAccessPointID,
+                                  NetworkAccessPointTypeCode networkAccessPointTypeCode,
+                                  String mediaIdentifier,
+                                  MediaType mediaType) {
         ActiveParticipantType ap = new ActiveParticipantType(userID, userIsRequestor);
         ap.setAlternativeUserID(altUserID);
         ap.setUserName(userName);
@@ -245,8 +274,9 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param patientName name of the involved patient
      * @return this
      */
-    public T addPatientParticipantObject(String patientId, String patientName, List<TypeValuePairType> details,
-                                            ParticipantObjectDataLifeCycle lifecycle) {
+    public T addPatientParticipantObject(String patientId, String patientName,
+                                         List<TypeValuePairType> details,
+                                         ParticipantObjectDataLifeCycle lifecycle) {
         return addParticipantObjectIdentification(
                 ParticipantObjectIdTypeCode.PatientNumber,
                 patientName,
@@ -286,7 +316,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param objectIDTypeCode    The Participant Object ID Type code
      * @param objectName          The Participant Object Name
      * @param objectQuery         The Participant Object Query data
-     * @param objectDetails        The Participant Object detail
+     * @param objectDetails       The Participant Object detail
      * @param objectID            The Participant Object ID
      * @param objectTypeCode      The Participant Object Type Code
      * @param objectTypeCodeRole  The Participant Object Type Code's ROle
@@ -295,14 +325,14 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return this
      */
     public T addParticipantObjectIdentification(ParticipantObjectIdType objectIDTypeCode,
-                                                   String objectName,
-                                                   byte[] objectQuery,
-                                                   List<TypeValuePairType> objectDetails,
-                                                   String objectID,
-                                                   ParticipantObjectTypeCode objectTypeCode,
-                                                   ParticipantObjectTypeCodeRole objectTypeCodeRole,
-                                                   ParticipantObjectDataLifeCycle objectDataLifeCycle,
-                                                   String objectSensitivity) {
+                                                String objectName,
+                                                byte[] objectQuery,
+                                                List<TypeValuePairType> objectDetails,
+                                                String objectID,
+                                                ParticipantObjectTypeCode objectTypeCode,
+                                                ParticipantObjectTypeCodeRole objectTypeCodeRole,
+                                                ParticipantObjectDataLifeCycle objectDataLifeCycle,
+                                                String objectSensitivity) {
         ParticipantObjectIdentificationType poi = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
         poi.setParticipantObjectName(objectName);
@@ -310,7 +340,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         if (objectDetails != null) {
             objectDetails.stream()
                     .filter(Objects::nonNull)
-                    .forEach(objectDetail -> poi.getParticipantObjectDetail().add(objectDetail));
+                    .forEach(objectDetail -> poi.getParticipantObjectDetails().add(objectDetail));
         }
         poi.setParticipantObjectTypeCode(objectTypeCode);
         poi.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
@@ -321,12 +351,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
 
-    // TODO what about IPv6?
     protected NetworkAccessPointTypeCode getNetworkAccessPointCodeFromAddress(String address) {
         if (address == null) {
             return null;
         }
-        return address.matches("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$") ?
+        return IPV4.matcher(address).matches() || IPV6.matcher(address).matches() ?
                 NetworkAccessPointTypeCode.IPAddress :
                 NetworkAccessPointTypeCode.MachineName;
     }

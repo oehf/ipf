@@ -35,7 +35,8 @@ import java.util.Collections;
  * The Node Authentication event can be used to report both successes and failures.
  * If reporting of success is done, this could generate a very large number of audit messages,
  * since every authenticated DICOM association, HL7 transaction, and HTML connection should result
- * in a successful node authentication. It is expected that in most situations only the failures will be reported.
+ * in a successful node authentication. It is expected that in most situations only the failures
+ * will be reported.
  * </p>
  *
  * @author Christian Ohr
@@ -49,9 +50,12 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
      *                  not have been effective, and that the security system may have been compromised.
      * @param eventType event type
      */
-    public SecurityAlertBuilder(EventOutcomeIndicator outcome, EventType eventType) {
+    public SecurityAlertBuilder(EventOutcomeIndicator outcome,
+                                String eventOutcomeDescription,
+                                EventType eventType) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Execute,
                 EventIdCode.SecurityAlert,
                 eventType,
@@ -61,10 +65,10 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
 
 
     /**
-     * @param userId          The Active Participant's UserID
-     * @param altUserId       The Active Participant's Alternate UserID
-     * @param userName        The Active Participant's UserName
-     * @param networkId       The Active Participant's Network Access Point ID
+     * @param userId          UserID
+     * @param altUserId       Alternate UserID
+     * @param userName        UserName
+     * @param networkId       Network Access Point ID
      * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */
@@ -78,10 +82,10 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
     }
 
     /**
-     * @param userId    The Active Participant's UserID
-     * @param altUserId The Active Participant's Alternate UserID
-     * @param userName  The Active Participant's UserName
-     * @param networkId The Active Participant's Network Access Point ID
+     * @param userId    UserID
+     * @param altUserId Alternate UserID
+     * @param userName  UserName
+     * @param networkId Network Access Point ID
      * @return this
      */
     public SecurityAlertBuilder addPerformingActiveParticipant(String userId,

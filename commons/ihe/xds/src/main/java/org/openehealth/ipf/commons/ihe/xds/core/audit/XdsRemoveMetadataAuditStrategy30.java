@@ -15,12 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import java.util.List;
 import java.util.Map;
@@ -59,10 +55,4 @@ public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
         return new XdsRemoveMetadataAuditDataset(isServerSide());
     }
 
-    @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
-        return getEventOutcomeCodeFromRegistryResponse(ebXML);
-    }
 }

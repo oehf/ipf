@@ -16,10 +16,67 @@
 
 package org.openehealth.ipf.commons.audit.event;
 
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+
+import java.util.Collections;
+
 /**
+ * Builds an Audit Event representing a DICOM Study Deleted event as specified in
+ * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.8
+ * <p>
+ * This message describes the event of deletion of one or more studies and all associated
+ * SOP Instances in a single action. This message shall only include information about a
+ * single patient.
+ * </p>
+ *
  * @author Christian Ohr
  */
 public class DicomStudyDeletedBuilder extends BaseAuditMessageBuilder<DicomStudyDeletedBuilder> {
 
-    // TODO
+    public DicomStudyDeletedBuilder(EventOutcomeIndicator outcome,
+                                    String eventOutcomeDescription,
+                                    EventType eventType,
+                                    PurposeOfUse... purposesOfUse) {
+        super();
+        setEventIdentification(outcome,
+                eventOutcomeDescription,
+                EventActionCode.Delete,
+                EventIdCode.DICOMStudyDeleted,
+                eventType,
+                purposesOfUse
+        );
+    }
+
+    /**
+     * @param patientId   patient ID
+     * @param patientName patient name
+     * @return this
+     */
+    public DicomStudyDeletedBuilder setPatientParticipantObject(String patientId, String patientName) {
+        if (patientId != null) {
+            addPatientParticipantObject(patientId, patientName, Collections.emptyList(), null);
+        }
+        return self();
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+        int participants = getMessage().getActiveParticipants().size();
+        if (participants < 1 || participants > 2) {
+            throw new AuditException("Must have one or two ActiveParticipants");
+        }
+        if (getMessage().findParticipantObjectIdentifications(poi -> poi.getParticipantObjectIDTypeCode() == ParticipantObjectIdTypeCode.StudyInstanceUID).isEmpty()) {
+            throw new AuditException("Must have one or more ParticipantObjectIdentification with ParticipantObjectIDTypeCode StudyInstanceUID");
+        }
+        if (getMessage().findParticipantObjectIdentifications(poi -> poi.getParticipantObjectIDTypeCode() == ParticipantObjectIdTypeCode.PatientNumber).size() != 1) {
+            throw new AuditException("Must have one ParticipantObjectIdentification with ParticipantObjectIDTypeCode PatientNumber");
+        }
+    }
 }

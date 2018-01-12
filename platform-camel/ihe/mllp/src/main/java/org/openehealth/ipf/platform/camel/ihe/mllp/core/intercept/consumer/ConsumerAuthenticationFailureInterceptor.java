@@ -45,7 +45,9 @@ public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport
         try {
             getWrappedProcessor().process(exchange);
         } catch (MllpAuthenticationFailure e) {
-            AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(auditContext, getRemoteAddress(exchange));
+            AuditMessage auditMessage =
+                    MllpAuditUtils.auditAuthenticationNodeFailure(
+                            auditContext, e.getMessage(), getRemoteAddress(exchange));
             auditContext.audit(auditMessage);
             throw e;
         }

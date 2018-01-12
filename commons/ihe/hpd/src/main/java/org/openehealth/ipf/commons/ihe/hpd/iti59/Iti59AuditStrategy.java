@@ -56,7 +56,9 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     @Override
     public Iti59AuditDataset enrichAuditDatasetFromRequest(Iti59AuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         BatchRequest batchRequest = (BatchRequest) requestObject;
-        if ((batchRequest == null) || (batchRequest.getBatchRequests() == null) || batchRequest.getBatchRequests().isEmpty()) {
+        if ((batchRequest == null) ||
+                (batchRequest.getBatchRequests() == null) ||
+                batchRequest.getBatchRequests().isEmpty()) {
             log.debug("Empty batch request");
             return auditDataset;
         }
@@ -191,8 +193,10 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
             requestItem.setOutcomeCode((ldapResult.getResultCode() != null) && (ldapResult.getResultCode().getCode() == 0)
                     ? EventOutcomeIndicator.Success
                     : EventOutcomeIndicator.SeriousFailure);
+            requestItem.setOutcomeDescription(ldapResult.getErrorMessage());
         } else if (value instanceof ErrorResponse) {
             requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
+            requestItem.setOutcomeDescription(((ErrorResponse)value).getMessage());
         } else {
             requestItem.setOutcomeCode(EventOutcomeIndicator.MajorFailure);
             log.debug(failureLogMessage, failureLogArgs);

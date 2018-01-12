@@ -31,6 +31,8 @@ import java.util.List;
 /**
  * ATNA Audit event for RAD-69 and RAD-75.
  * @author Dmytro Rud
+ *
+ * @deprecated
  */
 public class ImagingRetrieveEvent extends GenericIHEAuditEventMessage {
 

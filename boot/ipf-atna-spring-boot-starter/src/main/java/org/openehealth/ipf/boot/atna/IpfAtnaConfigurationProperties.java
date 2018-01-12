@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
-import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
@@ -65,7 +64,7 @@ public class IpfAtnaConfigurationProperties {
      * Enterprise Site Id
      */
     @Getter @Setter
-    private String auditEnterpriseSiteId = "enterpriseSiteId";
+    private String auditEnterpriseSiteId;
 
     /**
      * Sets the Audit Message Queue class to be used for sending ATNA records

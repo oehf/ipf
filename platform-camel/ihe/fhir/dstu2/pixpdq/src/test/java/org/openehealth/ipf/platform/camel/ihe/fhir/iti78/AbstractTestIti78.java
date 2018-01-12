@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.instance.model.Bundle;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;

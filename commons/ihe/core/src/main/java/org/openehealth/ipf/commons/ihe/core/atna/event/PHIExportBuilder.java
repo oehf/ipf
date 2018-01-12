@@ -32,25 +32,47 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Builder for building IHE-specific DataExport events.
+ * It automatically sets the AuditSource, local and remote ActiveParticipant and a Human Requestor
+ * and provides methods for adding patient IDs.
+ *
  * @author Christian Ohr
  */
-public class IHEDataExportBuilder<T extends IHEDataExportBuilder<T>> extends IHEAuditMessageBuilder<T, DataExportBuilder> {
+public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMessageBuilder<T, DataExportBuilder> {
 
-    public IHEDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
+    public PHIExportBuilder(AuditContext auditContext,
+                            AuditDataset auditDataset,
+                            EventType eventType) {
         this(auditContext, auditDataset, eventType, Collections.emptyList());
     }
 
-    public IHEDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public PHIExportBuilder(AuditContext auditContext,
+                            AuditDataset auditDataset,
+                            EventType eventType,
+                            List<PurposeOfUse> purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Read, eventType, purposesOfUse);
     }
 
-    public IHEDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
-        this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(), eventActionCode, eventType, purposesOfUse);
+    public PHIExportBuilder(AuditContext auditContext,
+                            AuditDataset auditDataset,
+                            EventActionCode eventActionCode,
+                            EventType eventType,
+                            List<PurposeOfUse> purposesOfUse) {
+        this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(),
+                auditDataset.getEventOutcomeDescription(),
+                eventActionCode, eventType, purposesOfUse);
     }
 
-    public IHEDataExportBuilder(AuditContext auditContext, AuditDataset auditDataset, EventOutcomeIndicator eventOutcomeIndicator, EventActionCode eventActionCode, EventType eventType, List<PurposeOfUse> purposesOfUse) {
+    public PHIExportBuilder(AuditContext auditContext,
+                            AuditDataset auditDataset,
+                            EventOutcomeIndicator eventOutcomeIndicator,
+                            String eventOutcomeDescription,
+                            EventActionCode eventActionCode,
+                            EventType eventType,
+                            List<PurposeOfUse> purposesOfUse) {
         super(auditContext, new DataExportBuilder(
                 eventOutcomeIndicator,
+                eventOutcomeDescription,
                 eventActionCode,
                 eventType,
                 purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
@@ -69,7 +91,8 @@ public class IHEDataExportBuilder<T extends IHEDataExportBuilder<T>> extends IHE
 
     public T setPatient(String patientId) {
         if (patientId != null) {
-            delegate.addPatientParticipantObject(patientId, null, null, null);
+            delegate.addPatientParticipantObject(patientId, null,
+                    Collections.emptyList(), null);
         }
         return self();
     }

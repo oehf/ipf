@@ -83,4 +83,12 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @return event outcome code
      */
     EventOutcomeIndicator getEventOutcomeIndicator(Object response);
+
+    /**
+     * Determines which event outcome description corresponds with the provided response POJO
+     *
+     * @param response POJO
+     * @return event outcome description
+     */
+    String getEventOutcomeDescription(Object response);
 }

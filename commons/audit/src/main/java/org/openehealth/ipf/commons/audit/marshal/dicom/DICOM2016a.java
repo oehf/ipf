@@ -90,6 +90,11 @@ public class DICOM2016a implements SerializationStrategy {
             eventIdentification.getEventTypeCode().stream()
                     .map(eventTypeCode -> codedValueType("EventTypeCode", eventTypeCode))
                     .forEach(element::addContent);
+            if (eventIdentification.getEventOutcomeDescription() != null) {
+                element.addContent(
+                        new Element("EventOutcomeDescription")
+                                .addContent(eventIdentification.getEventOutcomeDescription()));
+            }
             eventIdentification.getPurposesOfUse().stream()
                     .map(purposeOfUse -> codedValueType("PurposeOfUse", purposeOfUse))
                     .forEach(element::addContent);
@@ -116,11 +121,13 @@ public class DICOM2016a implements SerializationStrategy {
                 element.addContent(new Element("ParticipantObjectQuery")
                         .addContent(Base64.getEncoder().encodeToString(poi.getParticipantObjectQuery())));
             }
-            poi.getParticipantObjectDetail().stream()
+            poi.getParticipantObjectDetails().stream()
                     .map(participantObjectDetail -> typeValuePairType("ParticipantObjectDetail", participantObjectDetail))
                     .forEach(element::addContent);
 
-            // TODO imaging attributes missing
+            poi.getParticipantObjectDescriptions().stream()
+                    .map(this::dicomObjectDescription)
+                    .forEach(element::addContent);
         }
         return element;
     }
@@ -156,6 +163,41 @@ public class DICOM2016a implements SerializationStrategy {
         element.setAttribute("type", typeValuePair.getType());
         element.setAttribute("value", new String(typeValuePair.getValue()));
         return element;
+    }
+
+    protected Element dicomObjectDescription(DicomObjectDescriptionType dicomObjectDescription) {
+        Element pod = new Element("ParticipantObjectDescription");
+        dicomObjectDescription.getMPPS().forEach(mpps ->
+                pod.addContent(new Element("MPPS").setAttribute("UID", mpps)));
+        dicomObjectDescription.getAccession().forEach(accession ->
+                pod.addContent(new Element("Accession").setAttribute("Number", accession)));
+        dicomObjectDescription.getSOPClasses().forEach(sop -> {
+            Element sopClass = new Element("SOPClass")
+                    .setAttribute("NumberOfInstances", String.valueOf(sop.getNumberOfInstances()));
+            conditionallyAddAttribute(sopClass, "UID", sop.getUid());
+            sop.getInstanceUids().forEach(uid ->
+                    sopClass.addContent(new Element("Instance").setAttribute("UID", uid)));
+            pod.addContent(sopClass);
+        });
+        if (!dicomObjectDescription.getStudyIDs().isEmpty()) {
+            Element participantObjectContainsStudy = new Element("ParticipantObjectContainsStudy ");
+            dicomObjectDescription.getStudyIDs().forEach(studyID ->
+                    participantObjectContainsStudy.addContent(
+                            new Element("StudyIDs ")
+                                    .setAttribute("UID", studyID)));
+            pod.addContent(participantObjectContainsStudy);
+        }
+        if (dicomObjectDescription.getEncrypted() != null) {
+            pod.addContent(
+                    new Element("Encrypted")
+                            .addContent(String.valueOf(dicomObjectDescription.getEncrypted())));
+        }
+        if (dicomObjectDescription.getAnonymized() != null) {
+            pod.addContent(
+                    new Element("Anonymized")
+                            .addContent(String.valueOf(dicomObjectDescription.getAnonymized())));
+        }
+        return pod;
     }
 
     protected void conditionallyAddAttribute(Element element, String attributeName, String value) {

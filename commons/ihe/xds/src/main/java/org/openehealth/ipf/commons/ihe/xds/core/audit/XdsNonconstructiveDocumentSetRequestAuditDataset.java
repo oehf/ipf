@@ -74,9 +74,8 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator() {
-        throw new UnsupportedOperationException("Call #getEventOutcomeIndicator(Status status) instead");
+        throw new UnsupportedOperationException("Call getEventOutcomeIndicator(Status status) instead");
     }
-
 
     public void registerProcessedDocument(String documentUniqueId, String repositoryUniqueId, String homeCommunityId) {
         documents.stream()

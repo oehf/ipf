@@ -32,6 +32,8 @@ import java.util.List;
  * @author Dmytro Rud
  *
  * @since 3.3
+ *
+ * @deprecated
  */
 public class RemoveDocumentsEvent extends GenericIHEAuditEventMessage {
 

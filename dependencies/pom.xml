@@ -571,6 +571,7 @@
                 <version>${slf4j-version}</version>
             </dependency>
 
+            <!-- FIXME remove -->
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-flow</artifactId>
@@ -591,6 +592,7 @@
                 <artifactId>ipf-oht-atna-nodeauth</artifactId>
                 <version>${ipf-oht-atna-version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>
                 <artifactId>ipf-oht-mdht-uml-cda</artifactId>

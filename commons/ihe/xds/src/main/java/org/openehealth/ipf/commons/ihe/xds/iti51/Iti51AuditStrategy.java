@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti51;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
 /**
  * Base audit strategy for ITI-51.
@@ -47,7 +48,7 @@ public class Iti51AuditStrategy extends XdsQueryAuditStrategy30 {
     }
 
     private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset, String pid) {
-        return new XdsQueryBuilder(auditContext, auditDataset, XdsEventTypeCode.MultiPatientStoredQuery, auditDataset.getPurposesOfUse())
+        return new XdsQueryInformationBuilder(auditContext, auditDataset, XdsEventTypeCode.MultiPatientStoredQuery, auditDataset.getPurposesOfUse())
                 .addPatients(pid)
                 .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.MultiPatientStoredQuery)
                 .getMessage();

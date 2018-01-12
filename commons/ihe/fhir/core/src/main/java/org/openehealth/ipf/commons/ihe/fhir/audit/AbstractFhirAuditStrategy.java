@@ -51,10 +51,12 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
         if (response instanceof IBaseResource) {
             EventOutcomeIndicator eventOutcomeIndicator = getEventOutcomeIndicator(response);
             auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);
+            auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
             return eventOutcomeIndicator == EventOutcomeIndicator.Success;
         }
         return true;
     }
+
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
@@ -73,6 +75,14 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
                 EventOutcomeIndicator.Success;
     }
 
+    @Override
+    public String getEventOutcomeDescription(Object response) {
+        return response instanceof IBaseOperationOutcome ?
+                getEventOutcomeDescriptionFromOperationOutcome((O)response) :
+                null;
+    }
+
+
     /**
      * Operation Outcomes are sets of error, warning and information messages that provide detailed information
      * about the outcome of some attempted system operation. They are provided as a direct system response,
@@ -82,5 +92,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @return ATNA outcome code
      */
     public abstract EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(O response);
+
+    public abstract String getEventOutcomeDescriptionFromOperationOutcome(O response);
 
 }

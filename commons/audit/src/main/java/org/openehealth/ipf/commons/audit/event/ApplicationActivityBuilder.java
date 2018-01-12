@@ -31,15 +31,20 @@ import java.util.Collections;
  * This audit message describes the event of an Application Entity starting or stopping.
  * This is closely related to the more general case of any kind of application startup or shutdown,
  * and may be suitable for those purposes also.
- *
+ * </p>
+ * s
  * @author Christian Ohr
  */
 public class ApplicationActivityBuilder<T extends ApplicationActivityBuilder<T>> extends BaseAuditMessageBuilder<T> {
 
-
     public ApplicationActivityBuilder(EventOutcomeIndicator outcome, EventType type) {
+        this(outcome, null, type);
+    }
+
+    public ApplicationActivityBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType type) {
         super();
         setEventIdentification(outcome,
+                eventOutcomeDescription,
                 EventActionCode.Execute,
                 EventIdCode.ApplicationActivity,
                 type,
@@ -107,14 +112,24 @@ public class ApplicationActivityBuilder<T extends ApplicationActivityBuilder<T>>
     }
 
     public static class ApplicationStart extends ApplicationActivityBuilder<ApplicationStart> {
+
         public ApplicationStart(EventOutcomeIndicator outcome) {
-            super(outcome, EventTypeCode.ApplicationStart);
+            this(outcome, null);
+        }
+
+        public ApplicationStart(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.ApplicationStart);
         }
     }
 
     public static class ApplicationStop extends ApplicationActivityBuilder<ApplicationStop> {
+
         public ApplicationStop(EventOutcomeIndicator outcome) {
-            super(outcome, EventTypeCode.ApplicationStop);
+            this(outcome, null);
+        }
+
+        public ApplicationStop(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
+            super(outcome, eventOutcomeDescription, EventTypeCode.ApplicationStop);
         }
     }
 

@@ -18,13 +18,8 @@ package org.openehealth.ipf.boot.atna;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.codes.EventTypeCode;
-import org.openehealth.ipf.commons.audit.event.SecurityAlertBuilder;
 import org.openehealth.ipf.commons.audit.event.UserAuthenticationBuilder;
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.actuate.security.AuthenticationAuditListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
@@ -62,18 +57,17 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
 
-                UserAuthenticationBuilder builder = new UserAuthenticationBuilder(outcome, EventTypeCode.Login)
-                                .setAuditSourceId(
-                                        auditContext.getAuditSourceId(),
-                                        auditContext.getAuditEnterpriseSiteId(),
-                                        auditContext.getAuditSource());
+                UserAuthenticationBuilder builder = new UserAuthenticationBuilder.Login(outcome)
+                                .setAuditSource(auditContext);
                 if (userDetails.getUsername() != null) {
-                    builder.setAuthenticatedParticipant(userDetails.getUsername(), null, null, true,
-                            null, webAuthenticationDetails.getRemoteAddress());
+                    builder.setAuthenticatedParticipant(
+                            userDetails.getUsername(),
+                            webAuthenticationDetails.getRemoteAddress());
                 };
                 if (webAuthenticationDetails.getRemoteAddress() != null) {
-                    builder.setAuthenticatingSystemParticipant(auditContext.getSendingApplication(), null, null, false,
-                            null, webAuthenticationDetails.getRemoteAddress());
+                    builder.setAuthenticatingSystemParticipant(
+                            auditContext.getSendingApplication(),
+                            webAuthenticationDetails.getRemoteAddress());
                 }
 
                 try {

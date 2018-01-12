@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpEventTypeCode;
 
@@ -72,7 +72,7 @@ public class Iti8AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
                                                      final FeedAuditDataset auditDataset,
                                                      EventActionCode eventActionCode,
                                                      boolean newPatientId) {
-        return new IHEPatientRecordBuilder<>(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityFeed)
+        return new PatientRecordEventBuilder<>(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityFeed)
 
                 // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
                 .addPatients(

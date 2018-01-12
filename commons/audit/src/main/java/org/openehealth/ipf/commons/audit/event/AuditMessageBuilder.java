@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.model.Validateable;
 
-import java.nio.charset.StandardCharsets;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -45,7 +43,7 @@ public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends V
      */
     default TypeValuePairType getTypeValuePair(String type, Object value) {
         return new TypeValuePairType(
-                requireNonNull(type),
-                requireNonNull(value).toString());
+                requireNonNull(type, "Type of TypeValuePair must not be null"),
+                requireNonNull(value, "Value of TypeValuePair must not be null").toString());
     }
 }

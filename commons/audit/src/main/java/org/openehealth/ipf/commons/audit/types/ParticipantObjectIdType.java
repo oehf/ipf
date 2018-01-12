@@ -17,6 +17,9 @@
 package org.openehealth.ipf.commons.audit.types;
 
 /**
+ * The Participant Object ID Type describes the identifier that is contained in Participant Object ID.
+ * Codes from coded terminologies and implementation defined codes can also be used.
+ *
  * @author Christian Ohr
  */
 public interface ParticipantObjectIdType extends CodedValueType {

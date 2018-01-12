@@ -19,7 +19,6 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.SingleValidationMessage;
 import ca.uhn.fhir.validation.ValidationResult;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.dstu3.model.AuditEvent;
 import org.openehealth.ipf.commons.audit.AuditContext;
