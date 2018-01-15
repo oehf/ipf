@@ -40,16 +40,11 @@ import java.util.List;
  */
 public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMessageBuilder<T, DataImportBuilder> {
 
-    public PHIImportBuilder(AuditContext auditContext,
-                            AuditDataset auditDataset,
-                            EventType eventType) {
-        this(auditContext, auditDataset, eventType, Collections.emptyList());
-    }
 
     public PHIImportBuilder(AuditContext auditContext,
                             AuditDataset auditDataset,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Create, eventType, purposesOfUse);
     }
 
@@ -57,7 +52,7 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
                             AuditDataset auditDataset,
                             EventActionCode eventActionCode,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription(), eventActionCode, eventType, purposesOfUse);
     }
@@ -68,13 +63,13 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
                             String eventOutcomeDescription,
                             EventActionCode eventActionCode,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         super(auditContext, new DataImportBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,
                 eventType,
-                purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
+                purposesOfUse));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

@@ -41,7 +41,7 @@ public class Iti51AuditStrategy extends XdsQueryAuditStrategy30 {
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
         return auditDataset.getPatientIds().isEmpty() ?
-                new AuditMessage[]{doMakeAuditMessage(auditContext, auditDataset, null)} :
+                new AuditMessage[]{ doMakeAuditMessage(auditContext, auditDataset, null) } :
                 auditDataset.getPatientIds().stream()
                         .map(patientId -> doMakeAuditMessage(auditContext, auditDataset, patientId))
                         .toArray(AuditMessage[]::new);

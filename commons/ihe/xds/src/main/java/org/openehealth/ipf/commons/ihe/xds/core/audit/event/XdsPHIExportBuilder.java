@@ -41,7 +41,7 @@ public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
     public XdsPHIExportBuilder(AuditContext auditContext,
                                XdsAuditDataset auditDataset,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Read, eventType, purposesOfUse);
     }
 
@@ -49,7 +49,7 @@ public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
                                XdsAuditDataset auditDataset,
                                EventActionCode eventActionCode,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
@@ -59,7 +59,7 @@ public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
                                String eventOutcomeDescription,
                                EventActionCode eventActionCode,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription, eventActionCode, eventType, purposesOfUse);
     }
 

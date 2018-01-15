@@ -105,8 +105,8 @@ public class WsAuditDataset extends AuditDataset {
     /**
      * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
      */
-    @Getter
-    private final List<PurposeOfUse> purposesOfUse = new ArrayList<>();
+    @Getter @Setter
+    private PurposeOfUse[] purposesOfUse;
 
     /**
      * Patient ID from XUA token, see ITI TF-2b Section 3.40.4.1.2.2.1.

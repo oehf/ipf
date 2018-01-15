@@ -68,7 +68,7 @@ public class Iti45AuditStrategyTest extends AuditorTestBase {
         auditDataset.setSourceUserId(REPLY_TO_URI);
         auditDataset.setDestinationUserId(SERVER_URI);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
-        auditDataset.getPurposesOfUse().addAll(NEW_PURPOSES_OF_USE);
+        auditDataset.setPurposesOfUse(NEW_PURPOSES_OF_USE);
         auditDataset.getUserRoles().addAll(NEW_USER_ROLES);
         return auditDataset;
     }

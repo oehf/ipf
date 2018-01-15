@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
 
 /**
  * Base class for building DICOM audit messages as specified in the various IHE transactions.
- * If provides some methods for setting audit event participants that are common across
+ * It provides some methods for setting audit event participants that are common across
  * different IHE transactions, namely local participant, remote participant, and human requestor
  *
  * @author Christian Ohr

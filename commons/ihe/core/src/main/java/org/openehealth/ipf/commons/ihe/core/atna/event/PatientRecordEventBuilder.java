@@ -43,12 +43,8 @@ public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> e
 
     private static final Pattern PATIENT_ID_PATTERN = Pattern.compile("^.+?\\^\\^\\^.*?&.+?&ISO(\\^.*){0,4}$");
 
-    public PatientRecordEventBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType) {
-        this(auditContext, auditDataset, action, eventType, Collections.emptyList());
-    }
-
     public PatientRecordEventBuilder(AuditContext auditContext, AuditDataset auditDataset, EventActionCode action, EventType eventType,
-                                     List<PurposeOfUse> purposesOfUse) {
+                                     PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription(),
@@ -63,13 +59,13 @@ public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> e
                                      String eventOutcomeDescription,
                                      EventActionCode action,
                                      EventType eventType,
-                                     List<PurposeOfUse> purposesOfUse) {
+                                     PurposeOfUse... purposesOfUse) {
         super(auditContext, new PatientRecordBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 action,
                 eventType,
-                purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
+                purposesOfUse));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

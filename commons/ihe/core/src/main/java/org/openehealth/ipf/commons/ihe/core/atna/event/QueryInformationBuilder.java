@@ -38,19 +38,15 @@ import java.util.*;
  */
 public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
 
-    public QueryInformationBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType) {
-        this(auditContext, auditDataset, eventType, Collections.emptyList());
-    }
-
     public QueryInformationBuilder(AuditContext auditContext,
                                    AuditDataset auditDataset,
                                    EventType eventType,
-                                   List<PurposeOfUse> purposesOfUse) {
+                                   PurposeOfUse... purposesOfUse) {
         super(auditContext, new QueryBuilder(
                 auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription(),
                 eventType,
-                purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
+                purposesOfUse));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

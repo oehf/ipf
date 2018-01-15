@@ -81,13 +81,10 @@ public class AuditorTestBase {
         PURPOSES_OF_USE.add(cvt);
     }
 
-    protected static final List<PurposeOfUse> NEW_PURPOSES_OF_USE;
-
-    static {
-        NEW_PURPOSES_OF_USE = new ArrayList<>();
-        NEW_PURPOSES_OF_USE.add(PurposeOfUse.of("12", "1.0.14265.1", "Law Enforcement"));
-        NEW_PURPOSES_OF_USE.add(PurposeOfUse.of("13", "1.0.14265.1", "Something Else"));
-    }
+    protected static final PurposeOfUse[] NEW_PURPOSES_OF_USE = {
+            PurposeOfUse.of("12", "1.0.14265.1", "Law Enforcement"),
+            PurposeOfUse.of("13", "1.0.14265.1", "Something Else")
+    };
 
     protected static final List<CodedValueType> USER_ROLES;
 
@@ -158,13 +155,13 @@ public class AuditorTestBase {
     }
 
     private void assertCommonAuditAttributes(AuditMessage auditMessage,
-                                               EventOutcomeIndicator eventOutcomeIndicator,
-                                               EventId eventId,
-                                               EventActionCode eventActionCode,
-                                               String sourceUserId,
-                                               String destinationUserId,
-                                               boolean serverSide,
-                                               boolean requiresPatient) {
+                                             EventOutcomeIndicator eventOutcomeIndicator,
+                                             EventId eventId,
+                                             EventActionCode eventActionCode,
+                                             String sourceUserId,
+                                             String destinationUserId,
+                                             boolean serverSide,
+                                             boolean requiresPatient) {
         assertEquals(eventOutcomeIndicator, auditMessage.getEventIdentification().getEventOutcomeIndicator());
         assertEquals(eventActionCode, auditMessage.getEventIdentification().getEventActionCode());
         assertEquals(eventId, auditMessage.getEventIdentification().getEventID());

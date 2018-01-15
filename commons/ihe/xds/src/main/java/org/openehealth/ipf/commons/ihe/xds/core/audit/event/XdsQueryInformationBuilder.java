@@ -39,7 +39,7 @@ public class XdsQueryInformationBuilder extends QueryInformationBuilder<XdsQuery
     public XdsQueryInformationBuilder(AuditContext auditContext,
                                       XdsQueryAuditDataset auditDataset,
                                       EventType eventType,
-                                      List<PurposeOfUse> purposesOfUse) {
+                                      PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventType, purposesOfUse);
     }
 

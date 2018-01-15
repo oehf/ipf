@@ -42,14 +42,8 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
 
     public PHIExportBuilder(AuditContext auditContext,
                             AuditDataset auditDataset,
-                            EventType eventType) {
-        this(auditContext, auditDataset, eventType, Collections.emptyList());
-    }
-
-    public PHIExportBuilder(AuditContext auditContext,
-                            AuditDataset auditDataset,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Read, eventType, purposesOfUse);
     }
 
@@ -57,7 +51,7 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
                             AuditDataset auditDataset,
                             EventActionCode eventActionCode,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription(),
                 eventActionCode, eventType, purposesOfUse);
@@ -69,13 +63,13 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
                             String eventOutcomeDescription,
                             EventActionCode eventActionCode,
                             EventType eventType,
-                            List<PurposeOfUse> purposesOfUse) {
+                            PurposeOfUse... purposesOfUse) {
         super(auditContext, new DataExportBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,
                 eventType,
-                purposesOfUse.toArray(new PurposeOfUse[purposesOfUse.size()])));
+                purposesOfUse));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

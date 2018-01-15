@@ -42,7 +42,7 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
     public XdsPHIImportBuilder(AuditContext auditContext,
                                XdsAuditDataset auditDataset,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         this(auditContext, auditDataset, EventActionCode.Create, eventType, purposesOfUse);
     }
 
@@ -50,7 +50,7 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                                XdsAuditDataset auditDataset,
                                EventActionCode eventActionCode,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventActionCode, eventType, purposesOfUse);
     }
 
@@ -60,7 +60,7 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                                String eventOutcomeDescription,
                                EventActionCode eventActionCode,
                                EventType eventType,
-                               List<PurposeOfUse> purposesOfUse) {
+                               PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription,
                 eventActionCode, eventType, purposesOfUse);
     }

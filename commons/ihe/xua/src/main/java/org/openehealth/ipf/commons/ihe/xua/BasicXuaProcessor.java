@@ -168,7 +168,7 @@ public class BasicXuaProcessor implements XuaProcessor {
         for (AttributeStatement statement : assertion.getAttributeStatements()) {
             for (Attribute attribute : statement.getAttributes()) {
                 if (PURPOSE_OF_USE_ATTRIBUTE_NAME.equals(attribute.getName())) {
-                    extractPurposeOfUse(attribute, PURPOSE_OF_USE_ELEMENT_NAME, auditDataset.getPurposesOfUse());
+                    auditDataset.setPurposesOfUse(extractPurposeOfUse(attribute, PURPOSE_OF_USE_ELEMENT_NAME));
                 } else if (SUBJECT_ROLE_ATTRIBUTE_NAME.equals(attribute.getName())) {
                     extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME, auditDataset.getUserRoles());
                 } else if (PATIENT_ID_ATTRIBUTE_NAME.equals(attribute.getName())) {
@@ -184,7 +184,8 @@ public class BasicXuaProcessor implements XuaProcessor {
         }
     }
 
-    private static void extractPurposeOfUse(Attribute attribute, QName valueElementName, List<PurposeOfUse> targetCollection) {
+    private static PurposeOfUse[] extractPurposeOfUse(Attribute attribute, QName valueElementName) {
+        List<PurposeOfUse> targetCollection = new ArrayList<>();
         for (XMLObject value : attribute.getAttributeValues()) {
             if (value.getDOM() != null) {
                 NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
@@ -194,6 +195,8 @@ public class BasicXuaProcessor implements XuaProcessor {
                 }
             }
         }
+        return targetCollection.toArray(new PurposeOfUse[targetCollection.size()]);
+
     }
 
     private static PurposeOfUse elementToPurposeOfUse(Element element) {

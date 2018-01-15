@@ -43,7 +43,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                                         XdsAuditDataset auditDataset,
                                         EventActionCode action,
                                         EventType eventType,
-                                        List<PurposeOfUse> purposesOfUse) {
+                                        PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, action, eventType, purposesOfUse);
     }
 
@@ -53,7 +53,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                                         String eventOutcomeDescription,
                                         EventActionCode action,
                                         EventType eventType,
-                                        List<PurposeOfUse> purposesOfUse) {
+                                        PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, eventOutcomeIndicator, eventOutcomeDescription,
                 action, eventType, purposesOfUse);
     }
