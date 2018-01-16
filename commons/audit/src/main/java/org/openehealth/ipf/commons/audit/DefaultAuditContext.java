@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
+import org.openehealth.ipf.commons.audit.protocol.VertxTLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
@@ -85,6 +86,7 @@ public class DefaultAuditContext implements AuditContext {
         switch (transport) {
             case "UDP": setAuditTransmissionProtocol(new UDPSyslogSenderImpl()); break;
             case "TLS": setAuditTransmissionProtocol(new TLSSyslogSenderImpl()); break;
+            case "NIO-TLS": setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl()); break;
             default: throw new IllegalArgumentException("Unknown transport :" + transport);
         }
     }

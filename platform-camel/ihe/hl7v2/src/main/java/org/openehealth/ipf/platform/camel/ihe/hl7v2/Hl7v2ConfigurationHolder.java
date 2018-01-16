@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 /**
  * Interface for Camel components which handle HL7v2 messages,

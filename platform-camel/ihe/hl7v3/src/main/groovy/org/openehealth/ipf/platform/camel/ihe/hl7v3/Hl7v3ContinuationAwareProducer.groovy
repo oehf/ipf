@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.core.DomBuildersThreadLocal
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory

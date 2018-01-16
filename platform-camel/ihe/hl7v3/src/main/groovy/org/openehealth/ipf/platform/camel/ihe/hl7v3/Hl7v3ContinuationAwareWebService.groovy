@@ -20,7 +20,7 @@ import org.apache.commons.lang3.Validate
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage

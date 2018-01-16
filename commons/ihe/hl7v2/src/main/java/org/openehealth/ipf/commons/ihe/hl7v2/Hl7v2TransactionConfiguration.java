@@ -28,7 +28,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 

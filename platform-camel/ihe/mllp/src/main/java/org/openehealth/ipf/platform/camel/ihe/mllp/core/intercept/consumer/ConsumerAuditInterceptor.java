@@ -20,7 +20,7 @@ import org.apache.camel.Message;
 import org.apache.camel.component.mina2.Mina2Constants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpAuditInterceptorSupport;
 
 import java.net.InetSocketAddress;

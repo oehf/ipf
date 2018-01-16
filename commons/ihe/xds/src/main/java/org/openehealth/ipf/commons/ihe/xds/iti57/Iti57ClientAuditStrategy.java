@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 

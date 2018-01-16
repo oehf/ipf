@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;

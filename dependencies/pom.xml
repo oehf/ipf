@@ -30,6 +30,7 @@
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>4.3.12.RELEASE</spring-version>
         <spring-boot-version>1.5.8.RELEASE</spring-boot-version>
+        <vertx-version>3.5.0</vertx-version>
         <xmlsec-version>2.1.0</xmlsec-version>
 
         <github.global.server>github</github.global.server>
@@ -690,6 +691,17 @@
                 <groupId>com.phloc</groupId>
                 <artifactId>phloc-commons</artifactId>
                 <version>${phloc-commons-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-core</artifactId>
+                <version>${vertx-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-unit</artifactId>
+                <version>${vertx-version}</version>
             </dependency>
 
             <!-- All IPF dependencies -->

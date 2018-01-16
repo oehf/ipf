@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;

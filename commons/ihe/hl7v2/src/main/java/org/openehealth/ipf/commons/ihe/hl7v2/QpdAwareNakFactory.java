@@ -22,7 +22,7 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

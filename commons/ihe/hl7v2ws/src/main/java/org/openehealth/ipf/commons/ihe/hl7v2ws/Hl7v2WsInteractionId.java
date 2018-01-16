@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;

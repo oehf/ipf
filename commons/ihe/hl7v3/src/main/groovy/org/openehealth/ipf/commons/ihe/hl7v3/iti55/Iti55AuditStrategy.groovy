@@ -18,11 +18,11 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.CrossGatewayPatientDiscovery
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.CrossGatewayPatientDiscovery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 
 /**

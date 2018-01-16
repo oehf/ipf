@@ -21,15 +21,12 @@ import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.QUERY_ENCODING;
-import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy.URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID;
 
 /**
  * @author Christian Ohr

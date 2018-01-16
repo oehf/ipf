@@ -20,13 +20,13 @@ import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
 /**

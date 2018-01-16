@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;

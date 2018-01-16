@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationTy
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
 
 import javax.servlet.ServletException;
 

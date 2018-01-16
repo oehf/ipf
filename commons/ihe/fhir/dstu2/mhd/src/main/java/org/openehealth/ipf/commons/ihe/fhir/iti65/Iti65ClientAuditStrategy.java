@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
 
 import java.util.Collections;
 

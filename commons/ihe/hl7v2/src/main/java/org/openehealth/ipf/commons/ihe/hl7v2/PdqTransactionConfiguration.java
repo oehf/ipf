@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 
 import java.util.List;
 

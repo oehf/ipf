@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
 import javax.xml.namespace.QName;

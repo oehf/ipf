@@ -25,6 +25,8 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.*;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 

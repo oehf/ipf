@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;

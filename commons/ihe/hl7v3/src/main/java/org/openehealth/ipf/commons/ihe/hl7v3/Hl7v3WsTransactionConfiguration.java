@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 

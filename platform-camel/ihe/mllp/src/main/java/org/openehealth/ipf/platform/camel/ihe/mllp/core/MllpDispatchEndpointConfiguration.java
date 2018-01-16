@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 import java.util.Map;
 

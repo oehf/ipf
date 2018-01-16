@@ -21,9 +21,9 @@ import org.openehealth.ipf.commons.audit.AuditException
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3EventTypeCode
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx

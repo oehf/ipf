@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirParticipantObjectIdTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.Map;

@@ -49,7 +49,6 @@ public class DicomObjectDescriptionType implements Serializable, Validateable {
     /**
      * Accession Number(s) associated with this participant object.
      */
-    @Getter @Setter
     private List<String> accession;
 
     /**

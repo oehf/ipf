@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 import java.io.IOException;

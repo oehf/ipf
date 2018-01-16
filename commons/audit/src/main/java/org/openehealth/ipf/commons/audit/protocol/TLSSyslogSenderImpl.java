@@ -36,10 +36,15 @@ import java.util.concurrent.atomic.AtomicReference;
  * that implements TLS syslog.
  * Multiple messages may be sent over the same socket.
  * <p>
- * Designed to run in a standalone mode from the standard IHE Auditor
+ * Designed to run in a standalone mode
  * and is not dependent on any context or configuration.
  * <p>
- * TODO provide a NIO-based sender using Netty/Mina
+ * <p>
+ * Note that this implementation disobeys the ATNA specification saying,
+ * that the Secure Application, Secure Node, or Audit Record Forwarder is unable to send the
+ * message to the Audit Record Repository, then the actor shall store the audit record
+ * locally and send it when it is able.
+ * </p>
  *
  * @author <a href="mailto:tarboxl@mir.wustl.edu">Lawrence Tarbox</a>
  * @author Christian Ohr
@@ -96,6 +101,17 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
     }
 
+    @Override
+    public void shutdown() {
+        if (socket.get() != null) {
+            try {
+                // TODO could wait until everything is sent
+                socket.get().close();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
     private synchronized void doSend(AuditContext auditContext, byte[] syslogFrame, byte[] msgBytes) throws IOException {
         Socket socket = getSocket(auditContext);
         OutputStream out = socket.getOutputStream();
@@ -114,5 +130,6 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                     auditContext.getAuditRepositoryPort()), e);
         }
     }
+
 
 }

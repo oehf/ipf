@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**

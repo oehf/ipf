@@ -19,7 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.mina2.Mina2Constants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;

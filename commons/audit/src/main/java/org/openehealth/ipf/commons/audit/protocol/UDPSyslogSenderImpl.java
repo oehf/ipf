@@ -28,8 +28,12 @@ import java.nio.charset.StandardCharsets;
 /**
  * Simple UDP sender that opens a new DatagramSocket for every batch of AuditMessages
  * being sent.
- *
- * TODO provide a NIO-based sender using Netty/Mina
+ * <p>
+ * Note that this implementation disobeys the ATNA specification saying,
+ * that the Secure Application, Secure Node, or Audit Record Forwarder is unable to send the
+ * message to the Audit Record Repository, then the actor shall store the audit record
+ * locally and send it when it is able.
+ * </p>
  *
  * @author Christian Ohr
  */
@@ -63,12 +67,17 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                     LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
                     DatagramPacket packet = new DatagramPacket(
                             msgBytes,
-                            Math.max(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
+                            Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
                             auditContext.getAuditRepositoryAddress(),
                             auditContext.getAuditRepositoryPort());
                     socket.send(packet);
                 }
             }
         }
+    }
+
+    @Override
+    public void shutdown() {
+
     }
 }

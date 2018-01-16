@@ -21,9 +21,9 @@ import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti31.Iti31AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti30.Iti30AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31.Iti31AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
 

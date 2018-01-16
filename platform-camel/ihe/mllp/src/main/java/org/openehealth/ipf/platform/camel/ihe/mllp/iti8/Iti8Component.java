@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.FeedInteractions.ITI_8_PIX;

@@ -19,7 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.RelatesToType;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;

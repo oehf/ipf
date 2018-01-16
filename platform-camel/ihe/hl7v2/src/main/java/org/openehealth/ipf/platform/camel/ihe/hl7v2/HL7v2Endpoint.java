@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 /**
  * Interface for endpoints that handle HL7v2 transactions

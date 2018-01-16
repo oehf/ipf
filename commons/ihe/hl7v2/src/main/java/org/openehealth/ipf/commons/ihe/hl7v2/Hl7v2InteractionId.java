@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 /**
  * HL7v2 Transaction ID

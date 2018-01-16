@@ -20,8 +20,8 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
-import org.openehealth.ipf.commons.ihe.hpd.audit.HpdEventTypeCode;
-import org.openehealth.ipf.commons.ihe.hpd.audit.HpdParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import java.util.Collections;
 

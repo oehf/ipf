@@ -20,7 +20,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;

@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.xds.iti38;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
 /**
