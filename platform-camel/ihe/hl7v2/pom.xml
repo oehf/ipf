@@ -6,17 +6,6 @@
     <description>HL7v2 support for Apache Camel IHE components</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <!--
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hl7v2.*</osgi.export.pkg>
-        <osgi.import.pkg>
-            org.openehealth.ipf.platform.camel.core.process,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
-        -->
-    </properties>
-
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel-ihe</artifactId>

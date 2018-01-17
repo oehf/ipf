@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.protocol.AuditMessageRecorder;
+import org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.EventId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
@@ -113,7 +113,7 @@ public class AuditorTestBase {
 
     protected MockedSender sender;
     protected DefaultAuditContext auditContext;
-    protected AuditMessageRecorder recorder;
+    protected RecordingAuditMessageQueue recorder;
 
     @Before
     public void setUp() {
@@ -123,7 +123,7 @@ public class AuditorTestBase {
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
 
         auditContext = new DefaultAuditContext();
-        recorder = new AuditMessageRecorder();
+        recorder = new RecordingAuditMessageQueue();
         auditContext.setAuditMessageQueue(recorder);
     }
 

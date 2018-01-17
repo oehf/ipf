@@ -13,11 +13,6 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.platform.camel.cda.*
-        </osgi.export.pkg>
-        <osgi.import.pkg>
-        </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.cda.extend.CDAR2ModelExtension</ipf.extension.classes>
     </properties>
     

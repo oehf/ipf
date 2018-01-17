@@ -12,14 +12,6 @@
     <description>FHIR-specific IHE support</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.ihe.fhir.iti78*,
-            org.openehealth.ipf.commons.ihe.fhir.iti83*,
-            org.openehealth.ipf.commons.ihe.fhir.translation*;-split-package:=merge-first
-        </osgi.export.pkg>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

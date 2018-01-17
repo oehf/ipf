@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,21 +14,20 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.audit.protocol;
+package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 
 import java.util.*;
 
 /**
- * For testing only: an implementation that records the audit message strings in memory instead of sending them to
- * some destination. After some time, this will cause OutOfMemoryErrors.
+ * For testing only: an implementation that records the audit messages in memory.
+ * After some time, this will cause OutOfMemoryErrors.
  *
  * @author Christian Ohr
  */
-public class AuditMessageRecorder implements AuditMessageQueue {
+public class RecordingAuditMessageQueue implements AuditMessageQueue {
 
     private List<AuditMessage> messages = new ArrayList<>();
 

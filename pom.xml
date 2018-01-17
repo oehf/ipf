@@ -19,16 +19,9 @@
 
     <modules>
         <module>dependencies</module>
-        <!--
-        <module>archetypes</module>
-        <module>assembly</module>
-        -->
         <module>commons</module>
         <module>modules</module>
         <module>boot</module>
-        <!--
-        <module>osgi</module>
-        -->
         <module>platform-camel</module>
         <module>tutorials</module>
     </modules>
@@ -54,29 +47,6 @@
         <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
         <site.directory>${user.home}/sites/ipf</site.directory>
         <site.scm.directory>${user.home}/sites/scm/ipf</site.scm.directory>
-
-        <!-- Default Bundle Properties -->
-        <!--
-        <osgi.export.pkg>*</osgi.export.pkg>
-        <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg />
-        <osgi.private.pkg />
-        <osgi.bundle.activator />
-        <osgi.bundle.classpath />
-        <osgi.embed.dependency />
-        <osgi.fragment.host />
-        <osgi.require.bundle />
-        <osgi.spring.context />
-        <ipf.extension.classes />
-        <ipf.extension.beans />
-        <eclipse.supplement.bundle />
-        <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
-        <osgi.bundle.license>Apache License, Version
-            2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache
-            foundation
-        </osgi.bundle.license>
-        <osgi.bundle.category>healthcare</osgi.bundle.category>
-        -->
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
@@ -133,7 +103,6 @@
         <junit-version>4.12</junit-version>
         <log4j-version>2.9.0</log4j-version>
         <lombok-version>1.16.18</lombok-version>
-        <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>

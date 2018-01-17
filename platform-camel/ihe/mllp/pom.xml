@@ -6,17 +6,6 @@
     <description>MLLP IHE components for Apache Camel</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <!--
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
-        <osgi.import.pkg>
-            org.slf4j.*;version="[1.6,2)",
-            org.apache.mina.*;version="[2,3)",
-            *
-        </osgi.import.pkg>
-        -->
-    </properties>
-
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel-ihe</artifactId>

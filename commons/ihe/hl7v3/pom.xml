@@ -11,29 +11,6 @@
         <artifactId>ipf-commons-ihe</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <!--
-        <osgi.import.pkg>
-            groovy.util,
-            groovy.xml,
-            org.joda.time,
-            org.joda.time.format,
-            org.openehealth.ipf.modules.hl7.message,
-            ca.uhn.hl7v2.model,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.ihe.hl7v3.*,
-            '=schema.HL7V3.NE2008.coreschemas',
-            '=schema.HL7V3.NE2008.multicacheschemas',
-            schematron.*,
-            wsdl.*
-        </osgi.export.pkg>
-        <osgi.fragment.host>org.apache.cxf.cxf-core</osgi.fragment.host>
-        -->
-    </properties>
     
     <dependencies>
         <!-- Dependencies for main -->

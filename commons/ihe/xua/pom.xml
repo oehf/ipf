@@ -6,10 +6,6 @@
     <description>XUA support for IHE Web Services</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.xua.*</osgi.export.pkg>
-    </properties>
-
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>

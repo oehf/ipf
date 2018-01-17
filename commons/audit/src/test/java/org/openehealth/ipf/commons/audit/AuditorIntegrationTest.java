@@ -26,7 +26,6 @@ import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.protocol.VertxTLSSyslogSenderImpl;
@@ -279,7 +278,7 @@ public class AuditorIntegrationTest {
         System.setProperty(JAVAX_NET_SSL_KEYSTORE, clientKeyStore != null ? clientKeyStore : CLIENT_KEY_STORE);
         System.setProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD, TRUST_STORE_PASS);
         System.setProperty(JAVAX_NET_SSL_TRUSTSTORE, TRUST_STORE);
-        // System.setProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
+        System.setProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
     }
 
     private int freePort() {

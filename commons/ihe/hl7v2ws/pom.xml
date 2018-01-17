@@ -11,26 +11,6 @@
         <artifactId>ipf-commons-ihe</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <!--
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.ihe.hl7v2ws.*,
-            org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.*,
-            wsdl.pcc01
-        </osgi.export.pkg>
-        <osgi.import.pkg>
-            org.openehealth.ipf.modules.hl7.message,
-            org.openehealth.ipf.commons.core.modules.api,
-            org.openehealth.ipf.modules.hl7,
-            groovy.util,
-            ca.uhn.hl7v2,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
-        <osgi.fragment.host>org.apache.cxf.cxf-core</osgi.fragment.host>
-        -->
-    </properties>
     
     <dependencies>
         <!-- Dependencies for main -->

@@ -11,11 +11,6 @@
         <artifactId>ipf-commons-ihe</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.xds.*,wsdl.*</osgi.export.pkg>
-        <osgi.fragment.host>org.apache.cxf.cxf-core</osgi.fragment.host>
-    </properties>
     
     <dependencies>
         <!-- Dependencies for main -->

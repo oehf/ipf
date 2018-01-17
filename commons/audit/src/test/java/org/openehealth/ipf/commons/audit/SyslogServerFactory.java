@@ -45,13 +45,4 @@ public final class SyslogServerFactory {
                                    keystorePath, keystorePassword, async);
     }
 
-    /*
-    public static void createJMSConsumer(String brokerUrl, String queueName, CountDownLatch latch, boolean daemon){
-        Runnable runnable = new JmsAtnaMessageConsumer(latch, brokerUrl, queueName);
-        Thread brokerThread = new Thread(runnable);
-        brokerThread.setDaemon(daemon);
-        brokerThread.start();
-    }
-    */
-
 }
