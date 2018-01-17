@@ -1076,6 +1076,7 @@
                 </executions>
             </plugin>
 -->
+            <!--
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>
@@ -1090,6 +1091,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -1299,12 +1301,14 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>
                 <version>${maven-dsldoc-plugin-version}</version>
                 <inherited>false</inherited>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changes-plugin</artifactId>
