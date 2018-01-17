@@ -54,6 +54,8 @@ public class AuditInRequestInterceptor<T extends WsAuditDataset> extends Abstrac
         T auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_IN, auditDataset);
+        // TODO Also extract basic auth user?
+        extractClientCertificateCommonName(message, auditDataset);
         
         if (wsTransactionConfiguration.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));

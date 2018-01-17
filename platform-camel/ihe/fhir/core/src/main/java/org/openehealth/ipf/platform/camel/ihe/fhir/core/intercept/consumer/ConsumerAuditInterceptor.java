@@ -28,6 +28,12 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+import javax.security.cert.X509Certificate;
+
+import java.security.Principal;
+
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -102,10 +108,34 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             AuditDatasetType auditDataset = strategy.createAuditDataset();
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(exchange.getIn().getHeader(Constants.HTTP_URL, String.class));
+
+            // TODO Also extract basic auth user?
+            extractClientCertificateCommonName(exchange, auditDataset);
+
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);
             return null;
+        }
+    }
+
+    private void extractClientCertificateCommonName(Exchange exchange, AuditDatasetType auditDataset) {
+        X509Certificate[] certificates = (X509Certificate[]) exchange.getIn().getHeader(Constants.HTTP_X509_CERTIFICATES);
+        if (certificates != null && certificates.length > 0) {
+            try {
+                X509Certificate certificate = certificates[0];
+                Principal principal = certificate.getSubjectDN();
+                String dn = principal.getName();
+                LdapName ldapDN = new LdapName(dn);
+                for (Rdn rdn : ldapDN.getRdns()) {
+                    if (rdn.getType().equalsIgnoreCase("CN")) {
+                        auditDataset.setSourceUserName((String) rdn.getValue());
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                LOG.info("Could not extract CN from client certificate", e);
+            }
         }
     }
 

@@ -42,6 +42,7 @@ public interface Constants {
     String HTTP_PROTOCOL_VERSION = "FhirHttpProtocolVersion";
     String HTTP_CLIENT_IP_ADDRESS = "FhirHttpClientIpAddress";
     String HTTP_HEADERS = "FhirHttpHeaders";
+    String HTTP_X509_CERTIFICATES = "FhirHttpCertificates";
 
 
     // Paging stuff

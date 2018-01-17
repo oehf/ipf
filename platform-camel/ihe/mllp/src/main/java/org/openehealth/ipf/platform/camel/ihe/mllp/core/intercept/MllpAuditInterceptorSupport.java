@@ -35,12 +35,10 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
-import javax.security.auth.x500.X500Principal;
+import java.security.Principal;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
@@ -105,16 +103,18 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             SSLSession sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
             if (sslSession != null) {
                 try {
-                    X500Principal principal = (X500Principal) sslSession.getPeerPrincipal();
-                    String dn = principal.getName();
-                    LdapName ldapDN = new LdapName(dn);
-                    for (Rdn rdn : ldapDN.getRdns()) {
-                        if (rdn.getType().equalsIgnoreCase("CN")) {
-                            auditDataset.setSourceUserName((String) rdn.getValue());
-                            break;
+                    Principal principal = sslSession.getPeerPrincipal();
+                    if (principal != null) {
+                        String dn = principal.getName();
+                        LdapName ldapDN = new LdapName(dn);
+                        for (Rdn rdn : ldapDN.getRdns()) {
+                            if (rdn.getType().equalsIgnoreCase("CN")) {
+                                auditDataset.setSourceUserName((String) rdn.getValue());
+                                break;
+                            }
                         }
                     }
-                } catch (SSLPeerUnverifiedException | InvalidNameException e) {
+                } catch (Exception e) {
                     LOG.info("Could not extract CN from client certificate", e);
                 }
             }

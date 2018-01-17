@@ -24,6 +24,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -210,6 +211,11 @@ public abstract class AbstractPlainProvider implements Serializable {
 
         Map<String, List<String>> headers = extractHttpHeaders(httpServletRequest);
         enriched.put(Constants.HTTP_HEADERS, headers);
+
+        String cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
+        if (cipherSuite != null) {
+            enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute(X509Certificate.class.getName()));
+        }
 
         if (parameters != null) {
             enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
