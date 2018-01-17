@@ -67,7 +67,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         else
             delegate.addSourceActiveParticipant(auditDataset.getSourceUserId(),
                     getProcessId(),
-                    null,
+                    auditDataset.getSourceUserName(),
                     auditDataset.getLocalAddress(),
                     auditDataset.isSourceUserIsRequestor());
         return self();
@@ -84,7 +84,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         if (auditDataset.isServerSide())
             delegate.addSourceActiveParticipant(auditDataset.getSourceUserId(),
                     null,
-                    null,
+                    auditDataset.getSourceUserName(),
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isSourceUserIsRequestor());
         else

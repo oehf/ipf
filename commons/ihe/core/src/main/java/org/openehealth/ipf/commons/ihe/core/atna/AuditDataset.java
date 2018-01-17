@@ -54,6 +54,12 @@ public abstract class AuditDataset implements Serializable {
     private String eventOutcomeDescription;
 
     /**
+     * Source User Name, e.g. extracted from a client certificate
+     */
+    @Getter
+    @Setter String sourceUserName;
+
+    /**
      * @param serverSide   specifies whether this audit dataset will be used on the
      *                     server side (<code>true</code>) or on the client side
      *                     (<code>false</code>)

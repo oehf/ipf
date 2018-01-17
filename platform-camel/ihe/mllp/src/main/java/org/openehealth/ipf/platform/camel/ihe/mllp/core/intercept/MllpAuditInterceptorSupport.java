@@ -19,8 +19,11 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
+import org.apache.camel.component.mina2.Mina2Constants;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.ssl.SslFilter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.AuditUtils;
@@ -31,6 +34,13 @@ import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
+import javax.security.auth.x500.X500Principal;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
@@ -62,6 +72,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
 
         AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(exchange, msg);
         determineParticipantsAddresses(exchange, auditDataset);
+        extractSslClientUser(exchange, auditDataset);
 
         boolean failed = false;
         try {
@@ -84,6 +95,28 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
                 }
             } else {
                 LOG.warn("Audit dataset is not initialized, no auditing happens");
+            }
+        }
+    }
+
+    private void extractSslClientUser(Exchange exchange, AuditDatasetType auditDataset) {
+        IoSession ioSession = exchange.getIn().getHeader(Mina2Constants.MINA_IOSESSION, IoSession.class);
+        if (ioSession != null) {
+            SSLSession sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
+            if (sslSession != null) {
+                try {
+                    X500Principal principal = (X500Principal) sslSession.getPeerPrincipal();
+                    String dn = principal.getName();
+                    LdapName ldapDN = new LdapName(dn);
+                    for (Rdn rdn : ldapDN.getRdns()) {
+                        if (rdn.getType().equalsIgnoreCase("CN")) {
+                            auditDataset.setSourceUserName((String) rdn.getValue());
+                            break;
+                        }
+                    }
+                } catch (SSLPeerUnverifiedException | InvalidNameException e) {
+                    LOG.info("Could not extract CN from client certificate", e);
+                }
             }
         }
     }
