@@ -36,6 +36,7 @@ import java.util.Collections;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthenticationBuilder> {
 

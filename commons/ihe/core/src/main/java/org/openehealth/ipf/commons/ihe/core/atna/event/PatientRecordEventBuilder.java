@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
  * local and remote ActiveParticipant and a Human Requestor and provides methods for adding patient IDs.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
 

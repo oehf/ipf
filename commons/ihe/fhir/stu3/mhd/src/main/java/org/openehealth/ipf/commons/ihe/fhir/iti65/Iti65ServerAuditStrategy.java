@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
 import java.util.Collections;
 
@@ -36,7 +36,7 @@ public class Iti65ServerAuditStrategy extends Iti65AuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti65AuditDataset auditDataset) {
-        return new PHIImportBuilder<>(auditContext, auditDataset, FhirEventTypeCodes.ProvideDocumentBundle)
+        return new PHIImportBuilder<>(auditContext, auditDataset, FhirEventTypeCode.ProvideDocumentBundle)
                 .setPatient(auditDataset.getPatientId())
                 .addImportedEntity(
                         auditDataset.getDocumentManifestUuid(),

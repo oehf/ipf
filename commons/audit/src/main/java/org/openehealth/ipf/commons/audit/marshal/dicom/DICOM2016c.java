@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.types.AuditSource;
  * Correct AuditSourceIdentification in DICOM audit message
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DICOM2016c extends DICOM2016a {
 

@@ -37,6 +37,7 @@ import static java.util.Objects.requireNonNull;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder> {
 

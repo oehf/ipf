@@ -48,7 +48,7 @@ public class IpfAtnaAutoConfigurationTest {
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
         assertEquals(1234, auditContext.getAuditRepositoryPort());
-        assertEquals("TLS", auditContext.getAuditTransmissionProtocol().getTransport());
+        assertEquals("TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
         assertTrue(auditContext.getAuditMessageQueue() instanceof AsynchronousAuditMessageQueue);
     }
 

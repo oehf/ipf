@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti9
 
 import ca.uhn.hl7v2.model.Message
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.AuditUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset
 
@@ -38,9 +39,9 @@ class Iti9AuditStrategyUtils  {
     }
 
     
-    static boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
+    static boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg, AuditContext auditContext) {
         if (msg.MSH[9][1].value == 'RSP' && msg.MSH[9][2].value == 'K23' && !msg.QUERY_RESPONSE?.PID?.empty) {
-            if (System.getProperty(QueryAuditDataset.NO_PATIENT_RESULT_IDS) == null) {
+            if (auditContext.isIncludeParticipantsFromResponse()) {
                 def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE.PID[3])
                 if ((!auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
                     auditDataset.patientIds = patientIds

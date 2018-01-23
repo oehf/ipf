@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationTy
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
 import javax.servlet.ServletException;
 
@@ -74,7 +74,7 @@ public class TestIti65Success extends AbstractTestIti65 {
                 event.getEventIdentification().getEventActionCode());
 
         assertEquals(EventIdCode.Import, event.getEventIdentification().getEventID());
-        assertEquals(FhirEventTypeCodes.ProvideDocumentBundle, event.getEventIdentification().getEventTypeCode().get(0));
+        assertEquals(FhirEventTypeCode.ProvideDocumentBundle, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
         ActiveParticipantType source = event.getActiveParticipants().get(0);

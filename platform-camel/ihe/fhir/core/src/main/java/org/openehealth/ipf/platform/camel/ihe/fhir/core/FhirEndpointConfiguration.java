@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
@@ -45,7 +46,7 @@ import java.util.Map;
  * @since 3.1
  */
 @UriParams
-public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
+public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends AuditableEndpointConfiguration {
 
     static final String STRICT = "strict";
     static final String LENIENT = "lenient";
@@ -57,10 +58,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     private FhirContext context;
-
-    // Consumer only
-    @Getter
-    private AuditContext auditContext;
 
     @Getter
     @UriParam(defaultValue = "FhirServlet")
@@ -90,7 +87,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean lazyLoadBundles = false;
+    private boolean lazyLoadBundles;
 
     @Getter
     private FhirSecurityInformation securityInformation;
@@ -108,8 +105,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         super(component, parameters);
         this.path = path;
         this.context = component.initializeFhirContext();
-
-        auditContext = AuditConfiguration.obtainAuditContext(component, parameters);
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(

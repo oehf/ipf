@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class XdsQueryInformationBuilder extends QueryInformationBuilder<XdsQueryInformationBuilder> {
 

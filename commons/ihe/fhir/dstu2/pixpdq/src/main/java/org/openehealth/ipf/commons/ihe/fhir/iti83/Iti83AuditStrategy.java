@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.Map;
@@ -44,11 +44,11 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCodes.MobilePatientIdentifierCrossReferenceQuery)
+        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         "PIXmQuery",
-                        FhirParticipantObjectIdTypeCodes.MobilePatientIdentifierCrossReferenceQuery,
+                        FhirParticipantObjectIdTypeCode.MobilePatientIdentifierCrossReferenceQuery,
                         auditDataset.getQueryString())
 
                 .getMessages();

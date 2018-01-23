@@ -32,6 +32,7 @@ import java.util.Base64;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DICOM2016a implements SerializationStrategy {
 

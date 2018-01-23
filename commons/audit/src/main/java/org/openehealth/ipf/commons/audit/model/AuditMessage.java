@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
  * ensure compliance with the specification.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 @EqualsAndHashCode
 public class AuditMessage implements Serializable, Validateable {

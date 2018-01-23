@@ -74,6 +74,13 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
             <bean class="org.openehealth.ipf.commons.audit.marshal.dicom.Current"/>
         </property>
         -->
+        
+        <!-- Setting this to true causes data from the response being added to the audit records, particularly
+             patient identifiers. This is not envisaged by DICOM, but project or legal requirements may overrule
+             this. The default, however, is false
+             
+        <property name="includeParticipantsFromResponse" value="true" />
+         -->
 
     </bean>
 ```

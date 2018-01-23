@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
  * There is no obvious performance improvement compared to {@link UDPSyslogSenderImpl}.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
@@ -79,7 +80,7 @@ public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTr
     }
 
     @Override
-    public String getTransport() {
+    public String getTransportName() {
         return "NIO-UDP";
     }
 

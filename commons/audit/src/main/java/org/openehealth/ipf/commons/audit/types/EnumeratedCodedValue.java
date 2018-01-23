@@ -21,6 +21,7 @@ package org.openehealth.ipf.commons.audit.types;
  * implement this interface can be used everywhere a {@link CodedValueType} is required.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface EnumeratedCodedValue<T extends CodedValueType> extends EnumeratedValueSet<T>, CodedValueType {
 

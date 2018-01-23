@@ -21,6 +21,7 @@ package org.openehealth.ipf.commons.audit.types;
  * as assigned in role-based access control security.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface ActiveParticipantRoleId extends CodedValueType {
 

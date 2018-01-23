@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Generic Audit Dataset for FHIR Query transactions
+ * Generic Audit Dataset for FHIR Query-only transactions
  *
  * @author Christian Ohr
  * @since 3.1

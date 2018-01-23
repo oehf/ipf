@@ -33,6 +33,9 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
  * When describing a human user’s participation in an event, the RoleIDCode value should
  * represent the access control roles/permissions that authorized the event.
  * </p>
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, EnumeratedCodedValue<ActiveParticipantRoleId> {
 

@@ -57,17 +57,18 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
+    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response, AuditContext auditContext) {
         response = slurp(response)
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext)
 
-        // patient IDs from response FIXME really?
-        Set<String> patientIds = [] as Set<String>
-        addPatientIds(response.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
-        if (auditDataset.patientIds) {
-            patientIds.addAll(auditDataset.patientIds)
+        if (auditContext.isIncludeParticipantsFromResponse()) {
+            Set<String> patientIds = [] as Set<String>
+            addPatientIds(response.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
+            if (auditDataset.patientIds) {
+                patientIds.addAll(auditDataset.patientIds)
+            }
+            auditDataset.patientIds = patientIds as String[] ?: null
         }
-        auditDataset.patientIds = patientIds as String[] ?: null
         result
     }
 

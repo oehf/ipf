@@ -37,6 +37,7 @@ import java.util.List;
  * and provides methods for adding patient IDs.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMessageBuilder<T, DataExportBuilder> {
 
@@ -96,7 +97,12 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
-        return addExportedEntity(objectId, participantObjectIdType, ParticipantObjectTypeCode.System, participantObjectTypeCodeRole, details);
+        return addExportedEntity(
+                objectId,
+                participantObjectIdType,
+                ParticipantObjectTypeCode.System,
+                participantObjectTypeCodeRole,
+                details);
     }
 
     public T addExportedEntity(

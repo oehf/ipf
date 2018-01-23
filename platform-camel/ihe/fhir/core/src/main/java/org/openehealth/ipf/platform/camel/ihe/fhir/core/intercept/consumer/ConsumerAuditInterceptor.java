@@ -67,7 +67,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             failed = exchange.isFailed();
             if (!failed) {
                 Object result = resultMessage(exchange).getBody();
-                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result);
+                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
             }
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an

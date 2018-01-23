@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.pdqcore
 
 import ca.uhn.hl7v2.model.Message
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.AuditUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset
 
@@ -62,8 +63,8 @@ abstract class PdqAuditStrategyUtils  {
     }
 
     
-    static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
-        if (System.getProperty(QueryAuditDataset.NO_PATIENT_RESULT_IDS) == null) {
+    static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg, AuditContext auditContext) {
+        if (auditContext.isIncludeParticipantsFromResponse()) {
             if (msg.MSH[9][1].value == 'RSP') {
                 def patientIds = []
                 for (group in msg.QUERY_RESPONSE()) {

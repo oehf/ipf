@@ -22,6 +22,9 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
  * Determine the timing and priority in which audit messages are delivered to the
  * transmission protocol sender. Examples for implementations are synchronous,
  * asynchronous or JMS-based.
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public interface AuditMessageQueue {
 

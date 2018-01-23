@@ -18,6 +18,10 @@ package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 
+/**
+ * @author Christian Ohr
+ * @since 3.5
+ */
 public class SynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
 
     @Override

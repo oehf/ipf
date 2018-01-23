@@ -21,6 +21,10 @@ import lombok.Setter;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author Christian Ohr
+ * @since 3.5
+ */
 @EqualsAndHashCode
 class CodedValueTypeImpl implements CodedValueType {
 

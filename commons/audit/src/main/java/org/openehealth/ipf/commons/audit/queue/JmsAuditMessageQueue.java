@@ -31,6 +31,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  * @author Christian Ohr
+ * @since 3.5
  *
  * @see JmsAuditMessageListener
  */

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 
@@ -47,7 +48,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         if (response instanceof IBaseResource) {
             EventOutcomeIndicator eventOutcomeIndicator = getEventOutcomeIndicator(response);
             auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);

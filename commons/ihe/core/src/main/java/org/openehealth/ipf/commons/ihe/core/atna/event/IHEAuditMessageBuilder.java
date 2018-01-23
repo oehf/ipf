@@ -34,6 +34,7 @@ import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
  * different IHE transactions, namely local participant, remote participant, and human requestor
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T, D>, D extends BaseAuditMessageBuilder<D>>
         extends DelegatingAuditMessageBuilder<T, D> {
@@ -104,7 +105,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         return self();
     }
 
-    protected static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
+    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
         List<TypeValuePairType> tvp = new ArrayList<>();
         if (studyInstanceId != null) {
             tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));

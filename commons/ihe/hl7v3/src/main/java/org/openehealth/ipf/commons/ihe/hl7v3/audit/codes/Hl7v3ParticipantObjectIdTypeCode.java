@@ -22,6 +22,9 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 
 /**
  * ParticipantObjectIdTypes for the MLLP transactions in this module
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum Hl7v3ParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 

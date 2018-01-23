@@ -26,6 +26,7 @@ import java.util.stream.Stream;
  * @see EnumeratedCodedValue
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface EnumeratedValueSet<T> {
 

@@ -23,7 +23,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 /**
+ * Strategy for marshalling an {@link AuditMessage} into a serialized format. The primary
+ * format is DICOM.
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface SerializationStrategy {
 

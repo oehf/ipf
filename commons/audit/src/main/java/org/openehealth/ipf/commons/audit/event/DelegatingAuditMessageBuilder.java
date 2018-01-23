@@ -26,6 +26,7 @@ import static java.util.Objects.requireNonNull;
  * messages that is more closely aligned (in terms of wording) with what is specified in DICOM.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public abstract class DelegatingAuditMessageBuilder<T extends DelegatingAuditMessageBuilder<T, D>, D extends BaseAuditMessageBuilder<D>> implements AuditMessageBuilder<T> {
 

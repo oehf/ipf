@@ -25,6 +25,7 @@ import java.util.*;
  * some destination. After some time, this will cause OutOfMemoryErrors.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class RecordingAuditMessageTransmission implements AuditTransmissionProtocol {
 
@@ -42,7 +43,7 @@ public class RecordingAuditMessageTransmission implements AuditTransmissionProto
     }
 
     @Override
-    public String getTransport() {
+    public String getTransportName() {
         return "RECORDER";
     }
 

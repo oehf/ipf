@@ -33,6 +33,7 @@ import java.util.List;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class PatientRecordBuilder extends BaseAuditMessageBuilder<PatientRecordBuilder> {
 

@@ -46,9 +46,9 @@ import java.util.concurrent.atomic.AtomicReference;
  * locally and send it when it is able.
  * </p>
  *
- * @author <a href="mailto:tarboxl@mir.wustl.edu">Lawrence Tarbox</a>
+ * @author Lawrence Tarbox, Derived from code written by Matthew Davis of IBM.
  * @author Christian Ohr
- * Derived from code written by Matthew Davis of IBM.
+ * @since 3.5
  */
 public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
@@ -64,7 +64,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     @Override
-    public String getTransport() {
+    public String getTransportName() {
         return "TLS";
     }
 

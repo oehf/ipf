@@ -33,6 +33,7 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 @EqualsAndHashCode
 public class ParticipantObjectIdentificationType implements Serializable, Validateable {

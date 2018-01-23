@@ -38,6 +38,7 @@ import java.util.stream.Stream;
  * NIO implemention of a TLS Syslog sender by using an embedded Vert.x instance.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
@@ -82,7 +83,7 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
     }
 
     @Override
-    public String getTransport() {
+    public String getTransportName() {
         return "NIO-TLS";
     }
 
@@ -121,11 +122,12 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                                     .exceptionHandler(exceptionEvent -> {
                                         LOG.info("Audit Connection caught exception", exceptionEvent);
                                         writeHandlerId.set(null);
-                                        socket.close();
+                                        client.close();
                                     })
                                     .closeHandler(closeEvent -> {
                                         LOG.info("Audit Connection closed");
                                         writeHandlerId.set(null);
+                                        client.close();
                                     });
                             writeHandlerId.compareAndSet(null, socket.writeHandlerID());
                             latch.countDown();

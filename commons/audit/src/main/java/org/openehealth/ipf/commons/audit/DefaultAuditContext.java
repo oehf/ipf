@@ -35,6 +35,7 @@ import java.net.UnknownHostException;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DefaultAuditContext implements AuditContext {
 
@@ -73,13 +74,16 @@ public class DefaultAuditContext implements AuditContext {
     @Getter @Setter
     private SerializationStrategy serializationStrategy = new Current();
 
+    @Getter @Setter
+    private boolean includeParticipantsFromResponse = false;
+
     public void setAuditRepositoryHost(String auditRepositoryHost) throws UnknownHostException {
         this.auditRepositoryHostName = auditRepositoryHost;
         this.auditRepositoryAddress = InetAddress.getByName(auditRepositoryHost);
     }
 
     public String getAuditRepositoryTransport() {
-        return auditTransmissionProtocol.getTransport();
+        return auditTransmissionProtocol.getTransportName();
     }
 
     public void setAuditRepositoryTransport(String transport) {

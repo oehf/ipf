@@ -22,6 +22,9 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 /**
  * Purpose of Use codes from XSPA
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum XspaPoUCode implements PurposeOfUse, EnumeratedCodedValue<PurposeOfUse> {
 

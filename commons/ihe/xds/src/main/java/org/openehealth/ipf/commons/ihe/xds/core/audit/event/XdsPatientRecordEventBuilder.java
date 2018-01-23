@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsPatientRecordEventBuilder> {
 

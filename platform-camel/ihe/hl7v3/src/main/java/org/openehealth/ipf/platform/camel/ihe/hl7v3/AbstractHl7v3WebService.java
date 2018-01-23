@@ -135,7 +135,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
             Hl7v3AuditDataset auditDataset) {
         if (auditStrategy != null) {
             try {
-                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
+                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
                 auditStrategy.doAudit(auditContext, auditDataset);
             } catch (Exception e) {
                 log.error("Phase 2 of server-side ATNA auditing failed", e);

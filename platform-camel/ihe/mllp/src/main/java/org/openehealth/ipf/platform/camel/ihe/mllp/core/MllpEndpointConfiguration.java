@@ -23,6 +23,7 @@ import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
@@ -38,7 +39,7 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public class MllpEndpointConfiguration extends InterceptableEndpointConfiguration {
+public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
 
     private static final long serialVersionUID = -3604219045768985192L;
     private static final Logger LOG = LoggerFactory.getLogger(MllpEndpointConfiguration.class);
@@ -46,8 +47,6 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
 
     @Getter
     private final ProtocolCodecFactory codecFactory;
-    @Getter
-    private AuditContext auditContext;
     @Getter
     private final SSLContext sslContext;
     @Getter
@@ -75,8 +74,6 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
     protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);
-
-        auditContext = AuditConfiguration.obtainAuditContext(component, parameters);
 
         // Will only be effective if sslContext is set and overrides
         String sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
@@ -137,10 +134,6 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
 
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 
-    }
-
-    public boolean isAudit() {
-        return auditContext.isAuditEnabled();
     }
 
 }

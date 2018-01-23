@@ -53,7 +53,20 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param response     {@link Object} representing the responded resource.
      * @return true if response indicates success, false otherwise
      */
-    boolean enrichAuditDatasetFromResponse(T auditDataset, Object response);
+    default boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+        return enrichAuditDatasetFromResponse(auditDataset, response, null);
+    }
+
+    /**
+     * Enriches the given audit dataset with transaction-specific
+     * contents of the response message.
+     *
+     * @param auditDataset audit dataset to be enriched.
+     * @param response     {@link Object} representing the responded resource.
+     * @param auditContext audit context, if relevant
+     * @return true if response indicates success, false otherwise
+     */
+    boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext);
 
 
     /**

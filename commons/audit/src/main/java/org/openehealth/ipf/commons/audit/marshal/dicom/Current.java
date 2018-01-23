@@ -23,7 +23,11 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Uses a singleton instance of the most recent DICOM version that has relevant changes to
+ * the audit message format.
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class Current implements SerializationStrategy {
 

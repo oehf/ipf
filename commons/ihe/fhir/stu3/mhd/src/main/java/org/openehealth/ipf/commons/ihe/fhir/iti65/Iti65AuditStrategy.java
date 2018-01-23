@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
 
@@ -57,7 +58,7 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(Iti65AuditDataset auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(Iti65AuditDataset auditDataset, Object response, AuditContext auditContext) {
         Bundle bundle = (Bundle) response;
         // Extract DocumentManifest (UU)IDs from the response bundle for auditing
         bundle.getEntry().stream()
@@ -66,7 +67,7 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
                 .filter(r -> r.getLocation() != null && r.getLocation().startsWith("DocumentManifest"))
                 .findFirst()
                 .ifPresent(r -> auditDataset.setDocumentManifestUuid(r.getLocation()));
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
+        return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 
     /**

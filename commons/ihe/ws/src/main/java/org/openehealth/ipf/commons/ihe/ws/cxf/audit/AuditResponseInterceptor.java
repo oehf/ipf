@@ -150,7 +150,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         {
             auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);
         } else {
-            auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
+            auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response, getAuditContext());
         }
         
         // perform transaction-specific auditing

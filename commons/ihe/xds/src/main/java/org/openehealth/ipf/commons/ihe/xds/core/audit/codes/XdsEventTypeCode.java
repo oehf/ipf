@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.audit.types.EventType;
  * EventTypes for the XDS transactions in this module
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public enum XdsEventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 

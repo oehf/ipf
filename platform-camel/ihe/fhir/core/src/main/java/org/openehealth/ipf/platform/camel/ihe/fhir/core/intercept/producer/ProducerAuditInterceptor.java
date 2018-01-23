@@ -115,7 +115,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      * All exception are ignored.
      */
     private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, IBaseResource response) {
-        return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
+        return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 
 

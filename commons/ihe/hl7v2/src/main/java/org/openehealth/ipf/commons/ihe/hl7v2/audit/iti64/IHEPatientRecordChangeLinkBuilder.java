@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 
 import java.util.Arrays;
 import java.util.Collections;

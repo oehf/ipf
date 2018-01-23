@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
  * ParticipantObjectIdTypeCodes for the HPD transactions in this module
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public enum HpdParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 

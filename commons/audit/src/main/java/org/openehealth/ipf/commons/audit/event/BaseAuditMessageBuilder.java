@@ -34,6 +34,9 @@ import static java.util.Objects.requireNonNull;
  * e.g. participants and participating objects of the audit event.
  *
  * @param <T>
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<T>> implements AuditMessageBuilder<T> {
 

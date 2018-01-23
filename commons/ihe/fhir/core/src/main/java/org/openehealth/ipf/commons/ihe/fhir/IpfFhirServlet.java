@@ -208,6 +208,9 @@ public class IpfFhirServlet extends RestfulServer {
     protected void initialize() throws ServletException {
         setFhirContext(new FhirContext(fhirVersion));
 
+        // Provide some more details about the request for downstream processing
+        registerInterceptor(new RequestDetailProvider());
+
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
             registerInterceptor(loggingInterceptor);

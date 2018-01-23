@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.types;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface SecurityAlertType extends CodedValueType {
 

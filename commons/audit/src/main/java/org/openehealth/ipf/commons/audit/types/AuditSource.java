@@ -22,6 +22,7 @@ package org.openehealth.ipf.commons.audit.types;
  * AuditSource.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface AuditSource extends CodedValueType {
 

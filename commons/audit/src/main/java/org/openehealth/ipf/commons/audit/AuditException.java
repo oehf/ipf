@@ -18,11 +18,16 @@ package org.openehealth.ipf.commons.audit;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class AuditException extends RuntimeException {
 
     public AuditException(String message) {
         super(message);
+    }
+
+    public AuditException(Throwable cause) {
+        super(cause);
     }
 
     public AuditException(String message, Throwable cause) {

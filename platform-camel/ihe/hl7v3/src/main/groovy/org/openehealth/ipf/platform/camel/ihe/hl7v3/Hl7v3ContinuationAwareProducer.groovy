@@ -157,7 +157,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             if (exception) {
                 auditDataset.eventOutcomeIndicator = EventOutcomeIndicator.SeriousFailure
             } else {
-                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString)
+                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString, auditContext)
             }
             auditStrategy.doAudit(auditContext, auditDataset)
         } catch (Exception e) {

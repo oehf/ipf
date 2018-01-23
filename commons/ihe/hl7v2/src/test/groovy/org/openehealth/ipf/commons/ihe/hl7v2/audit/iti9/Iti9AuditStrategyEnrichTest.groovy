@@ -20,6 +20,8 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.Parser
 import org.junit.Before
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.DefaultAuditContext
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
@@ -34,10 +36,12 @@ class Iti9AuditStrategyEnrichTest {
             CustomModelClassUtils.createFactory("pix", "2.5"),
             PixPdqTransactions.ITI9).pipeParser
     private String msg
+    private AuditContext auditContext
 
     @Before
     void setup() {
         msg = getClass().getResourceAsStream("/rsp.hl7").text
+        auditContext = new DefaultAuditContext();
     }
 
     @Test
@@ -45,7 +49,7 @@ class Iti9AuditStrategyEnrichTest {
         Iti9AuditStrategy strategy = new Iti9AuditStrategy(false)
         QueryAuditDataset dataset = new QueryAuditDataset(false)
         Message message = PARSER.parse(msg)
-        strategy.enrichAuditDatasetFromResponse(dataset, message)
+        strategy.enrichAuditDatasetFromResponse(dataset, message, auditContext)
         // println dataset
     }
 }

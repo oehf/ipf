@@ -29,6 +29,7 @@ import java.util.Collections;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBuilder> {
 

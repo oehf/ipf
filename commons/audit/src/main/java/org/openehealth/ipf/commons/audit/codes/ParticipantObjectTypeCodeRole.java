@@ -24,6 +24,9 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
  * Participant Object Type Role codes as originally specified in https://tools.ietf.org/html/rfc3881#section-5.5
  * and now maintained in http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.1.2.
  * This value set is a literal part of the audit schema, ie.e. no other codes may be used.
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum ParticipantObjectTypeCodeRole implements EnumeratedValueSet<Short> {
 

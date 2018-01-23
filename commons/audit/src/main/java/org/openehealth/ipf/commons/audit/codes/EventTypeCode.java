@@ -24,6 +24,9 @@ import org.openehealth.ipf.commons.audit.types.EventType;
  * Audit Event ID Code as specified in
  * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_401
  * 1.2.840.10008.6.1.904
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum EventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 

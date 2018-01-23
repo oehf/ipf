@@ -32,8 +32,9 @@ import java.util.Collections;
  * This is closely related to the more general case of any kind of application startup or shutdown,
  * and may be suitable for those purposes also.
  * </p>
- * s
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class ApplicationActivityBuilder<T extends ApplicationActivityBuilder<T>> extends BaseAuditMessageBuilder<T> {
 

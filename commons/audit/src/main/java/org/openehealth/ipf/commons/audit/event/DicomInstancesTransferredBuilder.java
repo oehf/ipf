@@ -39,6 +39,7 @@ import java.util.Collections;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DicomInstancesTransferredBuilder extends BaseAuditMessageBuilder<DicomInstancesTransferredBuilder> {
 

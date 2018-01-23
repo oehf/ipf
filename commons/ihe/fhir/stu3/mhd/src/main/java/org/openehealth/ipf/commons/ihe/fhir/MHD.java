@@ -19,11 +19,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68TransactionConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,10 +51,16 @@ public class MHD implements IntegrationProfile {
     @AllArgsConstructor
     public enum QueryInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
         ITI_66(ITI_66_CONFIG),
-        ITI_67(ITI_67_CONFIG),
-        ITI_68(ITI_68_CONFIG);
+        ITI_67(ITI_67_CONFIG);
 
         @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+    }
+
+    @AllArgsConstructor
+    public enum RetrieveInteractions implements FhirInteractionId<Iti68AuditDataset> {
+        ITI_68(ITI_68_CONFIG);
+
+        @Getter FhirTransactionConfiguration<Iti68AuditDataset> fhirTransactionConfiguration;
     }
 
     @Override
@@ -64,14 +75,5 @@ public class MHD implements IntegrationProfile {
     private static final Iti65TransactionConfiguration ITI_65_CONFIG = new Iti65TransactionConfiguration();
     private static final Iti66TransactionConfiguration ITI_66_CONFIG = new Iti66TransactionConfiguration();
     private static final Iti67TransactionConfiguration ITI_67_CONFIG = new Iti67TransactionConfiguration();
-    private static final FhirTransactionConfiguration<FhirQueryAuditDataset> ITI_68_CONFIG = new FhirTransactionConfiguration<>(
-            "mhd-iti68",
-            "Retrieve Document",
-            false,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
+    private static final Iti68TransactionConfiguration ITI_68_CONFIG = new Iti68TransactionConfiguration();
 }

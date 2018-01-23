@@ -35,6 +35,7 @@ import static java.util.Objects.requireNonNull;
  * audit encoding process.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 @EqualsAndHashCode
 public class TypeValuePairType implements Serializable {

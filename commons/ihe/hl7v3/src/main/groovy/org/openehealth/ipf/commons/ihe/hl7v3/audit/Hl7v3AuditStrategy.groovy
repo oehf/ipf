@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.audit
 
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
@@ -79,7 +80,7 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
     }
 
     @Override
-    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
+    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response, AuditContext auditContext) {
         Object gpath = slurp(response)
         auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(gpath)
         auditDataset.eventOutcomeDescription = getEventOutcomeDescription(gpath)

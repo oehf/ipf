@@ -24,6 +24,9 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
  * Event Action codes as originally specified by https://tools.ietf.org/html/rfc3881#section-5.1
  * and now maintained in http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.1.2
  * This value set is a literal part of the audit schema, i.e. no other codes may be used.
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum EventActionCode implements EnumeratedValueSet<String> {
 

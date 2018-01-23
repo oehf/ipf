@@ -28,8 +28,8 @@
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.12.RELEASE</spring-version>
-        <spring-boot-version>1.5.8.RELEASE</spring-boot-version>
+        <spring-version>4.3.13.RELEASE</spring-version>
+        <spring-boot-version>1.5.9.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
         <xmlsec-version>2.1.0</xmlsec-version>
 

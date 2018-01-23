@@ -145,7 +145,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
      */
     private void enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Message msg) {
         try {
-            getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, msg);
+            getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, msg, auditContext);
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from response", e);
         }

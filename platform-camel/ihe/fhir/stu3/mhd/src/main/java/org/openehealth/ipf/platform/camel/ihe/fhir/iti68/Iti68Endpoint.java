@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
-import lombok.Getter;
 import org.apache.camel.component.servlet.ServletComponent;
 import org.apache.camel.component.servlet.ServletEndpoint;
 
@@ -27,9 +26,6 @@ import java.net.URISyntaxException;
  *
  */
 public class Iti68Endpoint extends ServletEndpoint {
-
-    @Getter
-    private boolean audit;
 
     public Iti68Endpoint(String endPointURI, ServletComponent component, URI httpUri) throws URISyntaxException {
         super(endPointURI, component, httpUri);

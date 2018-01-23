@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class AuditUtils {
 

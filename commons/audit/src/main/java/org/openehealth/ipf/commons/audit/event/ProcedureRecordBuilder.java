@@ -33,7 +33,9 @@ import java.util.Collections;
  * This message describes the event of a procedure record being created, accessed, modified,
  * accessed, or deleted. This message may only include information about a single patient.
  * </p>
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class ProcedureRecordBuilder extends BaseAuditMessageBuilder<ProcedureRecordBuilder> {
 

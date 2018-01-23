@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public enum HpdEventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 

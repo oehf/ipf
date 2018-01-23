@@ -20,12 +20,12 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpParticipantObjectIdTypeCode.PIXQuery;
+import static org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpParticipantObjectIdTypeCode.PIXQuery;
 
 public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
 
@@ -47,8 +47,9 @@ public class Iti9AuditStrategy extends AuditStrategySupport<QueryAuditDataset> {
 
     @Override
     public boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset,
-                                                  Object msg) {
-        return Iti9AuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message) msg);
+                                                  Object msg,
+                                                  AuditContext auditContext) {
+        return Iti9AuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message) msg, auditContext);
     }
 
     @Override

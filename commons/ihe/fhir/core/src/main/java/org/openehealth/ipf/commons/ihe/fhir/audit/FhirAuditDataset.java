@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
@@ -34,7 +33,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class FhirAuditDataset extends AuditDataset {
+public class FhirAuditDataset extends AuditDataset {
 
     /**
      * Request payload.

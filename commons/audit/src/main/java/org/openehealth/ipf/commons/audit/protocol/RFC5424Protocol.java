@@ -23,9 +23,10 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Base client implementation of RFC 5424 syslog for sending audit messages to an Audit Record Repository
- * that implements RFC 5424 syslog.
+ * that implements RFC 5424 SYSLOG.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class RFC5424Protocol {
 

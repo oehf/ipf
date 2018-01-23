@@ -30,11 +30,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.IntStream;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
 

@@ -37,6 +37,7 @@ import java.util.List;
  * and provides methods for adding patient IDs.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMessageBuilder<T, DataImportBuilder> {
 

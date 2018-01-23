@@ -18,25 +18,21 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EventId;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
  * @author Christian Ohr
  */
-public enum FhirEventTypeCodes implements EventType, EnumeratedCodedValue<EventType> {
+public enum FhirEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
 
-    ProvideDocumentBundle("ITI-65", "Provide Document Bundle"),
-    MobileDocumentManifestQuery("ITI-66", "Mobile Document Manifest Query"),
-    MobileDocumentReferenceQuery("ITI-67", "Mobile Document Reference Query"),
-    MobileDocumentRetrieval("ITI-68", "Mobile Document Retrieval"),
-    MobilePatientDemographicsQuery("ITI-78", "Mobile Patient Demographics Query"),
-    MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query");
+    RestfulOperation("rest", "RESTful Operation");
 
     @Getter
-    private EventType value;
+    private EventId value;
 
-    FhirEventTypeCodes(String code, String displayName) {
-        this.value = EventType.of(code, "IHE Transactions", displayName);
+    FhirEventIdCode(String code, String displayName) {
+        this.value = EventId.of(code, "http://hl7.org/fhir/audit-event-type", displayName);
     }
 
 }

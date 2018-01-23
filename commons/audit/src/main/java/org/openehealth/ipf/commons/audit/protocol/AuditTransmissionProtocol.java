@@ -19,7 +19,11 @@ package org.openehealth.ipf.commons.audit.protocol;
 import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
+ * Implementations of this interface transmit the serialized {@link org.openehealth.ipf.commons.audit.model.AuditMessage AuditMessage}
+ * to an AuditRepository using IP protocols like TCP or UDP, usually wrapped into a carrier protocol (such as SYSLOG).
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface AuditTransmissionProtocol {
 
@@ -33,10 +37,23 @@ public interface AuditTransmissionProtocol {
     String HTTPS_CIPHERSUITES = "https.ciphersuites";
     String JDK_TLS_CLIENT_PROTOCOLS = "jdk.tls.client.protocols";
 
+    /**
+     * Transmits the message
+     *
+     * @param auditContext audit context that e.g. contains the destination
+     * @param auditMessage audit message strings
+     * @throws Exception thrown if sending the messages has failed
+     */
     void send(AuditContext auditContext, String... auditMessage) throws Exception;
 
+    /**
+     * May be imüplemented to clean up instances on shut down
+     */
     void shutdown();
 
-    String getTransport();
+    /**
+     * @return name of the AuditTransmissionProtocol
+     */
+    String getTransportName();
 
 }

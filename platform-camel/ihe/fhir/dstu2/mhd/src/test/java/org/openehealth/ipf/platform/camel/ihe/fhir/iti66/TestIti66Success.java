@@ -28,8 +28,8 @@ import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
 import javax.servlet.ServletException;
 
@@ -81,7 +81,7 @@ public class TestIti66Success extends AbstractTestIti66 {
                 event.getEventIdentification().getEventActionCode());
 
         assertEquals(EventIdCode.Query, event.getEventIdentification().getEventID());
-        assertEquals(FhirEventTypeCodes.MobileDocumentManifestQuery, event.getEventIdentification().getEventTypeCode().get(0));
+        assertEquals(FhirEventTypeCode.MobileDocumentManifestQuery, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
         ActiveParticipantType source = event.getActiveParticipants().get(0);
@@ -113,7 +113,7 @@ public class TestIti66Success extends AbstractTestIti66 {
         assertEquals("http://localhost:8999/DocumentManifest?patient.identifier=urn%3Aoid%3A2.16.840.1.113883.3.37.4.1.1.2.1.1%7C1",
                 new String(Base64.getDecoder().decode(query.getParticipantObjectQuery()), StandardCharsets.UTF_8));
 
-        assertEquals(FhirParticipantObjectIdTypeCodes.MobileDocumentManifestQuery, query.getParticipantObjectIDTypeCode());
+        assertEquals(FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery, query.getParticipantObjectIDTypeCode());
     }
 
     @Test

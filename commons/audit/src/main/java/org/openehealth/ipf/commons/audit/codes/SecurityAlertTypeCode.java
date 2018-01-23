@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.audit.types.SecurityAlertType;
  * Security Alert Type Code as specified in
  * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_403
  * 1.2.840.10008.6.1.906
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum SecurityAlertTypeCode implements EnumeratedCodedValue<SecurityAlertType>, SecurityAlertType {
 

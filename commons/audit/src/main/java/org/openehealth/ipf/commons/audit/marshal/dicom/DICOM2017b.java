@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.audit.types.AuditSource;
  * http://dicom.nema.org/Dicom/News/November2016/docs/cpack90/cp1638.pdf
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class DICOM2017b extends DICOM2016c {
 

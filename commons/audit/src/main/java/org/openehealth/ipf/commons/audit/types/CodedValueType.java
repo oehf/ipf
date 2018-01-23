@@ -17,6 +17,10 @@ package org.openehealth.ipf.commons.audit.types;
 
 import java.io.Serializable;
 
+/**
+ * @author Christian Ohr
+ * @since 3.5
+ */
 public interface CodedValueType extends Serializable {
 
     String getCode();

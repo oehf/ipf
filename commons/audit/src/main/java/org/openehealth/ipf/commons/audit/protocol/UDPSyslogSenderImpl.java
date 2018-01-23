@@ -36,6 +36,7 @@ import java.nio.charset.StandardCharsets;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
@@ -51,7 +52,7 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     @Override
-    public String getTransport() {
+    public String getTransportName() {
         return "UDP";
     }
 

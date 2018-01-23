@@ -33,7 +33,8 @@ import java.util.concurrent.TimeUnit;
  * audit destination is not reachable.
  * </p>
  *
- * @since 3.1
+ * @author Christian Ohr
+ * @since 3.5
  */
 public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
 

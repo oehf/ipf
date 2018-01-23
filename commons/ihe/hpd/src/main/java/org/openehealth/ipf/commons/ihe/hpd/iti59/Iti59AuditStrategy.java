@@ -121,7 +121,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(Iti59AuditDataset auditDataset, Object responseObject) {
+    public boolean enrichAuditDatasetFromResponse(Iti59AuditDataset auditDataset, Object responseObject, AuditContext auditContext) {
         // check whether there is any need to analyse the response object
         if (auditDataset.getRequestItems() == null) {
             log.debug("The request was empty, nothing to audit");

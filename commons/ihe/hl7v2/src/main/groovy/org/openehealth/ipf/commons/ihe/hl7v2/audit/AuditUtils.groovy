@@ -27,32 +27,30 @@ import org.slf4j.LoggerFactory
  * Various ATNA-auditing related utilities.
  * <p>
  * All generic Groovy stuff is collected here.
- *   
+ *
  * @author Dmytro Rud
  */
 class AuditUtils {
     private static final transient Logger LOG = LoggerFactory.getLogger(AuditUtils.class)
-    
+
     private AuditUtils() {
         throw new IllegalStateException('Helper class, do not instantiate')
     }
 
-    
     /**
      * Enriches the given audit dataset with HL7-related 
      * information common for all PIX/PDQ transactions
      * contained in the request message.
      */
     static void enrichGenericAuditDatasetFromRequest(
-            MllpAuditDataset auditDataset, 
-            Message msg)
-    {
-        auditDataset.sendingApplication   = msg.MSH[3].value ?: ''
-        auditDataset.sendingFacility      = msg.MSH[4].value ?: ''
+            MllpAuditDataset auditDataset,
+            Message msg) {
+        auditDataset.sendingApplication = msg.MSH[3].value ?: ''
+        auditDataset.sendingFacility = msg.MSH[4].value ?: ''
         auditDataset.receivingApplication = msg.MSH[5].value ?: ''
-        auditDataset.receivingFacility    = msg.MSH[6].value ?: ''
-        auditDataset.messageType          = msg.MSH[9][2].value ?: ''
-        auditDataset.messageControlId     = msg.MSH[10].value ?: ''
+        auditDataset.receivingFacility = msg.MSH[6].value ?: ''
+        auditDataset.messageType = msg.MSH[9][2].value ?: ''
+        auditDataset.messageControlId = msg.MSH[10].value ?: ''
     }
 
     /**
@@ -69,7 +67,6 @@ class AuditUtils {
             return false
         }
     }
-     
 
     /**
      * Returns a list of patient IDs from the given repeatable field 
@@ -78,13 +75,12 @@ class AuditUtils {
     static List pidList(Repeatable repeatable) {
         repeatable.collect { it.encode() } ?: null
     }
-     
-    
+
     /**
-      * Returns string representation of the request message by extracting it
-      * from the corresponding header of the given Camel exchange (preferred) 
-      * or by serializing the given message adapter. 
-      */
+     * Returns string representation of the request message by extracting it
+     * from the corresponding header of the given Camel exchange (preferred)
+     * or by serializing the given message adapter.
+     */
     static String getRequestString(Map<String, Object> parameters, Message msg) {
         parameters[Constants.ORIGINAL_MESSAGE_STRING_HEADER_NAME] ?: msg.toString()
     }

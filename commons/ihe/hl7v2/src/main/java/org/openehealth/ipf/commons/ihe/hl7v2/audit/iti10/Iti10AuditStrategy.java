@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 
 import java.util.Map;

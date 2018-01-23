@@ -35,6 +35,7 @@ import java.util.*;
  * and provides methods for adding patient IDs.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
 

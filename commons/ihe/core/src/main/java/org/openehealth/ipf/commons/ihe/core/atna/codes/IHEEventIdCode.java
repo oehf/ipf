@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.audit.types.EventId;
  * Custom IHE Event IDs
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public enum IHEEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
 

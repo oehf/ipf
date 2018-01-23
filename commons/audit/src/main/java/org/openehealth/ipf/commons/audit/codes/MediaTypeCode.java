@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.audit.types.MediaType;
  * Media Type Code as specified in
  * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_405
  * 1.2.840.10008.6.1.908
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> {
 

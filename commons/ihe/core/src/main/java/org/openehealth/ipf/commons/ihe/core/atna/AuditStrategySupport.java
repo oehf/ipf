@@ -63,7 +63,7 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         return true;
     }
 

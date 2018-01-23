@@ -23,14 +23,17 @@ import org.openehealth.ipf.commons.audit.model.Validateable;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Base interface for building DICOM audit messages
+ *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends Validateable {
 
     AuditMessage getMessage();
 
     default AuditMessage[] getMessages() {
-        return new AuditMessage[] { getMessage() };
+        return new AuditMessage[]{getMessage()};
     }
 
 

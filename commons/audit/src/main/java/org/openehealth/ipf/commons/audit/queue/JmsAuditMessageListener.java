@@ -34,6 +34,7 @@ import static java.util.Objects.requireNonNull;
  * message redelivery and other features.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class JmsAuditMessageListener implements MessageListener {
 

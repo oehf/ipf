@@ -30,6 +30,7 @@ import java.util.Collections;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class NetworkEntryBuilder extends BaseAuditMessageBuilder<NetworkEntryBuilder> {
 

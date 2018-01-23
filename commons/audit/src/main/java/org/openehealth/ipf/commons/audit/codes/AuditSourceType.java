@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
  * This value set is a literal part of the audit schema, ie.e. no other codes may be used.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public enum AuditSourceType implements EnumeratedCodedValue<AuditSource>, AuditSource {
 

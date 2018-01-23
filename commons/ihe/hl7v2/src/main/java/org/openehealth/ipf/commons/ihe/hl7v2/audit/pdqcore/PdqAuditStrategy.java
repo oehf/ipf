@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 
 import java.util.Map;
@@ -51,8 +51,8 @@ public abstract class PdqAuditStrategy extends AuditStrategySupport<QueryAuditDa
     }
     
     @Override
-    public boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Object msg) {
-        PdqAuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message)msg);
+    public boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Object msg, AuditContext auditContext) {
+        PdqAuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, (Message)msg, auditContext);
         return true;
     }
 

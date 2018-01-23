@@ -16,16 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
+import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
+import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
- * ParticipantObjectIdTypeCodes for the XDS transactions in this module
- *
  * @author Christian Ohr
  */
-public enum FhirParticipantObjectIdTypeCodes implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
+public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 
     ProvideDocumentBundle("ITI-65", "Provide Document Bundle"),
     MobileDocumentManifestQuery("ITI-66", "Mobile Document Manifest Query"),
@@ -35,12 +34,20 @@ public enum FhirParticipantObjectIdTypeCodes implements ParticipantObjectIdType,
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private EventType value;
 
-    FhirParticipantObjectIdTypeCodes(String code, String displayName) {
-        this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);
+    FhirEventTypeCode(String code, String displayName) {
+        this.value = EventType.of(code, "IHE Transactions", displayName);
     }
 
+    public static EventType fromRestOperationType(RestOperationTypeEnum operation) {
+        return fromRestOperationType(operation, null);
+    }
+
+    public static EventType fromRestOperationType(RestOperationTypeEnum operation, String originalText) {
+        return EventType.of(
+                operation.getCode(),
+                "http://hl7.org/fhir/restful-interaction",
+                originalText != null ? originalText : operation.getCode());
+    }
 }
-
-

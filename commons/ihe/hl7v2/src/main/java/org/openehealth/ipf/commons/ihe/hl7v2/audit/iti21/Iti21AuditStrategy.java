@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti21;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpEventTypeCode;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.pdqcore.PdqAuditStrategy;
 
 /**

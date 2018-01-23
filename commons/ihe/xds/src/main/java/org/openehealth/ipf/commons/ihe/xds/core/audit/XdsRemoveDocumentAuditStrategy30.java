@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
@@ -41,7 +42,7 @@ public abstract class XdsRemoveDocumentAuditStrategy30 extends XdsNonconstructiv
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo) {
+    public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
         RegistryResponseType response = (RegistryResponseType) pojo;
         if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
             auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));

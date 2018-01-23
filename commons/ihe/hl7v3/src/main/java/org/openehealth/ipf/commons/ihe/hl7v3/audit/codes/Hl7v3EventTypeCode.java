@@ -21,7 +21,10 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
- * EventTypes for the MLLP transactions in this module
+ * EventTypes for the MLLP transactions in this module#
+ *
+ * @author Christian Ohr
+ * @since 3.5
  */
 public enum Hl7v3EventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 

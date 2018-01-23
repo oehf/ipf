@@ -27,8 +27,8 @@ import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCodes;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 
 import java.nio.charset.StandardCharsets;
@@ -98,7 +98,7 @@ public class TestIti78Success extends AbstractTestIti78 {
                 EventActionCode.Execute,
                 event.getEventIdentification().getEventActionCode());
         assertEquals(EventIdCode.Query, event.getEventIdentification().getEventID());
-        assertEquals(FhirEventTypeCodes.MobilePatientDemographicsQuery, event.getEventIdentification().getEventTypeCode().get(0));
+        assertEquals(FhirEventTypeCode.MobilePatientDemographicsQuery, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
         ActiveParticipantType source = event.getActiveParticipants().get(0);
@@ -124,7 +124,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals("http://localhost:8999/Patient?family=Test",
                 new String(Base64.getDecoder().decode(patient.getParticipantObjectQuery()), StandardCharsets.UTF_8));
 
-        assertEquals(FhirParticipantObjectIdTypeCodes.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
+        assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
 
     }
 

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
@@ -102,7 +103,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         EventOutcomeIndicator outcomeCodes = getEventOutcomeIndicator(response);
         auditDataset.setEventOutcomeIndicator(outcomeCodes);
         auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));

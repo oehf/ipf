@@ -26,6 +26,7 @@ import java.util.*;
  * After some time, this will cause OutOfMemoryErrors.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public class RecordingAuditMessageQueue implements AuditMessageQueue {
 

@@ -21,6 +21,7 @@ package org.openehealth.ipf.commons.audit.types;
  * Codes from coded terminologies and implementation defined codes can also be used.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface ParticipantObjectIdType extends CodedValueType {
 

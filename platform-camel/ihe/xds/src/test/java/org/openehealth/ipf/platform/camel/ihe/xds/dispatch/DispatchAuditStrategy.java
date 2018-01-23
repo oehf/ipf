@@ -112,10 +112,10 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
-            return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
+            return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         }
         return false;
     }

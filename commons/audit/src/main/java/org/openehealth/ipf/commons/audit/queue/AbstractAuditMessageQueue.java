@@ -33,6 +33,7 @@ import java.util.stream.Stream;
  * </p>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 

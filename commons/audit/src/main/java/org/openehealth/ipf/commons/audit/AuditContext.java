@@ -37,6 +37,7 @@ import java.net.InetAddress;
  * </ul>
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 public interface AuditContext {
 
@@ -47,13 +48,26 @@ public interface AuditContext {
 
     void setAuditEnabled(boolean auditEnabled);
 
+    /**
+     * @return hostname of the audit repository
+     */
     String getAuditRepositoryHostName();
 
+    /**
+     * @return address of the audit repository
+     */
     InetAddress getAuditRepositoryAddress();
 
+    /**
+     * @return port of the audit repository
+     */
+    int getAuditRepositoryPort();
+
+    /**
+     * @return sending application
+     */
     String getSendingApplication();
 
-    int getAuditRepositoryPort();
 
     /**
      * @return the wire protocol to be used
@@ -95,6 +109,17 @@ public interface AuditContext {
      * @return type of audit source
      */
     AuditSource getAuditSource();
+
+    /**
+     * Determines whether participant object records shall be added to the audit message
+     * that are derived from the response of a request. This specifically applies to
+     * query results. The DICOM audit specification states that this should not be the case,
+     * however, project and legal requirements sometimes mandate that e.g. patient identifiers
+     * being retrieved shall be audited.
+     *
+     * @return true if participant object records shall be added, otherwise false
+     */
+    boolean isIncludeParticipantsFromResponse();
 
     static AuditContext noAudit() {
         return DefaultAuditContext.NO_AUDIT;
