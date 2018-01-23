@@ -67,12 +67,14 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
         boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         if (auditContext.isIncludeParticipantsFromResponse()) {
             // NOT in CX format....
+            /*
             if (response instanceof Patient) {
                 auditDataset.getPatientIds().add(((Patient) response).getId());
             } else if (response instanceof Bundle) {
                 ((Bundle) response).getEntry().forEach(bec ->
                         auditDataset.getPatientIds().add((bec.getResource()).getId()));
             }
+            */
         }
         return result;
     }

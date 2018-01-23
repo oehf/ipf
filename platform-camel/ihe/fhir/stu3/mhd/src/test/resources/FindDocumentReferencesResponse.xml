@@ -35,13 +35,6 @@
                             <prefix value="Dr."/>
                             <suffix value="M.D."/>
                         </name>
-                        <practitionerRole>
-                            <role>
-                                <coding>
-                                    <code value="Primary Care Physician"/>
-                                </coding>
-                            </role>
-                        </practitionerRole>
                     </Practitioner>
                 </contained>
                 <contained>
@@ -63,9 +56,7 @@
                     <system value="urn:ietf:rfc:3986"/>
                     <value value="urn:uuid:63ab1c29-4225-11e6-9b33-0050569b0094"/>
                 </identifier>
-                <subject>
-                    <reference value="Patient/1"/>
-                </subject>
+                <status value="current"/>
                 <type>
                     <coding>
                         <system value="http://loinc.org"/>
@@ -80,11 +71,13 @@
                         <display value="Display value for: 11111-4"/>
                     </coding>
                 </class>
+                <subject>
+                    <reference value="Patient/1"/>
+                </subject>
+                <indexed value="1965-12-17T01:00:00.000+01:00"/>
                 <author>
                     <reference value="#1"/>
                 </author>
-                <indexed value="1965-12-17T01:00:00.000+01:00"/>
-                <status value="current"/>
                 <description value="Document 01"/>
                 <securityLabel>
                     <coding>
