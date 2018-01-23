@@ -22,10 +22,8 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
@@ -43,16 +41,6 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class WsAuditDataset extends AuditDataset {
 
     private static final long serialVersionUID = 7940196804508126576L;
-
-    public static final List<CodedValueType> DEFAULT_USER_ROLES;
-
-    static {
-        CodedValueType role = new CodedValueType();
-        role.setCode("User");
-        role.setCodeSystemName("99IPF");
-        role.setOriginalText("Default User Role");
-        DEFAULT_USER_ROLES = Collections.singletonList(role);
-    }
 
     /**
      * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
@@ -105,7 +93,8 @@ public class WsAuditDataset extends AuditDataset {
     /**
      * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private PurposeOfUse[] purposesOfUse;
 
     /**
@@ -129,7 +118,6 @@ public class WsAuditDataset extends AuditDataset {
     private String remoteAddress;
 
     @Setter
-    @Getter
     private boolean sourceUserIsRequestor = true;
 
     @Setter
@@ -170,5 +158,10 @@ public class WsAuditDataset extends AuditDataset {
      */
     public String getLocalAddress() {
         return localAddress != null ? localAddress : AuditUtils.getLocalIPAddress();
+    }
+
+    @Override
+    public boolean isSourceUserIsRequestor() {
+        return sourceUserIsRequestor && super.isSourceUserIsRequestor();
     }
 }

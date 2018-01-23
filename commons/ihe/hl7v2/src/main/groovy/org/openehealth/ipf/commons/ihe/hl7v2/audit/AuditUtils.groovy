@@ -16,10 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.audit
 
 import ca.uhn.hl7v2.model.Message
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

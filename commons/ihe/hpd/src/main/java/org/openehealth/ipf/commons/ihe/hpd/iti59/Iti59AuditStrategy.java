@@ -77,9 +77,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(addRequest.getRequestID()),
                         EventActionCode.Create,
-                        providerIds,
-                        null,
-                        null);
+                        providerIds);
 
             } else if (dsmlMessage instanceof ModifyRequest) {
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
@@ -90,27 +88,24 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyRequest.getRequestID()),
                         EventActionCode.Update,
-                        providerIds,
-                        null,
-                        null);
+                        providerIds);
 
             } else if (dsmlMessage instanceof ModifyDNRequest) {
                 ModifyDNRequest modifyDNRequest = (ModifyDNRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyDNRequest.getRequestID()),
                         EventActionCode.Update,
-                        Collections.emptySet(),
-                        modifyDNRequest.getDn(),
-                        modifyDNRequest.getNewrdn());
+                        Collections.emptySet());
+                requestItems[i].setDn(modifyDNRequest.getDn());
+                requestItems[i].setNewRdn(modifyDNRequest.getNewrdn());
 
             } else if (dsmlMessage instanceof DelRequest) {
                 DelRequest delRequest = (DelRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(delRequest.getRequestID()),
                         EventActionCode.Delete,
-                        Collections.emptySet(),
-                        delRequest.getDn(),
-                        null);
+                        Collections.emptySet());
+                requestItems[i].setDn(delRequest.getDn());
             } else {
                 log.debug("Cannot handle ITI-59 request of type {}", getShortCanonicalName(dsmlMessage, "<null>"));
             }

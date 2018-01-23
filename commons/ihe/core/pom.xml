@@ -14,16 +14,6 @@
     
     <dependencies>
 
-        <!-- FIXME remove -->
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-nodeauth</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-audit</artifactId>
@@ -44,6 +34,11 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.oht.atna</groupId>
+            <artifactId>ipf-oht-atna-auditor</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

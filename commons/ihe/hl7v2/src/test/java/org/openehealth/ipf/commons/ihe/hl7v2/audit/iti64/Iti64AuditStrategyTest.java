@@ -17,12 +17,11 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.EventIdCode;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -54,7 +53,12 @@ public class Iti64AuditStrategyTest extends AuditorTestBase {
                 serverSide,
                 true);
 
-        // TODO check all the special participantObjectIdentifications
+        assertEquals(2, auditMessage.findParticipantObjectIdentifications(
+                poit -> poit.getParticipantObjectDataLifeCycle() == ParticipantObjectDataLifeCycle.Origination).size());
+        assertEquals(2, auditMessage.findParticipantObjectIdentifications(
+                poit -> poit.getParticipantObjectDataLifeCycle() == ParticipantObjectDataLifeCycle.LogicalDeletion).size());
+        assertEquals(1, auditMessage.findParticipantObjectIdentifications(
+                poit -> poit.getParticipantObjectTypeCode() == ParticipantObjectTypeCode.System).size());
 
         // System.out.println(printAuditMessage(auditMessage));
     }

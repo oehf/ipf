@@ -50,10 +50,27 @@
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-ws</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-xml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.oht.atna</groupId>
+            <artifactId>ipf-oht-atna-auditor</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

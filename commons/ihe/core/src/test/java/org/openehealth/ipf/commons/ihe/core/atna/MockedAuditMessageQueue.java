@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 
 import java.util.ArrayList;
@@ -36,20 +37,22 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.source;
  * @author Jens Riemschneider
  */
 @Slf4j
-public class MockedAuditMessageQueue extends AbstractMockedAuditMessageQueue {
+public class MockedAuditMessageQueue implements AbstractMockedAuditMessageQueue {
 
     private static final String NEW_VALIDATION_SCHEMA = "/atna2.xsd";
     private XsdValidator validator = new XsdValidator();
+    private final boolean needValidation;
 
     @Getter
     List<AuditMessage> messages = Collections.synchronizedList(new ArrayList<>());
 
     public MockedAuditMessageQueue() {
-        super(true);
+        this(true);
     }
 
     public MockedAuditMessageQueue(boolean needValidation) {
-        super(needValidation);
+        super();
+        this.needValidation = needValidation;
     }
 
     @Override
@@ -64,4 +67,8 @@ public class MockedAuditMessageQueue extends AbstractMockedAuditMessageQueue {
         }
     }
 
+    @Override
+    public void clear() {
+        messages.clear();
+    }
 }

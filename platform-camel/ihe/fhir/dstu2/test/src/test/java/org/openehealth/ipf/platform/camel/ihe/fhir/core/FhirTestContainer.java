@@ -25,7 +25,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import static org.junit.Assert.assertEquals;

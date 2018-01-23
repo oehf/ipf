@@ -16,11 +16,15 @@
 package org.openehealth.ipf.commons.xml;
 
 import lombok.extern.slf4j.Slf4j;
+import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.transform.Source;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.regex.Matcher;
@@ -35,10 +39,10 @@ import java.util.regex.Pattern;
 abstract public class XmlUtils {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
-        "(?:<\\?xml.+?\\?>)?"   +                              // optional prolog
-        "(?:\\s*<\\!--.*?-->)*" +                              // optional comments
-        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
-        Pattern.DOTALL
+            "(?:<\\?xml.+?\\?>)?" +                              // optional prolog
+                    "(?:\\s*<\\!--.*?-->)*" +                              // optional comments
+                    "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
+            Pattern.DOTALL
     );
 
 
@@ -95,4 +99,25 @@ abstract public class XmlUtils {
         }
     }
 
+    /**
+     * Simple method to serialize a DOM-bound XML object to a byte array (string)
+     *
+     * @param inputNode DOM Node to serialize
+     * @return Byte array of XML in ASCII form
+     * @throws Exception
+     */
+    public static byte[] serialize(Node inputNode) throws Exception {
+        // Initialize sources and targets
+        ByteArrayOutputStream serializerOutput = new ByteArrayOutputStream();
+        Source sourceObject = new DOMSource(inputNode);
+        Result targetObject = new StreamResult(serializerOutput);
+
+
+        TransformerFactory serializerFactory = TransformerFactory.newInstance();
+        Transformer serializer = serializerFactory.newTransformer();
+        serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+        serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        serializer.transform(sourceObject, targetObject);
+        return serializerOutput.toByteArray();
+    }
 }

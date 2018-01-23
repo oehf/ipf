@@ -109,7 +109,7 @@ public abstract class AuditDataset implements Serializable {
      * @return true if the source user is the requestor of the event
      */
     public boolean isSourceUserIsRequestor() {
-        return true;
+        return getUserName() == null || getUserName().isEmpty();
     }
 
     /**

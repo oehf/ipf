@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.audit.AuditContext
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -114,7 +114,7 @@ class StandardTestContainer {
             msg += "You should call startServer(...) in the @BeforeClass method of your test to initialize the server."
             throw new IllegalStateException(msg)
         }
-        auditSender.messages.clear()
+        auditSender.clear()
     }
 
     /**

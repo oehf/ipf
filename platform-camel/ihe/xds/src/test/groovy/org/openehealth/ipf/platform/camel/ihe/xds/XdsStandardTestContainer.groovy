@@ -98,6 +98,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
         assert human.userID == name
         assert human.userName == name
         assert human.roleIDCodes.size() == roles.size()
+        assert human.isUserIsRequestor()
         roles.eachWithIndex { CodedValueType cvt, int i ->
             assert human.roleIDCodes[i].code == cvt.code
             assert human.roleIDCodes[i].codeSystemName == cvt.codeSystemName

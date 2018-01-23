@@ -24,7 +24,7 @@ import org.hl7.fhir.instance.model.AuditEvent;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.translation.AuditRecordTranslator;
 
 import java.util.ArrayList;
@@ -37,16 +37,18 @@ import java.util.List;
  * FIXME
  */
 @Slf4j
-public class FhirMockedSender extends AbstractMockedAuditMessageQueue {
+public class FhirMockedSender implements AbstractMockedAuditMessageQueue {
 
     protected List<AuditEvent> messages = Collections.synchronizedList(new ArrayList<>());
 
     private final FhirContext fhirContext;
+    private final boolean needValidation;
     private final AuditRecordTranslator translator = new AuditRecordTranslator();
 
     public FhirMockedSender(FhirContext fhirContext, boolean needValidation) {
-        super(needValidation);
+        super();
         this.fhirContext = fhirContext;
+        this.needValidation = needValidation;
     }
 
     @Override
@@ -74,6 +76,11 @@ public class FhirMockedSender extends AbstractMockedAuditMessageQueue {
             }
             messages.add(auditEventResource);
         }
+    }
+
+    @Override
+    public void clear() {
+        messages.clear();
     }
 
 }

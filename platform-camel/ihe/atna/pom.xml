@@ -13,13 +13,6 @@
     </parent>
     
     <dependencies>
-        <!-- Dependencies for main -->
-
-        <!-- FIXME remove -->
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

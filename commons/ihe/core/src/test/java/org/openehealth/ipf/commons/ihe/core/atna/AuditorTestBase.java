@@ -54,15 +54,20 @@ public class AuditorTestBase {
     protected static final String CLIENT_IP_ADDRESS = "141.44.162.126";
     protected static final String SUBMISSION_SET_UUID = "6d334214-2a2e-43ef-a362-cbe6e77b91a0";
 
+
     protected static final String SENDING_FACILITY = "SF";
     protected static final String SENDING_APPLICATION = "SA";
     protected static final String RECEIVING_FACILITY = "RF";
     protected static final String RECEIVING_APPLICATION = "RA";
 
-    protected static final String[] PATIENT_IDS = new String[]{
-            "1234^^^&1.2.3.4.5.6&ISO",
-            "durak^^^&6.7.8.9.10&KRYSO"
-    };
+    protected static final String[] DOCUMENT_OIDS = {"1.1.1", "1.1.2", "1.1.3"};
+    protected static final String[] REPOSITORY_OIDS = {"2.1.1", "2.1.2", "2.1.3"};
+    protected static final String[] HOME_COMMUNITY_IDS = {"3.1.1", "3.1.2", "3.1.3"};
+    protected static final String[] OBJECT_UUIDS = {"objectUuid1", "objectUuid2", "objectUuid3"};
+    protected static final String[] STUDY_INSTANCE_UUIDS = {"study-instance_uuid-1", "study-instance_uuid-1", "study-instance_uuid-2"};
+    protected static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid-11", "series-instance_uuid-12", "series-instance_uuid-21"};
+    protected static final String[] PATIENT_IDS = new String[]{"1234^^^&1.2.3.4.5.6&ISO", "durak^^^&6.7.8.9.10&KRYSO"};
+    protected static final String[] PROVIDER_IDS = new String[]{"2.16.10.89.200:UPIN:800-800-8000:Active", "2.16.10.98.123:NPI:666789-800:Active", "1.89.11.00.123:HospId:786868:Active"};
 
     protected static final List<CodedValueType> PURPOSES_OF_USE;
 
@@ -142,6 +147,25 @@ public class AuditorTestBase {
                 REPLY_TO_URI, SERVER_URI, serverSide, requiresPatient);
     }
 
+    protected void assertCommonXdsAuditAttributes(AuditMessage auditMessage,
+                                                  EventOutcomeIndicator eventOutcomeIndicator,
+                                                  EventId eventId,
+                                                  EventActionCode eventActionCode,
+                                                  boolean serverSide,
+                                                  boolean requiresPatient) {
+        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
+                REPLY_TO_URI, SERVER_URI, serverSide, requiresPatient);
+    }
+
+    protected void assertCommonHpdAuditAttributes(AuditMessage auditMessage,
+                                                  EventOutcomeIndicator eventOutcomeIndicator,
+                                                  EventId eventId,
+                                                  EventActionCode eventActionCode,
+                                                  boolean serverSide) {
+        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
+                REPLY_TO_URI, SERVER_URI, serverSide, false);
+    }
+
     protected void assertCommonV2AuditAttributes(AuditMessage auditMessage,
                                                  EventOutcomeIndicator eventOutcomeIndicator,
                                                  EventId eventId,
@@ -166,10 +190,15 @@ public class AuditorTestBase {
         assertEquals(eventActionCode, auditMessage.getEventIdentification().getEventActionCode());
         assertEquals(eventId, auditMessage.getEventIdentification().getEventID());
 
+        ActiveParticipantType human = auditMessage.getActiveParticipants().stream()
+                .filter(apt -> apt.getUserName() != null)
+                .findFirst().orElse(null);
+
         ActiveParticipantType source = auditMessage.getActiveParticipants().stream()
                 .filter(apt -> ActiveParticipantRoleIdCode.Source == apt.getRoleIDCodes().get(0))
                 .findFirst().orElseThrow(() -> new AssertionError("Expected source participant"));
-        assertTrue(source.isUserIsRequestor());
+
+        assertEquals(human == null, source.isUserIsRequestor());
         assertEquals(sourceUserId, source.getUserID());
         if (!serverSide) {
             assertNotNull(source.getAlternativeUserID());

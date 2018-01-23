@@ -40,8 +40,8 @@ public class Iti59AuditDataset extends WsAuditDataset {
         @Getter @Setter private String outcomeDescription;
 
         // proprietary extensions for Delete and ModifyDN
-        @Getter private final String dn;
-        @Getter private final String newRdn;
+        @Getter @Setter private String dn;
+        @Getter @Setter private String newRdn;
     }
 
     @Getter @Setter private RequestItem[] requestItems;

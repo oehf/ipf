@@ -19,7 +19,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
 

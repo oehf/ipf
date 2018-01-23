@@ -28,12 +28,12 @@ import java.util.*;
  * @author Christian Ohr
  * @since 3.5
  */
-public class RecordingAuditMessageQueue implements AuditMessageQueue {
+public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQueue {
 
     private List<AuditMessage> messages = new ArrayList<>();
 
     @Override
-    public void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception {
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
         messages.addAll(Arrays.asList(auditMessages));
     }
 

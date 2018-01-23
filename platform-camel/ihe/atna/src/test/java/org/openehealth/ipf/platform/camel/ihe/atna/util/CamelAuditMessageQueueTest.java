@@ -31,7 +31,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor.getAuditor;
 
 /**
  * @author Martin Krasser
@@ -49,8 +48,6 @@ public class CamelAuditMessageQueueTest {
     @After
     public void tearDown() {
         mock.reset();
-        getAuditor().getContext().setSender(null);
-        getAuditor().setContext(null);
     }
 
     @Test

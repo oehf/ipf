@@ -46,11 +46,9 @@ public abstract class XdsRemoveDocumentAuditStrategy30 extends XdsNonconstructiv
         RegistryResponseType response = (RegistryResponseType) pojo;
         if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
             auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));
-        }
-        else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&
+        } else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&
                 (response.getRegistryErrorList() != null) &&
-                (response.getRegistryErrorList().getRegistryError() != null))
-        {
+                (response.getRegistryErrorList().getRegistryError() != null)) {
             for (RegistryError error : response.getRegistryErrorList().getRegistryError()) {
                 if (Severity.ERROR.getOpcode30().equals(error.getSeverity())) {
                     auditDataset.getDocuments().stream()

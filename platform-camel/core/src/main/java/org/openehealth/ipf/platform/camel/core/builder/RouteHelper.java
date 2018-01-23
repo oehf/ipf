@@ -290,7 +290,7 @@ public class RouteHelper {
      */
     public Enricher enricher(String aggregatorBeanName, String resourceUri) throws Exception {
         Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(routeBuilder.getContext(), resourceUri);
-        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(routeBuilder.outBody()), endpoint.createProducer());
+        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(routeBuilder.body()), endpoint.createProducer());
     }
 
     /**
