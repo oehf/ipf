@@ -25,8 +25,7 @@ import org.springframework.core.io.ClassPathResource
  * Entry point for command line execution.
  * @author Christian Ohr
  */
-public class Server {
-    private static final int SYSLOG_PORT = 514
+class Server {
       
     /**
      * Standard main.
@@ -57,9 +56,6 @@ public class Server {
         servletServer.initParameters.put("highlight", "true")
 
         servletServer.start()
-        
-        AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
-        AuditorModuleContext.context.config.auditRepositoryPort = SYSLOG_PORT
 
         while (true) {
             Thread.sleep(10000)
