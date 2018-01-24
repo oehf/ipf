@@ -25,6 +25,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Utility functions for obtaining local system context such as
+ * local hostname or IP address
+ *
  * @author Christian Ohr
  * @since 3.5
  */
@@ -38,7 +41,7 @@ public class AuditUtils {
     private static final String USER = "USER";
 
     /**
-     * @return the (optional) process ID of the running process or
+     * @return the process ID of the running process or "unknown"
      */
     public static String getProcessId() {
         return systemData.computeIfAbsent(PID, s -> {
@@ -53,21 +56,21 @@ public class AuditUtils {
     }
 
     /**
-     * @return the IP Address of the host
+     * @return the IP Address of the local host or "unknown"
      */
     public static String getLocalIPAddress() {
         return systemData.computeIfAbsent(IP, s ->
-                inetAddress()
+                localInetAddress()
                         .map(InetAddress::getHostAddress)
                         .orElse("unknown")).trim();
     }
 
     /**
-     * @return the name of the host
+     * @return the name of the host or "unknown"
      */
     public static String getLocalHostName() {
         return systemData.computeIfAbsent(HOST, s ->
-                inetAddress()
+                localInetAddress()
                         .map(InetAddress::getCanonicalHostName)
                         .orElse("unknown")).trim();
     }
@@ -79,32 +82,36 @@ public class AuditUtils {
         return systemData.computeIfAbsent(HOST, s -> System.getProperty("user.name"));
     }
 
-    public static String getHostFromUrl(String address) {
-        if (address == null) return null;
+    /**
+     * @param url a (remote) url
+     * @return the host name extracted from the provided URL
+     */
+    public static String getHostFromUrl(String url) {
+        if (url == null) return null;
 
         // drop schema
-        int pos = address.indexOf("://");
+        int pos = url.indexOf("://");
         if (pos > 0) {
-            address = address.substring(pos + 3);
+            url = url.substring(pos + 3);
         }
 
         // drop user authentication information
-        pos = address.indexOf('@');
+        pos = url.indexOf('@');
         if (pos > 0) {
-            address = address.substring(pos + 1);
+            url = url.substring(pos + 1);
         }
 
         // drop trailing parts: port number, query parameters, path, fragment
-        for (int i = 0; i < address.length(); ++i) {
-            char c = address.charAt(i);
+        for (int i = 0; i < url.length(); ++i) {
+            char c = url.charAt(i);
             if ((c == ':') || (c == '?') || (c == '/') || (c == '#')) {
-                return address.substring(0, i);
+                return url.substring(0, i);
             }
         }
-        return address;
+        return url;
     }
 
-    public static Optional<InetAddress> inetAddress() {
+    public static Optional<InetAddress> localInetAddress() {
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             return Optional.of(socket.getLocalAddress());

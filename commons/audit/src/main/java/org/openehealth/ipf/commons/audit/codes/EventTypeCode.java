@@ -21,9 +21,11 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
- * Audit Event ID Code as specified in
+ * Audit Event Type Code as specified in
  * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_401
  * 1.2.840.10008.6.1.904
+ * and http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_403
+ * 1.2.840.10008.6.1.906
  *
  * @author Christian Ohr
  * @since 3.5
@@ -52,7 +54,16 @@ public enum EventTypeCode implements EventType, EnumeratedCodedValue<EventType> 
     RemoteServiceOperationStarted("110139", "Remote Service Operation Started"),
     RemoteServiceOperationStopped("110140", "Remote Service Operation Stopped"),
     LocalServiceOperationStarted("110141", "Local Service Operation Started"),
-    LocalServiceOperationStopped("110142", "Local Service Operation Stopped");
+    LocalServiceOperationStopped("110142", "Local Service Operation Stopped"),
+
+    AuthenticationDecision("110143", "Authentication Decision"),
+    AuthorizationDecision("110144", "Authorization Decision"),
+    SessionStart("110145", "Session start"),
+    SessionStop("110146", "Session stop"),
+    AccessControlDecision("110147", "Access Control Decision"),
+    StudyInstanceUID("110180", "Study Instance UID"),
+    SOPClassUID("110181", "SOP Class UID"),
+    NodeID("110182", "Node ID");
 
     @Getter
     private EventType value;

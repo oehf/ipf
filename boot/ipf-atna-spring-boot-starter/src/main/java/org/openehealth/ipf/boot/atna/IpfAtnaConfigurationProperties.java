@@ -78,4 +78,7 @@ public class IpfAtnaConfigurationProperties {
     @Getter @Setter
     private Class<? extends AuditTransmissionProtocol> auditSenderClass;
 
+    @Getter @Setter
+    private boolean includeParticipantsFromResponse;
+
 }

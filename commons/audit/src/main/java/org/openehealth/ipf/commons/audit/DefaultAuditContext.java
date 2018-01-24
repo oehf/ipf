@@ -45,7 +45,7 @@ public class DefaultAuditContext implements AuditContext {
     private String auditRepositoryHostName = "localhost";
 
     @Getter
-    private InetAddress auditRepositoryAddress = AuditUtils.inetAddress().orElse(null);
+    private InetAddress auditRepositoryAddress = AuditUtils.localInetAddress().orElse(null);
 
     @Getter @Setter
     private int auditRepositoryPort = 514;

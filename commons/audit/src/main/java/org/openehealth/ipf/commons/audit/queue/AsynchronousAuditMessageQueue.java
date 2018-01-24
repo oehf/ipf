@@ -17,9 +17,11 @@
 package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -65,7 +67,13 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     protected void handle(AuditContext auditContext, String... auditRecords) {
         Runnable runnable = runnable(auditContext, auditRecords);
         if (executorService != null && !executorService.isShutdown()) {
-            executorService.execute(runnable);
+            CompletableFuture.runAsync(runnable, executorService)
+                    .exceptionally(e -> {
+                        LOG.warn(String.format("Failed to send ATNA event to destination [%s:%d]",
+                                auditContext.getAuditRepositoryAddress().getHostAddress(),
+                                auditContext.getAuditRepositoryPort()), e);
+                        return null;
+                    });
         } else {
             runnable.run();
         }
@@ -76,9 +84,7 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
             try {
                 auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
             } catch (Exception e) {
-                LOG.warn(String.format("Failed to send ATNA event to destination [%s:%d]",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
-                        auditContext.getAuditRepositoryPort()), e);
+                throw new AuditException(e);
             }
         };
     }
