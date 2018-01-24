@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -70,7 +68,12 @@ public abstract class AuditDataset implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+        return "AuditDataset{" +
+                "serverSide=" + serverSide +
+                ", eventOutcomeIndicator=" + eventOutcomeIndicator +
+                ", eventOutcomeDescription='" + eventOutcomeDescription + '\'' +
+                ", sourceUserName='" + sourceUserName + '\'' +
+                '}';
     }
 
     /**
