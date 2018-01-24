@@ -38,11 +38,14 @@ import java.util.Collections;
  */
 public class ApplicationActivityBuilder<T extends ApplicationActivityBuilder<T>> extends BaseAuditMessageBuilder<T> {
 
-    public ApplicationActivityBuilder(EventOutcomeIndicator outcome, EventType type) {
+    public ApplicationActivityBuilder(EventOutcomeIndicator outcome,
+                                      EventType type) {
         this(outcome, null, type);
     }
 
-    public ApplicationActivityBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType type) {
+    public ApplicationActivityBuilder(EventOutcomeIndicator outcome,
+                                      String eventOutcomeDescription,
+                                      EventType type) {
         super();
         setEventIdentification(outcome,
                 eventOutcomeDescription,

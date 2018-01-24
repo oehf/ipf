@@ -37,8 +37,8 @@ class Iti8AuditStrategyUtilsTest {
         Message message = load(HapiContextFactory.createHapiContext(
                 CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8),
                 'iti8/iti8-a40.hl7')
-        FeedAuditDataset dataset = new FeedAuditDataset(true);
-        Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message);
+        FeedAuditDataset dataset = new FeedAuditDataset(true)
+        Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message)
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'
                 + '~7200117317^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO'
                 + '~7200117355^^^CCC&2.16.840.1.113883.3.37.4.1.1.2.711.1&ISO', dataset.patientId)
@@ -47,6 +47,6 @@ class Iti8AuditStrategyUtilsTest {
 
     private static <T extends Message> T load(HapiContext context, String fileName) throws HL7Exception {
         return (T)context.getPipeParser().parse(
-                new Scanner(Iti8AuditStrategyUtilsTest.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next());
+                new Scanner(Iti8AuditStrategyUtilsTest.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next())
     }
 }

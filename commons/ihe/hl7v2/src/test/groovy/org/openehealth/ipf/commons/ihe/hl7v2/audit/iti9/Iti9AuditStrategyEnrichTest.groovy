@@ -41,7 +41,7 @@ class Iti9AuditStrategyEnrichTest {
     @Before
     void setup() {
         msg = getClass().getResourceAsStream("/rsp.hl7").text
-        auditContext = new DefaultAuditContext();
+        auditContext = new DefaultAuditContext()
     }
 
     @Test

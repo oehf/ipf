@@ -37,7 +37,7 @@ public abstract class AbstractCDAR2Test {
     static {
         URIConverter.URI_MAP.put(
             URI.createURI("http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore"),
-            URI.createPlatformPluginURI("/org.eclipse.ocl.ecore/model/oclstdlib.ecore", true));
+            URI.createPlatformPluginURI("/org.eclipse.ocl.ecore/model/oclstdlib.ecore", true))
     }
     
     @BeforeClass

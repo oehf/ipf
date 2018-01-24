@@ -41,7 +41,7 @@ class TestIti46 extends HL7v3StandardTestContainer {
             readFile('translation/pixfeed/v3/PIX_FEED_REV_Maximal_Request.xml')
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass

@@ -19,8 +19,6 @@ package org.openehealth.ipf.commons.audit;
 import io.vertx.core.Verticle;
 import io.vertx.ext.unit.Async;
 
-import java.util.concurrent.CountDownLatch;
-
 /**
  *
  */

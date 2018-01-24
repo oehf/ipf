@@ -32,13 +32,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
  */
 public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
 
-    public static final String IHE_HOME_COMMUNITY_ID = "ihe:homeCommunityID";
-    public static final String URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID = "urn:ihe:iti:xca:2010:homeCommunityId";
-    public static final String QUERY_ENCODING = "QueryEncoding";
-    public static final String REPOSITORY_UNIQUE_ID = "Repository Unique Id";
-    public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
-    public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
-
     /**
      * Constructs an XDS audit strategy.
      *   

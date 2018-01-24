@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
 import java.nio.charset.StandardCharsets;
@@ -31,12 +31,12 @@ import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy.IHE_HOME_COMMUNITY_ID;
+import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID;
 
 /**
  * @author Christian Ohr
  */
-public class Iti55AuditStrategyTest extends AuditorTestBase {
+public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase {
 
     @Test
     public void testServerSide() {

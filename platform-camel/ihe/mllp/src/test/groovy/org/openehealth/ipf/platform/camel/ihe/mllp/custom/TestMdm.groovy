@@ -108,7 +108,7 @@ class TestMdm extends MllpTestContainer {
                 )
         def processor = consumer.processor
         
-        def body = getMessageString(msh9, msh12);
+        def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
         
@@ -149,7 +149,7 @@ class TestMdm extends MllpTestContainer {
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = 'mdm://localhost:19081?audit=false'
         def body = getMessageString(msh9, msh12)
-        def failed = true;
+        def failed = true
         
         try {
             send(endpointUri, body)

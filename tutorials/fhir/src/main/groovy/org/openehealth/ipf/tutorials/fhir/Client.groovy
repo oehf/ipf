@@ -38,25 +38,25 @@ public class Client {
      *          any problem that occurred.
      */
     public static void main(String[] args) {
-        FhirContext context = FhirContext.forDstu2Hl7Org();
+        FhirContext context = FhirContext.forDstu2Hl7Org()
 
-        Parameters inParams = new Parameters();
+        Parameters inParams = new Parameters()
         inParams.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(new StringType("urn:oid:1.2.3.4|0815"));
+                .setValue(new StringType("urn:oid:1.2.3.4|0815"))
         inParams.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
+                .setValue(new UriType("urn:oid:1.2.3.4.6"))
 
-        IGenericClient client = context.newRestfulGenericClient("http://localhost:9091/");
+        IGenericClient client = context.newRestfulGenericClient("http://localhost:9091/")
         Parameters result = client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(inParams)
                 .useHttpGet()
-                .execute();
+                .execute()
 
-        System.out.println(context.newXmlParser().encodeResourceToString(result));
+        System.out.println(context.newXmlParser().encodeResourceToString(result))
     }
 
 }

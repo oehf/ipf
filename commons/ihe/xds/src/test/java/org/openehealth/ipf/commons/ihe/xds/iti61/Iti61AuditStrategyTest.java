@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti61AuditStrategyTest extends AuditorTestBase {
+public class Iti61AuditStrategyTest extends XdsAuditorTestBase {
 
     @Test
     public void testServerSide() {

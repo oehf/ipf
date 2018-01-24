@@ -40,16 +40,16 @@ class TestIti56 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti56/iti-56.xml'
     
-    final String SERVICE1_URI =    "xcpd-iti56://localhost:${port}/iti56service?correlator=#correlator";
-    final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti56service-response";
-    final String SERVICE_URI_ERROR = "xcpd-iti56://localhost:${port}/iti56service-error?correlator=#correlator";
+    final String SERVICE1_URI =    "xcpd-iti56://localhost:${port}/iti56service?correlator=#correlator" 
+    final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti56service-response" 
+    final String SERVICE_URI_ERROR = "xcpd-iti56://localhost:${port}/iti56service-error?correlator=#correlator" 
     
     static final String REQUEST = readFile('iti56/iti56-sample-request.xml')
 
     static final long AWAIT_DELAY = 20 * 1000L
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

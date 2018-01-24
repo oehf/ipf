@@ -23,7 +23,7 @@ import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.spi.Synchronization
 import org.junit.After
 import org.junit.AfterClass
-import org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
@@ -41,7 +41,7 @@ class MllpTestContainer {
 
     static ProducerTemplate producerTemplate
     static CamelContext camelContext
-    static MockedAuditMessageQueue auditSender
+    static AbstractMockedAuditMessageQueue auditSender
     static ClassPathXmlApplicationContext appContext
 
     static String TIMEOUT = '15000'
@@ -57,7 +57,7 @@ class MllpTestContainer {
         camelContext.shutdownStrategy.timeout = 20L
         camelContext.shutdownStrategy.timeUnit = TimeUnit.SECONDS
 
-        auditSender = appContext.getBean('mockedSender', MockedAuditMessageQueue.class)
+        auditSender = appContext.getBean('mockedSender', AbstractMockedAuditMessageQueue.class)
 
         if (standalone) {
             Thread.currentThread().join()
@@ -66,7 +66,7 @@ class MllpTestContainer {
     
     @After
     void tearDown() {
-        auditSender?.messages.clear()
+        auditSender?.clear()
     }
     
     @AfterClass

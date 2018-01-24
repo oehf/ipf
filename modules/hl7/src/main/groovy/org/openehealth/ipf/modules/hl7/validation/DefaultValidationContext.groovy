@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
-import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.Version
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.validation.EncodingRule
@@ -132,7 +132,7 @@ public class DefaultValidationContext implements ValidationContext, Serializable
            }
        }
        //filter only the rules that apply for clazz
-       def result = [];
+       def result = []
        for(rule in rules){
            if(rule.appliesFor(clazz)){
                result.add(rule)

@@ -50,7 +50,7 @@ class SegmentAdapter<T extends Segment> extends StructureAdapter<T> {
     }
 
     def getAt(int idx) {
-        def result;
+        def result
         def adapters = adaptTypes(target.getField(idx))
         if (target.getMaxCardinality(idx) == 1) {
             // non-repeating field
@@ -60,11 +60,11 @@ class SegmentAdapter<T extends Segment> extends StructureAdapter<T> {
             } else {
                 result = adapters[0]
             }
-            result.setPath(typePath(this, idx));
+            result.setPath(typePath(this, idx))
         } else { 
             // repeating field
             for(AbstractAdapter adapter : adapters){
-                adapter.setPath(typePath(this, idx));
+                adapter.setPath(typePath(this, idx))
             }
             result = selector(adapters, this, idx)
         }

@@ -29,24 +29,24 @@ import org.springframework.beans.factory.annotation.Autowired
  */
 class Iti8MllpExceptionHandler implements ExceptionHandler {
 
-    @Autowired CamelContext camelContext;
+    @Autowired CamelContext camelContext
 
     @Override
     public void handleException(Throwable exception) {
-        handleException("", exception);
+        handleException("", exception)
     }
 
     @Override
     public void handleException(String message, Throwable exception) {
-        handleException(message, null, exception);
+        handleException(message, null, exception)
     }
 
     @Override
     public void handleException(String message, Exchange exchange, Throwable exception) {
         if (exchange == null) {
-            exchange = new DefaultExchange(camelContext);
+            exchange = new DefaultExchange(camelContext)
         }
-        message = MessageUtils.defaultNak(new HL7Exception(exception), AcknowledgmentCode.CE, "2.3.1").toString();
-        exchange.getIn().setBody(message);
+        message = MessageUtils.defaultNak(new HL7Exception(exception), AcknowledgmentCode.CE, "2.3.1").toString()
+        exchange.getIn().setBody(message)
     }
 }

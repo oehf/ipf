@@ -62,10 +62,10 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
      * @return this
      */
     public BeginTransferringDicomInstancesBuilder setSendingProcessParticipant(String userId,
-                                                                                     String altUserId,
-                                                                                     String userName,
-                                                                                     String networkId,
-                                                                                     boolean userIsRequestor) {
+                                                                               String altUserId,
+                                                                               String userName,
+                                                                               String networkId,
+                                                                               boolean userIsRequestor) {
         return addSourceActiveParticipant(userId, altUserId, userName, networkId, userIsRequestor);
     }
 
@@ -78,10 +78,10 @@ public class BeginTransferringDicomInstancesBuilder extends BaseAuditMessageBuil
      * @return this
      */
     public BeginTransferringDicomInstancesBuilder setReceivingProcessParticipant(String userId,
-                                                                                       String altUserId,
-                                                                                       String userName,
-                                                                                       String networkId,
-                                                                                       boolean userIsRequestor) {
+                                                                                 String altUserId,
+                                                                                 String userName,
+                                                                                 String networkId,
+                                                                                 boolean userIsRequestor) {
         return addDestinationActiveParticipant(userId, altUserId, userName, networkId, userIsRequestor);
     }
 

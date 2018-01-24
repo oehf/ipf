@@ -28,16 +28,16 @@ public interface AbstractAdapter<T> {
    /**
     * @return the adapter target. This should be a HAPI object
     */
-    T getTarget();
+    T getTarget()
     
     /**
     * @return the position of the element target in the message
     */
-    String getPath();
+    String getPath()
    
     /**
     * @return sets the position of the element target in the message
     */
-    void setPath(String path);
+    void setPath(String path)
 
 }

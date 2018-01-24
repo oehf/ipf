@@ -30,8 +30,6 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
  */
 abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset> {
 
-    public static final String IHE_HOME_COMMUNITY_ID = "ihe:homeCommunityID";
-
     private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3AuditStrategy.class)
 
     Hl7v3AuditStrategy(boolean serverSide) {

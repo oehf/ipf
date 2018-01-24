@@ -105,8 +105,8 @@ class TestIti44 extends HL7v3StandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'iti-44.xml'
     
-    def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1";
-    def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1";
+    def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1"
+    def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1"
 
     private static final String ADD_REQUEST =
             readFile('translation/pixfeed/v3/PIX_FEED_REG_Maximal_Request.xml')
@@ -117,7 +117,7 @@ class TestIti44 extends HL7v3StandardTestContainer {
 
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -135,7 +135,7 @@ class TestIti44 extends HL7v3StandardTestContainer {
     void testMpiProblem() {
         Processor processor = [process : { Exchange arg0 ->
                 arg0.in.body = new String(REQUEST2.getBytes('ISO-8859-1'))
-                arg0.setProperty(Exchange.CHARSET_NAME, "UTF-8");
+                arg0.setProperty(Exchange.CHARSET_NAME, "UTF-8")
         } ] as Processor
 
         producerTemplate.send(SERVICE1_PIX, ExchangePattern.InOut, processor)

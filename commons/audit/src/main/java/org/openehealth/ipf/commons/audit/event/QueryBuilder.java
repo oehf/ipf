@@ -72,8 +72,11 @@ public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
      */
-    public QueryBuilder setQueryingParticipant(String userId, String altUserId, String userName,
-                                               String networkAccessPointId, boolean userIsRequestor) {
+    public QueryBuilder setQueryingParticipant(String userId,
+                                               String altUserId,
+                                               String userName,
+                                               String networkAccessPointId,
+                                               boolean userIsRequestor) {
         return addSourceActiveParticipant(userId, altUserId, userName, networkAccessPointId, userIsRequestor);
     }
 
@@ -88,8 +91,11 @@ public class QueryBuilder extends BaseAuditMessageBuilder<QueryBuilder> {
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
      */
-    public QueryBuilder setRespondingParticipant(String userId, String altUserId, String userName,
-                                                 String networkAccessPointId, boolean userIsRequestor) {
+    public QueryBuilder setRespondingParticipant(String userId,
+                                                 String altUserId,
+                                                 String userName,
+                                                 String networkAccessPointId,
+                                                 boolean userIsRequestor) {
         return addDestinationActiveParticipant(userId, altUserId, userName, networkAccessPointId, userIsRequestor);
     }
 

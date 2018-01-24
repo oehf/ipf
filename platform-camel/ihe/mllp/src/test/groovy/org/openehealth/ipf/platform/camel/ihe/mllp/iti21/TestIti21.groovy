@@ -54,7 +54,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Rule
-    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES);
+    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES)
 
     @BeforeClass
     static void setUpClass() {
@@ -99,7 +99,7 @@ class TestIti21 extends MllpTestContainer {
         }
         assert failed
 
-        auditSender.messages.clear()
+        auditSender.clear()
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
@@ -144,8 +144,8 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(3, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
-        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID());
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID())
     }
 
     @Test
@@ -173,7 +173,7 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(2, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -189,7 +189,7 @@ class TestIti21 extends MllpTestContainer {
         def messages = auditSender.messages
         assertEquals(3, messages.size())
         LOG.warn("{}", messages)
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID());
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
     @Test
@@ -211,7 +211,7 @@ class TestIti21 extends MllpTestContainer {
         ]
 
         // Expect that the headers being sent arrive at the mock endpoint
-        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace");
+        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace")
         mockEndpoint.expectedMessageCount(1)
         mockEndpoint.expectedMessagesMatches(new Predicate() {
             @Override
@@ -270,7 +270,7 @@ class TestIti21 extends MllpTestContainer {
         )
         def processor = consumer.processor
 
-        def body = getMessageString(msh9, msh12);
+        def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
 
@@ -314,7 +314,7 @@ class TestIti21 extends MllpTestContainer {
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
-        def failed = true;
+        def failed = true
 
         try {
             send(endpointUri, body)

@@ -39,7 +39,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="includeParticipantsFromResponse" value="true"/>
     </bean>
 
-    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
     
 	<ipf:globalContext id="globalContext"/>    
 

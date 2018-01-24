@@ -43,7 +43,7 @@ class Iti21TestContinuationsRouteBuilder extends RouteBuilder {
          'PID|3||79653^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
              '|MÃ¼ller^Hannes^^^^^L||19400101|M|||Am Domplatz 14^^KÃ¶ln^^57000||022/843274\r' +
          'PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
-             '|MÃ¼ller^Joachim^^^^^L||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r';
+             '|MÃ¼ller^Joachim^^^^^L||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r'
 
      
      static final Map CHAIN_1 = [

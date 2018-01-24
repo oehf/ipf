@@ -91,7 +91,7 @@ public class MessageAdapters {
 	}
 
     static <T extends AbstractMessage>  MessageAdapter<T>  make(HapiContext context, String message) {
-        make(context.genericParser, message);
+        make(context.genericParser, message)
     }
 
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, String message) {

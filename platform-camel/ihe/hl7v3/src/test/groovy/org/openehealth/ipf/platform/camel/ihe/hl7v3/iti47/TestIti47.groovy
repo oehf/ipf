@@ -60,7 +60,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
     private static final String REQUEST = readFile('iti47/01_PDQQuery1.xml')
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

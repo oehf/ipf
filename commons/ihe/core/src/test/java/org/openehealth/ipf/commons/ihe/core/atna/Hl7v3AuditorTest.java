@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3AuditorTest extends AuditorTestBase {
+public class Hl7v3AuditorTest extends OhtAuditorTestBase {
 
     @Test
     public void testAuditors() {

@@ -46,8 +46,8 @@ class FhirExtensionModule {
     }
 
     private static void registerDataFormat(FhirDataFormat dataFormat, DataFormatClause self, FhirContext defaultContext, String defaultCharset) {
-        if (defaultContext != null) dataFormat.setDefaultFhirContext(defaultContext);
-        if (defaultCharset != null) dataFormat.setDefaultCharset(defaultCharset);
-        CoreExtensionModule.dataFormat(self, dataFormat);
+        if (defaultContext != null) dataFormat.setDefaultFhirContext(defaultContext)
+        if (defaultCharset != null) dataFormat.setDefaultCharset(defaultCharset)
+        CoreExtensionModule.dataFormat(self, dataFormat)
     }
 }

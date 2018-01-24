@@ -1,4 +1,4 @@
-package org.openehealth.ipf.platform.camel.core.config;
+package org.openehealth.ipf.platform.camel.core.config
 
 class CustomRoute2 extends CustomRouteBuilder{
 	

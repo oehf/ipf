@@ -34,14 +34,14 @@ class TestIti45 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-45.xml'
     
-    def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1";
-    def SERVICE2 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service2?audit=false";
+    def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1" 
+    def SERVICE2 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service2?audit=false" 
 
     private static final String REQUEST =
         readFile('translation/pixquery/v3/NistPixpdq_Mesa10501-04_Example_01.xml')
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

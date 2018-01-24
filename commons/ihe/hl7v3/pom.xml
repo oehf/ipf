@@ -64,11 +64,6 @@
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

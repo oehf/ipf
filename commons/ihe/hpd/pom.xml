@@ -47,11 +47,6 @@
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

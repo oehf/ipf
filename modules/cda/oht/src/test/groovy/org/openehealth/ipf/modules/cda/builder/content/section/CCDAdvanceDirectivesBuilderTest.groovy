@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest;
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
 import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
 import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section

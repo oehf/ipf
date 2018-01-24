@@ -59,7 +59,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
     static final AtomicInteger ttlResponsesCount = new AtomicInteger(0)
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     private MockEndpoint allResponsesMockEndpoint

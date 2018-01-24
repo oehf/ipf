@@ -27,7 +27,7 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception
  */
 class Iti9Responder extends ExpressionAdapter {
 
-    private final ResponseCase responseCase;
+    private final ResponseCase responseCase
 
     Iti9Responder(ResponseCase responseCase) {
         this.responseCase = responseCase
@@ -36,10 +36,10 @@ class Iti9Responder extends ExpressionAdapter {
     @Override
     Object evaluate(Exchange exchange) {
         try {
-            Message request = exchange.getIn().getBody(Message.class);
-            return responseCase.populateResponse(request);
+            Message request = exchange.getIn().getBody(Message.class)
+            return responseCase.populateResponse(request)
         } catch (HL7Exception e) {
-            throw new HL7v2Exception(e);
+            throw new HL7v2Exception(e)
         }
 
     }

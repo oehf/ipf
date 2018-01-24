@@ -53,7 +53,7 @@ abstract class TestDispatch extends MllpTestContainer {
     // ITI-8 and ITI-64 can be dispatched, ITI-9 must fail
     @Test
     void testHappyCaseAndAudit1() {
-        DefaultExchange exchange = new DefaultExchange(camelContext);
+        DefaultExchange exchange = new DefaultExchange(camelContext)
 
         exchange.in.body = send('pix-iti8://localhost:' + getDispatcherPort(), ITI_8_REQUEST)
         validatingProcessor().process(exchange)
@@ -91,6 +91,6 @@ abstract class TestDispatch extends MllpTestContainer {
         .size())
     }
 
-    protected abstract String getDispatcherPort();
+    protected abstract String getDispatcherPort()
 
 }

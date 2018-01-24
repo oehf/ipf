@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * For testing only: an implementation that records the audit messages in memory.
@@ -30,7 +31,7 @@ import java.util.*;
  */
 public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQueue {
 
-    private List<AuditMessage> messages = new ArrayList<>();
+    private List<AuditMessage> messages = new CopyOnWriteArrayList<>();
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {

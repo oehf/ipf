@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
@@ -62,7 +63,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
                 auditDataset.messageId,
                 CrossGatewayPatientDiscovery,
                 auditDataset.requestPayload,
-                IHE_HOME_COMMUNITY_ID, auditDataset.homeCommunityId
+                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, auditDataset.homeCommunityId
         )
 
         builder.getMessages()

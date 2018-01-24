@@ -41,15 +41,24 @@ import static java.util.Objects.requireNonNull;
  */
 public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder> {
 
-    public DataExportBuilder(EventOutcomeIndicator outcome, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataExportBuilder(EventOutcomeIndicator outcome,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         this(outcome, null, eventType, purposesOfUse);
     }
 
-    public DataExportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataExportBuilder(EventOutcomeIndicator outcome,
+                             String eventOutcomeDescription,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         this(outcome, eventOutcomeDescription, EventActionCode.Read, eventType, purposesOfUse);
     }
 
-    public DataExportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataExportBuilder(EventOutcomeIndicator outcome,
+                             String eventOutcomeDescription,
+                             EventActionCode eventActionCode,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
                 eventOutcomeDescription,
@@ -69,8 +78,11 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
      */
-    public DataExportBuilder addReceivingParticipant(String userId, String altUserId, String userName,
-                                                     String networkAccessPointId, boolean userIsRequestor) {
+    public DataExportBuilder addReceivingParticipant(String userId,
+                                                     String altUserId,
+                                                     String userName,
+                                                     String networkAccessPointId,
+                                                     boolean userIsRequestor) {
         return addDestinationActiveParticipant(userId, altUserId, userName, networkAccessPointId, userIsRequestor);
     }
 
@@ -84,8 +96,11 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
      *                             UserIsRequestor with a value of TRUE. This accommodates both push and pull transfer models for media
      * @return this
      */
-    public DataExportBuilder addExportingParticipant(String userId, String altUserId, String userName,
-                                                     String networkAccessPointId, boolean userIsRequestor) {
+    public DataExportBuilder addExportingParticipant(String userId,
+                                                     String altUserId,
+                                                     String userName,
+                                                     String networkAccessPointId,
+                                                     boolean userIsRequestor) {
         return addSourceActiveParticipant(userId, altUserId, userName, networkAccessPointId, userIsRequestor);
     }
 

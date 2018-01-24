@@ -30,7 +30,7 @@ class AdapterHelper {
 
     
     static String typePath(AbstractAdapter target, Integer repetition){
-        String targetPath = target.path;
+        String targetPath = target.path
         return targetPath == '' ?  "${target.name}-${repetition}" : "${targetPath}-${repetition}"
     }
     

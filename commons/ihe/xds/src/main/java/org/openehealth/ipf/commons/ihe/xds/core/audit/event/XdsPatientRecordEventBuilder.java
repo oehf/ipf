@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
 import java.util.Collections;
@@ -108,7 +107,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
 
     private List<TypeValuePairType> makeDetail(String repositoryId) {
         List<TypeValuePairType> tvp = new LinkedList<>();
-        tvp.add(new TypeValuePairType(XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repositoryId));
+        tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
         return tvp;
     }
 }

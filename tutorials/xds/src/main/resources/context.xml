@@ -59,8 +59,13 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     <!-- Auditing -->
     <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
         <property name="auditEnabled" value="true"/>
-        <property name="auditMessageQueue" ref="mockedSender"/>
         <property name="auditSourceId" value="sourceId"/>
+        <property name="auditMessageQueue" ref="mockedSender"/>
+        <!-- default
+        <property name="auditRepositoryHost" value="localhost"/>
+        <property name="auditRepositoryPort" value="514"/>
+        <property name="auditRepositoryTransport" value="UDP"/>
+        -->
     </bean>
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>

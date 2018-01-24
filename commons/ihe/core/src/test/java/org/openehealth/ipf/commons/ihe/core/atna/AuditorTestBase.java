@@ -28,8 +28,6 @@ import org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.EventId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -53,60 +51,13 @@ public class AuditorTestBase {
     protected static final String HOME_COMMUNITY_ID = "urn:oid:3.14.15.926";
     protected static final String CLIENT_IP_ADDRESS = "141.44.162.126";
     protected static final String SUBMISSION_SET_UUID = "6d334214-2a2e-43ef-a362-cbe6e77b91a0";
-
-
-    protected static final String SENDING_FACILITY = "SF";
-    protected static final String SENDING_APPLICATION = "SA";
-    protected static final String RECEIVING_FACILITY = "RF";
-    protected static final String RECEIVING_APPLICATION = "RA";
-
-    protected static final String[] DOCUMENT_OIDS = {"1.1.1", "1.1.2", "1.1.3"};
-    protected static final String[] REPOSITORY_OIDS = {"2.1.1", "2.1.2", "2.1.3"};
-    protected static final String[] HOME_COMMUNITY_IDS = {"3.1.1", "3.1.2", "3.1.3"};
-    protected static final String[] OBJECT_UUIDS = {"objectUuid1", "objectUuid2", "objectUuid3"};
-    protected static final String[] STUDY_INSTANCE_UUIDS = {"study-instance_uuid-1", "study-instance_uuid-1", "study-instance_uuid-2"};
-    protected static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid-11", "series-instance_uuid-12", "series-instance_uuid-21"};
     protected static final String[] PATIENT_IDS = new String[]{"1234^^^&1.2.3.4.5.6&ISO", "durak^^^&6.7.8.9.10&KRYSO"};
-    protected static final String[] PROVIDER_IDS = new String[]{"2.16.10.89.200:UPIN:800-800-8000:Active", "2.16.10.98.123:NPI:666789-800:Active", "1.89.11.00.123:HospId:786868:Active"};
 
-    protected static final List<CodedValueType> PURPOSES_OF_USE;
-
-    static {
-        PURPOSES_OF_USE = new ArrayList<>();
-        CodedValueType cvt = new CodedValueType();
-
-        cvt.setCode("12");
-        cvt.setCodeSystemName("1.0.14265.1");
-        cvt.setOriginalText("Law Enforcement");
-        PURPOSES_OF_USE.add(cvt);
-
-        cvt.setCode("13");
-        cvt.setCodeSystemName("1.0.14265.1");
-        cvt.setOriginalText("Something Else");
-        PURPOSES_OF_USE.add(cvt);
-    }
 
     protected static final PurposeOfUse[] NEW_PURPOSES_OF_USE = {
             PurposeOfUse.of("12", "1.0.14265.1", "Law Enforcement"),
             PurposeOfUse.of("13", "1.0.14265.1", "Something Else")
     };
-
-    protected static final List<CodedValueType> USER_ROLES;
-
-    static {
-        USER_ROLES = new ArrayList<>();
-        CodedValueType cvt = new CodedValueType();
-
-        cvt.setCode("ABC");
-        cvt.setCodeSystemName("1.2.3.4.5");
-        cvt.setOriginalText("Role_ABC");
-        PURPOSES_OF_USE.add(cvt);
-
-        cvt.setCode("DEF");
-        cvt.setCodeSystemName("1.2.3.4.5.6");
-        cvt.setOriginalText("Role_DEF");
-        PURPOSES_OF_USE.add(cvt);
-    }
 
     protected static final List<ActiveParticipantRoleId> NEW_USER_ROLES;
 
@@ -116,17 +67,11 @@ public class AuditorTestBase {
         NEW_USER_ROLES.add(ActiveParticipantRoleId.of("DEF", "1.2.3.4.5.6", "Role_DEF"));
     }
 
-    protected MockedSender sender;
     protected DefaultAuditContext auditContext;
     protected RecordingAuditMessageQueue recorder;
 
     @Before
     public void setUp() {
-        sender = new MockedSender();
-        AuditorModuleContext.getContext().setSender(sender);
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-
         auditContext = new DefaultAuditContext();
         recorder = new RecordingAuditMessageQueue();
         auditContext.setAuditMessageQueue(recorder);
@@ -137,48 +82,8 @@ public class AuditorTestBase {
         recorder.clear();
     }
 
-    protected void assertCommonV3AuditAttributes(AuditMessage auditMessage,
-                                                 EventOutcomeIndicator eventOutcomeIndicator,
-                                                 EventId eventId,
-                                                 EventActionCode eventActionCode,
-                                                 boolean serverSide,
-                                                 boolean requiresPatient) {
-        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
-                REPLY_TO_URI, SERVER_URI, serverSide, requiresPatient);
-    }
 
-    protected void assertCommonXdsAuditAttributes(AuditMessage auditMessage,
-                                                  EventOutcomeIndicator eventOutcomeIndicator,
-                                                  EventId eventId,
-                                                  EventActionCode eventActionCode,
-                                                  boolean serverSide,
-                                                  boolean requiresPatient) {
-        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
-                REPLY_TO_URI, SERVER_URI, serverSide, requiresPatient);
-    }
-
-    protected void assertCommonHpdAuditAttributes(AuditMessage auditMessage,
-                                                  EventOutcomeIndicator eventOutcomeIndicator,
-                                                  EventId eventId,
-                                                  EventActionCode eventActionCode,
-                                                  boolean serverSide) {
-        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
-                REPLY_TO_URI, SERVER_URI, serverSide, false);
-    }
-
-    protected void assertCommonV2AuditAttributes(AuditMessage auditMessage,
-                                                 EventOutcomeIndicator eventOutcomeIndicator,
-                                                 EventId eventId,
-                                                 EventActionCode eventActionCode,
-                                                 boolean serverSide,
-                                                 boolean requiresPatient) {
-        assertCommonAuditAttributes(auditMessage, eventOutcomeIndicator, eventId, eventActionCode,
-                SENDING_FACILITY + "|" + SENDING_APPLICATION,
-                RECEIVING_FACILITY + "|" + RECEIVING_APPLICATION,
-                serverSide, requiresPatient);
-    }
-
-    private void assertCommonAuditAttributes(AuditMessage auditMessage,
+    protected void assertCommonAuditAttributes(AuditMessage auditMessage,
                                              EventOutcomeIndicator eventOutcomeIndicator,
                                              EventId eventId,
                                              EventActionCode eventActionCode,

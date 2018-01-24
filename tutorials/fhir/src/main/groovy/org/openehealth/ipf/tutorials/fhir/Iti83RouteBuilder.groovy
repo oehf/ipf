@@ -41,10 +41,10 @@ class Iti83RouteBuilder extends RouteBuilder {
     private Boolean validateIti9Response = false
 
     public Iti83RouteBuilder(UriMapper uriMapper, String host, int iti9Port) {
-        super();
-        this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper);
-        this.responseTranslator = new PixQueryResponseToPixmResponseTranslator(uriMapper);
-        this.host = host;
+        super()
+        this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper)
+        this.responseTranslator = new PixQueryResponseToPixmResponseTranslator(uriMapper)
+        this.host = host
         this.port = iti9Port
     }
 

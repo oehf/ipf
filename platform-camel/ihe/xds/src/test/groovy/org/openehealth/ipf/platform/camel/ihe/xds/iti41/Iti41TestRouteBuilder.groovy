@@ -78,7 +78,7 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
         ProvideAndRegisterDocumentSet request = exchange.in.getBody(ProvideAndRegisterDocumentSet.class)
         def doc = request.documents[0]
         def value = doc.documentEntry.comments.value        
-        def status = FAILURE;
+        def status = FAILURE
         def dataHandler = doc.getContent(DataHandler)
         if (expected == value && dataHandler != null) {
             Collection attachments = dataHandler.dataSource.attachments

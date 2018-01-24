@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole
 import org.openehealth.ipf.commons.audit.model.*
 import org.openehealth.ipf.commons.audit.types.CodedValueType
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -137,8 +138,8 @@ class XdsStandardTestContainer extends StandardTestContainer {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetails[0], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[1], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[0], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[1], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkImageDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
@@ -147,10 +148,10 @@ class XdsStandardTestContainer extends StandardTestContainer {
         checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
         assert uri.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetails[0], XdsAuditStrategy.STUDY_INSTANCE_UNIQUE_ID, studyId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[1], XdsAuditStrategy.SERIES_INSTANCE_UNIQUE_ID, seriesId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[2], XdsAuditStrategy.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[3], XdsAuditStrategy.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[0], IHEAuditMessageBuilder.STUDY_INSTANCE_UNIQUE_ID, studyId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[1], IHEAuditMessageBuilder.SERIES_INSTANCE_UNIQUE_ID, seriesId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[2], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(uri.participantObjectDetails[3], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {

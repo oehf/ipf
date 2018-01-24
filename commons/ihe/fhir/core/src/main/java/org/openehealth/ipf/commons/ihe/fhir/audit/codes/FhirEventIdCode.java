@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EventId;
-import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
  * @author Christian Ohr

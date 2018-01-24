@@ -16,7 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import org.junit.Before
-import org.junit.Test;
+import org.junit.Test
 
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
@@ -48,7 +48,7 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
         assertFieldEquals('25026500^CREATININE, RANDOM URINE^^25026500^CREATININE, RANDOM URINE', obx1, 3)
         assertFieldsEmpty(obx1, 4)
         
-        AbstractAdapter adapter = obx1[5];
+        AbstractAdapter adapter = obx1[5]
         assertTrue(adapter instanceof SelectorClosure)
         //should be [100~200~300] in message
         assertEquals('100', adapter.elementAt(0).value)
@@ -75,7 +75,7 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
         assertFieldsEmpty(obx3, 4)
         
         
-        AbstractAdapter adapter = obx2[5];
+        AbstractAdapter adapter = obx2[5]
         assertTrue(adapter instanceof SelectorClosure)
         assertEquals('400', adapter.elementAt(0).value)
         assertFalse(adapter.isEmpty())
@@ -96,7 +96,7 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
         assertFieldEquals('50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE^^50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE', obx3, 3)
         assertFieldsEmpty(obx3, 4)
         
-        AbstractAdapter adapter = obx3[5];
+        AbstractAdapter adapter = obx3[5]
         assertTrue(adapter instanceof SelectorClosure)
         assertEquals('4', adapter.elementAt(0).value)
         assertFalse(adapter.isEmpty())
@@ -140,13 +140,13 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
     }
 
     void assertFieldEquals(String expected, AbstractAdapter adapter, int field){
-        String simpleName = adapter.target.getClass().getSimpleName();
+        String simpleName = adapter.target.getClass().getSimpleName()
         assertEquals(expected, adapter[field].encode())
         assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", adapter[field].isEmpty())
     }
 
     void assertFieldsEmpty(SegmentAdapter adapter, int ... fields){
-        String simpleName = adapter.target.getClass().getSimpleName();
+        String simpleName = adapter.target.getClass().getSimpleName()
         for (field in fields){
             assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", adapter[field].isEmpty())
         }
@@ -155,7 +155,7 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
     @Test
     void testTypeAdapterPath(){
         String encoded =  msg2.MSH.encode()
-        assertNotNull(encoded);
+        assertNotNull(encoded)
         
         String path =  msg2.MSH.getPath()
         assertEquals("MSH", path)
@@ -175,10 +175,10 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
         assertEquals(CompositeAdapter.class, msg2.PATIENT_RESULT.PATIENT.PID[5].class)
         assertEquals(PrimitiveAdapter.class, msg2.PATIENT_RESULT.PATIENT.PID[5][2].class)
         path = msg2.PATIENT_RESULT.PATIENT.PID[5].path
-        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5', path);
+        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5', path)
         
         path = msg2.PATIENT_RESULT.PATIENT.PID[5][2].path
-        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5-2', path);
+        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5-2', path)
         
     }
 }

@@ -32,14 +32,14 @@ public class TestCallbackHandler implements CallbackHandler {
                 if (callback instanceof NameCallback){
                     NameCallback nc = (NameCallback)callback
                     String name = 'ipf-client-key'
-                    nc.setName(name);
+                    nc.setName(name)
                     println "${nc.prompt} ${nc.name}"
                 } else if (callback instanceof PasswordCallback){
                     PasswordCallback pc = (PasswordCallback)callback
                     String pw = 'changeit'
-                    pc.setPassword(pw.toCharArray());
+                    pc.setPassword(pw.toCharArray())
                     println "${pc.prompt} :)"
-                    pw = null;
+                    pw = null
                 }
             }
         } catch (IOException e){

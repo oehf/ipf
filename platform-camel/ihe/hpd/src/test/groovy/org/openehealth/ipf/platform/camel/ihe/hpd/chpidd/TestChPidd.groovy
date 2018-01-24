@@ -33,7 +33,7 @@ class TestChPidd extends StandardTestContainer {
     final String SERVICE1 = "ch-pidd://localhost:${port}/ch-pidd-service1"
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass

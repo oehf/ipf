@@ -54,7 +54,7 @@ public class DefaultAuditContext implements AuditContext {
     private boolean auditEnabled = false;
 
     @Getter @Setter
-    private AuditTransmissionProtocol auditTransmissionProtocol;
+    private AuditTransmissionProtocol auditTransmissionProtocol = new UDPSyslogSenderImpl();
 
     @Getter @Setter
     private AuditMessageQueue auditMessageQueue = new SynchronousAuditMessageQueue();

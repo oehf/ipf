@@ -15,15 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63
 
-import java.util.concurrent.CountDownLatch;
-
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63ResponseValidator
-
-import java.util.concurrent.atomic.AtomicInteger
-
-import javax.activation.DataHandler
-
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
@@ -34,6 +25,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
+
+import javax.activation.DataHandler
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
+
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63ResponseValidator
 
 /**
  * Test routes for ITI-63.
@@ -50,10 +48,10 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
         RESPONSE.status = Status.SUCCESS
         RESPONSE.documents << new Document(
                 RESPONSE.documentEntries.get(0),
-                new DataHandler('abcd ' * 1500, "text/plain"));
+                new DataHandler('abcd ' * 1500, "text/plain"))
     }
 
-    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+    private final CountDownLatch countDownLatch, asyncCountDownLatch
 
     static final int TASKS_COUNT = 5
 
@@ -84,6 +82,7 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
+                    // FIXME this assertion fails. Why?
                     assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
 

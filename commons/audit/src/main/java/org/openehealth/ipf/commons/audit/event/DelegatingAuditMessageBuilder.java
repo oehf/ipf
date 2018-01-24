@@ -46,7 +46,4 @@ public abstract class DelegatingAuditMessageBuilder<T extends DelegatingAuditMes
         delegate.validate();
     }
 
-    protected T self() {
-        return (T) this;
-    }
 }

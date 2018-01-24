@@ -32,8 +32,8 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
 
 class CamelOnlyRouteBuilder extends RouteBuilder {
 
-    private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
-    private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
+    private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator()
+    private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator()
 
 
     @Override
@@ -53,7 +53,7 @@ class CamelOnlyRouteBuilder extends RouteBuilder {
             .setHeader("myHeader", constant("content-2"))
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
             .process(typeAndHeaderChecker(String.class, "content-2"))
-            .process(iti47ResponseValidator());
+            .process(iti47ResponseValidator())
     }
     
     
@@ -61,24 +61,24 @@ class CamelOnlyRouteBuilder extends RouteBuilder {
             final Class<?> expectedClass,
             final String expectedHeaderContent)
     {
-        Validate.notNull(expectedClass);
+        Validate.notNull(expectedClass)
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                Class<?> actualClass = exchange.getIn().getBody().getClass();
+                Class<?> actualClass = exchange.getIn().getBody().getClass()
                 if (! expectedClass.equals(actualClass)) {
                     throw new RuntimeException("Wrong body class: expected " + 
-                            expectedClass + ", got " + actualClass);
+                            expectedClass + ", got " + actualClass)
                 }
 
                 if (expectedHeaderContent != null) {
-                    String actualHeaderContent = exchange.getIn().getHeader("myHeader", String.class);
+                    String actualHeaderContent = exchange.getIn().getHeader("myHeader", String.class)
                     if (! expectedHeaderContent.equals(actualHeaderContent)) {
-                        throw new RuntimeException("wrong headers");
+                        throw new RuntimeException("wrong headers")
                     }
                 }
             }
-        };
+        }
     }
 
 }

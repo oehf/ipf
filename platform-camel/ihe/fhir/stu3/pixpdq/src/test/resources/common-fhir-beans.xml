@@ -61,6 +61,6 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="auditMessageQueue" ref="mockedSender"/>
     </bean>
 
-    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
 
 </beans>

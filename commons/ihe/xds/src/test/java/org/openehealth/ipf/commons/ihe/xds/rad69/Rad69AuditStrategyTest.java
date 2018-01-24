@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.xds.rad69;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Rad69AuditStrategyTest extends AuditorTestBase {
+public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
 
     @Test
     public void testServerSide() {

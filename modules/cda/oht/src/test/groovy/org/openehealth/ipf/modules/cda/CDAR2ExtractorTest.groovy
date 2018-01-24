@@ -27,11 +27,11 @@ import groovy.util.slurpersupport.GPathResult
  */
 public class CDAR2ExtractorTest extends AbstractCDAR2Test {
 	
-	private CDAR2Parser parser;
+	private CDAR2Parser parser
 	
 	@Before
 	public void setUp() throws Exception {
-		parser = new CDAR2Parser();
+		parser = new CDAR2Parser()
 	}
 	
 	/*
@@ -43,9 +43,9 @@ public class CDAR2ExtractorTest extends AbstractCDAR2Test {
 	@Test
 	public void testExtractFromSampleDocument() throws IOException {
 		InputStream is = getClass().getResourceAsStream(
-		"/builders/content/document/SampleCDADocument.xml");
-		def clinicalDocument = parser.parse(is);
-		assertNotNull(clinicalDocument);
+		"/builders/content/document/SampleCDADocument.xml")
+		def clinicalDocument = parser.parse(is)
+		assertNotNull(clinicalDocument)
 		def components = clinicalDocument.structuredComponents
 		
 		// Simple navigation
@@ -118,7 +118,7 @@ public class CDAR2ExtractorTest extends AbstractCDAR2Test {
 	@Test
 	public void testExtractFromSlurpedDocument() throws IOException {
 		InputStream is = getClass().getResourceAsStream(
-		"/builders/content/document/SampleCDADocument.xml");
+		"/builders/content/document/SampleCDADocument.xml")
 		def clinicalDocument = new XmlSlurper().parse(is)
 		
 		def components = clinicalDocument.component.structuredBody.component

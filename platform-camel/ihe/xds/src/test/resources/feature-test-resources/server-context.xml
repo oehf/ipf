@@ -43,7 +43,7 @@
         <property name="auditSourceId" value="sourceId"/>
     </bean>
 
-    <bean id="mockedSender" class="org.openehealth.ipf.commons.ihe.core.atna.MockedAuditMessageQueue"/>
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
 
     <ipf:globalContext id="globalContext"/>
 

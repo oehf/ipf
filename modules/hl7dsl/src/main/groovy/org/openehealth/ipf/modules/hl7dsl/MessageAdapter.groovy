@@ -18,9 +18,9 @@ package org.openehealth.ipf.modules.hl7dsl
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptStructure
 import static org.openehealth.ipf.modules.hl7dsl.util.Messages.copyMessage
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.newInstance
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.model.AbstractMessage;
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.Parser
+import ca.uhn.hl7v2.model.AbstractMessage
 
 /**
  * @author Martin Krasser
@@ -37,7 +37,7 @@ class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implemen
 
     MessageAdapter(Parser parser, Message message) {
         super(message)
-        this.parser = (parser != null ? parser : message.parser);
+        this.parser = (parser != null ? parser : message.parser)
     }
 
     MessageAdapter empty() {

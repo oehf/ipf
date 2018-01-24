@@ -78,7 +78,7 @@ class MessageTest extends groovy.test.GroovyAssert {
 
     @Test
     void testCopy() {
-		msg1.MSH[5] = 'X';
+		msg1.MSH[5] = 'X'
         ADT_A01 copy = msg1.copy()
         assert copy.MSH[5].value == 'X'
         copy.MSH[5].value = 'Y'

@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Dmytro Rud
  */
-public class HpdAuditorTest extends AuditorTestBase {
+public class HpdAuditorTest extends OhtAuditorTestBase {
 
     private static final List<String> PROVIDER_IDS = Arrays.asList(
             "2.16.10.89.200:UPIN:800-800-8000:Active",

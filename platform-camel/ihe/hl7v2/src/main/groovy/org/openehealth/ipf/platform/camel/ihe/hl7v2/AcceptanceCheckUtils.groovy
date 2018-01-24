@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException
 class AcceptanceCheckUtils {
 
      private AcceptanceCheckUtils() {
-         throw new IllegalStateException('Helper class, do not instantiate');
+         throw new IllegalStateException('Helper class, do not instantiate')
      }
 
      

@@ -19,11 +19,9 @@ package org.openehealth.ipf.commons.ihe.xds.rad75;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Rad75AuditStrategyTest extends AuditorTestBase {
+public class Rad75AuditStrategyTest extends XdsAuditorTestBase {
 
     @Test
     public void testServerSide() {

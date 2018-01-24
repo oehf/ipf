@@ -17,13 +17,13 @@ package org.openehealth.ipf.commons.map.extend
 
 import static org.easymock.EasyMock.*
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.commons.core.config.ContextFacade;
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.MappingService
 import org.springframework.core.io.ClassPathResource
 
 /**

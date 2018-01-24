@@ -54,7 +54,7 @@ class VariesAdapter extends TypeAdapter {
           return idx == 1 ? target.data : new NullAdapter()
         }
 
-        return new NullAdapter();
+        return new NullAdapter()
     }
     
     void putAt(int idx, Object value) {

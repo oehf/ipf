@@ -17,7 +17,7 @@ package org.openehealth.ipf.modules.hl7.validation.builder
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
-import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.Version
 import ca.uhn.hl7v2.validation.Rule
 
 /**

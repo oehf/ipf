@@ -23,11 +23,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
-import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
 /**
  * @author Christian Ohr

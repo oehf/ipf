@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.cda.builder.content.header
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040ServiceEvent
 import org.junit.Before
 import org.junit.Test
-import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader;
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
 import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
 
 /**

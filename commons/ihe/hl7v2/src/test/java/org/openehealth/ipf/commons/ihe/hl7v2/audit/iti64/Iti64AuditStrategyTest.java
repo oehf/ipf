@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.Hl7v2AuditorTestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti64AuditStrategyTest extends AuditorTestBase {
+public class Iti64AuditStrategyTest extends Hl7v2AuditorTestBase {
 
     @Test
     public void testServerSide() {

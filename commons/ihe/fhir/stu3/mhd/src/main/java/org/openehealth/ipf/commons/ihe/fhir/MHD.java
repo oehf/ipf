@@ -19,15 +19,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68TransactionConfiguration;
 
 import java.util.ArrayList;

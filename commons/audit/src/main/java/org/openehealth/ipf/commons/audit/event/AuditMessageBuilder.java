@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,8 +30,14 @@ import static java.util.Objects.requireNonNull;
  */
 public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends Validateable {
 
+    /**
+     * @return the audit message being built
+     */
     AuditMessage getMessage();
 
+    /**
+     * @return the audit message being built as only element in an array
+     */
     default AuditMessage[] getMessages() {
         return new AuditMessage[]{getMessage()};
     }
@@ -48,5 +54,13 @@ public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends V
         return new TypeValuePairType(
                 requireNonNull(type, "Type of TypeValuePair must not be null"),
                 requireNonNull(value, "Value of TypeValuePair must not be null").toString());
+    }
+
+    /**
+     * @return this builder
+     */
+    @SuppressWarnings("unchecked")
+    default T self() {
+        return (T) this;
     }
 }

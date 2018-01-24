@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CountDownLatch
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
@@ -46,7 +46,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
     
     static boolean errorOccurred = false
 
-    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+    private final CountDownLatch countDownLatch, asyncCountDownLatch
 
     static final int TASKS_COUNT = 5
 
@@ -133,34 +133,34 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
 
 
     private static RetrievedDocumentSet createRetrievedDocumentSet() {
-        DocumentReference requestData1 = new DocumentReference();
-        requestData1.setDocumentUniqueId("doc1");
-        requestData1.setHomeCommunityId("urn:oid:1.2.3");
-        requestData1.setRepositoryUniqueId("repo1");
+        DocumentReference requestData1 = new DocumentReference()
+        requestData1.setDocumentUniqueId("doc1")
+        requestData1.setHomeCommunityId("urn:oid:1.2.3")
+        requestData1.setRepositoryUniqueId("repo1")
 
-        DataHandler dataHandler1 = new DataHandler('Hund ' * 1500, "text/plain");
-        RetrievedDocument doc1 = new RetrievedDocument();
-        doc1.setRequestData(requestData1);
-        doc1.setDataHandler(dataHandler1);
-        doc1.setMimeType("animal/dog");
+        DataHandler dataHandler1 = new DataHandler('Hund ' * 1500, "text/plain")
+        RetrievedDocument doc1 = new RetrievedDocument()
+        doc1.setRequestData(requestData1)
+        doc1.setDataHandler(dataHandler1)
+        doc1.setMimeType("animal/dog")
 
-        DocumentReference requestData2 = new DocumentReference();
-        requestData2.setDocumentUniqueId("doc2");
-        requestData2.setHomeCommunityId("urn:oid:1.2.4");
-        requestData2.setRepositoryUniqueId("repo2");
+        DocumentReference requestData2 = new DocumentReference()
+        requestData2.setDocumentUniqueId("doc2")
+        requestData2.setHomeCommunityId("urn:oid:1.2.4")
+        requestData2.setRepositoryUniqueId("repo2")
 
-        DataHandler dataHandler2 = new DataHandler('Katz ' * 1500, "text/plain");
-        RetrievedDocument doc2 = new RetrievedDocument();
-        doc2.setRequestData(requestData2);
-        doc2.setDataHandler(dataHandler2);
-        doc2.setMimeType("animal/cat");
+        DataHandler dataHandler2 = new DataHandler('Katz ' * 1500, "text/plain")
+        RetrievedDocument doc2 = new RetrievedDocument()
+        doc2.setRequestData(requestData2)
+        doc2.setDataHandler(dataHandler2)
+        doc2.setMimeType("animal/cat")
 
-        RetrievedDocumentSet response = new RetrievedDocumentSet();
-        response.getDocuments().add(doc1);
-        response.getDocuments().add(doc2);
-        response.setStatus(Status.SUCCESS);
+        RetrievedDocumentSet response = new RetrievedDocumentSet()
+        response.getDocuments().add(doc1)
+        response.getDocuments().add(doc2)
+        response.setStatus(Status.SUCCESS)
 
-        return response;
+        return response
     }
 
 

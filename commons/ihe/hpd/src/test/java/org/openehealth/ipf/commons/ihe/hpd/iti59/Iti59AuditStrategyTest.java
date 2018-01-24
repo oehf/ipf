@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.hpd.atna.HpdAuditorTestBase;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Christian Ohr
  */
-public class Iti59AuditStrategyTest extends AuditorTestBase {
+public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
 
     @Test
     public void testServerSide() {

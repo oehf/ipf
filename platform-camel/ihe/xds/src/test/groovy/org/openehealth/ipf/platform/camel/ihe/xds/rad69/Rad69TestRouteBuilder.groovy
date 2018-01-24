@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 
-import javax.activation.DataHandler;
+import javax.activation.DataHandler
 
 /**
  * @author Clay Sebourn

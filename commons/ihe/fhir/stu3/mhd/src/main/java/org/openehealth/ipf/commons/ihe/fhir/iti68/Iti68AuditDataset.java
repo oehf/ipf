@@ -18,9 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti68;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hl7.fhir.dstu3.model.DocumentManifest;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**

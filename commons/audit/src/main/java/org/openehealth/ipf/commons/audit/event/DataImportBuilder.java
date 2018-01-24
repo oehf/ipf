@@ -41,15 +41,24 @@ import static java.util.Objects.requireNonNull;
  */
 public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder> {
 
-    public DataImportBuilder(EventOutcomeIndicator outcome, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataImportBuilder(EventOutcomeIndicator outcome,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         this(outcome, null, eventType, purposesOfUse);
     }
 
-    public DataImportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataImportBuilder(EventOutcomeIndicator outcome,
+                             String eventOutcomeDescription,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         this(outcome, eventOutcomeDescription, EventActionCode.Create, eventType, purposesOfUse);
     }
 
-    public DataImportBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription, EventActionCode eventActionCode, EventType eventType, PurposeOfUse... purposesOfUse) {
+    public DataImportBuilder(EventOutcomeIndicator outcome,
+                             String eventOutcomeDescription,
+                             EventActionCode eventActionCode,
+                             EventType eventType,
+                             PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
                 eventOutcomeDescription,

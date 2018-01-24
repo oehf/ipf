@@ -37,7 +37,8 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
         this(outcome, null);
     }
 
-    public AuditLogUsedBuilder(EventOutcomeIndicator outcome, String eventOutcomeDescription) {
+    public AuditLogUsedBuilder(EventOutcomeIndicator outcome,
+                               String eventOutcomeDescription) {
         super();
         setEventIdentification(outcome,
                 eventOutcomeDescription,
@@ -56,7 +57,11 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
      * @param userName  The Active Participant's UserName
      * @param networkId The Active Participant's Network Access Point ID
      */
-    public AuditLogUsedBuilder addAccessingParticipant(String userId, String altUserId, String userName, boolean userIsRequestor, String networkId) {
+    public AuditLogUsedBuilder addAccessingParticipant(String userId,
+                                                       String altUserId,
+                                                       String userName,
+                                                       boolean userIsRequestor,
+                                                       String networkId) {
         return addActiveParticipant(
                         userId,
                         altUserId,

@@ -37,16 +37,16 @@ public class MdhtExtensionModule {
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ProcessorDefinition mdht(DataFormatClause self) {
-         MdhtDataFormat dataFormat = new MdhtDataFormat();
-         return CoreExtensionModule.dataFormat(self, dataFormat);
+         MdhtDataFormat dataFormat = new MdhtDataFormat()
+         return CoreExtensionModule.dataFormat(self, dataFormat)
      }         
  
      /**
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ValidatorAdapterDefinition mdht(ValidatorAdapterDefinition self) {
-         self.validator = new CDAR2Validator();
-         return (ValidatorAdapterDefinition)self.input(bodyAs(ClinicalDocument.class));
+         self.validator = new CDAR2Validator()
+         return (ValidatorAdapterDefinition)self.input(bodyAs(ClinicalDocument.class))
      }
 
 }

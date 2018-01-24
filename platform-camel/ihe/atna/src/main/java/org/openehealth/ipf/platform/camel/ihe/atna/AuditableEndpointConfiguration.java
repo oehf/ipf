@@ -17,15 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.atna;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.camel.impl.DefaultComponent;
-import org.apache.camel.spi.UriParam;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
-import java.util.List;
 import java.util.Map;
 
 /**

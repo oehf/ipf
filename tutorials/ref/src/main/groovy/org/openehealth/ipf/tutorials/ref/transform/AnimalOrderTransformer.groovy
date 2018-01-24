@@ -33,7 +33,7 @@ class AnimalOrderTransformer implements Transmogrifier, InitializingBean {
     //  Template setup
     // --------------------------------------------------------
 
-    TemplateEngine engine = new SimpleTemplateEngine();
+    TemplateEngine engine = new SimpleTemplateEngine()
     Template template
     Resource templateResource 
     
@@ -57,6 +57,6 @@ class AnimalOrderTransformer implements Transmogrifier, InitializingBean {
     }
 
     public void afterPropertiesSet(){
-        init();
+        init()
     }
 }

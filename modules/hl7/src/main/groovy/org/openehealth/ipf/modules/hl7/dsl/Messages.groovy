@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
-import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Message
 
 /**
  * @author Martin Krasser

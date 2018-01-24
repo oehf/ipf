@@ -33,7 +33,7 @@ import static org.easymock.EasyMock.*
 
 class Testiti47CamelOnly extends HL7v3StandardTestContainer {
 
-    private static String requestMessage, responseMessage;
+    private static String requestMessage, responseMessage
 
 
     @BeforeClass
@@ -47,27 +47,27 @@ class Testiti47CamelOnly extends HL7v3StandardTestContainer {
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
         replay(registry)
 
-        requestMessage  = readFile("translation/pdq/v3/PDQ.xml");
-        responseMessage = readFile("translation/pdq/v2/PDQ_Response.hl7");
-        startServer(new CXFServlet(), "camel-only.xml");
+        requestMessage  = readFile("translation/pdq/v3/PDQ.xml")
+        responseMessage = readFile("translation/pdq/v2/PDQ_Response.hl7")
+        startServer(new CXFServlet(), "camel-only.xml")
     }
 
 
     @Test
     void testCamelOnly() {
-        String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service";
-        Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage());
-        String response = Exchanges.resultMessage(responseExchange).getBody(String.class);
-        Assert.assertTrue(response.contains("<typeCode code=\"AA\"/>"));
+        String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service"
+        Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage())
+        String response = Exchanges.resultMessage(responseExchange).getBody(String.class)
+        Assert.assertTrue(response.contains("<typeCode code=\"AA\"/>"))
     }
 
 
     static String getRequestMessage() {
-        return requestMessage;
+        return requestMessage
     }
 
 
     static String getResponseMessage() {
-        return responseMessage;
+        return responseMessage
     }
 }

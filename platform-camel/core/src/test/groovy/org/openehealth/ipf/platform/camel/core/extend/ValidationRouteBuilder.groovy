@@ -71,9 +71,9 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
             .validation('direct:error-responder')
             .to('mock:output')
        
-       from('direct:result-responder').process(new ConstantTransformer('result'));
-       from('direct:fault-responder').process(new FailureTransformer(false));
-       from('direct:error-responder').process(new FailureTransformer(true));
+       from('direct:result-responder').process(new ConstantTransformer('result'))
+       from('direct:fault-responder').process(new FailureTransformer(false))
+       from('direct:error-responder').process(new FailureTransformer(true))
        
        // -------------------------------------------------------------
        // Use validation process with responder closure
@@ -92,18 +92,18 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
            .to('mock:output')
 
 
-        from('direct:positive-validator').errorHandler(noErrorHandler()).process(successValidator());
-        from('direct:fault-validator').errorHandler(noErrorHandler()).process(failureValidator(false));
-        from('direct:error-validator').errorHandler(noErrorHandler()).process(failureValidator(true));
+        from('direct:positive-validator').errorHandler(noErrorHandler()).process(successValidator())
+        from('direct:fault-validator').errorHandler(noErrorHandler()).process(failureValidator(false))
+        from('direct:error-validator').errorHandler(noErrorHandler()).process(failureValidator(true))
            
     }
 
     private Processor successValidator() {
-        return new ConstantTransformer('blah');
+        return new ConstantTransformer('blah')
     }
     
     private Processor failureValidator(boolean error) {
-        return new FailureTransformer(error);
+        return new FailureTransformer(error)
     }
     
 }

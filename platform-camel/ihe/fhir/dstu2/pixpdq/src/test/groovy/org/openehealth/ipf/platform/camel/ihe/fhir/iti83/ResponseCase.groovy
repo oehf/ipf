@@ -93,12 +93,12 @@ public enum ResponseCase {
         }
     }
 
-    static final String RESULT_VALUE = "4711";
-    static final String REQUESTED_OID = "1.2.3.4.5.6";
-    static final String REQUESTED_NAMESPACE = "namespace";
+    static final String RESULT_VALUE = "4711"
+    static final String REQUESTED_OID = "1.2.3.4.5.6"
+    static final String REQUESTED_NAMESPACE = "namespace"
 
-    private AcknowledgmentCode ackCode;
-    private String responseCode;
+    private AcknowledgmentCode ackCode
+    private String responseCode
 
     ResponseCase(AcknowledgmentCode ackCode, String responseCode) {
         this.ackCode = ackCode
@@ -110,14 +110,14 @@ public enum ResponseCase {
     }
 
     RSP_K23 populateResponse(Message request, String namespace, String oid) {
-        RSP_K23 rsp = MessageUtils.response(request, "RSP", "K23");
-        rsp.MSA[1] = ackCode.name();
+        RSP_K23 rsp = MessageUtils.response(request, "RSP", "K23")
+        rsp.MSA[1] = ackCode.name()
         rsp.QAK[1] = request.QPD[2].value ?: ''
         rsp.QAK[2] = responseCode
         rsp.QPD = request.QPD
         doPopulateResponse(rsp, namespace, oid)
     }
 
-    abstract RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid);
+    abstract RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid)
 
 }

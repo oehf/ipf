@@ -39,11 +39,11 @@ import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.make
  */
 class DocumentationExamplesTest extends groovy.test.GroovyAssert {
 
-    ORU_R01 message;
+    ORU_R01 message
 	
 	@Before
 	public void setUp(){
-		message = load('dsl/oru-r01-25.hl7');
+		message = load('dsl/oru-r01-25.hl7')
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ class DocumentationExamplesTest extends groovy.test.GroovyAssert {
 	
 	@Test
 	public void testConstruction(){
-        ORU_R01 messageCopy = message.copy();
+        ORU_R01 messageCopy = message.copy()
         ORU_R01 messageFromString = make(messageCopy.toString())
 	}
 	
@@ -77,7 +77,7 @@ class DocumentationExamplesTest extends groovy.test.GroovyAssert {
 		Primitive primitive = message.MSH[3][2]  // MSH-3-2 = universal ID primitive field
 		primitive = message.MSH.sendingApplication.universalIDType
 		
-		ca.uhn.hl7v2.model.v23.message.ORU_R01 message23 = new ca.uhn.hl7v2.model.v23.message.ORU_R01();
+		ca.uhn.hl7v2.model.v23.message.ORU_R01 message23 = new ca.uhn.hl7v2.model.v23.message.ORU_R01()
 		def messageType = message23.MSH.messageType.messageType // only works for HL7 v2.2 and 2.3 messages
 		messageType = message.MSH.messageType.messageCode     // only works for HL7 v2.4\+ messages
 		messageType = message.MSH[9][1]                       // works for all HL7 versions
@@ -85,7 +85,7 @@ class DocumentationExamplesTest extends groovy.test.GroovyAssert {
 	
 	@Test
 	public void testFieldValues(){
-		Primitive val = message.MSH[3][2];
+		Primitive val = message.MSH[3][2]
 		String primitiveValueEncode = message.MSH[3][2].encode()
 		String primitiveValueString = message.MSH[3][2].toString()
 		assertEquals(primitiveValueEncode, primitiveValueString)

@@ -91,7 +91,9 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param typeCodes        The RFC 3881 Audit Source Type codes to use
      * @return this
      */
-    public T setAuditSource(String sourceId, String enterpriseSiteId, AuditSource... typeCodes) {
+    public T setAuditSource(String sourceId,
+                            String enterpriseSiteId,
+                            AuditSource... typeCodes) {
         return setAuditSourceIdentification(sourceId, enterpriseSiteId, typeCodes);
     }
 
@@ -171,7 +173,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param isRequestor Whether the participant represents the requestor (i.e. push request)
      * @return this
      */
-    public T addSourceActiveParticipant(String userId, String altUserId, String userName, String networkId, boolean isRequestor) {
+    public T addSourceActiveParticipant(String userId,
+                                        String altUserId,
+                                        String userName,
+                                        String networkId,
+                                        boolean isRequestor) {
         return addActiveParticipant(
                 userId,
                 altUserId,
@@ -191,7 +197,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param userIsRequestor      Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */
-    public T addDestinationActiveParticipant(String userId, String altUserId, String userName, String networkAccessPointId, boolean userIsRequestor) {
+    public T addDestinationActiveParticipant(String userId,
+                                             String altUserId,
+                                             String userName,
+                                             String networkAccessPointId,
+                                             boolean userIsRequestor) {
         return addActiveParticipant(
                 userId,
                 altUserId,
@@ -375,8 +385,5 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
 
-    @SuppressWarnings("unchecked")
-    protected T self() {
-        return (T) this;
-    }
+
 }

@@ -17,9 +17,12 @@
 package org.openehealth.ipf.commons.ihe.xds.iti63;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti63AuditStrategyTest extends AuditorTestBase {
+public class Iti63AuditStrategyTest extends XdsAuditorTestBase {
 
     @Test
     public void testServerSide() {
