@@ -68,14 +68,10 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             throw e;
         } finally {
             if (auditDataset != null) {
-                try {
-                    auditDataset.setEventOutcomeIndicator(failed ?
-                            EventOutcomeIndicator.MajorFailure :
-                            EventOutcomeIndicator.Success);
-                    getAuditStrategy().doAudit(auditContext, auditDataset);
-                } catch (Exception e) {
-                    LOG.error("ATNA auditing failed", e);
-                }
+                auditDataset.setEventOutcomeIndicator(failed ?
+                        EventOutcomeIndicator.MajorFailure :
+                        EventOutcomeIndicator.Success);
+                getAuditStrategy().doAudit(auditContext, auditDataset);
             }
         }
     }

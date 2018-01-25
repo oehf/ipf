@@ -121,7 +121,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) throws Exception {
+    public void doAudit(AuditContext auditContext, T auditDataset) {
         XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditContext, auditDataset);

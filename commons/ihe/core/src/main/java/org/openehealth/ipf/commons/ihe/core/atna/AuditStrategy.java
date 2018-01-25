@@ -75,7 +75,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param auditContext audit context used for auditing
      * @param auditDataset Collected audit dataset.
      */
-    void doAudit(AuditContext auditContext, T auditDataset) throws Exception;
+    void doAudit(AuditContext auditContext, T auditDataset);
 
 
     /**

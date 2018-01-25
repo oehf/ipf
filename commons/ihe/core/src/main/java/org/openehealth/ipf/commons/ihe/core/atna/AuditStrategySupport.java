@@ -43,7 +43,7 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
 
 
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) throws Exception {
+    public void doAudit(AuditContext auditContext, T auditDataset) {
         auditContext.audit(makeAuditMessage(auditContext, auditDataset));
     }
 

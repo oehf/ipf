@@ -259,7 +259,7 @@ public class AuditorIntegrationTest {
         });
     }
 
-    private void sendAudit() throws Exception {
+    private void sendAudit() {
         LOG.debug("Sending audit record");
         auditContext.audit(
                 new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)

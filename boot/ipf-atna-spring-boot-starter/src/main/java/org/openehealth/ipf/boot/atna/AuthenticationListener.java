@@ -69,12 +69,7 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
                             auditContext.getSendingApplication(),
                             webAuthenticationDetails.getRemoteAddress());
                 }
-
-                try {
-                    auditContext.audit(builder.getMessage());
-                } catch (Exception e) {
-                    throw new AuditException("Auditing failed: ", e);
-                }
+                auditContext.audit(builder.getMessage());
             }
         }
     }

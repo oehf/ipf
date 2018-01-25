@@ -40,21 +40,17 @@ public class ApplicationStartEventListener implements ApplicationListener<Contex
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (auditContext.isAuditEnabled()) {
-            try {
-                auditContext.audit(
-                        new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
-                                .setAuditSource(auditContext)
-                                .setApplicationParticipant(
-                                        contextRefreshedEvent.getApplicationContext().getApplicationName(),
-                                        null,
-                                        null,
-                                        AuditUtils.getLocalHostName())
-                                .addApplicationStarterParticipant(System.getProperty("user.name"))
-                                .getMessages()
-                );
-            } catch (Exception e) {
-                throw new AuditException("Auditing failed: ", e);
-            }
+            auditContext.audit(
+                    new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
+                            .setAuditSource(auditContext)
+                            .setApplicationParticipant(
+                                    contextRefreshedEvent.getApplicationContext().getApplicationName(),
+                                    null,
+                                    null,
+                                    AuditUtils.getLocalHostName())
+                            .addApplicationStarterParticipant(System.getProperty("user.name"))
+                            .getMessages()
+            );
         }
 
     }

@@ -40,21 +40,17 @@ public class ApplicationStopEventListener implements ApplicationListener<Context
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
         if (auditContext.isAuditEnabled()) {
-            try {
-                auditContext.audit(
-                        new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
-                                .setAuditSource(auditContext)
-                                .setApplicationParticipant(
-                                        contextClosedEvent.getApplicationContext().getApplicationName(),
-                                        null,
-                                        null,
-                                        AuditUtils.getLocalHostName())
-                                .addApplicationStarterParticipant(System.getProperty("user.name"))
-                                .getMessages()
-                );
-            } catch (Exception e) {
-                throw new AuditException("Auditing failed: ", e);
-            }
+            auditContext.audit(
+                    new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
+                            .setAuditSource(auditContext)
+                            .setApplicationParticipant(
+                                    contextClosedEvent.getApplicationContext().getApplicationName(),
+                                    null,
+                                    null,
+                                    AuditUtils.getLocalHostName())
+                            .addApplicationStarterParticipant(System.getProperty("user.name"))
+                            .getMessages()
+            );
         }
     }
 }

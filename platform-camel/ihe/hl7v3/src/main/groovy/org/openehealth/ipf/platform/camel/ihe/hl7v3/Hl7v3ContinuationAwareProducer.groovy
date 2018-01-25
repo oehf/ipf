@@ -160,8 +160,6 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
                 auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString, auditContext)
             }
             auditStrategy.doAudit(auditContext, auditDataset)
-        } catch (Exception e) {
-            LOG.error("Phase 2 of client-side ATNA auditing failed", e)
         } finally {
             if (exception) {
                 throw exception

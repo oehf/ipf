@@ -51,7 +51,7 @@ public class CamelAuditMessageQueueTest {
     }
 
     @Test
-    public void testCamelEndpointAudit() throws Exception {
+    public void testCamelEndpointAudit() {
         AuditMessage auditMessage = new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success, null).getMessage();
         auditContext.audit(auditMessage);
 
