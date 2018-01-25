@@ -11,7 +11,7 @@ The dependency on the IPF [Spring Boot] ATNA starter module is:
     </dependency>
 ```
 
-Note: all IHE Spring boot starter modules depend on this starter module, so you normally do not have to
+Note: all IHE-related Spring boot starter modules depend on this starter module, so you normally do not have to
 explicitly depend on `ipf-atna-spring-boot-starter`.
 
 `ipf-atna-spring-boot-starter` auto-configures:

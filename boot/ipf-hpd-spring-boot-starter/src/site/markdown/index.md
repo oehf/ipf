@@ -12,9 +12,7 @@ The dependency on the IPF [Spring Boot] IHE HPD starter module is:
 ```
 
 
-`ipf-hpd-spring-boot-starter` auto-configures ATNA auditor beans for transactions of the IHE HPD profile.
-
-This starter module also transitively depends on `cxf-spring-boot-starter-jaxws` (https://cxf.apache.org/docs/springboot.html) that sets up the CXF
+This starter module transitively depends on `cxf-spring-boot-starter-jaxws` (https://cxf.apache.org/docs/springboot.html) that sets up the CXF
 web service stack, so you don't have to care about this anymore.
 
 `ipf-hpd-spring-boot-starter` provides the following application properties:

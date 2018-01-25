@@ -12,9 +12,7 @@ The dependency on the IPF [Spring Boot] IHE XDS starter module is:
 ```
 
 
-`ipf-xds-spring-boot-starter` autoconfigures ATNA auditor beans for all XDS-based IHE transactions.
-
-Furthermore, if a single `org.springframework.cache.CacheManager` bean is available and the application
+If a single `org.springframework.cache.CacheManager` bean is available and the application
 property `ipf.xds.caching` is set to true, the following caching beans are set up:
 
 * `cachingAsynchronyCorrelator` for [Asynchronous Web Service exchange option](../ipf-platform-camel-ihe-ws/async.html)
