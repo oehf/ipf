@@ -19,14 +19,21 @@ package org.openehealth.ipf.commons.audit.queue;
 import org.openehealth.ipf.commons.audit.AuditContext;
 
 /**
+ *
+ * Synchronously pass the message to the {@link org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol}
+ *
  * @author Christian Ohr
  * @since 3.5
  */
 public class SynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
 
     @Override
-    protected void handle(AuditContext auditContext, String... auditRecords) throws Exception {
-        auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+    protected void handle(AuditContext auditContext, String... auditRecords) {
+        try {
+            auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+        } catch (Exception e) {
+            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
+        }
     }
 }
    

@@ -20,8 +20,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Ehcache-based implementation of asynchronous message correlator.
@@ -45,17 +44,17 @@ public class CachingAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
 
     @Override
     public void storeServiceEndpointUri(String messageId, String serviceEndpointUri) {
-        cache.put(messageId + SERVICE_ENDPOINT_URI_SUFFIX, notNull(serviceEndpointUri, "service endpoint URI"));
+        cache.put(messageId + SERVICE_ENDPOINT_URI_SUFFIX, requireNonNull(serviceEndpointUri, "service endpoint URI"));
     }
 
     @Override
     public void storeCorrelationKey(String messageId, String correlationKey) {
-        cache.put(messageId + CORRELATION_KEY_SUFFIX, notNull(correlationKey, "correlation key"));
+        cache.put(messageId + CORRELATION_KEY_SUFFIX, requireNonNull(correlationKey, "correlation key"));
     }
 
     @Override
     public void storeAuditDataset(String messageId, WsAuditDataset auditDataset) {
-        cache.put(messageId + AUDIT_DATASET_SUFFIX, notNull(auditDataset, "audit dataset"));
+        cache.put(messageId + AUDIT_DATASET_SUFFIX, requireNonNull(auditDataset, "audit dataset"));
     }
 
     @Override
@@ -75,7 +74,7 @@ public class CachingAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
 
     @Override
     public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
-        noNullElements(alternativeKeys, "alternative keys should be not null");
+        requireNonNull(alternativeKeys, "alternative keys should be not null");
         for (String key : alternativeKeys) {
             cache.put(key + ALTERNATIVE_KEY_SUFFIX, messageId);
         }

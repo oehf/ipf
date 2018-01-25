@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ import org.apache.camel.Message;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.camel.util.jsse.SSLContextParameters;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
@@ -47,7 +46,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
 import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
 
@@ -83,12 +82,10 @@ public abstract class AbstractWsProducer<
             Class<InType> requestClass,
             Class<OutType> responseClass) {
         super(endpoint);
-        notNull(clientFactory, "client factory cannot be null");
-        notNull(requestClass, "request class cannot be null");
-        notNull(responseClass, "responseClass class cannot be null");
-        this.clientFactory = clientFactory;
-        this.requestClass = requestClass;
-        this.responseClass = responseClass;
+
+        this.clientFactory = requireNonNull(clientFactory, "client factory cannot be null");
+        this.requestClass = requireNonNull(requestClass, "request class cannot be null");
+        this.responseClass = requireNonNull(responseClass, "responseClass class cannot be null");
     }
 
 
@@ -112,9 +109,11 @@ public abstract class AbstractWsProducer<
         }
 
         // get and analyse WS-Addressing asynchrony configuration
+        String replyToHeader = exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
+        replyToHeader = replyToHeader != null ? replyToHeader.trim() : null;
         String replyToUri =
                 getWsTransactionConfiguration().isAllowAsynchrony()
-                        ? StringUtils.trimToNull(exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class))
+                        ? (replyToHeader == null || replyToHeader.isEmpty() ? null : replyToHeader)
                         : null;
 
         // for asynchronous interaction: configure WSA headers and store correlation data

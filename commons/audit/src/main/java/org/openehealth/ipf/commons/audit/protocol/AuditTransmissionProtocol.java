@@ -41,10 +41,10 @@ public interface AuditTransmissionProtocol {
      * Transmits the message
      *
      * @param auditContext audit context that e.g. contains the destination
-     * @param auditMessage audit message strings
+     * @param auditMessages audit message strings
      * @throws Exception thrown if sending the messages has failed
      */
-    void send(AuditContext auditContext, String... auditMessage) throws Exception;
+    void send(AuditContext auditContext, String... auditMessages) throws Exception;
 
     /**
      * May be imüplemented to clean up instances on shut down

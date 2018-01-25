@@ -69,9 +69,7 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
         if (executorService != null && !executorService.isShutdown()) {
             CompletableFuture.runAsync(runnable, executorService)
                     .exceptionally(e -> {
-                        LOG.warn(String.format("Failed to send ATNA event to destination [%s:%d]",
-                                auditContext.getAuditRepositoryAddress().getHostAddress(),
-                                auditContext.getAuditRepositoryPort()), e);
+                        auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
                         return null;
                     });
         } else {

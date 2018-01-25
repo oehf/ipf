@@ -44,6 +44,8 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
 
     private String endpointUriString;
     private URI endpointUriObject;
+    private InetAddress destinationAddress;
+    private int destinationPort;
 
     /**
      * Sets the Camel context that contains the endpoint to send audit messages
@@ -62,9 +64,12 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
      * @param endpointUri
      * @throws URISyntaxException
      */
-    public void setEndpointUri(String endpointUri) throws URISyntaxException {
+    public void setEndpointUri(String endpointUri) throws URISyntaxException, UnknownHostException {
         endpointUriString = endpointUri;
         endpointUriObject = new URI(endpointUri);
+        String host = endpointUriObject.getHost();
+        destinationAddress = InetAddress.getByName(host == null ? "0.0.0.0" : host);
+        destinationPort = endpointUriObject.getPort();
     }
 
     public void init() throws Exception {
@@ -78,18 +83,13 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
 
 
     @Override
-    public void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception {
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
         for (AuditMessage m : auditMessages) {
             HashMap<String, Object> headers = new HashMap<>();
-            headers.put(HEADER_NAMESPACE + ".destination.address", getDestinationAddress().getHostAddress());
-            headers.put(HEADER_NAMESPACE + ".destination.port", getDestinationPort());
+            headers.put(HEADER_NAMESPACE + ".destination.address", destinationAddress.getHostAddress());
+            headers.put(HEADER_NAMESPACE + ".destination.port", destinationPort);
             producerTemplate.sendBodyAndHeaders(endpointUriString, m, headers);
         }
-    }
-
-
-    private int getDestinationPort() {
-        return endpointUriObject.getPort();
     }
 
     private InetAddress getDestinationAddress() throws UnknownHostException {

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -25,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
@@ -58,7 +58,7 @@ public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDa
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext,
                 customInterceptors, null);
 
-        Validate.notNull(correlator, "Correlator for asynchronous processing must be set.");
+        requireNonNull(correlator, "Correlator for asynchronous processing must be set.");
         this.correlator = correlator;
     }
 

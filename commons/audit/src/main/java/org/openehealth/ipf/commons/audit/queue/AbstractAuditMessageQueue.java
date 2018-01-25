@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
     @Override
-    public void audit(AuditContext auditContext, AuditMessage... auditMessages) throws Exception {
+    public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
 
         String[] auditRecords = Stream.of(auditMessages)
                 .map(msg -> auditContext.getSerializationStrategy().marshal(msg, false))
@@ -47,7 +47,7 @@ abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
         handle(auditContext, auditRecords);
     }
 
-    protected abstract void handle(AuditContext auditContext, String... auditRecords) throws Exception;
+    protected abstract void handle(AuditContext auditContext, String... auditRecords);
 
 
 }

@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 import javax.activation.DataHandler;
 import javax.xml.bind.attachment.AttachmentMarshaller;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 /**
  * An attachment marshaller implementation which does not read any data
  * from the provided data handlers in order to keep all streams usable.
@@ -51,9 +49,9 @@ public class NonReadingAttachmentMarshaller extends AttachmentMarshaller {
     }
 
     private static String attachmentDescription(String name, String size, String contentType) {
-        return "Attachment: name='" + defaultString(name, "[unknown]") +
-                "', size='" + defaultString(size, "[unknown]") +
-                "', content type='" + defaultString(contentType, "[unknown]") + '\'';
+        return "Attachment: name='" + name != null ? name : "[unknown]" +
+                "', size='" + size != null ? size : "[unknown]" +
+                "', content type='" + contentType != null ? contentType : "[unknown]" + '\'';
     }
 
 }

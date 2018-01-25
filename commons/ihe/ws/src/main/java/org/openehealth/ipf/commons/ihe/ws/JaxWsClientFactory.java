@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Factory for ITI Web Service stubs.
@@ -84,7 +84,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             List<AbstractFeature> features,
             Map<String, Object> properties,
             AsynchronyCorrelator<AuditDatasetType> correlator) {
-        notNull(wsTransactionConfiguration, "wsTransactionConfiguration");
+        requireNonNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
         this.auditStrategy = auditStrategy;

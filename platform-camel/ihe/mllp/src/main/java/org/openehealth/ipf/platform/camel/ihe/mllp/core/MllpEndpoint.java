@@ -17,14 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.apache.camel.CamelContext;
-import org.apache.camel.Component;
-import org.apache.camel.Consumer;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.PollingConsumer;
-import org.apache.camel.Processor;
-import org.apache.camel.Producer;
+import org.apache.camel.*;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina2.Mina2Configuration;
@@ -32,7 +25,6 @@ import org.apache.camel.component.mina2.Mina2Consumer;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.apache.camel.component.mina2.Mina2Producer;
 import org.apache.camel.impl.DefaultEndpoint;
-import org.apache.commons.lang3.Validate;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
@@ -53,6 +45,8 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A wrapper for standard camel-mina endpoint
@@ -89,9 +83,9 @@ public abstract class MllpEndpoint<
             Mina2Endpoint wrappedEndpoint,
             ConfigType config) {
         super(wrappedEndpoint.getEndpointUri(), mllpComponent);
-        this.mllpComponent = Validate.notNull(mllpComponent);
-        this.wrappedEndpoint = Validate.notNull(wrappedEndpoint);
-        this.config = Validate.notNull(config);
+        this.mllpComponent = requireNonNull(mllpComponent);
+        this.wrappedEndpoint = requireNonNull(wrappedEndpoint);
+        this.config = requireNonNull(config);
     }
 
     @Override
@@ -159,11 +153,7 @@ public abstract class MllpEndpoint<
                 String hostAddress = session.getRemoteAddress().toString();
                 AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
                         config.getAuditContext(), message, hostAddress);
-                try {
-                    config.getAuditContext().audit(auditMessage);
-                } catch (Exception e) {
-                    LOG.warn("Could not log TLS authentication node failure");
-                }
+                config.getAuditContext().audit(auditMessage);
             }
         }
     }

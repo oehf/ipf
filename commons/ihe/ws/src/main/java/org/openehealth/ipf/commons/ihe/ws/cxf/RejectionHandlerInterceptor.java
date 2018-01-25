@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.phase.Phase;
+
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -36,7 +37,7 @@ public class RejectionHandlerInterceptor extends AbstractSoapInterceptor {
 
     public RejectionHandlerInterceptor(WsRejectionHandlingStrategy strategy) {
         super(Phase.MARSHAL);
-        Validate.notNull(strategy);
+        requireNonNull(strategy);
         this.strategy = strategy;
     }
 

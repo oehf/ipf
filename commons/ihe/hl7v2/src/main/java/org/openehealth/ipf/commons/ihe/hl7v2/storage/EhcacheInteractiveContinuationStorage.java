@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * An Ehcache-based implementation of {@link InteractiveContinuationStorage}.
  *
@@ -39,7 +41,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
 
 
     public EhcacheInteractiveContinuationStorage(Ehcache ehcache) {
-        Validate.notNull(ehcache);
+        requireNonNull(ehcache);
         this.ehcache = ehcache;
     }
 

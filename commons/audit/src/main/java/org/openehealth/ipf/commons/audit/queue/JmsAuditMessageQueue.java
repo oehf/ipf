@@ -61,19 +61,23 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
 
 
     @Override
-    protected void handle(AuditContext auditContext, String... auditRecords) throws Exception {
-        Connection connection = connectionFactory.createConnection(userName, password);
-        connection.start();
+    protected void handle(AuditContext auditContext, String... auditRecords) {
         try {
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Queue queue = session.createQueue(queueName);
-            MessageProducer producer = session.createProducer(queue);
-            for (String auditMessage : auditRecords) {
-                TextMessage message = session.createTextMessage(auditMessage);
-                producer.send(message);
+            Connection connection = connectionFactory.createConnection(userName, password);
+            connection.start();
+            try {
+                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                Queue queue = session.createQueue(queueName);
+                MessageProducer producer = session.createProducer(queue);
+                for (String auditMessage : auditRecords) {
+                    TextMessage message = session.createTextMessage(auditMessage);
+                    producer.send(message);
+                }
+            } finally {
+                if (connection != null) connection.close();
             }
-        } finally {
-            if (connection != null) connection.close();
+        } catch (Exception e) {
+            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
         }
     }
 

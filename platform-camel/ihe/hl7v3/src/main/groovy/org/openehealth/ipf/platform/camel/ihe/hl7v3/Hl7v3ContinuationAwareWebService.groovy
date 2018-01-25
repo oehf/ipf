@@ -16,13 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
 import groovy.util.slurpersupport.GPathResult
-import org.apache.commons.lang3.Validate
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
@@ -32,6 +31,7 @@ import org.slf4j.LoggerFactory
 
 import javax.xml.transform.Source
 
+import static java.util.Objects.requireNonNull
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
 import static org.openehealth.ipf.commons.xml.XmlUtils.source
@@ -62,7 +62,7 @@ abstract class Hl7v3ContinuationAwareWebService
     Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {
         super(endpoint.component.interactionId)
 
-        Validate.notNull(endpoint.continuationStorage)
+        requireNonNull(endpoint.continuationStorage)
 
         this.storage          = endpoint.continuationStorage
         this.defaultThreshold = endpoint.defaultContinuationThreshold

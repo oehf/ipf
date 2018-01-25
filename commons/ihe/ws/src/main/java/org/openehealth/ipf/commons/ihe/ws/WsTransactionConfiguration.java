@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Contains information about a Web Service-based transaction.
@@ -89,10 +90,10 @@ public class WsTransactionConfiguration<T extends WsAuditDataset> extends Transa
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
 
-        Validate.notNull(serviceName, "serviceName");
-        Validate.notNull(sei, "service endpoint interface");
-        Validate.notNull(bindingName, "bindingName");
-        Validate.notNull(wsdlLocation, "wsdlLocation");
+        requireNonNull(serviceName, "serviceName");
+        requireNonNull(sei, "service endpoint interface");
+        requireNonNull(bindingName, "bindingName");
+        requireNonNull(wsdlLocation, "wsdlLocation");
 
         this.sei = sei;
         this.serviceName = serviceName;

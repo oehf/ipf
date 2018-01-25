@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.audit;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
+import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
+import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
@@ -73,6 +75,9 @@ public class DefaultAuditContext implements AuditContext {
 
     @Getter @Setter
     private SerializationStrategy serializationStrategy = new Current();
+
+    @Getter @Setter
+    private AuditExceptionHandler auditExceptionHandler = new LoggingAuditExceptionHandler();
 
     @Getter @Setter
     private boolean includeParticipantsFromResponse = false;

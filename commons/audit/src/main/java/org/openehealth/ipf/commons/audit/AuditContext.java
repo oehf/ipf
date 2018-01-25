@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.audit;
 
+import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
@@ -91,7 +92,7 @@ public interface AuditContext {
      *
      * @param messages audit messages to be sent
      */
-    default void audit(AuditMessage... messages) throws Exception {
+    default void audit(AuditMessage... messages) {
         getAuditMessageQueue().audit(this, messages);
     }
 
@@ -109,6 +110,11 @@ public interface AuditContext {
      * @return type of audit source
      */
     AuditSource getAuditSource();
+
+    /**
+     * @return exception handler
+     */
+    AuditExceptionHandler getAuditExceptionHandler();
 
     /**
      * Determines whether participant object records shall be added to the audit message

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,36 +13,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.openehealth.ipf.commons.audit.queue;
+
+package org.openehealth.ipf.commons.audit.handler;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Determine the timing and priority in which audit messages are delivered.
- * Examples for implementations are synchronous, asynchronous or JMS-based.
+ * Example implementation of an audit exception handler
  *
  * @author Christian Ohr
  * @since 3.5
  */
-public interface AuditMessageQueue {
+public class LoggingAuditExceptionHandler implements AuditExceptionHandler {
 
-    /**
-     *
-     * @param auditContext
-     * @param auditMessages
-     * @throws Exception
-     */
-    void audit(AuditContext auditContext, AuditMessage... auditMessages);
+    private static final Logger LOG = LoggerFactory.getLogger(LoggingAuditExceptionHandler.class);
 
-    /**
-     * Forces all unsent messages in the queue to be sent
-     */
-    default void flush() {}
-
-    /**
-     * Flushes the queue and shutdown any associated runtime daemons that
-     * may be handling queue inflow/outflow
-     */
-    default void shutdown() {}
+    @Override
+    public void handleException(AuditContext auditContext, Throwable t, String... auditMessages) {
+        LOG.warn(String.format("Failed to send ATNA audit event to destination [%s:%d]",
+                auditContext.getAuditRepositoryAddress().getHostAddress(),
+                auditContext.getAuditRepositoryPort()), t);
+    }
 }

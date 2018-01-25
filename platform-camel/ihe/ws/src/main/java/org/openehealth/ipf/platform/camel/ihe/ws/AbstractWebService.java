@@ -15,21 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
-
-import java.util.Map;
-
-import javax.xml.ws.handler.MessageContext;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import javax.xml.ws.handler.MessageContext;
+import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
 
 /**
  * Base class for web services that are aware of a {@link DefaultWsConsumer}.
@@ -55,7 +54,7 @@ abstract public class AbstractWebService {
             Object body, 
             Map<String, Object> additionalHeaders,
             ExchangePattern exchangePattern) {
-        Validate.notNull(consumer);
+        requireNonNull(consumer);
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);
         
@@ -110,8 +109,7 @@ abstract public class AbstractWebService {
      *          the consumer to be used
      */
     public void setConsumer(DefaultWsConsumer consumer) {
-        Validate.notNull(consumer, "consumer");
-        this.consumer = consumer;
+        this.consumer = requireNonNull(consumer, "consumer");
     }
 
     /**

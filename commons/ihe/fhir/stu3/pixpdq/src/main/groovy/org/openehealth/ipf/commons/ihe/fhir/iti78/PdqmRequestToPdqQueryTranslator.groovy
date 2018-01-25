@@ -32,6 +32,8 @@ import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 
+import static java.util.Objects.requireNonNull
+
 /**
  * Translates a {@link IBaseResource} into a HL7v2 PDQ Query message. For the time being, paging is left in
  * the responsibility of the underlying FHIR framework, so that the PDQ v2 message does not contain any
@@ -64,7 +66,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
      * @param uriMapper mapping for translating FHIR URIs into OIDs
      */
     PdqmRequestToPdqQueryTranslator(UriMapper uriMapper) {
-        Validate.notNull(uriMapper, "URI Mapper must not be null")
+        requireNonNull(uriMapper, "URI Mapper must not be null")
         this.uriMapper = uriMapper
     }
 
@@ -72,7 +74,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
      * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
      */
     void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
-        Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        requireNonNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
             .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})
