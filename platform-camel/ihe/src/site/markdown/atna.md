@@ -75,6 +75,12 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         </property>
         -->
         
+        <!-- Object responsible for handling exceptions that occur while sending the audit records
+             to an audit repository. The default handler simply writes a warning to the log.
+              
+        <property name="auditExceptionHandler" ref="#ghi"/>
+        -->
+        
         <!-- Setting this to true causes data from the response being added to the audit records, particularly
              patient identifiers. This is not envisaged by DICOM, but project or legal requirements may overrule
              this. The default, however, is false
@@ -83,6 +89,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
          -->
 
     </bean>
+</beans>    
 ```
 
 ### Configure custom audit event queueing
@@ -92,13 +99,11 @@ of the interface `org.openehealth.ipf.commons.audit.queue.AuditMessageQueue`. Th
 asynchronous delivery of string-serialized audit messages as well as a queue for sending the `AuditingMessage` object to 
 a Camel Endpoint as described below.
 
+### Configure custom audit event exception handling
 
-### Configuring TLS details
-
-If `TLS` is selected as `auditRepositoryTransport`, the standard [JSSE system properties] are used to customize keystore,
-truststore, passwords, cipher suites and TLS protocol. Once a TLS connection is established, it is kept open as long as
-it is usable.
-
+The exception handler that is called when transmitting audit records fails can be customized , i.e. by using a different implementation 
+of the interface `org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler`. The only existing implementations is to
+log the exception, but you can implement more elaborate solutions, e.g. resending, or using a fallback transmission protocol.
 
 ### Specifiying a DICOM version
 
@@ -114,6 +119,11 @@ relevant version.
 You can also provide a custom implementation of `org.openehealth.ipf.commons.audit.marshal.SerializationStrategy`
 that creates other representations of an `AuditMessage` (e.g. a JSON-serialized `AuditEvent` FHIR resource).    
 
+### Configuring TLS details
+
+If `TLS` is selected as `auditRepositoryTransport`, the standard [JSSE system properties] are used to customize keystore,
+truststore, passwords, cipher suites and TLS protocol. Once a TLS connection is established, it is kept open as long as
+it is usable.
 
 ### Routing audit messages to Camel endpoints
 

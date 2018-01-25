@@ -19,6 +19,8 @@ package org.openehealth.ipf.boot.atna;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
+import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
+import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
@@ -77,6 +79,13 @@ public class IpfAtnaConfigurationProperties {
      */
     @Getter @Setter
     private Class<? extends AuditTransmissionProtocol> auditSenderClass;
+
+    /**
+     * Sets the exception handler in case auditing fails
+     */
+    @Getter @Setter
+    private Class<? extends AuditExceptionHandler> auditExceptionHandlerClass = LoggingAuditExceptionHandler.class;
+
 
     @Getter @Setter
     private boolean includeParticipantsFromResponse;

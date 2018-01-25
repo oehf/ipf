@@ -52,6 +52,7 @@ public class IpfAtnaAutoConfiguration {
 
         auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
         auditContext.setAuditMessageQueue(config.getAuditQueueClass().newInstance());
+        auditContext.setAuditExceptionHandler(config.getAuditExceptionHandlerClass().newInstance());
 
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
 

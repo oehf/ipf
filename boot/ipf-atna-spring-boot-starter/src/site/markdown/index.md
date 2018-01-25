@@ -21,17 +21,19 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 
 `ipf-atna-spring-boot-starter` provides the following application properties:
 
-| Property (`ipf.atna.`)       | Default               | Description                                         |
-|------------------------------|-----------------------|-----------------------------------------------------|
-| `audit-enabled`              | false                 | Whether auditing is enabled
-| `audit-repository-host`      | localhost             | Host of the ATNA repository to send the events to
-| `audit-repository-port`      | 514                   | Port of the ATNA repository to send the events to
-| `audit-repository-transport` | UDP                   | Wire transport format (UDP, TLS)
-| `audit-source-id`            | `${spring.application.name}` | Source ID for ATNA events
-| `audit-enterprise-site-id`   |                       | Enterprise Site ID for ATNA events
-| `audit-source-type`          | 4 (ApplicationServerProcess) | Type of Audit Source
-| `audit-queue-class`          | `org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue` | Queue implementation for auditing
-| `audit-sender-class`         | as indidcated by `audit-repository-transport` | ATNA sender implementation
+| Property (`ipf.atna.`)         | Default               | Description                                         |
+|--------------------------------|-----------------------|-----------------------------------------------------|
+| `audit-enabled`                | false                 | Whether auditing is enabled
+| `audit-repository-host`        | localhost             | Host of the ATNA repository to send the events to
+| `audit-repository-port`        | 514                   | Port of the ATNA repository to send the events to
+| `audit-repository-transport`   | UDP                   | Wire transport format (UDP, TLS)
+| `audit-source-id`              | `${spring.application.name}` | Source ID for ATNA events
+| `audit-enterprise-site-id`     |                       | Enterprise Site ID for ATNA events
+| `audit-source-type`            | 4 (ApplicationServerProcess) | Type of Audit Source
+| `audit-queue-class`            | `org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue` | Queue implementation for auditing
+| `audit-sender-class`           | as indidcated by `audit-repository-transport` | ATNA sender implementation
+| `audit-exception-handler-class`| `org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler`| Exception handler impleemntation
+| `include-participants-from-response`| false            | Whether to include (patient) participants from responses as well
 
 
 [Spring Boot]: https://projects.spring.io/spring-boot/

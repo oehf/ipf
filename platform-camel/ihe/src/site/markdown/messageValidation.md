@@ -14,7 +14,7 @@ DSL element, can be obtained from the corresponding factories, depending on the 
 
 | Integration profile                 | Transaction numbers/IDs              | Validating processors factory                                              |
 |:------------------------------------|:-------------------------------------|:---------------------------------------------------------------------------|
-| IHE XDS.a, XDS.b, XCA               | ITI-14, 15, 16, 18, 38, 39, 41, 42, 43 (no validation for ITI-17)     | `org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators`
+| IHE XDS, XCA                        | ITI-18, 38, 39, 41, 42, 43           | `org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators`
 | IHE PIX / PDQ                       | ITI-8, 9, 10, 21, 22                 | `org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators`
 | IHE PIXv3, PDQv3, XCPD, QED         | ITI-44, 45, 46, 47, 55, 56, PCC-1    | `org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators`
 | IHE PCD, Continua WAN               | PCD-01, WAN                          | `org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators`
