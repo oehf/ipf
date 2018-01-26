@@ -24,7 +24,6 @@ import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
@@ -168,8 +167,7 @@ class TestIti8 extends MllpTestContainer {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-            (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception))
+            if((e instanceof HL7Exception) || (cause instanceof HL7Exception))
             {
                 failed = false
             }

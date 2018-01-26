@@ -51,7 +51,7 @@ public class Iti86AuditStrategyTest extends XdsAuditorTestBase {
         assertNotNull(auditMessage);
         auditMessage.validate();
 
-        System.out.println(printAuditMessage(auditMessage));
+        // System.out.println(printAuditMessage(auditMessage));
 
         assertCommonXdsAuditAttributes(auditMessage,
                 EventOutcomeIndicator.Success,

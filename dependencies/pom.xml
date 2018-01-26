@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.20.1</camel-version>
+        <camel-version>2.20.2</camel-version>
         <cxf-version>3.2.1</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
@@ -590,7 +590,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j-version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -599,16 +598,6 @@
             </dependency>
 
             <!-- FIXME remove -->
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-flow</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-flow</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.atna</groupId>
                 <artifactId>ipf-oht-atna-auditor</artifactId>

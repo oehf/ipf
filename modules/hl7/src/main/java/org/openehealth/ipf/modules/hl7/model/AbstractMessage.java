@@ -32,8 +32,7 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
  * @author Christian Ohr
  */
 @SuppressWarnings("serial")
-public abstract class AbstractMessage extends
-		ca.uhn.hl7v2.model.AbstractMessage {
+public abstract class AbstractMessage extends ca.uhn.hl7v2.model.AbstractMessage {
 
 	protected enum Cardinality {
         REQUIRED, OPTIONAL, REQUIRED_REPEATING, OPTIONAL_REPEATING

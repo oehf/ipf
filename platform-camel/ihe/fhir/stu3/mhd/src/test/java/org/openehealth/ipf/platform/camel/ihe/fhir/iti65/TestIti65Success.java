@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
 import javax.servlet.ServletException;
@@ -58,7 +58,7 @@ public class TestIti65Success extends AbstractTestIti65 {
     public void testSendManualMhd() throws Exception {
 
         Bundle result = sendManually(provideAndRegister());
-        printAsXML(result);
+        // printAsXML(result);
 
         // Check ATNA Audit
         AbstractMockedAuditMessageQueue sender = getAuditSender();

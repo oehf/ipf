@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64
 
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import static org.junit.Assert.assertEquals
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.impl.DefaultExchange
+import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import ca.uhn.hl7v2.parser.PipeParser
-import ca.uhn.hl7v2.HL7Exception
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+
+import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
 
 /**
@@ -138,8 +138,7 @@ class TestIti64 extends MllpTestContainer {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-                    (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
+            if((e instanceof HL7Exception) || (cause instanceof HL7Exception)) {
                 failed = false
             }
         }

@@ -15,37 +15,36 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
-import static org.junit.Assert.*
-
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.parser.PipeParser
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertFalse
 
 /**
  * Unit tests for the PIX Update Notification transaction a.k.a. ITI-10.
  * @author Dmytro Rud
  */
 class TestIti10 extends MllpTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'iti10/iti-10.xml'
-    
+
     static void main(args) {
         init(CONTEXT_DESCRIPTOR, true)
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
-    
+
     /**
      * Happy case, audit either enabled or disabled.
      * Expected result: ACK response, two or zero audit items.
@@ -54,18 +53,19 @@ class TestIti10 extends MllpTestContainer {
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit("pix-iti10://localhost:18108?timeout=${TIMEOUT}", 2)
     }
+
     @Test
     void testHappyCaseAndAudit2() {
         doTestHappyCaseAndAudit("pix-iti10://localhost:18107?audit=false&timeout=${TIMEOUT}", 0)
     }
-    
+
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString10('ADT^A31^ADT_A05', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on consumer side, audit enabled.
@@ -79,43 +79,46 @@ class TestIti10 extends MllpTestContainer {
     public void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.5')
     }
+
     @Test
     public void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('ADT^A02', '2.5')
     }
+
     @Test
     public void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('ADT^A31', '2.3.1')
     }
+
     @Test
     public void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('ADT^A31', '3.1415926')
     }
+
     @Test
     public void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('ADT^A31^ADT_A02', '2.5')
     }
-    
+
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'pix-iti10://localhost:18108'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-                [process : { Exchange e -> /* nop */ }] as Processor
-                )
+                [process: { Exchange e -> /* nop */ }] as Processor
+        )
         def processor = consumer.processor
-        
+
         def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-        
+
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertEquals(0, auditSender.messages.size())
     }
-    
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on producer side, audit enabled.
@@ -125,35 +128,38 @@ class TestIti10 extends MllpTestContainer {
     void testInacceptanceOnProducer1() {
         doTestInacceptanceOnProducer('MDM^T01', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer2() {
         doTestInacceptanceOnProducer('ADT^A02', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer3() {
         doTestInacceptanceOnProducer('ADT^A31', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnProducer4() {
         doTestInacceptanceOnProducer('ADT^A31', '3.1415926')
     }
+
     @Test
     void testInacceptanceOnProducer5() {
         doTestInacceptanceOnProducer('ADT^A31^ADT_A02', '2.5')
     }
-    
+
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = 'pix-iti10://localhost:18108'
         def body = getMessageString(msh9, msh12)
         def failed = true
         def ex
-        
+
         try {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-            (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
+            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception)) {
                 failed = false
             }
             ex = e
@@ -161,5 +167,5 @@ class TestIti10 extends MllpTestContainer {
         assertFalse("Expected HL7Exception but got ${ex} with cause ${ex.cause}", failed)
         assertEquals(0, auditSender.messages.size())
     }
-    
+
 }

@@ -51,7 +51,6 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.11</build-helper-version>
-        <bundle-plugin-version>3.2.0</bundle-plugin-version>
         <compiler-plugin-version>3.7.0</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
@@ -70,43 +69,37 @@
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
         <lombok-plugin-version>1.16.18.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
-        <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
         <sources-plugin-version>3.0.1</sources-plugin-version>
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.0</activemq-version>
-        <aspectj-version>1.8.9</aspectj-version>
-        <cglib-version>3.2.4</cglib-version>
+        <activemq-version>5.15.2</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
-        <commons-collections-version>3.2.2</commons-collections-version>
-        <commons-dbcp2-version>2.1.1</commons-dbcp2-version>
-        <commons-fileupload-version>1.3.2</commons-fileupload-version>
-        <commons-io-version>2.5</commons-io-version>
-        <commons-lang3-version>3.5</commons-lang3-version>
-        <commons-math3-version>3.6.1</commons-math3-version>
+        <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
+        <commons-io-version>2.6</commons-io-version>
+        <commons-lang3-version>3.7</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>19.0</guava-version>
-        <httpclient4-version>4.5.2</httpclient4-version>
+        <guava-version>21.0</guava-version>
+        <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jdom-version>2.0.6</jdom-version>
         <jetty-version>9.4.6.v20170531</jetty-version>
-        <joda-time-version>2.9.7</joda-time-version>
+        <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.9.0</log4j-version>
         <lombok-version>1.16.18</lombok-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.20</tomcat-version>
+        <tomcat-version>8.5.27</tomcat-version>
         <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -325,19 +318,9 @@
                 <version>${commons-codec-version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${commons-collections-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-dbcp2</artifactId>
                 <version>${commons-dbcp2-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-fileupload</groupId>
-                <artifactId>commons-fileupload</artifactId>
-                <version>${commons-fileupload-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -361,11 +344,6 @@
                 <version>${commons-lang3-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-math3</artifactId>
-                <version>${commons-math3-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
@@ -375,16 +353,6 @@
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${ehcache-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${aspectj-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${aspectj-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
@@ -454,11 +422,6 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>${hibernate-jpa-2.1-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.validation</groupId>
@@ -582,12 +545,6 @@
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>${cglib-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -745,6 +702,7 @@
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
                             boot/ipf-spring-boot-starter/generated-stubs:
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
+                            commons/audit/generated-stubs:
                             commons/core/generated-stubs:
                             commons/flow/generated-stubs:
                             commons/ihe/core/generated-stubs:
@@ -828,17 +786,6 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${assembly-plugin-version}</version>
                 </plugin>
-                <!--
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>${bundle-plugin-version}</version>
-                    <configuration>
-                        <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
-                    </configuration>
-                    <extensions>true</extensions>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -867,11 +814,6 @@
                             <systemPath>${java.home}/../lib/tools.jar</systemPath>
                         </dependency>
                     </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.ops4j</groupId>
-                    <artifactId>maven-pax-plugin</artifactId>
-                    <version>${pax-plugin-version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -1017,65 +959,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>false</extensions>
-                <configuration>
-                    <unpackBundle>true</unpackBundle>
-                    <manifestLocation>META-INF</manifestLocation>
-                    <instructions>
-                        <_versionpolicy>"$(version;===;$(@))"</_versionpolicy>
-                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>${osgi.export.pkg}</Export-Package>
-                        <Import-Package>${osgi.import.pkg}</Import-Package>
-                        <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
-                        <Private-Package>${osgi.private.pkg}</Private-Package>
-                        <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
-                        <Bundle-ClassPath>${osgi.bundle.classpath}</Bundle-ClassPath>
-                        <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
-                        <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
-                        <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
-                        <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
-
-                        <Bundle-Description>${project.description}</Bundle-Description>
-                        <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
-                        <Bundle-License>${osgi.bundle.license}</Bundle-License>
-
-                        <Spring-Context>${osgi.spring.context}</Spring-Context>
-                        <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
-                        <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
-                        <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
-
-                        <Build-Time>$(now)</Build-Time>
-                    </instructions>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>manifest</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>bundle-install</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>bundle-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
             <!--
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
