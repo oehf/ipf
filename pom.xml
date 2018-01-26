@@ -30,7 +30,6 @@
         <!-- Project configurations -->
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
 
-        <!-- Report version properties. Reflow Skin does not work with site-plugin 3.5 -->
         <surefire-report-plugin-version>2.20</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
         <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
@@ -65,7 +64,7 @@
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.0.2</jar-plugin-version>
-        <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
+        <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
         <lombok-plugin-version>1.16.18.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
@@ -90,7 +89,6 @@
         <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jdom-version>2.0.6</jdom-version>
         <jetty-version>9.4.6.v20170531</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
@@ -683,16 +681,17 @@
                         <links>
                             <link>http://docs.oracle.com/javase/8/docs/api/</link>
                             <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
-                            <link>http://hapifhir.io/apidocs/index.html</link>
+                            <link>http://hapifhir.io/apidocs/</link>
+                            <link>http://cxf.apache.org/javadoc/latest/</link>
                             <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                             <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                            <link>http://docs.spring.io/spring/docs/4.2.x/javadoc-api/</link>
+                            <link>http://docs.spring.io/spring/docs/4.3.x/javadoc-api/</link>
                         </links>
                         <source>1.8</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                         <additionalJOption>-J-Xmx512m</additionalJOption>
-                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <doclint>none</doclint>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:

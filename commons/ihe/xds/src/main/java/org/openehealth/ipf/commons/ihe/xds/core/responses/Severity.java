@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ErrorType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
@@ -30,23 +29,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum(String.class)
 public enum Severity {
     /** An error. */
-    @XmlEnumValue("Error") ERROR(ErrorType.ERROR, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
+    @XmlEnumValue("Error") ERROR("urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
     /** A warning. */
-    @XmlEnumValue("Warning") WARNING(ErrorType.WARNING, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
-    
-    private final ErrorType ebXML21;
+    @XmlEnumValue("Warning") WARNING("urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
+
     private final String opcode30;
     
-    Severity(ErrorType opcode21, String opcode30) {
-        ebXML21 = opcode21;
+    Severity(String opcode30) {
         this.opcode30 = opcode30;
-    }
-
-    /**
-     * @return a representation in ebXML 2.1.
-     */
-    public ErrorType getEbXML21() {
-        return ebXML21;
     }
 
     /**
@@ -54,16 +44,6 @@ public enum Severity {
      */
     public String getOpcode30() {
         return opcode30;
-    }
-    
-    /**
-     * <code>null</code>-safe version of {@link #getEbXML21()}.
-     * @param severity
-     *          the type for which to get the ebXML representation. Can be <code>null</code>.
-     * @return the ebXML 2.1 representation or <code>null</code> if type was <code>null</code>.
-     */
-    public static ErrorType getEbXML21(Severity severity) {
-        return severity != null ? severity.getEbXML21() : null;
     }
 
     /**
@@ -94,19 +74,4 @@ public enum Severity {
         throw new XDSMetaDataException(ValidationMessage.INVALID_SEVERITY_IN_RESPONSE);
     }
 
-    /**
-     * Returns the severity that is represented by the given ebXML 2.1.
-     * @param opcode21
-     *          the ebXML 2.1 representation. Can be <code>null</code>.
-     * @return the severity.
-     */
-    public static Severity valueOfOpcode21(ErrorType opcode21) {
-        for (Severity severity : values()) {
-            if (severity.getEbXML21().equals(opcode21)) {
-                return severity;
-            }
-        }
-        
-        throw new XDSMetaDataException(ValidationMessage.INVALID_SEVERITY_IN_RESPONSE);
-    }
 }
