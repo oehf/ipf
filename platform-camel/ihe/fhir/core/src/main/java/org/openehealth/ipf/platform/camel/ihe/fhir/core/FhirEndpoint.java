@@ -73,10 +73,12 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be registered
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider provider = getResourceProvider();
-        // Make consumer known to provider
-        provider.setConsumer(consumer);
-        fhirComponent.connect(consumer, provider);
+        for (AbstractPlainProvider provider : getResourceProviders()) {
+            // Make consumer known to provider
+            provider.setConsumer(consumer);
+            fhirComponent.connect(consumer, provider);
+        }
+
     }
 
     /**
@@ -86,9 +88,10 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be unregistered
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider provider = getResourceProvider();
-        provider.unsetConsumer(consumer);
-        fhirComponent.disconnect(consumer, provider);
+        for (AbstractPlainProvider provider : getResourceProviders()) {
+            provider.unsetConsumer(consumer);
+            fhirComponent.disconnect(consumer, provider);
+        }
     }
 
     public FhirContext getContext() {
@@ -157,12 +160,12 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
 
     // Private stuff
 
-    private AbstractPlainProvider getResourceProvider() {
-        AbstractPlainProvider provider = config.getResourceProvider();
-        if (provider == null) {
-            provider = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
+    private List<? extends AbstractPlainProvider> getResourceProviders() {
+        List<? extends AbstractPlainProvider> providers = config.getResourceProvider();
+        if (providers == null) {
+            providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
-        return provider;
+        return providers;
     }
 
     public ClientRequestFactory<?> getClientRequestFactory() {

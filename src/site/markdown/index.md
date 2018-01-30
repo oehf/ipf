@@ -94,18 +94,21 @@ Other IPF features provide part of the underlying foundation or supporting funct
 | [Dynamic Feature Registration]                  | Aids in building up modular integration solutions where each module contributes routes, services etc. to the overall application
 
 
-IPF comes with some [Spring Boot Starters](../ipf-spring-boot-starter/index.html) that support running eHealth applications
+IPF comes with some [Spring Boot Starters](ipf-spring-boot-starter/index.html) that support running eHealth applications
 in the Spring Boot runtime environment.
 
 
-## Removed modules
+## Removed functionality
 
-IPF 3.4 removed the modules listed below.
+* As XDS.a transactions have been retired by IHE, all functionality related with ITI-14, ITI-15, ITI-16 and ITI-17
+have been removed. This includes the ebXML/ebRS 2.x model classes.
 
- * `ipf-archetypes`
- * `ipf-assembly`
- * `ipf-modules-hl7-dsl` (note that the HL7 DSL is part of `ipf-modules-hl7`)
- * `ipf-platform-camel-core-legacy` (part of Camel Groovy module)
+ 
+## Added modules
+
+IPF 3.4 added the modules listed below:
+
+ * `ipf-commons-audit`
 
 
 ## Tutorials and Examples
@@ -129,6 +132,7 @@ IPF 3.4 removed the modules listed below.
 
 If you are using previous versions of IPF and want to update:
 
+* IPF 3.5.x comes with some changes that must be considered when upgrading from IPF 3.4.x. Read the [3.5 Update Instructions] for how to update from IPF 3.4.x
 * IPF 3.4.x comes with some changes that must be considered when upgrading from IPF 3.2.x or IPF 3.3.x to IPF 3.4.x Read the [3.4 Update Instructions] for how to update from IPF 3.1.x
 * IPF 3.2.x comes with some changes that must be considered when upgrading from IPF 3.1.x to IPF 3.2.x Read the [3.2 Update Instructions] for how to update from IPF 3.1.x
 * IPF 3.1.x introduces a few minor incompatibilities compared to IPF 3.0.x due to having less mandatory dependencies on the Spring framework. Read the [3.1 Update Instructions] for how to update from IPF 3.0.x
@@ -164,6 +168,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [3.1 Update Instructions]: migration-3.1.html
 [3.2 Update Instructions]: migration-3.2.html
 [3.4 Update Instructions]: migration-3.4.html
+[3.5 Update Instructions]: migration-3.5.html
 [Recoverability]: recoverability.html
 [Performance Monitoring]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html

@@ -45,7 +45,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @author Christian Ohr
  */
-public class GenericFhirAuditMessageStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
+public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
     private Function<T, Optional<Reference>> patientIdExtractor;
 
@@ -53,7 +53,7 @@ public class GenericFhirAuditMessageStrategy<T extends IDomainResource> extends 
      * @param serverSide         server side auditing
      * @param patientIdExtractor function that extracts a patient reference from a domain resource
      */
-    public GenericFhirAuditMessageStrategy(boolean serverSide, Function<T, Optional<Reference>> patientIdExtractor) {
+    public GenericFhirAuditStrategy(boolean serverSide, Function<T, Optional<Reference>> patientIdExtractor) {
         super(serverSide);
         this.patientIdExtractor = requireNonNull(patientIdExtractor);
     }

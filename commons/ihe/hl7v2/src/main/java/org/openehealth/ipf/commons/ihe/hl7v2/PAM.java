@@ -39,7 +39,7 @@ public class PAM implements IntegrationProfile {
     public enum Interactions implements Hl7v2InteractionId<FeedAuditDataset> {
         ITI_30 {
             @Override
-            public void init(TransactionOptions... options) {
+            public void init(List<? extends HL7v2TransactionOption> options) {
                 init("pam-iti30",
                         "Patient Identity Management",
                         false,
@@ -51,7 +51,7 @@ public class PAM implements IntegrationProfile {
         },
         ITI_31 {
             @Override
-            public void init(TransactionOptions... options) {
+            public void init(List<? extends HL7v2TransactionOption> options) {
                 init("pam-iti31",
                         "Patient Encounter Management",
                         false,
@@ -72,7 +72,7 @@ public class PAM implements IntegrationProfile {
                 AuditStrategy<FeedAuditDataset> clientAuditStrategy,
                 AuditStrategy<FeedAuditDataset> serverAuditStrategy,
                 PamTransactions pamTransactions,
-                TransactionOptions... options)
+                List<? extends HL7v2TransactionOption> options)
         {
             this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration<>(
                     name,
@@ -86,7 +86,7 @@ public class PAM implements IntegrationProfile {
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     new String[]{"ADT"},
-                    TransactionOptionUtils.concatAllToString(options),
+                    new String[]{HL7v2TransactionOption.concatAllToString(options)},
                     new String[]{"ACK"},
                     new String[]{"*"},
                     new boolean[]{true},

@@ -29,15 +29,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `mhd-iti68` component producers is:
-
-```
-mhd-iti68://hostname:port/path/to/service[?parameters]
-```
-
-where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
-represents additional path elements of the remote service.
-URI parameters are optional and control special features as described in the corresponding section below.
+There is no producer created by this endpoint. The component can only be used on the server-side.
 
 #### Consumer
 
@@ -62,6 +54,8 @@ then the mhd-iti68 consumer will be available for external clients under the URL
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
+SSL support for IPF IHE consumers side must be configured in their [deployment container].
+See e.g. SSL How-To for [Tomcat 8](https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html).
 
 ### Example
 
@@ -73,24 +67,26 @@ This is an example on how to use the component on the consumer side:
       // process the incoming request and create a response
 ```
 
-
 ### Basic Common Component Features
 
 * [ATNA auditing]
 
-### Basic FHIR Component Features
+The ITI-68 endpoint forwards a preliminary [Iti68AuditDataset](../apidocs/org/openehealth/ipf/commons/ihe/fhir/iti68/Iti68AuditDataset.html) 
+instance in a Camel message header named `AuditDataset`. The Camel consumer route has the possibility adding 
+the unique document ID, and, if applicable in scenarios involving XDS, an optional patient ID, repository ID 
+and home community ID in order to populate this AuditDataset with more information. This is because the 
+document retrieval URL is completely unspecified with regard to this information.
 
-* [Message types and exception handling]
-* [Security]
 
-### Connection-related FHIR Component Features
+### Remarks for this component
 
-* [Connection parameters]
+Although this component is part of a FHIR-specific module, it just responds to a plain servlet
+request, which can be about any URL that is mapped on the Camel servlet (see [deployment container]).
+The successful response does consist of a binary data stream, representing the document content.
+
 
 [ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
-[Message types and exception handling]: ../ipf-platform-camel-ihe-fhir-core/messageTypes.html
 [Security]: ../ipf-platform-camel-ihe-fhir-core/security.html
-[Connection parameters]: ../ipf-platform-camel-ihe-fhir-core/connection.html
 
 [deployment container]: ../ipf-platform-camel-ihe-fhir-core/deployment.html
 

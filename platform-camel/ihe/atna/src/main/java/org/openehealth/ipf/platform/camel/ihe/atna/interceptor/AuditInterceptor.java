@@ -30,6 +30,8 @@ import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
  */
 public interface AuditInterceptor<T extends AuditDataset, E extends AuditableEndpoint<T>> extends Interceptor<E> {
 
+    String AUDIT_DATASET_HEADER = "AuditDataset";
+
     /**
      * Returns the audit strategy instance configured for this interceptor.
      */

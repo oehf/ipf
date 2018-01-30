@@ -29,12 +29,12 @@ import java.util.Map;
  *
  * @since 3.5
  */
-public abstract class AuditableEndpointConfiguration extends InterceptableEndpointConfiguration {
+public class AuditableEndpointConfiguration extends InterceptableEndpointConfiguration {
 
     @Getter
     private AuditContext auditContext;
 
-    protected AuditableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
+    public AuditableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
         super(component, parameters);
         auditContext = AuditConfiguration.obtainAuditContext(component, parameters);
     }

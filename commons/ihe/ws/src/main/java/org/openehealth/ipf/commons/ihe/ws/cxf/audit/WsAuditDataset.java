@@ -84,13 +84,6 @@ public class WsAuditDataset extends AuditDataset {
     private String clientIpAddress;
 
     /**
-     * Service (i.e. registry or repository) endpoint URL.
-     */
-    @Getter
-    @Setter
-    private String serviceEndpointUrl;
-
-    /**
      * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
      */
     @Getter

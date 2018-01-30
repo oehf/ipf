@@ -38,6 +38,7 @@ Additionally, there are the following support projects:
 It may be released independently and is located at [https://github.com/oehf/ipf-gazelle](https://github.com/oehf/ipf-gazelle).
 * `ipf-oht-atna`, which provides infrastructure for IHE audit trails and node authentication via TLS.
 It may be released independently and is located at [https://github.com/oehf/ipf-oht-atna](https://github.com/oehf/ipf-oht-atna).
+*NOTE*: `ipf-oht-atna` libraries have been deprecated, and IPF has removed all dependencies targeting at `ipf-oht-atna`.
 
 ### Continuous Integration
 

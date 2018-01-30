@@ -80,6 +80,9 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             failed = !AuditUtils.isPositiveAck(result);
         } catch (Exception e) {
             failed = true;
+            if (auditDataset != null) {
+                auditDataset.setEventOutcomeDescription(e.getMessage());
+            }
             throw e;
         } finally {
             if (auditDataset != null) {

@@ -17,11 +17,12 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti68;
 
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 /**
  * @author Christian Ohr
  */
-public class Iti68TransactionConfiguration extends TransactionConfiguration<Iti68AuditDataset> {
+public class Iti68TransactionConfiguration extends TransactionConfiguration<AuditDataset> {
 
     public Iti68TransactionConfiguration() {
 
@@ -29,6 +30,6 @@ public class Iti68TransactionConfiguration extends TransactionConfiguration<Iti6
                 "Retrieve Document",
                 false,
                 null,
-                new Iti68ServerAuditStrategy());
+                null);
     }
 }

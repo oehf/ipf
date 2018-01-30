@@ -29,7 +29,7 @@ public interface InterceptableComponent extends Component {
 
     /**
      * Returns a list of component-specific (i.e. transaction-specific)
-     * FHIR interceptors which will be integrated into the interceptor
+     * interceptors which will be integrated into the interceptor
      * chain of each consumer instance created by this component.
      * <p/>
      * Per default returns an empty list.

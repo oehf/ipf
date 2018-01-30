@@ -16,4 +16,10 @@ parameter, where `ref` is the ID of a `AuditContext` bean.
 
 The parameters for executing RFC 5425-compliant auditing over TLS are now exclusively derived from
 the standard [JSSE parameters](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization).
- 
+
+
+### Removal of deprecated functionality in IPF 3.5
+
+The following deprecated classes will be eventually removed in IPF 3.5
+
+* all deprecated classes in `ipf-modules-hl7`, particularly the old validation rule builders

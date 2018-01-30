@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
+import java.util.List;
+
 /**
  * HL7v2 Transaction ID
  *
@@ -34,5 +36,5 @@ public interface Hl7v2InteractionId<T extends MllpAuditDataset> extends Interact
      * Optional initialization with dynamic TransactionOptions
      * @param options transaction options
      */
-    default void init(TransactionOptions... options) {}
+    default void init(List<? extends HL7v2TransactionOption> options) {}
 }

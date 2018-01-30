@@ -23,11 +23,12 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
+import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
@@ -35,6 +36,8 @@ import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import javax.net.ssl.HostnameVerifier;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Configuration of a FHIR endpoint instance
@@ -62,7 +65,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam
-    private AbstractPlainProvider resourceProvider;
+    private List<? extends AbstractPlainProvider> resourceProvider;
 
     // Producer only
 
@@ -104,10 +107,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         this.context = component.initializeFhirContext();
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
-        resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "resourceProvider", AbstractPlainProvider.class, null);
+        resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
+                parameters, "resourceProvider", AbstractPlainProvider.class);
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "clientRequestFactory", ClientRequestFactory.class, null);
+                parameters, "clientRequestFactory", ClientRequestFactory.class);
         hapiClientInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "hapiClientInterceptorFactories", List.class);
         // TODO: make use of use hapiServerInterceptorFactories
@@ -160,6 +163,20 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 hostnameVerifier,
                 username,
                 password);
+    }
+
+    public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters, String key, Class<T> type) {
+        String values = component.getAndRemoveParameter(parameters, key, String.class);
+        if (values == null) {
+            return null;
+        } else {
+            return Stream.of(values.split(","))
+                    .map(value ->
+                            EndpointHelper.isReferenceParameter(value) ?
+                                    EndpointHelper.resolveReferenceParameter(component.getCamelContext(), value, type) :
+                                    component.getCamelContext().getTypeConverter().convertTo(type, value))
+                    .collect(Collectors.toList());
+        }
     }
 
     public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {

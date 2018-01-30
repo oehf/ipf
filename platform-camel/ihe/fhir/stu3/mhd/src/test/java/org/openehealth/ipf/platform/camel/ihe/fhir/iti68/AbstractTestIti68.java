@@ -14,21 +14,23 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti68;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
-import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
+import org.apache.camel.component.servlet.CamelHttpTransportServlet;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @author Christian Ohr
+ *
  */
-public class Iti68TransactionConfiguration extends TransactionConfiguration<Iti68AuditDataset> {
+abstract class AbstractTestIti68 extends StandardTestContainer {
 
-    public Iti68TransactionConfiguration() {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti68.class);
 
-        super("mhd-iti68",
-                "Retrieve Document",
-                false,
-                null,
-                new Iti68ServerAuditStrategy());
+    public static void startServer(String contextDescriptor) {
+        CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "CamelServlet");
     }
+
 }

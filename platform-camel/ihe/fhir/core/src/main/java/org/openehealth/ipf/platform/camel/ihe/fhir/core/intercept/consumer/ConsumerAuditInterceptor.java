@@ -28,12 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
-import javax.security.cert.X509Certificate;
-
-import java.security.Principal;
-
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -72,6 +66,9 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an
             // appropriate error response
+            if (auditDataset != null) {
+                auditDataset.setEventOutcomeDescription(e.getMessage());
+            }
             failed = true;
             throw e;
         } finally {
@@ -106,7 +103,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             auditDataset.setDestinationUserId(exchange.getIn().getHeader(Constants.HTTP_URL, String.class));
 
             // TODO Also extract basic auth user?
-            extractClientCertificateCommonName(exchange, auditDataset);
+            AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
@@ -115,25 +112,6 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         }
     }
 
-    private void extractClientCertificateCommonName(Exchange exchange, AuditDatasetType auditDataset) {
-        X509Certificate[] certificates = (X509Certificate[]) exchange.getIn().getHeader(Constants.HTTP_X509_CERTIFICATES);
-        if (certificates != null && certificates.length > 0) {
-            try {
-                X509Certificate certificate = certificates[0];
-                Principal principal = certificate.getSubjectDN();
-                String dn = principal.getName();
-                LdapName ldapDN = new LdapName(dn);
-                for (Rdn rdn : ldapDN.getRdns()) {
-                    if (rdn.getType().equalsIgnoreCase("CN")) {
-                        auditDataset.setSourceUserName((String) rdn.getValue());
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-                LOG.info("Could not extract CN from client certificate", e);
-            }
-        }
-    }
 
 
 }

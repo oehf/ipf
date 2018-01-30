@@ -14,21 +14,20 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti68;
+package org.openehealth.ipf.commons.ihe.core;
 
-import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * @author Christian Ohr
+ * Some IHE transactions define options that influence the interface(s) being exposed by their interactions, e.g.:
+ * <ul>
+ *     <li>PAM defines options for ITI-30 and ITI-31 that determines the acceptable HL7 trigger events</li>
+ *     <li>QEDm defines options that determine what FHIR resource types needs to be provided</li>
+ * </ul>
  */
-public class Iti68TransactionConfiguration extends TransactionConfiguration<Iti68AuditDataset> {
+public interface TransactionOptions<T> extends Serializable {
 
-    public Iti68TransactionConfiguration() {
+    List<T> getSupportedThings();
 
-        super("mhd-iti68",
-                "Retrieve Document",
-                false,
-                null,
-                new Iti68ServerAuditStrategy());
-    }
 }

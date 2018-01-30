@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
+import java.util.Map;
+
+
 /**
  * @author Christian Ohr
  */
@@ -35,20 +38,30 @@ public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDat
     }
 
     @Override
+    public Iti68AuditDataset enrichAuditDatasetFromRequest(Iti68AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
+        return auditDataset;
+    }
+
+
+    // TODO: don't know about patient, document, repo, homecommunity....
+
+    @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti68AuditDataset auditDataset) {
-        return new PHIExportBuilder<>(auditContext, auditDataset,
+        PHIExportBuilder builder = new PHIExportBuilder<>(auditContext, auditDataset,
                 EventActionCode.Create,
                 FhirEventTypeCode.MobileDocumentRetrieval)
-                .setPatient(auditDataset.getPatientId())
-                .addExportedEntity(
-                        auditDataset.getDocumentUniqueId(),
-                        ParticipantObjectIdTypeCode.ReportNumber,
-                        ParticipantObjectTypeCodeRole.Report,
-                        PHIExportBuilder.makeDocumentDetail(
-                                auditDataset.getRepositoryUniqueId(),
-                                auditDataset.getHomeCommunityId(),
-                                null,null))
-                .getMessages();
+                .setPatient(auditDataset.getPatientId());
+        if (auditDataset.getDocumentUniqueId() != null) {
+            builder.addExportedEntity(
+                    auditDataset.getDocumentUniqueId(),
+                    ParticipantObjectIdTypeCode.ReportNumber,
+                    ParticipantObjectTypeCodeRole.Report,
+                    PHIExportBuilder.makeDocumentDetail(
+                            auditDataset.getRepositoryUniqueId(),
+                            auditDataset.getHomeCommunityId(),
+                            null, null));
+        }
+        return builder.getMessages();
     }
 
     @Override

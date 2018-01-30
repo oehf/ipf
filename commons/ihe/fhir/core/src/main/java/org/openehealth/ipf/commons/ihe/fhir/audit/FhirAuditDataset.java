@@ -42,18 +42,6 @@ public class FhirAuditDataset extends AuditDataset {
     private String requestPayload;
 
     /**
-     * Client user ID
-     */
-    @Getter @Setter
-    private String userId;
-
-    /**
-     * Client IP address
-     */
-    @Getter @Setter
-    private String clientIpAddress;
-
-    /**
      * Local address
      */
     @Setter

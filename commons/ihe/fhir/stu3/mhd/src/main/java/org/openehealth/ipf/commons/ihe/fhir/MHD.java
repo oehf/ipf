@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
@@ -54,10 +55,11 @@ public class MHD implements IntegrationProfile {
     }
 
     @AllArgsConstructor
-    public enum RetrieveInteractions implements FhirInteractionId<Iti68AuditDataset> {
+    public enum RetrieveInteractions implements InteractionId {
         ITI_68(ITI_68_CONFIG);
 
-        @Getter FhirTransactionConfiguration<Iti68AuditDataset> fhirTransactionConfiguration;
+        @Getter
+        TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
     }
 
     @Override

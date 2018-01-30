@@ -44,7 +44,7 @@ public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
     public static ParticipantObjectIdType fromResourceType(String resourceType) {
         return ParticipantObjectIdType.of(
                 resourceType,
-                "http://hl7.org/fhir/ValueSet/audit-entity-type",
+                "http://hl7.org/fhir/resource-types",
                 resourceType);
     }
 }

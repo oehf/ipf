@@ -132,26 +132,26 @@ class XdsStandardTestContainer extends StandardTestContainer {
         checkParticipantObjectDetail(uri.participantObjectDetails[0], "bla", docUniqueId)
     }
 
-    void checkDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId) {
-        assert uri.participantObjectTypeCode == ParticipantObjectTypeCode.System
-        assert uri.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
-        checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
-        assert uri.participantObjectID == docUniqueId
+    void checkDocument(ParticipantObjectIdentificationType doc, String docUniqueId, String homeId, String repoId) {
+        assert doc.participantObjectTypeCode == ParticipantObjectTypeCode.System
+        assert doc.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
+        checkCode(doc.participantObjectIDTypeCode, '9', 'RFC-3881')
+        assert doc.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetails[0], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[1], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[0], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[1], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
-    void checkImageDocument(ParticipantObjectIdentificationType uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
-        assert uri.participantObjectTypeCode == ParticipantObjectTypeCode.System
-        assert uri.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
-        checkCode(uri.participantObjectIDTypeCode, '9', 'RFC-3881')
-        assert uri.participantObjectID == docUniqueId
+    void checkImageDocument(ParticipantObjectIdentificationType doc, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
+        assert doc.participantObjectTypeCode == ParticipantObjectTypeCode.System
+        assert doc.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
+        checkCode(doc.participantObjectIDTypeCode, '9', 'RFC-3881')
+        assert doc.participantObjectID == docUniqueId
 
-        checkParticipantObjectDetail(uri.participantObjectDetails[0], IHEAuditMessageBuilder.STUDY_INSTANCE_UNIQUE_ID, studyId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[1], IHEAuditMessageBuilder.SERIES_INSTANCE_UNIQUE_ID, seriesId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[2], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
-        checkParticipantObjectDetail(uri.participantObjectDetails[3], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[0], IHEAuditMessageBuilder.STUDY_INSTANCE_UNIQUE_ID, studyId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[1], IHEAuditMessageBuilder.SERIES_INSTANCE_UNIQUE_ID, seriesId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[2], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[3], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)
     }
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {

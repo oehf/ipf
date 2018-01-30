@@ -1,0 +1,58 @@
+/*
+ * Copyright 2018 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package org.openehealth.ipf.commons.ihe.hl7v2;
+
+import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * @author Christian Ohr
+ */
+public interface HL7v2TransactionOption extends TransactionOptions<String> {
+
+
+    static List<String> concat(HL7v2TransactionOption options, List<String> suffix) {
+        if (suffix != null && !suffix.isEmpty()) {
+            // Remove potential duplicates
+            Set<String> events = new HashSet<>(options.getSupportedThings());
+            events.addAll(suffix);
+            return new ArrayList<>(events);
+        }
+        return options.getSupportedThings();
+    }
+
+    static List<String> concat(HL7v2TransactionOption option, HL7v2TransactionOption otherOption, List<String> suffix) {
+        List<String> events = concat(otherOption, suffix);
+        return concat(option, events);
+    }
+
+    /**
+     * Provides a concatenated string with all things the options support, separated with spaces
+     *
+     * @param options transaction options
+     * @param <T>     TransactionOptions type
+     * @return concatenated string
+     */
+    static <T extends HL7v2TransactionOption> String concatAllToString(List<? extends T> options) {
+        return options.stream()
+                .flatMap(o -> o.getSupportedThings().stream())
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
+    }
+}

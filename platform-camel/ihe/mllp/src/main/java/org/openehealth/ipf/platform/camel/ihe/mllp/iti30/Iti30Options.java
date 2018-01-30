@@ -16,24 +16,27 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
- *
+ * Options for ITI-30
  */
-public enum Iti30Options implements TransactionOptions {
+public enum Iti30Options implements HL7v2TransactionOption {
 
     MERGE("A28", "A31", "A40", "A47"),
     LINK_UNLINK("A24", "A28", "A31", "A37", "A47");
 
-    private String[]  supportedEvents;
+    private List<String> supportedEvents;
 
     Iti30Options(String... supportedEvents) {
-        this.supportedEvents = supportedEvents;
+        this.supportedEvents = Arrays.asList(supportedEvents);
     }
 
     @Override
-    public String[] getSupportedEvents() {
+    public List<String> getSupportedThings() {
         return supportedEvents;
     }
 
