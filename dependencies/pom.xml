@@ -12,7 +12,7 @@
 
         <camel-version>2.20.2</camel-version>
         <cxf-version>3.2.1</cxf-version>
-        <groovy-version>2.4.12</groovy-version>
+        <groovy-version>2.4.13</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.2.0</hapi-fhir-version>
         <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
@@ -696,6 +696,16 @@
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
                 <version>${jaxb-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>javax.activation-api</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.ws</groupId>
+                <artifactId>jaxws-api</artifactId>
+                <version>2.3.0</version>
             </dependency>
             <dependency>
                 <groupId>com.phloc</groupId>
