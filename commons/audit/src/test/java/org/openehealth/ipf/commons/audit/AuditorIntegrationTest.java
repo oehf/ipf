@@ -47,6 +47,7 @@ import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtoc
 /**
  *
  */
+@Ignore
 @RunWith(VertxUnitRunner.class)
 public class AuditorIntegrationTest {
 
