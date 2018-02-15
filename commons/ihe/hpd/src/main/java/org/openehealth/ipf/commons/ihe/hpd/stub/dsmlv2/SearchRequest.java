@@ -1,7 +1,27 @@
-
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -10,39 +30,39 @@ import javax.xml.bind.annotation.*;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="SearchRequest"&gt;
- *   &lt;complexContent&gt;
- *     &lt;extension base="{urn:oasis:names:tc:DSML:2:0:core}DsmlMessage"&gt;
- *       &lt;sequence&gt;
- *         &lt;element name="filter" type="{urn:oasis:names:tc:DSML:2:0:core}Filter"/&gt;
- *         &lt;element name="attributes" type="{urn:oasis:names:tc:DSML:2:0:core}AttributeDescriptions" minOccurs="0"/&gt;
- *       &lt;/sequence&gt;
- *       &lt;attribute name="dn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" /&gt;
- *       &lt;attribute name="scope" use="required"&gt;
- *         &lt;simpleType&gt;
- *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *             &lt;enumeration value="baseObject"/&gt;
- *             &lt;enumeration value="singleLevel"/&gt;
- *             &lt;enumeration value="wholeSubtree"/&gt;
- *           &lt;/restriction&gt;
- *         &lt;/simpleType&gt;
- *       &lt;/attribute&gt;
- *       &lt;attribute name="derefAliases" use="required"&gt;
- *         &lt;simpleType&gt;
- *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *             &lt;enumeration value="neverDerefAliases"/&gt;
- *             &lt;enumeration value="derefInSearching"/&gt;
- *             &lt;enumeration value="derefFindingBaseObj"/&gt;
- *             &lt;enumeration value="derefAlways"/&gt;
- *           &lt;/restriction&gt;
- *         &lt;/simpleType&gt;
- *       &lt;/attribute&gt;
- *       &lt;attribute name="sizeLimit" type="{urn:oasis:names:tc:DSML:2:0:core}MAXINT" default="0" /&gt;
- *       &lt;attribute name="timeLimit" type="{urn:oasis:names:tc:DSML:2:0:core}MAXINT" default="0" /&gt;
- *       &lt;attribute name="typesOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" /&gt;
- *     &lt;/extension&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="SearchRequest">
+ *   &lt;complexContent>
+ *     &lt;extension base="{urn:oasis:names:tc:DSML:2:0:core}DsmlMessage">
+ *       &lt;sequence>
+ *         &lt;element name="filter" type="{urn:oasis:names:tc:DSML:2:0:core}Filter"/>
+ *         &lt;element name="attributes" type="{urn:oasis:names:tc:DSML:2:0:core}AttributeDescriptions" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="dn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" />
+ *       &lt;attribute name="scope" use="required">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *             &lt;enumeration value="baseObject"/>
+ *             &lt;enumeration value="singleLevel"/>
+ *             &lt;enumeration value="wholeSubtree"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
+ *       &lt;attribute name="derefAliases" use="required">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *             &lt;enumeration value="neverDerefAliases"/>
+ *             &lt;enumeration value="derefInSearching"/>
+ *             &lt;enumeration value="derefFindingBaseObj"/>
+ *             &lt;enumeration value="derefAlways"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
+ *       &lt;attribute name="sizeLimit" type="{urn:oasis:names:tc:DSML:2:0:core}MAXINT" default="0" />
+ *       &lt;attribute name="timeLimit" type="{urn:oasis:names:tc:DSML:2:0:core}MAXINT" default="0" />
+ *       &lt;attribute name="typesOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 
@@ -62,9 +82,9 @@ public class SearchRequest
     @XmlAttribute(name = "dn", required = true)
     protected String dn;
     @XmlAttribute(name = "scope", required = true)
-    protected SearchRequest.SearchScope scope;
+    protected SearchScope scope;
     @XmlAttribute(name = "derefAliases", required = true)
-    protected SearchRequest.DerefAliasesType derefAliases;
+    protected DerefAliasesType derefAliases;
     @XmlAttribute(name = "sizeLimit")
     protected Long sizeLimit;
     @XmlAttribute(name = "timeLimit")
@@ -149,10 +169,10 @@ public class SearchRequest
      * 
      * @return
      *     possible object is
-     *     {@link SearchRequest.SearchScope }
+     *     {@link SearchScope }
      *     
      */
-    public SearchRequest.SearchScope getScope() {
+    public SearchScope getScope() {
         return scope;
     }
 
@@ -161,10 +181,10 @@ public class SearchRequest
      * 
      * @param value
      *     allowed object is
-     *     {@link SearchRequest.SearchScope }
+     *     {@link SearchScope }
      *     
      */
-    public void setScope(SearchRequest.SearchScope value) {
+    public void setScope(SearchScope value) {
         this.scope = value;
     }
 
@@ -173,10 +193,10 @@ public class SearchRequest
      * 
      * @return
      *     possible object is
-     *     {@link SearchRequest.DerefAliasesType }
+     *     {@link DerefAliasesType }
      *     
      */
-    public SearchRequest.DerefAliasesType getDerefAliases() {
+    public DerefAliasesType getDerefAliases() {
         return derefAliases;
     }
 
@@ -185,10 +205,10 @@ public class SearchRequest
      * 
      * @param value
      *     allowed object is
-     *     {@link SearchRequest.DerefAliasesType }
+     *     {@link DerefAliasesType }
      *     
      */
-    public void setDerefAliases(SearchRequest.DerefAliasesType value) {
+    public void setDerefAliases(DerefAliasesType value) {
         this.derefAliases = value;
     }
 
@@ -316,8 +336,8 @@ public class SearchRequest
             return value;
         }
 
-        public static SearchRequest.DerefAliasesType fromValue(String v) {
-            for (SearchRequest.DerefAliasesType c: SearchRequest.DerefAliasesType.values()) {
+        public static DerefAliasesType fromValue(String v) {
+            for (DerefAliasesType c: DerefAliasesType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }
@@ -364,8 +384,8 @@ public class SearchRequest
             return value;
         }
 
-        public static SearchRequest.SearchScope fromValue(String v) {
-            for (SearchRequest.SearchScope c: SearchRequest.SearchScope.values()) {
+        public static SearchScope fromValue(String v) {
+            for (SearchScope c: SearchScope.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }
