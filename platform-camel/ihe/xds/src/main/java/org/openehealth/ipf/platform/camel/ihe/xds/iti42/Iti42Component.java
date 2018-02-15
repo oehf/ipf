@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
 /**
  * The Camel component for the ITI-42 transaction.
@@ -42,15 +42,10 @@ public class Iti42Component extends XdsComponent<XdsSubmitAuditDataset> {
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti42Service.class) {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, Iti42Service.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
                                                                                                            JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);

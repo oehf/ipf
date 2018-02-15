@@ -5,10 +5,6 @@
     <name>ipf-platform-camel-ihe-atna</name>
     <description>ATNA support for Apache Camel IHE components</description>
     <url>${site.url}/${project.artifactId}</url>
-     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.atna.*</osgi.export.pkg>
-    </properties>
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -17,11 +13,7 @@
     </parent>
     
     <dependencies>
-        <!-- Dependencies for main -->
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-core</artifactId>

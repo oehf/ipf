@@ -17,7 +17,8 @@ package org.openehealth.ipf.commons.ihe.hl7v3.storage
 
 import net.sf.ehcache.Ehcache
 import net.sf.ehcache.Element
-import org.apache.commons.lang3.Validate
+
+import static java.util.Objects.requireNonNull
 
 /**
  * @author Dmytro Rud
@@ -31,7 +32,7 @@ class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
     private static final String CONTINUATION_QUANTITY_SUFFIX = '.quantity'
 
     EhcacheHl7v3ContinuationStorage(Ehcache ehcache) {
-        Validate.notNull(ehcache)
+        requireNonNull(ehcache)
         this.ehcache = ehcache
     }
 

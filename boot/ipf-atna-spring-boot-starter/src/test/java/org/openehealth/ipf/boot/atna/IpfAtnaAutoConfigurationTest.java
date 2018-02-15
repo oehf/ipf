@@ -16,25 +16,15 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-import org.openhealthtools.ihe.atna.auditor.queue.AsynchronousAuditQueue;
-import org.openhealthtools.ihe.atna.nodeauth.SecurityDomain;
-import org.openhealthtools.ihe.atna.nodeauth.SecurityDomainManager;
-import org.openhealthtools.ihe.atna.nodeauth.context.NodeAuthModuleContext;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Properties;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -45,47 +35,21 @@ import static org.junit.Assert.assertTrue;
 public class IpfAtnaAutoConfigurationTest {
 
     @Autowired
-    private AuditorModuleConfig auditorModuleConfig;
+    private AuditContext auditContext;
 
-    @Autowired
-    private AuditorModuleContext auditorModuleContext;
-
-    @Autowired
-    private AuditorTLSConfig auditorTLSConfig;
 
     @Autowired
     private IpfAtnaConfigurationProperties ipfAtnaConfigurationProperties;
 
-    private static Properties p;
-
-    @BeforeClass
-    public static void setup() {
-        p = System.getProperties();
-        System.setProperty("javax.net.ssl.keyStore", "target/test-classes/keystore.jks");
-        System.setProperty("javax.net.ssl.keyStorePassword", "secret");
-        System.setProperty("javax.net.ssl.trustStore", "target/test-classes/keystore.jks");
-        System.setProperty("javax.net.ssl.trustStorePassword", "secret");
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        System.setProperties(p);
-    }
 
     @Test
     public void testAtnaSettings() throws Exception {
-        assertEquals("atna-test", auditorModuleConfig.getAuditSourceId());
-        assertEquals("mysite", auditorModuleConfig.getAuditEnterpriseSiteId());
-        assertEquals("arr.somewhere.com", auditorModuleConfig.getAuditRepositoryHost());
-        assertEquals(1234, auditorModuleConfig.getAuditRepositoryPort());
-        assertEquals("TLS", auditorModuleConfig.getAuditRepositoryTransport());
-        assertTrue(auditorModuleContext.getQueue() instanceof AsynchronousAuditQueue);
-
-        assertNotNull(auditorTLSConfig);
-        NodeAuthModuleContext nodeAuthModuleContext = NodeAuthModuleContext.getContext();
-        SecurityDomainManager securityDomainManager = nodeAuthModuleContext.getSecurityDomainManager();
-        SecurityDomain securityDomain = securityDomainManager.getSecurityDomain("arr.somewhere.com", 1234);
-        assertEquals("mydomain", securityDomain.getName());
+        assertEquals("atna-test", auditContext.getAuditSourceId());
+        assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
+        assertEquals("localhost", auditContext.getAuditRepositoryHostName());
+        assertEquals(1234, auditContext.getAuditRepositoryPort());
+        assertEquals("TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
+        assertTrue(auditContext.getAuditMessageQueue() instanceof AsynchronousAuditMessageQueue);
     }
 
 }

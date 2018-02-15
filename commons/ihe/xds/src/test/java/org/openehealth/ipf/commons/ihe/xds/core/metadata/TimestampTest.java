@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
-import org.openhealthtools.ihe.utils.XMLUtils;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.w3c.dom.Element;
 
 import javax.xml.bind.JAXBContext;
@@ -46,10 +46,10 @@ public class TimestampTest {
 
         check(ts, Timestamp.Precision.SECOND, "20150102010405");
         check(ts, Timestamp.Precision.MINUTE, "201501020104");
-        check(ts, Timestamp.Precision.HOUR,   "2015010201");
-        check(ts, Timestamp.Precision.DAY,    "20150102");
-        check(ts, Timestamp.Precision.MONTH,  "201501");
-        check(ts, Timestamp.Precision.YEAR,   "2015");
+        check(ts, Timestamp.Precision.HOUR, "2015010201");
+        check(ts, Timestamp.Precision.DAY, "20150102");
+        check(ts, Timestamp.Precision.MONTH, "201501");
+        check(ts, Timestamp.Precision.YEAR, "2015");
     }
 
     @Test
@@ -59,10 +59,10 @@ public class TimestampTest {
 
         check(ts, Timestamp.Precision.SECOND, "20150101000000");
         check(ts, Timestamp.Precision.MINUTE, "201501010000");
-        check(ts, Timestamp.Precision.HOUR,   "2015010100");
-        check(ts, Timestamp.Precision.DAY,    "20150101");
-        check(ts, Timestamp.Precision.MONTH,  "201501");
-        check(ts, Timestamp.Precision.YEAR,   "2015");
+        check(ts, Timestamp.Precision.HOUR, "2015010100");
+        check(ts, Timestamp.Precision.DAY, "20150101");
+        check(ts, Timestamp.Precision.MONTH, "201501");
+        check(ts, Timestamp.Precision.YEAR, "2015");
     }
 
     @Test
@@ -103,27 +103,27 @@ public class TimestampTest {
         Timestamp ts1 = Timestamp.fromHL7("20150102100405.777+0800");
 
         ts1.setPrecision(Timestamp.Precision.YEAR);
-        assertEquals   (ts1, Timestamp.fromHL7("2015"));
+        assertEquals(ts1, Timestamp.fromHL7("2015"));
         assertNotEquals(ts1, Timestamp.fromHL7("2017"));
 
         ts1.setPrecision(Timestamp.Precision.MONTH);
-        assertEquals   (ts1, Timestamp.fromHL7("201501"));
+        assertEquals(ts1, Timestamp.fromHL7("201501"));
         assertNotEquals(ts1, Timestamp.fromHL7("201507"));
 
         ts1.setPrecision(Timestamp.Precision.DAY);
-        assertEquals   (ts1, Timestamp.fromHL7("20150102"));
+        assertEquals(ts1, Timestamp.fromHL7("20150102"));
         assertNotEquals(ts1, Timestamp.fromHL7("20150107"));
 
         ts1.setPrecision(Timestamp.Precision.HOUR);
-        assertEquals   (ts1, Timestamp.fromHL7("2015010204+0200"));
+        assertEquals(ts1, Timestamp.fromHL7("2015010204+0200"));
         assertNotEquals(ts1, Timestamp.fromHL7("2015010207+0200"));
 
         ts1.setPrecision(Timestamp.Precision.MINUTE);
-        assertEquals   (ts1, Timestamp.fromHL7("201501020404+0200"));
+        assertEquals(ts1, Timestamp.fromHL7("201501020404+0200"));
         assertNotEquals(ts1, Timestamp.fromHL7("201501020407+0200"));
 
         ts1.setPrecision(Timestamp.Precision.SECOND);
-        assertEquals   (ts1, Timestamp.fromHL7("20150102040405.123+0200"));
+        assertEquals(ts1, Timestamp.fromHL7("20150102040405.123+0200"));
         assertNotEquals(ts1, Timestamp.fromHL7("20150102040407.777+0200"));
     }
 
@@ -153,7 +153,7 @@ public class TimestampTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(QueryRegistry.class);
         jaxbContext.createMarshaller().marshal(query, element);
 
-        String s = new String(XMLUtils.serialize(element.getFirstChild()));
+        String s = new String(XmlUtils.serialize(element.getFirstChild()));
         assertTrue(s.contains("<xds:from dateTime=\"1980-01-01T00:00:00Z\"/>"));
         assertTrue(s.contains("<xds:to dateTime=\"1981-01-01T00:00:00Z\" precision=\"YEAR\"/>"));
 
@@ -165,4 +165,5 @@ public class TimestampTest {
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getFrom().getPrecision());
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getTo().getPrecision());
     }
+
 }

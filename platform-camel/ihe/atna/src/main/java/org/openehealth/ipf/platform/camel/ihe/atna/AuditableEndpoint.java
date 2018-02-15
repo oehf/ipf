@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.atna;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
@@ -43,7 +44,15 @@ public interface AuditableEndpoint<AuditDatasetType extends AuditDataset> extend
     AuditStrategy<AuditDatasetType> getServerAuditStrategy();
 
     /**
-     * Returns <tt>true</tt> when ATNA auditing should be performed.
+     * @return <tt>true</tt> when ATNA auditing should be performed.
      */
-    boolean isAudit();
+    default boolean isAudit() {
+        return getAuditContext().isAuditEnabled();
+    }
+
+    /**
+     * @return audit context to be used for this endpoint
+     */
+    AuditContext getAuditContext();
+
 }

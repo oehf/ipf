@@ -15,8 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 
@@ -24,26 +28,20 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti66AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti66AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti66AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
-    }
-
-    @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti66(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString(),
-                auditDataset.getPatientIds());
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
+        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobileDocumentManifestQuery)
+                .addPatients(auditDataset.getPatientIds())
+                .setQueryParameters("MobileDocumentManifestQuery",
+                        FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery,
+                        auditDataset.getQueryString())
+                .getMessages();
     }
 
 }

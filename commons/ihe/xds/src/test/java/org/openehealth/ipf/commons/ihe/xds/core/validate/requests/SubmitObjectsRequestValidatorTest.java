@@ -19,7 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlot30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
@@ -27,8 +28,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
@@ -37,6 +40,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
  * @author Jens Riemschneider
  */
 public class SubmitObjectsRequestValidatorTest {
+
     private SubmitObjectsRequestValidator validator;    
     private EbXMLFactory factory;
     private ProvideAndRegisterDocumentSet request;
@@ -47,7 +51,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Before
     public void setUp() {
         validator = new SubmitObjectsRequestValidator();
-        factory = new EbXMLFactory21();
+        factory = new EbXMLFactory30();
         
         request = SampleData.createProvideAndRegisterDocumentSet();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
@@ -227,7 +231,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Test    
     public void testNoClassifiedObject() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject("lol");
+        ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject(null);
         expectFailure(NO_CLASSIFIED_OBJ, ebXML);
     }
     
@@ -400,7 +404,9 @@ public class SubmitObjectsRequestValidatorTest {
     
     @Test    
     public void testSlotValueTooLong() {
-        docEntry.setHash("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456");
+        char[] chars = new char[EbXMLSlot30.MAX_SLOT_LENGTH + 1];
+        Arrays.fill(chars, 'x');
+        docEntry.setHash(String.valueOf(chars));
         expectFailure(SLOT_VALUE_TOO_LONG);
     }
     
@@ -424,10 +430,11 @@ public class SubmitObjectsRequestValidatorTest {
     }
 
     @Test    
-    public void testNullUri() {
+    public void testMultipleUriValues() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, null);
-        expectFailure(NULL_URI, ebXML);
+        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add("second value");
+        assertEquals(2, ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().size());
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, ebXML);
     }
     
     @Test    
@@ -442,27 +449,6 @@ public class SubmitObjectsRequestValidatorTest {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, ":lol:");
         expectFailure(INVALID_URI, ebXML);
-    }
-    
-    @Test    
-    public void testNullUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add(null);
-        expectFailure(NULL_URI_PART, ebXML);
-    }
-    
-    @Test    
-    public void testInvalidUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add("lol|");
-        expectFailure(INVALID_URI_PART, ebXML);
-    }
-    
-    @Test    
-    public void testMissingUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, "2|lol");
-        expectFailure(MISSING_URI_PART, ebXML);
     }
     
     @Test    

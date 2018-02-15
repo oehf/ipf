@@ -34,13 +34,8 @@ public class Iti39AsyncResponseComponent extends XdsComponent<XdsNonconstructive
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti39AsyncResponseService.class);
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters)  {
+        return new XdsAsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti39AsyncResponseService.class);
     }
 
 }

@@ -17,26 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInteractiveResponseSenderInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerRequestDefragmenterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
@@ -47,27 +40,24 @@ import java.util.List;
 
 /**
  * Camel endpoint for MLLP-based eHealth transactions (like IHE PIX, PDQ, XAD-PID, etc.).
+ *
  * @author Dmytro Rud
  */
 public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
-        extends MllpEndpoint<MllpTransactionEndpointConfiguration, MllpTransactionComponent<AuditDatasetType>>
-        implements AuditableEndpoint<AuditDatasetType>
-{
+        extends MllpEndpoint<MllpTransactionEndpointConfiguration, AuditDatasetType, MllpTransactionComponent<AuditDatasetType>>
+        implements AuditableEndpoint<AuditDatasetType> {
 
     /**
      * Constructor.
-     * @param mllpComponent
-     *      MLLP Component instance which is creating this endpoint.
-     * @param wrappedEndpoint
-     *      The original camel-mina endpoint instance.
-     * @param config
-     *      Configuration parameters.
+     *
+     * @param mllpComponent   MLLP Component instance which is creating this endpoint.
+     * @param wrappedEndpoint The original camel-mina endpoint instance.
+     * @param config          Configuration parameters.
      */
     public MllpTransactionEndpoint(
             MllpTransactionComponent<AuditDatasetType> mllpComponent,
             Mina2Endpoint wrappedEndpoint,
-            MllpTransactionEndpointConfiguration config)
-    {
+            MllpTransactionEndpointConfiguration config) {
         super(mllpComponent, wrappedEndpoint, config);
     }
 
@@ -86,12 +76,12 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
             initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
         }
         if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<AuditDatasetType>());
+            initialChain.add(new ConsumerAuditInterceptor<AuditDatasetType>(getAuditContext()));
         }
         initialChain.add(new ConsumerResponseAcceptanceInterceptor());
         initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
         if (isAudit()) {
-            initialChain.add(new ConsumerAuthenticationFailureInterceptor());
+            initialChain.add(new ConsumerAuthenticationFailureInterceptor(getAuditContext()));
         }
         return initialChain;
     }
@@ -109,13 +99,17 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
                 : new ProducerMarshalInterceptor());
         initialChain.add(new ProducerResponseAcceptanceInterceptor());
         if (isAudit()) {
-            initialChain.add(new ProducerAuditInterceptor<AuditDatasetType>());
+            initialChain.add(new ProducerAuditInterceptor<AuditDatasetType>(getAuditContext()));
         }
         initialChain.add(new ProducerRequestAcceptanceInterceptor());
         initialChain.add(new ProducerAdaptingInterceptor());
         return initialChain;
     }
 
+    @Override
+    public AuditContext getAuditContext() {
+        return getConfig().getAuditContext();
+    }
 
     /**
      * Returns <tt>true</tt> when ATNA auditing should be performed.
@@ -123,20 +117,14 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
-        return getConfig().isAudit();
+        return getAuditContext().isAuditEnabled();
     }
 
-    /**
-     * Returns client-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return getMllpComponent().getClientAuditStrategy();
     }
 
-    /**
-     * Returns server-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
         return getMllpComponent().getServerAuditStrategy();

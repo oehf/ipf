@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti51;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditStrategy30;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
 /**
  * Base audit strategy for ITI-51.
+ *
  * @author Dmytro Rud
  * @author Michael Ottati
  */
@@ -28,41 +32,28 @@ public class Iti51AuditStrategy extends XdsQueryAuditStrategy30 {
 
     /**
      * Constructs the audit strategy.
-     * @param serverSide
-     *      whether this is a server-side or a client-side strategy.
+     *
+     * @param serverSide whether this is a server-side or a client-side strategy.
      */
     public Iti51AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
 
-    private void doAudit(XdsQueryAuditDataset auditDataset, String patientId) {
-        AuditorManager.getCustomXdsAuditor().auditIti51(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryUuid(),
-                auditDataset.getRequestPayload(),
-                auditDataset.getHomeCommunityId(),
-                patientId,
-                auditDataset.getPurposesOfUse(),
-                auditDataset.getUserRoles());
+    @Override
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
+        return auditDataset.getPatientIds().isEmpty() ?
+                new AuditMessage[]{ doMakeAuditMessage(auditContext, auditDataset, null) } :
+                auditDataset.getPatientIds().stream()
+                        .map(patientId -> doMakeAuditMessage(auditContext, auditDataset, patientId))
+                        .toArray(AuditMessage[]::new);
     }
 
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset, String pid) {
+        return new XdsQueryInformationBuilder(auditContext, auditDataset, XdsEventTypeCode.MultiPatientStoredQuery, auditDataset.getPurposesOfUse())
+                .addPatients(pid)
+                .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.MultiPatientStoredQuery)
+                .getMessage();
 
-    @Override
-    public void doAudit(XdsQueryAuditDataset auditDataset) {
-        if (auditDataset.getPatientIds().isEmpty()) {
-            // when no patient IDs were present in the request,
-            // then we create one ATNA audit record without ID
-            doAudit(auditDataset, null);
-        } else {
-            for (String patientId : auditDataset.getPatientIds()) {
-                doAudit(auditDataset, patientId);
-            }
-        }
     }
 }

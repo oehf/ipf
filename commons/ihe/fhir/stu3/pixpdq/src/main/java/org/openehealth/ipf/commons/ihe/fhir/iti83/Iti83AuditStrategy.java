@@ -19,10 +19,14 @@ import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.StringType;
 import org.hl7.fhir.dstu3.model.Type;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.Map;
 
@@ -32,26 +36,22 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti83AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
-    }
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
+        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
+                .addPatients(auditDataset.getPatientIds())
+                .setQueryParameters(
+                        "PIXmQuery",
+                        FhirParticipantObjectIdTypeCode.MobilePatientIdentifierCrossReferenceQuery,
+                        auditDataset.getQueryString())
 
-    @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti83(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString(),
-                auditDataset.getPatientIds());
+                .getMessages();
     }
 
     @Override
@@ -79,21 +79,11 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDat
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        /* Pending https://github.com/oehf/ipf/issues/124
-        if (result) {
-            if (response instanceof Parameters) {
-                Parameters parameters = (Parameters) response;
-                auditDataset.getPatientIds().addAll(
-                        parameters.getParameter().stream()
-                                .map(Parameters.ParametersParameterComponent::getValue)
-                                .filter(Identifier.class::isInstance)
-                                .map(Identifier.class::cast)
-                                .map(id -> String.format("%s|%s", id.getSystem(), id.getValue()))
-                                .collect(Collectors.toList()));
-            }
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
+        if (auditContext.isIncludeParticipantsFromResponse()) {
+        // TODO
         }
-        */
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
+        return result;
     }
 }

@@ -27,7 +27,7 @@ import ca.uhn.hl7v2.model.v22.message.ADT_A01
  */
 class MessageAdapterTest extends groovy.test.GroovyAssert {
     
-    MessageAdapter<ADT_A01> msg;
+    MessageAdapter<ADT_A01> msg
 
     @Before
     void setUp() {
@@ -70,7 +70,7 @@ class MessageAdapterTest extends groovy.test.GroovyAssert {
 
     @Test
     void testCopy() {
-		msg.MSH[5] = 'X';
+		msg.MSH[5] = 'X'
 		MessageAdapter<ADT_A01> copy = msg.copy()
         assert copy.MSH[5].value == 'X'
         copy.MSH[5].value = 'Y'

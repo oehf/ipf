@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
 import ca.uhn.hl7v2.model.Message
-import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.instance.model.Enumerations
 import org.hl7.fhir.instance.model.IdType
@@ -31,6 +30,8 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
+
+import static java.util.Objects.requireNonNull
 
 /**
  * Translates a {@link IBaseResource} into a HL7v2 PDQ Query message. For the time being, paging is left in
@@ -64,7 +65,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
      * @param uriMapper mapping for translating FHIR URIs into OIDs
      */
     PdqmRequestToPdqQueryTranslator(UriMapper uriMapper) {
-        Validate.notNull(uriMapper, "URI Mapper must not be null")
+        requireNonNull(uriMapper, "URI Mapper must not be null")
         this.uriMapper = uriMapper
     }
 
@@ -72,7 +73,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
      * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
      */
     void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
-        Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        requireNonNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
             .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})

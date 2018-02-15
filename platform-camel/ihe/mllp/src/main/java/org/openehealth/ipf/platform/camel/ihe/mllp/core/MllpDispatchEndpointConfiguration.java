@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.stripToNull;
@@ -32,11 +34,11 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
     /**
      * @deprecated
      */
-    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration> component, Map<String, Object> parameters) throws Exception {
+    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }
 
-    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration> component, String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);
         String routesString = stripToNull(component.getAndRemoveParameter(parameters, "routes", String.class));
         routes = routesString != null ? routesString.split("\\s*,\\s*") : new String[0];

@@ -15,10 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
+
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
 /**
  * @author Dmytro Rud
@@ -38,26 +43,24 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
         auditDataset.messageId = idString(request.id)
 
         // patient IDs
-        def patientIds = [] as Set<String>
+        Set<String> patientIds = [] as Set<String>
         addPatientIds(request.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
-        auditDataset.patientIds = patientIds.toArray()
+        auditDataset.setPatientIds(patientIds as String[])
         auditDataset
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti46(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
-                auditDataset.patientIds,
-                auditDataset.messageId,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        new PatientRecordEventBuilder(
+                auditContext,
+                auditDataset,
+                isServerSide() ? EventActionCode.Update : EventActionCode.Read,
+                Hl7v3EventTypeCode.PIXUpdateNotification,
+                auditDataset.purposesOfUse)
+        // Type=II (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
+                .addPatients('II', auditDataset.messageId, auditDataset.getPatientIds())
+                .getMessages()
     }
+
 
 }

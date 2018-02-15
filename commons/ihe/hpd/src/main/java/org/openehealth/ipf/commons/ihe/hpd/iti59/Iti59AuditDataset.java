@@ -18,8 +18,9 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.Set;
 
@@ -32,14 +33,15 @@ public class Iti59AuditDataset extends WsAuditDataset {
     @RequiredArgsConstructor
     public static class RequestItem {
         @Getter private final String requestId;
-        @Getter private final RFC3881EventCodes.RFC3881EventActionCodes actionCode;
+        @Getter private final EventActionCode actionCode;
         @Getter private final Set<String> providerIds;
 
-        // proprietary extensions for Delete and ModifyDN
-        @Getter private final String dn;
-        @Getter private final String newRdn;
+        @Getter @Setter private EventOutcomeIndicator outcomeCode;
+        @Getter @Setter private String outcomeDescription;
 
-        @Getter @Setter private RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCode;
+        // proprietary extensions for Delete and ModifyDN
+        @Getter @Setter private String dn;
+        @Getter @Setter private String newRdn;
     }
 
     @Getter @Setter private RequestItem[] requestItems;
@@ -47,5 +49,4 @@ public class Iti59AuditDataset extends WsAuditDataset {
     public Iti59AuditDataset(boolean serverSide) {
         super(serverSide);
     }
-
 }

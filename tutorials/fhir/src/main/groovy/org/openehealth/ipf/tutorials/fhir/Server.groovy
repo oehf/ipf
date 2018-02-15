@@ -18,15 +18,13 @@ package org.openehealth.ipf.tutorials.fhir
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.core.io.ClassPathResource
 
 /**
  * Entry point for command line execution.
  * @author Christian Ohr
  */
-public class Server {
-    private static final int SYSLOG_PORT = 514
+class Server {
       
     /**
      * Standard main.
@@ -35,7 +33,7 @@ public class Server {
      * @throws Exception
      *          any problem that occurred.
      */
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ClassPathResource contextResource = new ClassPathResource('context.xml')
         
         IpfFhirServlet servlet = new IpfFhirServlet()
@@ -57,9 +55,6 @@ public class Server {
         servletServer.initParameters.put("highlight", "true")
 
         servletServer.start()
-        
-        AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
-        AuditorModuleContext.context.config.auditRepositoryPort = SYSLOG_PORT
 
         while (true) {
             Thread.sleep(10000)

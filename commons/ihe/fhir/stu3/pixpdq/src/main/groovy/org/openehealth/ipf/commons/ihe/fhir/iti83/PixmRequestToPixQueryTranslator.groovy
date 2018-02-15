@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
 import ca.uhn.hl7v2.model.Message
-import org.apache.commons.lang3.Validate
 import org.hl7.fhir.dstu3.model.Identifier
 import org.hl7.fhir.dstu3.model.Parameters
 import org.hl7.fhir.dstu3.model.UriType
@@ -27,6 +26,8 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
+
+import static java.util.Objects.requireNonNull
 
 /**
  * Translates a {@link IBaseResource} into a HL7v2 PIX Query message
@@ -53,7 +54,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
      * @param uriMapper mapping for translating FHIR URIs into OIDs
      */
     PixmRequestToPixQueryTranslator(UriMapper uriMapper) {
-        Validate.notNull(uriMapper, "URI Mapper must not be null")
+        requireNonNull(uriMapper, "URI Mapper must not be null")
         this.uriMapper = uriMapper
     }
 
@@ -61,14 +62,14 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
      * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
      */
     void setPixSupplierResourceIdentifierUri(String pixSupplierResourceIdentifierUri) {
-        Validate.notNull(pixSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        requireNonNull(pixSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pixSupplierResourceIdentifierUri = pixSupplierResourceIdentifierUri
     }
 
     @Override
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         Parameters inParams = (Parameters) request
-        QBP_Q21 qry = PIX.Interactions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
+        QBP_Q21 qry = PIX.QueryInteractions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
         qry.MSH[3] = senderDeviceName
         qry.MSH[4] = senderFacilityName

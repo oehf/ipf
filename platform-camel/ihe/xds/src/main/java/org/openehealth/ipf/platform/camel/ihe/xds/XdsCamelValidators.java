@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.*;
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
@@ -49,7 +49,7 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
  *  
  * @author Dmytro Rud
  */
-abstract public class XdsCamelValidators extends XdsACamelValidators {
+public abstract class XdsCamelValidators {
     
     private static final Processor ITI_18_REQUEST_VALIDATOR = exchange -> {
         if (! validationEnabled(exchange)) {

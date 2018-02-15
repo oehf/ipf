@@ -27,11 +27,10 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
+import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -54,7 +53,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Rule
-    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES);
+    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES)
 
     @BeforeClass
     static void setUpClass() {
@@ -99,7 +98,7 @@ class TestIti21 extends MllpTestContainer {
         }
         assert failed
 
-        auditSender.messages.clear()
+        auditSender.clear()
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
@@ -144,8 +143,8 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(3, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
-        assertTrue(messages[1] instanceof SecurityAlertEvent)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID())
     }
 
     @Test
@@ -173,7 +172,7 @@ class TestIti21 extends MllpTestContainer {
 
         def messages = auditSender.messages
         assertEquals(2, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -188,7 +187,8 @@ class TestIti21 extends MllpTestContainer {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
         def messages = auditSender.messages
         assertEquals(3, messages.size())
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        LOG.warn("{}", messages)
+        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
     @Test
@@ -210,7 +210,7 @@ class TestIti21 extends MllpTestContainer {
         ]
 
         // Expect that the headers being sent arrive at the mock endpoint
-        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace");
+        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace")
         mockEndpoint.expectedMessageCount(1)
         mockEndpoint.expectedMessagesMatches(new Predicate() {
             @Override
@@ -269,7 +269,7 @@ class TestIti21 extends MllpTestContainer {
         )
         def processor = consumer.processor
 
-        def body = getMessageString(msh9, msh12);
+        def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
 
@@ -313,14 +313,13 @@ class TestIti21 extends MllpTestContainer {
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
-        def failed = true;
+        def failed = true
 
         try {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-                    (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
+            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception)) {
                 failed = false
             }
         }

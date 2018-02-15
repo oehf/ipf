@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.tutorials.ref.extend;
+package org.openehealth.ipf.tutorials.ref.extend
 
-import org.apache.camel.model.language.ExpressionDefinition;
+import org.apache.camel.model.language.ExpressionDefinition
 
-import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE;
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression;
+import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
+import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression
 
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.ProcessorDefinition
 
 /**
  * @author Martin Krasser
@@ -49,7 +49,7 @@ public class TutorialModelExtensionModule {
                                              String fileExtension) {
         def header = 'CamelFileName'
         def expression = filenameExpression(filePrefix, fileExtension)
-        delegate.setHeader(header, expression).to('file:' + dir);
+        delegate.setHeader(header, expression).to('file:' + dir)
     }
 
     // ------------------------------------------------------------

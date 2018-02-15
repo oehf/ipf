@@ -37,7 +37,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZEL
 public class PDQV3 implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v3InteractionId {
+    public enum Interactions implements Hl7v3InteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration> {
         ITI_47(ITI_47_WS_CONFIG);
 
         @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;

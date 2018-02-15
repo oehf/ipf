@@ -11,17 +11,6 @@
         <artifactId>ipf-platform-camel-ihe</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-    <!--
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xds.*</osgi.export.pkg>
-        <osgi.import.pkg>
-            org.openehealth.ipf.commons.ihe.xds.core.validate.requests,
-            org.openehealth.ipf.commons.ihe.xds.core.validate.responses,
-            org.openehealth.ipf.platform.camel.core.process,
-            *
-        </osgi.import.pkg>
-    </properties>
-	-->
     
     <dependencies>
         <!-- Dependencies for main -->

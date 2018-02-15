@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
@@ -40,9 +39,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
@@ -245,18 +243,6 @@ public class AdhocQueryRequestValidatorTest {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(folderRequestMpq);
         ebXML.getSlots(QueryParameter.FOLDER_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
-    }
-
-    @Test
-    public void testGoodCaseSql() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), ITI_16);
-    }
-    
-    @Test
-    public void testMissingSqlQuery() {
-        request = SampleData.createSqlQuery();
-        ((SqlQuery)request.getQuery()).setSql(null);
-        expectFailure(MISSING_SQL_QUERY_TEXT, ITI_16);
     }
     
     @Test

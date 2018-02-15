@@ -43,7 +43,6 @@ public class URNTest {
         assertFalse(URN.isURN("blorg:oid:1234"));
         assertFalse(URN.isURN("urn:oid"));
         assertFalse(URN.isURN("1234"));
-        assertFalse(URN.isURN("urn:isbn:ABC§"));
         assertFalse(URN.isURN("http://hl7.org/fhir"));
     }
 

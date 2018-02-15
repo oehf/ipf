@@ -13,10 +13,6 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.*</osgi.export.pkg>
-    </properties>
-    
     <modules>
         <module>core</module>
         <module>ws</module> 

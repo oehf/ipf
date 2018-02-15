@@ -16,17 +16,22 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import lombok.AccessLevel;
+import lombok.Getter;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.Map;
 
 /**
- *
  * @since 3.1
  */
 public abstract class AuditStrategySupport<T extends AuditDataset> implements AuditStrategy<T> {
 
+    @Getter(AccessLevel.PROTECTED)
     private final boolean serverSide;
+
 
     /**
      * @param serverSide <code>true</code> when this strategy is a server-side one;
@@ -36,18 +41,40 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
         this.serverSide = serverSide;
     }
 
+
+    @Override
+    public void doAudit(AuditContext auditContext, T auditDataset) {
+        auditContext.audit(makeAuditMessage(auditContext, auditDataset));
+    }
+
+    /**
+     * Constructs an {@link AuditMessage} from a provided {@link AuditDataset}
+     *
+     * @param auditContext audit context
+     * @param auditDataset audit dataset
+     * @return audit message
+     */
+    public abstract AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset);
+
+
     @Override
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
         return auditDataset;
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         return true;
     }
 
+
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object response) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
+        return null;
+    }
+
+    @Override
+    public String getEventOutcomeDescription(Object response) {
         return null;
     }
 
@@ -56,7 +83,4 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
         return true;
     }
 
-    protected boolean isServerSide() {
-        return serverSide;
-    }
 }

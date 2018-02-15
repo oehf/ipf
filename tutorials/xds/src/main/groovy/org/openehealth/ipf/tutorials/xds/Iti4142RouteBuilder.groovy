@@ -43,7 +43,7 @@ import static org.openehealth.ipf.tutorials.xds.SearchResult.*
  * @author Jens Riemschneider
  */
 class Iti4142RouteBuilder extends RouteBuilder {
-    private final static Logger log = LoggerFactory.getLogger(Iti4142RouteBuilder.class);
+    private final static Logger log = LoggerFactory.getLogger(Iti4142RouteBuilder.class)
     
     @Override
     public void configure() throws Exception {

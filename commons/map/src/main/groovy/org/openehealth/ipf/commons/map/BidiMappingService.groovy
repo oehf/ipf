@@ -83,13 +83,13 @@ class BidiMappingService implements MappingService {
 
     private void evaluateMappingScript(URL script) {
         Binding binding = new Binding()
-        GroovyShell shell = new GroovyShell(binding);
+        GroovyShell shell = new GroovyShell(binding)
         evaluateResource(script, shell, binding)
     }
 
     private void evaluateMappingScripts(URL[] scripts) {
         Binding binding = new Binding()
-        GroovyShell shell = new GroovyShell(binding);
+        GroovyShell shell = new GroovyShell(binding)
         scripts.each { script ->
             evaluateResource(script, shell, binding)
         }
@@ -218,16 +218,16 @@ class BidiMappingService implements MappingService {
     }
 
     private URL getURL(String location) throws IOException {
-        URL url;
+        URL url
         if (location.startsWith("/")) {
-            url = getClass().getResource(location);
+            url = getClass().getResource(location)
         } else {
             try {
                 // Try to parse the location as a URL...
-                url = new URL(location);
+                url = new URL(location)
             } catch (MalformedURLException ex) {
                 // No URL -> resolve as resource path.
-                url = getClass().getClassLoader().getResource(location);
+                url = getClass().getClassLoader().getResource(location)
             }
         }
         return url

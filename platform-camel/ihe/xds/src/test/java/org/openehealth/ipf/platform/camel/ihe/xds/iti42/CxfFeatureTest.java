@@ -24,43 +24,40 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPFaultException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
-public class CxfFeatureTest extends StandardTestContainer {
+public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
 
     @BeforeClass
-    public static void setUp() throws IOException {
+    public static void setUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
 
-//    public static void main(String[] args) {
-//        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
-//    }
-
     @Test
     public void testFeatureEndpointWithoutPolicy() {
-        JaxWsClientFactory clientFactory = new JaxWsRequestClientFactory<>(
+        JaxWsClientFactory<? extends XdsAuditDataset> clientFactory = new JaxWsRequestClientFactory<>(
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + getPort() + "/xds-iti42",
-                null, null, null, null, null);
+                null, null,
+                null, null, null, null);
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
             Assert.fail("This line must be not reachable");
-        } catch(SOAPFaultException ex) {
+        } catch (SOAPFaultException ex) {
             Assert.assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
         }
     }
@@ -68,9 +65,9 @@ public class CxfFeatureTest extends StandardTestContainer {
     @Test
     public void testFeatureEndpointWithPolicy() {
         SpringBusFactory bf = new SpringBusFactory();
-	    Bus bus = bf.createBus("feature-test-resources/client-context.xml");
-	    SpringBusFactory.setDefaultBus(bus);
-	    SpringBusFactory.setThreadDefaultBus(bus);
+        Bus bus = bf.createBus("feature-test-resources/client-context.xml");
+        SpringBusFactory.setDefaultBus(bus);
+        SpringBusFactory.setThreadDefaultBus(bus);
 
         Iti42PortType client =
                 getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + getPort() + "/xds-iti42");
@@ -82,7 +79,7 @@ public class CxfFeatureTest extends StandardTestContainer {
 
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
-        } catch(SOAPFaultException ex) {
+        } catch (SOAPFaultException ex) {
             //ex.printStackTrace();
             Assert.fail();
         } finally {
@@ -94,7 +91,7 @@ public class CxfFeatureTest extends StandardTestContainer {
     private Iti42PortType getClient(String wsdlLocation, String serviceURL) {
         URL wsdlURL = getClass().getClassLoader().getResource(wsdlLocation);
         Service service = Service.create(wsdlURL, ITI_42.getWsTransactionConfiguration().getServiceName());
-        Iti42PortType client = (Iti42PortType)service.getPort(ITI_42.getWsTransactionConfiguration().getSei());
+        Iti42PortType client = (Iti42PortType) service.getPort(ITI_42.getWsTransactionConfiguration().getSei());
 
         BindingProvider bindingProvider = (BindingProvider) client;
         Map<String, Object> reqContext = bindingProvider.getRequestContext();

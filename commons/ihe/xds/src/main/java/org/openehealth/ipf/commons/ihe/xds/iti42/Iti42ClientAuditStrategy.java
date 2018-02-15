@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti42;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
@@ -30,16 +33,11 @@ public class Iti42ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetBEvent(
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getSubmissionSetUuid(),
-                auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse(),
-                auditDataset.getUserRoles());
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsSubmitAuditDataset auditDataset) {
+        return new XdsPHIExportBuilder(auditContext, auditDataset, XdsEventTypeCode.RegisterDocumentSetB, auditDataset.getPurposesOfUse())
+                .setPatient(auditDataset.getPatientId())
+                .setSubmissionSet(auditDataset)
+                .getMessages();
     }
 
 }

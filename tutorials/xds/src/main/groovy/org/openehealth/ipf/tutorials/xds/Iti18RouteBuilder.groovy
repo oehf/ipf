@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory
  * @author Jens Riemschneider
  */
 class Iti18RouteBuilder extends RouteBuilder {
-    private final static Logger log = LoggerFactory.getLogger(Iti18RouteBuilder.class);
+    private final static Logger log = LoggerFactory.getLogger(Iti18RouteBuilder.class)
     
     static final def DOCS = 'resp.documentEntries'
     static final def FOLDERS = 'resp.folders'

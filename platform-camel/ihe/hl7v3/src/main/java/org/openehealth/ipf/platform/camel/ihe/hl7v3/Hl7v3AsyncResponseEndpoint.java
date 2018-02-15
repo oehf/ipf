@@ -15,19 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.apache.cxf.feature.AbstractFeature;
-import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,22 +35,16 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType>
-{
+        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> {
 
     public Hl7v3AsyncResponseEndpoint(
             String endpointUri,
             String address,
-            Hl7v3Component<ConfigType> component,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            List<String> schemaLocations,
-            Map<String, Object> properties,
-            Class<? extends AbstractWebService> serviceClass)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            Map<String, Object> parameters,
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, parameters, serviceClass);
     }
-
 
     // currently is used for deferred response receivers only!
     @Override
@@ -60,6 +53,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties());
@@ -72,6 +66,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
+                getAuditContext(),
                 getCorrelator(),
                 getCustomInterceptors());
     }

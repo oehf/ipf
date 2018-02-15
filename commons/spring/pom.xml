@@ -12,20 +12,6 @@
     <description>Spring support for IPF</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.core.config*;-split-package:=merge-first,
-            org.openehealth.ipf.commons.map*;-split-package:=merge-first
-        </osgi.export.pkg>
-        <!--
-            Needed to load any class via
-            org.openehealth.ipf.commons.core.io.IOUtils.deserialize(byte[])
-         -->
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -43,17 +29,6 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-map</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

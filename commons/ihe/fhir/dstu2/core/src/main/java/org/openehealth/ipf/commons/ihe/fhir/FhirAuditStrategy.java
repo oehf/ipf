@@ -1,7 +1,9 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.hl7.fhir.instance.model.OperationOutcome;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.AbstractFhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Comparator;
 
@@ -15,9 +17,9 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromOperationOutcome(OperationOutcome response) {
-        if (response.hasIssue()) {
-            return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+    public EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(OperationOutcome response) {
+        if (!response.hasIssue()) {
+            return EventOutcomeIndicator.Success;
         }
         // Find out the worst issue severity
         OperationOutcome.IssueSeverity severity = response.getIssue().stream()
@@ -27,14 +29,20 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
         switch (severity) {
             case FATAL:
             case ERROR:
-                return RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE;
+                return EventOutcomeIndicator.MajorFailure;
             case WARNING:
-                return RFC3881EventCodes.RFC3881EventOutcomeCodes.MINOR_FAILURE;
+                return EventOutcomeIndicator.MinorFailure;
             default:
-                return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+                return EventOutcomeIndicator.Success;
         }
 
     }
 
-
+    @Override
+    public String getEventOutcomeDescriptionFromOperationOutcome(OperationOutcome response) {
+        if (!response.hasIssue()) {
+            return null;
+        }
+        return response.getIssue().get(0).getDiagnostics();
+    }
 }

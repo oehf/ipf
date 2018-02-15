@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Dmytro Rud
  */
-public class XdsAuditorTest extends AuditorTestBase {
+public class XdsAuditorTest extends OhtAuditorTestBase {
 
     private static final String SUBMISSION_SET_ID    = "submission-set-id";
     private static final String[] OBJECT_UUIDS       = {"objectUuid1", "objectUuid2", "objectUuid3"};

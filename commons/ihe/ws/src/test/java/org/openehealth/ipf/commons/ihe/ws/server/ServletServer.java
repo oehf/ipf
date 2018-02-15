@@ -24,7 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
+
 
 /**
  * Simple abstraction of an embedded servlet server (e.g. Jetty or Tomcat).
@@ -70,7 +71,7 @@ public abstract class ServletServer {
      *          the path of the servlet itself (including patterns if needed).
      */
     public void setServletPath(String servletPath) {
-        notNull(servletPath, "servletPath cannot be null");
+        requireNonNull(servletPath, "servletPath cannot be null");
         this.servletPath = servletPath;
     }
 
@@ -86,7 +87,7 @@ public abstract class ServletServer {
      *          the path of the context in which the servlet is running.
      */
     public void setContextPath(String contextPath) {
-        notNull(contextPath, "contextPath cannot be null");
+        requireNonNull(contextPath, "contextPath cannot be null");
         this.contextPath = contextPath;
     }
 
@@ -118,7 +119,7 @@ public abstract class ServletServer {
      *          the servlet.      
      */
     public void setServlet(Servlet servlet) {
-        notNull(servlet, "servlet cannot be null");
+        requireNonNull(servlet, "servlet cannot be null");
         this.servlet = servlet;
     }
 

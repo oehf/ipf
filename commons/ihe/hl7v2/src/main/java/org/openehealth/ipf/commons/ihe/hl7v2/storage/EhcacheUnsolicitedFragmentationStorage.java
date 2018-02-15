@@ -19,6 +19,8 @@ import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.apache.commons.lang3.Validate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A storage of HL7 v2 unsolicited fragmentation accumulators.
  * @author Dmytro Rud
@@ -28,7 +30,7 @@ public class EhcacheUnsolicitedFragmentationStorage implements UnsolicitedFragme
     private final Ehcache ehcache;
 
     public EhcacheUnsolicitedFragmentationStorage(Ehcache ehcache) {
-        Validate.notNull(ehcache);
+        requireNonNull(ehcache);
         this.ehcache = ehcache;
     }
 

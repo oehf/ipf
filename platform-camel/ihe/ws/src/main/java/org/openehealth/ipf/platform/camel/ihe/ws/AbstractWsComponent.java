@@ -21,11 +21,13 @@ import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,10 @@ import java.util.Map;
  * @param <ConfigType>       configuration type
  * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId<ConfigType>>
+abstract public class AbstractWsComponent<
+        AuditDatasetType extends WsAuditDataset,
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>,
+        InteractionIdType extends WsInteractionId<ConfigType>>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
 
     private final InteractionIdType interactionId;
@@ -61,8 +66,11 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
                 parameters, "outInterceptors", Interceptor.class)));
         provider.setOutFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "outFaultInterceptors", Interceptor.class)));
-
         return provider;
+    }
+
+    protected AuditContext getAuditContext(Map<String, Object> parameters) {
+        return AuditConfiguration.obtainAuditContext(this, parameters);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -86,12 +94,12 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return interactionId.getWsTransactionConfiguration().getClientAuditStrategy();
+        return getWsTransactionConfiguration().getClientAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return interactionId.getWsTransactionConfiguration().getServerAuditStrategy();
+        return getWsTransactionConfiguration().getServerAuditStrategy();
     }
 
     /**

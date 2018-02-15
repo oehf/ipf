@@ -15,14 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
+
+import java.util.stream.Stream;
 
 /**
  * Server audit strategy for ITI-39.
+ *
  * @author Dmytro Rud
+ * @author Christian Ohr
  */
 public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
@@ -31,22 +38,21 @@ public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
-        for (Status status : Status.values()) {
-            if (auditDataset.hasDocuments(status)) {
-                AuditorManager.getXCARespondingGatewayAuditor().auditCrossGatewayRetrieveEvent(
-                        auditDataset.getEventOutcomeCode(status),
-                        auditDataset.getUserId(),
-                        auditDataset.getClientIpAddress(),
-                        auditDataset.getServiceEndpointUrl(),
-                        auditDataset.getUserName(),
-                        auditDataset.getDocumentIds(status),
-                        auditDataset.getRepositoryIds(status),
-                        auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPurposesOfUse(),
-                        auditDataset.getUserRoles());
-            }
-        }
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+        return Stream.of(Status.values())
+                .filter(auditDataset::hasDocuments)
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
+                .toArray(AuditMessage[]::new);
+    }
+
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsPHIExportBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), null,
+                EventActionCode.Read,
+                XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
+                .setPatient(auditDataset.getPatientId())
+                .addDocumentIds(auditDataset, status)
+                .getMessage();
     }
 
 }

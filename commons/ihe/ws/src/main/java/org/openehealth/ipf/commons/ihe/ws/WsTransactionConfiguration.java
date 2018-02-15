@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Contains information about a Web Service-based transaction.
  * All parameters are static, i. e. do not depend on the endpoint configuration.
  */
-public class WsTransactionConfiguration extends TransactionConfiguration {
+public class WsTransactionConfiguration<T extends WsAuditDataset> extends TransactionConfiguration<T> {
     private final QName bindingName;
     private final Class<?> sei;
     private final QName serviceName;
@@ -75,8 +76,8 @@ public class WsTransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends WsAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends WsAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             QName serviceName,
             Class<?> sei,
             QName bindingName,
@@ -89,10 +90,10 @@ public class WsTransactionConfiguration extends TransactionConfiguration {
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
 
-        Validate.notNull(serviceName, "serviceName");
-        Validate.notNull(sei, "service endpoint interface");
-        Validate.notNull(bindingName, "bindingName");
-        Validate.notNull(wsdlLocation, "wsdlLocation");
+        requireNonNull(serviceName, "serviceName");
+        requireNonNull(sei, "service endpoint interface");
+        requireNonNull(bindingName, "bindingName");
+        requireNonNull(wsdlLocation, "wsdlLocation");
 
         this.sei = sei;
         this.serviceName = serviceName;

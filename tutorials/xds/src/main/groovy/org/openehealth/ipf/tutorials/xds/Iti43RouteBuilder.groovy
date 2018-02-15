@@ -33,7 +33,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
  * @author Jens Riemschneider
  */
 class Iti43RouteBuilder extends RouteBuilder {
-    private final static Logger log = LoggerFactory.getLogger(Iti43RouteBuilder.class);
+    private final static Logger log = LoggerFactory.getLogger(Iti43RouteBuilder.class)
     
     @Override
     public void configure() throws Exception {

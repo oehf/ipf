@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.Reference;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  *
@@ -28,9 +28,9 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 public class Iti65AuditDataset extends FhirAuditDataset {
 
     // Document manifest unique ID
-    @Getter
-    @Setter
+    @Getter @Setter
     private String documentManifestUuid;
+
 
     public Iti65AuditDataset(boolean serverSide) {
         super(serverSide);

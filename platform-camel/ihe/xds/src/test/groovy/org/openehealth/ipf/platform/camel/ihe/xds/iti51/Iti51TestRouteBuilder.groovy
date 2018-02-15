@@ -59,7 +59,7 @@ class Iti51TestRouteBuilder extends SpringRouteBuilder {
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .process { resultMessage(it).body = QueryResponse(FAILURE) }
+                    .process { resultMessage(it).body = new QueryResponse(FAILURE) }
    }
 
     def checkValue(exchange, expected) {

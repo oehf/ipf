@@ -5,20 +5,6 @@
     <name>ipf-commons-xml</name>
     <description>Generic IPF support for XML validation</description>
     <url>${site.url}/${project.artifactId}</url>
-    
-    <properties>
-        <osgi.export.pkg>
-            '=schematron',
-            org.openehealth.ipf.commons.xml*
-        </osgi.export.pkg>
-        <!--
-            Needed to load any class via
-            org.openehealth.ipf.commons.core.io.IOUtils.deserialize(byte[])
-         -->
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
-    </properties>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -49,10 +35,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>

@@ -17,16 +17,18 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
@@ -41,6 +43,12 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         implements AuditInterceptor<AuditDatasetType, FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProducerAuditInterceptor.class);
+
+    private final AuditContext auditContext;
+
+    public ProducerAuditInterceptor(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
+    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -60,21 +68,16 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             throw e;
         } finally {
             if (auditDataset != null) {
-                try {
-                    auditDataset.setEventOutcomeCode(failed ?
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS);
-                    getAuditStrategy().doAudit(auditDataset);
-                } catch (Exception e) {
-                    LOG.error("ATNA auditing failed", e);
-                }
+                auditDataset.setEventOutcomeIndicator(failed ?
+                        EventOutcomeIndicator.MajorFailure :
+                        EventOutcomeIndicator.Success);
+                getAuditStrategy().doAudit(auditContext, auditDataset);
             }
         }
     }
 
     @Override
-    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) throws Exception {
-
+    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) {
     }
 
     @Override
@@ -91,6 +94,9 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
+            auditDataset.setSourceUserId("unknown");
+            auditDataset.setDestinationUserId(exchange.getProperty("CamelToEndpoint").toString());
+
             // TODO set client-side headers
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
@@ -105,7 +111,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      * All exception are ignored.
      */
     private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, IBaseResource response) {
-        return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
+        return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 
 

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.map.extend;
+package org.openehealth.ipf.commons.map.extend
 
-import org.openehealth.ipf.commons.core.config.ContextFacade;
-import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.core.config.ContextFacade
+import org.openehealth.ipf.commons.map.MappingService
 
-import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.*;
+import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.*
 
 
 /**

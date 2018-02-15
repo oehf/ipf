@@ -29,10 +29,9 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.easymock.EasyMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.SimpleTransactionStatus;
 
 /**
@@ -77,9 +76,9 @@ public class TransactedRouteTest extends StandardTestContainer {
     public void testTransactedRoute () throws Exception {
         // setup the transaction mock        
         EasyMock.reset(txManager);
-        txManager.getTransaction((TransactionDefinition) EasyMock.anyObject());
+        txManager.getTransaction(EasyMock.anyObject());
         EasyMock.expectLastCall().andReturn(new SimpleTransactionStatus()).atLeastOnce();
-        txManager.rollback((SimpleTransactionStatus) (EasyMock.anyObject()));
+        txManager.rollback(EasyMock.anyObject());
         EasyMock.expectLastCall().asStub();
                 
         EasyMock.replay(txManager);

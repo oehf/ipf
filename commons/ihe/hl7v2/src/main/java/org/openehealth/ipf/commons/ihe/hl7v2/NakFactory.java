@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
-import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 import java.io.IOException;
@@ -28,15 +28,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 
 /**
  * Basic ACK and NAK factory for HL7v2-based transactions.
  *
  * @author Dmytro Rud
  */
-public class NakFactory {
-    private final Hl7v2TransactionConfiguration config;
+public class NakFactory<T extends MllpAuditDataset> {
 
+    private final Hl7v2TransactionConfiguration<T> config;
     private final boolean useCAckTypeCodes;
     private final String defaultNakMsh9;
 
@@ -50,13 +52,10 @@ public class NakFactory {
      *                         <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.
      * @param defaultNakMsh9   desired contents of MSH-9 in this transaction's default NAKs.
      */
-    public NakFactory(Hl7v2TransactionConfiguration config, boolean useCAckTypeCodes, String defaultNakMsh9) {
-        Validate.notNull(config);
-        Validate.notEmpty(defaultNakMsh9);
-
-        this.config = config;
+    public NakFactory(Hl7v2TransactionConfiguration<T> config, boolean useCAckTypeCodes, String defaultNakMsh9) {
+        this.config = requireNonNull(config);
         this.useCAckTypeCodes = useCAckTypeCodes;
-        this.defaultNakMsh9 = defaultNakMsh9;
+        this.defaultNakMsh9 = requireNonNull(defaultNakMsh9);
     }
 
 
@@ -65,7 +64,7 @@ public class NakFactory {
      *
      * @param config Configuration of the transaction served by this factory.
      */
-    public NakFactory(Hl7v2TransactionConfiguration config) {
+    public NakFactory(Hl7v2TransactionConfiguration<T> config) {
         this(config, false, "ACK");
     }
 

@@ -24,16 +24,17 @@ import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 
 /**
  * MLLP dispatching Camel component.
  * @author Dmytro Rud
  */
-public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration> {
+public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> {
 
-    public static final Hl7v2TransactionConfiguration CONFIGURATION =
-            new Hl7v2TransactionConfiguration(
+    public static final Hl7v2TransactionConfiguration<MllpAuditDataset> CONFIGURATION =
+            new Hl7v2TransactionConfiguration<>(
                     "mllp-dispatch",
                     "MLLP Dispatcher",
                     false,
@@ -52,7 +53,7 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
                     new boolean[] {false},      // interactive continuation (if any) will be delegated
                     new DefaultHapiContext());
 
-    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
+    private static final NakFactory<MllpAuditDataset> NAK_FACTORY = new NakFactory<>(CONFIGURATION);
 
     static {
         CONFIGURATION.getHapiContext().getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
@@ -64,22 +65,22 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     }
 
     @Override
-    protected MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
         return new MllpDispatchEndpoint(this, wrappedEndpoint, config);
     }
 
     @Override
-    public Hl7v2InteractionId getInteractionId() {
+    public Hl7v2InteractionId<MllpAuditDataset> getInteractionId() {
         return null;
     }
 
     @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration<MllpAuditDataset> getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
     }
 
     @Override
-    public NakFactory getNakFactory() {
+    public NakFactory<MllpAuditDataset> getNakFactory() {
         return NAK_FACTORY;
     }
 }

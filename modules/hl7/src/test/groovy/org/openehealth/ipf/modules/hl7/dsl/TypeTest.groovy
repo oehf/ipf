@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.v24.segment.OBX
 import org.junit.Before
-import org.junit.Test;
+import org.junit.Test
 
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
@@ -78,7 +78,7 @@ class TypeTest extends groovy.test.GroovyAssert {
         assertFieldEquals('50060710^MICROALBUMIN^^50060710^MICROALBUMIN', obx2, 3)
         assertFieldsEmpty(obx3, 4)
 
-        Repeatable field = obx2[5];
+        Repeatable field = obx2[5]
         assertEquals('400', field.elementAt(0).value)
         assertFalse(field.isEmpty())
         assertTrue((boolean)field)
@@ -99,7 +99,7 @@ class TypeTest extends groovy.test.GroovyAssert {
         assertFieldEquals('50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE^^50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE', obx3, 3)
         assertFieldsEmpty(obx3, 4)
 
-        Repeatable field = obx3[5];
+        Repeatable field = obx3[5]
         assertEquals('4', field.elementAt(0).value)
         assertFalse(field.isEmpty())
         assertTrue((boolean)field)
@@ -143,14 +143,14 @@ class TypeTest extends groovy.test.GroovyAssert {
     }
 
     void assertFieldEquals(String expected, data, int field) {
-        String simpleName = data.getClass().getSimpleName();
+        String simpleName = data.getClass().getSimpleName()
         assertEquals(expected, data[field].encode())
         assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", data[field].empty)
         assertTrue((boolean)data[field])
     }
 
     void assertFieldsEmpty(Segment segment, int... fields) {
-        String simpleName = segment.getClass().getSimpleName();
+        String simpleName = segment.getClass().getSimpleName()
         for (field in fields) {
             assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", segment[field].empty)
             if (segment[field]) {

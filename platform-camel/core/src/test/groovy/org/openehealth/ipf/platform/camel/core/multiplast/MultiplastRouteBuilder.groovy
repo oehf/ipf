@@ -32,7 +32,7 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
         ThreadPoolExecutor privilegedThreadPool = new PrivilegedTestExecutorService(3,
                 3, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(),
-                Executors.defaultThreadFactory());
+                Executors.defaultThreadFactory())
 
         from('direct:start')
             .multiplast(

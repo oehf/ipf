@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.tutorials.ref.route
 
-import org.apache.camel.ValidationException;
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.ValidationException
+import org.apache.camel.spring.SpringRouteBuilder
+
 /**
  * @author Martin Krasser
  */

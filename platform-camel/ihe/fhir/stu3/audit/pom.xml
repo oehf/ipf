@@ -12,10 +12,6 @@
     <description>Apache Camel components for ATNA transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.fhir.iti81*</osgi.export.pkg>
-    </properties>
-
     <dependencies>
 
         <dependency>

@@ -27,14 +27,7 @@ http://camel.apache.org/schema/cxf
 http://camel.apache.org/schema/cxf/camel-cxf.xsd
 ">
 
-    <!-- Importing the CXF configuration -->
-    <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true"/>
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext> 
+    <import resource="../common-xds-beans.xml"/>
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.dispatch.DispatchRouteBuilder">
@@ -52,15 +45,17 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd
     <bean id="auditInRequestInterceptor"
           class="org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor">
         <constructor-arg index="0" ref="dispatchAuditStrategy"/>
-        <constructor-arg index="1" ref="documentRegistryTransactionConfiguration"/>
+        <constructor-arg index="1" ref="auditContext"/>
+        <constructor-arg index="2" ref="documentRegistryTransactionConfiguration"/>
     </bean>
 
     <bean id="auditResponseInterceptor"
           class="org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor">
         <constructor-arg index="0" ref="dispatchAuditStrategy"/>
-        <constructor-arg index="1" value="true"/>
-        <constructor-arg index="2"><null/></constructor-arg>
-        <constructor-arg index="3" value="false"/>
+        <constructor-arg index="1" ref="auditContext"/>
+        <constructor-arg index="2" value="true"/>
+        <constructor-arg index="3"><null/></constructor-arg>
+        <constructor-arg index="4" value="false"/>
     </bean>
 
     <bean id="dispatchInContextCreatorInterceptor"

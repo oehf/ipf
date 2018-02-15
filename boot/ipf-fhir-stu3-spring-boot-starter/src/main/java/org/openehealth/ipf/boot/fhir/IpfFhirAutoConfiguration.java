@@ -25,11 +25,9 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.NamingSystemService;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -55,15 +53,6 @@ public class IpfFhirAutoConfiguration {
 
     @Autowired
     private IpfFhirConfigurationProperties config;
-
-    @Bean
-    @ConditionalOnMissingBean(FhirAuditor.class)
-    @ConditionalOnProperty("ipf.atna.auditor-enabled")
-    public FhirAuditor fhirAuditor(AuditorModuleConfig auditorModuleConfig) {
-        FhirAuditor auditor = FhirAuditor.getAuditor();
-        auditor.setConfig(auditorModuleConfig);
-        return auditor;
-    }
 
     @Bean
     public FhirContext fhirContext() {

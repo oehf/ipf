@@ -40,11 +40,6 @@ final class ToEbXMLVisitor implements Visitor {
     }
 
     @Override
-    public void visit(SqlQuery query) {
-        new SqlQueryTransformer().toEbXML(query, ebXML);
-    }
-
-    @Override
     public void visit(FindDocumentsQuery query) {
         new FindDocumentsQueryTransformer<>().toEbXML(query, ebXML);
     }

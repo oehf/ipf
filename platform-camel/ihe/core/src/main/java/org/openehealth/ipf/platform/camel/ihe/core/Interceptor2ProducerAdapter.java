@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.core;
 
 import org.apache.camel.*;
-import org.apache.commons.lang3.Validate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Adapter for HL7v2 interceptors which allows them
@@ -29,8 +30,8 @@ public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor,
     private final Producer originalProducer;
 
     public Interceptor2ProducerAdapter(Processor interceptor, Producer originalProducer) {
-        this.interceptor = Validate.notNull(interceptor);
-        this.originalProducer = Validate.notNull(originalProducer);
+        this.interceptor = requireNonNull(interceptor);
+        this.originalProducer = requireNonNull(originalProducer);
     }
 
     @Override

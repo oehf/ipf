@@ -19,21 +19,22 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_SUCCESS
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 /**
  * Tests the ITI-86 transaction with a webservice and client adapter defined via URIs.
  * @author Dmytro Rud
  */
-class TestIti86 extends StandardTestContainer {
+class TestIti86 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-86.xml'
     
@@ -43,7 +44,7 @@ class TestIti86 extends StandardTestContainer {
     RemoveDocuments request
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -82,38 +83,34 @@ class TestIti86 extends StandardTestContainer {
         checkAudit(['partial', '2.1.2'], ['2.1.3'])
     }
 
-    def checkAudit(List<String> successfulDocuments, List<String> failedDocuments) {
-        def messages = auditSender.messages.collect { getMessage(it) }
-
-        messages.each {
-            assert it.AuditSourceIdentification.size() == 1
-            assert it.EventIdentification.size() == 1
-            assert it.ActiveParticipant.size() == 2
-            assert it.EventIdentification.@EventActionCode == 'D'
-            assert it.ActiveParticipant[1].@UserID.text() == SERVICE2_ADDR
-            checkCode(it.EventIdentification.EventTypeCode, 'ITI-86', 'IHE Transactions')
+    void checkAudit(List<String> successfulDocuments, List<String> failedDocuments) {
+        auditSender.messages.each { AuditMessage message ->
+            assert message.activeParticipants.size() == 2
+            assert message.eventIdentification.eventActionCode == EventActionCode.Delete
+            assert message.activeParticipants[1].userID == SERVICE2_ADDR
+            checkCode(message.eventIdentification.eventTypeCode[0], 'ITI-86', 'IHE Transactions')
         }
 
-        checkDocumentUids(messages, successfulDocuments, '0')
-        checkDocumentUids(messages, failedDocuments, '8')
+        checkDocumentUids(auditSender.messages, successfulDocuments, EventOutcomeIndicator.Success)
+        checkDocumentUids(auditSender.messages, failedDocuments, EventOutcomeIndicator.SeriousFailure)
     }
 
-    private void checkDocumentUids(List allMessages, List<String> documentUids, String outcomeCode) {
+    private void checkDocumentUids(List<AuditMessage> allMessages, List<String> documentUids, EventOutcomeIndicator outcomeCode) {
         if (documentUids) {
-            def messages = allMessages.findAll { it.EventIdentification.@EventOutcomeIndicator.text() == outcomeCode }
+            def messages = allMessages.findAll { it.eventIdentification.eventOutcomeIndicator == outcomeCode }
             assert messages.size() == 2
 
             messages.each { message ->
-                assert message.ParticipantObjectIdentification.size() == documentUids.size()
+                assert message.participantObjectIdentifications.size() == documentUids.size()
                 documentUids.eachWithIndex { documentUid, i ->
-                    assert message.ParticipantObjectIdentification[i].@ParticipantObjectID.text() == documentUid
+                    assert message.participantObjectIdentifications[i].participantObjectID == documentUid
                 }
             }
         }
     }
 
-    def sendIt(endpoint, firstDocumentUid) {
-        request.documents[0].documentUniqueId = firstDocumentUid
+    def sendIt(endpoint, String firstDocumentUid) {
+        request.documents[0].setDocumentUniqueId(firstDocumentUid)
         return send(endpoint, request, Response.class)
     }
 }

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Clay Sebourn
  */
-public class RadAuditorTest extends AuditorTestBase {
+public class RadAuditorTest extends OhtAuditorTestBase {
 
     private static final String[] STUDY_INSTANCE_UUIDS  = {"study-instance_uuid-1", "study-instance_uuid-1", "study-instance_uuid-2"};
     private static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid-11", "series-instance_uuid-12", "series-instance_uuid-21"};

@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 
 /**
@@ -39,43 +42,65 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
         super(serverSide);
     }
 
-
     /**
      * A helper method that analyzes the given registry response and 
      * determines the corresponding RFC 3881 event outcome code.
-     * @param response
-     *          registry to analyze.
+     * @param response registry to analyze.
      * @return outcome code.
      */
-    public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+    private static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
         try {
             if (response.getStatus() == Status.SUCCESS) {
-                return RFC3881EventOutcomeCodes.SUCCESS;
+                return EventOutcomeIndicator.Success;
             }
-
             if (response.getErrors().isEmpty()) {
-                return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                return EventOutcomeIndicator.SeriousFailure;
             }
-
             // determine the highest error severity
             for (EbXMLRegistryError error : response.getErrors()) {
                 if (error.getSeverity() == Severity.ERROR) {
-                    return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                    return EventOutcomeIndicator.SeriousFailure;
                 }
             }
-
-            return RFC3881EventOutcomeCodes.MINOR_FAILURE;
+            return EventOutcomeIndicator.MinorFailure;
         } catch (Exception e) {
-            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+            return EventOutcomeIndicator.SeriousFailure;
         }
     }
 
+    private static String getEventOutcomeDescriptionFromRegistryResponse(EbXMLRegistryResponse response) {
+        if (response.getErrors().isEmpty()) {
+            return null;
+        }
+        for (EbXMLRegistryError error : response.getErrors()) {
+            if (error.getSeverity() == Severity.ERROR) {
+                return error.getCodeContext();
+            }
+        }
+        return response.getErrors().get(0).getCodeContext();
+    }
+
+
+        @Override
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        return getEventOutcomeCodeFromRegistryResponse(ebXML);
+    }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
-        RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
-        auditDataset.setEventOutcomeCode(outcomeCodes);
-        return outcomeCodes == RFC3881EventOutcomeCodes.SUCCESS;
+    public String getEventOutcomeDescription(Object pojo) {
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
+    }
+
+    @Override
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
+        EventOutcomeIndicator outcomeCodes = getEventOutcomeIndicator(response);
+        auditDataset.setEventOutcomeIndicator(outcomeCodes);
+        auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
+        return outcomeCodes == EventOutcomeIndicator.Success;
     }
 
 }

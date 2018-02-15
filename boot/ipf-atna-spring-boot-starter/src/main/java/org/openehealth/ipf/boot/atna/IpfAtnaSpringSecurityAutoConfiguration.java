@@ -16,8 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,8 +37,8 @@ public class IpfAtnaSpringSecurityAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
     @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
-    AuthenticationListener loginListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
-        return new AuthenticationListener(auditor);
+    AuthenticationListener loginListener(AuditContext auditContext) {
+        return new AuthenticationListener(auditContext);
     }
 
 

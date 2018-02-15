@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.core.multiplast
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.impl.DefaultExchange;
-import org.junit.Test;
-import org.junit.BeforeClass;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.apache.camel.CamelContext
+import org.apache.camel.Exchange
+import org.apache.camel.ExchangePattern
+import org.apache.camel.ProducerTemplate
+import org.apache.camel.impl.DefaultExchange
+import org.junit.Test
+import org.junit.BeforeClass
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.springframework.context.ApplicationContext
+import org.springframework.context.support.ClassPathXmlApplicationContext
 
 import java.security.AccessControlContext
 import javax.security.auth.login.LoginContext
@@ -44,8 +44,8 @@ class TestMultiplast {
     private static ProducerTemplate producerTemplate
     private static CamelContext camelContext
 
-    public static final String KEYSTORE_PROPERTY = "keystore.target";
-    public static final String LOGIN_PROPERTY    = "java.security.auth.login.config";
+    public static final String KEYSTORE_PROPERTY = "keystore.target"
+    public static final String LOGIN_PROPERTY    = "java.security.auth.login.config"
 
     @BeforeClass
     static void setUpClass() {
@@ -103,7 +103,7 @@ class TestMultiplast {
                 Exchange resultExchange = send('ear, war, jar', [ep('abc'), ep('def'), ep('ghi')].join(';'))
                 return Exchanges.resultMessage(resultExchange).body == 'ijklmnopr'
             }
-        };
+        }
 
         def uriPath = {String filename -> TestMultiplast.classLoader.getResource(filename).path}
 
@@ -111,7 +111,7 @@ class TestMultiplast {
         System.properties[KEYSTORE_PROPERTY] = uriPath('client.jks')
 
         LoginContext lc = new LoginContext('DF', new TestCallbackHandler())
-        lc.login();
+        lc.login()
         Subject subject = lc.subject
 
         AccessControlContext acc = new AccessControlContext (AccessController.getContext(), new SubjectDomainCombiner(subject))

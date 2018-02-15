@@ -85,8 +85,7 @@ public class PatientInfo implements Serializable {
      *         (note: there can be present fields without any content)
      */
     public Set<String> getAllFieldIds() {
-        Set<String> result = new HashSet<>();
-        result.addAll(stringFields.keySet());
+        Set<String> result = new HashSet<>(stringFields.keySet());
         return result;
     }
 

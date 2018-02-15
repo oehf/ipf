@@ -33,7 +33,7 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
 
     void configure() {
 
-        def transmogrifier = new StaticTransmogrifier();
+        def transmogrifier = new StaticTransmogrifier()
         transmogrifier.from = 'a'
         transmogrifier.to = 'b'
 

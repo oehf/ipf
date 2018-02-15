@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ServerAuditStrategy;
@@ -41,7 +43,7 @@ public class XCDR implements XdsIntegrationProfile {
 		ITI_80(ITI_80_WS_CONFIG);
 
 		@Getter
-		private WsTransactionConfiguration wsTransactionConfiguration;
+		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {
@@ -64,7 +66,7 @@ public class XCDR implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration ITI_80_WS_CONFIG = new WsTransactionConfiguration(
+	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_80_WS_CONFIG = new WsTransactionConfiguration<>(
 		"xcdr-iti80",
 		"Cross Gateway Provide Document",
 		false,

@@ -21,17 +21,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10.Iti10ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10.Iti10ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9.Iti9ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9.Iti9ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti10.Iti10AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti8.Iti8AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti9.Iti9AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,30 +43,40 @@ import java.util.List;
 public class PIX implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v2InteractionId {
+    public enum FeedInteractions implements Hl7v2InteractionId<FeedAuditDataset> {
         ITI_8_PIX( ITI_8_CONFIGURATION,  ITI_8_NAK_FACTORY),
-        ITI_8_XDS( ITI_8_CONFIGURATION,  ITI_8_NAK_FACTORY),
+        ITI_8_XDS( ITI_8_CONFIGURATION,  ITI_8_NAK_FACTORY);
+
+        @Getter private Hl7v2TransactionConfiguration<FeedAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<FeedAuditDataset> nakFactory;
+    }
+
+    @AllArgsConstructor
+    public enum QueryInteractions implements Hl7v2InteractionId {
         ITI_9    ( ITI_9_CONFIGURATION,  ITI_9_NAK_FACTORY),
         ITI_10   (ITI_10_CONFIGURATION, ITI_10_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter private NakFactory nakFactory;
+        @Getter private Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<QueryAuditDataset> nakFactory;
     }
 
     @Override
     public List<InteractionId> getInteractionIds() {
-        return Arrays.asList(Interactions.values());
+        List<InteractionId> interactions = new ArrayList<>();
+        interactions.addAll(Arrays.asList(FeedInteractions.values()));
+        interactions.addAll(Arrays.asList(QueryInteractions.values()));
+        return Collections.unmodifiableList(interactions);
     }
 
     // Private static variables, simulating singletons
 
-    private static final Hl7v2TransactionConfiguration ITI_8_CONFIGURATION =
-            new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<FeedAuditDataset> ITI_8_CONFIGURATION =
+            new Hl7v2TransactionConfiguration<>(
                     "pix-iti8",
                     "Patient Identity Feed",
                     false,
-                    new Iti8ClientAuditStrategy(),
-                    new Iti8ServerAuditStrategy(),
+                    new Iti8AuditStrategy(false),
+                    new Iti8AuditStrategy(true),
                     Version.V231,
                     "PIX adapter",
                     "IPF",
@@ -79,15 +90,15 @@ public class PIX implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pix", "2.3.1"),
                             PixPdqTransactions.ITI8));
 
-    private static final NakFactory ITI_8_NAK_FACTORY = new NakFactory(ITI_8_CONFIGURATION);
+    private static final NakFactory<FeedAuditDataset> ITI_8_NAK_FACTORY = new NakFactory<>(ITI_8_CONFIGURATION);
 
-    private static final Hl7v2TransactionConfiguration ITI_9_CONFIGURATION =
-            new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_9_CONFIGURATION =
+            new Hl7v2TransactionConfiguration<>(
                     "pix-iti9",
                     "PIX Query",
                     true,
-                    new Iti9ClientAuditStrategy(),
-                    new Iti9ServerAuditStrategy(),
+                    new Iti9AuditStrategy(false),
+                    new Iti9AuditStrategy(true),
                     Version.V25,
                     "PIX adapter",
                     "IPF",
@@ -101,15 +112,15 @@ public class PIX implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pix", "2.5"),
                             PixPdqTransactions.ITI9));
 
-    private static final NakFactory ITI_9_NAK_FACTORY = new QpdAwareNakFactory(ITI_9_CONFIGURATION, "RSP", "K23");
+    private static final NakFactory<QueryAuditDataset> ITI_9_NAK_FACTORY = new QpdAwareNakFactory(ITI_9_CONFIGURATION, "RSP", "K23");
 
-    private static final Hl7v2TransactionConfiguration ITI_10_CONFIGURATION =
-            new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_10_CONFIGURATION =
+            new Hl7v2TransactionConfiguration<>(
                     "pix-iti10",
                     "PIX Update Notification",
                     false,
-                    new Iti10ClientAuditStrategy(),
-                    new Iti10ServerAuditStrategy(),
+                    new Iti10AuditStrategy(false),
+                    new Iti10AuditStrategy(true),
                     Version.V25,
                     "PIX adapter",
                     "IPF",
@@ -121,5 +132,5 @@ public class PIX implements IntegrationProfile {
                     false,
                     HapiContextFactory.createHapiContext(PixPdqTransactions.ITI10));
 
-    private static final NakFactory ITI_10_NAK_FACTORY = new NakFactory(ITI_10_CONFIGURATION);
+    private static final NakFactory<QueryAuditDataset> ITI_10_NAK_FACTORY = new NakFactory<>(ITI_10_CONFIGURATION);
 }

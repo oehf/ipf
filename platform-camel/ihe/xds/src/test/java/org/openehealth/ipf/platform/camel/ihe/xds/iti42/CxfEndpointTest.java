@@ -37,11 +37,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
@@ -54,7 +50,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
 public class CxfEndpointTest {
     private final EbXMLFactory factory = new EbXMLFactory30();
@@ -90,8 +86,8 @@ public class CxfEndpointTest {
     public void test() throws Exception {
         runRequestAndExpectFailure();
 
-        JaxWsServiceFactory<XdsAuditDataset> serviceFactory = new JaxWsRequestServiceFactory<>(
-                ITI_42.getWsTransactionConfiguration(), "/iti-42", null, null, null);
+        JaxWsServiceFactory<? extends XdsAuditDataset> serviceFactory = new JaxWsRequestServiceFactory<>(
+                ITI_42.getWsTransactionConfiguration(), "/iti-42", null, null, null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
 
@@ -121,10 +117,10 @@ public class CxfEndpointTest {
     }
 
     private Response runRequest() {
-        JaxWsClientFactory clientFactory = new JaxWsRequestClientFactory<>(
+        JaxWsClientFactory<? extends XdsAuditDataset> clientFactory = new JaxWsRequestClientFactory<>(
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + port + "/iti-42",
-                null, null, null, null, null);
+                null, null, null, null, null, null);
 
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         RegisterDocumentSet request = SampleData.createRegisterDocumentSet();

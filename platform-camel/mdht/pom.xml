@@ -12,16 +12,6 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <!--
-        <osgi.export.pkg>
-            org.openehealth.ipf.platform.camel.cda.*
-        </osgi.export.pkg>
-        <osgi.import.pkg>
-        </osgi.import.pkg>
-        -->
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

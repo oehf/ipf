@@ -19,7 +19,7 @@ import org.apache.camel.Expression
 import org.joda.time.DateTime
 
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.commons.core.config.ContextFacade;
+import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument

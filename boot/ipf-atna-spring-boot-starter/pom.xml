@@ -29,6 +29,10 @@
             <artifactId>ipf-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-audit</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
             <optional>true</optional>
@@ -63,12 +67,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- IPF Support -->
-
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
-        </dependency>
 	</dependencies>
 
     <distributionManagement>

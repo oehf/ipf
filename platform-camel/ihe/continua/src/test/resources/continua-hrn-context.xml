@@ -13,13 +13,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:camel="http://camel.apache.org/schema/spring"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 http://cxf.apache.org/transports/http/configuration
-http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+http://cxf.apache.org/schemas/configuration/http-conf.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
@@ -28,6 +31,16 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd">
         <camel:jmxAgent id="agent" disabled="false" />
         <camel:routeBuilder ref="hrnRouteBuilder" />
     </camel:camelContext>
+
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="auditMessageQueue" ref="mockedSender"/>
+        <property name="auditSourceId" value="sourceId"/>
+    </bean>
+
+    <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
+
+    <ipf:globalContext id="globalContext"/>
 
     <bean id="hrnRouteBuilder" class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.ContinuaHrnRouteBuilder">
     </bean>

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
@@ -30,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
  */
 public class QueryRegistryTransformer {
     private final EbXMLFactory factory30 = new EbXMLFactory30();
-    private final EbXMLFactory factory21 = new EbXMLFactory21();
     
     /**
      * Transforms the request into its ebXML representation.
@@ -44,7 +42,7 @@ public class QueryRegistryTransformer {
         }
         
         Query query = request.getQuery();
-        EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest(query);        
+        EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest();
         query.accept(new ToEbXMLVisitor(ebXML));        
 
         ebXML.setReturnType(request.getReturnType().getCode());
@@ -64,7 +62,7 @@ public class QueryRegistryTransformer {
         }
         
         String id = ebXML.getId();
-        QueryType queryType = id == null ? QueryType.SQL : QueryType.valueOfId(id);
+        QueryType queryType = QueryType.valueOfId(id);
         if (queryType == null) {
             return null;
         }
@@ -86,8 +84,7 @@ public class QueryRegistryTransformer {
         }
     }
 
-    private EbXMLAdhocQueryRequest createAdhocQueryRequest(Query query) {
-        EbXMLFactory factory = query.getType() == QueryType.SQL ? factory21 : factory30;
-        return factory.createAdhocQueryRequest();
+    private EbXMLAdhocQueryRequest createAdhocQueryRequest() {
+        return factory30.createAdhocQueryRequest();
     }
 }

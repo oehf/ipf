@@ -19,6 +19,10 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Static configuration for FHIR transaction components
@@ -26,10 +30,10 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public class FhirTransactionConfiguration extends TransactionConfiguration {
+public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
 
     private final FhirContext fhirContext;
-    private final AbstractPlainProvider staticResourceProvider;
+    private final List<? extends AbstractPlainProvider> staticResourceProviders;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
@@ -39,22 +43,35 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             FhirContext fhirContext,
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator)
-    {
+            FhirTransactionValidator fhirValidator) {
+        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirContext,
+                Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
+    }
+
+    public FhirTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
+            FhirContext fhirContext,
+            List<? extends AbstractPlainProvider> resourceProviders,
+            ClientRequestFactory<?> clientRequestFactory,
+            FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirContext = fhirContext;
-        this.staticResourceProvider = resourceProvider;
+        this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidator = fhirValidator;
     }
 
-    public AbstractPlainProvider getStaticResourceProvider() {
-        return staticResourceProvider;
+    public List<? extends AbstractPlainProvider> getStaticResourceProvider() {
+        return staticResourceProviders;
     }
 
     public ClientRequestFactory<?> getStaticClientRequestFactory() {

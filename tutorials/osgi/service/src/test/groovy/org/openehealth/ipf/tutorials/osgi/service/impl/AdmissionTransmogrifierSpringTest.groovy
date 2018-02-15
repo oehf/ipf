@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals
 public class AdmissionTransmogrifierSpringTest {
 
      @Autowired
-     Transmogrifier transmogrifier;
+     Transmogrifier transmogrifier
      
      def message
      

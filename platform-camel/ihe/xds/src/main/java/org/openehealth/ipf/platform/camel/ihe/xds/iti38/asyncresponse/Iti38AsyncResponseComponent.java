@@ -34,13 +34,8 @@ public class Iti38AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti38AsyncResponseService.class);
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new XdsAsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti38AsyncResponseService.class);
     }
 
 

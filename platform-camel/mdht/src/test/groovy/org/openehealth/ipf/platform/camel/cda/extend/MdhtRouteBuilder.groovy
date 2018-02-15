@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormat
  */
 class MdhtRouteBuilder extends RouteBuilder {
 
-    private MdhtDataFormat mdht = new MdhtDataFormat();
+    private MdhtDataFormat mdht = new MdhtDataFormat()
 
     void configure() {
         

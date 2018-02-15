@@ -18,10 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.core.atna.custom.HpdAuditor
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 
 /**
  * @author Dmytro Rud
@@ -33,14 +31,11 @@ class TestIti59 extends StandardTestContainer {
     final String SERVICE1 = "hpd-iti59://localhost:${port}/hpd-service1"
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass
     static void classSetUp() {
-        HpdAuditor.auditor.config = new AuditorModuleConfig()
-        HpdAuditor.auditor.config.setAuditRepositoryHost('localhost')
-        HpdAuditor.auditor.config.setAuditRepositoryPort(514)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 

@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti39
 
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
  * @author Dmytro Rud
  */
 @DirtiesContext
-class TestIti39 extends StandardTestContainer {
+class TestIti39 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-39.xml'
     
@@ -58,7 +58,7 @@ class TestIti39 extends StandardTestContainer {
 
     static void main(args) {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

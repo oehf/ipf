@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContaine
 import java.util.List;
 
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_CLASS_NODE;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID;

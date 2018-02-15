@@ -11,11 +11,6 @@
         <artifactId>ipf-commons-ihe</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.hpd.*,wsdl.*</osgi.export.pkg>
-        <osgi.fragment.host>org.apache.cxf.cxf-core</osgi.fragment.host>
-    </properties>
     
     <dependencies>
         <!-- Dependencies for main -->
@@ -38,6 +33,13 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-ws</artifactId>

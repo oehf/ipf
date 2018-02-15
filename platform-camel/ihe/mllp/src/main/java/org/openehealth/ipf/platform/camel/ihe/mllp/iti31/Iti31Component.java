@@ -16,11 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti31;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti31.Iti31AuditDataset;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_31;
@@ -32,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_31;
  *
  * @author Christian Ohr
  */
-public class Iti31Component extends MllpTransactionComponent<Iti31AuditDataset> {
+public class Iti31Component extends MllpTransactionComponent<FeedAuditDataset> {
 
 
     public Iti31Component() {
@@ -47,8 +50,8 @@ public class Iti31Component extends MllpTransactionComponent<Iti31AuditDataset> 
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
         String options = getAndRemoveParameter(parameters, "options", String.class, Iti31Options.BASIC.name());
-        Iti31Options[] iti31Options = TransactionOptionUtils.split(options, Iti31Options.class);
-        if (iti31Options == null) {
+        List<? extends HL7v2TransactionOption> iti31Options = TransactionOptionUtils.split(options, Iti31Options.class);
+        if (iti31Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");
         }
         getInteractionId().init(iti31Options);

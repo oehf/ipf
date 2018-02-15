@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,16 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.component.mina2.Mina2Constants;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 
 import java.net.InetSocketAddress;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
@@ -30,13 +34,21 @@ import java.net.InetSocketAddress;
  */
 public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
 
+    private final AuditContext auditContext;
+
+    public ConsumerAuthenticationFailureInterceptor(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
+    }
+
     @Override
     public void process(Exchange exchange) throws Exception {
         try {
             getWrappedProcessor().process(exchange);
-        }
-        catch (MllpAuthenticationFailure e) {
-            MllpAuditUtils.auditAuthenticationNodeFailure(getRemoteAddress(exchange));
+        } catch (MllpAuthenticationFailure e) {
+            AuditMessage auditMessage =
+                    MllpAuditUtils.auditAuthenticationNodeFailure(
+                            auditContext, e.getMessage(), getRemoteAddress(exchange));
+            auditContext.audit(auditMessage);
             throw e;
         }
     }

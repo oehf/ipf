@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti43;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIImportBuilder;
+
+import java.util.stream.Stream;
 
 /**
  * Client audit strategy for ITI-43.
  *
  * @author Dmytro Rud
+ * @author Christian Ohr
  */
 public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
@@ -32,21 +38,20 @@ public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
-        for (Status status : Status.values()) {
-            if (auditDataset.hasDocuments(status)) {
-                AuditorManager.getConsumerAuditor().auditRetrieveDocumentSetEvent(
-                        auditDataset.getEventOutcomeCode(status),
-                        auditDataset.getServiceEndpointUrl(),
-                        auditDataset.getUserName(),
-                        auditDataset.getDocumentIds(status),
-                        auditDataset.getRepositoryIds(status),
-                        auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPatientId(),
-                        auditDataset.getPurposesOfUse(),
-                        auditDataset.getUserRoles());
-            }
-        }
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+        return Stream.of(Status.values())
+                .filter(auditDataset::hasDocuments)
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
+                .toArray(AuditMessage[]::new);
     }
 
+    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
+        return new XdsPHIImportBuilder(auditContext, auditDataset,
+                auditDataset.getEventOutcomeIndicator(status), null,
+                EventActionCode.Create,
+                XdsEventTypeCode.RetrieveDocumentSet, auditDataset.getPurposesOfUse())
+                .setPatient(auditDataset.getPatientId())
+                .addDocumentIds(auditDataset, status)
+                .getMessage();
+    }
 }

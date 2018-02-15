@@ -12,17 +12,6 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hpd.*</osgi.export.pkg>
-        <!--osgi.import.pkg>
-            org.openehealth.ipf.commons.ihe.xds.core.validate.requests,
-            org.openehealth.ipf.commons.ihe.xds.core.validate.responses,
-            org.openehealth.ipf.platform.camel.core.process,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg-->
-    </properties>
-    
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
@@ -43,10 +32,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -82,6 +67,12 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-xua</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-spring</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

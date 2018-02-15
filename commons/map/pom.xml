@@ -5,18 +5,6 @@
     <name>ipf-commons-map</name>
     <description>Generic IPF Mapping Service</description>
     <url>${site.url}/${project.artifactId}</url>
-    
-    <properties>
-        <!--
-        <osgi.import.pkg>
-            org.apache.commons.io,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
-        <osgi.export.pkg>org.openehealth.ipf.commons.map.*</osgi.export.pkg>
-        <ipf.extension.beans>mappingExtension</ipf.extension.beans>
-        -->
-    </properties>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

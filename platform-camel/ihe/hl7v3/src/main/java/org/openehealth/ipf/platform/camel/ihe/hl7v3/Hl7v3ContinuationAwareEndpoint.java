@@ -15,19 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.apache.cxf.feature.AbstractFeature;
-import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,7 +60,7 @@ public class Hl7v3ContinuationAwareEndpoint
     /**
      * Consumer-side only: Storage bean for continuation fragments.
      */
-    private org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage continuationStorage = null;
+    private Hl7v3ContinuationStorage continuationStorage = null;
 
     /**
      * Whether the system should validate messages which are internally handled
@@ -70,15 +69,12 @@ public class Hl7v3ContinuationAwareEndpoint
     private boolean validationOnContinuation = false;
 
 
-    public Hl7v3ContinuationAwareEndpoint(
+    protected Hl7v3ContinuationAwareEndpoint(
             String endpointUri,
             String address,
-            Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> component,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            List<String> schemaLocations,
-            Map<String, Object> properties) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, null);
+            AbstractWsComponent<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, ? extends WsInteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration>> component,
+            Map<String, Object> parameters) {
+        super(endpointUri, address, component, parameters, null);
     }
 
     @Override
@@ -170,6 +166,7 @@ public class Hl7v3ContinuationAwareEndpoint
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isManualAudit() ? null : getComponent().getClientAuditStrategy(),
+                getAuditContext(),
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
@@ -183,6 +180,7 @@ public class Hl7v3ContinuationAwareEndpoint
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isManualAudit() ? null : getComponent().getServerAuditStrategy(),
+                getAuditContext(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

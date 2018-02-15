@@ -20,7 +20,6 @@ import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.v25.segment.PID
-import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.*
 import org.hl7.fhir.instance.model.Address.AddressUse
 import org.hl7.fhir.instance.model.ContactPoint.ContactPointSystem
@@ -35,6 +34,8 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import static java.util.Objects.requireNonNull
 
 /**
  * Translates HL7v2 PDQ Query Response message into a list of {@link Patient} resource
@@ -61,7 +62,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @param uriMapper mapping for translating FHIR URIs into OIDs
      */
     PdqResponseToPdqmResponseTranslator(UriMapper uriMapper) {
-        Validate.notNull(uriMapper, "URI Mapper must not be null")
+        requireNonNull(uriMapper, "URI Mapper must not be null")
         this.uriMapper = uriMapper
     }
 
@@ -69,7 +70,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
      */
     void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
-        Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        requireNonNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
                 .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})

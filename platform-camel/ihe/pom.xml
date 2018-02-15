@@ -13,10 +13,6 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.*</osgi.export.pkg>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

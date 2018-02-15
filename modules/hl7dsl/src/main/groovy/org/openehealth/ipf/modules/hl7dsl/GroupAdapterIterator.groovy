@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import ca.uhn.hl7v2.model.Group;
+import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.util.FilterIterator
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
@@ -57,7 +57,7 @@ class GroupAdapterIterator implements Iterator {
 		if (!hasNext()) { 
 			throw new NoSuchElementException("No more structures in message")
 		}
-		addChildren(remainingStructures.pop());
+		addChildren(remainingStructures.pop())
 	}
 	
 	private StructureAdapter addChildren(SegmentAdapter segment) {

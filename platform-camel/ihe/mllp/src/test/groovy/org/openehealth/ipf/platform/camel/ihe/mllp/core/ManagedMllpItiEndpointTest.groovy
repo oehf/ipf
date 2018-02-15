@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import javax.management.MBeanServer
 import javax.management.ObjectInstance
@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiCompone
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull
 
-public class ManagedMllpItiEndpointTest extends MllpTestContainer {
+class ManagedMllpItiEndpointTest extends MllpTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
 
@@ -51,7 +51,7 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
         ObjectName on = queryForNamedObjects(
                 'org.apache.camel:*,type=endpoints,name=\"some-mllp-iti:*\"')
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)
-        assertEquals(MllpTransactionEndpoint.class.getCanonicalName(), oi.getClassName());
+        assertEquals(MllpTransactionEndpoint.class.getCanonicalName(), oi.getClassName())
     }
 
     @Test
@@ -59,15 +59,15 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
         ObjectName on = queryForNamedObjects(
                 'org.apache.camel:*,type=endpoints,name=\"some-mllp-iti:*\"')
         assertEquals(SomeMllpItiComponent.class.getCanonicalName(),
-                (String) getMBeanServer().getAttribute(on, "ComponentType"));
+                (String) getMBeanServer().getAttribute(on, "ComponentType"))
         assertEquals(true,
-                ((Boolean) getMBeanServer().getAttribute(on, "Audit")).booleanValue());
+                ((Boolean) getMBeanServer().getAttribute(on, "Audit")).booleanValue())
         assertEquals(30000L,
-                ((Long) getMBeanServer().getAttribute(on, "Timeout")).longValue());
+                ((Long) getMBeanServer().getAttribute(on, "Timeout")).longValue())
         assertEquals(true,
-                ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue());
+                ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue())
         assertEquals(2,
-                ((String[]) getMBeanServer().getAttribute(on, "CustomInterceptorFactoryList")).length);
+                ((String[]) getMBeanServer().getAttribute(on, "CustomInterceptorFactoryList")).length)
     }
 
     /** some helper methods **/
@@ -79,10 +79,10 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     }
 
     private CamelContext getContext() {
-        return (CamelContext) getCamelContext();
+        return (CamelContext) getCamelContext()
     }
 
     private MBeanServer getMBeanServer() {
-        return getContext().getManagementStrategy().getManagementAgent().getMBeanServer();
+        return getContext().getManagementStrategy().getManagementAgent().getMBeanServer()
     }
 }

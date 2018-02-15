@@ -41,7 +41,7 @@ class TestCancelMessages {
      */
     @Test
     void testJ01() {
-        Parser p = new PipeParser();
+        Parser p = new PipeParser()
         Message request = p.parse(request('2.5'))
         String cancelString = createCancelMessage(request, p)
         Message cancel = p.parse(cancelString)
@@ -64,7 +64,7 @@ class TestCancelMessages {
      */
     @Test
     void testCNQ() {
-        Parser p = new PipeParser();
+        Parser p = new PipeParser()
         Message request = p.parse(request('2.3.1'))
         String cancelString = createCancelMessage(request, p)
         Message cancel = p.parse(cancelString)

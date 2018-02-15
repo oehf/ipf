@@ -15,12 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +27,7 @@ import java.util.Map;
  *
  * @author Boris Stanojevic
  */
-abstract public class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<XdsRemoveMetadataAuditDataset> {
+public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<XdsRemoveMetadataAuditDataset> {
 
     public XdsRemoveMetadataAuditStrategy30(boolean serverSide) {
         super(serverSide);
@@ -44,11 +40,9 @@ abstract public class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
 
         List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
         if (references != null) {
-            final int SIZE = references.size();
-
-            auditDataset.setObjectIds(new String[SIZE]);
-
-            for (int i = 0; i < SIZE; ++i) {
+            int size = references.size();
+            auditDataset.setObjectIds(new String[size]);
+            for (int i = 0; i < size; ++i) {
                 ObjectRefType reference = references.get(i);
                 auditDataset.getObjectIds()[i] = reference.getId();
             }
@@ -56,17 +50,9 @@ abstract public class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
         return auditDataset;
     }
 
-
     @Override
     public XdsRemoveMetadataAuditDataset createAuditDataset() {
         return new XdsRemoveMetadataAuditDataset(isServerSide());
     }
 
-
-    @Override
-    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
-        return getEventOutcomeCodeFromRegistryResponse(ebXML);
-    }
 }

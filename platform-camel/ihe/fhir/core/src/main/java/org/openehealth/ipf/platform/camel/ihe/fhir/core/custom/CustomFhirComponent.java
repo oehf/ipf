@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.custom;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @since 3.1
  */
 public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> extends FhirComponent<AuditDatasetType>
-        implements FhirInteractionId {
+        implements FhirInteractionId<AuditDatasetType> {
 
     @Getter @Setter
     private String name;

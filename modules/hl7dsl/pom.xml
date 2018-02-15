@@ -12,17 +12,6 @@
         <version>3.4-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <!--
-        <osgi.export.pkg>org.openehealth.ipf.modules.hl7dsl.*</osgi.export.pkg>
-        <osgi.import.pkg>
-            org.slf4j.*;version="[1.6,2)",
-            groovy.lang.*,
-            *
-        </osgi.import.pkg>
-        -->
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>

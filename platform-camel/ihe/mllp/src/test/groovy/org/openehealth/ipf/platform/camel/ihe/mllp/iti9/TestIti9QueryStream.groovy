@@ -61,12 +61,12 @@ class TestIti9QueryStream extends MllpTestContainer {
     public void testQueryStream() throws Exception {
         final String message = getMessageString('QBP^Q23', '2.5')
 
-        Socket socket = new Socket("localhost", 18091);
-        BufferedOutputStream outputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
-        final BufferedInputStream inputStream = new BufferedInputStream(new DataInputStream(socket.getInputStream()));
+        Socket socket = new Socket("localhost", 18091)
+        BufferedOutputStream outputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()))
+        final BufferedInputStream inputStream = new BufferedInputStream(new DataInputStream(socket.getInputStream()))
 
-        int messageCount = 100;
-        CountDownLatch latch = new CountDownLatch(messageCount);
+        int messageCount = 100
+        CountDownLatch latch = new CountDownLatch(messageCount)
 
         Runnable runnable = new Runnable() {
             @Override
@@ -92,10 +92,10 @@ class TestIti9QueryStream extends MllpTestContainer {
         }
 
         Thread t = new Thread(runnable)
-        t.start();
+        t.start()
 
         for (int i = 0; i < messageCount; i++) {
-            String msg = message.replace("10501110", String.valueOf(i));
+            String msg = message.replace("10501110", String.valueOf(i))
             outputStream.write(11)
             outputStream.flush()
             // Some systems send start byte in a separate frame
@@ -106,16 +106,16 @@ class TestIti9QueryStream extends MllpTestContainer {
             // Thread.sleep(10);
             outputStream.write(28)
             outputStream.write(13)
-            outputStream.flush();
+            outputStream.flush()
             // Thread.sleep(10);
         }
 
-        boolean success = latch.await(20, TimeUnit.SECONDS);
+        boolean success = latch.await(20, TimeUnit.SECONDS)
 
-        outputStream.close();
-        inputStream.close();
-        socket.close();
+        outputStream.close()
+        inputStream.close()
+        socket.close()
 
-        assertTrue(success);
+        assertTrue(success)
     }
 }

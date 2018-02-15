@@ -23,10 +23,10 @@ import org.hl7.fhir.instance.model.Conformance;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -47,7 +47,7 @@ public class FhirTestContainer extends StandardTestContainer {
     }
 
     public void assertConformance(String type) {
-        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
+        Conformance conf = client.capabilities().ofType(Conformance.class).execute();
         assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
         assertTrue(component.getResource().stream()
@@ -57,11 +57,11 @@ public class FhirTestContainer extends StandardTestContainer {
 
     protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+        AuditMessage event = sender.getMessages().get(0);
         assertEquals(
-                RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),
+                EventOutcomeIndicator.MajorFailure,
                 event.getEventIdentification().getEventOutcomeIndicator());
         assertAndRethrowException(e, issueType);
     }
@@ -73,10 +73,10 @@ public class FhirTestContainer extends StandardTestContainer {
         Assert.assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        AbstractMockedAuditMessageQueue sender = getAuditSender();
         Assert.assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
-        Assert.assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),
+        AuditMessage event = sender.getMessages().get(0);
+        Assert.assertEquals(EventOutcomeIndicator.MajorFailure,
                 event.getEventIdentification().getEventOutcomeIndicator());
 
         throw e;

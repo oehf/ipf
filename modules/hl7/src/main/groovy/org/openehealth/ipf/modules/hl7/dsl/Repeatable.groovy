@@ -124,15 +124,15 @@ class Repeatable extends Closure implements Iterable<Visitable> {
     }
 
     boolean isEmpty() {
-        boolean result = true;
+        boolean result = true
         for (int index = 0; index < elements.size(); index++) {
-            def element = elements[index];
+            def element = elements[index]
             if (element != null && !element.isEmpty()) {
-                result = false;
-                break;
+                result = false
+                break
             }
         }
-        return result;
+        return result
     }
 
     boolean asBoolean() {

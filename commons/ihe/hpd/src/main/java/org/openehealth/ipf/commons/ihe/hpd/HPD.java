@@ -21,13 +21,15 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.hpd.chpidd.ChPiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
-import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.*;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,20 +38,31 @@ import java.util.List;
 public class HPD implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements WsInteractionId<WsTransactionConfiguration> {
+    public enum ReadInteractions implements WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
         ITI_58(ITI_58_WS_CONFIG),
-        ITI_59(ITI_59_WS_CONFIG),
         CH_PIDD(CH_PIDD_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter
+        private WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
+    }
+
+    @AllArgsConstructor
+    public enum FeedInteractions implements WsInteractionId<WsTransactionConfiguration<Iti59AuditDataset>> {
+        ITI_59(ITI_59_WS_CONFIG);
+
+        @Getter
+        private WsTransactionConfiguration<Iti59AuditDataset> wsTransactionConfiguration;
     }
 
     @Override
     public List<InteractionId> getInteractionIds() {
-        return Arrays.asList(Interactions.values());
+        List<InteractionId> interactions = new ArrayList<>();
+        interactions.addAll(Arrays.asList(FeedInteractions.values()));
+        interactions.addAll(Arrays.asList(ReadInteractions.values()));
+        return Collections.unmodifiableList(interactions);
     }
 
-    private final static WsTransactionConfiguration ITI_58_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<WsAuditDataset> ITI_58_WS_CONFIG = new WsTransactionConfiguration<>(
             "hpd-iti58",
             "Provider Information Query",
             true,
@@ -65,12 +78,12 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI_59_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<Iti59AuditDataset> ITI_59_WS_CONFIG = new WsTransactionConfiguration<>(
             "hpd-iti59",
             "Provider Information Feed",
             true,
-            new Iti59AuditStrategy(false),
-            new Iti59AuditStrategy(true),
+            new Iti59ClientAuditStrategy(),
+            new Iti59ServerAuditStrategy(),
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Service"),
             Iti59PortType.class,
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),
@@ -81,7 +94,7 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration CH_PIDD_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<WsAuditDataset> CH_PIDD_WS_CONFIG = new WsTransactionConfiguration<>(
             "ch-pidd",
             "Provider Information Delta Download (Swiss HPD extension)",
             true,

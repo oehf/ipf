@@ -62,7 +62,7 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     public <T> Map<String, T> beans(Class<T> requiredType) {
         return BeanFactoryUtils.beansOfTypeIncludingAncestors(beanFactory,
                 ProxyUtils.isJDKDynamicProxy(requiredType) ?
-                        ProxyUtils.<T>getFirstProxiedInterface(requiredType) :
+                        ProxyUtils.getFirstProxiedInterface(requiredType) :
                         requiredType);
     }
 

@@ -27,8 +27,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 http://cxf.apache.org/transports/http/configuration 
 http://cxf.apache.org/schemas/configuration/http-conf.xsd">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    <import resource="common-xds-beans.xml"/>
 
     <camel:sslContextParameters id="myContext">
         <camel:keyManagers keyPassword="changeit">
@@ -44,11 +43,6 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd">
             </camel:cipherSuitesFilter>
         </camel:clientParameters>
     </camel:sslContextParameters>
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>  
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti41.Iti41TestRouteBuilder">

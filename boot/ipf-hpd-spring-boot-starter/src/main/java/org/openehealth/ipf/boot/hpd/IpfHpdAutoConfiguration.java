@@ -29,6 +29,4 @@ public class IpfHpdAutoConfiguration {
     @Autowired
     private IpfHpdConfigurationProperties hpdConfig;
 
-
-
 }

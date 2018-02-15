@@ -16,16 +16,19 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
@@ -41,6 +44,11 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
 
+    private final AuditContext auditContext;
+
+    public ConsumerAuditInterceptor(AuditContext auditContext) {
+        this.auditContext = requireNonNull(auditContext);
+    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -53,31 +61,28 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             failed = exchange.isFailed();
             if (!failed) {
                 Object result = resultMessage(exchange).getBody();
-                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result);
+                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
             }
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an
             // appropriate error response
+            if (auditDataset != null) {
+                auditDataset.setEventOutcomeDescription(e.getMessage());
+            }
             failed = true;
             throw e;
         } finally {
             if (auditDataset != null) {
-                try {
-                    auditDataset.setEventOutcomeCode(failed ?
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS);
-                    getAuditStrategy().doAudit(auditDataset);
-                } catch (Exception e) {
-                    LOG.error("ATNA auditing failed", e);
-                }
+                auditDataset.setEventOutcomeIndicator(failed ?
+                        EventOutcomeIndicator.MajorFailure :
+                        EventOutcomeIndicator.Success);
+                getAuditStrategy().doAudit(auditContext, auditDataset);
             }
         }
     }
 
     @Override
-    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) throws Exception {
-        // auditDataset.setClientIpAddress(exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class).getRemoteAddr());
-        // auditDataset.setLocalAddress
+    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) {
     }
 
     @Override
@@ -94,12 +99,19 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
+            auditDataset.setSourceUserId("unknown");
+            auditDataset.setDestinationUserId(exchange.getIn().getHeader(Constants.HTTP_URL, String.class));
+
+            // TODO Also extract basic auth user?
+            AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
+
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }
+
 
 
 }

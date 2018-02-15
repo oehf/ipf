@@ -19,7 +19,7 @@ import org.junit.*
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 /**
  * Test for PIX Feed translator.

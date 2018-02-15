@@ -12,25 +12,7 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
     
-    <properties>
-        <!--
-        <osgi.export.pkg>org.openehealth.ipf.modules.hl7.*</osgi.export.pkg>
-        <osgi.import.pkg>
-            org.openehealth.ipf.commons.map.extend,
-            org.joda.time,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
-        <ipf.extension.beans>hapiModelExtension</ipf.extension.beans>
-        -->
-    </properties>
-    
     <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-core</artifactId>
@@ -114,7 +96,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-	
+
+    <!--
 	<build>
 		<plugins>
 			<plugin>
@@ -132,6 +115,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	-->
 
     <distributionManagement>
         <site>

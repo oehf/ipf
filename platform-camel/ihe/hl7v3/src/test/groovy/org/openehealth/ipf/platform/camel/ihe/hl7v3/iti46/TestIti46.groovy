@@ -20,17 +20,20 @@ import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Tests for ITI-46.
  * @author Dmytro Rud
  */
-class TestIti46 extends StandardTestContainer {
-    
+class TestIti46 extends HL7v3StandardTestContainer {
+
     def static CONTEXT_DESCRIPTOR = 'iti-46.xml'
-    
+
     def SERVICE1 = "pixv3-iti46://localhost:${port}/pixv3-iti46-service1"
     def SERVICE_CHARSET = "pixv3-iti46://localhost:${port}/pixv3-iti46-charset"
 
@@ -38,24 +41,24 @@ class TestIti46 extends StandardTestContainer {
             readFile('translation/pixfeed/v3/PIX_FEED_REV_Maximal_Request.xml')
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
     @Test
     void testIti46() {
         def response = send(SERVICE1, NOTIFICATION, String.class)
         assert auditSender.messages.size() == 2
-        auditSender.messages.each {
-            assert it.toString().contains('EventActionCode="R"')
-            assert it.toString().contains('EventOutcomeIndicator="0"')
-        }
+        assert auditSender.messages[0].eventIdentification.eventActionCode == EventActionCode.Update
+        assert auditSender.messages[0].eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+        assert auditSender.messages[1].eventIdentification.eventActionCode == EventActionCode.Read
+        assert auditSender.messages[1].eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
     }
-    
+
     /**
      * Test whether setting and retrieving character sets
      * via Camel exchange property works.

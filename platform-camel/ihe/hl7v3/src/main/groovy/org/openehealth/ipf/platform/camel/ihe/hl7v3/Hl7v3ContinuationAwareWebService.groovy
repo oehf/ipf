@@ -16,12 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
 import groovy.util.slurpersupport.GPathResult
-import org.apache.commons.lang3.Validate
+import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory
 
 import javax.xml.transform.Source
 
+import static java.util.Objects.requireNonNull
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
 import static org.openehealth.ipf.commons.xml.XmlUtils.source
@@ -41,32 +43,32 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  *
  * @author Dmytro Rud
  */
-abstract public class Hl7v3ContinuationAwareWebService
+abstract class Hl7v3ContinuationAwareWebService
         extends AbstractHl7v3WebService
-        implements Hl7v3ContinuationsPortType
-{
+        implements Hl7v3ContinuationsPortType {
     private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareWebService.class)
 
     private static final String XSLT_TEMPLATE = '/xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
-    private final org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage storage
+    private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
     private final boolean validation
+    private final AuditContext auditContext
     private final AuditStrategy<Hl7v3AuditDataset> auditStrategy
 
     
-    public Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {
-        super(endpoint.component.wsTransactionConfiguration)
+    Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {
+        super(endpoint.component.interactionId)
 
-        Validate.notNull(endpoint.continuationStorage)
+        requireNonNull(endpoint.continuationStorage)
 
         this.storage          = endpoint.continuationStorage
         this.defaultThreshold = endpoint.defaultContinuationThreshold
         this.validation       = endpoint.validationOnContinuation
-        this.auditStrategy    = endpoint.manualAudit ?
-            endpoint.component.getServerAuditStrategy() : null
+        this.auditContext     = endpoint.auditContext
+        this.auditStrategy    = endpoint.manualAudit ? endpoint.component.getServerAuditStrategy() : null
     }
 
 
@@ -139,7 +141,7 @@ abstract public class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid request', e)
                 String nak = createNak(requestString, e)
-                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
             }
         }
@@ -154,13 +156,13 @@ abstract public class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid response', e)
                 String nak = createNak(requestString, e)
-                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
             }
         }
 
         // finalize ATNA auditing
-        finalizeAtnaAuditing(responseString, auditStrategy, auditDataset)
+        finalizeAtnaAuditing(responseString, auditStrategy, auditContext, auditDataset)
 
         // process continuations
         GPathResult request = slurp(requestString)

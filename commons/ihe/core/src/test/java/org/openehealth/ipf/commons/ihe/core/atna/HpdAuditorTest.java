@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Dmytro Rud
  */
-public class HpdAuditorTest extends AuditorTestBase {
+public class HpdAuditorTest extends OhtAuditorTestBase {
 
     private static final List<String> PROVIDER_IDS = Arrays.asList(
             "2.16.10.89.200:UPIN:800-800-8000:Active",
@@ -68,7 +68,7 @@ public class HpdAuditorTest extends AuditorTestBase {
 
         // operation MODIFY DN
         auditor.auditIti59(true,
-                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 null,
                 "uid=john.doe,ou=People,dc=example,dc=com",

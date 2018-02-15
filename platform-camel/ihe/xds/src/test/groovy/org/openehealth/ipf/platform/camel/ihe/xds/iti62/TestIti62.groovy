@@ -19,12 +19,15 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -33,7 +36,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-62 transaction with a webservice and client adapter defined via URIs.
  * @author Boris Stanojevic
  */
-class TestIti62 extends StandardTestContainer {
+class TestIti62 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-62.xml'
     
@@ -45,7 +48,7 @@ class TestIti62 extends StandardTestContainer {
     RemoveMetadata request
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -64,7 +67,7 @@ class TestIti62 extends StandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2).status
         assert auditSender.messages.size() == 4
 
-        checkAudit("0")
+        checkAudit(EventOutcomeIndicator.Success)
     }
     
     @Test
@@ -85,36 +88,30 @@ class TestIti62 extends StandardTestContainer {
         assert auditSender.messages.size() == 2
     }
 
-    void checkAudit(outcome) {
-        def message = getAudit('D', SERVICE2_ADDR)[0]
+    void checkAudit(EventOutcomeIndicator outcome) {
+        AuditMessage message = getAudit(EventActionCode.Delete, SERVICE2_ADDR)[0]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110110', 'ITI-62', 'D', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
+        checkEvent(message.eventIdentification, '110110', 'ITI-62', EventActionCode.Delete, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkRegistryObjectParticipantObjectDetail(message.participantObjectIdentifications[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
+        checkRegistryObjectParticipantObjectDetail(message.participantObjectIdentifications[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
 
-        message = getAudit('D', SERVICE2_ADDR)[1]
+        message = getAudit(EventActionCode.Delete, SERVICE2_ADDR)[1]
 
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.activeParticipants.size() == 2
+        assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.EventIdentification, '110110', 'ITI-62', 'D', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
+        checkEvent(message.eventIdentification, '110110', 'ITI-62', EventActionCode.Delete, outcome)
+        checkSource(message.activeParticipants[0], true)
+        checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkRegistryObjectParticipantObjectDetail(message.participantObjectIdentifications[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
+        checkRegistryObjectParticipantObjectDetail(message.participantObjectIdentifications[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
     }
 
     def sendIt(endpoint) {

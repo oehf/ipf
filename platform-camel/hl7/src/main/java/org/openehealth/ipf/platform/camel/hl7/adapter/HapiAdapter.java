@@ -22,9 +22,10 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -57,7 +58,7 @@ public abstract class HapiAdapter extends ProcessorAdapter {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);
         }
-        Validate.notNull(message, "Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type");
+        requireNonNull(message, "Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type");
         return message;
     }
 }

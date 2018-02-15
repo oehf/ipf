@@ -30,6 +30,8 @@ import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
  */
 public interface AuditInterceptor<T extends AuditDataset, E extends AuditableEndpoint<T>> extends Interceptor<E> {
 
+    String AUDIT_DATASET_HEADER = "AuditDataset";
+
     /**
      * Returns the audit strategy instance configured for this interceptor.
      */
@@ -39,7 +41,5 @@ public interface AuditInterceptor<T extends AuditDataset, E extends AuditableEnd
      * Determines local and remote network addresses on the basis of the
      * given exchange and stores them into the given audit dataset.
      */
-    void determineParticipantsAddresses(
-            Exchange exchange,
-            T auditDataset) throws Exception;
+    void determineParticipantsAddresses(Exchange exchange, T auditDataset);
 }

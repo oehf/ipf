@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 
 import java.util.Map;
 
@@ -32,7 +33,6 @@ public interface AuditStrategy<T extends AuditDataset> {
      * Creates a new audit dataset instance.
      */
     T createAuditDataset();
-
 
     /**
      * Enriches the given audit dataset with transaction-specific
@@ -53,15 +53,30 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param response     {@link Object} representing the responded resource.
      * @return true if response indicates success, false otherwise
      */
-    boolean enrichAuditDatasetFromResponse(T auditDataset, Object response);
+    default boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+        return enrichAuditDatasetFromResponse(auditDataset, response, null);
+    }
+
+    /**
+     * Enriches the given audit dataset with transaction-specific
+     * contents of the response message.
+     *
+     * @param auditDataset audit dataset to be enriched.
+     * @param response     {@link Object} representing the responded resource.
+     * @param auditContext audit context, if relevant
+     * @return true if response indicates success, false otherwise
+     */
+    boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext);
 
 
     /**
      * Performs the actual ATNA audit.
      *
+     * @param auditContext audit context used for auditing
      * @param auditDataset Collected audit dataset.
      */
-    void doAudit(T auditDataset);
+    void doAudit(AuditContext auditContext, T auditDataset);
+
 
     /**
      * Determines whether the given response finalizes the interaction
@@ -69,22 +84,24 @@ public interface AuditStrategy<T extends AuditDataset> {
      * <p>
      * Per default always returns <code>true</code>.
      *
-     * @param response
-     *      response in transaction-specific format (POJO, XML string, etc.).
-     * @return
-     *      <code>true</code> when this response finalizes the interaction.
+     * @param response response in transaction-specific format (POJO, XML string, etc.).
+     * @return <code>true</code> when this response finalizes the interaction.
      */
     boolean isAuditableResponse(Object response);
 
+    /**
+     * Determines which event outcome corresponds with the provided response POJO
+     *
+     * @param response POJO
+     * @return event outcome code
+     */
+    EventOutcomeIndicator getEventOutcomeIndicator(Object response);
 
     /**
-     * Determines which RFC 3881 event outcome code corresponds to the
-     * given response POJO.
-     * @param response
-     *      response ebXML POJO.
-     * @return
-     *      RFC 3881 event outcome code.
+     * Determines which event outcome description corresponds with the provided response POJO
+     *
+     * @param response POJO
+     * @return event outcome description
      */
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object response);
-
+    String getEventOutcomeDescription(Object response);
 }

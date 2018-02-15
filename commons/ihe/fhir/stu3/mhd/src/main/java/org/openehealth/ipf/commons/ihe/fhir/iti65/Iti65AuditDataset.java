@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  * @author Christian Ohr
@@ -35,6 +35,7 @@ public class Iti65AuditDataset extends FhirAuditDataset {
     public Iti65AuditDataset(boolean serverSide) {
         super(serverSide);
     }
+
 
     public void enrichDatasetFromDocumentManifest(DocumentManifest documentManifest) {
         Reference reference = documentManifest.getSubject();

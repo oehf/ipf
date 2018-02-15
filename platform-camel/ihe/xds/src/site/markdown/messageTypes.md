@@ -5,13 +5,11 @@ See corresponding sections below for details.
 
 ### ebXML data model
 
-According to the IHE specification, XDS/XCA/XCF/RAD transactions (besides `ITI-17`, which is not covered in this document)
-use either [ebXML 2.1](http://www.oasis-open.org/committees/regrep/documents/2.1/) or
-[ebXML 3.0](http://www.oasis-open.org/committees/regrep/documents/3.0/) data models for incoming and outgoing messages.
+According to the IHE specification, XDS/XCA/XCF/RAD transactions
+use [ebXML 3.0](http://www.oasis-open.org/committees/regrep/documents/3.0/) data models for incoming and outgoing messages.
 
 | ebXML version | IHE Transaction
 |---------------|-----------------------------------------------------
-| 2.1           | ITI-14, ITI-15, ITI-16
 | 3.0           | ITI-18, ITI-38, ITI-39, ITI-41, ITI-42, ITI-43, ITI-51, ITI-57, ITI-61, ITI-62, ITI-63, ITI-86, RAD-69, RAD-75, CH-XCMU
 
 IPF XDS/XCA components use Java stub classes instead of plain XML payload. All conversions are performed automatically when needed.
@@ -21,9 +19,6 @@ Data types for the *request* message of the supported transactions are listed in
 
 | Transaction           | Request Message Type (`org.openehealth.ipf.commons.ihe.xds.core...`)
 |-----------------------|--------------------------------------------------------------------------------------------------
-| ITI-14 	            | [`.stub.ebrs21.rs.SubmitObjectsRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/SubmitObjectsRequest.html)
-| ITI-15 	            | [`.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml21/ProvideAndRegisterDocumentSetRequestType.html)
-| ITI-16 	            | [`.stub.ebrs21.query.AdhocQueryRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/query/AdhocQueryRequest.html)
 | ITI-18,38,51,63       | [`.stub.ebrs30.query.AdhocQueryRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryRequest.html)
 | ITI-39,43 	        | [`.ebxml.ebxml30.RetrieveDocumentSetRequestType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetRequestType.html)
 | ITI-41 	            | [`.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/ProvideAndRegisterDocumentSetRequestType.html)
@@ -37,7 +32,6 @@ Data types for the *response* message of the supported transactions are listed i
 
 | Transaction                    | Response Message Type (`org.openehealth.ipf.commons.ihe.xds.core...`)
 |--------------------------------|--------------------------------------------------------------------------------------------------
-| ITI-14,15,16                   | [`.stub.ebrs21.rs.RegistryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/RegistryResponse.html)
 | ITI-18,38,51,63                | [`.stub.ebrs30.query.AdhocQueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryResponse.html)
 | ITI-39,43; RAD-69,75           | [`.ebxml.ebxml30.RetrieveDocumentSetResponseType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html)
 | ITI-41,42,57,61,62,86; CH-XCMU | [`.stub.ebrs30.rs.RegistryResponseType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/rs/RegistryResponseType.html)
@@ -52,9 +46,9 @@ Data types for the *request* message of the supported transactions are listed in
 
 | Transaction              | Request Message Type (`org.openehealth.ipf.commons.ihe.xds.core.requests...`)
 |--------------------------|--------------------------------------------------------------------------------------------------
-| ITI-14,42,57,61; CH-XCMU | [`.RegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RegisterDocumentSet.html)
-| ITI-15,41                | [`.ProvideAndRegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/ProvideAndRegisterDocumentSet.html)
-| ITI-16,18,38,51,63       | [`.QueryRegistry`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html)
+| ITI-42,57,61; CH-XCMU    | [`.RegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RegisterDocumentSet.html)
+| ITI-41                   | [`.ProvideAndRegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/ProvideAndRegisterDocumentSet.html)
+| ITI-18,38,51,63          | [`.QueryRegistry`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html)
 | ITI-39,43 	           | [`.RetrieveDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocumentSet.html)
 | ITI-62 	               | [`.RemoveMetadata`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveMetadata.html)
 | ITI-86       	           | [`.RemoveDocuments`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocuments.html)
@@ -64,8 +58,8 @@ Data types for the *response* message of the supported transactions are listed i
 
 | Transaction                          | Response Message Type (`org.openehealth.ipf.commons.ihe.xds.core.responses...`)
 |--------------------------------------|--------------------------------------------------------------------------------------------------
-| ITI-14,15,41,42,57,61,62,86; CH-XCMU | [`.Response`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/Response.html)
-| ITI-16,18,38,51,63                   | [`.QueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html)
+| ITI-41,42,57,61,62,86; CH-XCMU       | [`.Response`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/Response.html)
+| ITI-18,38,51,63                      | [`.QueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html)
 | ITI-39,43; RAD-69,75                 | [`.RetrievedDocumentSet`](../staging/apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html)
 
 Some XDS model classes from the package `org.openehealth.ipf.commons.ihe.xds.core.metadata` wrap [HAPI] objects:

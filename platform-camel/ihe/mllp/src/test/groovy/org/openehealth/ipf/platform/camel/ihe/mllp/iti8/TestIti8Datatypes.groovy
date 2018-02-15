@@ -86,7 +86,7 @@ class TestIti8Datatypes extends MllpTestContainer {
         
         
         /* --------------- values of unsupported types and null should cause exceptions --------------- */
-        def exceptionThrown = false;
+        def exceptionThrown = false
         try {
             body = null
             send(endpointUri, body)
@@ -122,7 +122,7 @@ class TestIti8Datatypes extends MllpTestContainer {
         }
         
         // 9-12 should throw exceptions
-        def exceptionsCount = 0;
+        def exceptionsCount = 0
         for(int i = 8; i <= 11; ++i) {
             try {
                 send(endpointUri, body)

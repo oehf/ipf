@@ -256,7 +256,7 @@ class Hl7ExtensionModule {
     }
 
     private static def normalizeCollection = { Collection c ->
-        c.collect { it instanceof Type ? it.encode() : it.toString() };
+        c.collect { it instanceof Type ? it.encode() : it.toString() }
     }
 
 }

@@ -34,23 +34,17 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class ChPiddComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class ChPiddComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
 
     public ChPiddComponent() {
-        super(HPD.Interactions.CH_PIDD);
+        super(HPD.ReadInteractions.CH_PIDD);
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                ChPiddService.class)
-        {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this, parameters, ChPiddService.class) {
             @Override
-            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, DownloadRequest.class, DownloadResponse.class);
             }
         };

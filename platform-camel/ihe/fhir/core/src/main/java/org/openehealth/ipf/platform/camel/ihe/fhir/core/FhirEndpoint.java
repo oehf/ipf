@@ -21,12 +21,12 @@ import org.apache.camel.Consumer;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -62,7 +62,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public Producer doCreateProducer() throws Exception {
+    public Producer doCreateProducer() {
         return new FhirProducer<AuditDatasetType>(this);
     }
 
@@ -73,10 +73,12 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be registered
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider provider = getResourceProvider();
-        // Make consumer known to provider
-        provider.setConsumer(consumer);
-        fhirComponent.connect(consumer, provider);
+        for (AbstractPlainProvider provider : getResourceProviders()) {
+            // Make consumer known to provider
+            provider.setConsumer(consumer);
+            fhirComponent.connect(consumer, provider);
+        }
+
     }
 
     /**
@@ -86,9 +88,10 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be unregistered
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider provider = getResourceProvider();
-        provider.unsetConsumer(consumer);
-        fhirComponent.disconnect(consumer, provider);
+        for (AbstractPlainProvider provider : getResourceProviders()) {
+            provider.unsetConsumer(consumer);
+            fhirComponent.disconnect(consumer, provider);
+        }
     }
 
     public FhirContext getContext() {
@@ -105,7 +108,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<>());
+            initialChain.add(new ConsumerAuditInterceptor<>(getAuditContext()));
         }
         return initialChain;
     }
@@ -120,18 +123,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public List<Interceptor> createInitialProducerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ProducerAuditInterceptor<>());
+            initialChain.add(new ProducerAuditInterceptor<>(getAuditContext()));
         }
         return initialChain;
-    }
-
-    /**
-     * Returns <tt>true</tt> when ATNA auditing should be performed.
-     */
-    @Override
-    @ManagedAttribute(description = "Audit Enabled")
-    public boolean isAudit() {
-        return config.isAudit();
     }
 
     @Override
@@ -144,35 +138,34 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return config;
     }
 
-    /**
-     * Returns client-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return fhirComponent.getClientAuditStrategy();
     }
 
-    /**
-     * Returns server-side audit strategy instance.
-     */
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
         return fhirComponent.getServerAuditStrategy();
     }
 
     @Override
-    public Consumer doCreateConsumer(Processor processor) throws Exception {
+    public AuditContext getAuditContext() {
+        return getInterceptableConfiguration().getAuditContext();
+    }
+
+    @Override
+    public Consumer doCreateConsumer(Processor processor) {
         return new FhirConsumer<>(this, processor);
     }
 
     // Private stuff
 
-    private AbstractPlainProvider getResourceProvider() {
-        AbstractPlainProvider provider = config.getResourceProvider();
-        if (provider == null) {
-            provider = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
+    private List<? extends AbstractPlainProvider> getResourceProviders() {
+        List<? extends AbstractPlainProvider> providers = config.getResourceProvider();
+        if (providers == null) {
+            providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
-        return provider;
+        return providers;
     }
 
     public ClientRequestFactory<?> getClientRequestFactory() {

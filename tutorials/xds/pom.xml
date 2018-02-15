@@ -13,28 +13,7 @@
     </parent>
 
     <properties>
-        <!--
-        <osgi.export.pkg>
-            org.openehealth.ipf.tutorials.xds.*;version="${project.version}"
-        </osgi.export.pkg>
-        <osgi.import.pkg>
-            org.openehealth.ipf.platform.camel.core.extend,
-            org.openehealth.ipf.platform.camel.core.util,
-            org.openehealth.ipf.platform.camel.ihe.xds,
-            org.openehealth.ipf.commons.ihe.xds.core.requests,
-            org.openehealth.ipf.commons.ihe.xds.core.responses,
-            org.openehealth.ipf.commons.ihe.xds.core.validate,
-            org.apache.commons.io,
-            org.apache.cxf.bus.spring,
-            javax.activation,
-            javax.mail.util,
-            META-INF.cxf,
-            !org.openehealth.ipf.commons.ihe.ws.server,
-            org.slf4j.*;version="[1.6,2)",
-            *
-        </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>
-        -->
     </properties>
 
     <dependencies>
@@ -42,6 +21,10 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

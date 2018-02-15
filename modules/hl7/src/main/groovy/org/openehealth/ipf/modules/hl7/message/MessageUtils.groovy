@@ -42,6 +42,15 @@ class MessageUtils {
     
     private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
     private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
+    private static final Parser PARSER
+
+    static {
+        ParserConfiguration config = new ParserConfiguration()
+        config.setEscaping(ESCAPE)
+        HapiContext context = new DefaultHapiContext()
+        context.parserConfiguration = config
+        PARSER = context.getGenericParser()
+    }
 
 
     /**
@@ -158,7 +167,8 @@ class MessageUtils {
         def now = hl7Now()
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
                 "MSA|AE|MsgIdUnknown|$cause|\r"
-        def nak = new GenericParser().parse(cannedNak)
+
+        def nak = PARSER.parse(cannedNak)
         e.populateResponse(nak, ackCode, 0)
         nak
     }

@@ -12,18 +12,6 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <!--
-        <osgi.export.pkg>
-            org.openehealth.ipf.platform.camel.ihe.hl7v2ws*
-        </osgi.export.pkg>
-        <osgi.import.pkg>
-              org.slf4j.*;version="[1.6,2)",
-              *
-        </osgi.import.pkg>
-        -->
-    </properties>
-
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
@@ -61,6 +49,11 @@
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-spring</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>

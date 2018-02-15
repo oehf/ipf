@@ -18,14 +18,12 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti31.Iti31ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti31.Iti31ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti30.Iti30AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31.Iti31AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
 
@@ -38,45 +36,45 @@ import java.util.List;
  */
 public class PAM implements IntegrationProfile {
 
-    public enum Interactions implements Hl7v2InteractionId {
+    public enum Interactions implements Hl7v2InteractionId<FeedAuditDataset> {
         ITI_30 {
             @Override
-            public void init(TransactionOptions... options) {
+            public void init(List<? extends HL7v2TransactionOption> options) {
                 init("pam-iti30",
                         "Patient Identity Management",
                         false,
-                        new Iti30ClientAuditStrategy(),
-                        new Iti30ServerAuditStrategy(),
+                        new Iti30AuditStrategy(false),
+                        new Iti30AuditStrategy(true),
                         PamTransactions.ITI30,
                         options);
             }
         },
         ITI_31 {
             @Override
-            public void init(TransactionOptions... options) {
+            public void init(List<? extends HL7v2TransactionOption> options) {
                 init("pam-iti31",
                         "Patient Encounter Management",
                         false,
-                        new Iti31ClientAuditStrategy(),
-                        new Iti31ServerAuditStrategy(),
+                        new Iti31AuditStrategy(false),
+                        new Iti31AuditStrategy(true),
                         PamTransactions.ITI31,
                         options);
             }
         };
 
-        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter private NakFactory nakFactory;
+        @Getter private Hl7v2TransactionConfiguration<FeedAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<FeedAuditDataset> nakFactory;
 
         protected void init(
                 String name,
                 String description,
                 boolean isQuery,
-                AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
-                AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
+                AuditStrategy<FeedAuditDataset> clientAuditStrategy,
+                AuditStrategy<FeedAuditDataset> serverAuditStrategy,
                 PamTransactions pamTransactions,
-                TransactionOptions... options)
+                List<? extends HL7v2TransactionOption> options)
         {
-            this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration(
+            this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration<>(
                     name,
                     description,
                     isQuery,
@@ -88,14 +86,14 @@ public class PAM implements IntegrationProfile {
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     new String[]{"ADT"},
-                    TransactionOptionUtils.concatAllToString(options),
+                    new String[]{HL7v2TransactionOption.concatAllToString(options)},
                     new String[]{"ACK"},
                     new String[]{"*"},
                     new boolean[]{true},
                     new boolean[]{false},
                     HapiContextFactory.createHapiContext(pamTransactions));
 
-            this.nakFactory = new NakFactory(this.hl7v2TransactionConfiguration);
+            this.nakFactory = new NakFactory<>(this.hl7v2TransactionConfiguration);
         }
     }
 

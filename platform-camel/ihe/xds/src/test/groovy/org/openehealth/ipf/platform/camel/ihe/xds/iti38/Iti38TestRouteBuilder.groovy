@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti38
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 

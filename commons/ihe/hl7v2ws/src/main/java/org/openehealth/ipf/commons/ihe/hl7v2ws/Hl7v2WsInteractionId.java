@@ -17,12 +17,14 @@
 package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v2WsInteractionId extends Hl7v2InteractionId, WsInteractionId<WsTransactionConfiguration> {
+public interface Hl7v2WsInteractionId extends Hl7v2InteractionId<MllpAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
 }

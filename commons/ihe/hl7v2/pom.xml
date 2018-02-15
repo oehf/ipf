@@ -12,15 +12,12 @@
         <version>3.5-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.ihe.hl7v2*,
-            ca.uhn.hl7v2.parser.eventmap;-split-package:=merge-first
-        </osgi.export.pkg>
-    </properties>
-
     <dependencies>
         <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-structures-v231</artifactId>
@@ -55,6 +52,19 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-xml</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

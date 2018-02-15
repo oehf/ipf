@@ -18,16 +18,15 @@ package org.openehealth.ipf.tutorials.xds
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.core.io.ClassPathResource
 
 /**
  * Entry point for command line execution.
  * @author Jens Riemschneider
  */
-public class Server {
+class Server {
     private static final int SYSLOG_PORT = 514
-      
+
     /**
      * Standard main.
      * @param args
@@ -37,9 +36,9 @@ public class Server {
      */
     public static void main(String[] args) {
         ClassPathResource contextResource = new ClassPathResource('context.xml')
-        
+
         CXFServlet servlet = new CXFServlet()
-        
+
         ServletServer servletServer = new TomcatServer()
         servletServer.contextResource = contextResource.getURI().toString()
         servletServer.port = 9091
@@ -52,9 +51,6 @@ public class Server {
         servletServer.truststoreFile = 'keystore'
         servletServer.truststorePass = 'changeit'
         servletServer.start()
-        
-        AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
-        AuditorModuleContext.context.config.auditRepositoryPort = SYSLOG_PORT
 
         while (true) Thread.sleep(10000)
     }

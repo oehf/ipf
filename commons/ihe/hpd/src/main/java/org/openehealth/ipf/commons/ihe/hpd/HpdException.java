@@ -16,8 +16,9 @@
 package org.openehealth.ipf.commons.ihe.hpd;
 
 import lombok.Getter;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Dmytro Rud
@@ -28,11 +29,11 @@ public class HpdException extends RuntimeException {
 
     public HpdException(String message, ErrorType type) {
         super(message);
-        this.type = Validate.notNull(type);
+        this.type = requireNonNull(type);
     }
 
     public HpdException(Exception exception, ErrorType type) {
         super(exception.getMessage());
-        this.type = Validate.notNull(type);
+        this.type = requireNonNull(type);
     }
 }

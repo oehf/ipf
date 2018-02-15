@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti63.asyncresponse.Iti63AsyncResponsePortType;
@@ -40,7 +42,7 @@ public class XCF implements XdsIntegrationProfile {
         ITI_63(ITI_63_WS_CONFIG),
         ITI_63_ASYNC_RESPONSE(ITI63_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -63,7 +65,7 @@ public class XCF implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration ITI_63_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_63_WS_CONFIG = new WsTransactionConfiguration<>(
             "xcf-iti63",
             "Cross Gateway Fetch",
             true,
@@ -79,7 +81,7 @@ public class XCF implements XdsIntegrationProfile {
             true,
             true);
 
-    private final static WsTransactionConfiguration ITI63_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI63_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
             "xcf-iti63-async-response",
             "Cross Gateway Fetch",
             true,

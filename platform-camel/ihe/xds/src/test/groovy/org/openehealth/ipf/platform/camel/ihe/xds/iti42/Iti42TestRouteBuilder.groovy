@@ -28,9 +28,9 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
 /**
  * @author Jens Riemschneider
  */
-public class Iti42TestRouteBuilder extends SpringRouteBuilder {
+class Iti42TestRouteBuilder extends SpringRouteBuilder {
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         from('xds-iti42:xds-iti42-service1')
             .process(iti42RequestValidator())
             .process {

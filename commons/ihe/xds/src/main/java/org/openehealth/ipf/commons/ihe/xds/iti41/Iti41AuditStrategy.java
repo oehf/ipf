@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,14 +27,15 @@ import java.util.Map;
 
 /**
  * Audit strategy for ITI-41.
+ *
  * @author Dmytro Rud
  */
 abstract class Iti41AuditStrategy extends XdsSubmitAuditStrategy30 {
 
     /**
      * Constructs the audit strategy.
-     * @param serverSide
-     *      whether this is a server-side or a client-side strategy.
+     *
+     * @param serverSide whether this is a server-side or a client-side strategy.
      */
     public Iti41AuditStrategy(boolean serverSide) {
         super(serverSide);
@@ -42,7 +43,7 @@ abstract class Iti41AuditStrategy extends XdsSubmitAuditStrategy30 {
 
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
+        ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType) pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);

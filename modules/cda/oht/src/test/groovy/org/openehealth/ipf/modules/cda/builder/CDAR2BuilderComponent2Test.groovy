@@ -16,7 +16,9 @@
 package org.openehealth.ipf.modules.cda.builder
 
 import org.openhealthtools.ihe.common.cdar2.*
-import groovytools.builder.NodeExceptionimport org.junit.Testimport org.junit.Assert
+import groovytools.builder.NodeException
+import org.junit.Test
+import org.junit.Assert
 /**
  * @author Christian Ohr
  */
@@ -78,7 +80,7 @@ public class CDAR2BuilderComponent2Test extends AbstractCDAR2BuilderTest {
 	
 	@Test
 	public void testSectionNullFlavors() {
-		def sectionSchema = builder.getSchema("section");
+		def sectionSchema = builder.getSchema("section")
 		def iSection = builder.build {
 			section{
 				code(code:'34133-9',

@@ -379,15 +379,18 @@ With the embedded Tomcat class of the XDS test package, this is only a few lines
 ### ATNA Auditing
 
 By default auditing is turned on by all endpoints.
-The configuration of the syslog server that receives auditing messages can be found in Server.groovy:
+The configuration of the syslog server that receives auditing messages can be found in context.xml:
 
-```groovy
-
-    // Server.groovy
-    ...
-        AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
-        AuditorModuleContext.context.config.auditRepositoryPort = SYSLOG_PORT
-    ...
+```xml
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="auditSourceId" value="sourceId"/>
+        <!-- default
+        <property name="auditRepositoryHost" value="localhost"/>
+        <property name="auditRepositoryPort" value="514"/>
+        <property name="auditRepositoryTransport" value="UDP"/>
+        -->
+    </bean>
 ```
 
 Auditing messages will always be send. Because they are send unreliably via the UDP protocol (this is the default),

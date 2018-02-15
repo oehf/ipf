@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
 import org.apache.camel.impl.DefaultExchange
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import static org.junit.Assert.assertEquals
@@ -52,7 +53,7 @@ abstract class TestDispatch extends MllpTestContainer {
     // ITI-8 and ITI-64 can be dispatched, ITI-9 must fail
     @Test
     void testHappyCaseAndAudit1() {
-        DefaultExchange exchange = new DefaultExchange(camelContext);
+        DefaultExchange exchange = new DefaultExchange(camelContext)
 
         exchange.in.body = send('pix-iti8://localhost:' + getDispatcherPort(), ITI_8_REQUEST)
         validatingProcessor().process(exchange)
@@ -75,21 +76,21 @@ abstract class TestDispatch extends MllpTestContainer {
         assertEquals(5, auditSender.messages.size())
 
         assertEquals(2, auditSender.messages.findAll {
-            it.auditMessage.eventIdentification.eventTypeCode[0].code == 'ITI-8' &&
-            it.auditMessage.eventIdentification.eventOutcomeIndicator == 0}
+            it.eventIdentification.eventTypeCode[0].code == 'ITI-8' &&
+            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success}
         .size())
 
         assertEquals(1, auditSender.messages.findAll {
-            it.auditMessage.eventIdentification.eventTypeCode[0].code == 'ITI-9' &&
-            it.auditMessage.eventIdentification.eventOutcomeIndicator == 12}
+            it.eventIdentification.eventTypeCode[0].code == 'ITI-9' &&
+            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.MajorFailure}
         .size())
 
         assertEquals(2, auditSender.messages.findAll {
-            it.auditMessage.eventIdentification.eventTypeCode[0].code == 'ITI-64' &&
-            it.auditMessage.eventIdentification.eventOutcomeIndicator == 0}
+            it.eventIdentification.eventTypeCode[0].code == 'ITI-64' &&
+            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success}
         .size())
     }
 
-    protected abstract String getDispatcherPort();
+    protected abstract String getDispatcherPort()
 
 }

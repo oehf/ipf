@@ -24,14 +24,14 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti65TransactionConfiguration extends FhirTransactionConfiguration {
+public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<Iti65AuditDataset> {
 
     public Iti65TransactionConfiguration() {
         super("mhd-iti65",
                 "Provide Document Bundle",
                 false,
-                new Iti65AuditStrategy(false),
-                new Iti65AuditStrategy(true),
+                new Iti65ClientAuditStrategy(),
+                new Iti65ServerAuditStrategy(),
                 FhirContext.forDstu3(),
                 new Iti65ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti65ClientRequestFactory(),                // Formulate requests

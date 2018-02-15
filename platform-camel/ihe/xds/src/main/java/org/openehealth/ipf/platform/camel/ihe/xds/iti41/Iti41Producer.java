@@ -29,12 +29,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer;
  */
 public class Iti41Producer extends XdsSubmissionProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType> {
 
-    public Iti41Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+    public Iti41Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
+                         JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);
     }
 
     @Override
-    protected RegistryResponseType callService(Object client, ProvideAndRegisterDocumentSetRequestType request) throws Exception {
+    protected RegistryResponseType callService(Object client, ProvideAndRegisterDocumentSetRequestType request) {
         injectTargetHomeCommunityId(client, request.getSubmitObjectsRequest());
         return ((Iti41PortType) client).documentRepositoryProvideAndRegisterDocumentSetB(request);
     }

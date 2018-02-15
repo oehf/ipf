@@ -19,13 +19,7 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="false"/>
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    <import resource="classpath:common-hl7v2ws-beans.xml" />
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.Pcd01RouteBuilder">

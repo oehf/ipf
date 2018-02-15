@@ -12,12 +12,6 @@
     <description>FHIR IHE support, independent of FHIR version</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.commons.ihe.fhir.*;-split-package:=merge-first
-        </osgi.export.pkg>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>

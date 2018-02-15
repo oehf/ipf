@@ -28,12 +28,7 @@ public class XdsQueryAuditDataset extends XdsAuditDataset {
     @Getter @Setter private String queryUuid;
     @Getter @Setter private String homeCommunityId;
 
-    /**
-     * @param serverSide
-     *            specifies whether this audit dataset will be used on the
-     *            server side (<code>true</code>) or on the client side (
-     *            <code>false</code>)
-     */
+
     public XdsQueryAuditDataset(boolean serverSide) {
         super(serverSide);
     }

@@ -19,16 +19,17 @@ import groovy.util.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
 import org.apache.camel.Exchange
 import org.apache.cxf.message.Message
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.core.DomBuildersThreadLocal
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
@@ -62,15 +63,15 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
     private final boolean validationOnContinuation
 
     private final AuditStrategy<Hl7v3AuditDataset> auditStrategy
+    private final AuditContext auditContext
 
     // TODO: make this value configurable
     private final int defaultContinuationQuantity = 10
 
 
-    public Hl7v3ContinuationAwareProducer(
+    Hl7v3ContinuationAwareProducer(
             Hl7v3ContinuationAwareEndpoint endpoint,
-            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory)
-    {
+            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         super(endpoint, clientFactory, String.class, String.class)
 
         this.wsTransactionConfiguration = endpoint.component.wsTransactionConfiguration
@@ -78,8 +79,8 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
         this.autoCancel                 = endpoint.autoCancel
         this.validationOnContinuation   = endpoint.validationOnContinuation
 
-        this.auditStrategy = endpoint.manualAudit ?
-            endpoint.component.getClientAuditStrategy() : null
+        this.auditStrategy = endpoint.manualAudit ? endpoint.component.getClientAuditStrategy() : null
+        this.auditContext = endpoint.auditContext
     }
 
 
@@ -129,18 +130,19 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
     private String processContinuationWithAtnaAuditing(
         Hl7v3ContinuationsPortType client,
         GPathResult request,
-        String fragmentString)
-    {
-        Hl7v3AuditDataset auditDataset = null
+        String fragmentString) {
 
+        Hl7v3AuditDataset auditDataset = null
         // fill request-related ATNA audit fields
         try {
             auditDataset = auditStrategy.createAuditDataset()
-            Map requestContext = ((BindingProvider) client).requestContext
-            auditDataset.serviceEndpointUrl = requestContext.get(Message.ENDPOINT_ADDRESS)
+            auditDataset.setSourceUserId("unknown")
+            Map<String, Object> requestContext = ((BindingProvider) client).requestContext
+            auditDataset.setDestinationUserId(requestContext.get(Message.ENDPOINT_ADDRESS)?.toString())
+            auditDataset.setRemoteAddress(requestContext.get(Message.ENDPOINT_ADDRESS)?.toString())
             auditStrategy.enrichAuditDatasetFromRequest(auditDataset, request, null)
         } catch (Exception e) {
-            LOG.error("Phase 1 of client-side ATNA auditing failed", e);
+            LOG.error("Phase 1 of client-side ATNA auditing failed", e)
         }
 
         Exception exception
@@ -153,13 +155,11 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
 
         try {
             if (exception) {
-                auditDataset.eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+                auditDataset.eventOutcomeIndicator = EventOutcomeIndicator.SeriousFailure
             } else {
-                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString)
+                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString, auditContext)
             }
-            auditStrategy.doAudit(auditDataset)
-        } catch (Exception e) {
-            LOG.error("Phase 2 of client-side ATNA auditing failed", e);
+            auditStrategy.doAudit(auditContext, auditDataset)
         } finally {
             if (exception) {
                 throw exception

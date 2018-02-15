@@ -20,12 +20,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
-import org.hl7.fhir.dstu3.model.Binary;
-import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.DocumentManifest;
-import org.hl7.fhir.dstu3.model.DocumentReference;
-import org.hl7.fhir.dstu3.model.ListResource;
-import org.hl7.fhir.dstu3.model.Resource;
+import org.hl7.fhir.dstu3.model.*;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
@@ -77,7 +72,7 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
                 Bundle.BundleEntryResponseComponent response = new Bundle.BundleEntryResponseComponent()
                         .setStatus("201 Created")
                         .setLastModified(new Date())
-                        .setLocation("blabla");
+                        .setLocation(requestEntry.getResource().getClass().getSimpleName() + "/" + 4711);
                 responseBundle.addEntry()
                         .setResponse(response)
                         .setResource(responseResource(requestEntry.getResource()));

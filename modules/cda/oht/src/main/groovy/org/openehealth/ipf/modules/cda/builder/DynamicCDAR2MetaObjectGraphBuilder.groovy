@@ -27,13 +27,13 @@ public class DynamicCDAR2MetaObjectGraphBuilder extends CDAR2MetaObjectGraphBuil
 
      public DynamicCDAR2MetaObjectGraphBuilder(MetaBuilder metaBuilder,
              SchemaNode defaultSchema, Factory defaultFactory) {
-         super(metaBuilder, defaultSchema, defaultFactory, null);
+         super(metaBuilder, defaultSchema, defaultFactory, null)
      }
 
      public DynamicCDAR2MetaObjectGraphBuilder(MetaBuilder metaBuilder,
              SchemaNode defaultSchema, Factory defaultFactory,
              Closure objectVisitor) {
-         super(metaBuilder, defaultSchema, defaultFactory, objectVisitor);
+         super(metaBuilder, defaultSchema, defaultFactory, objectVisitor)
      }     
 
      

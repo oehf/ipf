@@ -22,7 +22,6 @@ import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
@@ -37,8 +36,8 @@ abstract class AbstractTestIti67 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
-        startServer(servlet, contextDescriptor, false, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
-        startClient(String.format("http://localhost:%d/", FhirTestContainer.DEMO_APP_PORT));
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
+        startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
     protected ICriterion<?> referencePatientIdentifierParameter() {

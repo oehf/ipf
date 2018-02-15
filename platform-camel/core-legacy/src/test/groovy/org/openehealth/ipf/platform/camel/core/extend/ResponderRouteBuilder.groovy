@@ -36,18 +36,18 @@ class ResponderRouteBuilder extends SpringRouteBuilder {
     	
         from('direct:responder-test-1')
         .intercept(helper.validation(responseGenerator()))
-        .to('mock:output');
+        .to('mock:output')
 
         from('direct:responder-test-2')
         .intercept(helper.validation('direct:response-generator'))
-        .to('mock:output');
+        .to('mock:output')
 
-        from('direct:response-generator').process(responseGenerator());
+        from('direct:response-generator').process(responseGenerator())
         
     }
 
     private Processor responseGenerator() {
-        return new ConstantTransformer('blah');
+        return new ConstantTransformer('blah')
     }
 	
 }

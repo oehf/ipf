@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
-import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack;
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
 /**
  * Camel route for generic unit tests.

@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
-import static org.junit.Assert.*
-
-import org.apache.camel.Consumer
-import org.apache.camel.Route
+import org.apache.camel.*
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.*
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.apache.camel.ExchangePattern
-import org.apache.camel.Processor
-import org.apache.camel.Exchange
+import org.junit.BeforeClass
+import org.junit.Ignore
+import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
+
+import static org.junit.Assert.assertTrue
 
 /**
  * Tests for ITI-44.
  * @author Dmytro Rud
  */
-class TestIti44 extends StandardTestContainer {
+class TestIti44 extends HL7v3StandardTestContainer {
 
     def REQUEST2 = '''<?xml version="1.0" encoding="UTF-8"?>
 <PRPA_IN201301UV02 ITSVersion="XML_1.0" xmlns:urn="urn:hl7-org:v3" xmlns="urn:hl7-org:v3">
@@ -105,8 +105,8 @@ class TestIti44 extends StandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'iti-44.xml'
     
-    def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1";
-    def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1";
+    def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1"
+    def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1"
 
     private static final String ADD_REQUEST =
             readFile('translation/pixfeed/v3/PIX_FEED_REG_Maximal_Request.xml')
@@ -117,7 +117,7 @@ class TestIti44 extends StandardTestContainer {
 
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -135,7 +135,7 @@ class TestIti44 extends StandardTestContainer {
     void testMpiProblem() {
         Processor processor = [process : { Exchange arg0 ->
                 arg0.in.body = new String(REQUEST2.getBytes('ISO-8859-1'))
-                arg0.setProperty(Exchange.CHARSET_NAME, "UTF-8");
+                arg0.setProperty(Exchange.CHARSET_NAME, "UTF-8")
         } ] as Processor
 
         producerTemplate.send(SERVICE1_PIX, ExchangePattern.InOut, processor)
@@ -147,8 +147,8 @@ class TestIti44 extends StandardTestContainer {
         def response = send(SERVICE1_XDS, ADD_REQUEST, String.class)
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventActionCode="C"')
-            assert it.toString().contains('EventOutcomeIndicator="0"')
+            assert it.eventIdentification.eventActionCode == EventActionCode.Create
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
         }
     }
     
@@ -157,8 +157,8 @@ class TestIti44 extends StandardTestContainer {
         def response = send(SERVICE1_XDS, REVISE_REQUEST, String.class)
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
-            assert it.toString().contains('EventActionCode="U"')
-            assert it.toString().contains('EventOutcomeIndicator="0"')
+            assert it.eventIdentification.eventActionCode == EventActionCode.Update
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
         }
     }
 
@@ -169,12 +169,12 @@ class TestIti44 extends StandardTestContainer {
         int updateCount = 0
         int deleteCount = 0
         auditSender.messages.each {
-            if (it.toString().contains('EventActionCode="U"')) {
+            if (it.eventIdentification.eventActionCode == EventActionCode.Update) {
                 ++updateCount
-            } else if (it.toString().contains('EventActionCode="D"')) {
+            } else if (it.eventIdentification.eventActionCode == EventActionCode.Delete) {
                 ++deleteCount
             }
-            assert it.toString().contains('EventOutcomeIndicator="0"')
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
         }
         assert updateCount == 2
         assert deleteCount == 2

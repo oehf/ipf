@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7dsl;
+package org.openehealth.ipf.modules.hl7dsl
 
-import org.codehaus.groovy.runtime.InvokerInvocationException;
+import org.codehaus.groovy.runtime.InvokerInvocationException
 
 import ca.uhn.hl7v2.util.FilterIterator
 
@@ -31,8 +31,8 @@ class DelegatingPredicate implements FilterIterator.Predicate {
 	private Closure closure
 	
 	public DelegatingPredicate(Closure closure) {
-		super();
-		this.closure = closure;
+		super()
+		this.closure = closure
 	}
 
 	@Override
@@ -42,12 +42,12 @@ class DelegatingPredicate implements FilterIterator.Predicate {
 	
 	private Object callClosure(Object args) {
 		try {
-			return closure.call(args);
+			return closure.call(args)
 		} catch (InvokerInvocationException e) {
 			if (e.getCause() instanceof RuntimeException) {
-				throw (RuntimeException)e.getCause();
+				throw (RuntimeException)e.getCause()
 			} else {
-				throw e;
+				throw e
 			}
 		}
 	}	

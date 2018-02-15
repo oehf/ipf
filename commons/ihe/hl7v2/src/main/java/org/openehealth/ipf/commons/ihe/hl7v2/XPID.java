@@ -21,7 +21,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64.Iti64AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64.Iti64AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
@@ -36,11 +37,11 @@ import java.util.List;
 public class XPID implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v2InteractionId {
+    public enum Interactions implements Hl7v2InteractionId<Iti64AuditDataset> {
         ITI_64(ITI_64_CONFIGURATION, ITI_64_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter private NakFactory nakFactory;
+        @Getter private Hl7v2TransactionConfiguration<Iti64AuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<Iti64AuditDataset> nakFactory;
     }
 
     @Override
@@ -48,8 +49,8 @@ public class XPID implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v2TransactionConfiguration ITI_64_CONFIGURATION =
-            new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration<Iti64AuditDataset> ITI_64_CONFIGURATION =
+            new Hl7v2TransactionConfiguration<>(
                     "xpid-iti64",
                     "XAD-PID Change Management",
                     false,

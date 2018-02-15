@@ -15,11 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.CrossGatewayPatientDiscovery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 
 /**
  * Generic audit strategy for ITI-55 (XCPD).
@@ -30,46 +35,45 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
     Iti55AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
-    
-    
+
+
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         request = slurp(request)
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters)
 
         // query ID
+        auditDataset.messageId = idString(request.id)
         auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
         // home community ID
-        auditDataset.homeCommunityId = 
-            request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
+        auditDataset.homeCommunityId =
+                request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
         auditDataset
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti55(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        QueryInformationBuilder builder = new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery)
+        // No patient identifiers are included for the Initiating Gateway
+        if (isServerSide()) {
+            builder.addPatients(auditDataset.patientIds)
+        }
+        builder.setQueryParameters(
+                auditDataset.messageId,
+                CrossGatewayPatientDiscovery,
                 auditDataset.requestPayload,
-                auditDataset.queryId,
-                auditDataset.homeCommunityId,
-                auditDataset.patientIds,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
-    }
+                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, auditDataset.homeCommunityId
+        )
 
+        builder.getMessages()
+    }
 
     /**
      * MCCI ACKs are of no interest for ITI-55 ATNA auditing.
      */
     @Override
     boolean isAuditableResponse(Object response) {
-        return (! Iti55Utils.isMcciAck(response))
+        return (!Iti55Utils.isMcciAck(response.toString()))
     }
 }

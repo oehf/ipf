@@ -20,6 +20,10 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.audit.types.CodedValueType
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
@@ -28,9 +32,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
 import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -47,7 +50,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-class TestIti42 extends StandardTestContainer {
+class TestIti42 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-42.xml'
     
@@ -63,15 +66,15 @@ class TestIti42 extends StandardTestContainer {
     static Map<String, ?> camelHeaders
 
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
     static void classSetUp() {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(TestIti42.class.classLoader.getResourceAsStream('saml2-assertion-for-xua.xml'));
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance()
+        dbf.setNamespaceAware(true)
+        DocumentBuilder db = dbf.newDocumentBuilder()
+        Document doc = db.parse(TestIti42.class.classLoader.getResourceAsStream('saml2-assertion-for-xua.xml'))
         Element assertion = doc.documentElement
         SoapHeader header = new SoapHeader(new QName(assertion.namespaceURI, assertion.localName), assertion)
         //header.mustUnderstand = true
@@ -115,7 +118,7 @@ class TestIti42 extends StandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
         
-        checkAudit('0')
+        checkAudit(EventOutcomeIndicator.Success)
     }
     
     @Test
@@ -123,7 +126,7 @@ class TestIti42 extends StandardTestContainer {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2
         
-        checkAudit('8')
+        checkAudit(EventOutcomeIndicator.SeriousFailure)
     }
 
     @Test
@@ -152,46 +155,40 @@ class TestIti42 extends StandardTestContainer {
     }
 
 
-    void checkAudit(outcome) {
+    void checkAudit(EventOutcomeIndicator outcome) {
         // check registry audit records
-        def message = getAudit('C', SERVICE2_ADDR)[0]
+        AuditMessage message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
+
+        assert message.activeParticipants.size() == 3
+        assert message.participantObjectIdentifications.size() == 2
         
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 3
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 7
-        
-        checkEvent(message.EventIdentification, '110107', 'ITI-42', 'C', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
-                new CodedValueType(code: 'ELE', codeSystemName: '1.2.3.4.5.6.777.1', originalText: 'Electrician'),
-                new CodedValueType(code: 'GYN', codeSystemName: '1.2.3.4.5.6.777.2', originalText: 'Gynecologist'),
+        checkEvent(message.eventIdentification, '110107', 'ITI-42', EventActionCode.Create, outcome)
+        checkSource(message.activeParticipants[0], false)
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
+                CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
+                CodedValueType.of('GYN', '1.2.3.4.5.6.777.2', 'Gynecologist'),
         ])
-        checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'registryId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkDestination(message.activeParticipants[2], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
 
         // check repository audit records
-        message = getAudit('R', SERVICE2_ADDR)[0]
+        message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
+
+        assert message.activeParticipants.size() == 3
+        assert message.participantObjectIdentifications.size() == 2
         
-        assert message.EventIdentification.size() == 1
-        assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 3
-        assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 7
-        
-        checkEvent(message.EventIdentification, '110106', 'ITI-42', 'R', outcome)
-        checkSource(message.ActiveParticipant[0], 'true')
-        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
-                new CodedValueType(code: 'ELE', codeSystemName: '1.2.3.4.5.6.777.1', originalText: 'Electrician'),
-                new CodedValueType(code: 'GYN', codeSystemName: '1.2.3.4.5.6.777.2', originalText: 'Gynecologist'),
+        checkEvent(message.eventIdentification, '110106', 'ITI-42', EventActionCode.Read, outcome)
+        checkSource(message.activeParticipants[0], false)
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
+                CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
+                CodedValueType.of('GYN', '1.2.3.4.5.6.777.2', 'Gynecologist'),
         ])
-        checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
-        checkPatient(message.ParticipantObjectIdentification[0])
-        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+        checkDestination(message.activeParticipants[2], SERVICE2_ADDR, false)
+        checkAuditSource(message.auditSourceIdentification, 'sourceId')
+        checkPatient(message.participantObjectIdentifications[0])
+        checkSubmissionSet(message.participantObjectIdentifications[1])
     }
     
     def sendIt(endpoint, value) {

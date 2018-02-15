@@ -28,3 +28,4 @@ work
 /commons/ihe/ws/generated-stubs
 /commons/ihe/xds/generated-stubs
 generated-stubs
+/commons/audit/.vertx

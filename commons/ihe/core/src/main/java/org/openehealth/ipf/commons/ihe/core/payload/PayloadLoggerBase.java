@@ -17,14 +17,16 @@ package org.openehealth.ipf.commons.ihe.core.payload;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -37,12 +39,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * In the base version, the following parameters are supported
  * (this set can be extended in derived classes):
  * <ul>
- *     <li><tt>sequenceId</tt>&nbsp;&mdash; internally generated sequential ID
- *          as a 12-digit positive long int, zero-padded.</li>
- *     <li><tt>processId</tt>&nbsp;&mdash; process ID consisting from the OS process
- *          number and the host name, e.g. <tt>"12345-myhostname"</tt>.</li>
- *     <li><tt>date('format_spec')</tt>&nbsp;&mdash; current date and time, formatted
- *          using {@link java.text.SimpleDateFormat} according to the given specification.</li>
+ * <li><tt>sequenceId</tt>&nbsp;&mdash; internally generated sequential ID
+ * as a 12-digit positive long int, zero-padded.</li>
+ * <li><tt>processId</tt>&nbsp;&mdash; process ID consisting from the OS process
+ * number and the host name, e.g. <tt>"12345-myhostname"</tt>.</li>
+ * <li><tt>date('format_spec')</tt>&nbsp;&mdash; current date and time, formatted
+ * using {@link java.text.SimpleDateFormat} according to the given specification.</li>
  * </ul>
  * <br>
  * Example of a file name pattern:<br>
@@ -55,12 +57,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * Furthermore, the behavior of this class is regulated application-widely by the following Boolean
  * system properties:
  * <ul>
- *     <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.CONSOLE</tt>&nbsp;&mdash;
- *          when set to <code>true</code>, then the message payload will be logged using regular
- *          Java logging mechanisms  (level DEBUG) instead of being written into files whose names
- *          are created from the pattern.</li>
- *     <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED</tt>&nbsp;&mdash;
- *          when set to <code>true</code>, then no logging will be performed at all.</li>
+ * <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.CONSOLE</tt>&nbsp;&mdash;
+ * when set to <code>true</code>, then the message payload will be logged using regular
+ * Java logging mechanisms  (level DEBUG) instead of being written into files whose names
+ * are created from the pattern.</li>
+ * <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED</tt>&nbsp;&mdash;
+ * when set to <code>true</code>, then no logging will be performed at all.</li>
  * </ul>
  *
  * @author Dmytro Rud
@@ -91,7 +93,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     protected void doLogPayload(T context, String charsetName, String... payloadPieces) {
         // check whether we can process
-        if (! canProcess()) {
+        if (!canProcess()) {
             return;
         }
         if ((errorCountLimit >= 0) && (errorCount.get() >= errorCountLimit)) {
@@ -102,7 +104,8 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                LOG.debug(StringUtils.repeat("{}", payloadPieces.length), (Object[]) payloadPieces);
+                String output = Stream.of(payloadPieces).collect(Collectors.joining());
+                LOG.debug(output);
             }
         } else {
             // compute the file path and write payload pieces into this file
@@ -203,9 +206,9 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     /**
      * Configures maximal allowed count of file creation errors.
-     * @param errorCountLimit
-     *      maximal allowed count of file creation errors,
-     *      negative value (the default) means "no limit".
+     *
+     * @param errorCountLimit maximal allowed count of file creation errors,
+     *                        negative value (the default) means "no limit".
      */
     public void setErrorCountLimit(int errorCountLimit) {
         this.errorCountLimit = errorCountLimit;
@@ -216,6 +219,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     }
 
     public void setExpressionResolver(ExpressionResolver resolver) {
-        this.resolver = Validate.notNull(resolver);
+        this.resolver = requireNonNull(resolver);
     }
 }

@@ -24,6 +24,7 @@ import ca.uhn.hl7v2.HL7Exception;
  * @author Dmytro Rud
  */
 public class Hl7v2AcceptanceException extends HL7Exception {
+
     private static final long serialVersionUID = -954901285020747868L;
 
     public Hl7v2AcceptanceException(String message, ErrorCode code) {

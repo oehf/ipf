@@ -16,9 +16,15 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti44
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.AuditException
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
+
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
@@ -45,77 +51,47 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
         // (actual) patient IDs --
         // potentially multiple for Add/Revise, single for Merge
-        def patientIds = [] as Set<String>
+        Set<String> patientIds = [] as Set<String>
         addPatientIds(regEvent.subject1.patient.id, patientIds)
-        auditDataset.patientIds = patientIds.toArray()
+        auditDataset.patientIds = patientIds as String[]
 
         // obsolete (merged) patient ID
         auditDataset.oldPatientId = iiToCx(regEvent.replacementOf[0].priorRegistration.subject1.priorRegisteredRole.id[0]) ?: null
-
         auditDataset
     }
 
 
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
         switch (auditDataset.requestType) {
             case 'PRPA_IN201301UV02':
-                AuditorManager.hl7v3Auditor.auditIti44Add(
-                        serverSide,
-                        auditDataset.eventOutcomeCode,
-                        auditDataset.userId,
-                        auditDataset.userName,
-                        auditDataset.serviceEndpointUrl,
-                        auditDataset.clientIpAddress,
-                        auditDataset.patientIds,
-                        auditDataset.messageId,
-                        auditDataset.purposesOfUse,
-                        auditDataset.userRoles)
-                break
-
+                return [
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Create, true)
+                ] as AuditMessage[]
             case 'PRPA_IN201302UV02':
-                AuditorManager.hl7v3Auditor.auditIti44Revise(
-                        serverSide,
-                        auditDataset.eventOutcomeCode,
-                        auditDataset.userId,
-                        auditDataset.userName,
-                        auditDataset.serviceEndpointUrl,
-                        auditDataset.clientIpAddress,
-                        auditDataset.patientIds,
-                        auditDataset.messageId,
-                        auditDataset.purposesOfUse,
-                        auditDataset.userRoles)
-                break
-
+                return [
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
+                ] as AuditMessage[]
             case 'PRPA_IN201304UV02':
-                AuditorManager.hl7v3Auditor.auditIti44Delete(
-                        serverSide,
-                        auditDataset.eventOutcomeCode,
-                        auditDataset.userId,
-                        auditDataset.userName,
-                        auditDataset.serviceEndpointUrl,
-                        auditDataset.clientIpAddress,
-                        auditDataset.oldPatientId,
-                        auditDataset.messageId,
-                        auditDataset.purposesOfUse,
-                        auditDataset.userRoles)
-
-                AuditorManager.hl7v3Auditor.auditIti44Revise(
-                        serverSide,
-                        auditDataset.eventOutcomeCode,
-                        auditDataset.userId,
-                        auditDataset.userName,
-                        auditDataset.serviceEndpointUrl,
-                        auditDataset.clientIpAddress,
-                        auditDataset.patientIds,
-                        auditDataset.messageId,
-                        auditDataset.purposesOfUse,
-                        auditDataset.userRoles)
-                break
-
+                return [
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
+                ] as AuditMessage[]
             default:
-                LOG.error("Don't know how to audit message ${auditDataset.requestType}")
+                throw new AuditException("Cannot create audit message for event " + auditDataset.requestType)
         }
+    }
+
+    protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
+                                                     final Hl7v3AuditDataset auditDataset,
+                                                     EventActionCode eventActionCode,
+                                                     boolean newPatientId) {
+        String[] patientIds = newPatientId ? auditDataset.patientIds : [ auditDataset.oldPatientId ] as String[]
+        return new PatientRecordEventBuilder<>(auditContext, auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
+
+        // Type=II (the literal string), Value=the value of the message ID (from the message content, base64 encoded)
+                .addPatients("II", auditDataset.messageId, patientIds)
+                .getMessage()
     }
 
 

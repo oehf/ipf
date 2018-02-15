@@ -89,7 +89,7 @@ And here's an example for the custom ZBE segment class:
 
     import java.util.Collection;
 
-    import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
+    import ca.uhn.hl7v2.model.AbstractSegment;
 
 
     import ca.uhn.hl7v2.HL7Exception;

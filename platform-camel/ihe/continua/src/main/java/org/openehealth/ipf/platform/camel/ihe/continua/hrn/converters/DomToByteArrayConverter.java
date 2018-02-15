@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
-import org.openhealthtools.ihe.utils.XMLUtils;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
 
@@ -27,7 +27,7 @@ public class DomToByteArrayConverter implements Converter<Document, byte[]> {
     @Override
     public byte[] convert(Document document) {
         try {
-            return XMLUtils.serialize(document);
+            return XmlUtils.serialize(document);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

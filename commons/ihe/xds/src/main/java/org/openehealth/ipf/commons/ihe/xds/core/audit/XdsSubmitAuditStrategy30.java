@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsSubmitAuditStrategy30 extends XdsSubmitAuditStrategy {
+public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmitAuditDataset> {
 
     /**
      * Constructs an audit strategy for an XDS submission.
@@ -43,6 +42,18 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsSubmitAuditStrategy {
         super(serverSide);
     }
 
+    protected static void enrichDatasetFromSubmitObjectsRequest(XdsSubmitAuditDataset auditDataset, EbXMLSubmitObjectsRequest ebXML) {
+        List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        auditDataset.setHomeCommunityId(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
+
+        submissionSets.forEach(submissionSet -> {
+            String patientId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
+            auditDataset.getPatientIds().add(patientId);
+            String uniqueId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+            auditDataset.setSubmissionSetUuid(uniqueId);
+        });
+    }
+
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
@@ -51,11 +62,10 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsSubmitAuditStrategy {
         return auditDataset;
     }
 
-    @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
-        return getEventOutcomeCodeFromRegistryResponse(ebXML);
-    }
 
+
+    @Override
+    public XdsSubmitAuditDataset createAuditDataset() {
+        return new XdsSubmitAuditDataset(isServerSide());
+    }
 }

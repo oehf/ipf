@@ -74,12 +74,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         boolean isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 
-        boolean isOnDemand    = (profile == XDS_B.Interactions.ITI_61) ||
+        boolean isOnDemand    = (profile == XDS.Interactions.ITI_61) ||
                                 (profile.isQuery() && onDemandProvided);
 
         boolean needHashAndSize = (! isOnDemand) &&
                 (isContinuaHRN || profile.isQuery()
-                        || (profile == XDS_B.Interactions.ITI_42)
+                        || (profile == XDS.Interactions.ITI_42)
                         || (profile == XDM.Interactions.ITI_41)
                 );
 
@@ -103,7 +103,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
             new SlotValueValidation(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
-            new SlotValidation(SLOT_NAME_URI, uriValidator),
+            new SlotValueValidation(SLOT_NAME_URI, uriValidator, 0, 1),
             new AuthorClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
@@ -125,7 +125,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             validators.add(new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
         }
 
-        if ((profile.getInteractionId() == XDS_B.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
+        if ((profile.getInteractionId() == XDS.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;
@@ -215,7 +215,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(limitedMetadata || ((name != null) && (name.getValue() != null)),
                     MISSING_FOLDER_NAME, folder.getId());
 
-            if ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
+            if ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
                 validateUpdateObject(folder, container);
             }
         }
@@ -244,7 +244,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, profile);
 
-            boolean onDemandExpected = (profile == XDS_B.Interactions.ITI_61);
+            boolean onDemandExpected = (profile == XDS.Interactions.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
@@ -275,7 +275,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
-            if ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
+            if ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
                 validateUpdateObject(docEntry, container);
             }
         }

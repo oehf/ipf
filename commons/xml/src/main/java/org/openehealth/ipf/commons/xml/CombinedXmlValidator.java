@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName;
 import static org.openehealth.ipf.commons.xml.XmlUtils.source;
 
@@ -33,11 +33,9 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
 
 
     public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
-        Validate.notNull(message, "message must be not null");
-        Validate.notNull(profile, "validation profile must be not null");
-
+        requireNonNull(profile, "validation profile must be not null");
         // check whether the root element name is valid
-        String rootElementName = rootElementName(message);
+        String rootElementName = rootElementName(requireNonNull(message, "message must be not null"));
         if (! profile.isValidRootElement(rootElementName)) {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }

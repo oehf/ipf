@@ -4,11 +4,11 @@ spring:
 
 ipf:
   atna:
-    auditor-enabled: true
-    audit-repository-host: arr.somewhere.com
+    audit-enabled: true
+    audit-repository-host: localhost
     audit-repository-port: 1234
     audit-repository-transport: TLS
     audit-enterprise-site-id: mysite
-    audit-queue-class: org.openhealthtools.ihe.atna.auditor.queue.AsynchronousAuditQueue
+    audit-queue-class: org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue
     security-domain-name: mydomain
 

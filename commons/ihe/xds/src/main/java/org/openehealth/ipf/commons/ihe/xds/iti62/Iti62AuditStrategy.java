@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti62;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditStrategy30;
 
-import static org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset.DEFAULT_USER_ROLES;
-
 /**
  * Client audit strategy for ITI-62.
+ *
  * @author Boris Stanojevic
  */
 public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
@@ -32,18 +35,11 @@ public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsRemoveMetadataAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditIti62(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getPatientId(),
-                auditDataset.getObjectIds(),
-                auditDataset.getPurposesOfUse(),
-                auditDataset.getUserRoles().isEmpty() ? DEFAULT_USER_ROLES : auditDataset.getUserRoles());
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsRemoveMetadataAuditDataset auditDataset) {
+        return new XdsPatientRecordEventBuilder(auditContext, auditDataset, EventActionCode.Delete,
+                XdsEventTypeCode.RemoveMetadata, auditDataset.getPurposesOfUse())
+                .addPatients(auditDataset.getPatientIds())
+                .addObjectIds(auditDataset.getObjectIds())
+                .getMessages();
     }
-
 }

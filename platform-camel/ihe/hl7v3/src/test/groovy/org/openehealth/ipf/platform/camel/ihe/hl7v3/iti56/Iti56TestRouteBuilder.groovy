@@ -17,11 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
 import org.apache.camel.builder.RouteBuilder
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-import org.apache.camel.ExchangePattern;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
+import org.apache.camel.ExchangePattern
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
@@ -37,7 +37,7 @@ class Iti56TestRouteBuilder extends RouteBuilder {
     
     static final String RESPONSE = StandardTestContainer.readFile('iti56/iti56-sample-response.xml')
 
-    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+    private final CountDownLatch countDownLatch, asyncCountDownLatch
 
     static final int TASKS_COUNT = 5
 

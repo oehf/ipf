@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,6 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.VersionTransformer;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.w3c.dom.Element;
 
 
@@ -62,11 +63,12 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
      */
     public AuditResponseInterceptor(
             AuditStrategy<T> auditStrategy,
+            AuditContext auditContext,
             boolean serverSide,
             AsynchronyCorrelator<T> correlator,
             boolean asyncReceiver) 
     {
-        super(isClient(asyncReceiver, serverSide) ? Phase.INVOKE : Phase.PREPARE_SEND, auditStrategy);
+        super(isClient(asyncReceiver, serverSide) ? Phase.INVOKE : Phase.PREPARE_SEND, auditStrategy, auditContext);
         if (isClient(asyncReceiver, serverSide)) {
             addAfter(InPayloadInjectorInterceptor.class.getName());
             addBefore(ServiceInvokerInterceptor.class.getName());
@@ -146,13 +148,13 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
                 || (message == exchange.getOutFaultMessage())
                 || (response == null))
         {
-            auditDataset.setEventOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+            auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);
         } else {
-            auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
+            auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response, getAuditContext());
         }
         
         // perform transaction-specific auditing
-        auditStrategy.doAudit(auditDataset);
+        auditStrategy.doAudit(getAuditContext(), auditDataset);
     }
     
 }

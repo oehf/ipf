@@ -19,13 +19,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Audit dataset specific for non-constructive operations (Read+Delete as opposed to Create+Update in CRUD)
@@ -66,15 +65,15 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
         return documents.stream().anyMatch(x -> x.status == status);
     }
 
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Status status) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Status status) {
         return (status == Status.SUCCESSFUL)
-                ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
-                : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                ? EventOutcomeIndicator.Success
+                : EventOutcomeIndicator.SeriousFailure;
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode() {
-        throw new RuntimeException("Please call #getEventOutcomeCode(Status status) instead");
+    public EventOutcomeIndicator getEventOutcomeIndicator() {
+        throw new UnsupportedOperationException("Call getEventOutcomeIndicator(Status status) instead");
     }
 
     public void registerProcessedDocument(String documentUniqueId, String repositoryUniqueId, String homeCommunityId) {
@@ -87,8 +86,7 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
         return documents.stream()
                 .filter(x -> x.status == status)
                 .map(fieldExtractor)
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
+                .toArray(String[]::new);
     }
 
     public String[] getDocumentIds      (Status status) { return extract(status, x -> x.documentUniqueId); }

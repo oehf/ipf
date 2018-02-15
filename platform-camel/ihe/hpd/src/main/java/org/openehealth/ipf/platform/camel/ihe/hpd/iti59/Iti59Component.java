@@ -34,23 +34,17 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>, WsInteractionId<WsTransactionConfiguration<Iti59AuditDataset>>> {
 
     public Iti59Component() {
-        super(HPD.Interactions.ITI_59);
+        super(HPD.FeedInteractions.ITI_59);
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new HpdEndpoint<Iti59AuditDataset>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti59Service.class)
-        {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new HpdEndpoint<Iti59AuditDataset>(uri, remaining, this, parameters, Iti59Service.class) {
             @Override
-            public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
+            public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
             }
         };

@@ -22,7 +22,7 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  *
  * @author Christian Ohr
  */
-class TestIti41SslContextParameters extends StandardTestContainer {
+class TestIti41SslContextParameters extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-41-sslContextParameters.xml'
     
@@ -42,7 +42,7 @@ class TestIti41SslContextParameters extends StandardTestContainer {
     def docEntry
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass

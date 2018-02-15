@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +32,13 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Dmytro Rud
  */
-public class QpdAwareNakFactory extends NakFactory {
+public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
 
     private static final Logger LOG = LoggerFactory.getLogger(QpdAwareNakFactory.class);
     private final String messageType, triggerEvent;
 
 
-    public QpdAwareNakFactory(Hl7v2TransactionConfiguration config, String messageType, String triggerEvent) {
+    public QpdAwareNakFactory(Hl7v2TransactionConfiguration<QueryAuditDataset> config, String messageType, String triggerEvent) {
         super(config);
 
         Validate.notEmpty(messageType);

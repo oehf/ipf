@@ -31,8 +31,8 @@ import org.springframework.beans.factory.FactoryBean;
 public class MdmHl7v2TransactionConfigurationFactoryBean implements FactoryBean<Hl7v2TransactionConfiguration> {
 
     @Override
-    public Hl7v2TransactionConfiguration getObject() throws Exception {
-        return new Hl7v2TransactionConfiguration(
+    public Hl7v2TransactionConfiguration getObject() {
+        return new Hl7v2TransactionConfiguration<>(
                 "mdm",
                 "Medical Document Management",
                 false,

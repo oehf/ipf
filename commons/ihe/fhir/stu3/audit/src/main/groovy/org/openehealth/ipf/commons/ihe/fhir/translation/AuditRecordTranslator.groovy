@@ -16,12 +16,13 @@
 package org.openehealth.ipf.commons.ihe.fhir.translation
 
 import org.hl7.fhir.dstu3.model.*
-import org.joda.time.format.ISODateTimeFormat
-import org.openehealth.ipf.commons.ihe.fhir.AuditSourceTypeEnumFactory
-import org.openehealth.ipf.commons.ihe.fhir.ObjectRoleEnumFactory
-import org.openehealth.ipf.commons.ihe.fhir.ObjectTypeEnumFactory
-import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
+import org.hl7.fhir.dstu3.model.codesystems.AuditSourceTypeEnumFactory
+import org.hl7.fhir.dstu3.model.codesystems.ObjectRoleEnumFactory
+import org.hl7.fhir.dstu3.model.codesystems.ObjectTypeEnumFactory
+import org.openehealth.ipf.commons.audit.model.*
+import org.openehealth.ipf.commons.audit.types.CodedValueType
+
+import java.time.Instant
 
 /**
  * Translates ATNA audit records into FHIR AuditEvent resources.
@@ -29,31 +30,31 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
  * @author Dmytro Rud
  * @since 3.4
  */
-class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
+class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
 
-    static Coding coding(CodedValueType atna) {
+    static Coding coding(CodedValueType codedValueType) {
         return new Coding(
-                code: atna.code,
-                display: atna.originalText,
-                system: atna.codeSystemName.mapAtnaCodingSystem())
+                code: codedValueType.code,
+                display: codedValueType.originalText,
+                system: codedValueType.codeSystemName.mapAtnaCodingSystem())
     }
 
     /**
      * For codes returned from FHIR *EnumFactory instances.
      */
-    static Coding coding(Enum type) {
+    static Coding codingEnum(Enum type) {
         return new Coding(
                 code: type.toCode(),
                 display: type.display,
                 system: type.system)
     }
 
-    static CodeableConcept codeableConcept(CodedValueType atna) {
-        return new CodeableConcept().addCoding(coding(atna))
+    static CodeableConcept codeableConcept(CodedValueType codedValueType) {
+        return new CodeableConcept().addCoding(coding(codedValueType))
     }
 
-    static InstantType timestamp(String s) {
-        return new InstantType(ISODateTimeFormat.dateTime().parseDateTime(s).toDate())
+    static InstantType timestamp(Instant instant) {
+        return new InstantType(Date.from(instant))
     }
 
     static AuditEvent auditEvent(EventIdentificationType eventIdentificationType, AuditSourceIdentificationType auditSourceIdentificationType) {
@@ -62,8 +63,8 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
                 timestamp(eventIdentificationType.eventDateTime),
                 auditSourceIdentification(auditSourceIdentificationType))
         eventIdentificationType.eventTypeCode.each { fhir.addSubtype(coding(it)) }
-        fhir.action = new AuditEvent.AuditEventActionEnumFactory().fromCode(eventIdentificationType.eventActionCode)
-        fhir.outcome = new AuditEvent.AuditEventOutcomeEnumFactory().fromCode(Integer.toString(eventIdentificationType.eventOutcomeIndicator))
+        fhir.action = new AuditEvent.AuditEventActionEnumFactory().fromCode(eventIdentificationType.eventActionCode.value)
+        fhir.outcome = new AuditEvent.AuditEventOutcomeEnumFactory().fromCode(Integer.toString(eventIdentificationType.eventOutcomeIndicator.value))
         eventIdentificationType.purposesOfUse.each { fhir.addPurposeOfEvent(codeableConcept(it)) }
         return fhir
     }
@@ -72,22 +73,22 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
         AuditEvent.AuditEventSourceComponent fhir = new AuditEvent.AuditEventSourceComponent(
                 site: atna.auditEnterpriseSiteID,
                 identifier: new Identifier(value: atna.auditSourceID))
-            if (atna.auditSourceTypeCode?.code) {
-            fhir.addType(coding(new AuditSourceTypeEnumFactory().fromCode(atna.auditSourceTypeCode.code)))
+        atna.auditSourceType.each {
+            fhir.addType(codingEnum(new AuditSourceTypeEnumFactory().fromCode(it.code)))
         }
         return fhir
     }
 
     static AuditEvent.AuditEventAgentComponent participant(ActiveParticipantType atna) {
         AuditEvent.AuditEventAgentComponent fhir = new AuditEvent.AuditEventAgentComponent(new BooleanType(atna.userIsRequestor))
-        atna.roleIDCode.each { fhir.addRole(codeableConcept(it)) }
+        atna.roleIDCodes.each { fhir.addRole(codeableConcept(it)) }
         fhir.userId = new Identifier(value: atna.userID)
         fhir.altId = atna.alternativeUserID
         fhir.name = atna.userName
         if (atna.networkAccessPointID) {
             fhir.network = new AuditEvent.AuditEventAgentNetworkComponent()
-                .setAddress(atna.networkAccessPointID)
-                .setType(new AuditEvent.AuditEventAgentNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode)))
+                    .setAddress(atna.networkAccessPointID)
+                    .setType(new AuditEvent.AuditEventAgentNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode.value)))
         }
         fhir
     }
@@ -97,25 +98,25 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
         fhir.identifier = new Identifier(
                 value: atna.participantObjectID,
                 /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)
-        fhir.type = coding(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode)))
-        fhir.role = coding(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole)))
-        atna.participantObjectDetail.each {
+        fhir.type = codingEnum(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode.value)))
+        fhir.role = codingEnum(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole.value)))
+        atna.participantObjectDetails.each {
             fhir.addDetail(new AuditEvent.AuditEventEntityDetailComponent(type: it.type, value: it.value))
         }
         fhir
     }
 
-    AuditEvent translate(AuditEventMessage atna) {
+    AuditEvent translate(AuditMessage atna) {
         translateToFhir(atna, null)
     }
 
     @Override
-    AuditEvent translateToFhir(AuditEventMessage atna, Map<String, Object> parameters) {
+    AuditEvent translateToFhir(AuditMessage auditMessage, Map<String, Object> parameters) {
         AuditEvent fhir = auditEvent(
-                atna.auditMessage.eventIdentification,
-                atna.auditMessage.auditSourceIdentification[0])
-        atna.auditMessage.activeParticipant.each { fhir.addAgent(participant(it)) }
-        atna.auditMessage.participantObjectIdentification.each { fhir.addEntity(participantObject(it)) }
+                auditMessage.eventIdentification,
+                auditMessage.auditSourceIdentification)
+        auditMessage.activeParticipants.each { fhir.addAgent(participant(it)) }
+        auditMessage.participantObjectIdentifications.each { fhir.addEntity(participantObject(it)) }
         fhir
     }
 }

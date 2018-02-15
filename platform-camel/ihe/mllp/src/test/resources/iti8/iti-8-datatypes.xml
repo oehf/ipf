@@ -11,17 +11,11 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans.xsd
-http://camel.apache.org/schema/spring
-http://camel.apache.org/schema/spring/camel-spring.xsd">
+http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    <import resource="classpath:common-mllp-beans.xml"/>
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.DatatypesRouteBuilder">

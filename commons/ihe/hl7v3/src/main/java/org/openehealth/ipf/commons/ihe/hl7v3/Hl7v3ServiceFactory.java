@@ -17,7 +17,9 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
@@ -50,10 +52,11 @@ public class Hl7v3ServiceFactory extends JaxWsRequestServiceFactory<Hl7v3AuditDa
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
+            AuditContext auditContext,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy,
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext,
                 customInterceptors, rejectionHandlingStrategy);
     }
     

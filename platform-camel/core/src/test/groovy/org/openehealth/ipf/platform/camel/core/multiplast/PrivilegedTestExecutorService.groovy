@@ -32,49 +32,49 @@ class PrivilegedTestExecutorService extends ThreadPoolExecutor {
         public PrivilegedTestExecutorService(int corePoolSize, int maximumPoolSize,
                                    long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory factory) {
             super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, factory
-            );
+            )
         }
 
         public void execute(Runnable command) {
-            super.execute(new SubjectAwareRunnable(command));
+            super.execute(new SubjectAwareRunnable(command))
         }
 
         protected void beforeExecute(Thread t, Runnable r) {
-            super.beforeExecute(t, r);
+            super.beforeExecute(t, r)
         }
 
         private class SubjectAwareRunnable implements Runnable {
-            private final Runnable runnable;
-            private final Subject subject;
-            private final AccessControlContext ctx;
+            private final Runnable runnable
+            private final Subject subject
+            private final AccessControlContext ctx
 
             private SubjectAwareRunnable(Runnable runnable) {
-                this.runnable = runnable;
-                this.subject = currentSubject();
-                this.ctx = currentCtx();
+                this.runnable = runnable
+                this.subject = currentSubject()
+                this.ctx = currentCtx()
             }
 
             private AccessControlContext currentCtx() {
-                return AccessController.getContext();
+                return AccessController.getContext()
             }
 
             private Subject currentSubject() {
-                return Subject.getSubject(AccessController.getContext());
+                return Subject.getSubject(AccessController.getContext())
             }
 
             public void run() {
                 if(subject == null) {
-                    runnable.run();
+                    runnable.run()
                 } else {
                     Subject.doAsPrivileged(
                             subject,
                             new PrivilegedAction<Void>() {
                                 public Void run() {
-                                    runnable.run();
-                                    return null;
+                                    runnable.run()
+                                    return null
                                 }
                             },
-                            ctx);
+                            ctx)
                 }
             }
         }

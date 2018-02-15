@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
@@ -25,14 +26,27 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
  *
  * @author Dmytro Rud
  */
-abstract public class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
+public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
 
     public XdsRetrieveAuditStrategy30(boolean serverSide) {
         super(serverSide);
     }
 
+    /**
+     * These transactions defines the source user NOT as being the requestor. This could be a
+     * specification mistake.
+     *
+     * @return audit dataset
+     */
     @Override
-    public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo) {
+    public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
+        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = super.createAuditDataset();
+        auditDataset.setSourceUserIsRequestor(false);
+        return auditDataset;
+    }
+
+    @Override
+    public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
         RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
         if (response.getDocumentResponse() != null) {
             for (DocumentResponse documentResponse : response.getDocumentResponse()) {
@@ -42,6 +56,12 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
                         documentResponse.getHomeCommunityId());
             }
         }
+
+        // These transactions define source and destination userID the inverted way. This could be a
+        // specification mistake.
+        String sourceUserId = auditDataset.getSourceUserId();
+        auditDataset.setSourceUserId(auditDataset.getDestinationUserId());
+        auditDataset.setDestinationUserId(sourceUserId);
         return true;
     }
 

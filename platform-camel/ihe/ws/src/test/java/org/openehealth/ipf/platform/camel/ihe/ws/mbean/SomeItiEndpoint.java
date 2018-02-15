@@ -20,6 +20,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -30,19 +31,20 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import java.util.List;
 import java.util.Map;
 
-public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> {
-    
+public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> {
+
     @SuppressWarnings("unchecked")
     public SomeItiEndpoint(
             String endpointUri,
             String address,
             SomeItiComponent someItiComponent,
+            AuditContext auditContext,
             InterceptorProvider interceptorProvider,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
-        super(endpointUri, address, someItiComponent, interceptorProvider, features, schemaLocations, properties, null);
+            Map<String, Object> properties) {
+        super(endpointUri, address, someItiComponent, auditContext,
+                interceptorProvider, features, schemaLocations, properties, null);
     }
 
     @Override
@@ -56,13 +58,13 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransa
     }
 
     @Override
-    public Producer createProducer() throws Exception {
+    public Producer createProducer() {
         return null;   // dummy
     }
 
     @Override
-    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
-        return null;    // dummy
+    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+        return null;
     }
 
     @Override

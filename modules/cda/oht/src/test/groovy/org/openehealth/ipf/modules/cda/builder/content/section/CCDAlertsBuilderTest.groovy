@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
 import org.junit.Before
 import org.junit.Test
-import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest;
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
 /**
  * @author Stefan Ivanov
  */

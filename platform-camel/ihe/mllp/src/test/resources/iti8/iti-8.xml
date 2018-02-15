@@ -19,10 +19,7 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    <import resource="classpath:common-mllp-beans.xml"/>
 
     <camel:sslContextParameters id="sslContextParameters">
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">

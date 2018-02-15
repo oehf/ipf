@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import junit.framework.Test
+import junit.framework.TestSuite
 import org.openehealth.ipf.modules.cda.*
 import org.openehealth.ipf.modules.cda.builder.*
 
@@ -25,20 +25,20 @@ import org.openehealth.ipf.modules.cda.builder.*
  */
 public class CDAR2TestSuite{
   public static Test suite() {
-    TestSuite suite = new TestSuite();
-    suite.addTestSuite(CDAR2BuilderComponent2Test.class);
-    suite.addTestSuite(CDAR2BuilderStructureActTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureEncounterTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureObservationTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureObservationMediaTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureOrganizerTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureProcedureTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureRegionOfInterestTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureSubstanceAdministrationTest.class);
-    suite.addTestSuite(CDAR2BuilderStructureSupplyTest.class);
-    suite.addTestSuite(CDAR2NarrativeTest.class);
+    TestSuite suite = new TestSuite()
+    suite.addTestSuite(CDAR2BuilderComponent2Test.class)
+    suite.addTestSuite(CDAR2BuilderStructureActTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureEncounterTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureObservationTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureObservationMediaTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureOrganizerTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureProcedureTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureRegionOfInterestTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureSubstanceAdministrationTest.class)
+    suite.addTestSuite(CDAR2BuilderStructureSupplyTest.class)
+    suite.addTestSuite(CDAR2NarrativeTest.class)
     // suite.addTestSuite(CDAR2ExtractorTest.class);
-    return suite;
+    return suite
   }
   
 }

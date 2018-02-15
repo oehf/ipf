@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Dmytro Rud
  */
-public class PixAuditorTest extends AuditorTestBase {
+public class PixAuditorTest extends OhtAuditorTestBase {
 
     private static final String SENDING_FACILITY        = "sendingFacility";
     private static final String SENDING_APPLICATION     = "sendingApplication";

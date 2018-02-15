@@ -59,8 +59,7 @@ public class SerializationTest {
         checkSerialization(SampleData.createGetFoldersQuery());
         checkSerialization(SampleData.createGetRelatedDocumentsQuery());
         checkSerialization(SampleData.createGetSubmissionSetAndContentsQuery());
-        checkSerialization(SampleData.createGetSubmissionSetsQuery());        
-        checkSerialization(SampleData.createSqlQuery());        
+        checkSerialization(SampleData.createGetSubmissionSetsQuery());
     }
     
     @Test

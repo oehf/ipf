@@ -23,14 +23,7 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <!-- Importing the CXF configuration -->
-    <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true"/>
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext> 
+    <import resource="common-xds-beans.xml"/>
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti51.Iti51TestRouteBuilder">

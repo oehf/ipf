@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81TransactionConfiguration;
 
 import java.util.Arrays;
@@ -31,10 +32,10 @@ import java.util.List;
 public class ATNA implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements FhirInteractionId {
+    public enum Interactions implements FhirInteractionId<FhirQueryAuditDataset> {
         ITI_81(ITI_81_CONFIG);
 
-        @Getter FhirTransactionConfiguration fhirTransactionConfiguration;
+        @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 
 
@@ -43,5 +44,5 @@ public class ATNA implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final FhirTransactionConfiguration ITI_81_CONFIG = new Iti81TransactionConfiguration();
+    private static final Iti81TransactionConfiguration ITI_81_CONFIG = new Iti81TransactionConfiguration();
 }

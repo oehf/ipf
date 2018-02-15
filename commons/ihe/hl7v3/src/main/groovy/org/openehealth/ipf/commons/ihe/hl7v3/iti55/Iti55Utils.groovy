@@ -29,7 +29,7 @@ abstract class Iti55Utils {
     private static final transient Logger LOG = LoggerFactory.getLogger(Iti55Utils.class)
 
     private Iti55Utils() {
-        throw new IllegalStateException('cannot istantiate helper class')
+        throw new IllegalStateException('cannot instantiate helper class')
     }
 
 

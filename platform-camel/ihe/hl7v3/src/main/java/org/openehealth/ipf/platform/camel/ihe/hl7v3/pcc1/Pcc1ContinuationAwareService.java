@@ -28,8 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareWebSer
  */
 public class Pcc1ContinuationAwareService
         extends Hl7v3ContinuationAwareWebService
-        implements Pcc1PortType
-{
+        implements Pcc1PortType {
     public Pcc1ContinuationAwareService(Hl7v3ContinuationAwareEndpoint endpoint) {
         super(endpoint);
     }

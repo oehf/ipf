@@ -12,10 +12,8 @@ The dependency on the IPF [Spring Boot] IHE HL7v3 starter module is:
 ```
 
 
-`ipf-hl7v3-spring-boot-starter` auto-configures ATNA auditor beans for all HL7v3-based IHE transactions. 
-
-This starter module also transitively depends on `cxf-spring-boot-starter-jaxws` (https://cxf.apache.org/docs/springboot.html) that sets up the CXF
-web service stack, so you don't have to care about this anymore.
+This starter module transitively depends on `cxf-spring-boot-starter-jaxws` (https://cxf.apache.org/docs/springboot.html) 
+that sets up the CXF web service stack, so you don't have to care about this anymore.
 
 Furthermore, if a single `org.springframework.cache.CacheManager` bean is available and the application
 property `ipf.hl7v3.caching` is set to true, the following caching storage beans are set up:

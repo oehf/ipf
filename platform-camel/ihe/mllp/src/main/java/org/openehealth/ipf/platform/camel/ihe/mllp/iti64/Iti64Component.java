@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64.Iti64AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2.XPID.Interactions.ITI_64;

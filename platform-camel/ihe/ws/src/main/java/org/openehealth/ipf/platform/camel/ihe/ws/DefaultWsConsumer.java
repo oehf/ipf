@@ -23,7 +23,8 @@ import org.openehealth.ipf.commons.ihe.core.Constants;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
+
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.
@@ -33,7 +34,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class DefaultWsConsumer<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration> extends DefaultConsumer {
+        ConfigType extends WsTransactionConfiguration<AuditDatasetType>> extends DefaultConsumer {
     private final Server server;
 
     /**
@@ -49,8 +50,8 @@ public class DefaultWsConsumer<
      */
     public DefaultWsConsumer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, Processor processor, AbstractWebService service, Server server) {
         super(endpoint, processor);
-        notNull(service, "service cannot be null");
-        notNull(server, "server cannot be null");
+        requireNonNull(service, "service cannot be null");
+        requireNonNull(server, "server cannot be null");
         service.setConsumer(this);
         this.server = server;
     }

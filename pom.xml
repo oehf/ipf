@@ -19,16 +19,9 @@
 
     <modules>
         <module>dependencies</module>
-        <!--
-        <module>archetypes</module>
-        <module>assembly</module>
-        -->
         <module>commons</module>
         <module>modules</module>
         <module>boot</module>
-        <!--
-        <module>osgi</module>
-        -->
         <module>platform-camel</module>
         <module>tutorials</module>
     </modules>
@@ -37,7 +30,6 @@
         <!-- Project configurations -->
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
 
-        <!-- Report version properties. Reflow Skin does not work with site-plugin 3.5 -->
         <surefire-report-plugin-version>2.20</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
         <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
@@ -55,87 +47,55 @@
         <site.directory>${user.home}/sites/ipf</site.directory>
         <site.scm.directory>${user.home}/sites/scm/ipf</site.scm.directory>
 
-        <!-- Default Bundle Properties -->
-        <!--
-        <osgi.export.pkg>*</osgi.export.pkg>
-        <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg />
-        <osgi.private.pkg />
-        <osgi.bundle.activator />
-        <osgi.bundle.classpath />
-        <osgi.embed.dependency />
-        <osgi.fragment.host />
-        <osgi.require.bundle />
-        <osgi.spring.context />
-        <ipf.extension.classes />
-        <ipf.extension.beans />
-        <eclipse.supplement.bundle />
-        <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
-        <osgi.bundle.license>Apache License, Version
-            2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache
-            foundation
-        </osgi.bundle.license>
-        <osgi.bundle.category>healthcare</osgi.bundle.category>
-        -->
-
         <!-- Plugin version properties -->
+        <antrun-plugin-version>1.8</antrun-plugin-version>
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.11</build-helper-version>
-        <bundle-plugin-version>3.2.0</bundle-plugin-version>
         <compiler-plugin-version>3.7.0</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
-        <groovy-eclipse-batch-version>2.4.12-04</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.2-03</groovy-eclipse-compiler-version>
-        <!--
-        <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
-        -->
+
+        <groovy-eclipse-batch-version>2.4.13-02</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>2.9.2-04</groovy-eclipse-compiler-version>
+
         <jar-plugin-version>3.0.2</jar-plugin-version>
-        <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
+        <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
         <lombok-plugin-version>1.16.18.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
-        <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
         <sources-plugin-version>3.0.1</sources-plugin-version>
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.0</activemq-version>
-        <aspectj-version>1.8.9</aspectj-version>
-        <cglib-version>3.2.4</cglib-version>
+        <activemq-version>5.15.2</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
-        <commons-collections-version>3.2.2</commons-collections-version>
-        <commons-dbcp2-version>2.1.1</commons-dbcp2-version>
-        <commons-fileupload-version>1.3.2</commons-fileupload-version>
-        <commons-io-version>2.5</commons-io-version>
-        <commons-lang3-version>3.5</commons-lang3-version>
-        <commons-math3-version>3.6.1</commons-math3-version>
+        <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
+        <commons-io-version>2.6</commons-io-version>
+        <commons-lang3-version>3.7</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>19.0</guava-version>
-        <httpclient4-version>4.5.2</httpclient4-version>
+        <guava-version>21.0</guava-version>
+        <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jdom-version>2.0.6</jdom-version>
         <jetty-version>9.4.6.v20170531</jetty-version>
-        <joda-time-version>2.9.7</joda-time-version>
+        <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.9.0</log4j-version>
         <lombok-version>1.16.18</lombok-version>
-        <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.20</tomcat-version>
+        <tomcat-version>8.5.27</tomcat-version>
+        <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -230,6 +190,36 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>${compiler-plugin-version}</version>
@@ -273,6 +263,36 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -318,63 +338,6 @@
                 <artifactId>ipf-platform-camel-core-legacy</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-commons</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-jms</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-log</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-atna</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-hl7v2</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-hl7v3</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-ihe-xds</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-extender-basic</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-extender-spring</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-manager</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-repository</artifactId>
-                <version>${ipf-flow-manager-version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
@@ -394,11 +357,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.osgi.core</artifactId>
-                <version>${osgi-api-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils-version}</version>
@@ -415,19 +373,9 @@
                 <version>${commons-codec-version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${commons-collections-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-dbcp2</artifactId>
                 <version>${commons-dbcp2-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-fileupload</groupId>
-                <artifactId>commons-fileupload</artifactId>
-                <version>${commons-fileupload-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -451,11 +399,6 @@
                 <version>${commons-lang3-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-math3</artifactId>
-                <version>${commons-math3-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
@@ -465,16 +408,6 @@
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${ehcache-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${aspectj-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${aspectj-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
@@ -544,11 +477,6 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>${hibernate-jpa-2.1-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.validation</groupId>
@@ -675,12 +603,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>${cglib-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok-version}</version>
@@ -705,6 +627,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.woodstox</groupId>
+                <artifactId>woodstox-core-asl</artifactId>
+                <version>${woodstox-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -739,7 +666,57 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>${antrun-plugin-version}</version>
+                    <executions>
+                        <execution>
+                            <id>antrun</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
+                                        <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
+                                    </replace>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://netdna.bootstrapcd</replacetoken>
+                                        <replacevalue>https://netdna.bootstrapcd</replacevalue>
+                                    </replace>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
+                                        <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
+                                    </replace>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
+                                        <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
+                                    </replace>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
+                                        <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
+                                    </replace>
+
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>http://ajax.googleapis</replacetoken>
+                                        <replacevalue>https://ajax.googleapis</replacevalue>
+                                    </replace>
+                                    <replace dir="target/site" summary="true">
+                                        <include name="*.html" />
+                                        <replacetoken>\t</replacetoken>
+                                        <replacevalue>
+                                        </replacevalue>
+                                    </replace>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <!-- reporting plugins -->
                 <!-- Configure Maven site plugin for Reflow skin and Markdown support -->
@@ -811,16 +788,17 @@
                         <links>
                             <link>http://docs.oracle.com/javase/8/docs/api/</link>
                             <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
-                            <link>http://hapifhir.io/apidocs/index.html</link>
+                            <link>http://hapifhir.io/apidocs/</link>
+                            <link>http://cxf.apache.org/javadoc/latest/</link>
                             <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                             <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                            <link>http://docs.spring.io/spring/docs/4.2.x/javadoc-api/</link>
+                            <link>http://docs.spring.io/spring/docs/4.3.x/javadoc-api/</link>
                         </links>
                         <source>1.8</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                         <additionalJOption>-J-Xmx512m</additionalJOption>
-                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <doclint>none</doclint>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:
@@ -830,6 +808,7 @@
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
                             boot/ipf-spring-boot-starter/generated-stubs:
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
+                            commons/audit/generated-stubs:
                             commons/core/generated-stubs:
                             commons/flow/generated-stubs:
                             commons/ihe/core/generated-stubs:
@@ -913,17 +892,6 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${assembly-plugin-version}</version>
                 </plugin>
-                <!--
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>${bundle-plugin-version}</version>
-                    <configuration>
-                        <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
-                    </configuration>
-                    <extensions>true</extensions>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -952,11 +920,6 @@
                             <systemPath>${java.home}/../lib/tools.jar</systemPath>
                         </dependency>
                     </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.ops4j</groupId>
-                    <artifactId>maven-pax-plugin</artifactId>
-                    <version>${pax-plugin-version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -1011,7 +974,6 @@
             <!-- Configure Maven site plugin to perform stage -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <inherited>false</inherited>
                 <executions>
                     <execution>
                         <id>antrun</id>
@@ -1104,64 +1066,6 @@
             </plugin>
             <!--
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>false</extensions>
-                <configuration>
-                    <unpackBundle>true</unpackBundle>
-                    <manifestLocation>META-INF</manifestLocation>
-                    <instructions>
-                        <_versionpolicy>"$(version;===;$(@))"</_versionpolicy>
-                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>${osgi.export.pkg}</Export-Package>
-                        <Import-Package>${osgi.import.pkg}</Import-Package>
-                        <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
-                        <Private-Package>${osgi.private.pkg}</Private-Package>
-                        <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
-                        <Bundle-ClassPath>${osgi.bundle.classpath}</Bundle-ClassPath>
-                        <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
-                        <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
-                        <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
-                        <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
-
-                        <Bundle-Description>${project.description}</Bundle-Description>
-                        <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
-                        <Bundle-License>${osgi.bundle.license}</Bundle-License>
-
-                        <Spring-Context>${osgi.spring.context}</Spring-Context>
-                        <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
-                        <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
-                        <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
-
-                        <Build-Time>$(now)</Build-Time>
-                    </instructions>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>manifest</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>bundle-install</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>bundle-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
-            <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>
                 <executions>
@@ -1175,6 +1079,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -1190,36 +1095,6 @@
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
@@ -1384,12 +1259,14 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>
                 <version>${maven-dsldoc-plugin-version}</version>
                 <inherited>false</inherited>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changes-plugin</artifactId>

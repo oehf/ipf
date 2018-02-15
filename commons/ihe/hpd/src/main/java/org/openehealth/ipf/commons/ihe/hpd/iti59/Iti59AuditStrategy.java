@@ -16,29 +16,35 @@
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
 import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 /**
  * Audit strategy for the ITI-59 transaction.
+ *
  * @author Dmytro Rud
  */
 @Slf4j
-public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> {
+abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> {
 
     private static final String ATTR_NAME = "hcIdentifier";
 
-    public Iti59AuditStrategy(boolean serverSide) {
+    protected Iti59AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
@@ -50,7 +56,9 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
     @Override
     public Iti59AuditDataset enrichAuditDatasetFromRequest(Iti59AuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         BatchRequest batchRequest = (BatchRequest) requestObject;
-        if ((batchRequest == null) || (batchRequest.getBatchRequests() == null) || batchRequest.getBatchRequests().isEmpty()) {
+        if ((batchRequest == null) ||
+                (batchRequest.getBatchRequests() == null) ||
+                batchRequest.getBatchRequests().isEmpty()) {
             log.debug("Empty batch request");
             return auditDataset;
         }
@@ -69,10 +77,8 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                         .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(addRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
-                        providerIds,
-                        null,
-                        null);
+                        EventActionCode.Create,
+                        providerIds);
 
             } else if (dsmlMessage instanceof ModifyRequest) {
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
@@ -83,28 +89,25 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                         .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                        providerIds,
-                        null,
-                        null);
+                        EventActionCode.Update,
+                        providerIds);
 
             } else if (dsmlMessage instanceof ModifyDNRequest) {
                 ModifyDNRequest modifyDNRequest = (ModifyDNRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyDNRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                        null,
-                        modifyDNRequest.getDn(),
-                        modifyDNRequest.getNewrdn());
+                        EventActionCode.Update,
+                        Collections.emptySet());
+                requestItems[i].setDn(modifyDNRequest.getDn());
+                requestItems[i].setNewRdn(modifyDNRequest.getNewrdn());
 
             } else if (dsmlMessage instanceof DelRequest) {
                 DelRequest delRequest = (DelRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(delRequest.getRequestID()),
-                        RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
-                        null,
-                        delRequest.getDn(),
-                        null);
+                        EventActionCode.Delete,
+                        Collections.emptySet());
+                requestItems[i].setDn(delRequest.getDn());
             } else {
                 log.debug("Cannot handle ITI-59 request of type {}", getShortCanonicalName(dsmlMessage, "<null>"));
             }
@@ -115,7 +118,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(Iti59AuditDataset auditDataset, Object responseObject) {
+    public boolean enrichAuditDatasetFromResponse(Iti59AuditDataset auditDataset, Object responseObject, AuditContext auditContext) {
         // check whether there is any need to analyse the response object
         if (auditDataset.getRequestItems() == null) {
             log.debug("The request was empty, nothing to audit");
@@ -128,7 +131,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         if ((batchResponse == null) || (batchResponse.getBatchResponses() == null)) {
             for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
                 if (requestItem != null) {
-                    requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+                    requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
                 }
             }
             return false;
@@ -147,8 +150,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                 } else {
                     byRequestId.put(ldapResult.getRequestID(), ldapResult);
                 }
-            }
-            else if (value instanceof ErrorResponse) {
+            } else if (value instanceof ErrorResponse) {
                 ErrorResponse errorResponse = (ErrorResponse) value;
                 if (isEmpty(errorResponse.getRequestID())) {
                     byNumber[i] = errorResponse;
@@ -186,43 +188,31 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         if (value instanceof LDAPResult) {
             LDAPResult ldapResult = (LDAPResult) value;
             requestItem.setOutcomeCode((ldapResult.getResultCode() != null) && (ldapResult.getResultCode().getCode() == 0)
-                    ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
-                    : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
-        }
-        else if (value instanceof ErrorResponse) {
-            requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
-        }
-        else {
-            requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE);
+                    ? EventOutcomeIndicator.Success
+                    : EventOutcomeIndicator.SeriousFailure);
+            requestItem.setOutcomeDescription(ldapResult.getErrorMessage());
+        } else if (value instanceof ErrorResponse) {
+            requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
+            requestItem.setOutcomeDescription(((ErrorResponse)value).getMessage());
+        } else {
+            requestItem.setOutcomeCode(EventOutcomeIndicator.MajorFailure);
             log.debug(failureLogMessage, failureLogArgs);
         }
     }
 
     @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object responseObject) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
         // is not used because individual outcome codes are determined for each sub-request
         return null;
     }
 
     @Override
-    public void doAudit(Iti59AuditDataset auditDataset) {
-        for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
-            if (requestItem != null) {
-                AuditorManager.getHpdAuditor().auditIti59(
-                        isServerSide(),
-                        requestItem.getActionCode(),
-                        requestItem.getOutcomeCode(),
-                        auditDataset.getUserId(),
-                        auditDataset.getUserName(),
-                        auditDataset.getServiceEndpointUrl(),
-                        auditDataset.getClientIpAddress(),
-                        requestItem.getProviderIds(),
-                        requestItem.getDn(),
-                        requestItem.getNewRdn(),
-                        auditDataset.getPurposesOfUse(),
-                        auditDataset.getUserRoles());
-            }
-        }
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset) {
+        return Stream.of(auditDataset.getRequestItems())
+                .map(requestItem -> makeAuditMessage(auditContext, auditDataset, requestItem))
+                .toArray(AuditMessage[]::new);
     }
+
+    protected abstract AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem);
 
 }

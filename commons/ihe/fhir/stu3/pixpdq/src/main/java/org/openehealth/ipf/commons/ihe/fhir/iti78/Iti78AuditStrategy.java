@@ -16,9 +16,13 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import org.hl7.fhir.dstu3.model.IdType;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.Map;
 
@@ -28,26 +32,22 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.4
  */
-public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     protected Iti78AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
-    }
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
+        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientDemographicsQuery)
+                .addPatients(auditDataset.getPatientIds())
+                .setQueryParameters(
+                        "MobilePatientDemographicsQuery",
+                        FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery,
+                        auditDataset.getQueryString())
 
-    @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti78(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString(),
-                auditDataset.getPatientIds());
+                .getMessages();
     }
 
     @Override
@@ -60,4 +60,20 @@ public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy<FhirQuer
         return dataset;
     }
 
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
+        if (auditContext.isIncludeParticipantsFromResponse()) {
+            // NOT in CX format....
+            /*
+            if (response instanceof Patient) {
+                auditDataset.getPatientIds().add(((Patient) response).getId());
+            } else if (response instanceof Bundle) {
+                ((Bundle) response).getEntry().forEach(bec ->
+                        auditDataset.getPatientIds().add((bec.getResource()).getId()));
+            }
+            */
+        }
+        return result;
+    }
 }

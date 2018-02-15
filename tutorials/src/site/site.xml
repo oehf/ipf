@@ -156,7 +156,6 @@
             <item name="Camel CDA processing" href="ipf-platform-camel-cda/index.html" />
             <item name="Code System Mapping" href="ipf-commons-map/index.html" />
             <item name="Dynamic Registration of IPF Features" href="dynamic.html" />
-            <item name="OSGi Support" href="ipf-osgi-karaf/index.html" />
             <item name="Tutorials" href="ipf-tutorials/index.html" />
         </menu>
         <menu name="Development" inherit="bottom">

@@ -36,13 +36,8 @@ public class Iti56AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
 
     @SuppressWarnings("rawtypes") // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti56AsyncResponseService.class);
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti56AsyncResponseService.class);
     }
 
 }

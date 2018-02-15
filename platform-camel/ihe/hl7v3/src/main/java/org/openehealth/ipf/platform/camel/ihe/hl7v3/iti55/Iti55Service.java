@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND;
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND;
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory.response;
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent.THREAD_POOL_NAME;
 
 /**
@@ -69,7 +70,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
      *      Camel endpoint instance this Web Service corresponds to.
      */
     Iti55Service(Hl7v3Endpoint<Hl7v3WsTransactionConfiguration> endpoint) {
-        super(endpoint.getComponent().getWsTransactionConfiguration());
+        super(ITI_55);
         this.endpoint = endpoint;
         this.camelContext = endpoint.getCamelContext();
         this.producerTemplate = this.camelContext.createProducerTemplate();

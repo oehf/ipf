@@ -20,13 +20,12 @@ import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
@@ -52,7 +52,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
     @Override
     public void setEndpoint(MllpTransactionEndpoint<?> endpoint) {
         super.setEndpoint(endpoint);
-        this.storage = Validate.notNull(getEndpoint().getInteractiveContinuationStorage());
+        this.storage = requireNonNull(getEndpoint().getInteractiveContinuationStorage());
     }
 
     @Override

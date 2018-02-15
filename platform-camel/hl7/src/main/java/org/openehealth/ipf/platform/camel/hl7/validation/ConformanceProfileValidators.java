@@ -26,7 +26,6 @@ import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
 import org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
@@ -37,6 +36,8 @@ import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Factory for manually triggering a validation of a message depending on a profile or a defined
@@ -145,7 +146,7 @@ public final class ConformanceProfileValidators {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);
         }
-        Validate.notNull(message, "Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type");
+        requireNonNull(message, "Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type");
         return message;
     }
 

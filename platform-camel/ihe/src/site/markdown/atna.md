@@ -1,134 +1,133 @@
 
 ## ATNA Auditing in IPF eHealth Components
 
-ATNA auditing functionality is fully integrated into the corresponding IPF IHE components and controlled by the `audit` URI parameter.
-If the parameter is set to `true` (which is also the default), ATNA auditing is performed on the corresponding endpoint.
+ATNA auditing functionality is fully integrated into the corresponding IPF IHE components and controlled by the 
+`auditContext` endpoint URI parameter. This parameters references a bean of type `AuditContext` with the given name
+that bundles all relevant details around ATNA auditing (e.g. whether auditing is enabled, where the Audit Repository 
+is located, which wire protocol to be used, etc.) 
+
+| Parameter name | Values                     | Behavior                                      |  Default | Example
+|:---------------|:---------------------------|:----------------------------------------------|:---------|:----------
+| `auditContext` | `AuditContext` reference   | uses the referenced AuditContext for auditing | n/a      |`?auditContext=#myAuditContext`
+| `audit`        | `true` or `false`          | if true, uses a unique AuditContext bean for auditing    | `true`   | `?audit=false`
+
+You can have as many `AuditContext` beans as you wish (for auditing being turned on/off, using different queue implementations, etc.).
+In this case, you _must_ use the `auditContext` parameter. 
+
 
 ### Auditor Configuration
+
+As of IPF 3.5, all details regarding ATNA auditing is contained the the respective IHE transaction modules. The only
+configuration required is the `AuditContext`.
 
 In order to let the endpoint know *how* auditing should be performed, auditor beans have to be defined.
 Each of the currently supported IHE actor types has a corresponding singleton auditor, i.e. the following set is available:
 
-
-* `XDSRegistryAuditor`
-* `XDSRepositoryAuditor`
-* `XDSSourceAuditor`
-* `XDSConsumerAuditor`
-* `PIXManagerAuditor` (serves the Patient Demographic Supplier actor as well)
-* `PIXSourceAuditor`
-* `PIXConsumerAuditor`
-* `PDQConsumerAuditor`
-* `Hl7v3Auditor` (for all actors of PIXv3, PDQv3, XCPD and PCC (QED) transactions)
-* `FhirAuditor` (for all actors of MHD, PDQm, PIXm transactions)
-* `CustomPixAuditor` (for ITI-64)
-* `CustomXdsAuditor` (for ITI-51,ITI-57,ITI-61,ITI-62,ITI-63,RAD-69,RAD-75)
-
-Auditors can be configured both individually and as group. 
-As a minimum, the audit repository host and port must be set. It is furthermore recommended to set the audit source ID and
-audit enterprise site ID. See [Section 5.4 of RFC 3881](http://tools.ietf.org/html/rfc3881#section-5.4) for details.
-
-#### Individual Configuration
-
-Configuring a particular auditor (for example, the XDS Registry-related one) can be done in plain Java:
-
-```java
-    import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
-    import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
-    ...
-
-    AuditorModuleConfig config = new AuditorModuleConfig();
-    config.setAuditRepositoryHost("my.syslog.server");
-    config.setAuditRepositoryPort(514);
-    config.setAuditSourceId(...);
-    config.setAuditEnterpriseSiteId(...);
-    XDSRegistryAuditor.getAuditor().setConfig(config);
-```
-
-To perform the same configuration using Spring, the corresponding bean definitions are:
-
 ```xml
-    <bean id="config"
-          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig">
-       <property name="auditRepositoryHost" value="my.syslog.server" />
-       <property name="auditRepositoryPort" value="514" />
-       <property name="auditSourceId" value="..." />
-       <property name="auditEnterpriseSiteId" value="..." />
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ATNA Auditing Infrastructure. Everything simply goes into the AuditContext -->
+
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+
+        <!-- Whether auditing is enabled. Default is false -->
+        <property name="auditEnabled" value="true" />
+        <!-- Audit Source ID. Default is "IPF" -->
+        <property name="auditSourceId" value="MySource" />
+        <!-- Enterprise Site ID. Default is "IPF" -->
+        <property name="auditEnterpriseSiteId" value="MyEnterprise" />
+        <!-- Default is "localhost" -->
+        <property name="auditRepositoryHost" value="arr.server.com" />
+        <!-- Default is 514 -->
+        <property name="auditRepositoryPort" value="6514" />
+        <!-- Audit Transport (UDP, TLS). Default is "UDP" -->
+        <property name="auditRepositoryTransport" value="TLS" />
+        <!-- Audit Source Type. Default is "Other" -->
+        <property name="auditSource">
+            <value type="org.openehealth.ipf.commons.audit.codes.AuditSourceType">ApplicationServerProcess</value>
+        </property>
+        <!-- Sending Application for SYSLOG frame. Default is "IPF" -->
+        <property name="sendingApplication" value="demo"/>
+
+        <!-- Advanced -->
+
+        <!-- Adding a custom sender implementation. Overrules auditRepositoryTransport.
+
+        <property name="auditTransmissionProtocol" ref="#abc"/>
+        -->
+
+        <!-- Setting if the message is sent synchronously (default), asynchronously, via JMS,  or a custom
+             implementation like org.openehealth.ipf.platform.camel.ihe.atna.util.CamelAuditMessageQueue.
+
+        <property name="auditMessageQueue" ref="#def"/>
+        -->
+
+        <!-- Setting the strategy to serialize an AuditMessage. By default, the latest DICOM Audit
+             standard is used, but you may choose an older one (e.g. Dicom2016c). Or write your own that
+             is maybe not even DICOM based, e.g. rending FHIR AuditEvents.
+
+        <property name="serializationStrategy">
+            <bean class="org.openehealth.ipf.commons.audit.marshal.dicom.Current"/>
+        </property>
+        -->
+        
+        <!-- Object responsible for handling exceptions that occur while sending the audit records
+             to an audit repository. The default handler simply writes a warning to the log.
+              
+        <property name="auditExceptionHandler" ref="#ghi"/>
+        -->
+        
+        <!-- Setting this to true causes data from the response being added to the audit records, particularly
+             patient identifiers. This is not envisaged by DICOM, but project or legal requirements may overrule
+             this. The default, however, is false
+             
+        <property name="includeParticipantsFromResponse" value="true" />
+         -->
+
     </bean>
-
-    <bean id="registryAuditor"
-          class="org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor"
-          factory-method="getAuditor">
-       <property name="config" ref="config" />
-    </bean>
+</beans>    
 ```
-
-#### Group Configuration
-
-Configuring a group of auditors can be done in plain Java:
-
-```java
-    import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-    ...
-
-    AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("my.syslog.server");
-    AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-```
-
-To perform the same configuration using Spring, the corresponding bean definitions are:
-
-```xml
-    <bean id="iheAuditorContext"
-          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext"
-          factory-method="getContext" />
-    </bean>
-
-    <bean id="iheAuditorConfig"
-          factory-bean="iheAuditorContext"
-          factory-method="getConfig">
-       <property name="auditRepositoryHost" value="my.syslog.server" />
-       <property name="auditRepositoryPort" value="514" />
-    </bean>
-
-```
-
-### Configure reliable audit transport
-
-The default transport protocol ATNA auditing is based on unreliable UDP communication ([Syslog protocol](http://tools.ietf.org/html/rfc5424)), cf. IHE IT TF, Vol. 2, Section 3.20.6.1. This choice is also explained in the [ATNA FAQ](http://wiki.ihe.net/index.php?title=ATNA_Profile_FAQ#Why_does_ATNA_use_UDP_SYSLOG.3F).
-
-In order to change this setting, the TLS implementation of `org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender` must be provided and registered as follows:
-
-```java
-    import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-    import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
-    import org.openhealthtools.ihe.atna.auditor.sender.TLSSyslogSenderImpl;
-    ...
-
-    // the following is equivalent to AuditorModuleContext.getContext().getConfig().setAuditRepositoryTransport("TLS")
-    AuditMessageSender sender = new TLSSyslogSenderImpl();
-    AuditorModuleContext.getContext().setSender(sender);
-```
-
-This will affect all auditors, because the auditor module context is a singleton.
 
 ### Configure custom audit event queueing
 
-The delivery queue that is used as channel for the audit sender can be customized in a similar way, i.e. by using a different implementation of the interface `org.openhealthtools.ihe.atna.auditor.queue.AuditMessageQueue`. There are implementations for synchronous and asynchronous delivery
+The delivery queue that is used as channel for the audit sender can be customized , i.e. by using a different implementation 
+of the interface `org.openehealth.ipf.commons.audit.queue.AuditMessageQueue`. There are implementations for synchronous and 
+asynchronous delivery of string-serialized audit messages as well as a queue for sending the `AuditingMessage` object to 
+a Camel Endpoint as described below.
 
-```java
-    import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-    import org.openhealthtools.ihe.atna.auditor.queue.AuditMessageQueue;
-    ...
+### Configure custom audit event exception handling
 
-    AuditMessageQueue queue = new ThreadedAuditQueue();
-    AuditorModuleContext.getContext().setQueue(queue);
-```
+The exception handler that is called when transmitting audit records fails can be customized , i.e. by using a different implementation 
+of the interface `org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler`. The only existing implementations is to
+log the exception, but you can implement more elaborate solutions, e.g. resending, or using a fallback transmission protocol.
 
-Again, this will affect all auditors, because the auditor module context is a singleton.
+### Specifiying a DICOM version
 
+[DICOM is versioned](http://www.dclunie.com/dicom-status/status.html), and each year a couple of updates are published. 
+Some updates also affect the way Audit messages are serialized (as specified in 
+[Part15](http://dicom.nema.org/medical/dicom/current/output/html/part15.html)).
+
+As IHE ATNA does not reference a specific DICOM version, in the past there have been interoperability issues where
+the Application Node sent ATNA events that the repository actor was not yet capable to consume. To ensure
+a certain degree of backwards compatibility, the `serializationStrategy` can be configured to use a certain
+implementation version, where `org.openehealth.ipf.commons.audit.marshal.dicom.Current` always references the latest
+relevant version.
+You can also provide a custom implementation of `org.openehealth.ipf.commons.audit.marshal.SerializationStrategy`
+that creates other representations of an `AuditMessage` (e.g. a JSON-serialized `AuditEvent` FHIR resource).    
+
+### Configuring TLS details
+
+If `TLS` is selected as `auditRepositoryTransport`, the standard [JSSE system properties] are used to customize keystore,
+truststore, passwords, cipher suites and TLS protocol. Once a TLS connection is established, it is kept open as long as
+it is usable.
 
 ### Routing audit messages to Camel endpoints
 
-This section is basically built upon be configuration possibilities described in the previous section. Instead of sending audit messages to a syslog server, 
+Instead of sending audit messages to a syslog server, 
 they can also be sent to Camel endpoints. For that purpose, add the following dependency to the `pom.xml`:
 
 ```xml
@@ -147,43 +146,38 @@ Now an instance of `CamelEndpointSender` can be configured in the application co
     <beans xmlns="http://www.springframework.org/schema/beans"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns:camel="http://camel.apache.org/schema/spring"
+           xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
            xsi:schemaLocation="
-    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://camel.apache.org/schema/spring
-    >
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring
+        http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://openehealth.org/schema/ipf-commons-core
+        http://openehealth.org/schema/ipf-commons-core.xsd">
 
-    <camel:camelContext id="camelContext">
-       <camel:routeBuilder ref="..."/>
-    </camel:camelContext>
+        <ipf:globalContext id="globalContext"/>
 
-    <!-- Set dummy host and port -->
-    <bean id="auditModuleConfig" factory-method="getConfig" factory-bean="auditModuleContext">
-       <property name="auditRepositoryHost" value="0.0.0.0" />
-       <property name="auditRepositoryPort" value="0" />
-    </bean>
-
-    <bean id="auditModuleContext" factory-method="getContext"
-          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext">
-       <property name="sender" ref="camelEndpointSender" />
-    </bean>
-
-    <bean id="camelEndpointSender"
-          class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender" init-method="init" destroy-method="destroy">
-       <property name="camelContext" ref="camelContext" />
-       <!-- endpoint registered in the Camel context -->
-       <property name="endpointUri" value="direct:input" />
-    </bean>
-    ...
+        <camel:camelContext id="camelContext">
+           <camel:routeBuilder ref="..."/>
+        </camel:camelContext>
+    
+        <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+            <property name="auditEnabled" value="true"/>
+            <property name="auditMessageQueue" ref="camelEndpointSender"/>
+        </bean>
+    
+        <bean id="camelEndpointSender"
+              class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelAuditMessageQueue" init-method="init" destroy-method="destroy">
+            <property name="camelContext" ref="camelContext" />
+            <property name="endpointUri" value="direct:input" />
+        </bean>
+    
     </beans>
 ```
 
-The `CamelEndpointSender` instance is configured to send audit messages to the `direct:input` endpoint that is registered in the Camel context. 
-The `AuditorModuleContext` singleton is configured to use the custom audit message sender. Although ignored by the sender, OpenHealthTools require 
-us to set the audit repository host and port. Hence, they can be set to arbitrary values, 0.0.0.0 and 0, respectively. 
-These values are overwritten by the message sender. The sender derives them from the Camel endpoint URI.
-
-The audit message is sent as In-Only exchange to the endpoint where the message body contains a string representation of the audit XML message. 
+The `CamelEndpointSender` instance is configured to send audit message objects to the `direct:input` endpoint that is registered 
+in the Camel context. The audit message is sent as In-Only exchange to the endpoint where the message body contains the `AuditMessage` 
+instance.. 
 Additionally the following Camel message headers are populated:
 
 * `org.openehealth.ipf.platform.camel.ihe.atna.datetime`: date and time when the audit event was generated
@@ -203,90 +197,5 @@ Note that when the XUA user name cannot be determined IPF does neither throw any
 In other words, the support for XUA is restricted to filling the corresponding field in ATNA audit records.
 
 
-### Complete ATNA configuration example
 
-The following example shows a more sophisticated configuration of ATNA auditing — in particular, there is the possibility to send audit records over TLS.
-First of all, all ATNA-related parameters are concentrated in a separate properties file:
-
-```
-    # Properties for ATNA Auditing
-
-    # Sender class -- preconfigured are UDP and TCP-over-SSL
-    #auditor.class           = org.openhealthtools.ihe.atna.auditor.sender.UDPSyslogSenderImpl
-    auditor.class           = org.openhealthtools.ihe.atna.auditor.sender.TLSSyslogSenderImpl
-
-    # Sender queue -- should be threaded for TCP transport, for UDP does not matter
-    #audit.queue.class = org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue
-    audit.queue.class = org.openhealthtools.ihe.atna.auditor.queue.ThreadedAuditQueue
-
-    # address of the ATNA Audit repository
-    audit.repository.host   = 10.205.115.42
-    audit.repository.port   = 3201
-
-    # these parameters will be evaluated only when
-    # the TCP-over-TLS auditor is selected
-    javax.net.ssl.keyStore           = c:/PIX_X_REF_MGR_ICW.jks
-    javax.net.ssl.keyStorePassword   = abcd
-    javax.net.ssl.trustStore         = c:/PIX_X_REF_MGR_ICW.jks
-    javax.net.ssl.trustStorePassword = abcd
-    https.ciphersuites               = SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA
-    https.protocols                  = TLSv1
-```
-
-These parameters are used to configure the beans defined in the separate Spring context file. The `AuditorTLSConfig` encapsulates some  
-initialization logic that is hard to express in XML:
-
-```xml
-    <beans xmlns="http://www.springframework.org/schema/beans"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="
-    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    ">
-
-        <!-- ============================================ -->
-        <!--       Configuration of ATNA auditing         -->
-        <!-- ============================================ -->
-
-        <bean id="atnaAuditProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-            <property name="location" value="classpath:/atna-audit.properties"/>
-        </bean>
-
-        <bean id="auditorModuleContext"
-              class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext"
-              factory-method="getContext">
-        </bean>
-        
-        <bean id="auditorTLSConfig" class="org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig" init-method="init">
-            <constructor-arg ref="auditorModuleConfig"/>
-            <constructor-arg ref="atnaAuditProperties"/> <!-- skip, and System.getProperties will be used -->
-            <property name="securityDomainName" value="mpi-atna-tls"/>
-        </bean>
-
-    </beans>
-```
-
-Both the properties file and the Spring descriptor must be referenced by the main Spring context:
-
-```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:ctx="http://www.springframework.org/schema/context"
-           xmlns:camel="http://camel.apache.org/schema/spring"
-           xsi:schemaLocation="
-    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd
-    http://camel.apache.org/schema/spring
-    http://camel.apache.org/schema/spring/camel-spring.xsd
-    ">
-
-        <ctx:property-placeholder location="classpath:/atna-audit.properties" />
-
-        <import resource="classpath:/atna-audit-context.xml" />
-
-        .....
-    </beans>
-```
+[JSSE system properties]:   https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization

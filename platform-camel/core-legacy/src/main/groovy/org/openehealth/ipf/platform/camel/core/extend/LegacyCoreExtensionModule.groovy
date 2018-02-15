@@ -53,7 +53,7 @@ public class LegacyCoreExtensionModule {
      * @deprecated use {@link ProcessorDefinition#processRef(java.lang.String)}
      */
     public static ProcessorDefinition process(ProcessorDefinition self, String processorBeanName) {
-        return self.processRef(processorBeanName);
+        return self.processRef(processorBeanName)
     }
 
     /**
@@ -67,7 +67,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-processclosure
      */
     public static ProcessorDefinition process(ProcessorDefinition self, Closure processorLogic) {
-        return self.process(new DelegatingProcessor(processorLogic));
+        return self.process(new DelegatingProcessor(processorLogic))
     }
 
     /**
@@ -79,9 +79,9 @@ public class LegacyCoreExtensionModule {
      * @deprecated
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, DelegateProcessor delegateProcessor) {
-        InterceptDefinition answer = new InterceptDefinition(delegateProcessor);
-        self.addOutput(answer);
-        return answer;
+        InterceptDefinition answer = new InterceptDefinition(delegateProcessor)
+        self.addOutput(answer)
+        return answer
     }
 
     /**
@@ -94,7 +94,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-interceptclosure
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, Closure interceptorLogic) {
-        return intercept(self, new DelegatingInterceptor(interceptorLogic));
+        return intercept(self, new DelegatingInterceptor(interceptorLogic))
     }
 
     /**
@@ -106,9 +106,9 @@ public class LegacyCoreExtensionModule {
      * @deprecated
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, String interceptorBean) {
-        InterceptDefinition answer = new InterceptDefinition(interceptorBean);
-        self.addOutput(answer);
-        return answer;
+        InterceptDefinition answer = new InterceptDefinition(interceptorBean)
+        self.addOutput(answer)
+        return answer
     }
 
     /**
@@ -123,7 +123,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-filterclosure
      */
     public static FilterDefinition filter(ProcessorDefinition self, Closure predicateLogic) {
-        return self.filter(new DelegatingCamelPredicate(predicateLogic));
+        return self.filter(new DelegatingCamelPredicate(predicateLogic))
     }
 
     /**
@@ -136,7 +136,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transformclosure 
      */
     public static ProcessorDefinition transform(ProcessorDefinition self, Closure transformExpression) {
-        return self.transform(new DelegatingExpression(transformExpression));
+        return self.transform(new DelegatingExpression(transformExpression))
     }
 
     /**
@@ -151,7 +151,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setPropertyclosure
      */
     public static ProcessorDefinition setExchangeProperty(ProcessorDefinition self, String name, Closure propertyExpression) {
-        return self.setProperty(name, new DelegatingExpression(propertyExpression));
+        return self.setProperty(name, new DelegatingExpression(propertyExpression))
     }
 
     /**
@@ -166,7 +166,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setHeaderclosure
      */
     public static ProcessorDefinition setHeader(ProcessorDefinition self, String name, Closure headerExpression) {
-        return self.setHeader(name, new DelegatingExpression(headerExpression));
+        return self.setHeader(name, new DelegatingExpression(headerExpression))
     }
 
     /**
@@ -180,7 +180,7 @@ public class LegacyCoreExtensionModule {
      * @deprecated
      */
     public static ProcessorDefinition setOutHeader(ProcessorDefinition self, String name, Closure headerExpression) {
-        return self.setOutHeader(name, new DelegatingExpression(headerExpression));
+        return self.setOutHeader(name, new DelegatingExpression(headerExpression))
     }
 
     /**
@@ -194,7 +194,7 @@ public class LegacyCoreExtensionModule {
      * @deprecated
      */
     public static ProcessorDefinition setFaultHeader(ProcessorDefinition self, String name, Closure headerExpression) {
-        return self.setFaultHeader(name, new DelegatingExpression(headerExpression));
+        return self.setFaultHeader(name, new DelegatingExpression(headerExpression))
     }
 
     /**
@@ -207,7 +207,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setBodyclosure
      */
     public static ProcessorDefinition setBody(ProcessorDefinition self, Closure bodyExpression) {
-        return self.setBody(new DelegatingExpression(bodyExpression));
+        return self.setBody(new DelegatingExpression(bodyExpression))
     }
 
 
@@ -224,7 +224,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Contentenrichment
      */
     public static ProcessorDefinition enrich(ProcessorDefinition self, String resourceUri, Closure aggregationLogic) {
-        return self.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic));
+        return self.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic))
     }
 
 
@@ -235,9 +235,9 @@ public class LegacyCoreExtensionModule {
      * @deprecated conflicts with {@link ProcessorDefinition#validate()}
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self) {
-        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition();
-        self.addOutput(answer);
-        return answer;
+        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition()
+        self.addOutput(answer)
+        return answer
     }
 
 
@@ -250,9 +250,9 @@ public class LegacyCoreExtensionModule {
      * @deprecated
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self, String validatorBeanName) {
-        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName);
-        self.addOutput(answer);
-        return answer;
+        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName)
+        self.addOutput(answer)
+        return answer
     }
 
     /**
@@ -265,7 +265,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validate 
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self, Closure validatorLogic) {
-        return validate(self, new DelegatingValidator(validatorLogic));
+        return validate(self, new DelegatingValidator(validatorLogic))
     }
 
 
@@ -280,7 +280,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-whenclosure
      */
     public static ChoiceDefinition when(ChoiceDefinition self, Closure predicateLogic) {
-        return self.when(new DelegatingCamelPredicate(predicateLogic));
+        return self.when(new DelegatingCamelPredicate(predicateLogic))
     }
 
     /**
@@ -297,7 +297,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self, String schemaResource, boolean namespaceAware) {
-        return dataFormat(self, new GnodeDataFormat(schemaResource, namespaceAware));
+        return dataFormat(self, new GnodeDataFormat(schemaResource, namespaceAware))
     }
 
     /**
@@ -311,7 +311,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self, boolean namespaceAware) {
-        return dataFormat(self, new GnodeDataFormat(namespaceAware));
+        return dataFormat(self, new GnodeDataFormat(namespaceAware))
     }
 
     /**
@@ -324,7 +324,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self) {
-        return gnode(self, true);
+        return gnode(self, true)
     }
 
     /**
@@ -341,7 +341,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self, String schemaResource, boolean namespaceAware) {
-        return dataFormat(self, new GpathDataFormat(schemaResource, namespaceAware));
+        return dataFormat(self, new GpathDataFormat(schemaResource, namespaceAware))
     }
 
     /**
@@ -355,7 +355,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self, boolean namespaceAware) {
-        return dataFormat(self, new GpathDataFormat(namespaceAware));
+        return dataFormat(self, new GpathDataFormat(namespaceAware))
     }
 
     /**
@@ -368,7 +368,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self) {
-        return gpath(self, true);
+        return gpath(self, true)
     }
 
 
@@ -382,7 +382,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-onwhenclosure
      */
     public static OnExceptionDefinition onWhen(OnExceptionDefinition self, Closure predicate) {
-        return self.onWhen(new DelegatingCamelPredicate(predicate));
+        return self.onWhen(new DelegatingCamelPredicate(predicate))
     }
 
 
@@ -397,7 +397,7 @@ public class LegacyCoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
     public static AggregatorAdapter aggregationStrategy(RouteBuilder self, Closure aggregationLogic) {
-        return aggregationStrategy(self, new DelegatingAggregator(aggregationLogic));
+        return aggregationStrategy(self, new DelegatingAggregator(aggregationLogic))
     }
 
     /**
@@ -411,7 +411,7 @@ public class LegacyCoreExtensionModule {
      *
      */
     public static PredicateAdapter predicate(RouteBuilder self, Predicate predicate) {
-        return new PredicateAdapter(predicate);
+        return new PredicateAdapter(predicate)
     }
 
     /**
@@ -425,7 +425,7 @@ public class LegacyCoreExtensionModule {
      *
      */
     public static PredicateAdapter predicate(RouteBuilder self, String predicateBeanName) {
-        return predicate(self, self.lookup(predicateBeanName, Predicate.class));
+        return predicate(self, self.lookup(predicateBeanName, Predicate.class))
     }
 
     /**
@@ -438,17 +438,17 @@ public class LegacyCoreExtensionModule {
      * @deprecated use Camel predicates
      */
     public static PredicateAdapter predicate(RouteBuilder self, Closure predicateLogic) {
-        return predicate(self, new DelegatingPredicate(predicateLogic));
+        return predicate(self, new DelegatingPredicate(predicateLogic))
     }
 
 
     static ProcessorDefinition dataFormat(DataFormatClause self, DataFormat dataFormat) {
         if (self.operation == DataFormatClause.Operation.Marshal) {
-            return self.processorType.marshal(dataFormat);
+            return self.processorType.marshal(dataFormat)
         } else if (self.operation == DataFormatClause.Operation.Unmarshal) {
-            return self.processorType.unmarshal(dataFormat);
+            return self.processorType.unmarshal(dataFormat)
         } else {
-            throw new IllegalArgumentException("Unknown data format operation: " + self.operation);
+            throw new IllegalArgumentException("Unknown data format operation: " + self.operation)
         }
     }
 

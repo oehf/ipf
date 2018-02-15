@@ -27,6 +27,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
  * @author Jens Riemschneider
  */
 public class EbXMLSlot30 implements EbXMLSlot {
+
+    public static final int MAX_SLOT_LENGTH = 256;
     private final SlotType1 slot;
     
     /**
@@ -51,6 +53,6 @@ public class EbXMLSlot30 implements EbXMLSlot {
 
     @Override
     public int getValueLengthLimit() {
-        return 256;
+        return MAX_SLOT_LENGTH;
     }
 }

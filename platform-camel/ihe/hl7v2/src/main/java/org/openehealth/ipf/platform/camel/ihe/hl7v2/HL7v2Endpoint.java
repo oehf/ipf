@@ -17,11 +17,12 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 /**
  * Interface for endpoints that handle HL7v2 transactions
  *
  * @since 3.1
  */
-public interface HL7v2Endpoint extends Endpoint, Hl7v2ConfigurationHolder {
+public interface HL7v2Endpoint<T extends MllpAuditDataset> extends Endpoint, Hl7v2ConfigurationHolder<T> {
 }

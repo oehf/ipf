@@ -16,37 +16,42 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti31;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptions;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils.concat;
+import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  *
  */
-public enum Iti31Options implements TransactionOptions {
+public enum Iti31Options implements HL7v2TransactionOption {
 
     BASIC("A01", "A03", "A04", "A11", "A13"),
-    INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT(
-            concat(BASIC, "A02", "A05", "A06", "A07", "A12", "A38")),
-    PENDING_EVENT_MANAGEMENT(
-            concat(INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT, "A14", "A15", "A16", "A25", "A26", "A27")),
-    ADVANCED_ENCOUNTER_MANAGEMENT(
-            concat(BASIC, "A21", "A22", "A44", "A52", "A53", "A54", "A55")),
-    TEMPORARY_PATIENT_TRANSFERS_TRACKING(
-            concat(BASIC, "A09", "A10", "A32", "A33")),
-    HISTORIC_MOVEMENT_MANAGEMENT(
-            concat(INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT, ADVANCED_ENCOUNTER_MANAGEMENT, "Z99")),
-    MAINTAIN_DEMOGRAPHICS(
-            concat(BASIC, "A08", "A40"));
+    INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT(BASIC, "A02", "A05", "A06", "A07", "A12", "A38"),
+    PENDING_EVENT_MANAGEMENT(INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT, "A14", "A15", "A16", "A25", "A26", "A27"),
+    ADVANCED_ENCOUNTER_MANAGEMENT(BASIC, "A21", "A22", "A44", "A52", "A53", "A54", "A55"),
+    TEMPORARY_PATIENT_TRANSFERS_TRACKING(BASIC, "A09", "A10", "A32", "A33"),
+    HISTORIC_MOVEMENT_MANAGEMENT(INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT, ADVANCED_ENCOUNTER_MANAGEMENT, "Z99"),
+    MAINTAIN_DEMOGRAPHICS(BASIC, "A08", "A40");
 
-    private String[] supportedEvents;
+    private List<String> supportedEvents;
 
     Iti31Options(String... supportedEvents) {
-        this.supportedEvents = supportedEvents;
+        this.supportedEvents = Arrays.asList(supportedEvents);
+    }
+
+    Iti31Options(Iti31Options option, String... supportedEvents) {
+        this.supportedEvents = HL7v2TransactionOption.concat(option, Arrays.asList(supportedEvents));
+    }
+
+    Iti31Options(Iti31Options option1, Iti31Options option2, String... supportedEvents) {
+        this.supportedEvents = HL7v2TransactionOption.concat(option1, option2, Arrays.asList(supportedEvents));
     }
 
     @Override
-    public String[] getSupportedEvents() {
+    public List<String> getSupportedThings() {
         return supportedEvents;
     }
 

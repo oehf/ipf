@@ -24,12 +24,12 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareWebSer
 
 /**
  * Continuation-Aware service implementation for the IHE ITI-47 transaction (PDQ v3).
+ *
  * @author Dmytro Rud
  */
 public class Iti47ContinuationAwareService
         extends Hl7v3ContinuationAwareWebService
-        implements Iti47PortType
-{
+        implements Iti47PortType {
     public Iti47ContinuationAwareService(Hl7v3ContinuationAwareEndpoint endpoint) {
         super(endpoint);
     }

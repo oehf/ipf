@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
@@ -25,7 +26,7 @@ import javax.xml.namespace.QName;
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration {
+public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<Hl7v3AuditDataset> {
 
     @Getter private final String nakRootElementName;
     @Getter private final String controlActProcessCode;
@@ -69,8 +70,8 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends Hl7v3AuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends Hl7v3AuditDataset> serverAuditStrategy,
+            AuditStrategy<Hl7v3AuditDataset> clientAuditStrategy,
+            AuditStrategy<Hl7v3AuditDataset> serverAuditStrategy,
             QName serviceName,
             Class<?> sei,
             QName bindingName,

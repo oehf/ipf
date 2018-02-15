@@ -16,11 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30AuditDataset;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
@@ -32,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
  *
  * @author Christian Ohr
  */
-public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> {
+public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
 
 
     public Iti30Component() {
@@ -47,8 +50,8 @@ public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> 
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
         String options = getAndRemoveParameter(parameters, "options", String.class, Iti30Options.MERGE.name());
-        Iti30Options[] iti30Options = TransactionOptionUtils.split(options, Iti30Options.class);
-        if (iti30Options == null) {
+        List<? extends HL7v2TransactionOption> iti30Options = TransactionOptionUtils.split(options, Iti30Options.class);
+        if (iti30Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");
         }
         getInteractionId().init(iti30Options);

@@ -81,10 +81,10 @@ class GroupAdapter<T extends Group> extends StructureAdapter<T> {
     }
     
     def getAt(String s) {
-        def result;
+        def result
         def resultElementPath = structurePath(s)
         if (target.isRepeating(s)) {
-            result = selector(adaptStructures(target.getAll(s), resultElementPath), this, s);
+            result = selector(adaptStructures(target.getAll(s), resultElementPath), this, s)
         } else {
             result = adaptStructure(target.get(s), resultElementPath)
         }

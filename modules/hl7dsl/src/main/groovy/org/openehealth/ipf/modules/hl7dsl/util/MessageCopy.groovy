@@ -17,9 +17,9 @@ package org.openehealth.ipf.modules.hl7dsl.util
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.AbstractGroup
-import ca.uhn.hl7v2.model.Group;
+import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.util.DeepCopy;
+import ca.uhn.hl7v2.util.DeepCopy
 import ca.uhn.hl7v2.util.Terser
 
 /**

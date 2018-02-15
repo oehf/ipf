@@ -147,7 +147,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	    def interactionId = xml.interactionId.@extension.text()
         def triggerEvent  = interactionId.map('hl7v2v3-interactionId-eventStructure')[0]
 
-        def adt = PIX.Interactions.ITI_8_PIX.hl7v2TransactionConfiguration.request(triggerEvent)
+        def adt = PIX.FeedInteractions.ITI_8_PIX.hl7v2TransactionConfiguration.request(triggerEvent)
         def grp   = (triggerEvent == 'A40') ? adt.PATIENT(0) : adt
 
         // Segment MSH

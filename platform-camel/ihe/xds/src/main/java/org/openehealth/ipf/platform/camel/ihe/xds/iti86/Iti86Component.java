@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_86;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_86;
 
 /**
  * The Camel component for the ITI-86 transaction.
@@ -43,17 +43,12 @@ public class Iti86Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Iti86Service.class)
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this, parameters, Iti86Service.class)
         {
             @Override
-            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
-                    AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>, ?, ?> getProducer(
+                    AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>> endpoint,
                     JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory)
             {
                 return new SimpleWsProducer<>(endpoint, clientFactory, RemoveDocumentsRequestType.class, RegistryResponseType.class);

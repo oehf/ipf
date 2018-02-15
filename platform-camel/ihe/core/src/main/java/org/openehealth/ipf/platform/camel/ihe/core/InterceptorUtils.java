@@ -29,8 +29,7 @@ public class InterceptorUtils {
     public static Producer adaptProducerChain(
             List<Interceptor> chain,
             Endpoint endpoint,
-            Producer originalProducer)
-    {
+            Producer originalProducer) {
         Processor processor = originalProducer;
         for (Interceptor interceptor : chain) {
             interceptor.setEndpoint(endpoint);

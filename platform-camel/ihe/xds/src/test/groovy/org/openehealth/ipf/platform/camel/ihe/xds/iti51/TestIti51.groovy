@@ -20,21 +20,24 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
 import static org.junit.Assert.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 
 /**
  * Tests the ITI-51 component with the Web Service and the client defined within the URI.
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
-class TestIti51 extends StandardTestContainer {
+class TestIti51 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-51.xml'
     
@@ -48,7 +51,7 @@ class TestIti51 extends StandardTestContainer {
     def query
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -81,29 +84,28 @@ class TestIti51 extends StandardTestContainer {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 8
-        checkAudit('0')
+        checkAudit(EventOutcomeIndicator.Success)
     }
     
     @Test
     void testIti51FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 4
-        checkAudit('8')
+        checkAudit(EventOutcomeIndicator.SeriousFailure)
     }
     
-    def checkAudit(outcome) {
-        def messages = getAudit('E', SERVICE2_ADDR)
+    def checkAudit(EventOutcomeIndicator outcome) {
+        List<AuditMessage> messages = getAudit(EventActionCode.Execute, SERVICE2_ADDR)
         assert messages.size() == 4
         messages.each { message ->
-            assert message.AuditSourceIdentification.size() == 1
-            assert message.ActiveParticipant.size() == 2
-            assert message.ParticipantObjectIdentification.size() == 2
-            assert message.children().size() == 6
-            checkEvent(message.EventIdentification, '110112', 'ITI-51', 'E', outcome)
-            checkSource(message.ActiveParticipant[0], 'true')
-            checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-            checkPatient(message.ParticipantObjectIdentification[0], 'id3^^^&1.3&ISO', 'id4^^^&1.4&ISO')
-            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51',
+            assert message.activeParticipants.size() == 2
+            assert message.participantObjectIdentifications.size() == 2
+
+            checkEvent(message.eventIdentification, '110112', 'ITI-51', EventActionCode.Execute, outcome)
+            checkSource(message.activeParticipants[0], true)
+            checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+            checkPatient(message.participantObjectIdentifications[0], 'id3^^^&1.3&ISO', 'id4^^^&1.4&ISO')
+            checkQuery(message.participantObjectIdentifications[1], 'ITI-51',
                     QueryType.FIND_DOCUMENTS_MPQ.getId(),
                     QueryType.FIND_DOCUMENTS_MPQ.getId())
         }
@@ -121,12 +123,15 @@ class TestIti51 extends StandardTestContainer {
         assert FAILURE == response.status
         
         assert auditSender.messages.size() == 6
+
         [2, 3].each { i ->
             boolean found = false
-            def message = new XmlSlurper().parseText(auditSender.messages[i].auditMessage.toString())
-            for (detail in message.ParticipantObjectIdentification.ParticipantObjectDetail) {
-                if ((detail.@type.text() == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.@value.text()) {
-                    found = true
+            AuditMessage message = auditSender.messages[i]
+            for (poi in message.participantObjectIdentifications) {
+                for (detail in poi.participantObjectDetails) {
+                    if ((detail.type == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.value) {
+                        found = true
+                    }
                 }
             }
             assert found

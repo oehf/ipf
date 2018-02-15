@@ -42,7 +42,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZEL
 public class PIXV3 implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v3InteractionId {
+    public enum Interactions implements Hl7v3InteractionId<Hl7v3WsTransactionConfiguration> {
         ITI_44_PIX(ITI_44_PIX_WS_CONFIG),
         ITI_44_XDS(ITI_44_XDS_WS_CONFIG),
         ITI_45(ITI_45_WS_CONFIG),

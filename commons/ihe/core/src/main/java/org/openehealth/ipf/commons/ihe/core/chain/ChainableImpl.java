@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.core.chain;
 
-import org.apache.commons.lang3.Validate;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Base for an element of a chain.
@@ -37,7 +37,7 @@ public abstract class ChainableImpl implements Chainable {
      *      ID of this chain element.
      */
     public void setId(String id) {
-        this.id = Validate.notEmpty(id);
+        this.id = requireNonNull(id);
     }
 
     /**

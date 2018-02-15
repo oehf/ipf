@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.Map;
 
@@ -30,7 +29,7 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extends XdsAuditStrategy<XdsNonconstructiveDocumentSetRequestAuditDataset> {
+public abstract class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extends XdsAuditStrategy<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
     public XdsNonconstructiveDocumentSetRequestAuditStrategy30(boolean serverSide) {
         super(serverSide);
@@ -48,15 +47,14 @@ abstract public class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extend
     public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
         if (request.getDocumentRequest() != null) {
-            for (DocumentRequest document : request.getDocumentRequest()) {
-                auditDataset.getDocuments().add(new Document(
-                        document.getDocumentUniqueId(),
-                        document.getRepositoryUniqueId(),
-                        document.getHomeCommunityId(),
-                        null,
-                        null,
-                        getDefaultDocumentStatus()));
-            }
+            request.getDocumentRequest().forEach(document ->
+                    auditDataset.getDocuments().add(new Document(
+                            document.getDocumentUniqueId(),
+                            document.getRepositoryUniqueId(),
+                            document.getHomeCommunityId(),
+                            null,
+                            null,
+                            getDefaultDocumentStatus())));
         }
         return auditDataset;
     }
@@ -71,7 +69,7 @@ abstract public class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extend
      * based on the statuses of individual {@link Document Document}s.
      */
     @Override
-    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
         return null;
     }
 }

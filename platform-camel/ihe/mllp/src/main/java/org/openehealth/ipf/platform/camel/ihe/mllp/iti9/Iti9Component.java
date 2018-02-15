@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent
 import java.util.Collections;
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.Interactions.ITI_9;
+import static org.openehealth.ipf.commons.ihe.hl7v2.PIX.QueryInteractions.ITI_9;
 
 /**
  * Camel component for ITI-9 (PIX Query).
@@ -43,7 +43,7 @@ public class Iti9Component extends MllpTransactionComponent<QueryAuditDataset> {
     }
 
     @Override
-    public List<Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
         return Collections.singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

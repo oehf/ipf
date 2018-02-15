@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 
 import static org.junit.Assert.*
 
@@ -61,8 +61,8 @@ class TestIti8Validation extends MllpTestContainer {
 
     @Ignore
     void testConcurrentMessages() {
-        File f = File.createTempFile("tmp", "tmp");
-        Writer w = new BufferedWriter(new FileWriter(f));
+        File f = File.createTempFile("tmp", "tmp")
+        Writer w = new BufferedWriter(new FileWriter(f))
         LOG.info("Wrinting into {}", f.absolutePath)
         def endpointUri = 'pix-iti8://localhost:18080?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1')
@@ -84,7 +84,7 @@ class TestIti8Validation extends MllpTestContainer {
             })
         }
         latch.await(30, TimeUnit.MINUTES)
-        w.flush();
+        w.flush()
     }
     
     @Test

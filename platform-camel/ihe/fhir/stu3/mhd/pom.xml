@@ -12,15 +12,6 @@
     <description>Apache Camel components for MHD transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
-    <properties>
-        <osgi.export.pkg>
-            org.openehealth.ipf.platform.camel.ihe.fhir.iti65*,
-            org.openehealth.ipf.platform.camel.ihe.fhir.iti66*,
-            org.openehealth.ipf.platform.camel.ihe.fhir.iti67*,
-            org.openehealth.ipf.platform.camel.ihe.fhir.iti68*
-        </osgi.export.pkg>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

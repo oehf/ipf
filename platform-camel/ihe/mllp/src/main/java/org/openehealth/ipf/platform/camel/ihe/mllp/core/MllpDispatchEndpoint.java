@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
@@ -25,15 +26,15 @@ import java.util.List;
 
 /**
  * MLLP dispatching Camel endpoint.
+ *
  * @author Dmytro Rud
  */
-public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfiguration, MllpDispatchComponent> {
+public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfiguration, MllpAuditDataset, MllpDispatchComponent> {
 
     public MllpDispatchEndpoint(
             MllpDispatchComponent mllpComponent,
             Mina2Endpoint wrappedEndpoint,
-            MllpDispatchEndpointConfiguration config)
-    {
+            MllpDispatchEndpointConfiguration config) {
         super(mllpComponent, wrappedEndpoint, config);
     }
 

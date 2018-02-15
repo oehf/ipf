@@ -5,17 +5,6 @@
     <name>ipf-commons-core</name>
     <description>Generic interfaces and helpers</description>
     <url>${site.url}/${project.artifactId}</url>
-    
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.core.*</osgi.export.pkg>
-        <!--
-            Needed to load any class via
-            org.openehealth.ipf.commons.core.io.IOUtils.deserialize(byte[])
-         -->
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
-    </properties>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -31,21 +20,6 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

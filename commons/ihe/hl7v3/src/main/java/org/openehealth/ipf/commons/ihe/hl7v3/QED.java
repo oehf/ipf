@@ -36,7 +36,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.DEFAU
 public class QED implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v3InteractionId {
+    public enum Interactions implements Hl7v3InteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration> {
         PCC_1(PCC1_WS_CONFIG);
 
         @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;

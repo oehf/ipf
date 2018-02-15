@@ -17,7 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.core;
 
 import org.apache.camel.Endpoint;
-import org.apache.commons.lang3.Validate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Trivial InterceptorFactory that calls Class.newInstance()
@@ -29,7 +30,7 @@ public class InterceptorFactorySupport<E extends Endpoint, T extends Interceptor
     protected final Class<T> clazz;
 
     public InterceptorFactorySupport(Class<T> clazz) {
-        this.clazz = Validate.notNull(clazz);
+        this.clazz = requireNonNull(clazz);
     }
 
     @Override

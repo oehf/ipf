@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7dsl;
+package org.openehealth.ipf.modules.hl7dsl
 
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
@@ -36,11 +36,11 @@ import ca.uhn.hl7v2.model.v25.segment.PID
  */
 class DocumentationExamplesTest {
 
-	MessageAdapter<ORU_R01> message;
+	MessageAdapter<ORU_R01> message
 	
 	@Before
 	public void setUp(){
-		message = load('oru-r01-25.hl7');
+		message = load('oru-r01-25.hl7')
 	}
 	
 	@Test
@@ -55,8 +55,8 @@ class DocumentationExamplesTest {
 	
 	@Test
 	public void testConstruction(){
-		MessageAdapter<ORU_R01> msg = load('oru-r01-25.hl7');
-		MessageAdapter<ORU_R01> messageCopy = message.copy();
+		MessageAdapter<ORU_R01> msg = load('oru-r01-25.hl7')
+		MessageAdapter<ORU_R01> messageCopy = message.copy()
 		MessageAdapter<ORU_R01> messageFromString = make(messageCopy.toString())
 	}
 	
@@ -75,7 +75,7 @@ class DocumentationExamplesTest {
 		PrimitiveAdapter primitive = message.MSH[3][2]  // MSH-3-2 = universal ID primitive field
 		primitive = message.MSH.sendingApplication.universalIDType
 		
-		ca.uhn.hl7v2.model.v23.message.ORU_R01 target23 = new ca.uhn.hl7v2.model.v23.message.ORU_R01();
+		ca.uhn.hl7v2.model.v23.message.ORU_R01 target23 = new ca.uhn.hl7v2.model.v23.message.ORU_R01()
 		
 		MessageAdapter<ca.uhn.hl7v2.model.v23.message.ORU_R01> message23 = new MessageAdapter(target23)
 		def messageType = message23.MSH.messageType.messageType // only works for HL7 v2.2 and 2.3 messages
@@ -85,7 +85,7 @@ class DocumentationExamplesTest {
 	
 	@Test
 	public void testFieldValues(){
-		PrimitiveAdapter val = message.MSH[3][2];
+		PrimitiveAdapter val = message.MSH[3][2]
 		String primitiveValueEncode = message.MSH[3][2].encode()
 		String primitiveValueString = message.MSH[3][2].toString()
 		assertEquals(primitiveValueEncode, primitiveValueString)

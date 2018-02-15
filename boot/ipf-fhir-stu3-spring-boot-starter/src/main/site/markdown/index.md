@@ -14,7 +14,6 @@ The dependency on the IPF [Spring Boot] IHE FHIR starter module is:
 
 `ipf-fhir-spring-boot-starter` auto-configures:
  
-* ATNA auditor beans for all FHIR-based IHE transactions
 * the FHIR Servlet
 * a `org.openehealth.ipf.commons.ihe.fhir.NamingSystemService` instance
 * mappings for translating FHIR requests into PIX Query or PDQ requests and vice versa

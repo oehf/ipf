@@ -21,8 +21,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.io.Serializable;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Ehcache-based implementation of asynchronous message correlator.
@@ -39,7 +38,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     private final Ehcache ehcache;
 
     public EhcacheAsynchronyCorrelator(Ehcache ehcache) {
-        this.ehcache = notNull(ehcache, "ehcache instance");
+        this.ehcache = requireNonNull(ehcache, "ehcache instance");
     }
 
     private void put(String key, String suffix, Serializable value) {
@@ -53,17 +52,17 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
 
     @Override
     public void storeServiceEndpointUri(String messageId, String serviceEndpointUri) {
-        put(messageId, SERVICE_ENDPOINT_URI_SUFFIX, notNull(serviceEndpointUri, "service endpoint URI"));
+        put(messageId, SERVICE_ENDPOINT_URI_SUFFIX, requireNonNull(serviceEndpointUri, "service endpoint URI"));
     }
 
     @Override
     public void storeCorrelationKey(String messageId, String correlationKey) {
-        put(messageId, CORRELATION_KEY_SUFFIX, notNull(correlationKey, "correlation key"));
+        put(messageId, CORRELATION_KEY_SUFFIX, requireNonNull(correlationKey, "correlation key"));
     }
 
     @Override
     public void storeAuditDataset(String messageId, WsAuditDataset auditDataset) {
-        put(messageId, AUDIT_DATASET_SUFFIX, notNull(auditDataset, "audit dataset"));
+        put(messageId, AUDIT_DATASET_SUFFIX, requireNonNull(auditDataset, "audit dataset"));
     }
 
     @Override
@@ -83,7 +82,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
 
     @Override
     public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
-        noNullElements(alternativeKeys, "alternative keys should be not null");
+        requireNonNull(alternativeKeys, "alternative keys should be not null");
         for (String key : alternativeKeys) {
             put(key, ALTERNATIVE_KEY_SUFFIX, messageId);
         }

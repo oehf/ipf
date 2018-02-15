@@ -33,26 +33,18 @@ import static org.openehealth.ipf.commons.ihe.hl7v2ws.PCD.Interactions.PCD_01;
 /**
  * Camel component for the IHE PCD-01 transaction.
  */
-public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
+public class Pcd01Component extends AbstractHl7v2WsComponent {
 
     public Pcd01Component() {
         super(PCD_01);
     }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new SimpleHl7v2WsEndpoint<WsAuditDataset, Pcd01Component>(
-                uri,
-                remaining,
-                this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters),
-                Pcd01Service.class) {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
+        return new SimpleHl7v2WsEndpoint<Pcd01Component>(uri, remaining, this, parameters, Pcd01Service.class) {
             @Override
-            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
-                    AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(
+                    AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint,
                     JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
             }

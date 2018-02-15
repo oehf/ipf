@@ -15,28 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
-
-import static org.junit.Assert.fail
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-
 import org.apache.camel.RuntimeCamelException
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.audit.codes.EventActionCode
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
+
+import static org.junit.Assert.fail
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
  * @author Jens Riemschneider
  */
-class TestIti18 extends StandardTestContainer {
+class TestIti18 extends XdsStandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-18.xml'
     
@@ -50,7 +52,7 @@ class TestIti18 extends StandardTestContainer {
     FindDocumentsQuery query
     
     static void main(args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
     @BeforeClass
@@ -95,30 +97,28 @@ class TestIti18 extends StandardTestContainer {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
-        checkAudit('0')
+        checkAudit(EventOutcomeIndicator.Success)
     }
     
     @Test
     void testIti18FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2
-        checkAudit('8')
+        checkAudit(EventOutcomeIndicator.SeriousFailure)
     }
     
-    def checkAudit(outcome) {
-        def messages = getAudit('E', SERVICE2_ADDR)
+    def checkAudit(EventOutcomeIndicator outcome) {
+        List<AuditMessage> messages = getAudit(EventActionCode.Execute, SERVICE2_ADDR)
         assert messages.size() == 2
         messages.each { message ->
-            assert message.AuditSourceIdentification.size() == 1
-            assert message.ActiveParticipant.size() == 2
-            assert message.ParticipantObjectIdentification.size() == 2
-            assert message.children().size() == 6
+            assert message.activeParticipants.size() == 2
+            assert message.participantObjectIdentifications.size() == 2
             
-            checkEvent(message.EventIdentification, '110112', 'ITI-18', 'E', outcome)
-            checkSource(message.ActiveParticipant[0], 'true')
-            checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-            checkPatient(message.ParticipantObjectIdentification[0])
-            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-18', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d')
+            checkEvent(message.eventIdentification, '110112', 'ITI-18', EventActionCode.Execute, outcome)
+            checkSource(message.activeParticipants[0], true)
+            checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
+            checkPatient(message.participantObjectIdentifications[0])
+            checkQuery(message.participantObjectIdentifications[1], 'ITI-18', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d')
         }
     }
     
@@ -136,9 +136,9 @@ class TestIti18 extends StandardTestContainer {
         assert auditSender.messages.size() == 4
         [2, 3].each { i ->
             boolean found = false
-            def message = new XmlSlurper().parseText(auditSender.messages[i].auditMessage.toString())
-            for (detail in message.ParticipantObjectIdentification.ParticipantObjectDetail) {
-                if ((detail.@type.text() == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.@value.text()) {
+            AuditMessage message = auditSender.messages[i]
+            for (detail in message.participantObjectIdentifications[0].participantObjectDetails) {
+                if ((detail.type == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.value) {
                     found = true
                 }
             }

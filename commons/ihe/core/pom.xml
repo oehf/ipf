@@ -5,10 +5,6 @@
     <name>ipf-commons-ihe-core</name>
     <description>Generic IHE support</description>
     <url>${site.url}/${project.artifactId}</url>
-    
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.core.*</osgi.export.pkg>
-    </properties>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -17,27 +13,17 @@
     </parent>
     
     <dependencies>
+
         <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-audit</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-nodeauth</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
@@ -48,6 +34,11 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.oht.atna</groupId>
+            <artifactId>ipf-oht-atna-auditor</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

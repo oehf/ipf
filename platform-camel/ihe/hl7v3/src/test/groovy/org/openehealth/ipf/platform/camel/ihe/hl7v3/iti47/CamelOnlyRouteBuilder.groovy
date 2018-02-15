@@ -18,11 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
-import org.apache.commons.lang3.Validate
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator
 
+import static java.util.Objects.requireNonNull
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3
@@ -32,53 +32,52 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
 
 class CamelOnlyRouteBuilder extends RouteBuilder {
 
-    private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
-    private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
+    private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator()
+    private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator()
 
 
     @Override
     public void configure() throws Exception {
         from("pdqv3-iti47:iti47Service")
-            .onException(Exception.class)
+                .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(iti47RequestValidator())
-            .setHeader("myHeader", constant("content-1"))
-            .convertBodyTo(byte[].class)
-            .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
-            .process(typeAndHeaderChecker(QBP_Q21, "content-1"))
-            .process(validatingProcessor())
-            .transform(staticResponse(Testiti47CamelOnly.getResponseMessage()))
-            .process(validatingProcessor())
-            .setHeader("myHeader", constant("content-2"))
-            .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
-            .process(typeAndHeaderChecker(String.class, "content-2"))
-            .process(iti47ResponseValidator());
+                .process(iti47RequestValidator())
+                .setHeader("myHeader", constant("content-1"))
+                .convertBodyTo(byte[].class)
+                .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
+                .process(typeAndHeaderChecker(QBP_Q21, "content-1"))
+                .process(validatingProcessor())
+                .transform(staticResponse(Testiti47CamelOnly.getResponseMessage()))
+                .process(validatingProcessor())
+                .setHeader("myHeader", constant("content-2"))
+                .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
+                .process(typeAndHeaderChecker(String.class, "content-2"))
+                .process(iti47ResponseValidator())
     }
-    
-    
+
+
     private static Processor typeAndHeaderChecker(
             final Class<?> expectedClass,
-            final String expectedHeaderContent)
-    {
-        Validate.notNull(expectedClass);
+            final String expectedHeaderContent) {
+        requireNonNull(expectedClass)
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                Class<?> actualClass = exchange.getIn().getBody().getClass();
-                if (! expectedClass.equals(actualClass)) {
-                    throw new RuntimeException("Wrong body class: expected " + 
-                            expectedClass + ", got " + actualClass);
+                Class<?> actualClass = exchange.getIn().getBody().getClass()
+                if (!expectedClass.equals(actualClass)) {
+                    throw new RuntimeException("Wrong body class: expected " +
+                            expectedClass + ", got " + actualClass)
                 }
 
                 if (expectedHeaderContent != null) {
-                    String actualHeaderContent = exchange.getIn().getHeader("myHeader", String.class);
-                    if (! expectedHeaderContent.equals(actualHeaderContent)) {
-                        throw new RuntimeException("wrong headers");
+                    String actualHeaderContent = exchange.getIn().getHeader("myHeader", String.class)
+                    if (!expectedHeaderContent.equals(actualHeaderContent)) {
+                        throw new RuntimeException("wrong headers")
                     }
                 }
             }
-        };
+        }
     }
 
 }

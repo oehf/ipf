@@ -16,9 +16,15 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti45
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.audit.AuditContext
+import org.openehealth.ipf.commons.audit.model.AuditMessage
+import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PIXQuery
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
@@ -37,8 +43,12 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
         request = slurp(request)
         GPathResult qbp = request.controlActProcess.queryByParameter
 
+        // message ID
+        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
+        auditDataset.messageId = idString(request.id)
+
         // patient ID from request
-        auditDataset.patientIds = [iiToCx(qbp.parameterList.patientIdentifier[0].value)]
+        auditDataset.setPatientIds([iiToCx(qbp.parameterList.patientIdentifier[0].value)] as String[])
 
         // dump of queryByParameter
         auditDataset.requestPayload = render(qbp)
@@ -47,34 +57,27 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
+    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response, AuditContext auditContext) {
         response = slurp(response)
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext)
 
-        // patient IDs from response
-        def patientIds = [] as Set<String>
-        addPatientIds(response.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
-        if (auditDataset.patientIds) {
-            patientIds << auditDataset.patientIds[0]
+        if (auditContext.isIncludeParticipantsFromResponse()) {
+            Set<String> patientIds = [] as Set<String>
+            addPatientIds(response.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+            if (auditDataset.patientIds) {
+                patientIds << auditDataset.patientIds[0]
+            }
+            auditDataset.patientIds = patientIds as String[]
         }
-        auditDataset.patientIds = patientIds.toArray()
         result
     }
 
-
     @Override
-    void doAudit(Hl7v3AuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti45(
-                serverSide,
-                auditDataset.eventOutcomeCode,
-                auditDataset.userId,
-                auditDataset.userName,
-                auditDataset.serviceEndpointUrl,
-                auditDataset.clientIpAddress,
-                auditDataset.requestPayload,
-                auditDataset.patientIds,
-                auditDataset.purposesOfUse,
-                auditDataset.userRoles)
+    AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
+        new QueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PIXQuery, auditDataset.getPurposesOfUse())
+                .addPatients(auditDataset.patientIds)
+                .setQueryParameters(auditDataset.messageId, PIXQuery, auditDataset.requestPayload)
+                .getMessages()
     }
 
 }

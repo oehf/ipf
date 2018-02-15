@@ -28,7 +28,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
@@ -41,7 +41,7 @@ import static org.apache.commons.lang3.Validate.*;
  *
  * @author Dmytro Rud
  */
-public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
+public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends TransactionConfiguration<T> {
 
     private static class Definition {
         private final Set<String> triggerEvents;
@@ -105,8 +105,8 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             Version[] hl7Versions,
             String sendingApplication,
             String sendingFacility,
@@ -173,8 +173,8 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
             Version hl7Version,
             String sendingApplication,
             String sendingFacility,
@@ -423,12 +423,12 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
      * @return HAPI message created using the correct HapiContext
      * @throws HL7v2Exception if the message type or trigger event is not valid for this transaction
      */
-    public <T extends Message> T request(String messageType, String trigger) {
+    public <M extends Message> M request(String messageType, String trigger) {
         Message message = MessageUtils.makeMessage(
                 getHapiContext(), messageType, trigger, getHl7Versions()[0].getVersion());
         try {
             checkRequestAcceptance(message);
-            return (T) message;
+            return (M) message;
         } catch (Hl7v2AcceptanceException e) {
             throw new HL7v2Exception(e);
         }
@@ -437,7 +437,7 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
     /**
      * Like {@link #request(String, String)}, but uses the first configured request message type as default.
      */
-    public <T extends Message> T request(String trigger) {
+    public <M extends Message> M request(String trigger) {
         return request(allowedRequestMessageTypes[0], trigger);
     }
 
@@ -445,7 +445,7 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
      * Like {@link #request(String, String)}, but uses the first configured request message type
      * and the first configured trigger event as defaults.
      */
-    public <T extends Message> T request() {
+    public <M extends Message> M request() {
         return request(allowedRequestMessageTypes[0], allowedRequestTriggerEvents[0]);
     }
 }
