@@ -19,12 +19,12 @@ package org.openehealth.ipf.commons.core.test;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import org.openehealth.ipf.commons.core.modules.api.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 /**
@@ -66,24 +66,24 @@ public class ConditionalRule implements TestRule {
     }
 
     public ConditionalRule ifSystemProperty(final String property, final Predicate<String> condition) {
-        return runIf((source, params) ->
-                condition.matches(System.getProperty(property))).reason("condition matches on system property " + property);
+        return runIf(source ->
+                condition.test(System.getProperty(property))).reason("condition matches on system property " + property);
     }
 
     public ConditionalRule ifSystemPropertyIs(final String property, final String value) {
-        return ifSystemProperty(property, (s, params) ->
+        return ifSystemProperty(property, s ->
                 s != null && s.equalsIgnoreCase(value)).reason("system property " + property + " equals " + value);
     }
     public ConditionalRule negate() {
         if (predicate == null)
             throw new IllegalArgumentException("Must have defined a condition before negating it");
-        predicate = new Negate(predicate);
+        predicate = predicate.negate();
         reason = "not " + reason;
         return this;
     }
 
     public ConditionalRule skipOnWindows() {
-        return ifSystemProperty("os.name", (s, params) ->
+        return ifSystemProperty("os.name", s ->
                 s.startsWith("Windows")).negate().reason("skipped because running on Windows");
     }
 
@@ -99,7 +99,7 @@ public class ConditionalRule implements TestRule {
 
     public void verify() {
         if (predicate != null) {
-            if (!predicate.matches(null)) throw new IgnoredException();
+            if (!predicate.test(null)) throw new IgnoredException();
         }
     }
 
@@ -156,17 +156,4 @@ public class ConditionalRule implements TestRule {
         }
     }
 
-    private static class Negate implements Predicate<Void> {
-
-        private final Predicate<Void> predicate;
-
-        public Negate(Predicate<Void> predicate) {
-            this.predicate = predicate;
-        }
-
-        @Override
-        public boolean matches(Void source, Object... params) {
-            return !predicate.matches(source, params);
-        }
-    }
 }

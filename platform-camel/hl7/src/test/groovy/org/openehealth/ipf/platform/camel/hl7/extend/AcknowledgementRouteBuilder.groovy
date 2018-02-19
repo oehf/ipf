@@ -16,10 +16,7 @@
 package org.openehealth.ipf.platform.camel.hl7.extend
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.ErrorCode
-import ca.uhn.hl7v2.HapiContext
-import ca.uhn.hl7v2.parser.GenericParser
 import org.apache.camel.component.hl7.HL7DataFormat
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.hl7.HL7v2
