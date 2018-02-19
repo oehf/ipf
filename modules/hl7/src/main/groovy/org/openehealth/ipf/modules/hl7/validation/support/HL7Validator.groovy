@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator
  * 
  * @author Christian Ohr
  */
-public class HL7Validator implements Validator {
+class HL7Validator implements Validator {
 
      /**
       * Validates a message.

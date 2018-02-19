@@ -16,12 +16,16 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin
 
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.Severity
 import ca.uhn.hl7v2.Version
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import ca.uhn.hl7v2.parser.FixFieldDataType
-import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.hl7v2.util.DeepCopy
+import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
 
 /**
  * @author Christian Ohr
@@ -34,6 +38,7 @@ import ca.uhn.hl7v2.util.DeepCopy
  * Visitable#isEmpty is not originally exposed as property because it throws an exception
  */
 val Visitable.empty: Boolean get() = isEmpty
+
 fun <T : MessageVisitor> Visitable.accept(visitor: T): T = MessageVisitors.visit(this, visitor)
 
 
@@ -50,6 +55,7 @@ val Type.nullValue: Boolean get() = stringValue(this) == "\"\""
  * getValue or a default if null
  */
 fun Type.getValueOr(v: String?): String? = if (value != null) value else v
+
 fun Type.valueOr(v: String?): String? = getValueOr(v)
 
 /**
@@ -323,7 +329,6 @@ fun Structure.setObx5Type(type: String, desiredRepetitionsCount: Int = 1) {
 }
 
 
-
 // Extension functions/properties for Group -----------------------------------------------
 
 
@@ -331,7 +336,6 @@ fun Group.eachWithIndex(c: (Structure, String) -> Unit): Group = Visitors.eachWi
 fun Group.findIndexValues(c: (Structure) -> Boolean): List<String> = Visitors.findIndexValues(this, c)
 fun Group.findIndexOf(c: (Structure) -> Boolean): String? = Visitors.findIndexOf(this, c)
 fun Group.findLastIndexOf(c: (Structure) -> Boolean): String? = Visitors.findLastIndexOf(this, c)
-
 
 
 /**
@@ -358,15 +362,32 @@ operator fun Group.iterator(): Iterator<Structure> = asIterable().iterator()
  */
 fun <T : Message> T.copy(): T = parser.parse(encode()) as T
 
+fun Message.validate(context: HapiContext?) {
+    val ctx = context ?: parser.hapiContext
+    // We could also write an exception handler on top of SimpleValidationExceptionHandler that
+    // encapsulates the behavior below, but that may restrict custom validation...
+    val handler = SimpleValidationExceptionHandler(ctx)
+    handler.minimumSeverityToCollect = Severity.ERROR
+    try {
+        if (ctx.getMessageValidator<Boolean>().validate(this, handler)) {
+            throw ValidationException("Message validation failed", handler.exceptions)
+        }
+    } catch (e: HL7Exception) {
+        throw ValidationException("Message validation failed", e)
+    }
+}
+
 val Message.eventType: String get() = get("MSH")[9][1].value!!
 val Message.triggerEvent: String get() = get("MSH")[9][2].value!!
-val Message.messageStructure: String get() = messageStructure(
-        eventType, triggerEvent, version, parser.hapiContext.modelClassFactory)
+val Message.messageStructure: String
+    get() = messageStructure(
+            eventType, triggerEvent, version, parser.hapiContext.modelClassFactory)
 
-val Message?.encodingCharacters: EncodingCharacters get() =
-    if (this != null)
-        EncodingCharacters.getInstance(this) else
-        EncodingCharacters('|', "^~\\&")
+val Message?.encodingCharacters: EncodingCharacters
+    get() =
+        if (this != null)
+            EncodingCharacters.getInstance(this) else
+            EncodingCharacters('|', "^~\\&")
 
 
 /**
@@ -412,7 +433,6 @@ private fun <T> useFieldNumber(): T = throw Hl7DslException("Use field number as
 private fun <T> useStructureName(): T = throw Hl7DslException("Use structure name as index")
 
 private fun componentIndex(idx: Int) = if (idx < 1) throw Hl7DslException("component index must be in range 1..n") else idx - 1
-
 
 
 // Get a string value out of types or any object

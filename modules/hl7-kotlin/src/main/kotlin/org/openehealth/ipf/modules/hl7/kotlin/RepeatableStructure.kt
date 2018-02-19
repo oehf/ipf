@@ -23,7 +23,8 @@ import ca.uhn.hl7v2.model.MessageVisitor
 import ca.uhn.hl7v2.model.Structure
 
 /**
- * Represents the repeating structure with the given name, which is a child of the group,
+ * Represents the repeating structure with the given name.
+ * The structure is always a child of the group.
  *
  * @author Christian Ohr
  */
@@ -33,13 +34,13 @@ internal class RepeatableStructure(
         private val name: String) : Structure {
 
     override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun getMessage(): Message = group.message
 
     override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun getParent(): Group = group

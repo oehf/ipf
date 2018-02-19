@@ -33,7 +33,7 @@ object Visitors {
         accept(visitStructures(EachStructureLocationVisitor(c)))
     }
 
-    fun findIndexValues(group: Group, c: (Structure) -> Boolean) =
+    fun findIndexValues(group: Group, c: (Structure) -> Boolean): List<String> =
             findPairs(group, c).map { it.first }
 
     fun findIndexOf(group: Group, c: (Structure) -> Boolean): String? =

@@ -27,6 +27,8 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 /**
+ * Top-level functions for handling HL7 messages in Kotlin
+ *
  * @author Christian Ohr
  */
 
@@ -82,11 +84,13 @@ fun newGroup(name: String, message: Message): Group {
  * @param value primitive value
  * @return new primitive
  */
-fun newPrimitive(name: String, message: Message): Primitive {
+fun newPrimitive(name: String, message: Message, value: String? = null): Primitive {
     val context = message.parser.hapiContext
     val c = context.modelClassFactory.getTypeClass(name, message.version) ?: throw HL7Exception("Can't instantiate Type $name")
     val constructor = c.getConstructor(Message::class.java)
-    return constructor.newInstance(message) as Primitive
+    val p = constructor.newInstance(message) as Primitive
+    p.value = value
+    return p
 }
 
 /**
@@ -103,17 +107,39 @@ fun newComposite(name: String, message: Message): Composite {
     val context = message.parser.hapiContext
     val c = context.modelClassFactory.getTypeClass(name, message.version) ?: throw HL7Exception("Can't instantiate Type $name")
     val constructor = c.getConstructor(Message::class.java)
-    return constructor.newInstance(message) as Composite
+    val composite = constructor.newInstance(message) as Composite
+
+    return composite
 }
 
 
-fun <T: Message> loadHl7(context: HapiContext, resource: String, charset: Charset = Charsets.UTF_8): T {
-    val txt = Hl7DslException::class.java.getResource(resource).readText(charset)
-    return makeHl7(context, txt)
-}
+/**
+ * Loads a HL7 message from a classpath resource and parses it into a message
+ *
+ * @param context HAPI context
+ * @param resource resource name
+ * @param charset charset, defaults to UTF8
+ * @return typed message
+ */
+fun <T: Message> loadHl7(context: HapiContext, resource: String, charset: Charset = Charsets.UTF_8): T =
+    makeHl7(context, Hl7DslException::class.java.getResource(resource).readText(charset))
 
-fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Charset = Charsets.UTF_8): T {
-    return makeHl7(context, stream.bufferedReader(charset).use { it.readText() })
-}
+/**
+ * Loads a HL7 message from a InputStream and parses it into a message
+ *
+ * @param context HAPI context
+ * @param stream input stream
+ * @param charset charset, defaults to UTF8
+ * @return typed message
+ */
+fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Charset = Charsets.UTF_8): T =
+    makeHl7(context, stream.bufferedReader(charset).use { it.readText() })
 
+/**
+ * Parses a HL7 text string into a message
+ *
+ * @param context HAPI context
+ * @param txt HL7 message string
+ * @return typed message
+ */
 fun <T: Message> makeHl7(context: HapiContext, txt: String): T = context.genericParser.parse(txt) as T

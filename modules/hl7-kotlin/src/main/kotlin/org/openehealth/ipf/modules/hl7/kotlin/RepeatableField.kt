@@ -20,6 +20,9 @@ import ca.uhn.hl7v2.Location
 import ca.uhn.hl7v2.model.*
 
 /**
+ * Represents the repeating field with the given index.
+ * The field is always a child of the segment.
+ *
  * @author Christian Ohr
  */
 internal class RepeatableField (
