@@ -36,8 +36,9 @@ import java.util.Base64;
  */
 public class DICOM2016a implements SerializationStrategy {
 
-    private static final XMLOutputter PRETTY = new XMLOutputter(Format.getPrettyFormat());
-    private static final XMLOutputter COMPACT = new XMLOutputter(Format.getCompactFormat());
+    // Omit XML declaration, because this is done as part of the RFC5424Protocol
+    private static final XMLOutputter PRETTY = new XMLOutputter(Format.getPrettyFormat().setOmitDeclaration(true));
+    private static final XMLOutputter COMPACT = new XMLOutputter(Format.getCompactFormat().setOmitDeclaration(true));
 
 
     @Override
