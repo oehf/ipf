@@ -1,4 +1,18 @@
-
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import java.util.ArrayList;
@@ -13,16 +27,16 @@ import javax.xml.bind.annotation.*;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="BatchResponse"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;group ref="{urn:oasis:names:tc:DSML:2:0:core}BatchResponses" maxOccurs="unbounded" minOccurs="0"/&gt;
- *       &lt;/sequence&gt;
- *       &lt;attribute name="requestID" type="{urn:oasis:names:tc:DSML:2:0:core}RequestID" /&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="BatchResponse">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;group ref="{urn:oasis:names:tc:DSML:2:0:core}BatchResponses" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="requestID" type="{urn:oasis:names:tc:DSML:2:0:core}RequestID" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 
@@ -35,15 +49,15 @@ import javax.xml.bind.annotation.*;
 public class BatchResponse {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "authResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "errorResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "extendedResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "delResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "searchResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "addResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "modifyResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "modDNResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "compareResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "searchResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "compareResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "errorResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "delResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "modifyResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "authResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "addResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false)
     })
     protected List<JAXBElement<?>> batchResponses;
     @XmlAttribute(name = "requestID")
@@ -67,11 +81,11 @@ public class BatchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
-     * {@link JAXBElement }{@code <}{@link ErrorResponse }{@code >}
      * {@link JAXBElement }{@code <}{@link ExtendedResponse }{@code >}
      * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
      * {@link JAXBElement }{@code <}{@link SearchResponse }{@code >}
+     * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
+     * {@link JAXBElement }{@code <}{@link ErrorResponse }{@code >}
      * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
      * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
      * {@link JAXBElement }{@code <}{@link LDAPResult }{@code >}
@@ -81,7 +95,7 @@ public class BatchResponse {
      */
     public List<JAXBElement<?>> getBatchResponses() {
         if (batchResponses == null) {
-            batchResponses = new ArrayList<>();
+            batchResponses = new ArrayList<JAXBElement<?>>();
         }
         return this.batchResponses;
     }

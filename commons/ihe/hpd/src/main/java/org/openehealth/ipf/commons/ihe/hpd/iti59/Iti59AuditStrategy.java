@@ -73,6 +73,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 Set<String> providerIds = addRequest.getAttr().stream()
                         .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
                         .flatMap(x -> x.getValue().stream())
+                        .map(Object::toString)
                         .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(addRequest.getRequestID()),
@@ -84,6 +85,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                 Set<String> providerIds = modifyRequest.getModification().stream()
                         .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
                         .flatMap(x -> x.getValue().stream())
+                        .map(Object::toString)
                         .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyRequest.getRequestID()),
