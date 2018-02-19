@@ -15,11 +15,9 @@
     </parent>
 
     <modules>
-        <!--
-        <module>hl7dsl</module>
-        -->
         <module>hl7</module>
         <module>cda</module>
+        <module>hl7-kotlin</module>
     </modules>
 
     <dependencies>
