@@ -41,8 +41,8 @@ public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, Enum
 
     Application("110150", "Application"),
     ApplicationLauncher("110151", "Application Launcher"),
-    Destination("110152", "Destination"),
-    Source("110153", "Source"),
+    Destination("110152", "Destination Role ID"),
+    Source("110153", "Source Role ID"),
     DestinationMedia("110154", "Destination Media"),
     SourceMedia("110155", "Source Media");
 
