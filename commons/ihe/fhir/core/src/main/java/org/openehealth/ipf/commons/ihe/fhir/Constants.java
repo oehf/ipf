@@ -30,7 +30,6 @@ public interface Constants {
     // Request parameter information
     String FHIR_REQUEST_PARAMETERS = "FhirRequestParameters";
 
-
     // Parameter information from the HttpServletRequest
     String HTTP_URI = "FhirHttpUri";
     String HTTP_URL = "FhirHttpUrl";

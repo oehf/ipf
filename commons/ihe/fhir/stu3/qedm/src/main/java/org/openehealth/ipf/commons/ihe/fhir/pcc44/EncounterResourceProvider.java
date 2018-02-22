@@ -31,12 +31,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
- * Procedure Resource Provider for QEDm (PCC-44)
+ * Encounter Resource Provider for QEDm (PCC-44)
  *
  * @author Christian Ohr
  * @since 3.5
  */
-public class EncounterResourceProvider extends Pcc44ResourceProvider<Encounter> {
+public class EncounterResourceProvider extends AbstractPcc44ResourceProvider<Encounter> {
 
     public EncounterResourceProvider() {
         super(Encounter.class);
@@ -67,7 +67,7 @@ public class EncounterResourceProvider extends Pcc44ResourceProvider<Encounter> 
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, Encounter.class, httpServletRequest, httpServletResponse);
     }
 
 }

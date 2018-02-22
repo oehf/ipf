@@ -32,12 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
- * AllergyIntolerance Resource Provider for QEDm (PCC-44)
+ * DiagnosticReport Resource Provider for QEDm (PCC-44)
  *
  * @author Christian Ohr
  * @since 3.5
  */
-public class DiagnosticReportResourceProvider extends Pcc44ResourceProvider<DiagnosticReport> {
+public class DiagnosticReportResourceProvider extends AbstractPcc44ResourceProvider<DiagnosticReport> {
 
     public DiagnosticReportResourceProvider() {
         super(DiagnosticReport.class);
@@ -72,7 +72,7 @@ public class DiagnosticReportResourceProvider extends Pcc44ResourceProvider<Diag
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, DiagnosticReport.class, httpServletRequest, httpServletResponse);
     }
 
 }

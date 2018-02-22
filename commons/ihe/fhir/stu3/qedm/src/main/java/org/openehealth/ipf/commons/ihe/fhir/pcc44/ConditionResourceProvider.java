@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.5
  */
-public class ConditionResourceProvider extends Pcc44ResourceProvider<Condition> {
+public class ConditionResourceProvider extends AbstractPcc44ResourceProvider<Condition> {
 
     public ConditionResourceProvider() {
         super(Condition.class);
@@ -70,7 +70,7 @@ public class ConditionResourceProvider extends Pcc44ResourceProvider<Condition> 
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, Condition.class, httpServletRequest, httpServletResponse);
     }
 
 }

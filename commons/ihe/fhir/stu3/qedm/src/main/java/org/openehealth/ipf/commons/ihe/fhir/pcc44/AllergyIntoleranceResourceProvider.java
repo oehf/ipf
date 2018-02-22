@@ -35,7 +35,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.5
  */
-public class AllergyIntoleranceResourceProvider extends Pcc44ResourceProvider<AllergyIntolerance> {
+public class AllergyIntoleranceResourceProvider extends AbstractPcc44ResourceProvider<AllergyIntolerance> {
 
     public AllergyIntoleranceResourceProvider() {
         super(AllergyIntolerance.class);
@@ -63,7 +63,7 @@ public class AllergyIntoleranceResourceProvider extends Pcc44ResourceProvider<Al
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, AllergyIntolerance.class, httpServletRequest, httpServletResponse);
     }
 
 }

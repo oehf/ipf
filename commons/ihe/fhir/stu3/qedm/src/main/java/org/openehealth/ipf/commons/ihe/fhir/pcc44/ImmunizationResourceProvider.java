@@ -30,12 +30,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
- * MedicationRequest Resource Provider for QEDm (PCC-44)
+ * Immunization Resource Provider for QEDm (PCC-44)
  *
  * @author Christian Ohr
  * @since 3.5
  */
-public class ImmunizationResourceProvider extends Pcc44ResourceProvider<Immunization> {
+public class ImmunizationResourceProvider extends AbstractPcc44ResourceProvider<Immunization> {
 
     public ImmunizationResourceProvider() {
         super(Immunization.class);
@@ -64,7 +64,7 @@ public class ImmunizationResourceProvider extends Pcc44ResourceProvider<Immuniza
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, Immunization.class, httpServletRequest, httpServletResponse);
     }
 
 }

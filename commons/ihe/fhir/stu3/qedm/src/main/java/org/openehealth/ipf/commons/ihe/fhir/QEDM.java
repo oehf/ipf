@@ -19,7 +19,6 @@ import ca.uhn.fhir.context.FhirContext;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44ClientRequestFactory;
@@ -36,37 +35,22 @@ public class QEDM implements IntegrationProfile {
 
 
     public enum Interactions implements FhirInteractionId<FhirQueryAuditDataset> {
-        PCC_44 {
-            @Override
-            public void init(List<? extends FhirTransactionOptions> options) {
-                init("qedm-pcc44",
-                        "Mobile Query for Existing Data",
-                        true,
-                        new Pcc44AuditStrategy(false),
-                        new Pcc44AuditStrategy(true),
-                        options);
-            }
-        };
+
+        PCC_44;
 
         @Getter
         FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
 
-        protected void init(
-                String name,
-                String description,
-                boolean isQuery,
-                AuditStrategy<FhirQueryAuditDataset> clientAuditStrategy,
-                AuditStrategy<FhirQueryAuditDataset> serverAuditStrategy,
-                List<? extends FhirTransactionOptions> options) {
+        public void init(List<? extends FhirTransactionOptions> options) {
             this.fhirTransactionConfiguration = new FhirTransactionConfiguration<>(
-                    name,
-                    description,
-                    isQuery,
-                    clientAuditStrategy,
-                    serverAuditStrategy,
+                    "qedm-pcc44",
+                    "Mobile Query for Existing Data",
+                    true,
+                    new Pcc44AuditStrategy(false),
+                    new Pcc44AuditStrategy(true),
                     FhirContext.forDstu3(),
-                    FhirTransactionOptions.concat(options),
-                    new Pcc44ClientRequestFactory(), // DEPENDS, more generic!!
+                    FhirTransactionOptions.concatProviders(options),
+                    new Pcc44ClientRequestFactory(),
                     FhirTransactionValidator.NO_VALIDATION);
         }
     }

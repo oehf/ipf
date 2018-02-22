@@ -95,7 +95,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @return result of processing
      */
     protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
-                                                                    HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+                                                                    HttpServletRequest httpServletRequest,
+                                                                    HttpServletResponse httpServletResponse) {
         return requestBundle(payload, null, httpServletRequest, httpServletResponse);
     }
 
@@ -112,10 +113,31 @@ public abstract class AbstractPlainProvider implements Serializable {
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return requestBundle(payload, parameters, null, httpServletRequest, httpServletResponse);
+    }
+
+    /**
+     * Requests a list of resources with parameters
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param parameters          FHIR search parameters
+     * @param resourceType        FHIR resource type being searched
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param <R>                 Result type
+     * @return result of processing
+     */
+    protected final <R extends IBaseResource> List<R> requestBundle(
+            Object payload, FhirSearchParameters parameters,
+            Class<? extends IBaseResource> resourceType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        if (resourceType != null) {
+            headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
+        }
         return consumer.handleBundleRequest(payload, headers);
     }
 
@@ -133,10 +155,32 @@ public abstract class AbstractPlainProvider implements Serializable {
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return requestBundleProvider(payload, searchParameters, null, httpServletRequest, httpServletResponse);
+    }
+
+    /**
+     * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
+     * bundles. The type of the returned {@link IBundleProvider} instance is determined
+     * by the {@link #consumer RequestConsumer} impelmentation.
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param searchParameters    FHIR search parameters
+     * @param resourceType        FHIR resource type
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @return IBundleProvider
+     */
+    protected final IBundleProvider requestBundleProvider(
+            Object payload, FhirSearchParameters searchParameters,
+            Class<? extends IBaseResource> resourceType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest);
+        if (resourceType != null) {
+            headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
+        }
         return consumer.handleBundleProviderRequest(payload, headers);
     }
 

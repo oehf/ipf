@@ -22,9 +22,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
-import org.hl7.fhir.dstu3.model.DiagnosticReport;
 import org.hl7.fhir.dstu3.model.Procedure;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
@@ -38,7 +36,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.5
  */
-public class ProcedureResourceProvider extends Pcc44ResourceProvider<Procedure> {
+public class ProcedureResourceProvider extends AbstractPcc44ResourceProvider<Procedure> {
 
     public ProcedureResourceProvider() {
         super(Procedure.class);
@@ -69,7 +67,7 @@ public class ProcedureResourceProvider extends Pcc44ResourceProvider<Procedure> 
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, Procedure.class, httpServletRequest, httpServletResponse);
     }
 
 }

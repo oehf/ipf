@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 public interface FhirTransactionOptions extends TransactionOptions<Class<? extends AbstractResourceProvider>> {
 
-    static List<? extends AbstractResourceProvider> concat(List<? extends FhirTransactionOptions> options) {
+    static List<? extends AbstractResourceProvider> concatProviders(List<? extends FhirTransactionOptions> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
                 .map(c -> {

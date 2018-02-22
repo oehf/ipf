@@ -16,19 +16,42 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
+import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
+import ca.uhn.fhir.rest.gclient.ICriterion;
+import ca.uhn.fhir.rest.gclient.IQuery;
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.Observation;
-import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+
+import java.util.Map;
 
 /**
- * Request Factory for PCC-44 requests returning a bundle of ...
+ * Request Factory for PCC-44 requests returning a bundle of resources that were queried
  *
  * @author Christian Ohr
  * @since 3.5
  */
-public class Pcc44ClientRequestFactory extends QueryClientRequestFactory {
+public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
 
-    public Pcc44ClientRequestFactory() {
-        super(Observation.class, Bundle.class);
+    @Override
+    public IClientExecutable<IQuery<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+        IQuery<IBaseBundle> query;
+        Class<? extends IBaseResource> queriedResourceType = (Class<? extends IBaseResource>)parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
+        if (requestData instanceof ICriterion) {
+            query = client.search()
+                    .forResource(queriedResourceType)
+                    .where((ICriterion<?>) requestData);
+        } else {
+            query = client.search()
+                    .byUrl(requestData.toString());
+        }
+        if (parameters.containsKey(Constants.FHIR_COUNT)) {
+            query.count(Integer.parseInt(parameters.get(Constants.FHIR_COUNT).toString()));
+        }
+        return query.returnBundle(Bundle.class);
     }
+
 }

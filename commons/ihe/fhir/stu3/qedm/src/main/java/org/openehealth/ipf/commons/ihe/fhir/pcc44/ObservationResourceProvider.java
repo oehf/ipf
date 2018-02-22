@@ -34,7 +34,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.5
  */
-public class ObservationResourceProvider extends Pcc44ResourceProvider<Observation> {
+public class ObservationResourceProvider extends AbstractPcc44ResourceProvider<Observation> {
 
     public ObservationResourceProvider() {
         super(Observation.class);
@@ -69,7 +69,7 @@ public class ObservationResourceProvider extends Pcc44ResourceProvider<Observati
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, Observation.class, httpServletRequest, httpServletResponse);
     }
 
 

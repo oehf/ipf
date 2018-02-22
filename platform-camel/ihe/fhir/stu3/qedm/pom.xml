@@ -7,23 +7,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ipf-platform-camel-ihe-fhir-stu3-mhd</artifactId>
-    <name>ipf-platform-camel-ihe-fhir-stu3-mhd</name>
-    <description>Apache Camel components for MHD transactions</description>
+    <artifactId>ipf-platform-camel-ihe-fhir-stu3-qedm</artifactId>
+    <name>ipf-platform-camel-ihe-fhir-stu3-qedm</name>
+    <description>Apache Camel components for QEDM transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-fhir-stu3-mhd</artifactId>
+            <artifactId>ipf-commons-ihe-fhir-stu3-qedm</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-servlet</artifactId>
         </dependency>
 
         <!-- Test dependencies -->

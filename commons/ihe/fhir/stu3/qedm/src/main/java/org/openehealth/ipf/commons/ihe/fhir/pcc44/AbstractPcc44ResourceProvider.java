@@ -16,31 +16,26 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.annotation.*;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.Read;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.Observation;
-import org.hl7.fhir.dstu3.model.Patient;
-import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractResourceProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
 
 /**
  * @author Christian Ohr
  */
-abstract class Pcc44ResourceProvider<T extends IBaseResource> extends AbstractResourceProvider {
+
+// Must be public
+public abstract class AbstractPcc44ResourceProvider<T extends IBaseResource> extends AbstractResourceProvider {
 
     private final Class<T> clazz;
 
-    protected Pcc44ResourceProvider(Class<T> clazz) {
+    protected AbstractPcc44ResourceProvider(Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -51,8 +46,8 @@ abstract class Pcc44ResourceProvider<T extends IBaseResource> extends AbstractRe
 
     /**
      * Handles Retrieve. This is not an actual part of the PCC-44 specification, but in the
-     * context of restful FHIR IHE transaction it makes sense to be able to retrieve a Observation by
-     * its resource ID.
+     * context of restful FHIR IHE transaction it makes sense to be able to retrieve a resource by
+     * its ID.
      *
      * @param id                  resource ID
      * @param httpServletRequest  servlet request

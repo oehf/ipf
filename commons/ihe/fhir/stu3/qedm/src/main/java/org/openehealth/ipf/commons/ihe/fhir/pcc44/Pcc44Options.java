@@ -37,7 +37,16 @@ public enum Pcc44Options implements FhirTransactionOptions {
     Medications(MedicationStatementResourceProvider.class, MedicationRequestResourceProvider.class),
     Immunizations(ImmunizationResourceProvider.class),
     Procedures(ProcedureResourceProvider.class),
-    Encounters(EncounterResourceProvider.class);
+    Encounters(EncounterResourceProvider.class),
+    All(ObservationResourceProvider.class,
+            AllergyIntoleranceResourceProvider.class,
+            ConditionResourceProvider.class,
+            DiagnosticReportResourceProvider.class,
+            MedicationStatementResourceProvider.class,
+            MedicationRequestResourceProvider.class,
+            ImmunizationResourceProvider.class,
+            ProcedureResourceProvider.class,
+            EncounterResourceProvider.class);
 
     private List<Class<? extends AbstractResourceProvider>> resourceProviders;
 

@@ -17,6 +17,7 @@
         <module>pixpdq</module>
         <module>mhd</module>
         <module>audit</module>
+		<module>qedm</module>
 		<module>test</module>		
     </modules>
 

@@ -18,15 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 abstract class AbstractTestIti68 extends StandardTestContainer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti68.class);
 
     public static void startServer(String contextDescriptor) {
         CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();

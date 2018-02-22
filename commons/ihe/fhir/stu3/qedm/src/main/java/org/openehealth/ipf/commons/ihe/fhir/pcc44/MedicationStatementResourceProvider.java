@@ -35,7 +35,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.5
  */
-public class MedicationStatementResourceProvider extends Pcc44ResourceProvider<MedicationStatement> {
+public class MedicationStatementResourceProvider extends AbstractPcc44ResourceProvider<MedicationStatement> {
 
     public MedicationStatementResourceProvider() {
         super(MedicationStatement.class);
@@ -64,7 +64,7 @@ public class MedicationStatementResourceProvider extends Pcc44ResourceProvider<M
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, MedicationStatement.class, httpServletRequest, httpServletResponse);
     }
 
 
