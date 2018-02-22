@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.servlet.ServletComponent;
-import org.apache.camel.component.servlet.ServletEndpoint;
 import org.apache.camel.http.common.HttpMethods;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.MHD;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MHD;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;

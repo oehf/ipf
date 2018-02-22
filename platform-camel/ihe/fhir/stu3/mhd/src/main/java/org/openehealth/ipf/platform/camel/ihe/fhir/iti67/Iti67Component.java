@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.MHD.QueryInteractions.ITI_67;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryInteractions.ITI_67;
 
 /**
  * Component for MHD Retrieve Document Reference (ITI-67)

@@ -21,16 +21,16 @@ http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="bidiMappingService" 
-        class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+        class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
     </bean>
 
     <bean id="configurer" 
-        class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
+        class="org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer">
         <property name="mappingService" ref="bidiMappingService" />
     </bean>
     
     <!-- configurer bean is collected automatically -->
     <bean id="postProcessor" 
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
     </bean>    
 </beans>

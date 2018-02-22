@@ -1,1 +1,1 @@
-http\://openehealth.org/schema/ipf-commons-core=org.openehealth.ipf.commons.core.config.CommonsCoreNamespaceHandler
+http\://openehealth.org/schema/ipf-commons-core=org.openehealth.ipf.commons.spring.core.config.CommonsCoreNamespaceHandler

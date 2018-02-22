@@ -35,6 +35,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
   </bean>
   
   <bean id="postProcessor" 
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
   </bean>   
 </beans>

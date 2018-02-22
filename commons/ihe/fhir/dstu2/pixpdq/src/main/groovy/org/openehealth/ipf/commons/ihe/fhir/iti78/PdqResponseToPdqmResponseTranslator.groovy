@@ -27,7 +27,7 @@ import org.hl7.fhir.instance.model.ContactPoint.ContactPointUse
 import org.hl7.fhir.instance.model.HumanName.NameUse
 import org.hl7.fhir.instance.model.valuesets.V3MaritalStatus
 import org.hl7.fhir.instance.model.valuesets.V3NullFlavor
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper

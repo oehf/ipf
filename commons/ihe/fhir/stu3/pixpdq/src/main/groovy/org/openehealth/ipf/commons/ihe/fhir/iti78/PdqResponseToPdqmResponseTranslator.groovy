@@ -29,7 +29,7 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse
 import org.hl7.fhir.dstu3.model.codesystems.V3MaritalStatus
 import org.hl7.fhir.dstu3.model.codesystems.V3NullFlavor
 import org.hl7.fhir.dstu3.model.codesystems.V3ReligiousAffiliation
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper

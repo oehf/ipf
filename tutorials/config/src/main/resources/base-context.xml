@@ -10,7 +10,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
   <camel:camelContext id="camelContext" />
   
   <bean id="bidiMappingService"
-      class="org.openehealth.ipf.commons.map.SpringBidiMappingService" />
+      class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService" />
 
   <bean id="baseRoute"
         class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />

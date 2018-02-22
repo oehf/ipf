@@ -46,7 +46,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
   </bean>
   
   <bean id="postProcessor"
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
     <property name="springConfigurers" >
       <list>
         <ref bean="configurerRB" />

@@ -1,12 +1,12 @@
 ## Dynamic Custom Mappings
 
 Custom mapping scripts can be added to a global mapping service instance.
-Define a `org.openehealth.ipf.commons.map.config.CustomMappings` bean in a custom spring application context file which references
+Define a `org.openehealth.ipf.commons.spring.map.config.CustomMappings` bean in a custom spring application context file which references
 one or more mapping scripts that shall be picked up.
 
 ```
 <bean id="customMapping1"
-      class="org.openehealth.ipf.commons.map.config.CustomMappings">
+      class="org.openehealth.ipf.commons.spring.map.config.CustomMappings">
     <property name="mappingResources">
         <list>
             <value>classpath:config1.map</value>
@@ -16,7 +16,7 @@ one or more mapping scripts that shall be picked up.
 </bean>
 
 <bean id="customMapping2"
-      class="org.openehealth.ipf.commons.map.config.CustomMappings">
+      class="org.openehealth.ipf.commons.spring.map.config.CustomMappings">
     <property name="mappingResource" value="classpath:config3.map" />
 </bean>
 

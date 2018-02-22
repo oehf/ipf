@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
 import java.util.List;
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.fhir.QEDM.Interactions.PCC_44;
+import static org.openehealth.ipf.commons.ihe.fhir.qedm.QEDM.Interactions.PCC_44;
 
 
 /**

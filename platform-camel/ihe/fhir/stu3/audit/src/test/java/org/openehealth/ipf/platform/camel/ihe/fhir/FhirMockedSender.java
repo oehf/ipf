@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.translation.AuditRecordTranslator;
+import org.openehealth.ipf.commons.ihe.fhir.atna.translation.AuditRecordTranslator;
 
 import java.util.ArrayList;
 import java.util.Collections;

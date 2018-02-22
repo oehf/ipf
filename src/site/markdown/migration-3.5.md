@@ -17,6 +17,20 @@ parameter, where `ref` is the ID of a `AuditContext` bean.
 The parameters for executing RFC 5425-compliant auditing over TLS are now exclusively derived from
 the standard [JSSE parameters](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization).
 
+If you derived your own ATNA auditing from the OpenHealthTools libraries, you might want to migrate to the new API
+in order to avoid redundant configuration. Please check [here](../ipf-commons-audit/index.html) for details on
+the new API.
+
+### Package Changes
+
+In order to avoid split packages (violating the module concept as of Java 9), a couple of package names
+were changed to avoid that different IPF modules expose classes under the same package. Most likely,
+the following changes will affect library users:
+
+* `ipf-commons-spring` module: classes were moved from `org.openehealth.ipf.commons.*` to `org.openehealth.ipf.commons.spring.*`
+* `ipf-commons-ihe-fhir-dstu2-core` module: classes were moved from `org.openehealth.ipf.commons.ihe.fhir.*` to `org.openehealth.ipf.commons.ihe.fhir.support.*`
+* `ipf-commons-ihe-fhir-stu3-core` module: classes were moved from `org.openehealth.ipf.commons.ihe.fhir.*` to `org.openehealth.ipf.commons.ihe.fhir.support.*`
+
 
 ### Removal of deprecated functionality in IPF 3.5
 

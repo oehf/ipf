@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.PIXM.Interactions.ITI_83;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.PIXM.Interactions.ITI_83;
 
 /**
  * Component for PIXm (ITI-83)

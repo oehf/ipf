@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.MHD.SubmitInteractions.ITI_65;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.SubmitInteractions.ITI_65;
 
 /**
  * Component for MHD Register Document (ITI-65)

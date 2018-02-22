@@ -49,7 +49,7 @@ And the corresponding Spring application context shown below. Note that the cust
   </bean>
 
   <bean id="postProcessor"
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
       <property name="springConfigurers" >
         <list>
           <ref bean="customRouteBuilderConfigurer" />

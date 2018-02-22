@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.ATNA.Interactions.ITI_81;
+import static org.openehealth.ipf.commons.ihe.fhir.atna.ATNA.Interactions.ITI_81;
 
 /**
  * Component for RESTful ATNA (ITI-81)

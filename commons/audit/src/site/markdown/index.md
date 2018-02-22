@@ -23,7 +23,7 @@ In order to create and submit an Audit Message, perform the following steps
 1. Construct your Audit Message by using one of the builder classes contained in the
 `org.openehealth.ipf.commons.audit.event` package. Note that the IHE 
 modules (such as `ipf-commons-ihe-core` or `ipf-commons-ihe-xds`) inherit from some of
-these builders to create IHE ATNA-compliant Audit messages more easily.
+these builders to create IHE-style ATNA-compliant Audit messages more easily.
 2. Call the `getMessage` or `getMessages` method to obtain the `AuditMessage` from the
 builder.
 3. Submit the Audit Message to the configured destination by calling 

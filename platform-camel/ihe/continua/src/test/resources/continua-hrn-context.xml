@@ -62,7 +62,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         </property>
     </bean>
 
-    <bean id="springTypeConverter" class="org.openehealth.ipf.commons.core.config.SpringTypeConverter">
+    <bean id="springTypeConverter" class="org.openehealth.ipf.commons.spring.core.config.SpringTypeConverter">
         <constructor-arg ref="conversionService"/>
     </bean>
 

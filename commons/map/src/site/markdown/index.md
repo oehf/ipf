@@ -18,7 +18,7 @@ The ipf-commons-map library provides the MappingService implementation
 *  mapping of arbitrary objects
 *  definitions of mappings using external Groovy Scripts
 
-Additionally there is [`org.openehealth.ipf.commons.map.SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/SpringBidiMappingService.html)
+Additionally there is [`org.openehealth.ipf.commons.spring.map.SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/spring/map/SpringBidiMappingService.html)
 that adds the possibility to configure mapping scripts as Spring `Resource`s.
 
 You are free to implement and use your own service as long as it implements the
@@ -49,7 +49,7 @@ When using Spring, you should also depend on:
 
 ### Configuring the Mapping Service
 
-Here is how to configure IPF's [`SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/SpringBidiMappingService.html) using Spring:
+Here is how to configure IPF's [`SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/spring/map/SpringBidiMappingService.html) using Spring:
 
 ```xml
 
@@ -67,7 +67,7 @@ Here is how to configure IPF's [`SpringBidiMappingService`](../apidocs/org/opene
 
     ...
     <!-- Groovy class that provides the operations on the mappings -->
-    <bean id="myMappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+    <bean id="myMappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
        <property name="mappingResources">
            <list>
               <value>classpath:example.groovy"</value>
