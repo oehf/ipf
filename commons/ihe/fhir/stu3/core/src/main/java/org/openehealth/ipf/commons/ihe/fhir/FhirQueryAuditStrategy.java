@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +55,11 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
 
         String url = (String) parameters.get(HTTP_URL);
         String query = (String) parameters.get(HTTP_QUERY);
-        dataset.setQueryString(String.format("%s?%s", url, query));
+        try {
+            dataset.setQueryString(URLDecoder.decode(String.format("%s?%s", url, query), "UTF-8"));
+        } catch (UnsupportedEncodingException ignored) {
+            // should never occur
+        }
 
         FhirSearchParameters searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
         if (searchParameter != null) {
