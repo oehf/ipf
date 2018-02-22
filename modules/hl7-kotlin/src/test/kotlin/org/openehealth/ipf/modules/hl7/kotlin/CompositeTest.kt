@@ -17,8 +17,10 @@
 package org.openehealth.ipf.modules.hl7.kotlin
 
 import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.model.v22.datatype.CE
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -28,12 +30,17 @@ class CompositeTest {
 
     val context = DefaultHapiContext()
     val msg: ADT_A01 = loadHl7(context, "/msg-01.hl7")
-    val composite = msg["NK1"](0)[4]
+    private val composite = msg["NK1"](0)[4]
 
 
     @Test
     fun testGetAt() {
         assertEquals("NW", composite[4].value)
+    }
+
+    @Test
+    fun testEncode() {
+        assertEquals("Irgendwo 23^^Foo^NW^11000^DE", composite.encode())
     }
 
     @Test
@@ -68,5 +75,11 @@ class CompositeTest {
         // set via primitive adapter
         composite[4] = composite[5]
         assertEquals("11000", composite[4].value)
+    }
+
+    @Test
+    fun testMakeComposite() {
+        val ce = newComposite("CE", msg)
+        assertTrue(ce is CE)
     }
 }

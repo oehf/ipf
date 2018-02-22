@@ -29,8 +29,8 @@ class DoubleQuoteTest {
 
     val context = DefaultHapiContext()
     val msg: Message = loadHl7(context, "/msg-07.hl7")
-    val streetAddress = msg["PID"][11](0)[1]
-    val address = msg["PID"][11]
+    private val streetAddress = msg["PID"][11](0)[1]
+    private val address = msg["PID"][11]
 
     @Test
     fun testGet() {

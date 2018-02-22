@@ -28,9 +28,9 @@ import org.junit.Test
 class ShortcutSyntaxTest {
 
     val context = DefaultHapiContext()
-    val msg1: Message = loadHl7(context, "/msg-01.hl7")
-    val msg2: Message = loadHl7(context, "/msg-06.hl7")
-    val msg3: Message = loadHl7(context, "/msg-02.hl7")
+    private val msg1: Message = loadHl7(context, "/msg-01.hl7")
+    private val msg2: Message = loadHl7(context, "/msg-06.hl7")
+    private val msg3: Message = loadHl7(context, "/msg-02.hl7")
     
 
     @Test

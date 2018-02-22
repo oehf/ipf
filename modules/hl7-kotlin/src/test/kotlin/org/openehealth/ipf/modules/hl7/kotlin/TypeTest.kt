@@ -19,6 +19,7 @@ package org.openehealth.ipf.modules.hl7.kotlin
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Structure
+import ca.uhn.hl7v2.model.v24.datatype.SI
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -30,9 +31,9 @@ class TypeTest {
 
     val context = DefaultHapiContext()
     val msg: Message = loadHl7(context, "/msg-02.hl7")
-    val obx1 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"]["OBSERVATION"]["OBX"]
-    val obx2 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"]["OBX"]
-    val obx3 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"](1)["OBX"]
+    private val obx1 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"]["OBSERVATION"]["OBX"]
+    private val obx2 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"]["OBX"]
+    private val obx3 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"](1)["OBX"]
 
     @Test
     fun testIsEmptyOBX1() {
@@ -78,13 +79,20 @@ class TypeTest {
         assertFieldsEmpty(obx2, 16, 17)
     }
 
-    fun assertFieldEquals(expected: String, data: Structure, field: Int) {
+    @Test
+    fun testMakePrimitive() {
+        val si = newPrimitive("SI", msg, "1")
+        assertTrue(si is SI)
+        assertEquals("1", si.value)
+    }
+
+    private fun assertFieldEquals(expected: String, data: Structure, field: Int) {
         val simpleName = data::class.simpleName
         assertEquals(expected, data[field].encode())
         assertFalse("$simpleName[$field] must be not empty, but isEmpty() returns true", data[field].empty)
     }
 
-    fun assertFieldsEmpty(data: Structure, vararg fields: Int) {
+    private fun assertFieldsEmpty(data: Structure, vararg fields: Int) {
         val simpleName = data::class.simpleName
         for (field in fields) {
             assertTrue("$simpleName[$field] must be empty, but isEmpty() returns false", data[field].empty)

@@ -1,22 +1,17 @@
 ## HL7v2 Domain Specific Language
 
-The [Groovy]-based HL7v2 DSL provides a unique programming interface for handling HL7v2 messages. 
+The [Kotlin]-based HL7v2 DSL provides a unique programming interface for handling HL7v2 messages. 
 Its API aligns very closely with natural language and the syntax of HL7v2 as often seen in specifications and requirements, 
 so that translation from the language of the "HL7 world" into the language of the "developer's world" becomes redundant.
 
 ### How it works
 
-The `ipf-modules-hl7` library is basically a [Groovy extension module] that adds the required methods to the [HAPI]
+The `ipf-modules-hl7-kotlin` library adds the required methods to the [HAPI]
 model classes. These methods are used "under the hood" by the actual DSL.
-
-**Note**:
-IPF 2.x used a dedicated `ipf-modules-hl7dsl` library and achieved the same goal by using adapters
-wrapped around the [HAPI] model classes. With IPF 3.x, this library and all wrappers have been deprecated, and we
-strongly recommend to migrate your applications. With IPF 3.4, the library has finally been removed.
 
 ### Accessing HL7 messages
 
-The DSL offers a position-based navigation of HL7 structures and fields. It's all valid Groovy Syntax,
+The DSL offers a position-based navigation of HL7 structures and fields. It's all valid Kotlin Syntax,
 accomplished by operator overloading and metaclass programming, so you don't need a intermediate step that parses the
 expressions (see the [Terser] class in HAPI).
 
@@ -24,13 +19,13 @@ expressions (see the [Terser] class in HAPI).
 
 Groups and segments can be accessed by name like an object property.
 
-```groovy
+```kotlin
     import ca.uhn.hl7v2.model.Message
 
-    def message = parser.parse(msgTxt)
-    def msh   = message.MSH
-    def group = message.PATIENT_RESULT
-    def pid   = message.PATIENT_RESULT.PATIENT.PID
+    val message = parser.parse(msgTxt)
+    val msh   = message["MSH"]
+    val group = message["PATIENT_RESULT"]
+    val pid   = message["PATIENT_RESULT"]["PATIENT"]["PID"]
 ```
 
 Details are described [here][hl7v2dslStructures].
@@ -41,24 +36,12 @@ Obtaining fields is similar to obtaining groups and segments except that fields 
 of by name. Fields are accessed like an array field. Components in a composite field are accessed like a two-dimensional array.
 Subcomponents are accessed like a three-dimensional array.
 
-```groovy
-    String messageType = message.MSH[9][1].value
-    String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1].value
+```kotlin
+    val messageType = message["MSH"][9][1].value
+    val street = message["PATIENT_RESULT"]["PATIENT"]["PID"][11][1][1].value
 ```
 
 Details are described [here][hl7v2dslFields].
-
-
-#### Boolean conversion
-
-All fields and structures implement an `isEmpty()` method. For Groovy, this is also used
-for boolean conversion, so that checks for emptiness become even more concise:
-
-```groovy
-    if (message.MSH[9][3]) {
-      println('Message structure is present')
-    }
-```
 
 
 #### Repetitions
@@ -66,9 +49,9 @@ for boolean conversion, so that checks for emptiness become even more concise:
 Groups, segments and fields may be repeatable. Parentheses like with regular method calls are used in order to obtain a
 certain element of a repeating structure.
 
-```groovy
-    def group = message.PATIENT_RESULT(0).PATIENT
-    def nk1   = group.NK1(1)
+```kotlin
+    val group = message["PATIENT_RESULT"](0)["PATIENT"]
+    val nk1   = group["NK1"](1)
 ```
 
 Details are described [here][hl7v2dslRepetitions].
@@ -83,8 +66,8 @@ This appears to be backwards compatible on printed messages, but requires differ
 
 Smart navigation resolves these problems by assuming reasonable defaults when repetitions or component operators are omitted
 
-```groovy
-    assert group.NK1(0)[2][1][1].value == group.NK1[2].value
+```kotlin
+    assertEquals(group["NK1"](0)[2][1][1].value, group["NK1"][2].value)
 ```
 
 Details are described [here][hl7v2dslSmart].
@@ -95,11 +78,11 @@ As HL7 messages are compound structures, it should be possible to traverse them.
 HL7 messages and groups. Due to their nested structures, iteration is implemented as a depth first traversal over all
 non-empty substructures, i.e. non-empty groups and segments.
 
-```groovy
+```kotlin
     import ca.uhn.hl7v2.model.Message
 
-    boolean hasGroups = message.any { it instanceof Group }
-    def allStructureNames = message*.name
+    val hasGroups = message.asIterable().any { it is Group }
+    val allStructureNames = message.asIterable().map { it.name }
 ```
 
 Details are described [here][hl7v2dslIteration].
@@ -127,8 +110,7 @@ IPF does not change or extend [HAPI] on how to parse or render HL7 message.
 
 
 [HAPI]: https://hapifhir.github.io/hapi-hl7v2/
-[Groovy]: https://www.groovy-lang.org
-[Groovy extension module]: https://www.groovy-lang.org/metaprogramming.html#_extension_modules
+[Kotlin]: https://kotlinlang.org
 [Terser]: https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/util/Terser.html
 [hl7v2dslStructures]: hl7v2dslStructures.html
 [hl7v2dslFields]: hl7v2dslFields.html

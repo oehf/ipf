@@ -27,6 +27,7 @@ import ca.uhn.hl7v2.model.Structure
  * The structure is always a child of the group.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 internal class RepeatableStructure(
         val elements: Array<out Structure>,

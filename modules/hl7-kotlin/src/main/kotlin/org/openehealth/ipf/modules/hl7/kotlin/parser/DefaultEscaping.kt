@@ -14,19 +14,18 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.modules.hl7.kotlin.validation.model
+package org.openehealth.ipf.modules.hl7.kotlin.parser
 
-import ca.uhn.hl7v2.validation.Rule
-import ca.uhn.hl7v2.validation.ValidationException
+import ca.uhn.hl7v2.parser.EncodingCharacters
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
-abstract class LambdaRuleSupport<T>(protected val rule: (T) -> Array<ValidationException>,
-                                    private val description: String,
-                                    private val sectionReference: String) : Rule<T> {
+object DefaultEscaping: ca.uhn.hl7v2.parser.DefaultEscaping() {
 
-    override fun getSectionReference(): String = sectionReference
-    override fun getDescription(): String = description
-
+    override fun escape(text: String, encChars: EncodingCharacters): String {
+        val fixed = text.replace("\r", "\\X000d\\")
+        return super.escape(fixed, encChars)
+    }
 }

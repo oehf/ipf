@@ -236,6 +236,15 @@ fun Structure.from(source: Segment): Unit =
  */
 operator fun Structure.set(idx: Int, v: Any?) = get(idx).from(v)
 
+/**
+ * Sets the repetition [rep] of field [idx] to value [v].
+ *
+ * @param idx component index, starting with 1
+ * @param rep repetition starting with 0
+ * @param v any value, i.e. another HL7 type or object implementing toString
+ */
+operator fun Structure.set(idx: Int, rep: Int, v: Any?) = get(idx, rep).from(v)
+
 
 /**
  * Sets the segment with name [name] from the provided [segment]. If applied
@@ -244,8 +253,16 @@ operator fun Structure.set(idx: Int, v: Any?) = get(idx).from(v)
  * @param name structure name
  * @param segment segment of a matching class
  */
-operator fun Group.set(name: String, segment: Segment) = get(name).from(segment)
+operator fun Structure.set(name: String, segment: Segment) = get(name).from(segment)
 
+/**
+ * Sets the repetition [rep] of the segment with name [name] from the provided [segment].
+ *
+ * @param name structure name
+ * @param rep repetition
+ * @param segment segment of a matching class
+ */
+operator fun Structure.set(name: String, rep: Int, segment: Segment) = get(name, rep).from(segment)
 
 // Counting
 
@@ -332,10 +349,10 @@ fun Structure.setObx5Type(type: String, desiredRepetitionsCount: Int = 1) {
 // Extension functions/properties for Group -----------------------------------------------
 
 
-fun Group.eachWithIndex(c: (Structure, String) -> Unit): Group = Visitors.eachWithIndex(this, c)
-fun Group.findIndexValues(c: (Structure) -> Boolean): List<String> = Visitors.findIndexValues(this, c)
-fun Group.findIndexOf(c: (Structure) -> Boolean): String? = Visitors.findIndexOf(this, c)
-fun Group.findLastIndexOf(c: (Structure) -> Boolean): String? = Visitors.findLastIndexOf(this, c)
+fun Group.eachWithIndex(c: (Structure, String) -> Unit): Group = eachWithIndex(this, c)
+fun Group.findIndexValues(c: (Structure) -> Boolean): List<String> = findIndexValues(this, c)
+fun Group.findIndexOf(c: (Structure) -> Boolean): String? = findIndexOf(this, c)
+fun Group.findLastIndexOf(c: (Structure) -> Boolean): String? = findLastIndexOf(this, c)
 
 
 /**
@@ -393,10 +410,10 @@ val Message?.encodingCharacters: EncodingCharacters
 /**
  *  @return a response message with the basic MSH fields already populated
  */
-fun <T : Message> Message.respond(responseEvent: String, responseTrigger: String?): T {
+fun <T : Message> Message.respond(responseEvent: String, responseTrigger: String? = null): T {
 
     // make message of correct version
-    val trigger = if (responseTrigger != null) responseTrigger else this.triggerEvent
+    val trigger = responseTrigger ?: this.triggerEvent
     val out = newMessage(parser.hapiContext, responseEvent, trigger, version)
 
     // populate outbound MSH using data from inbound message ...
@@ -421,7 +438,7 @@ fun <T : Message> Message.respond(responseEvent: String, responseTrigger: String
  * @return true if the version of this [Message] is at least [otherVersion]
  */
 fun Message.atLeastVersion(otherVersion: String): Boolean =
-        Version.valueOf(this.version) >= Version.valueOf(otherVersion)
+        Version.versionOf(this.version) >= Version.versionOf(otherVersion)
 
 
 // Exceptions due to invalid access

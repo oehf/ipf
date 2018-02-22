@@ -16,11 +16,9 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin
 
-import ca.uhn.hl7v2.ErrorCode
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.HapiContext
-import ca.uhn.hl7v2.Version
+import ca.uhn.hl7v2.*
 import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.model.MessageVisitors.*
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.hl7v2.util.ReflectionUtil
 import java.io.InputStream
@@ -45,8 +43,8 @@ fun newMessage(context: HapiContext, eventType: String, triggerEvent: String, ve
             ?: throw HL7Exception("Can't instantiate message $structName", ErrorCode.UNSUPPORTED_MESSAGE_TYPE)
     val msg = ReflectionUtil.instantiateMessage(c, factory) as AbstractMessage
     msg.parser = context.genericParser
-    msg.initQuickstart(eventType, triggerEvent, "P2")
-    msg["MSH"][11][2] = "T"
+    msg.initQuickstart(eventType, triggerEvent, "P")
+    if (msg.atLeastVersion("2.3")) msg["MSH"][11][2] = "T"
     return msg
 }
 
@@ -100,7 +98,6 @@ fun newPrimitive(name: String, message: Message, value: String? = null): Primiti
  *
  * @param name composite name
  * @param message message for which the composite shall be created
- * @param list the list with the values for the composite
  * @return new composite
  */
 fun newComposite(name: String, message: Message): Composite {
@@ -143,3 +140,61 @@ fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Cha
  * @return typed message
  */
 fun <T: Message> makeHl7(context: HapiContext, txt: String): T = context.genericParser.parse(txt) as T
+
+/**
+ * Iterate over a [group] and do something with every structure and its location string
+ *
+ * @param group group to be traversed
+ * @param c closure
+ * @return the group being traversed
+ */
+fun eachWithIndex(group: Group, c: (Structure, String) -> Unit): Group = group.apply {
+    accept(visitStructures(EachStructureLocationVisitor(c)))
+}
+
+/**
+ * Find all locations of structures within the [group] that match the predicate [c]
+ *
+ * @param group group to be traversed
+ * @param c predicate
+ * @return list of location strings
+ */
+fun findIndexValues(group: Group, c: (Structure) -> Boolean): List<String> =
+        findPairs(group, c).map { it.first }
+
+/**
+ * Find the  location of the first structure within the [group] that matches the predicate [c]
+ *
+ * @param group group to be traversed
+ * @param c predicate
+ * @return location string
+ */
+fun findIndexOf(group: Group, c: (Structure) -> Boolean): String? =
+        findPairs(group, c, true).firstOrNull()?.first
+
+/**
+ * Find the  location of the last structure within the [group] that matches the predicate [c]
+ *
+ * @param group group to be traversed
+ * @param c predicate
+ * @return location string
+ */
+fun findLastIndexOf(group: Group, c: (Structure) -> Boolean): String? =
+        findPairs(group, c).lastOrNull()?.first
+
+/**
+ * It is easier to access the first/last element from a list of pairs instead of from a map
+ */
+private fun findPairs(group: Group, c: (Structure) -> Boolean, findFirst: Boolean = false): List<Pair<String, Structure>> {
+    val visitor = FindStructureVisitor(c, findFirst)
+    group.accept(visitStructures(visitor))
+    return visitor.paths.map { terserToDsl(it.first) to it.second }
+}
+
+
+internal fun terserToDsl(location: Location): String {
+    val terserSpec = location.toString()
+    val start = if (terserSpec.startsWith('/')) 1 else 0
+    val end = if (terserSpec.endsWith('/')) terserSpec.length - 1 else terserSpec.length
+    return terserSpec.substring(start, end).replace('/', '.')
+}

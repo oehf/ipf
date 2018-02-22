@@ -16,8 +16,21 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin
 
-/**
- * @author Christian Ohr
- * @since 3.5
- */
-class Hl7DslException(msg: String, t: Throwable? = null ): RuntimeException(msg, t)
+import ca.uhn.hl7v2.Location
+import ca.uhn.hl7v2.model.Group
+import ca.uhn.hl7v2.model.MessageVisitorSupport
+import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.Structure
+
+internal class EachStructureLocationVisitor(private val consume: (Structure, String) -> Unit) : MessageVisitorSupport() {
+
+    override fun end(group: Group, location: Location): Boolean {
+        consume(group, terserToDsl(location))
+        return super.end(group, location)
+    }
+
+    override fun end(segment: Segment, location: Location): Boolean {
+        consume(segment, terserToDsl(location))
+        return super.end(segment, location)
+    }
+}

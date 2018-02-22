@@ -51,7 +51,9 @@ class GroupTest {
     @Test
     fun testGetAt() {
         assertTrue(message["MSH"] is Segment)
+        assertTrue(message["PATIENT_RESULT"](0) is Group)
         assertTrue(message["PATIENT_RESULT", 0] is Group)
+        assertTrue(message["PATIENT_RESULT"]() is Array)
         assertTrue(message["PATIENT_RESULT"]["PATIENT"]["PID"] is Segment)
 
         // alternative notation does not exist in Kotlin
@@ -164,6 +166,12 @@ class GroupTest {
     }
 
     @Test
+    fun testMap() {
+        val names = message.asIterable().map { it.name }
+        assertEquals(34, names.size)
+    }
+
+    @Test
     fun testEachWithIndex() {
         val found = mutableListOf<String>()
         message.eachWithIndex { _, index -> found += index }
@@ -180,6 +188,15 @@ class GroupTest {
     @Test
     fun testAny() {
         assertTrue(message.asIterable().any { it is Group })
+    }
+
+    @Test
+    fun testFor() {
+        var numberOfStructures = 0
+        for (structure in message) {
+            numberOfStructures++
+        }
+        assertEquals(34, numberOfStructures)
     }
 
     @Test

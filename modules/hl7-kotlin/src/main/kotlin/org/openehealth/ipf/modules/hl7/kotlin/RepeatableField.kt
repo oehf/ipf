@@ -24,6 +24,7 @@ import ca.uhn.hl7v2.model.*
  * The field is always a child of the segment.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 internal class RepeatableField (
         val elements: Array<out Type>,

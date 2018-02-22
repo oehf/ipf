@@ -26,8 +26,9 @@ import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
  * extension functions.
  *
  * @author Christian Ohr
+ * @since 3.5
  */
-class IterableGroup(val g: Group) : Iterable<Structure>, AbstractGroup(g.message, g.message.parser.factory) {
+class IterableGroup(private val g: Group) : Iterable<Structure>, AbstractGroup(g.message, g.message.parser.factory) {
 
     override fun iterator(): Iterator<Structure> =
             ReadOnlyMessageIterator.createPopulatedStructureIterator(g, Structure::class.java)

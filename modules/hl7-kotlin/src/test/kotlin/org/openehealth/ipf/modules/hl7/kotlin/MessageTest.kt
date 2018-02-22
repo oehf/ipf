@@ -27,11 +27,11 @@ import org.junit.Test
 class MessageTest {
 
     val context = DefaultHapiContext()
-    val msg1: Message = loadHl7(context, "/msg-01.hl7")
-    val msg2: Message = loadHl7(context, "/msg-04.hl7")
-    val msg3: Message = loadHl7(context, "/msg-03.hl7")
-    val msg4: Message = loadHl7(context, "/msg-08.hl7")
-
+    private val msg1: Message = loadHl7(context, "/msg-01.hl7")
+    private val msg2: Message = loadHl7(context, "/msg-04.hl7")
+    private val msg3: Message = loadHl7(context, "/msg-03.hl7")
+    private val msg4: Message = loadHl7(context, "/msg-08.hl7")
+    private val msg5: Message = loadHl7(context, "/msg-05.hl7")
 
     @Test
     fun testCopy() {
@@ -68,4 +68,49 @@ class MessageTest {
         val msg4Copy = msg4.copy()
         assertEquals(msg4.toString(), msg4Copy.toString())
     }
+
+    @Test
+    fun testResponse22() {
+        val response: Message = msg1.respond("ACK")
+        assertEquals("ACK^A01", response["MSH"][9].encode())
+    }
+
+    @Test
+    fun testResponse25() {
+        val response: Message = msg3.respond("ACK")
+        assertEquals("ACK^T01", response["MSH"][9].encode())
+    }
+
+    @Test
+    fun testResponse25StructureName() {
+        val response: Message = msg5.respond("RSP", "K22")
+        assertEquals("RSP^K22^RSP_K21", response["MSH"][9].encode())
+    }
+
+    @Test
+    fun testMakeMessage22() {
+        val msg = newMessage(context, "ADT", "A04", "2.2")
+        assertEquals("ADT^A04", msg["MSH"][9].encode())
+        assertEquals("ADT", msg.eventType)
+        assertEquals("A04", msg.triggerEvent)
+        assertEquals("2.2", msg.version)
+        assertEquals("ADT_A04", msg.messageStructure)
+    }
+
+    @Test
+    fun testMakeMessage25() {
+        val msg = newMessage(context, "ADT", "A04", "2.5")
+        assertEquals("ADT^A04^ADT_A01", msg["MSH"][9].encode())
+        assertEquals("ADT", msg.eventType)
+        assertEquals("A04", msg.triggerEvent)
+        assertEquals("2.5", msg.version)
+        assertEquals("ADT_A01", msg.messageStructure)
+    }
+
+    @Test
+    fun testUnknownMessage() {
+        assertEquals("ABC", msg2.eventType)
+        assertEquals("XYZ", msg2.triggerEvent)
+    }
+
 }

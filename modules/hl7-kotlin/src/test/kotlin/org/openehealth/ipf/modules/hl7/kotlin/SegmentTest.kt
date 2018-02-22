@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import ca.uhn.hl7v2.model.v22.segment.NK1
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import org.junit.Assert.*
 import org.junit.Test
@@ -32,15 +33,15 @@ import org.junit.Test
 class SegmentTest {
 
     val context = DefaultHapiContext()
-    val msg1: ADT_A01 = loadHl7(context, "/msg-01.hl7")
-    val msg2: Message = loadHl7(context, "/msg-02.hl7")
-    val msg3: Message = loadHl7(context, "/msg-03.hl7")
-    val nk1 = msg1.nK1!!
+    private val msg1: ADT_A01 = loadHl7(context, "/msg-01.hl7")
+    private val msg2: Message = loadHl7(context, "/msg-02.hl7")
+    private val msg3: Message = loadHl7(context, "/msg-03.hl7")
+    private val nk1 = msg1.nK1!!
     val msh = msg1.msh!!
-    val evn = msg3["EVN"] as Segment
+    private val evn = msg3["EVN"] as Segment
     val pid = msg3["PID"] as Segment
-    val pv1 = msg1.pV1!!
-    val pv2 = msg1.pV2!!
+    private val pv1 = msg1.pV1!!
+    private val pv2 = msg1.pV2!!
 
     @Test
     fun testInvokeMethod() {
@@ -64,6 +65,20 @@ class SegmentTest {
         assertEquals("SAP-ISH", msg.msh[3].value)
         msg.msh.from(msh)
         assertEquals("SAP-XXX", msg.msh[3].value)
+        msg.msh[3] = "SAP-ISH"
+        msg["MSH"] = msh
+        assertEquals("SAP-XXX", msg.msh[3].value)
+    }
+
+    @Test
+    fun testSetRepetitiveSegment() {
+        val msg = msg2.copy()
+        val nte4 = msg2["PATIENT_RESULT"]["ORDER_OBSERVATION",1]["OBSERVATION",1]["NTE",4]
+        val nte3: Segment = msg2["PATIENT_RESULT"]["ORDER_OBSERVATION",1]["OBSERVATION",1]["NTE",3] as Segment
+        assertTrue(nte3[3].value!!.startsWith("MICROALBUMINURIA"))
+        assertTrue(nte4[3].value!!.startsWith("CLINICAL ALBUMINURIA"))
+        msg["PATIENT_RESULT"]["ORDER_OBSERVATION",1]["OBSERVATION",1]["NTE", 4] = nte3
+        assertTrue(msg["PATIENT_RESULT"]["ORDER_OBSERVATION",1]["OBSERVATION",1]["NTE", 4][3].value!!.startsWith("MICROALBUMINURIA"))
     }
 
     @Test
@@ -82,7 +97,6 @@ class SegmentTest {
     fun testSettingObx5Type() {
         // create a new OBX segment from scratch
         val obx = msg2["PATIENT_RESULT"]["ORDER_OBSERVATION"].nrp("OBSERVATION")["OBX"]
-        val obx5 = obx[5](0)
 
         // before OBX-5 type has been set, it should be impossible
         // to set this field using IPF DSL
@@ -188,5 +202,11 @@ class SegmentTest {
         assertFalse(pv1.empty)
     }
 
+
+    @Test
+    fun testMakeSegment() {
+        val nk1 = newSegment("NK1", msg1)
+        assertTrue(nk1 is NK1)
+    }
 
 }

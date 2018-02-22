@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin.validation.model
 
-import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.validation.EncodingRule
 import ca.uhn.hl7v2.validation.ValidationException
 

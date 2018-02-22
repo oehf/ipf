@@ -14,19 +14,13 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.modules.hl7.kotlin.validation.model
-
-import ca.uhn.hl7v2.validation.Rule
-import ca.uhn.hl7v2.validation.ValidationException
+package org.openehealth.ipf.modules.hl7.kotlin.config
 
 /**
  * @author Christian Ohr
  */
-abstract class LambdaRuleSupport<T>(protected val rule: (T) -> Array<ValidationException>,
-                                    private val description: String,
-                                    private val sectionReference: String) : Rule<T> {
+class CustomModelClasses {
 
-    override fun getSectionReference(): String = sectionReference
-    override fun getDescription(): String = description
+    var modelClasses: Map<String, Array<String>>? = null
 
 }
