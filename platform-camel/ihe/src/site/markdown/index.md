@@ -45,6 +45,7 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | ipf-platform-camel-ihe-fhir-mhd      | [ITI-65], [ITI-66], [ITI-67], [ITI-68]
 | ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
 | ipf-platform-camel-ihe-fhir-audit    | [ITI-81]
+| ipf-platform-camel-ihe-fhir-qedm     | [PCC-44]
 | ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
 
 ### Example
@@ -143,6 +144,7 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [RAD-69] Retrieve Imaging Document Set
 * [RAD-75] Cross-Gateway Retrieve Imaging Document Set
 * [PCC-1] Query for Existing Data
+* [PCC-44] Query for Existing Data Mobile
 * [PCD-01] Communicate Patient Care Device Data
 * [CH-PIDD] Provider Information Delta Download (Swiss EPR extension to HPD)
 * [CH-XCMU] Cross-Gateway Metadata Update (Swiss EPR extension to XDS MU)
@@ -198,7 +200,8 @@ required dependencies, usage and parameters.
 | [ITI-86]     | RMD           | Remove Documents                     | `rmd-iti86`             | SOAP/HTTP(S)  | ebXML
 | [RAD-69]     | XDS-I, XCA-I  | Retrieve Imaging Document Set     | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
 | [RAD-75]     | XCA-I         | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
-| [PCC-1]      | QED           | Query for Existing Data (QED)        | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
+| [PCC-1]      | QED           | Query for Existing Data              | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
+| [PCC-44]     | QEDm          | Query for Existing Data Mobile       | `qedm-pcc44`            | REST/HTTP(S)  | FHIR
 | [PCD-01], Continua WAN | PCD, Continua | Communicate Patient Care Device (PCD) Data | `pcd-pcd01` | SOAP/HTTP(S) | HL7v2
 | [CH-PIDD]    | Swiss EPR     | Provider Information Delta Download  | `ch-pidd`               | SOAP/HTTP(S)  | DSMLv2
 | [CH-XCMU]    | Swiss EPR     | Cross-Gateway Metadata Zpdate        | `ch-xcmu`               | SOAP/HTTP(S)  | ebXML
@@ -243,6 +246,7 @@ required dependencies, usage and parameters.
 [RAD-69]: ../ipf-platform-camel-ihe-xds/rad69.html
 [RAD-75]: ../ipf-platform-camel-ihe-xds/rad75.html
 [PCC-1]: ../ipf-platform-camel-ihe-hl7v3/pcc1.html
+[PCC-44]: ../ipf-platform-camel-ihe-fhir-stu3-qedm/pcc44.html
 [PCD-01]: ../ipf-platform-camel-ihe-hl7v2ws/pcd01.html
 [CH-PIDD]: ../ipf-platform-camel-ihe-hpd/ch-pidd.html
 [CH-XCMU]: ../ipf-platform-camel-ihe-xds/ch-xcmu.html
