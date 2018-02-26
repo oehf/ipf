@@ -57,15 +57,15 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-
+        <!--
         <groovy-eclipse-batch-version>2.4.12-04</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-03</groovy-eclipse-compiler-version>
+        -->
 
-        <!--
         <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
-        -->
-        
+
+
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>

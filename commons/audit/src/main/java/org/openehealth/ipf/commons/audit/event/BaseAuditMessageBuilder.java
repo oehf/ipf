@@ -21,11 +21,8 @@ import org.openehealth.ipf.commons.audit.model.*;
 import org.openehealth.ipf.commons.audit.types.*;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -125,6 +122,25 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                     EventId id,
                                     EventType type,
                                     PurposeOfUse... purposesOfUse) {
+        return setEventIdentification(outcome, eventOutcomeDescription, action, id, type,
+                purposesOfUse != null ? Arrays.asList(purposesOfUse) : Collections.emptyList());
+    }
+
+    /**
+     * Create and set an Event Identification block for this audit event message
+     *
+     * @param outcome The Event Outcome Indicator
+     * @param action  The Event Action Code
+     * @param id      The Event ID
+     * @param type    The Event Type Code
+     * @return this
+     */
+    public T setEventIdentification(EventOutcomeIndicator outcome,
+                                    String eventOutcomeDescription,
+                                    EventActionCode action,
+                                    EventId id,
+                                    EventType type,
+                                    Collection<PurposeOfUse> purposesOfUse) {
         EventIdentificationType eventIdentification = new EventIdentificationType(id, Instant.now(), outcome);
         eventIdentification.setEventActionCode(action);
         eventIdentification.setEventOutcomeDescription(eventOutcomeDescription);
@@ -132,14 +148,13 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
             eventIdentification.getEventTypeCode().add(type);
         }
         if (purposesOfUse != null) {
-            Stream.of(purposesOfUse)
+            purposesOfUse.stream()
                     .filter(Objects::nonNull)
                     .forEach(pou -> eventIdentification.getPurposesOfUse().add(pou));
         }
         auditMessage.setEventIdentification(eventIdentification);
         return self();
     }
-
 
     /**
      * Create and add an Audit Source Identification to this audit event message
@@ -152,9 +167,24 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     public T setAuditSourceIdentification(String sourceID,
                                           String enterpriseSiteID,
                                           AuditSource... typeCodes) {
+        return setAuditSourceIdentification(sourceID, enterpriseSiteID,
+                typeCodes != null ? Arrays.asList(typeCodes) : Collections.emptyList());
+    }
+
+    /**
+     * Create and add an Audit Source Identification to this audit event message
+     *
+     * @param sourceID         The Audit Source ID
+     * @param enterpriseSiteID The Audit Enterprise Site ID
+     * @param typeCodes        The Audit Source Type Codes
+     * @return this
+     */
+    public T setAuditSourceIdentification(String sourceID,
+                                          String enterpriseSiteID,
+                                          Collection<AuditSource> typeCodes) {
         AuditSourceIdentificationType asi = new AuditSourceIdentificationType(sourceID);
         if (typeCodes != null) {
-            Stream.of(typeCodes)
+            typeCodes.stream()
                     .filter(Objects::nonNull)
                     .forEach(typeCode -> asi.getAuditSourceType().add(typeCode));
         }

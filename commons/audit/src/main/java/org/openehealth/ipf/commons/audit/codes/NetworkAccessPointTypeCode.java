@@ -41,4 +41,7 @@ public enum NetworkAccessPointTypeCode implements EnumeratedValueSet<Short> {
         this.value = (short) value;
     }
 
+    public static NetworkAccessPointTypeCode enumForCode(Short code) {
+        return EnumeratedValueSet.enumForCode(NetworkAccessPointTypeCode.class, code);
+    }
 }

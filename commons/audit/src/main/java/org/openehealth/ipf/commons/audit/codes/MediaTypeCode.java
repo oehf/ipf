@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.audit.codes;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.MediaType;
 
 /**
@@ -49,4 +50,7 @@ public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> 
         this.value = MediaType.of(code, "DCM", displayName);
     }
 
+    public static MediaTypeCode enumForCode(String code) {
+        return EnumeratedValueSet.enumForCode(MediaTypeCode.class, code);
+    }
 }

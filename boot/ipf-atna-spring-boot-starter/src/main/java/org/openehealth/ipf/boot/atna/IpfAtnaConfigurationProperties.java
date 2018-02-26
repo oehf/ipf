@@ -18,6 +18,7 @@ package org.openehealth.ipf.boot.atna;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
@@ -73,6 +74,12 @@ public class IpfAtnaConfigurationProperties {
      */
     @Getter @Setter
     private Class<? extends AuditMessageQueue> auditQueueClass = SynchronousAuditMessageQueue.class;
+
+    /**
+     * Sets the Audit Message Postprocessor class
+     */
+    @Getter @Setter
+    private Class<? extends AuditMessagePostProcessor> auditMessagePostProcessorClass;
 
     /**
      * Sets the Audit Sender class to be used for sending ATNA records

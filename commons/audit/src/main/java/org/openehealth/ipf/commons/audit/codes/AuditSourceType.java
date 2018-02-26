@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.codes;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 /**
  * Audit Source Type Codes as originally specified in https://tools.ietf.org/html/rfc3881#section-5.4
@@ -46,4 +47,7 @@ public enum AuditSourceType implements EnumeratedCodedValue<AuditSource>, AuditS
         this.value = AuditSource.of(code, "DCM", displayName);
     }
 
+    public static AuditSourceType enumForCode(String code) {
+        return EnumeratedValueSet.enumForCode(AuditSourceType.class, code);
+    }
 }

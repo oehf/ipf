@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
@@ -51,4 +52,5 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
                 "http://hl7.org/fhir/restful-interaction",
                 originalText != null ? originalText : operation.getCode());
     }
+
 }

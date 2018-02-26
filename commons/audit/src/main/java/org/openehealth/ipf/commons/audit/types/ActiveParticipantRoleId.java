@@ -29,9 +29,17 @@ public interface ActiveParticipantRoleId extends CodedValueType {
         return new ActiveParticipantRoleIdImpl(code, codeSystemName, originalText);
     }
 
+    static ActiveParticipantRoleId of(CodedValueType codedValueType) {
+        return new ActiveParticipantRoleIdImpl(codedValueType);
+    }
+
     class ActiveParticipantRoleIdImpl extends CodedValueTypeImpl implements ActiveParticipantRoleId {
         public ActiveParticipantRoleIdImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+
+        public ActiveParticipantRoleIdImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

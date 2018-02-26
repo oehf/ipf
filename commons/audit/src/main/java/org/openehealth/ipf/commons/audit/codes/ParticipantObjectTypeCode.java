@@ -41,4 +41,8 @@ public enum ParticipantObjectTypeCode implements EnumeratedValueSet<Short> {
     ParticipantObjectTypeCode(int value) {
         this.value = (short) value;
     }
+
+    public static ParticipantObjectTypeCode enumForCode(Short code) {
+        return EnumeratedValueSet.enumForCode(ParticipantObjectTypeCode.class, code);
+    }
 }

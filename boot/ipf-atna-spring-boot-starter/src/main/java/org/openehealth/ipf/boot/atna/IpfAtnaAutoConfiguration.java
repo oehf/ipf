@@ -49,15 +49,23 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditRepositoryPort(config.getAuditRepositoryPort());
         auditContext.setAuditSource(config.getAuditSourceType());
         auditContext.setSendingApplication(config.getAuditSendingApplication());
-
-        auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
-        auditContext.setAuditMessageQueue(config.getAuditQueueClass().newInstance());
-        auditContext.setAuditExceptionHandler(config.getAuditExceptionHandlerClass().newInstance());
-
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
+        auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
+
+        if (config.getAuditQueueClass() != null) {
+            auditContext.setAuditMessageQueue(config.getAuditQueueClass().newInstance());
+        }
+
+        if (config.getAuditExceptionHandlerClass() != null) {
+            auditContext.setAuditExceptionHandler(config.getAuditExceptionHandlerClass().newInstance());
+        }
 
         if (config.getAuditSenderClass() != null) {
             auditContext.setAuditTransmissionProtocol(config.getAuditSenderClass().newInstance());
+        }
+
+        if (config.getAuditMessagePostProcessorClass() != null) {
+            auditContext.setAuditMessagePostProcessor(config.getAuditMessagePostProcessorClass().newInstance());
         }
 
         return auditContext;
@@ -85,6 +93,5 @@ public class IpfAtnaAutoConfiguration {
     AuthenticationListener loginListener(AuditContext auditContext) {
         return new AuthenticationListener(auditContext);
     }
-
 
 }

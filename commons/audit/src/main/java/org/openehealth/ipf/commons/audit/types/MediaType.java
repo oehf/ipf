@@ -26,9 +26,17 @@ public interface MediaType extends CodedValueType {
         return new MediaTypeImpl(code, codeSystemName, originalText);
     }
 
+    static MediaType of(CodedValueType codedValueType) {
+        return new MediaTypeImpl(codedValueType);
+    }
+
     class MediaTypeImpl extends CodedValueTypeImpl implements MediaType {
         public MediaTypeImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+
+        public MediaTypeImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

@@ -127,6 +127,9 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                 addResourceData(auditDataset, (T) methodOutcome.getResource());
             } else if (methodOutcome.getId() != null) {
                 auditDataset.setResourceId(methodOutcome.getId());
+                if (methodOutcome.getId().hasResourceType()) {
+                    auditDataset.setAffectedResourceType(methodOutcome.getId().getResourceType());
+                }
             }
         }
         return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
@@ -147,7 +150,9 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
 
     private void addResourceData(GenericFhirAuditDataset auditDataset, T resource) {
         auditDataset.setResourceId(resource.getIdElement());
-        auditDataset.setAffectedResourceType(resource.getIdElement().getResourceType());
+        if (resource.getIdElement().hasResourceType()) {
+            auditDataset.setAffectedResourceType(resource.getIdElement().getResourceType());
+        }
         patientIdExtractor.apply(resource).ifPresent(patient ->
                 auditDataset.getPatientIds().add(patient.getResource() != null ?
                         patient.getResource().getIdElement().toUnqualifiedVersionless().getValue() :

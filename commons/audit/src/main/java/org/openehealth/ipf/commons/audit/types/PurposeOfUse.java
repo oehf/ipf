@@ -26,9 +26,18 @@ public interface PurposeOfUse extends CodedValueType {
         return new PurposeOfUseImpl(code, codeSystemName, originalText);
     }
 
+    static PurposeOfUse of(CodedValueType codedValueType) {
+        return new PurposeOfUseImpl(codedValueType);
+    }
+
+
     class PurposeOfUseImpl extends CodedValueTypeImpl implements PurposeOfUse {
         public PurposeOfUseImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+
+        public PurposeOfUseImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

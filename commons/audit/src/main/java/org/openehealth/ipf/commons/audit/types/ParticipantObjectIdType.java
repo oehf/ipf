@@ -29,9 +29,17 @@ public interface ParticipantObjectIdType extends CodedValueType {
         return new ParticipantObjectIdTypeImpl(code, codeSystemName, originalText);
     }
 
+    static ParticipantObjectIdType of(CodedValueType codedValueType) {
+        return new ParticipantObjectIdTypeImpl(codedValueType);
+    }
+
     class ParticipantObjectIdTypeImpl extends CodedValueTypeImpl implements ParticipantObjectIdType {
         public ParticipantObjectIdTypeImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+
+        public ParticipantObjectIdTypeImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

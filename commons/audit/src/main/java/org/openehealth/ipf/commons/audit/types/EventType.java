@@ -26,9 +26,17 @@ public interface EventType extends CodedValueType {
         return new EventTypeImpl(code, codeSystemName, originalText);
     }
 
+    static EventType of(CodedValueType codedValueType) {
+        return new EventTypeImpl(codedValueType);
+    }
+
     class EventTypeImpl extends CodedValueTypeImpl implements EventType {
         public EventTypeImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+
+        public EventTypeImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

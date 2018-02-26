@@ -14,25 +14,21 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
+package org.openehealth.ipf.commons.audit;
 
-import lombok.Getter;
-import org.openehealth.ipf.commons.audit.codes.EventTypeCode;
-import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
-import org.openehealth.ipf.commons.audit.types.EventId;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+
+import java.util.function.Function;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
-public enum FhirEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
+public interface AuditMessagePostProcessor extends Function<AuditMessage, AuditMessage> {
 
-    RestfulOperation("rest", "RESTful Operation");
+    AuditMessage apply(AuditMessage auditMessage);
 
-    @Getter
-    private EventId value;
-
-    FhirEventIdCode(String code, String displayName) {
-        this.value = EventId.of(code, "http://hl7.org/fhir/audit-event-type", displayName);
+    static AuditMessagePostProcessor noOp() {
+        return auditMessage -> auditMessage;
     }
 }
