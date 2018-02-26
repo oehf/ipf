@@ -24,8 +24,16 @@ import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import ca.uhn.hl7v2.parser.FixFieldDataType
 import ca.uhn.hl7v2.util.DeepCopy
+import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
+import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
+import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler
+import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaEncodingRule
+import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaMessageRule
+import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaPrimitiveTypeRule
 
 /**
  * @author Christian Ohr
@@ -83,11 +91,7 @@ fun Type.from(source: Any?): Unit =
 operator fun Type.get(idx: Int): Type =
         when (this) {
             is Primitive -> if (idx == 1) this else throw Hl7DslException("Index out of bounds for primitive")
-            is Variable -> when (data) {
-                is Composite -> data[idx]
-                is Primitive -> if (idx == 1) data else throw Hl7DslException("Index out of bounds for primitive")
-                else -> unknownType()
-            }
+            is Variable -> data[idx]
             is Composite -> getComponent(componentIndex(idx))
             is RepeatableField -> elementAt(0)[idx]
             else -> unknownType()
@@ -119,6 +123,25 @@ operator fun Type.invoke(rep: Int): Type =
  */
 operator fun Type.invoke(): Array<out Type> =
         (this as? RepeatableField)?.elements ?: arrayOf(this)
+
+// Destructuring support for up to 10 components
+
+operator fun Type.component1(): Type = get(1)
+operator fun Type.component2(): Type = get(2)
+operator fun Type.component3(): Type = get(3)
+operator fun Type.component4(): Type = get(4)
+operator fun Type.component5(): Type = get(5)
+operator fun Type.component6(): Type = get(6)
+operator fun Type.component7(): Type = get(7)
+operator fun Type.component8(): Type = get(8)
+operator fun Type.component9(): Type = get(9)
+operator fun Type.component10(): Type = get(10)
+
+
+fun Type.map(key: Any?): Any? = mappingService().get(key, encode())
+fun Type.map(key: Any?, defaultValue: Any?): Any? = mappingService().get(key, encode(), defaultValue)
+fun Type.mapReverse(key: Any?): Any? = mappingService().getKey(key, encode())
+fun Type.mapReverse(key: Any?, defaultValue: Any?): Any? = mappingService().getKey(key, encode(), defaultValue)
 
 
 // Extension functions/properties for ExtraComponent ------------------------------------------
@@ -440,6 +463,12 @@ fun <T : Message> Message.respond(responseEvent: String, responseTrigger: String
 fun Message.atLeastVersion(otherVersion: String): Boolean =
         Version.versionOf(this.version) >= Version.versionOf(otherVersion)
 
+// Extension functions/properties for Rule Builders -----------------------------------------------
+
+fun MessageRuleBuilder.checkIf(check: (Message) -> Array<ca.uhn.hl7v2.validation.ValidationException>): MessageRuleBuilder = test(LambdaMessageRule(check))
+fun EncodingRuleBuilder.checkIf(check: (String) -> Array<ca.uhn.hl7v2.validation.ValidationException>): EncodingRuleBuilder = test(LambdaEncodingRule(check))
+fun PrimitiveRuleBuilder.checkIf(check: (String?) -> Array<ca.uhn.hl7v2.validation.ValidationException>): PrimitiveRuleBuilder = test(LambdaPrimitiveTypeRule(check))
+
 
 // Exceptions due to invalid access
 
@@ -451,6 +480,7 @@ private fun <T> useStructureName(): T = throw Hl7DslException("Use structure nam
 
 private fun componentIndex(idx: Int) = if (idx < 1) throw Hl7DslException("component index must be in range 1..n") else idx - 1
 
+private fun mappingService(): MappingService = ContextFacade.getBean(MappingService::class.java)
 
 // Get a string value out of types or any object
 

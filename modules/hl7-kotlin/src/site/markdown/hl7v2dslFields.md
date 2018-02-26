@@ -56,10 +56,21 @@ val messageType = message["MSH"][9][1].value
 val messageType = message["MSH"][9].value
 
 // Returns ADT_A01 if MSH[9][3] is empty
-val messageType = message["MSH"][9][3].getValueOr("ADT_A01")
+val messageType = message["MSH"][9][3].getValueOr("ADT_A01")  // or valueOr("ADT_A01")
 
 // Returns the value of a subcomponent
 val street = message["PATIENT_RESULT"]["PATIENT"]["PID"][11][1][1].value
+```
+
+### Destructuring
+
+Kotlin lets you destructure composite instances into components:
+
+```kotlin
+
+val(event, trigger, structure) = message["MSH"][9]
+println(event.value) // prints ADT
+
 ```
 
 ### Null values

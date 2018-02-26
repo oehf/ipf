@@ -39,5 +39,5 @@ The `find`/`filter` methods are particularly useful together with [smart navigat
 * messages that have a group structure in a newer HL7 version while having a flat structure in previous versions.
 
 
-[hl7v2dslSmart]: hl7v2dslSmartNavigation.html#
+[hl7v2dslSmart]: hl7v2dslSmartNavigation.html
 [Iterable extension functions]: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html

@@ -188,7 +188,7 @@ fun findLastIndexOf(group: Group, c: (Structure) -> Boolean): String? =
 private fun findPairs(group: Group, c: (Structure) -> Boolean, findFirst: Boolean = false): List<Pair<String, Structure>> {
     val visitor = FindStructureVisitor(c, findFirst)
     group.accept(visitStructures(visitor))
-    return visitor.paths.map { terserToDsl(it.first) to it.second }
+    return visitor.paths.map { (first, second) -> terserToDsl(first) to second }
 }
 
 

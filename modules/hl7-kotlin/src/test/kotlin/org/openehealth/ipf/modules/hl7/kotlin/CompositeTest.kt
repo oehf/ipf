@@ -82,4 +82,12 @@ class CompositeTest {
         val ce = newComposite("CE", msg)
         assertTrue(ce is CE)
     }
+
+
+    @Test
+    fun testDestructuring() {
+        val (street, _, _, _, _, country) = composite
+        assertEquals("Irgendwo 23", street.value)
+        assertEquals("DE", country.value)
+    }
 }

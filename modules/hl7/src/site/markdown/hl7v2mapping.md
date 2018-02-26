@@ -25,7 +25,7 @@ Given the following mapping example:
         )
 
         messageType(
-             'ADT^A01' : 'PRPA_IN402001'
+             'ADT^A01' : 'PRPA_IN402001',
              (ELSE) : { throw new HL7Exception("Invalid message type", 207) }
         )
     }

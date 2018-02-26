@@ -16,15 +16,15 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin.validation.model
 
-import ca.uhn.hl7v2.validation.Rule
 import ca.uhn.hl7v2.validation.ValidationException
+import ca.uhn.hl7v2.validation.impl.RuleSupport
 
 /**
  * @author Christian Ohr
  */
 abstract class LambdaRuleSupport<T>(protected val rule: (T) -> Array<ValidationException>,
                                     private val description: String,
-                                    private val sectionReference: String) : Rule<T> {
+                                    private val sectionReference: String) : RuleSupport<T>() {
 
     override fun getSectionReference(): String = sectionReference
     override fun getDescription(): String = description
