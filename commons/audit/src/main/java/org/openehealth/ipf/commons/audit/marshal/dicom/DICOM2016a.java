@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Christian Ohr
@@ -121,7 +121,7 @@ public class DICOM2016a implements SerializationStrategy {
             }
             if (poi.getParticipantObjectQuery() != null) {
                 element.addContent(new Element("ParticipantObjectQuery")
-                        .addContent(Base64.getEncoder().encodeToString(poi.getParticipantObjectQuery())));
+                        .addContent(new String(poi.getParticipantObjectQuery(), StandardCharsets.UTF_8)));
             }
             poi.getParticipantObjectDetails().stream()
                     .map(participantObjectDetail -> typeValuePairType("ParticipantObjectDetail", participantObjectDetail))
@@ -163,7 +163,7 @@ public class DICOM2016a implements SerializationStrategy {
     protected Element typeValuePairType(String tagName, TypeValuePairType typeValuePair) {
         Element element = new Element(tagName);
         element.setAttribute("type", typeValuePair.getType());
-        element.setAttribute("value", new String(typeValuePair.getValue()));
+        element.setAttribute("value", new String(typeValuePair.getValue(), StandardCharsets.UTF_8));
         return element;
     }
 
