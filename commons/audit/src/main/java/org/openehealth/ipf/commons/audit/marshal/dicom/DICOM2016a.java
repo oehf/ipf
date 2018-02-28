@@ -71,7 +71,11 @@ public class DICOM2016a implements SerializationStrategy {
         element.setAttribute("UserIsRequestor", Boolean.toString(activeParticipant.isUserIsRequestor()));
         conditionallyAddAttribute(element, "NetworkAccessPointID", activeParticipant.getNetworkAccessPointID());
         conditionallyAddAttribute(element, "NetworkAccessPointTypeCode", activeParticipant.getNetworkAccessPointTypeCode());
-// TODO mediaidentifier/mediatype
+        if (activeParticipant.getMediaType() != null) {
+            element.addContent(
+                    new Element("MediaIdentifier")
+                            .addContent(codedValueType("MediaType", activeParticipant.getMediaType())));
+        }
         if (activeParticipant.getRoleIDCodes() != null) {
             activeParticipant.getRoleIDCodes().stream()
                     .map(roleIdCode -> codedValueType("RoleIDCode", roleIdCode))
