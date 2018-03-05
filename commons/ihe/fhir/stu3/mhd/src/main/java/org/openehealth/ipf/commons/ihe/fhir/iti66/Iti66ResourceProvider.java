@@ -25,6 +25,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -102,7 +103,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @IdParam IdType id,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
-
+        if (id == null) throw new InvalidRequestException("Must provide ID with READ request");
         // Run down the route
         return requestResource(id, DocumentManifest.class, httpServletRequest, httpServletResponse);
     }

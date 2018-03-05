@@ -21,6 +21,8 @@ import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
 import org.hl7.fhir.dstu3.model.ContactPoint
 import org.hl7.fhir.dstu3.model.HumanName
+import org.hl7.fhir.dstu3.model.codesystems.ContactPointSystem
+import org.hl7.fhir.dstu3.model.codesystems.ContactPointUse
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -94,10 +96,9 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
         assertEquals('89000', patient.address[0].postalCode)
         assertEquals('DE', patient.address[0].country)
 
-        assertEquals(ContactPoint.ContactPointUse.HOME, patient.telecom[0].use)
+        assertEquals(ContactPoint.ContactPointUse.MOBILE, patient.telecom[0].use)
         assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecom[0].system)
-        assertEquals('089/2356395', patient.telecom[0].value)
-
+        assertEquals('01511134556', patient.telecom[0].value)
         assertEquals('Paukenbecker', patient.mothersMaidenName.family)
         assertEquals('Passau', patient.birthPlace.city)
         assertEquals('deu',patient.citizenship[0].code.codingFirstRep.code)

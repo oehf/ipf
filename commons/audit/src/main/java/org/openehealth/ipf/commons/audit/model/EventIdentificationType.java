@@ -82,11 +82,6 @@ public class EventIdentificationType implements Serializable, Validateable {
         return this.eventTypeCodes;
     }
 
-    public void setEventActionCode(EventActionCode eventActionCode) {
-        this.eventActionCode = eventActionCode;
-    }
-
-
     /**
      * <p>
      * The Purpose of Use value indicates the expected ultimate use of the data, rather than a likely near term use

@@ -363,6 +363,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             telecom.setSystem(ContactPointSystem.EMAIL)
                     .setValue(xtn[4].value)
         }
+        if ("CP".equals(xtn[3]?.value)) {
+            telecom.setUse(ContactPointUse.MOBILE);
+        }
         telecom
     }
 

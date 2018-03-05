@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IAnyResource;
@@ -117,6 +118,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
+        if (id == null) throw new InvalidRequestException("Must provide ID with READ request");
         // Run down the route
         return requestResource(id, Patient.class, httpServletRequest, httpServletResponse);
     }

@@ -42,9 +42,6 @@ public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDat
         return auditDataset;
     }
 
-
-    // TODO: don't know about patient, document, repo, homecommunity....
-
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti68AuditDataset auditDataset) {
         PHIExportBuilder builder = new PHIExportBuilder<>(auditContext, auditDataset,
