@@ -29,6 +29,7 @@
     </parent>
 
     <properties>
+        <kotlin.dokka.version>0.9.16</kotlin.dokka.version>
         <kotlin.version>1.2.21</kotlin.version>
         <kotlin.logging.version>1.4.9</kotlin.logging.version>
     </properties>
@@ -132,6 +133,29 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jetbrains.dokka</groupId>
+                        <artifactId>dokka-maven-plugin</artifactId>
+                        <version>${kotlin.dokka.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>javadocJar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <distributionManagement>
         <site>
