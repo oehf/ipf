@@ -70,5 +70,6 @@ public class StatusValidation implements QueryParameterValidation {
             }
         }
         metaDataAssert(!list.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, slotValues);
+
     }
 }
