@@ -64,11 +64,12 @@ public class StatusValidation implements QueryParameterValidation {
 
         List<AvailabilityStatus> list = slots.toStatus(param);
 
-        if (list != null && list.isEmpty()) {
+        if (list.isEmpty()) {
             for (String value : slots.toStringList(param)) {
                 metaDataAssert(AvailabilityStatus.valueOfOpcode(value) != null, INVALID_QUERY_PARAMETER_VALUE, value);
             }
         }
         metaDataAssert(!list.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, slotValues);
+
     }
 }

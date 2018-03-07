@@ -59,7 +59,6 @@ public class StatusValidationTest {
             slotValues.add(statusQuery);
         return ebXML;
     }
-
     private EbXMLAdhocQueryRequest validQueryRequestWithStatus() {
         QueryRegistry createFindDocumentsQuery = SampleData.createFindDocumentsQuery();
         return new QueryRegistryTransformer().toEbXML(createFindDocumentsQuery);
