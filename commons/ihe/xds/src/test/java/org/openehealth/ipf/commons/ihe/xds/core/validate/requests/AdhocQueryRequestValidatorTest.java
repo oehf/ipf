@@ -132,7 +132,7 @@ public class AdhocQueryRequestValidatorTest {
         valueList.clear();
         valueList.add("('lol')");
         valueList.add("('foo')");
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, ITI_18);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
 
         // at least one code -- should pass
         valueList.set(0, "('bar')");
