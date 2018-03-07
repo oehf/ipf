@@ -8,12 +8,12 @@ an Audit Repository.
 The most important improvements are:
 
 * type-safe Audit Event builders, that enforce setting mandatory members and avoid setting
-coded values into the wrong places (e.g. accidentally setting an 
-`ParticipantObjectTypeCodeRole` as `ParticipantObjectTypeCode`).
+coded values into the wrong places (e.g. accidentally setting a 
+`ParticipantObjectTypeCodeRole` code as `ParticipantObjectTypeCode` code).
 * possibility to select an Audit Message XML schema that belongs to a specific [DICOM] version
 * possibility to plug-in your own exception handler in case the Audit Repository is not reachable
-* configuration is done via an `AuditContext` bean, which is not a static global setting. You
-can use as many `AuditContext` as you wish.
+* configuration is done via an `AuditContext` bean instead of a static global. You
+can create and use as many `AuditContext` as you wish.
 
 
 ### Constructing an Audit Message
@@ -35,10 +35,53 @@ restrictions defined by DICOM or IHE.
 For more details on the API, please study the [javadocs](../apidocs/org/openehealth/ipf/commons/audit/package-frame.html).
 
 
+### Example
+
+Auditing an application start event
+
+```java
+auditContext.audit(
+    new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
+        .setAuditSource(auditContext)
+        .setApplicationParticipant(
+                appName,
+                null,
+                appName,
+                AuditUtils.getLocalHostName())
+        .addApplicationStarterParticipant(System.getProperty("user.name"))
+        .getMessage()
+);
+```
+
+Auditing a change to a user account:
+
+```java
+auditContext.audit(
+new SecurityAlertBuilder(EventOutcomeIndicator.Success, null, EventTypeCode.UserSecurityAttributesChanged)
+                .addActiveParticipant(adminUserId, null, adminUserName, true, null, networkId)
+                .addParticipantObjectIdentification(
+                        ParticipantObjectIdTypeCode.UserIdentifier,
+                        targetUserName,
+                        null,
+                        null,
+                        targetUserId,
+                        ParticipantObjectTypeCode.Person,
+                        ParticipantObjectTypeCodeRole.User,
+                        null, null)
+                .getMessage()
+);
+```
+
+### Hints
+
+* The `org.openehealth.ipf.commons.audit.utils.AuditUtils` class contains static methods to obtain
+ runtime information like process ID, current user, local host and IP address.
+
+
 ### Configuration
 
-The `AuditContext` interface (and its `DefaultAuditContext` implementation) is the only place to configure
-static details for auditing, e.g. whether auditing is activated, the location of the Audit Repository and 
+The `AuditContext` interface (and its [DefaultAuditContext]`(../apidocs/org/openehealth/ipf/commons/audit/DefaultAuditContext.html) implementation) is the only place to configure
+static details for auditing, e.g. whether auditing is activated, the location of the Audit Repository, or 
 the transmission protocol. It also allows to setup strategies for serialization, whether to send synchronously or 
 asynchronously, and how errors are handled.
 

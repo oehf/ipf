@@ -107,6 +107,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                 auditContext.getAuditSource());
     }
 
+
     /**
      * Create and set an Event Identification block for this audit event message
      *
@@ -189,7 +190,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                     .forEach(typeCode -> asi.getAuditSourceType().add(typeCode));
         }
         asi.setAuditEnterpriseSiteID(enterpriseSiteID);
-        auditMessage.setAuditSourceIdentification(asi);
+        return setAuditSourceIdentification(asi);
+    }
+
+    public T setAuditSourceIdentification(AuditSourceIdentificationType auditSourceIdentificationType) {
+        auditMessage.setAuditSourceIdentification(auditSourceIdentificationType);
         return self();
     }
 
@@ -306,7 +311,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         ap.setNetworkAccessPointTypeCode(networkAccessPointTypeCode);
         ap.setMediaIdentifier(mediaIdentifier);
         ap.setMediaType(mediaType);
-        auditMessage.getActiveParticipants().add(ap);
+        return addActiveParticipant(ap);
+    }
+
+    public T addActiveParticipant(ActiveParticipantType activeParticipantType) {
+        auditMessage.getActiveParticipants().add(activeParticipantType);
         return self();
     }
 
@@ -376,23 +385,26 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                                 ParticipantObjectTypeCodeRole objectTypeCodeRole,
                                                 ParticipantObjectDataLifeCycle objectDataLifeCycle,
                                                 String objectSensitivity) {
-        ParticipantObjectIdentificationType poi = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
+        ParticipantObjectIdentificationType poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
-        poi.setParticipantObjectName(objectName);
-        poi.setParticipantObjectQuery(objectQuery);
+        poit.setParticipantObjectName(objectName);
+        poit.setParticipantObjectQuery(objectQuery);
         if (objectDetails != null) {
             objectDetails.stream()
                     .filter(Objects::nonNull)
-                    .forEach(objectDetail -> poi.getParticipantObjectDetails().add(objectDetail));
+                    .forEach(objectDetail -> poit.getParticipantObjectDetails().add(objectDetail));
         }
-        poi.setParticipantObjectTypeCode(objectTypeCode);
-        poi.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
-        poi.setParticipantObjectDataLifeCycle(objectDataLifeCycle);
-        poi.setParticipantObjectSensitivity(objectSensitivity);
-        auditMessage.getParticipantObjectIdentifications().add(poi);
-        return self();
+        poit.setParticipantObjectTypeCode(objectTypeCode);
+        poit.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
+        poit.setParticipantObjectDataLifeCycle(objectDataLifeCycle);
+        poit.setParticipantObjectSensitivity(objectSensitivity);
+        return addParticipantObjectIdentification(poit);
     }
 
+    public T addParticipantObjectIdentification(ParticipantObjectIdentificationType poit) {
+        auditMessage.getParticipantObjectIdentifications().add(poit);
+        return self();
+    }
 
     protected NetworkAccessPointTypeCode getNetworkAccessPointCodeFromAddress(String address) {
         if (address == null) {
@@ -413,7 +425,6 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     public TypeValuePairType getTypeValuePair(String type, Object value) {
         return new TypeValuePairType(requireNonNull(type), requireNonNull(value).toString());
     }
-
 
 
 }
