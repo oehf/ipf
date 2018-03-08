@@ -17,15 +17,11 @@
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.EventIdCode;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.ihe.hpd.atna.HpdAuditorTestBase;
-
-import java.util.Arrays;
-import java.util.HashSet;
+import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,11 +44,16 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
         Iti59AuditDataset auditDataset = getHpdAuditDataset(strategy);
         AuditMessage[] auditMessages = makeAuditMessages(strategy, auditContext, auditDataset);
 
-        assertEquals(2, auditMessages.length);
+        assertEquals(3, auditMessages.length);
 
         for (AuditMessage auditMessage : auditMessages) {
             auditMessage.validate();
-            // System.out.println(printAuditMessage(auditMessage));
+             System.out.println(printAuditMessage(auditMessage));
+
+            assertEquals(1, auditMessage.getParticipantObjectIdentifications().size());
+            ParticipantObjectIdentificationType participant = auditMessage.getParticipantObjectIdentifications().get(0);
+            assertEquals(ParticipantObjectTypeCodeRole.Provider, participant.getParticipantObjectTypeCodeRole());
+            assertEquals(HpdParticipantObjectIdTypeCode.RelativeDistinguishedName, participant.getParticipantObjectIDTypeCode());
         }
 
         assertCommonHpdAuditAttributes(auditMessages[0],
@@ -61,8 +62,10 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
                 EventActionCode.Update,
                 serverSide);
 
-        assertEquals(PROVIDER_IDS.length, auditMessages[0].findParticipantObjectIdentifications(
-                poit -> poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Provider).size());
+        ParticipantObjectIdentificationType participant = auditMessages[2].getParticipantObjectIdentifications().get(0);
+        assertEquals(1, participant.getParticipantObjectDetails().size());
+        assertEquals("new uid", participant.getParticipantObjectDetails().get(0).getType());
+        assertEquals("Mi4yMi4yMjIuMjIyMjprbG1ubw==", new String(participant.getParticipantObjectDetails().get(0).getValue()));
     }
 
     private Iti59AuditDataset getHpdAuditDataset(Iti59AuditStrategy strategy) {
@@ -77,20 +80,30 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
         auditDataset.setPurposesOfUse(NEW_PURPOSES_OF_USE);
         auditDataset.getUserRoles().addAll(NEW_USER_ROLES);
 
-        Iti59AuditDataset.RequestItem requestItem1 = new Iti59AuditDataset.RequestItem(
-                QUERY_ID,
-                EventActionCode.Update,
-                new HashSet<>(Arrays.asList(PROVIDER_IDS)));
-        requestItem1.setDn("oldDn");
-        requestItem1.setNewRdn("newDn");
+        Iti59AuditDataset.RequestItem requestItem1 = new Iti59AuditDataset.RequestItem(QUERY_ID, EventActionCode.Update);
+        requestItem1.setUid("1.2.3.4.5.6:abcde");
+        requestItem1.setParticipantObjectTypeCode(ParticipantObjectTypeCode.Organization);
         requestItem1.setOutcomeCode(EventOutcomeIndicator.Success);
-        Iti59AuditDataset.RequestItem requestItem2 = new Iti59AuditDataset.RequestItem(
-                QUERY_ID,
-                EventActionCode.Create,
-                new HashSet<>(Arrays.asList(PROVIDER_IDS)));
-        requestItem2.setOutcomeCode(EventOutcomeIndicator.Success);
-        auditDataset.setRequestItems(new Iti59AuditDataset.RequestItem[]{requestItem1, requestItem2});
 
+        Iti59AuditDataset.RequestItem requestItem2 = new Iti59AuditDataset.RequestItem(QUERY_ID, EventActionCode.Create);
+        requestItem2.setUid("2.3.4.5.6.7:qrstu");
+        requestItem2.setParticipantObjectTypeCode(ParticipantObjectTypeCode.Person);
+        requestItem2.setOutcomeCode(EventOutcomeIndicator.MinorFailure);
+
+        // shall be absent in the ATNA message because the UID is null
+        Iti59AuditDataset.RequestItem requestItem3 = new Iti59AuditDataset.RequestItem(QUERY_ID, EventActionCode.Execute);
+        requestItem3.setUid(null);
+        requestItem3.setNewUid("1.3.5.7:fghij");
+        requestItem3.setParticipantObjectTypeCode(ParticipantObjectTypeCode.Person);
+        requestItem3.setOutcomeCode(EventOutcomeIndicator.Success);
+
+        Iti59AuditDataset.RequestItem requestItem4 = new Iti59AuditDataset.RequestItem(QUERY_ID, EventActionCode.Execute);
+        requestItem4.setUid("1.11.111.1111:klmno");
+        requestItem4.setNewUid("2.22.222.2222:klmno");
+        requestItem4.setParticipantObjectTypeCode(ParticipantObjectTypeCode.Organization);
+        requestItem4.setOutcomeCode(EventOutcomeIndicator.Success);
+
+        auditDataset.setRequestItems(new Iti59AuditDataset.RequestItem[]{requestItem1, requestItem2, requestItem3, requestItem4});
         return auditDataset;
     }
 }

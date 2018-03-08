@@ -16,14 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Christian Ohr
@@ -44,13 +47,16 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
                 HpdEventTypeCode.ProviderInformationFeed,
                 auditDataset.getPurposesOfUse());
 
-        requestItem.getProviderIds().forEach(providerId ->
-                builder.addImportedEntity(
-                        providerId,
-                        HpdParticipantObjectIdTypeCode.ProviderIdentifier,
-                        ParticipantObjectTypeCodeRole.Provider,
-                        Collections.emptyList()
-                ));
+        List<TypeValuePairType> details = StringUtils.isBlank(requestItem.getNewUid())
+                ? Collections.emptyList()
+                : Collections.singletonList(new TypeValuePairType("new uid", requestItem.getNewUid()));
+
+        builder.addImportedEntity(
+                requestItem.getUid(),
+                HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
+                requestItem.getParticipantObjectTypeCode(),
+                ParticipantObjectTypeCodeRole.Provider,
+                details);
 
         return builder.getMessage();
     }

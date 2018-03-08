@@ -27,11 +27,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
  */
 public class HpdAuditorTestBase extends AuditorTestBase {
 
-    protected static final String[] PROVIDER_IDS = new String[]{
-            "2.16.10.89.200:UPIN:800-800-8000:Active",
-            "2.16.10.98.123:NPI:666789-800:Active",
-            "1.89.11.00.123:HospId:786868:Active"};
-
     protected void assertCommonHpdAuditAttributes(AuditMessage auditMessage,
                                                   EventOutcomeIndicator eventOutcomeIndicator,
                                                   EventId eventId,

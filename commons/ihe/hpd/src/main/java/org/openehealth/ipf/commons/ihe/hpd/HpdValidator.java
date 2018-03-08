@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
@@ -25,14 +26,13 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchRequest;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
-import java.util.Map;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.openehealth.ipf.commons.ihe.hpd.HpdUtils.parseLdapAttribute;
 
 /**
  * @author Dmytro Rud
@@ -79,9 +79,26 @@ public class HpdValidator {
     }
 
     private void validateSearchRequest(SearchRequest request) {
-        Map<String, String> dn = parseLdapAttribute(request.getDn());
-        check(isNotBlank(dn.get("O")), "Missing DN.O");
-        check("HPD".equals(dn.get("DC")), "DN.DC not equal to 'HPD'");
+        try {
+            LdapName ldapName = new LdapName(request.getDn());
+            boolean oCheck = false;
+            boolean dcCheck = false;
+            for (Rdn rdn : ldapName.getRdns()) {
+                String value = (String) rdn.getValue();
+                switch (rdn.getType().toLowerCase()) {
+                    case "o":
+                        oCheck = StringUtils.isNotBlank(value);
+                        break;
+                    case "dc":
+                        dcCheck = "HPD".equals(value);
+                        break;
+                }
+            }
+            check(oCheck, "Missing DN.O");
+            check(dcCheck, "DN.DC not equal to 'HPD'");
+        } catch (InvalidNameException e) {
+            throw new HpdException(e, ErrorType.MALFORMED_REQUEST);
+        }
     }
 
     public void validateBatchResponse(BatchResponse response) {

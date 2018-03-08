@@ -37,9 +37,12 @@ class Iti59TestRouteBuilder extends RouteBuilder {
             .process {
                 it.out.body = new BatchResponse(
                         batchResponses: [
-                                FACTORY.createBatchResponseDelResponse(new LDAPResult(resultCode: new ResultCode(code: 0), requestID: 'id-2')),
-                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0), requestID: 'id-1')),
-                                FACTORY.createBatchResponseModDNResponse(new LDAPResult(resultCode: new ResultCode(code: 666), requestID: 'id-3')),
+                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0))),
+                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0))),
+                                FACTORY.createBatchResponseModifyResponse(new LDAPResult(resultCode: new ResultCode(code: 666))),
+                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0))),
+                                FACTORY.createBatchResponseAddResponse(new LDAPResult(resultCode: new ResultCode(code: 0))),
+                                FACTORY.createBatchResponseModifyResponse(new LDAPResult(resultCode: new ResultCode(code: 0))),
                         ],
                 )
             }
