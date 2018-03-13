@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -49,9 +53,9 @@ public class HpdAuditor extends IHEAuditor {
             String userName,
             String directoryUri,
             String clientIpAddress,
-            Collection<String> providerIds,
-            String dn,
-            String newRdn,
+            RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes participantObjectTypeCodes,
+            String uid,
+            String newUid,
             List<CodedValueType> purposesOfUse,
             List<CodedValueType> userRoles)
     {
@@ -67,16 +71,20 @@ public class HpdAuditor extends IHEAuditor {
 
         configureEvent(this, serverSide, event, replyToUri, userName, directoryUri,
                 directoryUri, clientIpAddress, userRoles);
-        if (!EventUtils.isEmptyOrNull(providerIds)) {
-            providerIds.forEach(event::addProviderParticipantObject);
-        }
-        if (!EventUtils.isEmptyOrNull(dn)) {
-            event.addEntryParticipantObject(dn);
-        }
-        if (!EventUtils.isEmptyOrNull(newRdn)) {
-            event.addEntryParticipantObject(newRdn);
+        if (!EventUtils.isEmptyOrNull(uid)) {
+            List<TypeValuePairType> details = StringUtils.isBlank(newUid)
+                    ? Collections.emptyList()
+                    : Collections.singletonList(createTypeValuePairType("new uid", newUid.getBytes()));
+            event.addProviderParticipantObject(uid, participantObjectTypeCodes, details);
         }
         audit(event);
+    }
+
+    private static TypeValuePairType createTypeValuePairType(String type, byte[] value){
+        TypeValuePairType pair = new TypeValuePairType();
+        pair.setType(type);
+        pair.setValue(value);
+        return pair;
     }
 
 }

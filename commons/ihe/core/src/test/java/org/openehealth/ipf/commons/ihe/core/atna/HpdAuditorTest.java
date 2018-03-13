@@ -19,6 +19,8 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.HpdAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +45,7 @@ public class HpdAuditorTest extends AuditorTestBase {
         auditor.auditIti59(true,
                 RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                PROVIDER_IDS,
+                RFC3881ParticipantObjectTypeCodes.ORGANIZATION,
                 null, null,
                 PURPOSES_OF_USE,
                 USER_ROLES);
@@ -51,7 +53,7 @@ public class HpdAuditorTest extends AuditorTestBase {
         auditor.auditIti59(false,
                 RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                PROVIDER_IDS,
+                RFC3881ParticipantObjectTypeCodes.PERSON,
                 null, null,
                 PURPOSES_OF_USE,
                 USER_ROLES);
@@ -60,7 +62,7 @@ public class HpdAuditorTest extends AuditorTestBase {
         auditor.auditIti59(true,
                 RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                null,
+                RFC3881ParticipantObjectTypeCodes.PERSON,
                 "uid=john.doe,ou=People,dc=example,dc=com",
                 null,
                 PURPOSES_OF_USE,
@@ -70,7 +72,7 @@ public class HpdAuditorTest extends AuditorTestBase {
         auditor.auditIti59(true,
                 RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                null,
+                RFC3881ParticipantObjectTypeCodes.PERSON,
                 "uid=john.doe,ou=People,dc=example,dc=com",
                 "cn=John Doe+telephoneNumber=+1 123-456-7890",
                 PURPOSES_OF_USE,

@@ -24,6 +24,7 @@ public class CustomParticipantObjectIDTypeCodes extends CodedValueType {
 
     public static final CodedValueType ISO21091_IDENTIFIER = new CustomParticipantObjectIDTypeCodes("99SupHPD-ISO21091", "ISO 21091 Identifier", "IHE");
     public static final CodedValueType LDAP_DN = new CustomParticipantObjectIDTypeCodes("DN", "Distinguished Name", "RFC-4517");
+    public static final CodedValueType ISO21091_RDN = new CustomParticipantObjectIDTypeCodes("99SupHPD-ISO21091-RDN", "ISO 21091 Relative Distinguished Name", "IHE");
 
     private CustomParticipantObjectIDTypeCodes(String code, String originalText, String codeSystemName) {
         setCode(code);

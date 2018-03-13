@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 
 import java.util.Set;
 
@@ -33,11 +34,10 @@ public class Iti59AuditDataset extends WsAuditDataset {
     public static class RequestItem {
         @Getter private final String requestId;
         @Getter private final RFC3881EventCodes.RFC3881EventActionCodes actionCode;
-        @Getter private final Set<String> providerIds;
 
-        // proprietary extensions for Delete and ModifyDN
-        @Getter private final String dn;
-        @Getter private final String newRdn;
+        @Getter @Setter private String uid;
+        @Getter @Setter private String newUid;    // only for operation Rename
+        @Getter @Setter private RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes participantObjectTypeCode;
 
         @Getter @Setter private RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCode;
     }

@@ -18,8 +18,10 @@ package org.openehealth.ipf.commons.ihe.core.atna.custom;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 
 import java.util.List;
 
@@ -43,28 +45,17 @@ public class HpdEvent extends GenericIHEAuditEventMessage {
               purposesOfUse);
     }
 
-    public void addProviderParticipantObject(String providerId) {
+    public void addProviderParticipantObject(String uid,
+                                             RFC3881ParticipantObjectTypeCodes participantObjectTypeCodes,
+                                             List<TypeValuePairType> details) {
         addParticipantObjectIdentification(
-                CustomParticipantObjectIDTypeCodes.ISO21091_IDENTIFIER,
+                CustomParticipantObjectIDTypeCodes.ISO21091_RDN,
                 null,
                 null,
-                null,
-                providerId,
-                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.ORGANIZATION,
+                details,
+                uid,
+                participantObjectTypeCodes,
                 RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PROVIDER,
-                null,
-                null);
-    }
-
-    public void addEntryParticipantObject(String dn) {
-        addParticipantObjectIdentification(
-                CustomParticipantObjectIDTypeCodes.LDAP_DN,
-                null,
-                null,
-                null,
-                dn,
-                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM,
-                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.RESOURCE,
                 null,
                 null);
     }
