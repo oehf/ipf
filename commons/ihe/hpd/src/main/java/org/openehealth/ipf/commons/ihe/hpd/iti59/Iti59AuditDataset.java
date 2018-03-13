@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 
-import java.util.Set;
-
 /**
  * Audit dataset for the ITI-59 transaction.
  * @author Dmytro Rud

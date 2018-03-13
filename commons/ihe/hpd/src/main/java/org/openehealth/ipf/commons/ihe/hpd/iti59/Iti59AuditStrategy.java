@@ -42,8 +42,8 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
     private static final Map<String, RFC3881ParticipantObjectTypeCodes> PARTICIPANT_OBJECT_CODE_MAP;
     static {
         PARTICIPANT_OBJECT_CODE_MAP = new HashMap<>();
-        PARTICIPANT_OBJECT_CODE_MAP.put("HCProfessional", RFC3881ParticipantObjectTypeCodes.PERSON);
-        PARTICIPANT_OBJECT_CODE_MAP.put("HCRegulatedOrganization", RFC3881ParticipantObjectTypeCodes.ORGANIZATION);
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCProfessional".toLowerCase(), RFC3881ParticipantObjectTypeCodes.PERSON);
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCRegulatedOrganization".toLowerCase(), RFC3881ParticipantObjectTypeCodes.ORGANIZATION);
     }
 
     public Iti59AuditStrategy(boolean serverSide) {
@@ -70,7 +70,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                         item.setUid(value);
                         break;
                     case "ou":
-                        item.setParticipantObjectTypeCode(PARTICIPANT_OBJECT_CODE_MAP.get(value));
+                        item.setParticipantObjectTypeCode(PARTICIPANT_OBJECT_CODE_MAP.get(value.toLowerCase()));
                         break;
                 }
             }

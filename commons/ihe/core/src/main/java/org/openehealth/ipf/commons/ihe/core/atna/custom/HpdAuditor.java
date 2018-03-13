@@ -24,7 +24,6 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
