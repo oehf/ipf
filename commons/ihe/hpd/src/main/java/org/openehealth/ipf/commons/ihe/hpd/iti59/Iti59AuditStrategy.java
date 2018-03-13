@@ -47,8 +47,8 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     private static final Map<String, ParticipantObjectTypeCode> PARTICIPANT_OBJECT_CODE_MAP;
     static {
         PARTICIPANT_OBJECT_CODE_MAP = new HashMap<>();
-        PARTICIPANT_OBJECT_CODE_MAP.put("HCProfessional", ParticipantObjectTypeCode.Person);
-        PARTICIPANT_OBJECT_CODE_MAP.put("HCRegulatedOrganization", ParticipantObjectTypeCode.Organization);
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCProfessional".toLowerCase(), ParticipantObjectTypeCode.Person);
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCRegulatedOrganization".toLowerCase(), ParticipantObjectTypeCode.Organization);
     }
 
     protected Iti59AuditStrategy(boolean serverSide) {
@@ -74,7 +74,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                         item.setUid(value);
                         break;
                     case "ou":
-                        item.setParticipantObjectTypeCode(PARTICIPANT_OBJECT_CODE_MAP.get(value));
+                        item.setParticipantObjectTypeCode(PARTICIPANT_OBJECT_CODE_MAP.get(value.toLowerCase()));
                         break;
                 }
             }
