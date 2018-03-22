@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.pcc44;
 
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.junit.BeforeClass;
@@ -46,7 +45,7 @@ public class TestPcc44Success extends AbstractTestPcc44 {
     private static final String CONTEXT_DESCRIPTOR = "pcc-44.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

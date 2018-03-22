@@ -129,7 +129,7 @@ public abstract class AbstractPlainProvider implements Serializable {
      */
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
-            Class<? extends IBaseResource> resourceType,
+            String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
@@ -172,7 +172,7 @@ public abstract class AbstractPlainProvider implements Serializable {
      */
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
-            Class<? extends IBaseResource> resourceType,
+            String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
