@@ -25,6 +25,7 @@ import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.Condition;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class ConditionResourceProvider extends AbstractPcc44ResourceProvider<Con
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, Condition.class, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.Condition.name(), httpServletRequest, httpServletResponse);
     }
 
 }

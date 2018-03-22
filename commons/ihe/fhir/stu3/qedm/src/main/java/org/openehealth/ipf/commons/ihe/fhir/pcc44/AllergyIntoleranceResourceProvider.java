@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +64,7 @@ public class AllergyIntoleranceResourceProvider extends AbstractPcc44ResourcePro
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, AllergyIntolerance.class, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.AllergyIntolerance.name(), httpServletRequest, httpServletResponse);
     }
 
 }

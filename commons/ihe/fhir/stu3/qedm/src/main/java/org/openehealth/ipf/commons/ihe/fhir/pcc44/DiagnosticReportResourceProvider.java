@@ -25,6 +25,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,7 @@ public class DiagnosticReportResourceProvider extends AbstractPcc44ResourceProvi
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, DiagnosticReport.class, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.DiagnosticReport.name(), httpServletRequest, httpServletResponse);
     }
 
 }

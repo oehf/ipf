@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.Encounter;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,7 @@ public class EncounterResourceProvider extends AbstractPcc44ResourceProvider<Enc
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, Encounter.class, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.Encounter.name(), httpServletRequest, httpServletResponse);
     }
 
 }

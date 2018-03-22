@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class MedicationRequestResourceProvider extends AbstractPcc44ResourceProv
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, MedicationRequest.class, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.MedicationRequest.name(), httpServletRequest, httpServletResponse);
     }
 
 }
