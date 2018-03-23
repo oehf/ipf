@@ -17,7 +17,6 @@
 package org.openehealth.ipf.boot.atna;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.UserAuthenticationBuilder;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;

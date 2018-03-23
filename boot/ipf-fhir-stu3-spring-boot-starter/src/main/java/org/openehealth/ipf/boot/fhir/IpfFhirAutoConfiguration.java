@@ -119,19 +119,24 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            IPagingProvider pagingProvider,
+            @Autowired(required = false) IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfFhirServlet(config.getFhirVersion());
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
-        fhirServlet.setPagingProvider(pagingProvider);
+
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
         fhirServlet.setStrictErrorHandler(servletProperties.isStrict());
         fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
-        fhirServlet.setNarrativeGenerator(narrativeGenerator);
+        if (narrativeGenerator != null) {
+            fhirServlet.setNarrativeGenerator(narrativeGenerator);
+        }
+        if (pagingProvider != null) {
+            fhirServlet.setPagingProvider(pagingProvider);
+        }
         return fhirServlet;
     }
 

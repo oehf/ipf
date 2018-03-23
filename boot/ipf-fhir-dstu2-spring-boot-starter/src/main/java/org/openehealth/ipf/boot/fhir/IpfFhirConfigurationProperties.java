@@ -41,7 +41,7 @@ public class IpfFhirConfigurationProperties {
      * Which FHIR version to use
      */
     @Getter @Setter
-    private FhirVersionEnum fhirVersion;
+    private FhirVersionEnum fhirVersion = FhirVersionEnum.DSTU2_HL7ORG;
 
     @NestedConfigurationProperty
     @Getter
