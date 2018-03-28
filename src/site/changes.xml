@@ -24,7 +24,16 @@
     </properties>
     <body>
         <release version="3.5.0" date="tbd" description="IPF 3.5.0">
-            <action dev="ohr" issue="183" type="update">
+            <action dev="ohr" issue="186" type="add">
+                Added support for the IHE QEDm transaction (without Provenance option)
+            </action>
+            <action dev="ohr" issue="186" type="add">
+                Added experimental Kotlin HL7 support
+            </action>
+            <action dev="thopap" issue="185" type="update">
+                Update CCDA schema files
+            </action>
+            <action dev="ohr" issue="183" type="add">
                 Add ATNA auditing for ITI-68 (MHD retrieve document) transaction
             </action>
             <action dev="ohr" issue="182" type="update">

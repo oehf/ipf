@@ -21,6 +21,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
@@ -37,6 +38,7 @@ import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
+@Ignore
 public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
