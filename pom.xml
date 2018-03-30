@@ -28,7 +28,7 @@
 
     <properties>
         <!-- Project configurations -->
-        <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <surefire-report-plugin-version>2.20</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
@@ -57,7 +57,7 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
         
-        <groovy-eclipse-batch-version>2.4.14-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-batch-version>2.4.15-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-04</groovy-eclipse-compiler-version>
         
 <!--
@@ -75,7 +75,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.2</activemq-version>
+        <activemq-version>5.15.3</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
@@ -89,18 +89,15 @@
         <guava-version>21.0</guava-version>
         <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
-        <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <javax-annotation-version>1.3.2</javax-annotation-version>
-        <javax-jws-version>2.3.0</javax-jws-version>
         <jetty-version>9.4.6.v20170531</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
-        <log4j-version>2.9.0</log4j-version>
+        <log4j-version>2.11.0</log4j-version>
         <lombok-version>1.16.20</lombok-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.27</tomcat-version>
+        <tomcat-version>8.5.29</tomcat-version>
         <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -112,6 +109,18 @@
     </scm>
 
     <profiles>
+        <profile>
+            <id>jigsaw</id>
+            <activation>
+                <jdk>[1.9,)</jdk>
+            </activation>
+        </profile>
+        <profile>
+            <id>no-jigsaw</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+        </profile>		
         <profile>
             <!-- This profile generates groovystubs and delomboked sources with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->
@@ -370,14 +379,6 @@
                         <groupId>commons-codec</groupId>
                         <artifactId>commons-codec</artifactId>
                     </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-core</artifactId>
-                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -388,14 +389,6 @@
                     <exclusion>
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-jms</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -423,21 +416,6 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${javax-validation-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>javax.annotation-api</artifactId>
-                <version>${javax-annotation-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.jws</groupId>
-                <artifactId>jsr181-api</artifactId>
-                <version>1.0-MR1</version>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>

@@ -38,6 +38,7 @@ import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
+@Ignore
 public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";

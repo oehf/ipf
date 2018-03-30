@@ -11,7 +11,20 @@
         <artifactId>ipf-commons</artifactId>
         <version>3.5-SNAPSHOT</version>
     </parent>
-    
+
+    <profiles>
+        <profile>
+            <id>jigsaw</id>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.xml</groupId>
+                    <artifactId>webservices-api</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
@@ -41,12 +54,14 @@
             <artifactId>groovy-xml</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.activation</groupId>
-            <artifactId>javax.activation</artifactId>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Dependencies for test -->
