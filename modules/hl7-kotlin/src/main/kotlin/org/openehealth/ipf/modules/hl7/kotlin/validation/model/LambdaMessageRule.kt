@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.validation.ValidationException
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 class LambdaMessageRule(rule: (Message) -> Array<ValidationException>,
                         description: String = "",

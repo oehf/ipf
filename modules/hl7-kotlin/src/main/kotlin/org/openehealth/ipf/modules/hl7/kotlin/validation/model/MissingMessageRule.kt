@@ -24,6 +24,7 @@ import org.openehealth.ipf.modules.hl7.kotlin.triggerEvent
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 class MissingMessageRule(private val description: String = "", private val sectionReference: String = "") : AbstractMessageRule() {
 

@@ -37,6 +37,7 @@ import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaPrimitiveTy
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 
 

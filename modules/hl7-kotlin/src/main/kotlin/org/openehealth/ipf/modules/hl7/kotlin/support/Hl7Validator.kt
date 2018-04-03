@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 class Hl7Validator<R> : Validator<Message, ValidationContext> {
 

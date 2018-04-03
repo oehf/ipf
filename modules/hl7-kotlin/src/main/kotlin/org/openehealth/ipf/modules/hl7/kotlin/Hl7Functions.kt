@@ -28,6 +28,7 @@ import java.nio.charset.Charset
  * Top-level functions for handling HL7 messages in Kotlin
  *
  * @author Christian Ohr
+ * @since 3.5
  */
 
 

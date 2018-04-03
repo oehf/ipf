@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.validation.impl.RuleSupport
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 abstract class LambdaRuleSupport<T>(protected val rule: (T) -> Array<ValidationException>,
                                     private val description: String,

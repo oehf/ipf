@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.validation.ValidationException
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
 class LambdaPrimitiveTypeRule(rule: (String?) -> Array<ValidationException>,
                               description: String = "",
