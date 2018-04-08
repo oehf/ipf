@@ -31,6 +31,7 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -42,8 +43,8 @@ import static org.junit.Assert.*;
 public class AuditorTestBase {
 
     protected static final String REPLY_TO_URI = "http://141.44.162.126:8090/services/iti55-response";
-    protected static final String USER_ID = "user-id";
-    protected static final String USER_NAME = "alias<user@issuer>";
+    protected static final String USER_ID = "alias<user@issuer>";
+    protected static final String USER_NAME = "Dr. Klaus-Peter Kohlrabi";
     protected static final String QUERY_PAYLOAD = "<query><coffee /></query>";
     protected static final String SERVER_URI = "http://www.icw.int/pxs/iti55-service";
     protected static final String QUERY_ID = "queryIdExtension@queryIdRoot";
@@ -53,19 +54,14 @@ public class AuditorTestBase {
     protected static final String SUBMISSION_SET_UUID = "6d334214-2a2e-43ef-a362-cbe6e77b91a0";
     protected static final String[] PATIENT_IDS = new String[]{"1234^^^&1.2.3.4.5.6&ISO", "durak^^^&6.7.8.9.10&KRYSO"};
 
-
-    protected static final PurposeOfUse[] NEW_PURPOSES_OF_USE = {
+    protected static final PurposeOfUse[] PURPOSES_OF_USE = {
             PurposeOfUse.of("12", "1.0.14265.1", "Law Enforcement"),
-            PurposeOfUse.of("13", "1.0.14265.1", "Something Else")
-    };
+            PurposeOfUse.of("13", "1.0.14265.1", "Something Else")};
 
-    protected static final List<ActiveParticipantRoleId> NEW_USER_ROLES;
+    protected static final List<ActiveParticipantRoleId> USER_ROLES = Arrays.asList(
+        ActiveParticipantRoleId.of("ABC", "1.2.3.4.5", "Role_ABC"),
+        ActiveParticipantRoleId.of("DEF", "1.2.3.4.5.6", "Role_DEF"));
 
-    static {
-        NEW_USER_ROLES = new ArrayList<>();
-        NEW_USER_ROLES.add(ActiveParticipantRoleId.of("ABC", "1.2.3.4.5", "Role_ABC"));
-        NEW_USER_ROLES.add(ActiveParticipantRoleId.of("DEF", "1.2.3.4.5.6", "Role_DEF"));
-    }
 
     protected DefaultAuditContext auditContext;
     protected RecordingAuditMessageQueue recorder;

@@ -15,13 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,6 +36,29 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public abstract class AuditDataset implements Serializable {
+
+    @NoArgsConstructor
+    public static class HumanUser {
+        /** ID, preferably in the format defined in the IHE XUA profile */
+        @Getter @Setter private String id;
+
+        /** Real-world name */
+        @Getter @Setter private String name;
+
+        /** Role codes */
+        @Getter private final List<ActiveParticipantRoleId> roles = new ArrayList<>();
+
+        public HumanUser(String id, String name, Collection<ActiveParticipantRoleId> roles) {
+            this.id = id;
+            this.name = name;
+            this.roles.addAll(roles);
+        }
+
+        public boolean isEmpty() {
+            return StringUtils.isAllBlank(id, name);
+        }
+    }
+
 
     /**
      * whether we audit on server (true) or on client (false)
@@ -55,7 +84,8 @@ public abstract class AuditDataset implements Serializable {
      * Source User Name, e.g. extracted from a client certificate
      */
     @Getter
-    @Setter String sourceUserName;
+    @Setter
+    String sourceUserName;
 
     /**
      * @param serverSide   specifies whether this audit dataset will be used on the
@@ -99,24 +129,19 @@ public abstract class AuditDataset implements Serializable {
     public abstract String getRemoteAddress();
 
     /**
-     * @return the name of a (human) use
+     * @return information about human user(s) participating in the transaction
      */
-    public abstract String getUserName();
-
-    /**
-     * @return the role(s) of a (human) user
-     */
-    public abstract List<ActiveParticipantRoleId> getUserRoles();
+    public abstract List<HumanUser> getHumanUsers();
 
     /**
      * @return true if the source user is the requestor of the event
      */
     public boolean isSourceUserIsRequestor() {
-        return getUserName() == null || getUserName().isEmpty();
+        return getHumanUsers().isEmpty();
     }
 
     /**
-     * @return true if the source user is the requestor of the event
+     * @return true if the destination user is the requestor of the event
      */
     public boolean isDestinationUserIsRequestor() {
         return false;

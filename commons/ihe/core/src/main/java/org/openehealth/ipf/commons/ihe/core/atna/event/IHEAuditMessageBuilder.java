@@ -98,9 +98,11 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     }
 
     protected final T addHumanRequestor(AuditDataset auditDataset) {
-        if (auditDataset.getUserName() != null && !auditDataset.getUserName().isEmpty()) {
-            delegate.addActiveParticipant(auditDataset.getUserName(), null, auditDataset.getUserName(),
-                    true, auditDataset.getUserRoles(), null);
+        for (AuditDataset.HumanUser humanUser : auditDataset.getHumanUsers()) {
+            if (!humanUser.isEmpty()) {
+                delegate.addActiveParticipant(humanUser.getId(), humanUser.getName(), humanUser.getId(),
+                        true, humanUser.getRoles(), null);
+            }
         }
         return self();
     }

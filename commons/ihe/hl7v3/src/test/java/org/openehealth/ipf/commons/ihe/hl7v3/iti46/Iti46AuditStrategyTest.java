@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
@@ -63,11 +64,10 @@ public class Iti46AuditStrategyTest extends HL7v3AuditorTestBase {
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
         auditDataset.setMessageId(MESSAGE_ID);
         auditDataset.setPatientIds(PATIENT_IDS);
-        auditDataset.setUserName(USER_NAME);
         auditDataset.setSourceUserId(REPLY_TO_URI);
         auditDataset.setDestinationUserId(SERVER_URI);
-        auditDataset.setPurposesOfUse(NEW_PURPOSES_OF_USE);
-        auditDataset.getUserRoles().addAll(NEW_USER_ROLES);
+        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
+        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
         return auditDataset;
     }
 }

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
@@ -65,15 +64,8 @@ public class FhirAuditDataset extends AuditDataset {
     @Getter
     private final Set<String> patientIds = new LinkedHashSet<>();
 
-    /**
-     * Access Control role(s) the human user holds that allows this transaction.
-     */
     @Getter
-    private final List<ActiveParticipantRoleId> userRoles = new ArrayList<>();
-
-
-    @Getter @Setter
-    private String userName;
+    private final List<HumanUser> humanUsers = new ArrayList<>();
 
     @Getter @Setter
     private String sourceUserId;

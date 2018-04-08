@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
@@ -62,19 +61,11 @@ public class WsAuditDataset extends AuditDataset {
     @Getter
     private String requestPayload;
 
-
     /**
-     * Client user name (WS-Security &lt;Username&gt; header).
+     * IDs and real-world names of human users.
      */
     @Getter
-    @Setter
-    private String userName;
-
-    /**
-     * Access Control role(s) the human user holds that allows this transaction.
-     */
-    @Getter
-    private final List<ActiveParticipantRoleId> userRoles = new ArrayList<>();
+    private final List<HumanUser> humanUsers = new ArrayList<>();
 
     /**
      * Client IP address.
@@ -112,10 +103,6 @@ public class WsAuditDataset extends AuditDataset {
 
     @Setter
     private boolean sourceUserIsRequestor = true;
-
-    @Setter
-    @Getter
-    private boolean destinationUserIsRequestor;
 
     /**
      * Constructor.
