@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.hpd.atna.HpdAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
@@ -73,12 +74,11 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setUserName(USER_NAME);
         auditDataset.setSourceUserId(REPLY_TO_URI);
         auditDataset.setDestinationUserId(SERVER_URI);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
-        auditDataset.setPurposesOfUse(NEW_PURPOSES_OF_USE);
-        auditDataset.getUserRoles().addAll(NEW_USER_ROLES);
+        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
+        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
 
         Iti59AuditDataset.RequestItem requestItem1 = new Iti59AuditDataset.RequestItem(QUERY_ID, EventActionCode.Update);
         requestItem1.setUid("1.2.3.4.5.6:abcde");
