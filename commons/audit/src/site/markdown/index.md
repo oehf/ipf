@@ -12,13 +12,17 @@ coded values into the wrong places (e.g. accidentally setting a
 `ParticipantObjectTypeCodeRole` code as `ParticipantObjectTypeCode` code).
 * possibility to select an Audit Message XML schema that belongs to a specific [DICOM] version
 * possibility to plug-in your own exception handler in case the Audit Repository is not reachable
-* configuration is done via an `AuditContext` bean instead of a static global. You
-can create and use as many `AuditContext` as you wish.
+* configuration is done via an `AuditContext` bean instead of a static global class. You
+can create and use as many `AuditContext` configuration beans as you wish.
 
 
 ### Constructing an Audit Message
 
-In order to create and submit an Audit Message, perform the following steps
+All of the IHE components implemented by IPF automatically use the audit support of this module
+for ATNA auditing. You only need to configure an [AuditContext](../apidocs/org/openehealth/ipf/commons/audit/AuditContext.html) bean.
+When you use one of the Spring Boot starter modules, this bean is already provided for you. 
+
+In order to create and submit your own Audit Message, perform the following steps
 
 1. Construct your Audit Message by using one of the builder classes contained in the
 `org.openehealth.ipf.commons.audit.event` package. Note that the IHE 
@@ -80,8 +84,8 @@ new SecurityAlertBuilder(EventOutcomeIndicator.Success, null, EventTypeCode.User
 
 ### Configuration
 
-The `AuditContext` interface (and its [DefaultAuditContext]`(../apidocs/org/openehealth/ipf/commons/audit/DefaultAuditContext.html) implementation) is the only place to configure
-static details for auditing, e.g. whether auditing is activated, the location of the Audit Repository, or 
+The `AuditContext` interface (and its [DefaultAuditContext](../apidocs/org/openehealth/ipf/commons/audit/DefaultAuditContext.html) implementation) 
+is the only place to configure static details for auditing, e.g. whether auditing is activated, the location of the Audit Repository, or 
 the transmission protocol. It also allows to setup strategies for serialization, whether to send synchronously or 
 asynchronously, and how errors are handled.
 

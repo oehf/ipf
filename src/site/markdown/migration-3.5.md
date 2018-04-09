@@ -19,7 +19,9 @@ the standard [JSSE parameters](https://docs.oracle.com/javase/8/docs/technotes/g
 
 If you derived your own ATNA auditing from the OpenHealthTools libraries, you might want to migrate to the new API
 in order to avoid redundant configuration. Please check [here](../ipf-commons-audit/index.html) for details on
-the new API.
+the new API and configuration.
+If you choose to migrate your own ATNA auditing at a later point in time, you can continue to use the legacy
+library by explicitly depending on `org.openehealth.ipf.oht.atna:ipf-oht-atna:3.6.0`. 
 
 ### Package Changes
 

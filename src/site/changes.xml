@@ -25,7 +25,7 @@
     <body>
         <release version="3.5.0" date="tbd" description="IPF 3.5.0">
             <action dev="ohr" issue="186" type="add">
-                Added support for the IHE QEDm transaction (without Provenance option)
+                Added initial support for the IHE QEDm transaction (without Provenance option)
             </action>
             <action dev="ohr" issue="186" type="add">
                 Added experimental Kotlin HL7 support
