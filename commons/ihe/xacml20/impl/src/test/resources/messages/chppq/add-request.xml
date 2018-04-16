@@ -1,0 +1,305 @@
+<epd:AddPolicyRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                      xmlns:epd="urn:e-health-suisse:2015:policy-administration"
+                      xmlns:xacml-saml="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion">
+    <saml:Assertion ID="a3b5a66d05d86477eafc48e561084edc9" Version="2.0"
+                    IssueInstant="2016-02-09T09:30:10.5Z">
+        <saml:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:2.999.1</saml:Issuer>
+        <saml:Statement xsi:type="xacml-saml:XACMLPolicyStatementType">
+            <ns5:PolicySet xmlns:ns3="urn:ihe-d:hl7-org:v3"
+                           xmlns:ns5="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+                           PolicySetId="1.2.840.113619.20.2.9.0"
+                           PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:deny-overrides">
+                <ns5:Description>
+                    Patient does not agree to share their medical documents through the exchange and does
+                    not allow the user to override view restrictions in emergency situations. Patient agrees
+                    that their
+                    medical documents are published to the exchange, but no notifications are allowed.
+                </ns5:Description>
+                <ns5:Target>
+                    <ns5:Resources>
+                        <ns5:Resource>
+                            <ns5:ResourceMatch MatchId="urn:hl7-org:v3:function:II-equal">
+                                <ns5:AttributeValue DataType="urn:hl7-org:v3#II">
+                                    <ns3:InstanceIdentifier root="*"/>
+                                </ns5:AttributeValue>
+                                <ns5:ResourceAttributeDesignator AttributeId="urn:ihe:iti:xds-b:2007:patient-id"
+                                                                 DataType="urn:hl7-org:v3#II"/>
+                            </ns5:ResourceMatch>
+                        </ns5:Resource>
+                    </ns5:Resources>
+                </ns5:Target>
+                <ns5:Policy PolicyId="3644dc70-4dec-11e3-8f96-0800200c9a66"
+                            RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:deny-overrides">
+                    <ns5:Description>
+                        Permit access on the PatientRecordContainer in patient search and patient record,
+                        if user's organization has previously interacted with the patient.
+                    </ns5:Description>
+                    <ns5:Target/>
+                    <ns5:Rule RuleId="3d37e220-4dec-11e3-8f96-0800200c9a66" Effect="Permit">
+                        <ns5:Target>
+                            <ns5:Resources>
+                                <ns5:Resource>
+                                    <ns5:ResourceMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:icw:2013:record:interactions
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe-d:cookbook:2013:resource-type"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ResourceMatch>
+                                </ns5:Resource>
+                            </ns5:Resources>
+                            <ns5:Actions>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:icw:2013:record:search-response
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:icw:2013:record:view-all-response
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                            </ns5:Actions>
+                        </ns5:Target>
+<!--
+                        <ns5:Condition>
+                            <ns5:Apply FunctionId="urn:icw:2013:record:function:interactedPreviously">
+                                <ns5:SubjectAttributeDesignator
+                                        AttributeId="urn:oasis:names:tc:xspa:1.0:subject:organization-id"
+                                        DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                <ns5:ResourceAttributeDesignator
+                                        AttributeId="urn:icw:2013:record:latest-organization-interaction"
+                                        DataType="urn:icw:2013:record#interaction"/>
+                            </ns5:Apply>
+                        </ns5:Condition>
+-->
+                    </ns5:Rule>
+                </ns5:Policy>
+                <ns5:Policy PolicyId="0bce8b03-a0af-41f1-be59-2bef105aaffb"
+                            RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:deny-overrides">
+                    <ns5:Description>
+                        Permit "Provide and Register" and "Register" transactions for patient consent documents
+                    </ns5:Description>
+                    <ns5:Target/>
+                    <ns5:Rule RuleId="87f9360c-6b9e-4b60-a097-7e3e9548c06e" Effect="Permit">
+                        <ns5:Target>
+                            <ns5:Resources>
+                                <ns5:Resource>
+                                    <ns5:ResourceMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:xds-b:2007:document-entry
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe-d:cookbook:2013:resource-type"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ResourceMatch>
+                                    <ns5:ResourceMatch MatchId="urn:hl7-org:v3:function:CV-equal">
+                                        <ns5:AttributeValue DataType="urn:hl7-org:v3#CV">
+                                            <ns3:CodedValue code="57016-8" codeSystem="2.16.840.1.113883.6.1"/>
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe:iti:xds-b:2007:document-entry:class-code"
+                                                DataType="urn:hl7-org:v3#CV"/>
+                                    </ns5:ResourceMatch>
+                                    <ns5:ResourceMatch MatchId="urn:hl7-org:v3:function:CV-equal">
+                                        <ns5:AttributeValue DataType="urn:hl7-org:v3#CV">
+                                            <ns3:CodedValue code="urn:ihe:iti:bppc:2007"
+                                                            codeSystem="1.3.6.1.4.1.19376.1.2.3"/>
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe:iti:xds-b:2007:document-entry:format-code"
+                                                DataType="urn:hl7-org:v3#CV"/>
+                                    </ns5:ResourceMatch>
+                                </ns5:Resource>
+                            </ns5:Resources>
+                            <ns5:Actions>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:RegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                            </ns5:Actions>
+                        </ns5:Target>
+                    </ns5:Rule>
+                    <ns5:Rule RuleId="87f9360d-6b9e-4b60-a097-7e3e9548c06d" Effect="Permit">
+                        <ns5:Target>
+                            <ns5:Resources>
+                                <ns5:Resource>
+                                    <ns5:ResourceMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:xds-b:2007:submission-set
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe-d:cookbook:2013:resource-type"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ResourceMatch>
+                                </ns5:Resource>
+                            </ns5:Resources>
+                            <ns5:Actions>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:RegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                            </ns5:Actions>
+                        </ns5:Target>
+                    </ns5:Rule>
+                    <ns5:Rule RuleId="87f9360e-6b9e-4b60-a097-7e3e9548c06e" Effect="Permit">
+                        <ns5:Target>
+                            <ns5:Resources>
+                                <ns5:Resource>
+                                    <ns5:ResourceMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:xds-b:2007:folder
+                                        </ns5:AttributeValue>
+                                        <ns5:ResourceAttributeDesignator
+                                                AttributeId="urn:ihe-d:cookbook:2013:resource-type"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ResourceMatch>
+                                </ns5:Resource>
+                            </ns5:Resources>
+                            <ns5:Actions>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                                <ns5:Action>
+                                    <ns5:ActionMatch
+                                            MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                        <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                            urn:ihe:iti:2007:RegisterDocumentSet-b
+                                        </ns5:AttributeValue>
+                                        <ns5:ActionAttributeDesignator
+                                                AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                                DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                    </ns5:ActionMatch>
+                                </ns5:Action>
+                            </ns5:Actions>
+                        </ns5:Target>
+                    </ns5:Rule>
+                </ns5:Policy>
+            </ns5:PolicySet>
+            <ns5:Policy xmlns:ns2="urn:hl7-org:v3" xmlns:ns3="urn:ihe-d:hl7-org:v3"
+                        xmlns:ns4="http://schema.icw-global.com/hie/xacml"
+                        xmlns:ns5="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+                        PolicyId="3644dc70-4dec-11e3-8f96-0800200c9a66"
+                        RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:deny-overrides">
+                <ns5:Description>Permit access on the PatientRecordContainer in patient search and patient
+                    record, if
+                    user's
+                    organization has previously interacted with the patient.
+                </ns5:Description>
+                <ns5:Target/>
+                <ns5:Rule RuleId="3d37e220-4dec-11e3-8f96-0800200c9a66" Effect="Permit">
+                    <ns5:Target>
+                        <ns5:Resources>
+                            <ns5:Resource>
+                                <ns5:ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                    <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                        urn:icw:2013:record:interactions
+                                    </ns5:AttributeValue>
+                                    <ns5:ResourceAttributeDesignator
+                                            AttributeId="urn:ihe-d:cookbook:2013:resource-type"
+                                            DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                </ns5:ResourceMatch>
+                            </ns5:Resource>
+                        </ns5:Resources>
+                        <ns5:Actions>
+                            <ns5:Action>
+                                <ns5:ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                    <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                        urn:icw:2013:record:search-response
+                                    </ns5:AttributeValue>
+                                    <ns5:ActionAttributeDesignator
+                                            AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                            DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                </ns5:ActionMatch>
+                            </ns5:Action>
+                            <ns5:Action>
+                                <ns5:ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                                    <ns5:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                                        urn:icw:2013:record:view-all-response
+                                    </ns5:AttributeValue>
+                                    <ns5:ActionAttributeDesignator
+                                            AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                            DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                                </ns5:ActionMatch>
+                            </ns5:Action>
+                        </ns5:Actions>
+                    </ns5:Target>
+<!--
+                    <ns5:Condition>
+                        <ns5:Apply FunctionId="urn:icw:2013:record:function:interactedPreviously">
+                            <ns5:SubjectAttributeDesignator
+                                    AttributeId="urn:oasis:names:tc:xspa:1.0:subject:organization-id"
+                                    DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                            <ns5:ResourceAttributeDesignator
+                                    AttributeId="urn:icw:2013:record:latest-organization-interaction"
+                                    DataType="urn:icw:2013:record#interaction"/>
+                        </ns5:Apply>
+                    </ns5:Condition>
+-->
+                </ns5:Rule>
+            </ns5:Policy>
+        </saml:Statement>
+    </saml:Assertion>
+</epd:AddPolicyRequest>

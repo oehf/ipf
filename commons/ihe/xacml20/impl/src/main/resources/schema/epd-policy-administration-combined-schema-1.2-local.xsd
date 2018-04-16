@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema  
+      targetNamespace="urn:e-health-suisse:2015:policy-administration" 
+      xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+      xmlns:epd="urn:e-health-suisse:2015:policy-administration" 
+      xmlns:xacml="urn:oasis:names:tc:xacml:2.0:policy:schema:os" 
+      xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" 
+      elementFormDefault="qualified" 
+      version="1.0">
+
+	<xs:import namespace="urn:oasis:names:tc:xacml:2.0:policy:schema:os" schemaLocation="access_control-xacml-2.0-policy-schema-os.xsd"/>
+	<xs:import namespace="urn:oasis:names:tc:SAML:2.0:assertion" schemaLocation="sstc-saml-schema-assertion-2.0.xsd"/>
+	<xs:import namespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion" schemaLocation="xacml-2.0-profile-saml2.0-v2-schema-assertion-wd-14.xsd"/>
+
+	<xs:element name="AddPolicyRequest" type="epd:AddPolicyRequest"/>
+	<xs:element name="UpdatePolicyRequest" type="epd:UpdatePolicyRequest"/>
+	<xs:element name="DeletePolicyRequest" type="epd:DeletePolicyRequest"/>
+
+	<!-- LOCAL EXTENSION BEGIN -->
+	<xs:complexType name="AddPolicyRequest">
+		<xs:complexContent>
+			<xs:extension base="epd:AssertionBasedRequestType"/>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="UpdatePolicyRequest">
+		<xs:complexContent>
+			<xs:extension base="epd:AssertionBasedRequestType"/>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="DeletePolicyRequest">
+		<xs:complexContent>
+			<xs:extension base="epd:AssertionBasedRequestType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<!-- LOCAL EXTENSION END -->
+
+	<xs:complexType name="AssertionBasedRequestType">
+		<xs:sequence>
+			<xs:element ref="saml:Assertion"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="XACMLPolicySetIdReferenceStatementType">
+		<xs:complexContent>
+			<xs:extension base="saml:StatementAbstractType">
+				<xs:sequence>
+					<xs:element ref="xacml:PolicySetIdReference" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="EpdPolicyRepositoryResponse">
+		<xs:complexType>
+			<xs:attribute name="status" type="xs:anyURI" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="UnknownPolicySetId" type="epd:UnknownPolicySetId"/>
+
+	<xs:complexType name="UnknownPolicySetId">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="message" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

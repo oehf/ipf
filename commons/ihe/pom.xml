@@ -23,6 +23,7 @@
         <module>fhir</module>
         <module>xua</module>
         <module>hpd</module>
+        <module>xacml20</module>
     </modules>
 
     <distributionManagement>

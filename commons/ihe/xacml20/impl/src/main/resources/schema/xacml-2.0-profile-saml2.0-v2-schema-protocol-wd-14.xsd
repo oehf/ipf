@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     XACML SAML Profile Version 2.0
+     OASIS Committee Specification 02
+     19 August 2014
+     Copyright (c) OASIS Open 2014. All Rights Reserved.
+     Source: http://docs.oasis-open.org/xacml/xacml-saml-profile/v2.0/cs02/schemas/
+     -->
+<schema
+    targetNamespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:xacml="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+    xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+    xmlns:xacml-saml="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+    xmlns:xacml-samlp="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified"
+    blockDefault="substitution"
+    version="wd 12">
+    <import namespace="urn:oasis:names:tc:SAML:2.0:protocol"
+        schemaLocation="sstc-saml-schema-protocol-2.0.xsd" />
+    <import namespace="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+        schemaLocation="access_control-xacml-2.0-context-schema-os.xsd" />
+    <import namespace="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+        schemaLocation="access_control-xacml-2.0-policy-schema-os.xsd" />
+    <import namespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+        schemaLocation="xacml-2.0-profile-saml2.0-v2-schema-assertion-wd-14.xsd" />
+    <annotation>
+      <documentation>
+          Document identifier: xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14
+          Location: TBD
+      </documentation>
+    </annotation>
+    <!--    -->
+    <element name="XACMLAuthzDecisionQuery" type="xacml-samlp:XACMLAuthzDecisionQueryType" />
+    <complexType name="XACMLAuthzDecisionQueryType">
+        <complexContent>
+            <extension base="samlp:RequestAbstractType">
+                <sequence>
+                    <element ref="xacml-context:Request" />
+                    <element ref="xacml:Policy" minOccurs="0" maxOccurs="unbounded" />
+                    <element ref="xacml:PolicySet" minOccurs="0" maxOccurs="unbounded" />
+                    <element ref="xacml-saml:ReferencedPolicies" minOccurs="0" maxOccurs="1" />
+                    <element ref="xacml-samlp:Extensions" minOccurs="0" />
+                </sequence>
+                <attribute name="InputContextOnly"
+                           type="boolean"
+                           use="optional"
+                           default="false" />
+                <attribute name="ReturnContext"
+                           type="boolean"
+                           use="optional"
+                           default="false" />
+                <attribute name="CombinePolicies"
+                           type="boolean"
+                           use="optional"
+                           default="true" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <!--    -->
+
+    <element name="Extensions" type="xacml-samlp:ExtensionsType" />
+    <complexType name="ExtensionsType">
+        <sequence>
+			<any namespace="##any" processContents="strict" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <element name="XACMLPolicyQuery" type="xacml-samlp:XACMLPolicyQueryType" />
+    <complexType name="XACMLPolicyQueryType">
+        <complexContent>
+            <extension base="samlp:RequestAbstractType">
+                <choice minOccurs="1" maxOccurs="unbounded">
+                    <element ref="xacml-context:Request" />
+                    <element ref="xacml:PolicySetIdReference" />
+                    <element ref="xacml:PolicyIdReference" />
+                </choice>
+            </extension>
+        </complexContent>
+    </complexType>
+</schema>

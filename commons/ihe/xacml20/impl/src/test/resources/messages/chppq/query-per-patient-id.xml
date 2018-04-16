@@ -1,0 +1,21 @@
+<xacml-samlp:XACMLPolicyQuery
+        xmlns:xacml-samlp="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+        xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:hl7="urn:hl7-org:v3"
+        ID="ppq-query-id-1"
+        Version="2.0"
+        IssueInstant="2016-02-09T09:30:10.5Z">
+    <xacml-context:Request>
+        <xacml-context:Subject/>
+        <xacml-context:Resource>
+            <xacml-context:Attribute AttributeId="urn:e-health-suisse:2015:epr-spid" DataType="urn:hl7-org:v3#II">
+                <xacml-context:AttributeValue>
+                    <hl7:InstanceIdentifier xsi:type="hl7:II" root="2.16.756.5.30.1.127.3.10.3" extension="8901"/>
+                </xacml-context:AttributeValue>
+            </xacml-context:Attribute>
+        </xacml-context:Resource>
+        <xacml-context:Action/>
+        <xacml-context:Environment/>
+    </xacml-context:Request>
+</xacml-samlp:XACMLPolicyQuery>

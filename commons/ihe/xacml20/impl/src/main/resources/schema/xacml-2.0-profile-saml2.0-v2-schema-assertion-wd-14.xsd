@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     XACML SAML Profile Version 2.0
+     OASIS Committee Specification 02
+     19 August 2014
+     Copyright (c) OASIS Open 2014. All Rights Reserved.
+     Source: http://docs.oasis-open.org/xacml/xacml-saml-profile/v2.0/cs02/schemas/
+     -->
+<schema
+    targetNamespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:xacml="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+    xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+    xmlns:xacml-saml="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified"
+    blockDefault="substitution"
+    version="wd 12">
+    <import namespace="urn:oasis:names:tc:SAML:2.0:assertion"
+        schemaLocation="sstc-saml-schema-assertion-2.0.xsd"/>
+    <import namespace="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+        schemaLocation="access_control-xacml-2.0-context-schema-os.xsd"/>
+    <import namespace="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+        schemaLocation="access_control-xacml-2.0-policy-schema-os.xsd"/>
+    <annotation>
+      <documentation>
+          Document identifier: xacml-2.0-profile-saml2.0-v2-schema-assertion-wd-14
+          Location: TBD
+      </documentation>
+    </annotation>
+    <!--    -->
+    <complexType name="XACMLAuthzDecisionStatementType">
+        <complexContent>
+            <extension base="saml:StatementAbstractType">
+                <sequence>
+                    <element ref="xacml-context:Response"/>
+                    <element ref="xacml-context:Request"  minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <!--    -->
+    <complexType name="XACMLPolicyStatementType">
+        <complexContent>
+            <extension base="saml:StatementAbstractType">
+                <sequence>
+                    <choice minOccurs="0" maxOccurs="unbounded">
+                        <element ref="xacml:Policy"/>
+                        <element ref="xacml:PolicySet"/>
+                    </choice>
+                    <element ref="xacml-saml:ReferencedPolicies"
+                           minOccurs="0" maxOccurs="1" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <!--    -->
+    <element name="ReferencedPolicies" 
+         type="xacml-saml:ReferencedPoliciesType"/>
+    <complexType name="ReferencedPoliciesType">
+        <sequence>
+            <choice minOccurs="0" maxOccurs="unbounded">
+                <element ref="xacml:Policy"/>
+                <element ref="xacml:PolicySet"/>
+            </choice>
+        </sequence>
+    </complexType>
+    <!--    -->
+</schema>

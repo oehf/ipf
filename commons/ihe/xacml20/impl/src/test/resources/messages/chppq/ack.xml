@@ -1,0 +1,3 @@
+<ns11:EpdPolicyRepositoryResponse xmlns:ns11="urn:e-health-suisse:2015:policy-administration"
+                                  xmlns="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0"
+                                  status="urn:e-health-suisse:2015:response-status:success"/>
