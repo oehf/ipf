@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This schema is required only for validation of XACML Policy Query responses, because of xsi:type -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="dummy" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:import namespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+               schemaLocation="xacml-2.0-profile-saml2.0-v2-schema-assertion-wd-14.xsd"/>
+    <xs:import namespace="urn:oasis:names:tc:SAML:2.0:protocol"
+               schemaLocation="sstc-saml-schema-protocol-2.0.xsd"/>
+</xs:schema>

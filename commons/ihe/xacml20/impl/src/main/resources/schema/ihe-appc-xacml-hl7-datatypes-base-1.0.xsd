@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+********************************************************
+HL7v3 Abstract Data Type Specification - ANSI/HL7 V3 DT, R1-2004 3/19/2012
+Original file comes from: ftp://ftp.ihe.net/TF_Implementation_Material/ITI/schema/IHE/APPC/ihe-appc-xacml-hl7-datatypes-base-1.0.xsd
+
+History:
+2017-02-15: First edition
+
+********************************************************
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" targetNamespace="urn:hl7-org:v3" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>XML Schema Reimplementation of a subset of the Abstract Data Type Specification of HL7v3 (ANSI/HL7 V3 DT,
+			R1-2004; HL7 Version 3 Standard: Data Types - Abstract Specification, Release 1 - 11/29/2004) by
+			InterComponentWare AG. Limited to the data types needed to express a patient's privacy consent directive using XACML,
+			as specified in the IHE Advanced Patient Privacy Consent (APPC) Profile. The standard v3 XML schemas are to complex for easy
+			integration, therefore we created this subset.
+		</xs:documentation>
+	</xs:annotation>
+	<!-- elment name definitions -->
+	<xs:element name="CodedValue" type="CV"/>
+	<xs:element name="InstanceIdentifier" type="II"/>
+	<!-- type definitions -->
+	<xs:complexType name="CV">
+		<xs:sequence>
+			<xs:element name="originalText" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="code" type="xs:string" use="required"/>
+		<xs:attribute name="codeSystem" type="oid" use="required"/>
+		<xs:attribute name="codeSystemName" type="xs:string" use="optional"/>
+		<xs:attribute name="codeSystemVersion" type="xs:string" use="optional"/>
+		<xs:attribute name="displayName" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="II">
+		<xs:attribute name="root" type="uid" use="required"/>
+		<xs:attribute name="extension" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- basic data types -->
+	<xs:simpleType name="uid">
+		<xs:annotation>
+			<xs:documentation>
+				A unique identifier for data objects. The system supports OIDs and UUIDs.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="oid uuid"/>
+	</xs:simpleType>
+	<xs:simpleType name="oid">
+		<xs:annotation>
+			<xs:documentation>
+				A unique object identifier as defined by ITU-T's ASN.1 standard, X.690.
+				An example of a valid OID is 2.16.840.1.113883.19.5.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-2](\.(0|[1-9][0-9]*))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="uuid">
+		<xs:annotation>
+			<xs:documentation>
+				A universally unique identifier as defined by the Open Software Foundation
+				as part of the Distributed Computing Environment. The canonical 8-4-4-4-12 form
+				must be used, e.g. 774c902a-4961-4b8c-b3ca-d691e6a86199
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

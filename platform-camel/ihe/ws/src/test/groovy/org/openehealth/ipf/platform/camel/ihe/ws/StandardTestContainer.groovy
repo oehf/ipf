@@ -55,8 +55,7 @@ class StandardTestContainer {
      */
     public static int DEMO_APP_PORT = 8999
 
-    static void startServer(servlet, String appContextName, boolean secure, int serverPort,
-                            String servletName = null) {
+    static void startServer(servlet, String appContextName, boolean secure, int serverPort, String servletName = null) {
         URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
 
         port = serverPort

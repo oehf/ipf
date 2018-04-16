@@ -1,0 +1,16 @@
+<epd:DeletePolicyRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                         xmlns:xacml="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+                         xmlns:epd="urn:e-health-suisse:2015:policy-administration"
+                         xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+    <saml:Assertion ID="x3b5a66d05d86477eafc48e561084edc9" Version="2.0"
+                    IssueInstant="2016-02-09T09:30:10.5Z">
+        <saml:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:2.999.1</saml:Issuer>
+        <saml:Statement xsi:type="epd:XACMLPolicySetIdReferenceStatementType">
+            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521160</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521161</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521162</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521163</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521164</xacml:PolicySetIdReference>
+        </saml:Statement>
+    </saml:Assertion>
+</epd:DeletePolicyRequest>

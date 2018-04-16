@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ipf-commons-ihe-xacml20-model</artifactId>
+    <name>ipf-commons-ihe-xacml20-model</name>
+    <description>Support for XACML 2.0-based integration profiles: data types</description>
+    <url>${site.url}/${project.artifactId}</url>
+
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>ipf-commons-ihe-xacml20</artifactId>
+        <version>3.5-SNAPSHOT</version>
+    </parent>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>schemagen</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sources>
+                        <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/Dummy.java</source>
+                    </sources>
+                    <clearOutputDir>false</clearOutputDir>
+                    <outputDirectory>${build.outputDirectory}</outputDirectory>
+                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
+                    <locale>en</locale>
+                    <transformSchemas>
+                        <transformSchema>
+                            <uri>http://swisscom.com/hlt/asd/xuagen</uri>
+                            <toPrefix>xuagen</toPrefix>
+                            <toFile>xuagen.xsd</toFile>
+                        </transformSchema>
+                        <transformSchema>
+                            <uri>dummy</uri>
+                            <toPrefix>dummy</toPrefix>
+                            <toFile>dummy.xsd</toFile>
+                        </transformSchema>
+                    </transformSchemas>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="PolicyRepository"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="urn:ihe:iti:ppq:2016"
+             xmlns:ppq="urn:ihe:iti:ppq:2016"
+             xmlns:epd="urn:e-health-suisse:2015:policy-administration"
+             xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+             xmlns:xacml-samlp="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <documentation>Policy Repository</documentation>
+
+    <types>
+        <xsd:schema targetNamespace="urn:e-health-suisse:2015:policy-administration">
+            <xsd:include schemaLocation="../schema/epd-policy-administration-combined-schema-1.2-local.xsd"/>
+        </xsd:schema>
+        <xsd:schema targetNamespace="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol">
+            <xsd:include schemaLocation="../schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd"/>
+        </xsd:schema>
+        <xsd:schema targetNamespace="urn:oasis:names:tc:SAML:2.0:protocol">
+            <xsd:include schemaLocation="../schema/sstc-saml-schema-protocol-2.0.xsd"/>
+        </xsd:schema>
+        <xsd:schema targetNamespace="urn:oasis:names:tc:SAML:2.0:conditions:delegation">
+            <xsd:include schemaLocation="../schema/sstc-saml-delegation.xsd"/>
+        </xsd:schema>
+        <xsd:schema targetNamespace="urn:hl7-org:v3">
+            <xsd:include schemaLocation="../schema/ihe-appc-xacml-hl7-datatypes-base-1.0.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="PolicyQuery_Message">
+        <part name="body" element="xacml-samlp:XACMLPolicyQuery"/>
+    </message>
+    <message name="PolicyQuery_ResponseMessage">
+        <part name="body" element="samlp:Response"/>
+    </message>
+
+    <message name="AddPolicyRequest_Message">
+        <part name="body" element="epd:AddPolicyRequest"/>
+    </message>
+    <message name="UpdatePolicyRequest_Message">
+        <part name="body" element="epd:UpdatePolicyRequest"/>
+    </message>
+    <message name="DeletePolicyRequest_Message">
+        <part name="body" element="epd:DeletePolicyRequest"/>
+    </message>
+
+    <message name="PolicyRequest_ResponseMessage">
+        <part name="body" element="epd:EpdPolicyRepositoryResponse"/>
+    </message>
+
+    <message name="UnknownPolicySetId_FaultMessage">
+        <part name="body" element="epd:UnknownPolicySetId"/>
+    </message>
+
+    <portType name="PolicyRepository_PortType">
+        <operation name="PolicyRepository_PolicyQuery">
+            <input message="ppq:PolicyQuery_Message"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:PolicyQuery"/>
+            <output message="ppq:PolicyQuery_ResponseMessage"
+                    wsam:Action="urn:e-health-suisse:2015:policy-administration:PolicyQueryResponse"/>
+        </operation>
+
+        <operation name="PolicyRepository_AddPolicy">
+            <input message="ppq:AddPolicyRequest_Message"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:AddPolicy"/>
+            <output message="ppq:PolicyRequest_ResponseMessage"
+                    wsam:Action="urn:e-health-suisse:2015:policy-administration:AddPolicyResponse"/>
+        </operation>
+
+        <operation name="PolicyRepository_UpdatePolicy">
+            <input message="ppq:UpdatePolicyRequest_Message"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:UpdatePolicy"/>
+            <output message="ppq:PolicyRequest_ResponseMessage"
+                    wsam:Action="urn:e-health-suisse:2015:policy-administration:UpdatePolicyResponse"/>
+            <fault name="UnknownPolicySetId" message="ppq:UnknownPolicySetId_FaultMessage"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:UpdatePolicyFault"/>
+        </operation>
+
+        <operation name="PolicyRepository_DeletePolicy">
+            <input message="ppq:DeletePolicyRequest_Message"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:DeletePolicy"/>
+            <output message="ppq:PolicyRequest_ResponseMessage"
+                    wsam:Action="urn:e-health-suisse:2015:policy-administration:DeletePolicyResponse"/>
+            <fault name="UnknownPolicySetId" message="ppq:UnknownPolicySetId_FaultMessage"
+                   wsam:Action="urn:e-health-suisse:2015:policy-administration:DeletePolicyFault"/>
+        </operation>
+    </portType>
+
+    <binding name="PolicyRepository_Binding_Soap12" type="ppq:PolicyRepository_PortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="PolicyRepository_PolicyQuery">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="PolicyRepository_AddPolicy">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="PolicyRepository_UpdatePolicy">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+            <fault name="UnknownPolicySetId">
+                <soap12:fault name="fault" use="literal"/>
+            </fault>
+        </operation>
+
+        <operation name="PolicyRepository_DeletePolicy">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+            <fault name="UnknownPolicySetId">
+                <soap12:fault name="fault" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+
+    <service name="PolicyRepository_Service">
+        <port name="PolicyRepository_Port_Soap12" binding="ppq:PolicyRepository_Binding_Soap12">
+            <soap12:address location="https://acme.org/ppq"/>
+        </port>
+    </service>
+</definitions>
+

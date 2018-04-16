@@ -1,0 +1,13 @@
+<xacml-samlp:XACMLPolicyQuery
+        xmlns:xacml-samlp="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+        xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+        xmlns:xacml-policy="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:hl7="urn:hl7-org:v3"
+        ID="ppq-query-id-2"
+        Version="2.0"
+        IssueInstant="2016-02-09T09:30:10.5Z">
+    <xacml-policy:PolicySetIdReference>
+        urn:e-health-suisse:2015:policies:exclusion-list
+    </xacml-policy:PolicySetIdReference>
+</xacml-samlp:XACMLPolicyQuery>
