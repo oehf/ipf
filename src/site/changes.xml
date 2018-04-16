@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.5.0" date="tbd" description="IPF 3.5.0">
+            <action dev="unixoid" issue="192" type="update">
+                Consider delegation when using XUA token information in ATNA records
+            </action>
             <action dev="ohr" issue="186" type="add">
                 Added support for the IHE QEDm transaction (without Provenance option)
             </action>
