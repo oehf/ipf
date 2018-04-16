@@ -1,3 +1,18 @@
+/*
+ * Copyright 2018 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.xacml20.model;
 
 import lombok.experimental.UtilityClass;
@@ -38,10 +53,11 @@ public class PpqConstants {
     }
 
     public static class CodingSystemIds {
-        public static final String SWISS_PATIENT_ID     = "2.16.756.5.30.1.127.3.10.3";
-        public static final String SWISS_SUBJECT_ROLE   = "2.16.756.5.30.1.127.3.10.4";   // TODO: .6
-        public static final String SWISS_PURPOSE_OF_USE = "2.16.756.5.30.1.127.3.10.5";
-        public static final String SNOMED_CT            = "2.16.840.1.113883.6.96";
+        public static final String SWISS_PATIENT_ID       = "2.16.756.5.30.1.127.3.10.3";
+        public static final String SWISS_SUBJECT_ROLE_OLD = "2.16.756.5.30.1.127.3.10.4";   // obsolete
+        public static final String SWISS_PURPOSE_OF_USE   = "2.16.756.5.30.1.127.3.10.5";
+        public static final String SWISS_SUBJECT_ROLE     = "2.16.756.5.30.1.127.3.10.6";
+        public static final String SNOMED_CT              = "2.16.840.1.113883.6.96";
     }
 
     public static final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
