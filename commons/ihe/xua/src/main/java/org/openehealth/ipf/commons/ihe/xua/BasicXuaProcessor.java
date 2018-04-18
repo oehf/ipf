@@ -43,6 +43,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.namespace.QName;
 import java.util.*;
 
+import static org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId.of;
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.SOAP_NS_URIS;
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS;
 
@@ -73,10 +74,20 @@ public class BasicXuaProcessor implements XuaProcessor {
     private static final String PATIENT_ID_ATTRIBUTE_NAME     = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
 
     private static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
-    private static final QName SUBJECT_ROLE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "Role");
+    private static final QName SUBJECT_ROLE_ELEMENT_NAME   = new QName("urn:hl7-org:v3", "Role");
+
+    /** Map from principal role to assistant role */
+    public static final Map<ActiveParticipantRoleId, ActiveParticipantRoleId> PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS;
+    static {
+        PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS = new HashMap<>();
+        // old (obsolete) and new coding system IDs
+        for (String codingSystemId : new String[]{"2.16.756.5.30.1.127.3.10.4", "2.16.756.5.30.1.127.3.10.6"}) {
+            PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("PAT", codingSystemId, ""), of("REP",       codingSystemId, "Representative"));
+            PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("HCP", codingSystemId, ""), of("ASSISTANT", codingSystemId, "Assistant"));
+        }
+    }
 
     private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
-
     static {
         try {
             InitializationService.initialize();
@@ -181,7 +192,14 @@ public class BasicXuaProcessor implements XuaProcessor {
                         mainUser.setName(extractSingleStringAttributeValue(attribute));
                         break;
                     case SUBJECT_ROLE_ATTRIBUTE_NAME:
-                        extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME, mainUser.getRoles());
+                        extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME).forEach(mainUserRoleId -> {
+                            mainUser.getRoles().add(mainUserRoleId);
+                            ActiveParticipantRoleId normalizedMainUserRoleId = of(mainUserRoleId.getCode(), mainUserRoleId.getCodeSystemName(), "");
+                            ActiveParticipantRoleId assistantUserRoleId = PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.get(normalizedMainUserRoleId);
+                            if (assistantUserRoleId != null) {
+                                assistantUser.getRoles().add(assistantUserRoleId);
+                            }
+                        });
                         break;
                     case PATIENT_ID_ATTRIBUTE_NAME:
                         auditDataset.setXuaPatientId(extractSingleStringAttributeValue(attribute));
@@ -238,16 +256,18 @@ public class BasicXuaProcessor implements XuaProcessor {
         );
     }
 
-    private static void extractActiveParticipantRoleId(Attribute attribute, QName valueElementName, List<ActiveParticipantRoleId> targetCollection) {
+    private static List<ActiveParticipantRoleId> extractActiveParticipantRoleId(Attribute attribute, QName valueElementName) {
+        List<ActiveParticipantRoleId> result = new ArrayList<>();
         for (XMLObject value : attribute.getAttributeValues()) {
             if (value.getDOM() != null) {
                 NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
                 for (int i = 0; i < nodeList.getLength(); ++i) {
                     Element elem = (Element) nodeList.item(i);
-                    targetCollection.add(elementToActiveParticipantRoleId(elem));
+                    result.add(elementToActiveParticipantRoleId(elem));
                 }
             }
         }
+        return result;
     }
 
     private static ActiveParticipantRoleId elementToActiveParticipantRoleId(Element element) {
