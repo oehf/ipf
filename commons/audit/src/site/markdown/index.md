@@ -36,6 +36,15 @@ builder.
 Every Audit Message and Audit Message builder also has a `validate` method that check basic
 restrictions defined by DICOM or IHE.
 
+The `AuditMessageBuilder` implementations are modelled corresponding to the definitions of the
+[DICOM Specific Audit Messages](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3).
+
+The delegate builder class `IHEAuditMessageBuilder` has builder sub classes that correspond with
+the IHE [ITI specification, Volume 2a](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf), section 3.20.4.1. 
+
+The DICOM serialization strategies produce XML files that validate against the schema of the respective revision of
+the [DICOM Audit Message Schema](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.1).
+
 For more details on the API, please study the [javadocs](../apidocs/org/openehealth/ipf/commons/audit/package-frame.html).
 
 
@@ -89,7 +98,38 @@ is the only place to configure static details for auditing, e.g. whether auditin
 the transmission protocol. It also allows to setup strategies for serialization, whether to send synchronously or 
 asynchronously, and how errors are handled.
 
-The default setup is to send Audit Messages via UDP to localhost:514, and handle errors just by logging them.
+#### Generic properties
+
+| Property                   | Default                | Description                                         |
+|----------------------------|------------------------|-----------------------------------------------------|
+| `auditEnabled`             | false                  | Whether audit is sent to the repository or not
+| `auditRepositoryHost`      | localhost              | Host name of the audit repository where audit records are sent to
+| `auditRepositoryPort`      | 514                    | Port of the the audit repository where audit records are sent to
+| `auditRepositoryTransport` | UDP                    | Transport protocol. One of UDP, TLS. Experimental: NIO-TLS (requires Vert.x lib dependency)
+
+#### Content properties
+
+| Property                   | Default                | Description                                         |
+|----------------------------|------------------------|-----------------------------------------------------|
+| `sendingApplication`       | IPF                    | sending application for the Syslog header info
+| `auditSourceId`            | IPF                    | audit source ID for the source identification of the audit message 
+| `auditEnterpriseSiteId`    | IPF                    | audit enterprise site ID for the source identification of the audit message 
+| `auditSource`              | 9 (Other)              | audit source type for the source identification of the audit message 
+| `includeParticipantsFromResponse` | false           | whether to include participant objects from a response into the audit message
+
+#### Advanced properties
+
+| Property                     | Default                                   | Description                                         |
+|------------------------------|-------------------------------------------|-----------------------------------------------------|
+| `auditTransmissionProtocol`  | instance of `UDPSyslogSenderImpl`         | Transport implementation. Overrules `auditRepositoryTransport` 
+| `auditMessageQueue`          | instance of `SynchronousAuditMessageQueue`| Audit message dispatcher implementation
+| `serializationStrategy`      | instance of `Current` (i.e. DICOM2017c)   | Serialization implementation
+| `auditMessagePostProcessor`  | no-op                                     | Audit Message Postprocessing, called before audit message is dispatched
+| `auditExceptionHandler`      | instance of `LoggingAuditExceptionHandler`| Handler to be called if the delivery of audit message to the audit repository has failed
+ 
+
+
+The default setup is to send Audit Messages via UDP to localhost:514, and handle delivery errors by just logging them.
 For production usage, it is usually required to configure a TLS connection to a remote Audit Repository and
 some decent strategy for handling failed connections to the Audit Repository.
 

@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.audit.types.AuditSource;
  * @author Christian Ohr
  * @since 3.5
  */
-public class DICOM2017b extends DICOM2016c {
+public class DICOM2017c extends DICOM2016c {
 
     @Override
     protected Element auditSourceType(AuditSource auditSourceType) {
