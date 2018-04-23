@@ -56,14 +56,15 @@
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
-        
-        <groovy-eclipse-batch-version>2.4.15-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.3-01</groovy-eclipse-compiler-version>
 
         <!--
+        <groovy-eclipse-batch-version>2.4.15-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>2.9.3-01</groovy-eclipse-compiler-version>
+        -->
+
         <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
-        -->
+
 
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
@@ -706,7 +707,6 @@
                                         <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
                                         <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
                                     </replace>
-
                                     <replace dir="target/site" summary="true">
                                         <include name="*.html" />
                                         <replacetoken>http://ajax.googleapis</replacetoken>
@@ -715,8 +715,7 @@
                                     <replace dir="target/site" summary="true">
                                         <include name="*.html" />
                                         <replacetoken>\t</replacetoken>
-                                        <replacevalue>
-                                        </replacevalue>
+                                        <replacevalue></replacevalue>
                                     </replace>
                                 </target>
                             </configuration>
@@ -1217,6 +1216,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${javadoc-plugin-version}</version>
+                <inherited>false</inherited>
                 <reportSets>
                     <reportSet>
                         <id>aggregate</id>

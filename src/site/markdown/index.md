@@ -111,6 +111,9 @@ IPF 3.4 added the modules listed below:
 
  * `ipf-commons-audit`
 
+## Javadocs
+
+The javadocs can be obtained [here](apidocs/index.html).
 
 ## Tutorials and Examples
 
@@ -120,14 +123,6 @@ IPF 3.4 added the modules listed below:
 | [XDS tutorial]                                  | A Groovy based implementation of an XDS repository
 | [Dynamic extension tutorial]                    | How to have IPF-based application modules contributing to an application
 | [IHE Client Example]                            | Some examples how to use IPF producer endpoints
-
-## Non-functional aspects
-
-| Feature                                         | Description
-|-------------------------------------------------|-----------------------------------------------
-| [Recoverability]                                | Recoverability means that a system can recover from crashes or service failures without losing messages or data
-| [Performance Monitoring]                        | Monitor performance and throughput of routes
-
 
 ## Update Instructions
 
