@@ -2,6 +2,7 @@
 Open eHealth Integration Platform
 
 
+
 ## About
 
 The Open eHealth Integration Platform (IPF) provides interfaces for health-care related integration solutions.
@@ -33,7 +34,7 @@ HL7v2 [IHE][ihe] transactions:
 <dependency>
   <groupId>org.openehealth.ipf.platform-camel</groupId>
   <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-  <version>3.4.0</version>
+  <version>3.5.0</version>
 </dependency>
 ```
 
@@ -45,7 +46,7 @@ version numbers for the major dependencies anymore.
     <dependency>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.4.0</version>
+        <version>3.5.0</version>
         <type>pom</type>
         <scope>import</scope>
     </dependency>
@@ -86,6 +87,7 @@ The following table summarizes the IPF features related to the eHealth domain:
 | [HL7 Message translation]                       | Translation utilities for translating between HL7v3 and HL7v2 messages for corresponding IHE transactions
 | [CDA Support]                                   | Wrapping a number of CDA-related libraries, providing the basis for implementing [CDA processing Camel routes].
 | [FHIR Support]                                  | FHIR® – Fast Healthcare Interoperability Resources (hl7.org/fhir) – is a next generation standards framework created by HL7 leveraging the latest web standards and applying a tight focus on implementability. 
+| [DICOM Audit Support]                           | Support for constructing, serializing and sending DICOM audit messages  
 
 
 Other IPF features provide part of the underlying foundation or supporting functionality:
@@ -113,6 +115,9 @@ IPF 3.4 added the modules listed below:
 
  * `ipf-commons-audit`
 
+## Javadocs
+
+The javadocs can be obtained [here](apidocs/index.html).
 
 ## Tutorials and Examples
 
@@ -122,14 +127,6 @@ IPF 3.4 added the modules listed below:
 | [XDS tutorial]                                  | A Groovy based implementation of an XDS repository
 | [Dynamic extension tutorial]                    | How to have IPF-based application modules contributing to an application
 | [IHE Client Example]                            | Some examples how to use IPF producer endpoints
-
-## Non-functional aspects
-
-| Feature                                         | Description
-|-------------------------------------------------|-----------------------------------------------
-| [Recoverability]                                | Recoverability means that a system can recover from crashes or service failures without losing messages or data
-| [Performance Monitoring]                        | Monitor performance and throughput of routes
-
 
 ## Update Instructions
 
@@ -161,6 +158,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [HL7 Message processing]: ipf-modules-hl7/index.html
 [HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
 [HL7 Message translation]: ipf-commons-ihe-hl7v3/index.html
+[DICOM Audit Support]: ipf-commons-atna/index.html
 [FHIR support]: ipf-platform-camel-ihe-fhir-core/index.html
 [CDA Support]: ipf-modules-cda/index.html
 [CDA processing Camel routes]: ipf-platform-camel-cda/index.html
