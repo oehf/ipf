@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/core/atna/XdsAuditorTest.html">XdsAuditorTest</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/core/atna/AuditorTestBase.html">AuditorTestBase</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/core/atna/XdsAuditorTest.html">XdsAuditorTest</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/core/atna/OhtAuditorTestBase.html">OhtAuditorTestBase</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SUBMISSION_SET_ID    = <span class="jxr_string">"submission-set-id"</span>;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] OBJECT_UUIDS       = {<span class="jxr_string">"objectUuid1"</span>, <span class="jxr_string">"objectUuid2"</span>, <span class="jxr_string">"objectUuid3"</span>};
@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      @Test
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testAuditors() {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">final</strong> CustomXdsAuditor auditor = AuditorManager.getCustomXdsAuditor();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/core/atna/custom/CustomXdsAuditor.html">CustomXdsAuditor</a> auditor = AuditorManager.getCustomXdsAuditor();
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          auditor.auditIti51(<strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>                  RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
@@ -132,6 +132,6 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

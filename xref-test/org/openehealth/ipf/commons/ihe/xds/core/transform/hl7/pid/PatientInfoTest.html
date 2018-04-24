@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.joda.time.DateTime;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.joda.time.DateTimeZone;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.XDS_B;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.XDS;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertValidationFailure(RegisterDocumentSet request, ValidationMessage expectedValidationMessage) {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">boolean</strong> failed = false;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              SUBMIT_OBJECTS_REQUEST_VALIDATOR.validate(REGISTER_DOCUMENT_SET_TRANSFORMER.toEbXML(request), XDS_B.Interactions.ITI_42);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              SUBMIT_OBJECTS_REQUEST_VALIDATOR.validate(REGISTER_DOCUMENT_SET_TRANSFORMER.toEbXML(request), XDS.Interactions.ITI_42);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          } <strong class="jxr_keyword">catch</strong> (XDSMetaDataException e) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>              assertEquals(expectedValidationMessage, e.getValidationMessage());
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>              failed = <strong class="jxr_keyword">true</strong>;
@@ -425,6 +425,6 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

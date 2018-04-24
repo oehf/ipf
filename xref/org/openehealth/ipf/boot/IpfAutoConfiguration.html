@@ -19,10 +19,10 @@
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.util.jsse.TrustManagersParameters;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.config.Registry;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.config.SpringRegistry;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.map.SpringBidiMappingService;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.annotation.Autowired;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -49,15 +49,15 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      @Bean
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      @ConditionalOnMissingBean(Registry.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      <a href="../../../../org/openehealth/ipf/commons/core/config/Registry.html">Registry</a> springRegistry() {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/core/config/SpringRegistry.html">SpringRegistry</a>();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/spring/core/config/SpringRegistry.html">SpringRegistry</a>();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// Dynamically collect CustomMappings, if available</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Bean
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      @ConditionalOnMissingBean(SpringConfigurationPostProcessor.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/openehealth/ipf/commons/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a> postProcessor(<a href="../../../../org/openehealth/ipf/commons/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> customMappingsConfigurer) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <a href="../../../../org/openehealth/ipf/commons/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a> processor = <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a>();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/openehealth/ipf/commons/spring/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a> postProcessor(<a href="../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> customMappingsConfigurer) {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <a href="../../../../org/openehealth/ipf/commons/spring/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a> processor = <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/spring/core/config/SpringConfigurationPostProcessor.html">SpringConfigurationPostProcessor</a>();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          List&lt;OrderedConfigurer&gt; list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">if</strong> (customMappingsConfigurer != <strong class="jxr_keyword">null</strong>) list.add(customMappingsConfigurer);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          processor.setSpringConfigurers(list);
@@ -66,16 +66,16 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Bean
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @ConditionalOnMissingBean(CustomMappingsConfigurer.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../org/openehealth/ipf/commons/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> customMappingsConfigurer(<a href="../../../../org/openehealth/ipf/commons/map/SpringBidiMappingService.html">SpringBidiMappingService</a> mappingService) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <a href="../../../../org/openehealth/ipf/commons/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> configurer = <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a>();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> customMappingsConfigurer(<a href="../../../../org/openehealth/ipf/commons/spring/map/SpringBidiMappingService.html">SpringBidiMappingService</a> mappingService) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <a href="../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a> configurer = <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappingsConfigurer.html">CustomMappingsConfigurer</a>();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          configurer.setMappingService(mappingService);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">return</strong> configurer;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      @Bean
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @ConditionalOnMissingBean(SpringBidiMappingService.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/openehealth/ipf/commons/map/SpringBidiMappingService.html">SpringBidiMappingService</a> mappingService() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/map/SpringBidiMappingService.html">SpringBidiMappingService</a>();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/openehealth/ipf/commons/spring/map/SpringBidiMappingService.html">SpringBidiMappingService</a> mappingService() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/openehealth/ipf/commons/spring/map/SpringBidiMappingService.html">SpringBidiMappingService</a>();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
@@ -144,6 +144,6 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

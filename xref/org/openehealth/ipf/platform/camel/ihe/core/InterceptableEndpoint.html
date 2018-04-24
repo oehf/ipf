@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Interface for endpoints that use the Interceptor framework defined in this module.</em>
@@ -111,9 +111,9 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">default</strong> List&lt;Interceptor&gt; getCustomInterceptors() {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>         List&lt;Interceptor&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         List&lt;InterceptorFactory&gt; factories = getInterceptableConfiguration().getCustomInterceptorFactories();
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>         result.addAll(factories.stream()
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 .map(InterceptorFactory::getNewInstance)
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 .collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         factories.stream()
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 .map((Function&lt;InterceptorFactory, Interceptor&gt;) InterceptorFactory::getNewInstance)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 .forEach(result::add);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>         <strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>     }
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
@@ -151,6 +151,6 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

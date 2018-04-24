@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">     * </em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">     * @return an expression object which will return the headers map.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> Exchange&gt; Expression headersExpression() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Expression headersExpression() {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Expression() {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>              @Override
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>              <strong class="jxr_keyword">public</strong> &lt;T&gt; T evaluate(Exchange exchange, Class&lt;T&gt; type) {
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          };
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> Exchange&gt; Expression headersAndBuilderExpression() {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Expression headersAndBuilderExpression() {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Expression() {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              @Override
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>              <strong class="jxr_keyword">public</strong> &lt;T&gt; T evaluate(Exchange exchange, Class&lt;T&gt; type) {
@@ -133,6 +133,6 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

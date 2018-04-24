@@ -82,12 +82,12 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">boolean</strong> isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Vocabulary.html">DisplayNameUsage</a> requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">boolean</strong> isOnDemand    = (profile == XDS_B.Interactions.ITI_61) ||
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">boolean</strong> isOnDemand    = (profile == XDS.Interactions.ITI_61) ||
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                                  (profile.isQuery() &amp;&amp; onDemandProvided);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">boolean</strong> needHashAndSize = (! isOnDemand) &amp;&amp;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>                  (isContinuaHRN || profile.isQuery()
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          || (profile == XDS_B.Interactions.ITI_42)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          || (profile == XDS.Interactions.ITI_42)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>                          || (profile == XDM.Interactions.ITI_41)
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                  );
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValidation.html">SlotValidation</a>(SLOT_NAME_URI, uriValidator),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_URI, uriValidator, 0, 1),
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/AuthorClassificationValidation.html">AuthorClassificationValidation</a>(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         }
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">if</strong> ((profile.getInteractionId() == XDS_B.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">if</strong> ((profile.getInteractionId() == XDS.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         }
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">return</strong> validators;
@@ -223,7 +223,7 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>             metaDataAssert(limitedMetadata || ((name != <strong class="jxr_keyword">null</strong>) &amp;&amp; (name.getValue() != <strong class="jxr_keyword">null</strong>)),
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>                     MISSING_FOLDER_NAME, folder.getId());
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <strong class="jxr_keyword">if</strong> ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <strong class="jxr_keyword">if</strong> ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>                 validateUpdateObject(folder, container);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>             }
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>         }
@@ -252,7 +252,7 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, profile);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">boolean</strong> onDemandExpected = (profile == XDS_B.Interactions.ITI_61);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">boolean</strong> onDemandExpected = (profile == XDS.Interactions.ITI_61);
 <a class="jxr_linenumber" name="L248" href="#L248">248</a>             <strong class="jxr_keyword">boolean</strong> onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a>             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
 <a class="jxr_linenumber" name="L276" href="#L276">276</a>                     LOGICAL_ID_SAME, docEntry.getLid());
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <strong class="jxr_keyword">if</strong> ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <strong class="jxr_keyword">if</strong> ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>                 validateUpdateObject(docEntry, container);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>             }
 <a class="jxr_linenumber" name="L281" href="#L281">281</a>         }
@@ -466,6 +466,6 @@
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

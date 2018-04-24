@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.boot.fhir;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.PDQM;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.map.config.CustomMappings;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.pixpdq.PDQM;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.spring.map.config.CustomMappings;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.AutoConfigureAfter;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,8 +42,8 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/openehealth/ipf/boot/fhir/IpfFhirPixpdqAutoConfiguration.html">IpfFhirPixpdqAutoConfiguration</a> {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      @Bean
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/map/config/CustomMappings.html">CustomMappings</a> translationFhirHl7v2Mappings() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <a href="../../../../../org/openehealth/ipf/commons/map/config/CustomMappings.html">CustomMappings</a> mappings = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/map/config/CustomMappings.html">CustomMappings</a>();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappings.html">CustomMappings</a> translationFhirHl7v2Mappings() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <a href="../../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappings.html">CustomMappings</a> mappings = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/spring/map/config/CustomMappings.html">CustomMappings</a>();
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          mappings.setMappingResource(<strong class="jxr_keyword">new</strong> ClassPathResource(<span class="jxr_string">"META-INF/map/fhir-hl7v2-translation.map"</span>));
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          <strong class="jxr_keyword">return</strong> mappings;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      }
@@ -51,6 +51,6 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

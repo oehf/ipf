@@ -38,36 +38,38 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      <em class="jxr_comment">// Request parameter information</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      String FHIR_REQUEST_PARAMETERS = <span class="jxr_string">"FhirRequestParameters"</span>;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <em class="jxr_comment">// Parameter information from the HttpServletRequest</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      String HTTP_URI = <span class="jxr_string">"FhirHttpUri"</span>;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      String HTTP_URL = <span class="jxr_string">"FhirHttpUrl"</span>;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      String HTTP_SCHEME = <span class="jxr_string">"FhirHttpScheme"</span>;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      String HTTP_METHOD = <span class="jxr_string">"FhirHttpMethod"</span>;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      String HTTP_QUERY = <span class="jxr_string">"FhirHttpQuery"</span>;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      String HTTP_CHARACTER_ENCODING = <span class="jxr_string">"FhirHttpCharacterEncoding"</span>;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      String HTTP_CONTENT_TYPE = <span class="jxr_string">"FhirHttpContentType"</span>;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      String HTTP_PROTOCOL_VERSION = <span class="jxr_string">"FhirHttpProtocolVersion"</span>;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      String HTTP_CLIENT_IP_ADDRESS = <span class="jxr_string">"FhirHttpClientIpAddress"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      String HTTP_HEADERS = <span class="jxr_string">"FhirHttpHeaders"</span>;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <em class="jxr_comment">// Parameter information from the HttpServletRequest</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      String HTTP_URI = <span class="jxr_string">"FhirHttpUri"</span>;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      String HTTP_URL = <span class="jxr_string">"FhirHttpUrl"</span>;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      String HTTP_SCHEME = <span class="jxr_string">"FhirHttpScheme"</span>;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      String HTTP_METHOD = <span class="jxr_string">"FhirHttpMethod"</span>;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      String HTTP_QUERY = <span class="jxr_string">"FhirHttpQuery"</span>;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      String HTTP_CHARACTER_ENCODING = <span class="jxr_string">"FhirHttpCharacterEncoding"</span>;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      String HTTP_CONTENT_TYPE = <span class="jxr_string">"FhirHttpContentType"</span>;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      String HTTP_PROTOCOL_VERSION = <span class="jxr_string">"FhirHttpProtocolVersion"</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      String HTTP_CLIENT_IP_ADDRESS = <span class="jxr_string">"FhirHttpClientIpAddress"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      String HTTP_HEADERS = <span class="jxr_string">"FhirHttpHeaders"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      String HTTP_X509_CERTIFICATES = <span class="jxr_string">"FhirHttpCertificates"</span>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// Paging stuff</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      String FHIR_COUNT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.PARAM_COUNT;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      String FHIR_FIRST = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_FIRST;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      String FHIR_LAST= ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_LAST;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      String FHIR_PREVIOUS = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_PREVIOUS;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      String FHIR_NEXT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_NEXT;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      String FHIR_FROM_INDEX = <span class="jxr_string">"FhirFromIndex"</span>;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      String FHIR_TO_INDEX = <span class="jxr_string">"FhirToIndex"</span>;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      String FHIR_REQUEST_SIZE_ONLY = <span class="jxr_string">"FhirRequestSizeOnly"</span>;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      String FHIR_REQUEST_GET_ONLY = <span class="jxr_string">"FhirRequestGetOnly"</span>;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      String URN_IETF_RFC_3986 = <span class="jxr_string">"urn:ietf:rfc:3986"</span>;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      String FHIR_RESOURCE_TYPE_HEADER = <span class="jxr_string">"RESOURCE_TYPE_HEADER"</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      String FHIR_OPERATION_HEADER = <span class="jxr_string">"OPERATION_HEADER"</span>;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <em class="jxr_comment">// Paging stuff</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      String FHIR_COUNT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.PARAM_COUNT;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      String FHIR_FIRST = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_FIRST;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      String FHIR_LAST= ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_LAST;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      String FHIR_PREVIOUS = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_PREVIOUS;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      String FHIR_NEXT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.Constants.LINK_NEXT;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      String FHIR_FROM_INDEX = <span class="jxr_string">"FhirFromIndex"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      String FHIR_TO_INDEX = <span class="jxr_string">"FhirToIndex"</span>;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      String FHIR_REQUEST_SIZE_ONLY = <span class="jxr_string">"FhirRequestSizeOnly"</span>;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      String FHIR_REQUEST_GET_ONLY = <span class="jxr_string">"FhirRequestGetOnly"</span>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      String URN_IETF_RFC_3986 = <span class="jxr_string">"urn:ietf:rfc:3986"</span>;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

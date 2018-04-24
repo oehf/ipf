@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7.HL7v2Exception;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7.message.MessageUtils;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/core/TransactionConfiguration.html">TransactionConfiguration</a> {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> Hl7v2TransactionConfiguration&lt;T <strong class="jxr_keyword">extends</strong> MllpAuditDataset&gt; <strong class="jxr_keyword">extends</strong> TransactionConfiguration&lt;T&gt; {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Definition</a> {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; triggerEvents;
@@ -113,8 +113,8 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>             String name,
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>             String description,
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>             <strong class="jxr_keyword">boolean</strong> isQuery,
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> MllpAuditDataset&gt; clientAuditStrategy,
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> MllpAuditDataset&gt; serverAuditStrategy,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             AuditStrategy&lt;T&gt; clientAuditStrategy,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             AuditStrategy&lt;T&gt; serverAuditStrategy,
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>             Version[] hl7Versions,
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>             String sendingApplication,
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>             String sendingFacility,
@@ -181,8 +181,8 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>             String name,
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>             String description,
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>             <strong class="jxr_keyword">boolean</strong> isQuery,
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>             AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> MllpAuditDataset&gt; clientAuditStrategy,
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>             AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> MllpAuditDataset&gt; serverAuditStrategy,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             AuditStrategy&lt;T&gt; clientAuditStrategy,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>             AuditStrategy&lt;T&gt; serverAuditStrategy,
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>             Version hl7Version,
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>             String sendingApplication,
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>             String sendingFacility,
@@ -431,12 +431,12 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">     * @return HAPI message created using the correct HapiContext</em>
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">     * @throws HL7v2Exception if the message type or trigger event is not valid for this transaction</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> Message&gt; T request(String messageType, String trigger) {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <strong class="jxr_keyword">public</strong> &lt;M <strong class="jxr_keyword">extends</strong> Message&gt; M request(String messageType, String trigger) {
 <a class="jxr_linenumber" name="L427" href="#L427">427</a>         Message message = MessageUtils.makeMessage(
 <a class="jxr_linenumber" name="L428" href="#L428">428</a>                 getHapiContext(), messageType, trigger, getHl7Versions()[0].getVersion());
 <a class="jxr_linenumber" name="L429" href="#L429">429</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a>             checkRequestAcceptance(message);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>             <strong class="jxr_keyword">return</strong> (T) message;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>             <strong class="jxr_keyword">return</strong> (M) message;
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>         } <strong class="jxr_keyword">catch</strong> (Hl7v2AcceptanceException e) {
 <a class="jxr_linenumber" name="L433" href="#L433">433</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/openehealth/ipf/modules/hl7/HL7v2Exception.html">HL7v2Exception</a>(e);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a>         }
@@ -445,7 +445,7 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">     * Like {@link #request(String, String)}, but uses the first configured request message type as default.</em>
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> Message&gt; T request(String trigger) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <strong class="jxr_keyword">public</strong> &lt;M <strong class="jxr_keyword">extends</strong> Message&gt; M request(String trigger) {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>         <strong class="jxr_keyword">return</strong> request(allowedRequestMessageTypes[0], trigger);
 <a class="jxr_linenumber" name="L442" href="#L442">442</a>     }
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
@@ -453,13 +453,13 @@
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">     * Like {@link #request(String, String)}, but uses the first configured request message type</em>
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">     * and the first configured trigger event as defaults.</em>
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> Message&gt; T request() {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <strong class="jxr_keyword">public</strong> &lt;M <strong class="jxr_keyword">extends</strong> Message&gt; M request() {
 <a class="jxr_linenumber" name="L449" href="#L449">449</a>         <strong class="jxr_keyword">return</strong> request(allowedRequestMessageTypes[0], allowedRequestTriggerEvents[0]);
 <a class="jxr_linenumber" name="L450" href="#L450">450</a>     }
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> }
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

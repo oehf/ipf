@@ -53,10 +53,10 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Test
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTelecomRendering() {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          String xtn = <span class="jxr_string">"1^2^3^4^5^6^7^8^9^0^a^b^c^d^^^"</span>;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          String xtn = <span class="jxr_string">"1^2^3^4^5^6^7^8^9^10^11^12^13^14^^^"</span>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          Telecom telecom = Hl7v2Based.parse(xtn, Telecom.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertEquals(<span class="jxr_string">"^2^3^4^5^6^7^8"</span>, Hl7v2Based.render(telecom));
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          assertEquals(<span class="jxr_string">"1^2^3^4^5^6^7^8^9^0^a^b^c^d"</span>, Hl7v2Based.rawRender(telecom));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertEquals(<span class="jxr_string">"^2^3^4^5^6^7^8^^^^12"</span>, Hl7v2Based.render(telecom));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          assertEquals(<span class="jxr_string">"1^2^3^4^5^6^7^8^9^10^11^12^13^14"</span>, Hl7v2Based.rawRender(telecom));
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Test
@@ -96,6 +96,6 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

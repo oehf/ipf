@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> SimpleWsProducer&lt;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          AuditDatasetType <strong class="jxr_keyword">extends</strong> WsAuditDataset,
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>          ConfigType <strong class="jxr_keyword">extends</strong> WsTransactionConfiguration,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>          ConfigType <strong class="jxr_keyword">extends</strong> WsTransactionConfiguration&lt;AuditDatasetType&gt;,
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          InType, OutType&gt; <strong class="jxr_keyword">extends</strong> AbstractWsProducer&lt;AuditDatasetType, ConfigType, InType, OutType&gt; {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String operationName;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
@@ -82,6 +82,6 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

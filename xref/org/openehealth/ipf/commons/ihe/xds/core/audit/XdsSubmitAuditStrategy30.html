@@ -23,52 +23,62 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.xds.core.audit;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Basis for Strategy pattern implementation for ATNA Auditing</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * in ebXML 3.0-based submission-related XDS transactions.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditStrategy30.html">XdsSubmitAuditStrategy30</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditStrategy.html">XdsSubmitAuditStrategy</a> {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * Constructs an audit strategy for an XDS submission.</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * @param serverSide</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     *      whether this is a server-side or a client-side strategy.</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditStrategy30.html">XdsSubmitAuditStrategy30</a>(<strong class="jxr_keyword">boolean</strong> serverSide) {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">super</strong>(serverSide);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      }
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Override
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> enrichAuditDatasetFromRequest(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> auditDataset, Object pojo, Map&lt;String, Object&gt; parameters) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/SubmitObjectsRequest.html">SubmitObjectsRequest</a> submitObjectsRequest = (SubmitObjectsRequest) pojo;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLSubmitObjectsRequest.html">EbXMLSubmitObjectsRequest</a> ebXML = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLSubmitObjectsRequest30.html">EbXMLSubmitObjectsRequest30</a>(submitObjectsRequest);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">return</strong> auditDataset;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Override
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/rs/RegistryResponseType.html">RegistryResponseType</a> response = (RegistryResponseType) pojo;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryResponse.html">EbXMLRegistryResponse</a> ebXML = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRegistryResponse30.html">EbXMLRegistryResponse30</a>(response);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">return</strong> getEventOutcomeCodeFromRegistryResponse(ebXML);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  }
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Basis for Strategy pattern implementation for ATNA Auditing</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * in ebXML 3.0-based submission-related XDS transactions.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditStrategy30.html">XdsSubmitAuditStrategy30</a> <strong class="jxr_keyword">extends</strong> XdsAuditStrategy&lt;XdsSubmitAuditDataset&gt; {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Constructs an audit strategy for an XDS submission.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * @param serverSide</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     *      whether this is a server-side or a client-side strategy.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditStrategy30.html">XdsSubmitAuditStrategy30</a>(<strong class="jxr_keyword">boolean</strong> serverSide) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">super</strong>(serverSide);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> enrichDatasetFromSubmitObjectsRequest(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> auditDataset, <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLSubmitObjectsRequest.html">EbXMLSubmitObjectsRequest</a> ebXML) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          List&lt;EbXMLRegistryPackage&gt; submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          auditDataset.setHomeCommunityId(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          submissionSets.forEach(submissionSet -&gt; {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              String patientId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              auditDataset.getPatientIds().add(patientId);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              String uniqueId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              auditDataset.setSubmissionSetUuid(uniqueId);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          });
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      @Override
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> enrichAuditDatasetFromRequest(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> auditDataset, Object pojo, Map&lt;String, Object&gt; parameters) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/SubmitObjectsRequest.html">SubmitObjectsRequest</a> submitObjectsRequest = (SubmitObjectsRequest) pojo;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLSubmitObjectsRequest.html">EbXMLSubmitObjectsRequest</a> ebXML = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLSubmitObjectsRequest30.html">EbXMLSubmitObjectsRequest30</a>(submitObjectsRequest);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> auditDataset;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      @Override
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a> createAuditDataset() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/audit/XdsSubmitAuditDataset.html">XdsSubmitAuditDataset</a>(isServerSide());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2018 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>
