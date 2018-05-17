@@ -33,6 +33,9 @@ org.openehealth.ipf.commons.ihe.core.payload
 org.openehealth.ipf.commons.ihe.fhir
 org.openehealth.ipf.commons.ihe.fhir.atna
 org.openehealth.ipf.commons.ihe.fhir.atna.translation
+org.openehealth.ipf.commons.ihe.fhir.audit
+org.openehealth.ipf.commons.ihe.fhir.audit.codes
+org.openehealth.ipf.commons.ihe.fhir.audit.events
 org.openehealth.ipf.commons.ihe.fhir.audit.marshal
 org.openehealth.ipf.commons.ihe.fhir.iti65
 org.openehealth.ipf.commons.ihe.fhir.iti66
@@ -42,7 +45,9 @@ org.openehealth.ipf.commons.ihe.fhir.iti78
 org.openehealth.ipf.commons.ihe.fhir.iti81
 org.openehealth.ipf.commons.ihe.fhir.iti83
 org.openehealth.ipf.commons.ihe.fhir.mhd
+org.openehealth.ipf.commons.ihe.fhir.pcc44
 org.openehealth.ipf.commons.ihe.fhir.pixpdq
+org.openehealth.ipf.commons.ihe.fhir.qedm
 org.openehealth.ipf.commons.ihe.fhir.support
 org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal
 org.openehealth.ipf.commons.ihe.fhir.support.translation
@@ -74,6 +79,8 @@ org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.message
 org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.segment
 org.openehealth.ipf.commons.ihe.hl7v2.options
 org.openehealth.ipf.commons.ihe.hl7v2.storage
+org.openehealth.ipf.commons.ihe.hl7v2ws
+org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 org.openehealth.ipf.commons.ihe.hl7v3
 org.openehealth.ipf.commons.ihe.hl7v3.audit
 org.openehealth.ipf.commons.ihe.hl7v3.audit.codes
@@ -88,6 +95,13 @@ org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse
 org.openehealth.ipf.commons.ihe.hl7v3.pcc1
 org.openehealth.ipf.commons.ihe.hl7v3.storage
 org.openehealth.ipf.commons.ihe.hl7v3.translation
+org.openehealth.ipf.commons.ihe.hpd
+org.openehealth.ipf.commons.ihe.hpd.audit.codes
+org.openehealth.ipf.commons.ihe.hpd.chpidd
+org.openehealth.ipf.commons.ihe.hpd.iti58
+org.openehealth.ipf.commons.ihe.hpd.iti59
+org.openehealth.ipf.commons.ihe.hpd.stub.chpidd
+org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2
 org.openehealth.ipf.commons.ihe.ws
 org.openehealth.ipf.commons.ihe.ws.correlation
 org.openehealth.ipf.commons.ihe.ws.cxf
@@ -202,6 +216,7 @@ org.openehealth.ipf.platform.camel.ihe.fhir.iti68
 org.openehealth.ipf.platform.camel.ihe.fhir.iti78
 org.openehealth.ipf.platform.camel.ihe.fhir.iti81
 org.openehealth.ipf.platform.camel.ihe.fhir.iti83
+org.openehealth.ipf.platform.camel.ihe.fhir.pcc44
 org.openehealth.ipf.platform.camel.ihe.hl7v2
 org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept
 org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer
