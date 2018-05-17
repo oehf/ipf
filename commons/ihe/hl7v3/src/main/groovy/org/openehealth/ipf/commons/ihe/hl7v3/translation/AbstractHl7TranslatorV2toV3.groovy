@@ -82,8 +82,10 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      *      target HL7v3 builder.
      * @param pid
      *      HL7v2 PID segment.
+     * @param deletedIdsOids
+     *      root OIDs of patient IDs which are to be deleted from the patient record.
      */
-    void createPatientPersonElements(MarkupBuilder builder, Segment pid) {
+    void createPatientPersonElements(MarkupBuilder builder, Segment pid, List<String> deletedIdsOids) {
         for (pid5 in pid[5]()) {
             createName(builder, pid5)
         }
@@ -176,6 +178,14 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
+        for (deletedIdOid in deletedIdsOids) {
+            builder.asOtherIDs(classCode: 'PAT') {
+                id(nullFlavor: 'NA')
+                scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                    id(root: deletedIdOid)
+                }
+            }
+        }
     }
 
     void createBirthPlaceElement(MarkupBuilder builder, Segment pid) {

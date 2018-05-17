@@ -87,6 +87,12 @@
                 </scopingOrganization>
               </asOtherIDs>
               <asOtherIDs classCode="PAT">
+                <id nullFlavor="NA"/>
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="1.12.23.34.45"/>
+                </scopingOrganization>
+              </asOtherIDs>
+              <asOtherIDs classCode="PAT">
                 <id root="1.2.3" extension="100-09-123456"/>
                 <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
                   <id root="1.2.3"/>

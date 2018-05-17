@@ -51,6 +51,12 @@
                 <streetAddressLine>2 TITUS PLACE</streetAddressLine>
               </addr>
               <maritalStatusCode code="S"/>
+              <asOtherIDs classCode="PAT">
+                <id nullFlavor="NA" />
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="2.71" />
+                </scopingOrganization>
+              </asOtherIDs>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.3" />

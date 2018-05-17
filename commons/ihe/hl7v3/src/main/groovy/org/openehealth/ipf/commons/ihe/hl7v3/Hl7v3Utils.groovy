@@ -140,8 +140,7 @@ class Hl7v3Utils {
     static createCustodian(MarkupBuilder builder, String mpiSystemIdRoot, mpiSystemIdExtension) {
         builder.custodian(typeCode: 'CST') {
             assignedEntity(classCode: 'ASSIGNED') {
-                buildInstanceIdentifier(builder, 'id', false, 
-                        mpiSystemIdRoot, mpiSystemIdExtension)
+                buildInstanceIdentifier(builder, 'id', false, mpiSystemIdRoot, mpiSystemIdExtension)
             }
         }
     }
