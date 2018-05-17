@@ -121,7 +121,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                             }
                                             statusCode(code: 'active')
                                             patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                                createPatientPersonElements(builder, qr.PID)
+                                                createPatientPersonElements(builder, qr.PID, [])
                                                 if (nullFlavorWhenScopingOrganizationIdNotFound) {
                                                     for (oid in remainingDomains) {
                                                         asOtherIDs(classCode: 'PAT') {
