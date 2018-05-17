@@ -154,7 +154,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [HL7 Message processing]: ipf-modules-hl7/index.html
 [HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
 [HL7 Message translation]: ipf-commons-ihe-hl7v3/index.html
-[DICOM Audit Support]: ipf-commons-atna/index.html
+[DICOM Audit Support]: ipf-commons-audit/index.html
 [FHIR support]: ipf-platform-camel-ihe-fhir-core/index.html
 [CDA Support]: ipf-modules-cda/index.html
 [CDA processing Camel routes]: ipf-platform-camel-cda/index.html
