@@ -29,7 +29,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
  */
 class Utils {
 
-    static final String HL7V2_NULL = '""'
+    public static final String HL7V2_NULL = '""'
 
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
