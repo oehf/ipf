@@ -107,32 +107,34 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 * Adds patient identifiers from the given GPath source.
 	 */
 	protected void addPatientIdentifiers(GPathResult source, Group grp) {
+        String scopingOrganizationRootOid = (source.name() == 'asOtherIDs') ? source.scopingOrganization.id.@root.text() : ''
 	    for (id in source.id) {
-	        def root               = id.@root.text()
-	        def extension          = id.@extension.text()
+            def nullFlavor         = id.@nullFlavor.text()
+	        def root               = nullFlavor ? scopingOrganizationRootOid : id.@root.text()
+	        def extension          = nullFlavor ? HL7V2_NULL : id.@extension.text()
 	        def assigningAuthority = id.@assigningAuthorityName.text()
 	        
             switch (root) {
-            case this.accountNumberRoot:
-                if (this.copyAccountNumberAs == 'PID-18') {
-                    if (grp.PID[18].value) {
-                        throw new Hl7TranslationException('PID-18 already filled')
+                case this.accountNumberRoot:
+                    if (this.copyAccountNumberAs == 'PID-18') {
+                        if (grp.PID[18].value) {
+                            throw new Hl7TranslationException('PID-18 already filled')
+                        }
+                        fillCx(grp.PID[18], root, extension, assigningAuthority)
                     }
-                    fillCx(grp.PID[18], root, extension, assigningAuthority)
-                }
-                break
+                    break
 
-            case this.nationalIdentifierRoot:
-                if (this.copyNationalIdentifierAs == 'PID-19') {
-                    if (grp.PID[19].value) {
-                        throw new Hl7TranslationException('PID-19 already filled')
+                case this.nationalIdentifierRoot:
+                    if (this.copyNationalIdentifierAs == 'PID-19') {
+                        if (grp.PID[19].value) {
+                            throw new Hl7TranslationException('PID-19 already filled')
+                        }
+                        grp.PID[19] = extension
                     }
-                    grp.PID[19] = extension
-                }
-                break
+                    break
 
-            default:
-                fillCx(nextRepetition(grp.PID[3]), root, extension, assigningAuthority)
+                default:
+                    fillCx(nextRepetition(grp.PID[3]), root, extension, assigningAuthority)
             }
 	    }
 	}

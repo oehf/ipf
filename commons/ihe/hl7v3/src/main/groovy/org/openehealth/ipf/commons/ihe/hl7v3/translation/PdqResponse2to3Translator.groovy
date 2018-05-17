@@ -156,8 +156,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                             rsp.QUERY_RESPONSE().size() : 0
                     
                     def queryId = xml.controlActProcess.queryByParameter.queryId
-                    buildInstanceIdentifier(builder, 'queryId', false,
-                            queryId.@root.text(), queryId.@extension.text())
+                    buildInstanceIdentifier(builder, 'queryId', false, queryId.@root.text(), queryId.@extension.text())
                     statusCode('code':'deliveredResponse')
                     queryResponseCode(code: status.responseStatus)
                     if (this.outputResultTotalQuantity) {

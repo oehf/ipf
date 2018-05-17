@@ -46,6 +46,12 @@
               <administrativeGenderCode code="M" />
               <birthTime value="19290405" />
               <addr />
+              <asOtherIDs classCode="PAT">
+                <id nullFlavor="NA" />
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="2.71" />
+                </scopingOrganization>
+              </asOtherIDs>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.3" />
