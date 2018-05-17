@@ -814,6 +814,7 @@
                             commons/ihe/fhir/stu3/audit/generated-stubs:
                             commons/ihe/fhir/stu3/mhd/generated-stubs:
                             commons/ihe/fhir/stu3/pixpdq/generated-stubs:
+                            commons/ihe/fhir/stu3/qedm/generated-stubs:
                             commons/ihe/hl7v2/generated-stubs:
                             commons/ihe/hl7v2ws/generated-stubs:
                             commons/ihe/hl7v3/generated-stubs:
