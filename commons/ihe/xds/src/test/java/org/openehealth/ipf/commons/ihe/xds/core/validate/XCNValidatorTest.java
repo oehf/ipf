@@ -33,8 +33,8 @@ public class XCNValidatorTest {
         validator.validate("abc^^^^^^^^&1.2.840.113619.6.197&ISO");
         validator.validate("^Welby^^^^^^^");
         validator.validate("^Welby");
-        // validator.validate("abc");
-        // validator.validate("abc^^^^^^^^");
+        validator.validate("abc");
+        validator.validate("abc^^^^^^^^");
     }
     
     @Test 
@@ -45,7 +45,6 @@ public class XCNValidatorTest {
         assertFails("11375^^^^^^^^&&ISO");
         assertFails("11375^^^^^^^^&abc&ISO");
         assertFails("^^^^^^^^&1.2.840.113619.6.197&ISO");
-        assertFails("11375^^^^^^^^");
     }
 
     private static void assertFails(String value) {
