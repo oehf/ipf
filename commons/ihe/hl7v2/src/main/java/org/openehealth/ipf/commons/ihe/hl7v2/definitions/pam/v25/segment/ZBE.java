@@ -47,13 +47,15 @@ public class ZBE extends AbstractSegment {
         super(parent, factory);
         Message message = getMessage();
         try {
-            add(EI.class, true, 0, 999, new Object[] { message }, "Movement ID");
+            add(EI.class, true, 0, 427, new Object[] { message }, "Movement ID");
             add(TS.class, true, 1, 26, new Object[] { message }, "Start Movement Date/Time");
             add(TS.class, false, 1, 26, new Object[] { message }, "End Movement Date/Time");
-            add(ST.class, true, 1, 10, new Object[] { message }, "Movement Action");
+            add(ST.class, true, 1, 6, new Object[] { message }, "Movement Action");
             add(ID.class, true, 1, 1, new Object[] { message }, "Historical Movement Indicator");
-            add(ID.class, false, 1, 10, new Object[] { message }, "Original trigger event code");
-            add(XON.class, false, 1, 999, new Object[] { message }, "Responsible Ward");
+            add(ID.class, false, 1, 3, new Object[] { message }, "Original trigger event code");
+            add(XON.class, false, 1, 567, new Object[] { message }, "Responsible Ward");
+            add(XON.class, false, 1, 567, new Object[] { message }, "Responsible Nursing Ward");
+            add(CWE.class, false, 1, 3, new Object[] { message }, "Movement Scope");
         } catch (HL7Exception he) {
             throw new HL7v2Exception(he);
         }
@@ -125,11 +127,32 @@ public class ZBE extends AbstractSegment {
     }
 
     /**
-     * Returns responsible ward (ZBE-7), (Medical or Nursing Ward, depending of the trigger event of the message)
+     * Returns responsible ward (ZBE-7).
+     * This is Medical or Nursing Ward, depending of the trigger event of the message.
+     * If ZBE-8 exists, then ZBE-7 shall be interpreted as the Responsible Medical Ward.
      *
      * @return responsible ward
      */
     public XON getResponsibleWard() {
         return getTypedField(7, 0);
+    }
+
+    /**
+     * Returns responsible nursing ward (ZBE-8).
+     * If ZBE-8 exists, then ZBE-7 shall be interpreted as the Responsible Medical Ward.
+     *
+     * @return responsible nursing ward
+     */
+    public XON getResponsibleNursingWard() {
+        return getTypedField(8, 0);
+    }
+
+    /**
+     * Returns movement scope (ZBE-9).
+     *
+     * @return movement scope
+     */
+    public CWE getMovementScope() {
+        return getTypedField(9, 0);
     }
 }
