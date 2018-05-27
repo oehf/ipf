@@ -55,7 +55,8 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
-                getCorrelator());
+                getCorrelator(),
+                getSecurityInformation());
     }
 
 

@@ -15,26 +15,25 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
-import java.io.ByteArrayInputStream;
-import javax.xml.parsers.DocumentBuilder;
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
+import org.openehealth.ipf.commons.core.DomBuildersPool;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * @author Stefan Ivanov
  */
 public class ByteArrayToDomConverter implements Converter<byte[], Document> {
 
-    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
-
     @Override
     public Document convert(byte[] source) {
-        try {
-            DocumentBuilder builder = DOM_BUILDERS.get();
-            return builder.parse(new ByteArrayInputStream(source));
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
+        return DomBuildersPool.use(builder -> {
+            try {
+                return builder.parse(new ByteArrayInputStream(source));
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        });
     }
 }

@@ -30,6 +30,7 @@
         <spring-version>4.3.14.RELEASE</spring-version>
         <spring-boot-version>1.5.10.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
+        <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.0</xmlsec-version>
 
         <github.global.server>github</github.global.server>
@@ -716,6 +717,12 @@
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-unit</artifactId>
                 <version>${vertx-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.vibur</groupId>
+                <artifactId>vibur-object-pool</artifactId>
+                <version>${vibur-version}</version>
             </dependency>
 
             <!-- All IPF dependencies -->

@@ -98,7 +98,8 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
-                null);
+                null,
+                getSecurityInformation());
     }
 
 
