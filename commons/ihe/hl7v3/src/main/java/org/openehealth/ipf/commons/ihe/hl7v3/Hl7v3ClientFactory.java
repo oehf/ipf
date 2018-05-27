@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
@@ -60,10 +61,11 @@ public class Hl7v3ClientFactory extends JaxWsRequestClientFactory<Hl7v3AuditData
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<Hl7v3AuditDataset> correlator)
+            AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
+            WsSecurityInformation securityInformation)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
-                customInterceptors, features, properties, correlator);
+                customInterceptors, features, properties, correlator, securityInformation);
     }
 
     @Override

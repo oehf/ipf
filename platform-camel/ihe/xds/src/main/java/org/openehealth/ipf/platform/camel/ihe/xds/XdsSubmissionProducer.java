@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.headers.Header;
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
+import org.openehealth.ipf.commons.core.DomBuildersPool;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
@@ -31,14 +31,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.ws.BindingProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, InType, OutType> {
-
-    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
 
     public static final String TARGET_HCID_NS = "urn:ihe:iti:xdr:2014";
     public static final String TARGET_HCID_NS_PREFIX = "xdr";
@@ -68,8 +67,7 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
         }
 
         if (targetHomeCommunityId != null) {
-            Document document = DOM_BUILDERS.get().newDocument();
-
+            Document document = DomBuildersPool.use(DocumentBuilder::newDocument);
             Element homeCommunityIdElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_LOCAL_PART);
             homeCommunityIdElement.setTextContent(targetHomeCommunityId);
 

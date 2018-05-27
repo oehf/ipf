@@ -21,7 +21,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Thread local for DOM document builders.
  * @author Dmytro Rud
+ *
+ * @deprecated since IPF 3.5.1, use {@link DomBuildersPool} instead.
  */
+@Deprecated
 public class DomBuildersThreadLocal extends ThreadLocal<DocumentBuilder> {
 
     public DocumentBuilder initialValue() {

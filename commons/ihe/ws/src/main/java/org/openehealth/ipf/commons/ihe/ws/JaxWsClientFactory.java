@@ -35,6 +35,10 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterce
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vibur.objectpool.ConcurrentPool;
+import org.vibur.objectpool.PoolObjectFactory;
+import org.vibur.objectpool.PoolService;
+import org.vibur.objectpool.util.ConcurrentLinkedQueueCollection;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Binding;
@@ -44,7 +48,6 @@ import javax.xml.ws.soap.SOAPBinding;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -56,7 +59,10 @@ import static java.util.Objects.requireNonNull;
 public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
-    protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<>();
+    public static final String POOL_SIZE_PROPERTY = JaxWsClientFactory.class.getName() + ".POOLSIZE";
+    private static final int DEFAULT_POOL_SIZE = 100;
+
+    protected final PoolService<Object> clientPool;
     protected final WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
@@ -65,6 +71,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
     protected final AuditContext auditContext;
     protected final AsynchronyCorrelator<AuditDatasetType> correlator;
+    protected final WsSecurityInformation securityInformation;
 
     /**
      * Constructs the factory.
@@ -83,7 +90,9 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<AuditDatasetType> correlator) {
+            AsynchronyCorrelator<AuditDatasetType> correlator,
+            WsSecurityInformation securityInformation)
+    {
         requireNonNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
@@ -93,35 +102,20 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         this.features = features;
         this.properties = properties;
         this.correlator = correlator;
+        this.securityInformation = securityInformation;
+
+        int poolSize = Integer.getInteger(POOL_SIZE_PROPERTY, -1);
+        clientPool = new ConcurrentPool<>(new ConcurrentLinkedQueueCollection<>(), new PortFactory(),
+                0, (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE, false);
     }
 
     /**
      * Returns a client stub for the web-service.
      *
-     * @param securityInformationSupplier Conduit-related security information or null if no security shall be set
      * @return the client stub
      */
-    public synchronized Object getClient(Supplier<WsSecurityInformation> securityInformationSupplier) {
-        if (threadLocalPort.get() == null) {
-            URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
-            Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
-            Object port = service.getPort(wsTransactionConfiguration.getSei());
-            Client client = ClientProxy.getClient(port);
-            configureBinding(port);
-            configureInterceptors(client);
-            configureProperties(client);
-            WsSecurityInformation securityInformation = securityInformationSupplier.get();
-            if (securityInformation != null) {
-                securityInformation.configureHttpConduit((HTTPConduit) client.getConduit());
-            }
-            threadLocalPort.set(port);
-            LOG.debug("Created client adapter for: {}", wsTransactionConfiguration.getServiceName());
-        }
-        return threadLocalPort.get();
-    }
-
     public synchronized Object getClient() {
-        return getClient(() -> null);
+        return clientPool.take();
     }
 
     /**
@@ -204,4 +198,52 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         SOAPBinding soapBinding = (SOAPBinding) binding;
         soapBinding.setMTOMEnabled(wsTransactionConfiguration.isMtom());
     }
+
+    /**
+     * Returns a client stub (previously gained via {@link #getClient()}) to the pool.
+     * This method MUST be called as soon as the use of the port stub is finished.
+     *
+     * @param client client stub, <code>null</code> values are safe.
+     */
+    public void restoreClient(Object client) {
+        if (client != null) {
+            clientPool.restore(client);
+            LOG.debug("Returned client stub {} to the pool", client);
+        }
+    }
+
+    
+    class PortFactory implements PoolObjectFactory<Object> {
+        @Override
+        public Object create() {
+            URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
+            Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
+            Object port = service.getPort(wsTransactionConfiguration.getSei());
+            Client client = ClientProxy.getClient(port);
+            configureBinding(port);
+            configureInterceptors(client);
+            configureProperties(client);
+            if (securityInformation != null) {
+                securityInformation.configureHttpConduit((HTTPConduit) client.getConduit());
+            }
+            LOG.debug("Created client stub {} for {}", port, wsTransactionConfiguration.getServiceName());
+            return port;
+        }
+
+        @Override
+        public boolean readyToTake(Object o) {
+            return true;
+        }
+
+        @Override
+        public boolean readyToRestore(Object o) {
+            return true;
+        }
+
+        @Override
+        public void destroy(Object o) {
+            // nop
+        }
+    }
+
 }

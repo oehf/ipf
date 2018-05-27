@@ -50,7 +50,8 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
-                getCorrelator());
+                getCorrelator(),
+                getSecurityInformation());
     }
 
 
