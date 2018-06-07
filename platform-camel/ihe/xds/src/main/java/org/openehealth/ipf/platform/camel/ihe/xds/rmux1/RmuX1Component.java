@@ -13,38 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.chxcmu;
+package org.openehealth.ipf.platform.camel.ihe.xds.rmux1;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XCMU.Interactions.CH_XCMU;
+import static org.openehealth.ipf.commons.ihe.xds.RMU.Interactions.RMU_X1;
 
 /**
- * The Camel component for the CH-XCMU transaction.
+ * The Camel component for the RMU ITI-X1 transaction.
  */
-public class ChXcmuComponent extends XdsComponent<XdsSubmitAuditDataset> {
+public class RmuX1Component extends XdsComponent<XdsSubmitAuditDataset> {
 
-    public ChXcmuComponent() {
-        super(CH_XCMU);
+    public RmuX1Component() {
+        super(RMU_X1);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, ChXcmuService.class) {
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, RmuX1Service.class) {
             @Override
             public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(
                     AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
-                    JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
-                return new ChXcmuProducer(endpoint, clientFactory);
+                    JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory)
+            {
+                return new SimpleWsProducer<>(endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
             }
         };
     }

@@ -89,10 +89,6 @@ public class RegisterDocumentSetTransformer {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
 
-        if (request.getTargetHomeCommunityId() != null) {
-            ebXML.addSlot(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID, request.getTargetHomeCommunityId());
-        }
-
         return ebXML;
     }
 
@@ -123,8 +119,6 @@ public class RegisterDocumentSetTransformer {
         for (EbXMLAssociation association : ebXML.getAssociations()) {
             request.getAssociations().add(associationTransformer.fromEbXML(association));
         }
-
-        request.setTargetHomeCommunityId(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
 
         return request;
     }

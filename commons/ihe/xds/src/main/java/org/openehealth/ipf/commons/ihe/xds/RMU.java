@@ -19,9 +19,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuPortType;
-import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1PortType;
+import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
@@ -30,16 +30,18 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * RMU = Restricted Metadata Update.
+ *
  * @author Dmytro Rud
  * @since 3.4
  */
-public class XCMU implements XdsIntegrationProfile {
+public class RMU implements XdsIntegrationProfile {
 
-	private static final XCMU Instance = new XCMU();
+	private static final RMU Instance = new RMU();
 
 	@AllArgsConstructor
 	public enum Interactions implements XdsInteractionId {
-		CH_XCMU(CH_XCMU_WS_CONFIG);
+		RMU_X1(RMU_X1_WS_CONFIG);
 
 		@Getter
 		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
@@ -65,17 +67,17 @@ public class XCMU implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> CH_XCMU_WS_CONFIG = new WsTransactionConfiguration<>(
-		"ch-xcmu",
-		"Cross Gateway Update Document Set",
+	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> RMU_X1_WS_CONFIG = new WsTransactionConfiguration<>(
+		"rmu-itiX1",
+		"Restricted Update Document Set",
 		false,
-		new ChXcmuClientAuditStrategy(),
-		new ChXcmuServerAuditStrategy(),
-		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Service", "ihe"),
-		ChXcmuPortType.class,
-		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Binding_Soap12", "ihe"),
+		new RmuX1ClientAuditStrategy(),
+		new RmuX1ServerAuditStrategy(),
+		new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_Service", "ihe"),
+		RmuX1PortType.class,
+		new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_Binding_Soap12", "ihe"),
 		false,
-		"wsdl/ch-xcmu.wsdl",
+		"wsdl/rmu-itiX1.wsdl",
 		true,
 		false,
 		false,

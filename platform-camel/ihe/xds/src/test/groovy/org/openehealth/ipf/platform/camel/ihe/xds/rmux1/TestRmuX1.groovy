@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.chxcmu
+package org.openehealth.ipf.platform.camel.ihe.xds.rmux1
 
 import org.apache.cxf.headers.Header
 import org.apache.cxf.jaxb.JAXBDataBinding
@@ -26,7 +26,6 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
@@ -40,18 +39,18 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
- * Tests the ITI-57 transaction with a webservice and client adapter defined via URIs.
+ * Tests the RMU ITI-X1 transaction with a webservice and client adapter defined via URIs.
  * @author Boris Stanojevic
  */
-class TestChXcmu extends XdsStandardTestContainer {
+class TestRmuX1 extends XdsStandardTestContainer {
     
-    def static CONTEXT_DESCRIPTOR = 'ch-xcmu.xml'
+    def static CONTEXT_DESCRIPTOR = 'rmu-itiX1.xml'
     
-    def SERVICE1 = "ch-xcmu://localhost:${port}/ch-xcmu-service1"
-    def SERVICE2 = "ch-xcmu://localhost:${port}/ch-xcmu-service2"
-    def SERVICE3 = "ch-xcmu://localhost:${port}/ch-xcmu-service3"
+    def SERVICE1 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service1"
+    def SERVICE2 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service2"
+    def SERVICE3 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service3"
 
-    def SERVICE2_ADDR = "http://localhost:${port}/ch-xcmu-service2"
+    def SERVICE2_ADDR = "http://localhost:${port}/rmu-itiX1-service2"
     
     def request
     def docEntry
@@ -73,13 +72,11 @@ class TestChXcmu extends XdsStandardTestContainer {
         docEntry.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183e'
         docEntry.version = new Version('123')
         docEntry.documentAvailability = DocumentAvailability.ONLINE
-        folder = request.folders[0]
-        folder.logicalUuid = 'urn:uuid:9d3c87c2-dfbb-4188-94f0-9b7440737bce'
-        folder.version = new Version('124')
+        request.folders.clear()
     }
     
     @Test
-    void testChXcmu() {
+    void testRmuItiX1() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
@@ -107,7 +104,7 @@ class TestChXcmu extends XdsStandardTestContainer {
     }
 
     @Test
-    void testIti57FailureAudit() {
+    void testRmuX1FailureAudit() {
         assert FAILURE == sendIt(SERVICE1, 'falsch').status
         assert auditSender.messages.size() == 2
     }

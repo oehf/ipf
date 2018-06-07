@@ -1,17 +1,20 @@
 
-## `ch-xcmu` component
+## `rmu-itiX1` component
 
-The ch-xcmu component provides interfaces for actors of the *Cross-Gateway Metadata Update* transaction (CH-XCMU),
-which is described in the [TODO Swiss EPD specification](todo://).
+** Note: This component will be renamed as soon as IHE will assign a proper transaction number 
+instead of ITI-X1** 
+
+The `rmu-itiX1` component provides interfaces for actors of the *Restricted Metadata Update* transaction (RMU ITI-X1),
+which is described in the [Restricted Metadata Update Supplement Draft](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_RMU_Rev1.0_PC_2018-05-23.pdf).
 
 ### Actors
 
 The transaction defines the following actors:
 
-![CH-XCMU actors](images/ch-xcmu.png)
+![RMU ITI-X1 actors](images/rmu-itiX1.png)
 
-Producer side corresponds to the *Initiating Gateway* actor.
-Consumer side corresponds to the *Responding Gateway* actor.
+Producer side corresponds to the *Update Initiator* actor.
+Consumer side corresponds to the *Update Responder* actor.
 
 ### Dependencies
 
@@ -29,10 +32,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `ch-xcmu` component producers is:
+The endpoint URI format of `rmu-itiX1` component producers is:
 
 ```
-ch-xcmu://hostname:port/path/to/service[?parameters]
+rmu-itiX1://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -41,10 +44,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `ch-xcmu` component consumers is:
+The endpoint URI format of `rmu-itiX1` component consumers is:
 
 ```
-ch-xcmu:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
+rmu-itiX1:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -55,24 +58,13 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /epd/*
+servletPath = /rmu/*
 ```
 
-and serviceName equals to `chXcmuService`, then the ch-xcmu consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/epd/chXcmuService`
+and serviceName equals to `rmuItiX1Service`, then the `rmu-itiX1` consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/rmu/rmuItiX1Service`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
-
-
-### Example
-
-This is an example on how to use the component on the consumer side:
-
-```java
-    from("xca-iti38:iti38Service?homeCommunityId=1.2.3.4.5&audit=true")
-      .process(myProcessor)
-      // process the incoming request and create a response
-```
 
 
 ### Basic Common Component Features

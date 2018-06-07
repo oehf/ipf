@@ -51,6 +51,9 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
             auditDataset.getPatientIds().add(patientId);
             String uniqueId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
             auditDataset.setSubmissionSetUuid(uniqueId);
+            if(auditDataset.getHomeCommunityId() == null) {
+                auditDataset.setHomeCommunityId(submissionSet.getHome());
+            }
         });
     }
 

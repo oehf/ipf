@@ -7,6 +7,6 @@
 #    KIND, either express or implied. See the License for the specific
 #    language governing permissions and limitations under the License.
 
-# Camel registration for the ch-xcmu component
+# Camel registration for the rmu-itiX1 component
  
-class=org.openehealth.ipf.platform.camel.ihe.xds.chxcmu.ChXcmuComponent
+class=org.openehealth.ipf.platform.camel.ihe.xds.rmux1.RmuX1Component
