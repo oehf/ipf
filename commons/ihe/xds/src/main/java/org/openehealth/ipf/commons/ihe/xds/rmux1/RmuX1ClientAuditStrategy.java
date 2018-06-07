@@ -13,32 +13,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.chxcmu;
+package org.openehealth.ipf.commons.ihe.xds.rmux1;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIImportBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
- * Audit strategy for ChXcmu.
+ * Audit strategy for the actor "Update Initiator" of the RMU ITI-X1 transaction.
  *
  * @author Boris Stanojevic
  * @author Christian Ohr
  */
-public class ChXcmuServerAuditStrategy extends XdsSubmitAuditStrategy30 {
+public class RmuX1ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    public ChXcmuServerAuditStrategy() {
-        super(true);
+    public RmuX1ClientAuditStrategy() {
+        super(false);
     }
+
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsSubmitAuditDataset auditDataset) {
-        return new XdsPHIImportBuilder(auditContext, auditDataset, EventActionCode.Update,
-                XdsEventTypeCode.CrossGatewayUpdateDocumentSet, auditDataset.getPurposesOfUse())
+        return new XdsPHIExportBuilder(auditContext, auditDataset, EventActionCode.Update,
+                XdsEventTypeCode.RestrictedUpdateDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
                 .setSubmissionSetWithHomeCommunityId(auditDataset)
                 .getMessages();

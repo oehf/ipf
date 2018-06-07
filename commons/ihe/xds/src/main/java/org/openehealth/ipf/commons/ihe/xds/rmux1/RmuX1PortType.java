@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.chxcmu;
+package org.openehealth.ipf.commons.ihe.xds.rmux1;
 
 import org.apache.cxf.annotations.DataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
 /**
- * SEI for the the XCMU profile.
+ * SEI for the the RMU profile.
  * @since 3.4
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcmu:2017", name = "RespondingGateway_PortType", portName = "RespondingGateway_Port_Soap12")
+@WebService(targetNamespace = "urn:ihe:iti:rmu:2018", name = "UpdateResponder_PortType", portName = "UpdateResponder_Port_Soap12")
 @XmlSeeAlso({
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
@@ -40,14 +40,14 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @DataBinding(XdsJaxbDataBinding.class)
-public interface ChXcmuPortType {
+public interface RmuX1PortType {
 
     @WebResult(name = "RegistryResponse",
             targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0",
             partName = "body")
-    @Action(input = "urn:ihe:iti:2017:CrossGatewayUpdateDocumentSet", output = "urn:ihe:iti:2017:CrossGatewayUpdateDocumentSetResponse")
-    @WebMethod(operationName = "RespondingGateway_CrossGatewayUpdateDocumentSet")
-    RegistryResponseType documentRegistryUpdateDocumentSet(
+    @Action(input = "urn:ihe:iti:2018:RestrictedUpdateDocumentSet", output = "urn:ihe:iti:2018:RestrictedUpdateDocumentSetResponse")
+    @WebMethod(operationName = "UpdateResponder_RestrictedUpdateDocumentSet")
+    RegistryResponseType restrictedUpdateDocumentSet(
             @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
                     SubmitObjectsRequest body
     );

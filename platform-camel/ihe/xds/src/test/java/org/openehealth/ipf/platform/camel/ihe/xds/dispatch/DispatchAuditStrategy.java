@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditStrategy;
@@ -89,8 +89,8 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
                 new Rad69ServerAuditStrategy());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet"),
                 new Rad75ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_CrossGatewayUpdateDocumentSet"),
-                new ChXcmuServerAuditStrategy());
+        map.put(new QName("urn:ihe:iti:rmu:2018", "RespondingGateway_CrossGatewayUpdateDocumentSet"),
+                new RmuX1ServerAuditStrategy());
         if (additionalMappings != null) {
             map.putAll(additionalMappings);
         }

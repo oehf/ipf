@@ -142,6 +142,7 @@ public enum ValidationMessage {
     MISSING_FOLDER_NAME("Folder name not provided in %s"),
     TIME_PRECISION_TOO_LOW("Precision of the timestamp is too low: %s"),
     ASSOCIATION_ID_MISSING("Attribute 'id' must be provided in the Association"),
+    OBJECT_NOT_UPDATABLE("%s %s is not updatable"),     // 1st param=object type, e.g. "Folder"; 2nd param=object UUID
     ;
 
 

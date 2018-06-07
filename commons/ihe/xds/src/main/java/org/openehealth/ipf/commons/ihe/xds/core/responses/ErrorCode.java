@@ -166,6 +166,20 @@ public enum ErrorCode {
     @Deprecated     // error code XDSReplaceFailed is deprecated by IHE
     @XmlEnumValue("XDSReplaceFailed") REPLACE_FAILED("XDSReplaceFailed"),
 
+    /* --- codes for RMU --- */
+    /** The receiving actor cannot store the request as the objectType is either not supported or does not match the value of the existing object. */
+    @XmlEnumValue("XDSObjectTypeError") OBJECT_TYPE_ERROR("XDSObjectTypeError"),
+    /** The receiving actor cannot store the request because the identifier is in conflict with an existing known value. */
+    @XmlEnumValue("XDSMetadataIdentifierError") METADATA_IDENTIFIER_ERROR("XDSMetadataIdentifierError"),
+    /** The receiving actor detected that an initial version of a metadata object instance was received in an update transaction. */
+    @XmlEnumValue("XDSInvalidRequestException") INVALID_REQUEST_EXCEPTION("XDSInvalidRequestException"),
+    /** An update for a metadata object includes changes to values for attributes which are prohibited for the transaction. */
+    @XmlEnumValue("UnmodifiableMetadataError") UNMODIFIABLE_METADATA_ERROR("UnmodifiableMetadataError"),
+    /** The receiving actor has detected that the request is not permitted because of local policy restrictions or violation of a previously reached agreement. */
+    @XmlEnumValue("LocalPolicyRestrictionError") LOCAL_POLICY_RESTRICTION_ERROR("LocalPolicyRestrictionError"),
+    /** The receiving actor has detected an error with a SS-HM annotation. */
+    @XmlEnumValue("XDSMetadataUpdateAnnotationError") METADATA_UPDATE_ANNOTATION_ERROR("XDSMetadataUpdateAnnotationError"),
+
     /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
     /** An error occurred when executing an SQL query. */
     @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError"),
