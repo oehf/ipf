@@ -20,11 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.IdType;
@@ -50,8 +46,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider documentManifestSearch(
             @RequiredParam(name = DocumentManifest.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentManifest.SP_CREATED) DateRangeParam created,
-            @OptionalParam(name = DocumentManifest.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,
-            @OptionalParam(name = DocumentManifest.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
+            @OptionalParam(name = DocumentManifest.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_SOURCE) TokenOrListParam source,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
@@ -63,10 +58,8 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
 
-        Iti66SearchParameters parameters = Iti66SearchParameters.builder()
+        Iti66SearchParameters searchParameters = Iti66SearchParameters.builder()
                 .created(created)
-                .authorFamilyName(authorFamilyName)
-                .authorGivenName(authorGivenName)
                 .type(type)
                 .source(source)
                 .status(status)
@@ -76,15 +69,17 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
                 .fhirContext(getFhirContext())
                 .build();
 
+        searchParameters.setAuthor(author);
+
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
-            parameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
+            searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
         } else if (chain == null || chain.isEmpty()) {
-            parameters.setPatientReference(patient);
+            searchParameters.setPatientReference(patient);
         }
 
         // Run down the route
-        return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
     }
 
     /**

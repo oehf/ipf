@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
@@ -60,7 +61,9 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     @SuppressWarnings("unused")
     @Search(type = PdqPatient.class)
     public IBundleProvider pdqmSearch(
-            @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
+            @Description(shortDefinition = "Logical id of this artifact")
+            @OptionalParam(name = Patient.SP_IDENTIFIER)
+                    TokenAndListParam identifiers,
             @OptionalParam(name = Patient.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,

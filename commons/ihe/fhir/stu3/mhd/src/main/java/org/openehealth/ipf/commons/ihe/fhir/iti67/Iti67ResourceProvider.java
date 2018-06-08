@@ -20,11 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.IdType;
@@ -61,8 +57,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_INDEXED) DateRangeParam indexed,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
@@ -82,8 +77,6 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .indexed(indexed)
-                .authorFamilyName(authorFamilyName)
-                .authorGivenName(authorGivenName)
                 .class_(class_)
                 .type(type)
                 .setting(setting)
@@ -99,10 +92,12 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .fhirContext(getFhirContext())
                 .build();
 
-        String chain = patient.getChain();
-        if (Patient.SP_IDENTIFIER.equals(chain)) {
+        searchParameters.setAuthor(author);
+
+        String patientChain = patient.getChain();
+        if (Patient.SP_IDENTIFIER.equals(patientChain)) {
             searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
-        } else if (chain == null || chain.isEmpty()) {
+        } else if (patientChain == null || patientChain.isEmpty()) {
             searchParameters.setPatientReference(patient);
         }
 
