@@ -22,14 +22,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidato
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.openehealth.ipf.commons.ihe.xds.XCMU.Interactions.CH_XCMU;
-
 /**
  * Validates a {@link EbXMLSubmitObjectsRequest} request.
  * @author Jens Riemschneider
  */
 public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjectsRequest, ValidationProfile> {
     private static final ObjectContainerValidator OBJECT_CONTAINER_VALIDATOR = new ObjectContainerValidator();
+    private static final HomeCommunityIdValidator HOME_COMMUNITY_ID_VALIDATOR = new HomeCommunityIdValidator(false);
 
     /**
      * Validates the request.
@@ -41,8 +40,7 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
     @Override
     public void validate(EbXMLSubmitObjectsRequest request, ValidationProfile profile)  {
         OBJECT_CONTAINER_VALIDATOR.validate(request, profile);
-
-        HomeCommunityIdValidator homeCommunityIdValidator = new HomeCommunityIdValidator(profile == CH_XCMU);
-        homeCommunityIdValidator.validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
+        HOME_COMMUNITY_ID_VALIDATOR.validate(request.getRegistryPackages().get(0).getHome());
+        HOME_COMMUNITY_ID_VALIDATOR.validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
     }
 }

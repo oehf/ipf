@@ -49,8 +49,6 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     @Getter private final List<Recipient> intendedRecipients = new ArrayList<>();
     @Getter @Setter private String sourceId;
     @Getter private Timestamp submissionTime;
-    @XmlAttribute
-    @Getter @Setter private String targetHomeCommunityId;
 
     /**
      * @param author
