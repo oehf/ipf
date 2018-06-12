@@ -17,7 +17,8 @@ package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 
 import org.apache.cxf.annotations.DataBinding;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20JaxbDataBinding;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12.*;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
@@ -30,6 +31,10 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 import javax.xml.ws.FaultAction;
 
+/**
+ * @since 3.5.1
+ * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
+ */
 @WebService(targetNamespace = "urn:ihe:iti:ppq:2016", name = "PolicyRepository_PortType", portName = "PolicyRepository_Port_Soap12")
 @XmlSeeAlso({
         ObjectFactory.class,

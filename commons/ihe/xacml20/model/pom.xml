@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe-xacml20</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.6-SNAPSHOT</version>
     </parent>
 
     <build>

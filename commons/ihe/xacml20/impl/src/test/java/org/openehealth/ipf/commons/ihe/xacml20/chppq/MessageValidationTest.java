@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
 import javax.xml.bind.JAXBElement;
@@ -26,12 +26,10 @@ import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
  */
-@Slf4j
 public class MessageValidationTest {
-
-    private final Xacml20MessageValidator validator = new Xacml20MessageValidator();
 
     @BeforeClass
     public static void beforeClass() {
@@ -39,26 +37,34 @@ public class MessageValidationTest {
     }
 
     private static <T> T loadFile(String fn) throws Exception {
-        InputStream stream = MessageValidationTest.class.getClassLoader().getResourceAsStream("messages/chppq/" + fn);
+        InputStream stream = MessageValidationTest.class.getClassLoader().getResourceAsStream("messages/" + fn);
         Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         Object object = unmarshaller.unmarshal(stream);
         if (object instanceof JAXBElement) {
             object = ((JAXBElement) object).getValue();
         }
-        log.debug("File {} --> object {}", fn, object.getClass().getSimpleName());
         return (T) object;
     }
 
     @Test
     public void testValidation() throws Exception {
-        validator.validateRequest(loadFile("query-per-patient-id.xml"));
-        validator.validateRequest(loadFile("query-per-policy-id.xml"));
-        validator.validateRequest(loadFile("add-request.xml"));
-        validator.validateRequest(loadFile("update-request.xml"));
-        validator.validateRequest(loadFile("delete-request.xml"));
+        validateChPpqRequest(loadFile("chppq/add-request.xml"));
+        validateChPpqRequest(loadFile("chppq/update-request.xml"));
+        validateChPpqRequest(loadFile("chppq/delete-request.xml"));
+        validateChPpqResponse(loadFile("chppq/ack.xml"));
 
-        validator.validateResponse(loadFile("query-response.xml"));
-        validator.validateResponse(loadFile("ack.xml"));
+        validateChPpqRequest(loadFile("chppq/query-per-patient-id.xml"));
+        validateChPpqRequest(loadFile("chppq/query-per-policy-id.xml"));
+        validateChPpqResponse(loadFile("chppq/query-response.xml"));
+
+        validateChPpq1Request(loadFile("chppq1/add-request.xml"));
+        validateChPpq1Request(loadFile("chppq1/update-request.xml"));
+        validateChPpq1Request(loadFile("chppq1/delete-request.xml"));
+        validateChPpq1Response(loadFile("chppq1/ack.xml"));
+
+        validateChPpq2Request(loadFile("chppq2/query-per-patient-id.xml"));
+        validateChPpq2Request(loadFile("chppq2/query-per-policy-id.xml"));
+        validateChPpq2Response(loadFile("chppq2/query-response.xml"));
     }
 }
 

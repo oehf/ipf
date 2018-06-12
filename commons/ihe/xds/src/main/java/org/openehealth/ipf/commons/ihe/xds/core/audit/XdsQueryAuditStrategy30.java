@@ -32,8 +32,6 @@ import java.util.Map;
  */
 public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
 
-
-
     /**
      * Constructs an XDS query audit strategy.
      *

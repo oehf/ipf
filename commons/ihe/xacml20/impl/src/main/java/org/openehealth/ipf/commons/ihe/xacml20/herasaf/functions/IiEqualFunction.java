@@ -20,6 +20,7 @@ import org.herasaf.xacml.core.function.AbstractFunction;
 import org.herasaf.xacml.core.function.FunctionProcessingException;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
  */
 public class IiEqualFunction extends AbstractFunction {

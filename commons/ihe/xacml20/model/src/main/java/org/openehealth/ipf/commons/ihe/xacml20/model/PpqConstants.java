@@ -60,6 +60,11 @@ public class PpqConstants {
         public static final String SNOMED_CT              = "2.16.840.1.113883.6.96";
     }
 
+    public static class StatusCode {
+        public static final String SUCCESS = "urn:e-health-suisse:2015:response-status:success";
+        public static final String FAILURE = "urn:e-health-suisse:2015:response-status:failure";
+    }
+
     public static final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
 
     public static final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
  */
 public class Hl7v3DataTypesInitializer extends AbstractDataTypesJaxbTypeAdapterInitializer {

@@ -1,0 +1,248 @@
+/*
+ * Copyright 2018 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
+
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.types.CodedValueType;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
+import java.io.InputStream;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * @since 3.5.1
+ * @author Dmytro Rud
+ */
+public class ChPpq1Test extends StandardTestContainer {
+
+    @BeforeClass
+    public static void beforeClass() {
+        startServer(new CXFServlet(), "chppq1-context.xml");
+        Xacml20Utils.initializeHerasaf();
+    }
+
+    @Before
+    public void before() {
+        getAuditSender().clear();
+    }
+
+    private static String getUri(String suffix) {
+        return "ch-ppq1://localhost:" + getPort() + "/ch-ppq-" + suffix;
+    }
+
+    private static <T> T loadFile(String fn) throws Exception {
+        InputStream stream = ChPpq1Test.class.getClassLoader().getResourceAsStream("messages/chppq1/" + fn);
+        Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
+        Object object = unmarshaller.unmarshal(stream);
+        if (object instanceof JAXBElement) {
+            object = ((JAXBElement) object).getValue();
+        }
+        return (T) object;
+    }
+
+    private static void checkCodeValueType(CodedValueType value, String[]... allowedCodes) {
+        for (String[] allowed : allowedCodes) {
+            if (allowed[0].equals(value.getCode()) && allowed[1].equals(value.getCodeSystemName()) && allowed[2].equals(value.getOriginalText())) {
+                return;
+            }
+        }
+        assertEquals(null, value);
+    }
+
+    @Test
+    public void testAddPolicySuccess() throws Exception {
+        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success);
+    }
+
+    @Test
+    public void testAddPolicyFailure() throws Exception {
+        testAddPolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure);
+    }
+
+    private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
+        EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request.xml"), EprPolicyRepositoryResponse.class);
+        assertEquals(statusCode, response.getStatus());
+
+        List messages = getAuditSender().getMessages();
+        assertEquals(2, messages.size());
+
+        for (Object object : messages) {
+            AuditMessage message = (AuditMessage) object;
+
+            EventIdentificationType event = message.getEventIdentification();
+            assertEquals(EventActionCode.Create, event.getEventActionCode());
+            assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
+            checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
+            assertEquals(1, event.getEventTypeCode().size());
+            checkCodeValueType(event.getEventTypeCode().get(0), new String[]{"PPQ-1", "e-health-suisse", "Privacy Policy Feed"});
+
+            assertEquals(0, event.getPurposesOfUse().size());
+
+            assertEquals(2, message.getActiveParticipants().size());
+            assertEquals(1, message.getActiveParticipants().get(0).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(0).getRoleIDCodes().get(0), new String[]{"110153", "DCM", "Source Role ID"});
+            assertEquals(1, message.getActiveParticipants().get(1).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
+
+            assertEquals(2, message.getParticipantObjectIdentifications().size());
+
+            ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
+            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("1.2.840.113619.20.2.9.0", participant.getParticipantObjectID());
+
+            participant = message.getParticipantObjectIdentifications().get(1);
+            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("3644dc70-4dec-11e3-8f96-0800200c9a66", participant.getParticipantObjectID());
+        }
+    }
+
+    @Test
+    public void testUpdatePolicySuccess() throws Exception {
+        testUpdatePolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
+    }
+
+    @Test
+    public void testUpdatePolicyFailure() throws Exception {
+        testUpdatePolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
+    }
+
+    @Test
+    public void testUpdatePolicyException() throws Exception {
+        testUpdatePolicy("exception", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
+    }
+
+    private void testUpdatePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectSoapFault) throws Exception {
+        try {
+            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("update-request.xml"), EprPolicyRepositoryResponse.class);
+            assertEquals(statusCode, response.getStatus());
+        } catch (UnknownPolicySetIdFaultMessage exception) {
+            if (!expectSoapFault) {
+                throw exception;
+            }
+        }
+
+        List messages = getAuditSender().getMessages();
+        assertEquals(2, messages.size());
+
+        for (Object object : messages) {
+            AuditMessage message = (AuditMessage) object;
+
+            EventIdentificationType event = message.getEventIdentification();
+            assertEquals(EventActionCode.Update, event.getEventActionCode());
+            assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
+            checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
+            assertEquals(1, event.getEventTypeCode().size());
+            checkCodeValueType(event.getEventTypeCode().get(0), new String[]{"PPQ-1", "e-health-suisse", "Privacy Policy Feed"});
+
+            assertEquals(0, event.getPurposesOfUse().size());
+
+            assertEquals(2, message.getActiveParticipants().size());
+            assertEquals(1, message.getActiveParticipants().get(0).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(0).getRoleIDCodes().get(0), new String[]{"110153", "DCM", "Source Role ID"});
+            assertEquals(1, message.getActiveParticipants().get(1).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
+
+            assertEquals(2, message.getParticipantObjectIdentifications().size());
+
+            ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
+            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("1.2.840.113619.20.2.9.0", participant.getParticipantObjectID());
+
+            participant = message.getParticipantObjectIdentifications().get(1);
+            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("3644dc70-4dec-11e3-8f96-0800200c9a66", participant.getParticipantObjectID());
+        }
+    }
+
+    @Test
+    public void testDeletePolicySuccess() throws Exception {
+        testDeletePolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
+    }
+
+    @Test
+    public void testDeletePolicyFailure() throws Exception {
+        testDeletePolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
+    }
+
+    @Test
+    public void testDeletePolicyException() throws Exception {
+        testDeletePolicy("exception", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
+    }
+
+    private void testDeletePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectException) throws Exception {
+        try {
+            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("delete-request.xml"), EprPolicyRepositoryResponse.class);
+            assertEquals(statusCode, response.getStatus());
+        } catch (UnknownPolicySetIdFaultMessage exception) {
+            if (!expectException) {
+                throw exception;
+            }
+        }
+
+        List messages = getAuditSender().getMessages();
+        assertEquals(2, messages.size());
+
+        for (Object object : messages) {
+            AuditMessage message = (AuditMessage) object;
+
+            EventIdentificationType event = message.getEventIdentification();
+            assertEquals(EventActionCode.Delete, event.getEventActionCode());
+            assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
+            checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
+            assertEquals(1, event.getEventTypeCode().size());
+            checkCodeValueType(event.getEventTypeCode().get(0), new String[]{"PPQ-1", "e-health-suisse", "Privacy Policy Feed"});
+
+            assertEquals(0, event.getPurposesOfUse().size());
+
+            assertEquals(2, message.getActiveParticipants().size());
+            assertEquals(1, message.getActiveParticipants().get(0).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(0).getRoleIDCodes().get(0), new String[]{"110153", "DCM", "Source Role ID"});
+            assertEquals(1, message.getActiveParticipants().get(1).getRoleIDCodes().size());
+            checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
+
+            assertEquals(5, message.getParticipantObjectIdentifications().size());
+            for (int i = 0; i < 5; ++i) {
+                ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(i);
+                assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
+                assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
+                assertEquals("10a3f268-d9d6-4772-b908-9d852116" + i, participant.getParticipantObjectID());
+            }
+        }
+    }
+
+}
