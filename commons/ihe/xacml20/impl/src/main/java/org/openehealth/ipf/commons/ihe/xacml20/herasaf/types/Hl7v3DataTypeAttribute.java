@@ -27,6 +27,7 @@ import javax.xml.bind.JAXBException;
 import java.util.List;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
  */
 abstract public class Hl7v3DataTypeAttribute<T> extends AbstractDataTypeAttribute<T> {

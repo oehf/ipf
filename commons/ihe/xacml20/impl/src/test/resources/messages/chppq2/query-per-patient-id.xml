@@ -1,0 +1,36 @@
+<!--
+  Copyright 2018 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<xacml-samlp:XACMLPolicyQuery
+        xmlns:xacml-samlp="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+        xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:hl7="urn:hl7-org:v3"
+        ID="ppq-query-id-1"
+        Version="2.0"
+        IssueInstant="2016-02-09T09:30:10.5Z">
+    <xacml-context:Request>
+        <xacml-context:Subject/>
+        <xacml-context:Resource>
+            <xacml-context:Attribute AttributeId="urn:e-health-suisse:2015:epr-spid" DataType="urn:hl7-org:v3#II">
+                <xacml-context:AttributeValue>
+                    <hl7:InstanceIdentifier xsi:type="hl7:II" root="2.16.756.5.30.1.127.3.10.3" extension="8901"/>
+                </xacml-context:AttributeValue>
+            </xacml-context:Attribute>
+        </xacml-context:Resource>
+        <xacml-context:Action/>
+        <xacml-context:Environment/>
+    </xacml-context:Request>
+</xacml-samlp:XACMLPolicyQuery>

@@ -15,18 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq;
 
-import org.openehealth.ipf.commons.ihe.xacml20.CH_PPQ;
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xacml20.CH_PPQ;
+import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20Endpoint;
 
 import java.util.Map;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
+ *
+ * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
  */
+@Deprecated
 public class ChPpqComponent extends AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>>> {
 
     public ChPpqComponent() {
@@ -35,7 +43,15 @@ public class ChPpqComponent extends AbstractWsComponent<ChPpqAuditDataset, WsTra
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new ChPpqEndpoint(uri, remaining, this, parameters, ChPpqService.class);
+        return new Xacml20Endpoint(uri, remaining, this, parameters, ChPpqService.class) {
+            @Override
+            public AbstractWsProducer<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ?, ?> getProducer(
+                    AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> endpoint,
+                    JaxWsClientFactory<ChPpqAuditDataset> clientFactory)
+            {
+                return new ChPpqProducer(this, clientFactory);
+            }
+        };
     }
 
 }

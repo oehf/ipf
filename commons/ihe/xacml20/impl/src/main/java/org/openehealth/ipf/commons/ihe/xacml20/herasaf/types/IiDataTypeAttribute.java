@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.herasaf.types;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
  */
 public class IiDataTypeAttribute extends Hl7v3DataTypeAttribute<II> {

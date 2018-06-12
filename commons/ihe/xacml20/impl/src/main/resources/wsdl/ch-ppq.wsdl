@@ -156,7 +156,7 @@
 
     <service name="PolicyRepository_Service">
         <port name="PolicyRepository_Port_Soap12" binding="ppq:PolicyRepository_Binding_Soap12">
-            <soap12:address location="https://acme.org/ppq"/>
+            <soap12:address location="https://ppq-policy-repository.org/ch-ppq"/>
         </port>
     </service>
 </definitions>

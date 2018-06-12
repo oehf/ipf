@@ -19,17 +19,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqPortType;
-import org.openehealth.ipf.commons.ihe.xacml20.chppq.UnknownPolicySetIdFaultMessage;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12.*;
+import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
+ *
+ * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
  */
 @Slf4j
+@Deprecated
 public class ChPpqService extends AbstractWebService implements ChPpqPortType {
 
     @Override
@@ -66,7 +71,7 @@ public class ChPpqService extends AbstractWebService implements ChPpqPortType {
 
     private static EpdPolicyRepositoryResponse errorResponse() {
         EpdPolicyRepositoryResponse repositoryResponse = new EpdPolicyRepositoryResponse();
-        repositoryResponse.setStatus(Xacml20Utils.PPQ_STATUS_FAILURE);
+        repositoryResponse.setStatus(PpqConstants.StatusCode.FAILURE);
         return repositoryResponse;
     }
 
@@ -74,6 +79,7 @@ public class ChPpqService extends AbstractWebService implements ChPpqPortType {
         Exchange result = process(request);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
+            log.debug(getClass().getSimpleName() + " service failed", exception);
             if (exception instanceof UnknownPolicySetIdFaultMessage) {
                 throw (UnknownPolicySetIdFaultMessage) exception;
             }

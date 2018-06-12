@@ -49,9 +49,9 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
-    <jxb:bindings schemaLocation="../schema/epd-policy-administration-combined-schema-1.2-local.xsd">
+    <jxb:bindings schemaLocation="../schema/epr-policy-administration-combined-schema-1.3-local.xsd">
         <jxb:schemaBindings>
-            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12"/>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss"/>
         </jxb:schemaBindings>
     </jxb:bindings>
 

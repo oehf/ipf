@@ -128,6 +128,26 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         return self();
     }
 
+    public T setQueryParameters(
+            String queryMessageIdentifier,
+            ParticipantObjectIdType participantObjectIdType,
+            String queryMessage,
+            ParticipantObjectTypeCode participantObjectTypeCode,
+            ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+            List<TypeValuePairType> details) {
+        delegate.addParticipantObjectIdentification(
+                participantObjectIdType,
+                null,
+                Base64.getEncoder().encode(queryMessage.getBytes(StandardCharsets.UTF_8)),
+                details,
+                queryMessageIdentifier,
+                participantObjectTypeCode,
+                participantObjectTypeCodeRole,
+                null,
+                null);
+        return self();
+    }
+
     @Override
     public void validate() {
         super.validate();

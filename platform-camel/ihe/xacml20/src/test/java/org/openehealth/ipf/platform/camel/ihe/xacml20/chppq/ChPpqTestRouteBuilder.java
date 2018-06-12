@@ -17,10 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
-import org.openehealth.ipf.commons.ihe.xacml20.chppq.UnknownPolicySetIdFaultMessage;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12.AssertionBasedRequestType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12.EpdPolicyRepositoryResponse;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss12.UnknownPolicySetId;
+import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EpdPolicyRepositoryResponse;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import javax.xml.bind.JAXBElement;
@@ -33,8 +34,12 @@ import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidat
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpqResponseValidator;
 
 /**
+ * @since 3.5.1
  * @author Dmytro Rud
+ *
+ * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
  */
+@Deprecated
 public class ChPpqTestRouteBuilder extends RouteBuilder {
 
     @Override
@@ -53,7 +58,7 @@ public class ChPpqTestRouteBuilder extends RouteBuilder {
                     } else if (request instanceof AssertionBasedRequestType) {
                         AssertionBasedRequestType assertionRequest = (AssertionBasedRequestType) request;
                         EpdPolicyRepositoryResponse response = new EpdPolicyRepositoryResponse();
-                        response.setStatus(Xacml20Utils.PPQ_STATUS_SUCCESS);
+                        response.setStatus(PpqConstants.StatusCode.SUCCESS);
                         exchange.getOut().setBody(response);
                     }
                     Marshaller marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();

@@ -22,6 +22,7 @@ import org.apache.cxf.jaxb.JAXBDataBinding;
  * Prevents the usage of com.sun.xml.bind.v2.runtime.output.XMLStreamWriterOutput.NewLineEscapeHandler
  * introduced in Glassfish JAXB 2.3.0.
  *
+ * @since 3.5.1
  * @author Dmytro Rud
  */
 public class Xacml20JaxbDataBinding extends JAXBDataBinding {
