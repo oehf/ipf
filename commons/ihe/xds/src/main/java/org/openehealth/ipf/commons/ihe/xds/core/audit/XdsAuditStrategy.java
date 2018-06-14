@@ -81,7 +81,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
     }
 
 
-        @Override
+    @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
         RegistryResponseType response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);

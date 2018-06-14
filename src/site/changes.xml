@@ -23,6 +23,23 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="3.5.1" description="IPF 3.5.1">
+            <action dev="unixoid" issue="200" type="update">
+                Replace Swiss profile XCMU with the IHE International profile RMU
+            </action>
+            <action dev="unixoid" issue="198" type="update">
+                Implement changes from IHE ITI Ballots 45, 46, 47
+            </action>
+            <action dev="unixoid" issue="197" type="update">
+                Use object pools instead of ThreadLocal
+            </action>
+            <action dev="unixoid" issue="194" type="fix">
+                Better translation between HL7v3 nullFlavor and HL7v2 NULL
+            </action>
+            <action dev="unixoid" issue="193" type="add">
+                Support for the Swiss profile "Privacy Policy Query" (PPQ)
+            </action>
+        </release>
         <release version="3.5.0" date="23 Apr 2018" description="IPF 3.5.0">
             <action dev="unixoid" issue="192" type="update">
                 Consider delegation when using XUA token information in ATNA records
