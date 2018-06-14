@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.5.1" description="IPF 3.5.1">
+            <action dev="ohr" issue="202" type="fix">
+                Better translation of HL7 patients to FHIR
+            </action>
             <action dev="unixoid" issue="200" type="update">
                 Replace Swiss profile XCMU with the IHE International profile RMU
             </action>
