@@ -50,9 +50,9 @@
                     <locale>en</locale>
                     <transformSchemas>
                         <transformSchema>
-                            <uri>http://swisscom.com/hlt/asd/xuagen</uri>
-                            <toPrefix>xuagen</toPrefix>
-                            <toFile>xuagen.xsd</toFile>
+                            <uri>http://www.openehealth.org/ipf/ppq</uri>
+                            <toPrefix>ipf</toPrefix>
+                            <toFile>ipf-ppq.xsd</toFile>
                         </transformSchema>
                         <transformSchema>
                             <uri>dummy</uri>
