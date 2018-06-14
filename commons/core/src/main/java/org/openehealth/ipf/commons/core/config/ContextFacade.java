@@ -49,7 +49,7 @@ public class ContextFacade {
      * @since 2.5
      */
     public static <B> B getBean(Class<B> requiredType) {
-        return instance.bean(requiredType);
+        return getInstance().bean(requiredType);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ContextFacade {
      * @since 3.5
      */
     public static <B> Collection<B> getBeans(Class<B> requiredType) {
-        return instance.beans(requiredType).values();
+        return getInstance().beans(requiredType).values();
     }
 
     /**
@@ -68,7 +68,7 @@ public class ContextFacade {
      */
     @SuppressWarnings("unchecked")
     public static <B> B getBean(String beanName) {
-        return (B) instance.bean(beanName);
+        return (B) getInstance().bean(beanName);
     }
 
     /**
@@ -78,4 +78,9 @@ public class ContextFacade {
         instance = null;
     }
 
+    private static Registry getInstance() {
+        if (instance == null) throw new IllegalStateException("Registry instance has not been set. Call ContextFacade.setRegistry" +
+        "or initialize a Spring Registry");
+        return instance;
+    }
 }
