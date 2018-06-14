@@ -2,14 +2,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.5.1</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.5.1</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -108,7 +108,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>HEAD</tag>
+       <tag>ipf-3.5.1</tag>
     </scm>
 
     <profiles>
@@ -715,7 +715,7 @@
                                     <replace dir="target/site" summary="true">
                                         <include name="*.html" />
                                         <replacetoken>\t</replacetoken>
-                                        <replacevalue></replacevalue>
+                                        <replacevalue />
                                     </replace>
                                 </target>
                             </configuration>
