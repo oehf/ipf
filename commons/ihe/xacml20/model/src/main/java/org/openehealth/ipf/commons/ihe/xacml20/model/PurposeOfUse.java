@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingS
  * @author Dmytro Rud
  */
 @AllArgsConstructor
-@XmlType(name = "PurposeOfUse", namespace = "http://swisscom.com/hlt/asd/xuagen")
+@XmlType(name = "PurposeOfUse", namespace = "http://www.openehealth.org/ipf/ppq")
 @XmlEnum
 public enum PurposeOfUse {
     NORMAL   (new CE("NORM", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Normal")),

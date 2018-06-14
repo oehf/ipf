@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * @author Dmytro Rud
  */
-@XmlType(name = "CX", namespace = "http://swisscom.com/hlt/asd/xuagen")
+@XmlType(name = "CX", namespace = "http://www.openehealth.org/ipf/ppq")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
