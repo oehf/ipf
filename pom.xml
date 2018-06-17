@@ -715,7 +715,7 @@
                                     <replace dir="target/site" summary="true">
                                         <include name="*.html" />
                                         <replacetoken>\t</replacetoken>
-                                        <replacevalue></replacevalue>
+                                        <replacevalue />
                                     </replace>
                                 </target>
                             </configuration>
