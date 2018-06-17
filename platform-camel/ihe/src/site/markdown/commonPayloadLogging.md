@@ -40,5 +40,5 @@ Since **IPF 3.3**, the configuration of payload logging is changed as follows:
 of type Boolean.  Setting this system property to `true` is equivalent to setting `globallyEnabled` to `false`, any other value or unset
 property is is equivalent to setting `globallyEnabled` to `true`.
 * Field `locallyEnabled` is renamed to simply `enabled`.
-* A new Java system property `org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED` is introduced.
+* A new Java system property `org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.CONSOLE` is introduced.
 When it is set to `true`, message payload will be written down using regular Java logging mechanisms instead of custom files.
