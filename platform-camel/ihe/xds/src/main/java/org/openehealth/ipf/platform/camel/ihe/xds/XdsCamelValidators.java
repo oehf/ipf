@@ -483,7 +483,7 @@ public abstract class XdsCamelValidators {
     /**
      * Returns a validating processor for RMU ITI-X1 request messages.
      */
-    public static Processor rmuX1RequestValidartor() {
+    public static Processor rmuX1RequestValidator() {
         return RMU_X1_REQUEST_VALIDATOR;
     }
 
