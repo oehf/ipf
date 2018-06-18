@@ -26,7 +26,7 @@ import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rmuX1RequestValidartor
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rmuX1RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rmuX1ResponseValidator
 
 /**
@@ -37,7 +37,7 @@ public class RmuX1TestRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('rmu-itiX1:rmu-itiX1-service1')
-            .process(rmuX1RequestValidartor())
+            .process(rmuX1RequestValidator())
             .process { checkValue(it, 'service 1')}
             .process(rmuX1ResponseValidator())
 
