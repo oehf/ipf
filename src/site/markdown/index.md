@@ -30,7 +30,7 @@ HL7v2 [IHE][ihe] transactions:
 <dependency>
   <groupId>org.openehealth.ipf.platform-camel</groupId>
   <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-  <version>3.5.0</version>
+  <version>3.5.1</version>
 </dependency>
 ```
 
@@ -42,7 +42,7 @@ version numbers for the major dependencies anymore.
     <dependency>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.1</version>
         <type>pom</type>
         <scope>import</scope>
     </dependency>
@@ -107,9 +107,19 @@ have been removed. This includes the ebXML/ebRS 2.x model classes.
  
 ## Added modules
 
-IPF 3.4 added the modules listed below:
+IPF 3.5.1 added the modules listed below:
 
- * `ipf-commons-audit`
+ * `ipf-commons-ihe-xacml20`
+ * `ipf-platform-camel-ihe-xacml20`
+ 
+## Deprecated modules
+
+IPF 3.5.1 deprecates the following modules:
+
+ * `ipf-commons-ihe-fhir-dstu2`
+ * `ipf-platform-camel-ihe-fhir-dstu2`
+
+These modules will be removed as soon as FHIR r4 support has been included.
 
 ## Javadocs
 
