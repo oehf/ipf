@@ -172,12 +172,14 @@ public class BasicXuaProcessor implements XuaProcessor {
 
             // process information about the assistant (if any)
             for (SubjectConfirmation subjectConfirmation : assertion.getSubject().getSubjectConfirmations()) {
-                assistantUser.setId(createXuaUserId(assertion.getIssuer(), subjectConfirmation.getNameID()));
-                AttributeStatement statement = new AttributeStatementExtractor().extractAttributeStatement(subjectConfirmation);
-                statement.getAttributes().stream()
-                        .filter(attr -> SUBJECT_NAME_ATTRIBUTE_NAME.equals(attr.getName()))
-                        .findAny()
-                        .ifPresent(attr -> assistantUser.setName(extractSingleStringAttributeValue(attr)));
+                if ((subjectConfirmation.getNameID() != null) && (subjectConfirmation.getSubjectConfirmationData() != null)) {
+                    assistantUser.setId(createXuaUserId(assertion.getIssuer(), subjectConfirmation.getNameID()));
+                    AttributeStatement statement = new AttributeStatementExtractor().extractAttributeStatement(subjectConfirmation);
+                    statement.getAttributes().stream()
+                            .filter(attr -> SUBJECT_NAME_ATTRIBUTE_NAME.equals(attr.getName()))
+                            .findAny()
+                            .ifPresent(attr -> assistantUser.setName(extractSingleStringAttributeValue(attr)));
+                }
             }
         }
 
