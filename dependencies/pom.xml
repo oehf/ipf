@@ -14,10 +14,9 @@
         <cxf-version>3.2.4</cxf-version>
         <groovy-version>2.4.15</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>3.2.0</hapi-fhir-version>
+        <hapi-fhir-version>3.4.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.6.0</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
@@ -28,8 +27,8 @@
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.14.RELEASE</spring-version>
-        <spring-boot-version>1.5.10.RELEASE</spring-boot-version>
+        <spring-version>4.3.17.RELEASE</spring-version>
+        <spring-boot-version>1.5.14.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.0</xmlsec-version>
@@ -122,6 +121,11 @@
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v27</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v271</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
             <dependency>
@@ -601,18 +605,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j-version}</version>
-            </dependency>
-
-            <!-- FIXME remove -->
-            <dependency>
-                <groupId>org.openehealth.ipf.oht.atna</groupId>
-                <artifactId>ipf-oht-atna-auditor</artifactId>
-                <version>${ipf-oht-atna-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.oht.atna</groupId>
-                <artifactId>ipf-oht-atna-nodeauth</artifactId>
-                <version>${ipf-oht-atna-version}</version>
             </dependency>
 
             <dependency>
