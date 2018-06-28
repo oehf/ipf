@@ -1,5 +1,0 @@
-Order
------
-Customer: ${customer}
-Item:     ${item}
-Count:    ${count}
