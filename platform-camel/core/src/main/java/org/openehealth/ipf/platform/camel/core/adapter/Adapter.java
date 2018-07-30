@@ -37,7 +37,7 @@ public interface Adapter {
      *            expression for obtaining input data.
      * @return this object.
      */
-    public Adapter input(Expression inputExpression);
+    Adapter input(Expression inputExpression);
     
     /**
      * Sets an expression {@link Closure} for obtaining input data from an
@@ -48,7 +48,7 @@ public interface Adapter {
      *            expression for obtaining input data.
      * @return this object.
      */
-    public Adapter input(Closure inputExpressionLogic);
+    Adapter input(Closure inputExpressionLogic);
     
     /**
      * Sets an {@link Expression} for obtaining input params from an
@@ -59,7 +59,7 @@ public interface Adapter {
      *            expression for obtaining input params.
      * @return this object.
      */
-    public Adapter params(Expression paramsExpression);
+    Adapter params(Expression paramsExpression);
     
     /**
      * Sets an expression {@link Closure} for obtaining input params from an
@@ -70,7 +70,7 @@ public interface Adapter {
      *            expression for obtaining input params.
      * @return this object.
      */
-    public Adapter params(Closure paramsExpressionLogic);
+    Adapter params(Closure paramsExpressionLogic);
     
     /**
      * Configures this adapter to use the given {@code params}
@@ -80,6 +80,6 @@ public interface Adapter {
      *            expression for obtaining input params.
      * @return this object.
      */
-    public Adapter staticParams(Object... params);
+    Adapter staticParams(Object... params);
     
 }

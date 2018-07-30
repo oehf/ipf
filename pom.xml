@@ -71,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.3</activemq-version>
+        <activemq-version>5.15.4</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
@@ -86,7 +86,7 @@
         <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.9.v20180320</jetty-version>
+        <jetty-version>9.4.11.v20180605</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.11.0</log4j-version>

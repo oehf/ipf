@@ -17,10 +17,7 @@
 package org.openehealth.ipf.modules.hl7.kotlin
 
 import ca.uhn.hl7v2.Location
-import ca.uhn.hl7v2.model.Group
-import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.model.MessageVisitor
-import ca.uhn.hl7v2.model.Structure
+import ca.uhn.hl7v2.model.*
 
 /**
  * Represents the repeating structure with the given name.
@@ -32,7 +29,9 @@ import ca.uhn.hl7v2.model.Structure
 internal class RepeatableStructure(
         val elements: Array<out Structure>,
         private val group: Group,
-        private val name: String) : Structure {
+        private val name: String) : Structure, Iterable<Structure> {
+
+    override fun iterator(): Iterator<Structure> = elements.iterator()
 
     override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean {
         TODO("not implemented")
@@ -40,9 +39,8 @@ internal class RepeatableStructure(
 
     override fun getMessage(): Message = group.message
 
-    override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location {
-        TODO("not implemented")
-    }
+    override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location =
+            elementAt(0).provideLocation(parentLocation, index, repetition)
 
     override fun getParent(): Group = group
 

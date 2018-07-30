@@ -29,7 +29,9 @@ import ca.uhn.hl7v2.model.*
 internal class RepeatableField (
         val elements: Array<out Type>,
         private val segment: Segment,
-        private val field: Int) : Type {
+        private val field: Int) : Type, Iterable<Type> {
+
+    override fun iterator(): Iterator<Type> = elements.iterator()
 
     override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean {
         TODO("not implemented")
@@ -39,33 +41,29 @@ internal class RepeatableField (
 
     override fun clear() = elements.forEach { it.clear() }
 
-    override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location {
-        TODO("not implemented")
-    }
+    override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location =
+            elementAt(0).provideLocation(parentLocation, index, repetition)
 
     override fun isEmpty(): Boolean = !elements.any { !it.isEmpty }
 
-    override fun getName(): String {
-        TODO("not implemented")
-    }
+    override fun getName(): String = elementAt(0).name
 
     override fun parse(string: String?) {
         TODO("not implemented")
     }
 
-    override fun encode(): String {
-        TODO("not implemented")
-    }
+    override fun encode(): String =
+        elements.map { it.encode() }.joinToString(getSeparator().toString())
 
-    override fun getExtraComponents(): ExtraComponents {
-        TODO("not implemented")
-    }
+
+    override fun getExtraComponents(): ExtraComponents = elementAt(0).extraComponents
+
 
     fun elementAt(rep: Int): Type = if (elements.size <= rep) segment.nrp(field) else elements[rep]
 
     fun count(): Int = elements.size
 
     private fun getSeparator(): Char {
-        return message.encodingCharactersValue[1]
+        return message.encodingCharacters.repetitionSeparator
     }
 }
