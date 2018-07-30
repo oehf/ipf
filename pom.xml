@@ -71,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.3</activemq-version>
+        <activemq-version>5.15.4</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
