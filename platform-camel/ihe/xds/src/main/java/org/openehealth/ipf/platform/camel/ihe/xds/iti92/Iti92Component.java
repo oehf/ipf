@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.rmux1;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti92;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -29,20 +29,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.RMU.Interactions.RMU_X1;
+import static org.openehealth.ipf.commons.ihe.xds.RMU.Interactions.ITI_92;
 
 /**
- * The Camel component for the RMU ITI-X1 transaction.
+ * The Camel component for the RMU ITI-92 transaction.
  */
-public class RmuX1Component extends XdsComponent<XdsSubmitAuditDataset> {
+public class Iti92Component extends XdsComponent<XdsSubmitAuditDataset> {
 
-    public RmuX1Component() {
-        super(RMU_X1);
+    public Iti92Component() {
+        super(ITI_92);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, RmuX1Service.class) {
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, Iti92Service.class) {
             @Override
             public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(
                     AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,

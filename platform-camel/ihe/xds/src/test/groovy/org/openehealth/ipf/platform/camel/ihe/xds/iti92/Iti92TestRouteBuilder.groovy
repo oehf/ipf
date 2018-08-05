@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.rmux1
+package org.openehealth.ipf.platform.camel.ihe.xds.iti92
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.cxf.headers.Header
@@ -26,26 +26,26 @@ import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rmuX1RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rmuX1ResponseValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti92RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti92ResponseValidator
 
 /**
  * @author Dmytro Rud
  */
-public class RmuX1TestRouteBuilder extends SpringRouteBuilder {
+public class Iti92TestRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from('rmu-itiX1:rmu-itiX1-service1')
-            .process(rmuX1RequestValidator())
+        from('rmu-iti92:rmu-iti92-service1')
+            .process(iti92RequestValidator())
             .process { checkValue(it, 'service 1')}
-            .process(rmuX1ResponseValidator())
+            .process(iti92ResponseValidator())
 
-        from('rmu-itiX1:rmu-itiX1-service2')
+        from('rmu-iti92:rmu-iti92-service2')
             .process { checkValue(it, 'service 2')}
 
         // for testing SOAP headers
-        from('rmu-itiX1:rmu-itiX1-service3')
+        from('rmu-iti92:rmu-iti92-service3')
             .process {
                 Map<QName, Header> soapHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS]
                 RegisterDocumentSet request = it.in.getBody(RegisterDocumentSet.class)

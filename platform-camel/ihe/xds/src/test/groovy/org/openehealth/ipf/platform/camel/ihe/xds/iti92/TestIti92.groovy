@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.rmux1
+package org.openehealth.ipf.platform.camel.ihe.xds.iti92
 
 import org.apache.cxf.headers.Header
 import org.apache.cxf.jaxb.JAXBDataBinding
@@ -39,18 +39,18 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
- * Tests the RMU ITI-X1 transaction with a webservice and client adapter defined via URIs.
+ * Tests the RMU ITI-92 transaction with a webservice and client adapter defined via URIs.
  * @author Boris Stanojevic
  */
-class TestRmuX1 extends XdsStandardTestContainer {
+class TestIti92 extends XdsStandardTestContainer {
     
-    def static CONTEXT_DESCRIPTOR = 'rmu-itiX1.xml'
+    def static CONTEXT_DESCRIPTOR = 'rmu-iti92.xml'
     
-    def SERVICE1 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service1"
-    def SERVICE2 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service2"
-    def SERVICE3 = "rmu-itiX1://localhost:${port}/rmu-itiX1-service3"
+    def SERVICE1 = "rmu-iti92://localhost:${port}/rmu-iti92-service1"
+    def SERVICE2 = "rmu-iti92://localhost:${port}/rmu-iti92-service2"
+    def SERVICE3 = "rmu-iti92://localhost:${port}/rmu-iti92-service3"
 
-    def SERVICE2_ADDR = "http://localhost:${port}/rmu-itiX1-service2"
+    def SERVICE2_ADDR = "http://localhost:${port}/rmu-iti92-service2"
     
     def request
     def docEntry
@@ -76,7 +76,7 @@ class TestRmuX1 extends XdsStandardTestContainer {
     }
     
     @Test
-    void testRmuItiX1() {
+    void testIti92() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
@@ -104,7 +104,7 @@ class TestRmuX1 extends XdsStandardTestContainer {
     }
 
     @Test
-    void testRmuX1FailureAudit() {
+    void testIti92FailureAudit() {
         assert FAILURE == sendIt(SERVICE1, 'falsch').status
         assert auditSender.messages.size() == 2
     }
@@ -115,28 +115,28 @@ class TestRmuX1 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.eventIdentification, '110107', 'ITI-X1', EventActionCode.Update, outcome)
+        checkEvent(message.eventIdentification, '110107', 'ITI-92', EventActionCode.Update, outcome)
         checkSource(message.activeParticipants[0], true)
         checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
         checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetails[0],
-                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
+                IHEAuditMessageBuilder.URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
 
         message = getAudit(EventActionCode.Update, SERVICE2_ADDR)[1]
 
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 2
 
-        checkEvent(message.eventIdentification, '110106', 'ITI-X1', EventActionCode.Update, outcome)
+        checkEvent(message.eventIdentification, '110106', 'ITI-92', EventActionCode.Update, outcome)
         checkSource(message.activeParticipants[0], true)
         checkDestination(message.activeParticipants[1], SERVICE2_ADDR, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
         checkParticipantObjectDetail(message.participantObjectIdentifications[1].participantObjectDetails[0],
-                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
+                IHEAuditMessageBuilder.URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID, 'urn:oid:1.2.3.4.5.6.2333.23')
     }
 
     def sendIt(endpoint, value, soapHeaders = null) {

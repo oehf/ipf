@@ -19,9 +19,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1PortType;
-import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
@@ -41,7 +41,7 @@ public class RMU implements XdsIntegrationProfile {
 
 	@AllArgsConstructor
 	public enum Interactions implements XdsInteractionId {
-		RMU_X1(RMU_X1_WS_CONFIG);
+		ITI_92(ITI_92_WS_CONFIG);
 
 		@Getter
 		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
@@ -67,17 +67,17 @@ public class RMU implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> RMU_X1_WS_CONFIG = new WsTransactionConfiguration<>(
-		"rmu-itiX1",
+	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_92_WS_CONFIG = new WsTransactionConfiguration<>(
+		"rmu-iti92",
 		"Restricted Update Document Set",
 		false,
-		new RmuX1ClientAuditStrategy(),
-		new RmuX1ServerAuditStrategy(),
+		new Iti92ClientAuditStrategy(),
+		new Iti92ServerAuditStrategy(),
 		new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_Service", "ihe"),
-		RmuX1PortType.class,
+		Iti92PortType.class,
 		new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_Binding_Soap12", "ihe"),
 		false,
-		"wsdl/rmu-itiX1.wsdl",
+		"wsdl/iti92.wsdl",
 		true,
 		false,
 		false,

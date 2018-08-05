@@ -33,8 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 public class AssociationTransformer {
     private final EbXMLFactory factory;
     private final CodeTransformer codeTransformer;
-    private final StringToBoolTransformer stringToBoolTransformer;
-    
+
     /**
      * Constructs the transformer
      * @param factory
@@ -44,7 +43,6 @@ public class AssociationTransformer {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
         codeTransformer = new CodeTransformer(factory);
-        stringToBoolTransformer = new StringToBoolTransformer();
     }
     
     /**
@@ -78,8 +76,7 @@ public class AssociationTransformer {
         AvailabilityStatus newStatus = association.getNewStatus();
         result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, AvailabilityStatus.toQueryOpcode(newStatus));
 
-        result.addSlot(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION,
-                                    stringToBoolTransformer.toEbXML(association.getAssociationPropagation()));
+        result.setAssociationPropagation(association.getAssociationPropagation());
 
         EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
         result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
@@ -119,8 +116,7 @@ public class AssociationTransformer {
         String newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
         result.setNewStatus(AvailabilityStatus.valueOfOpcode(newStatus));
 
-        String associationPropagation = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION);
-        result.setAssociationPropagation(stringToBoolTransformer.fromEbXML(associationPropagation));
+        result.setAssociationPropagation(association.getAssociationPropagation());
 
         EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         result.setDocCode(codeTransformer.fromEbXML(docCode));

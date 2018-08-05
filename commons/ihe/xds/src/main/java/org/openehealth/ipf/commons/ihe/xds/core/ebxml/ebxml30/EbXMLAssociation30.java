@@ -20,19 +20,21 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.StringToBoolTransformer;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_ORIGINAL_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_NEW_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_PREVIOUS_VERSION;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 /**
  * Encapsulation of {@link AssociationType1}.
  * @author Jens Riemschneider
  */
 public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> implements EbXMLAssociation {
+
+    private final StringToBoolTransformer stringToBoolTransformer = new StringToBoolTransformer();
+
     /**
      * Constructs an association by wrapping the given ebXML 3.0 object.
      * @param association
@@ -116,6 +118,18 @@ public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> 
     @Override
     public void setPreviousVersion(String version) {
         addSlot(SLOT_NAME_PREVIOUS_VERSION, version);
+    }
+
+    @Override
+    public Boolean getAssociationPropagation() {
+        return stringToBoolTransformer.fromEbXML(getSingleSlotValue(SLOT_NAME_ASSOCIATION_PROPAGATION));
+    }
+
+    @Override
+    public void setAssociationPropagation(Boolean value) {
+        if (value != null) {
+            addSlot(SLOT_NAME_ASSOCIATION_PROPAGATION, stringToBoolTransformer.toEbXML(value));
+        }
     }
 
     @Override

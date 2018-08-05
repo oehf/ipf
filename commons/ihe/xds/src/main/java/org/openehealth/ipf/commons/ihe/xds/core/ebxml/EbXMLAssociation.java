@@ -71,4 +71,7 @@ public interface EbXMLAssociation extends EbXMLRegistryObject, ExtraMetadataHold
 
     String getPreviousVersion();
     void setPreviousVersion(String version);
+
+    Boolean getAssociationPropagation();
+    void setAssociationPropagation(Boolean value);
 }
