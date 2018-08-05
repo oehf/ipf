@@ -281,21 +281,21 @@ public abstract class XdsCamelValidators {
         new RegistryResponseValidator().validate(message, ITI_86);
     };
 
-    private static final Processor RMU_X1_REQUEST_VALIDATOR = exchange -> {
+    private static final Processor ITI_92_REQUEST_VALIDATOR = exchange -> {
         if (! validationEnabled(exchange)) {
             return;
         }
         EbXMLSubmitObjectsRequest30 message =
                 new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        new SubmitObjectsRequestValidator().validate(message, RMU.Interactions.RMU_X1);
+        new SubmitObjectsRequestValidator().validate(message, RMU.Interactions.ITI_92);
     };
 
-    private static final Processor RMU_X1_RESPONSE_VALIDATOR = exchange -> {
+    private static final Processor ITI_92_RESPONSE_VALIDATOR = exchange -> {
         if (! validationEnabled(exchange)) {
             return;
         }
         EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, RMU.Interactions.RMU_X1);
+        new RegistryResponseValidator().validate(message, RMU.Interactions.ITI_92);
     };
 
     /**
@@ -481,17 +481,17 @@ public abstract class XdsCamelValidators {
     }
 
     /**
-     * Returns a validating processor for RMU ITI-X1 request messages.
+     * Returns a validating processor for RMU ITI-92 request messages.
      */
-    public static Processor rmuX1RequestValidator() {
-        return RMU_X1_REQUEST_VALIDATOR;
+    public static Processor iti92RequestValidator() {
+        return ITI_92_REQUEST_VALIDATOR;
     }
 
     /**
-     * Returns a validating processor for RMU ITI-X1 response messages.
+     * Returns a validating processor for RMU ITI-92 response messages.
      */
-    public static Processor rmuX1ResponseValidator() {
-        return RMU_X1_RESPONSE_VALIDATOR;
+    public static Processor iti92ResponseValidator() {
+        return ITI_92_RESPONSE_VALIDATOR;
     }
 
     private static final Processor RAD_69_REQUEST_VALIDATOR = exchange -> {

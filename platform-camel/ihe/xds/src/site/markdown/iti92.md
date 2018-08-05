@@ -1,17 +1,13 @@
+## `rmu-iti92` component
 
-## `rmu-itiX1` component
-
-** Note: This component will be renamed as soon as IHE will assign a proper transaction number 
-instead of ITI-X1** 
-
-The `rmu-itiX1` component provides interfaces for actors of the *Restricted Metadata Update* transaction (RMU ITI-X1),
-which is described in the [Restricted Metadata Update Supplement Draft](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_RMU_Rev1.0_PC_2018-05-23.pdf).
+The `rmu-iti92` component provides interfaces for actors of the *Restricted Update Document Set* transaction (RMU ITI-92),
+which is described in the [Restricted Metadata Update Supplement Draft](ftp://ftp.ihe.net/IT_Infrastructure/iheitiyr16-2018-2019/Technical_Cmte/Workitems/RMU/Current/).
 
 ### Actors
 
 The transaction defines the following actors:
 
-![RMU ITI-X1 actors](images/rmu-itiX1.png)
+![RMU ITI-92 actors](images/iti92.png)
 
 Producer side corresponds to the *Update Initiator* actor.
 Consumer side corresponds to the *Update Responder* actor.
@@ -32,10 +28,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `rmu-itiX1` component producers is:
+The endpoint URI format of `rmu-iti92` component producers is:
 
 ```
-rmu-itiX1://hostname:port/path/to/service[?parameters]
+rmu-iti92://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -44,10 +40,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `rmu-itiX1` component consumers is:
+The endpoint URI format of `rmu-iti92` component consumers is:
 
 ```
-rmu-itiX1:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
+rmu-iti92:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -61,8 +57,8 @@ contextPath = /IHE
 servletPath = /rmu/*
 ```
 
-and serviceName equals to `rmuItiX1Service`, then the `rmu-itiX1` consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/rmu/rmuItiX1Service`
+and serviceName equals to `rmuIti92Service`, then the `rmu-iti92` consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/rmu/rmuIti92Service`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 

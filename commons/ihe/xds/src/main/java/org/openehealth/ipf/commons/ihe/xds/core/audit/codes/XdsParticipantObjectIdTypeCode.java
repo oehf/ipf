@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 
 /**
- * ParticipantObjectIdTypeCodes for the XDS transactions in this module
+ * ParticipantObjectIdTypeCodes for the XDS query transactions in this module
  *
  * @author Christian Ohr
  * @since 3.5
@@ -29,21 +29,9 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 public enum XdsParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 
     RegistryStoredQuery("ITI-18", "Registry Stored Query"),
-    DistributeDocumentSetOnMedia("ITI-32", "Distribute Document Set on Media"),
     CrossGatewayQuery("ITI-38", "Cross Gateway Query"),
-    CrossGatewayRetrieve("ITI-39", "Cross Gateway Retrieve"),
-    ProvideAndRegisterDocumentSetB("ITI-41", "Provide and Register Document Set-b"),
-    RegisterDocumentSetB("ITI-42", "Register Document Set-b"),
-    RetrieveDocumentSet("ITI-43", "Retrieve Document Set"),
-    RetrieveValueSet("ITI-48", "Retrieve Value Set"),
     MultiPatientStoredQuery("ITI-51", "Multi-Patient Stored Query"),
-    RegisterOnDemandDocumentEntry("ITI-61", "Register On-Demand Document Entry"),
-    RemoveMetadata("ITI-62", "Remove Metadata"),
-    CrossCommunityFetch("ITI-63", "XCF Fetch"),
-    RemoveDocuments("ITI-86", "Remove Documents"),
-    CrossGatewayUpdateDocumentSet("ITI-X1", "Cross-Gateway Update Document Set"),
-    RetrieveImagingDocumentSet("RAD-69", "Retrieve Imaging Document Set"),
-    CrossGatewayRetrieveImagingDocumentSet("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
+    CrossCommunityFetch("ITI-63", "XCF Fetch");
 
     @Getter
     private ParticipantObjectIdType value;

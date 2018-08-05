@@ -52,7 +52,7 @@ public class Rad75ServerAuditStrategy extends XdsIRetrieveAuditStrategy30 {
                 EventActionCode.Read,
                 XdsEventTypeCode.CrossGatewayRetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status)
+                .addDocumentIds(auditDataset, status, true)
                 .getMessage();
     }
 

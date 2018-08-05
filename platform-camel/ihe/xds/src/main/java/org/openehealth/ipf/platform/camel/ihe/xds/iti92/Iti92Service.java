@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.rmux1;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti92;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92PortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 
 /**
- * Service implementation for the RMU ITI-X1 transaction "Restricted Update Document Set".
+ * Service implementation for the RMU ITI-92 transaction "Restricted Update Document Set".
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  */
-public class RmuX1Service extends XdsRegistryRequestService<SubmitObjectsRequest> implements RmuX1PortType {
+public class Iti92Service extends XdsRegistryRequestService<SubmitObjectsRequest> implements Iti92PortType {
 
     @Override
     public RegistryResponseType restrictedUpdateDocumentSet(SubmitObjectsRequest body) {
