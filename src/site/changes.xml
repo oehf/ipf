@@ -23,7 +23,12 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.5.1" description="IPF 3.5.1">
+        <release version="3.5.2" description="IPF 3.5.2">
+            <action dev="unixoid" issue="214" type="update">
+                Implement changes of the RMU specification from 25 Jul 2018
+            </action>
+        </release>
+        <release version="3.5.1" date="14 Jun 2018" description="IPF 3.5.1">
             <action dev="ohr" issue="203" type="update">
                 Add Accept Language and User Principal from FHIR HTTP Request to Camel Headers
             </action>
@@ -38,6 +43,9 @@
             </action>
             <action dev="unixoid" issue="197" type="update">
                 Use object pools instead of ThreadLocal
+            </action>
+            <action dev="ohr" issue="196" type="update">
+                Better exception when global registry is not set
             </action>
             <action dev="unixoid" issue="194" type="fix">
                 Better translation between HL7v3 nullFlavor and HL7v2 NULL
