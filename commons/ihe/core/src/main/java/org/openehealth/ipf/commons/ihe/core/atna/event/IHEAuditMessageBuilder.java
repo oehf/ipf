@@ -111,7 +111,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         return self();
     }
 
-    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
+    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId, boolean xcaHomeCommunityId) {
         List<TypeValuePairType> tvp = new ArrayList<>();
         if (studyInstanceId != null) {
             tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
@@ -123,7 +123,8 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            tvp.add(new TypeValuePairType(IHE_HOME_COMMUNITY_ID, homeCommunityId));
+            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            tvp.add(new TypeValuePairType(type, homeCommunityId));
         }
         return tvp;
     }

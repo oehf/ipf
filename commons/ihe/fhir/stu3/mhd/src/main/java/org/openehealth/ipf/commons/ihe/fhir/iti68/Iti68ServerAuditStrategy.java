@@ -56,7 +56,7 @@ public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDat
                     PHIExportBuilder.makeDocumentDetail(
                             auditDataset.getRepositoryUniqueId(),
                             auditDataset.getHomeCommunityId(),
-                            null, null));
+                            null, null, false));
         }
         return builder.getMessages();
     }

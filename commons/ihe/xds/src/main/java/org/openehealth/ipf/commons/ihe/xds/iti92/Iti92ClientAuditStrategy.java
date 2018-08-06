@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.rmux1;
+package org.openehealth.ipf.commons.ihe.xds.iti92;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
@@ -24,14 +24,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
- * Audit strategy for the actor "Update Initiator" of the RMU ITI-X1 transaction.
+ * Audit strategy for the actor "Update Initiator" of the RMU ITI-92 transaction.
  *
  * @author Boris Stanojevic
  * @author Christian Ohr
  */
-public class RmuX1ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
+public class Iti92ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    public RmuX1ClientAuditStrategy() {
+    public Iti92ClientAuditStrategy() {
         super(false);
     }
 
@@ -41,7 +41,7 @@ public class RmuX1ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
         return new XdsPHIExportBuilder(auditContext, auditDataset, EventActionCode.Update,
                 XdsEventTypeCode.RestrictedUpdateDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .setSubmissionSetWithHomeCommunityId(auditDataset)
+                .setSubmissionSetWithHomeCommunityId(auditDataset, true)
                 .getMessages();
     }
 }

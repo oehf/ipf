@@ -51,7 +51,7 @@ public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
                 EventActionCode.Create,
                 XdsEventTypeCode.RetrieveDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status)
+                .addDocumentIds(auditDataset, status, false)
                 .getMessage();
     }
 }

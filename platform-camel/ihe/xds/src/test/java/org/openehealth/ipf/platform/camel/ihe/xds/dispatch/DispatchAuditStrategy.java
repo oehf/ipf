@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.xds.rmux1.RmuX1ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditStrategy;
@@ -37,6 +36,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 
@@ -85,12 +85,12 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
                 new Iti80ServerAuditStrategy());
         map.put(new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_RemoveDocuments"),
                 new Iti86AuditStrategy(true));
+        map.put(new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_RestrictedUpdateDocumentSet"),
+                new Iti92ServerAuditStrategy());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_RetrieveImagingDocumentSet"),
                 new Rad69ServerAuditStrategy());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet"),
                 new Rad75ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:rmu:2018", "RespondingGateway_CrossGatewayUpdateDocumentSet"),
-                new RmuX1ServerAuditStrategy());
         if (additionalMappings != null) {
             map.putAll(additionalMappings);
         }
