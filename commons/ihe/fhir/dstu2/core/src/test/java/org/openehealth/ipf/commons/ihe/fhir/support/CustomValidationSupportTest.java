@@ -42,12 +42,4 @@ public class CustomValidationSupportTest {
         assertEquals(DocumentReference.class.getSimpleName(), definition.getConstrainedType());
     }
 
-    @Test
-    public void testFindUnknownStructureDefinition() {
-        CustomValidationSupport customValidationSupport = new CustomValidationSupport();
-        customValidationSupport.setPrefix("profiles/Gablorg-");
-        StructureDefinition definition = customValidationSupport.fetchResource(FHIR_CONTEXT, StructureDefinition.class,
-                CustomValidationSupport.HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION + "DocumentReference");
-        assertNull(definition);
-    }
 }

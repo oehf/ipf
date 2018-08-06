@@ -155,6 +155,11 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-dstu2</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
                 <version>${hapi-fhir-version}</version>
             </dependency>
@@ -176,6 +181,16 @@
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-r4</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation-resources-r4</artifactId>
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
