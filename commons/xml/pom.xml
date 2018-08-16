@@ -68,6 +68,11 @@
             <artifactId>jaxb-core</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>

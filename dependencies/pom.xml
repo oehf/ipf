@@ -10,20 +10,19 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.21.0</camel-version>
-        <cxf-version>3.2.4</cxf-version>
-        <groovy-version>2.4.15</groovy-version>
+        <camel-version>2.22.0</camel-version>
+        <cxf-version>3.2.5</cxf-version>
+        <groovy-version>3.0.0-alpha-3</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.4.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.0</jaxb-version>
-        <javax-activation-version>1.2.0</javax-activation-version>
+        <javax-activation-version>1.1.1</javax-activation-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <javax-annotation-version>1.3.2</javax-annotation-version>
         <jaxws-api-version>2.3.0</jaxws-api-version>
-        <jsr181-api-version>1.0-MR1</jsr181-api-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.17</mina2-version>
         <opensaml-version>3.3.0</opensaml-version>
@@ -549,6 +548,11 @@
                 <groupId>org.apache.santuario</groupId>
                 <artifactId>xmlsec</artifactId>
                 <version>${xmlsec-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>${javax-activation-version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.validation</groupId>

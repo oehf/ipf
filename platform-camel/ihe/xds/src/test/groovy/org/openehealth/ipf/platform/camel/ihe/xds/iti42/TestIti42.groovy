@@ -191,23 +191,17 @@ class TestIti42 extends XdsStandardTestContainer {
         
         checkEvent(message.eventIdentification, '110106', 'ITI-42', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], false)
-<<<<<<< .mine
+
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
+
+        checkDestination(message.activeParticipants[3], SERVICE2_ADDR, false)
         /* TODO fails with java 9
         checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
                 CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
                 CodedValueType.of('GYN', '1.2.3.4.5.6.777.2', 'Gynecologist'),
         ])
         */
-        checkDestination(message.activeParticipants[2], SERVICE2_ADDR, false)
-=======
-
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
-
-        checkDestination(message.activeParticipants[3], SERVICE2_ADDR, false)
-
-
->>>>>>> .theirs
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
