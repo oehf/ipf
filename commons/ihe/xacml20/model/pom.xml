@@ -30,7 +30,7 @@
                         <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/Dummy.java</source>
                     </sources>
                     <clearOutputDir>false</clearOutputDir>
-                    <outputDirectory>${build.outputDirectory}</outputDirectory>
+                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                     <createJavaDocAnnotations>false</createJavaDocAnnotations>
                     <locale>en</locale>
                     <transformSchemas>

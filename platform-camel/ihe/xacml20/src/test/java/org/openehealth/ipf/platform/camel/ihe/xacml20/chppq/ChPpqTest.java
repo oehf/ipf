@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -50,6 +51,7 @@ import static org.junit.Assert.assertTrue;
  * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
  */
 @Deprecated
+@Ignore
 public class ChPpqTest extends StandardTestContainer {
 
     @BeforeClass
