@@ -22,8 +22,8 @@
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.17</mina2-version>
         <opensaml-version>3.3.0</opensaml-version>
-        <phloc-schematron-version>2.7.1</phloc-schematron-version>
-        <phloc-commons-version>4.4.11</phloc-commons-version>
+        <ph-schematron-version>5.0.4</ph-schematron-version>
+        <ph-commons-version>9.1.1</ph-commons-version>
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
@@ -711,14 +711,14 @@
                 <version>${jaxb-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.phloc</groupId>
-                <artifactId>phloc-schematron</artifactId>
-                <version>${phloc-schematron-version}</version>
+                <groupId>com.helger</groupId>
+                <artifactId>ph-schematron</artifactId>
+                <version>${ph-schematron-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.phloc</groupId>
-                <artifactId>phloc-commons</artifactId>
-                <version>${phloc-commons-version}</version>
+                <groupId>com.helger</groupId>
+                <artifactId>ph-commons</artifactId>
+                <version>${ph-commons-version}</version>
             </dependency>
 
             <dependency>

@@ -49,7 +49,7 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
         from("mhd-iti65:stub?audit=true")
                 .errorHandler(noErrorHandler())
                 .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, constant(true))
-                .setHeader(VALIDATION_MODE, constant(SCHEMA | SCHEMATRON | MODEL))
+                .setHeader(VALIDATION_MODE, constant(SCHEMA | SCHEMATRON )) // | MODEL))
                 .process(itiRequestValidator())
                 .transform(new Responder());
     }
