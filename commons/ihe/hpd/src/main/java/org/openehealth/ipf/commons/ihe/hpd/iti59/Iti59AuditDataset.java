@@ -20,9 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-
-import java.util.Set;
 
 /**
  * Audit dataset for the ITI-59 transaction.
@@ -34,14 +33,13 @@ public class Iti59AuditDataset extends WsAuditDataset {
     public static class RequestItem {
         @Getter private final String requestId;
         @Getter private final EventActionCode actionCode;
-        @Getter private final Set<String> providerIds;
+
+        @Getter @Setter private String uid;
+        @Getter @Setter private String newUid;    // only for operation Rename
+        @Getter @Setter private ParticipantObjectTypeCode participantObjectTypeCode;
 
         @Getter @Setter private EventOutcomeIndicator outcomeCode;
         @Getter @Setter private String outcomeDescription;
-
-        // proprietary extensions for Delete and ModifyDN
-        @Getter @Setter private String dn;
-        @Getter @Setter private String newRdn;
     }
 
     @Getter @Setter private RequestItem[] requestItems;

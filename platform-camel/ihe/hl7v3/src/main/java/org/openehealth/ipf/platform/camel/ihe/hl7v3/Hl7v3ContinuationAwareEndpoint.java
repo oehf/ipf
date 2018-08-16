@@ -170,7 +170,8 @@ public class Hl7v3ContinuationAwareEndpoint
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
-                getCorrelator());
+                getCorrelator(),
+                getSecurityInformation());
     }
 
 

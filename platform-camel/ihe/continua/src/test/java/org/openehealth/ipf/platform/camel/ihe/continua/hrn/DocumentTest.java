@@ -24,7 +24,7 @@ import javax.activation.DataHandler;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.core.config.SpringTypeConverter;
+import org.openehealth.ipf.commons.spring.core.config.SpringTypeConverter;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;

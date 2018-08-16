@@ -72,15 +72,16 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                 Collections.emptyList());
     }
 
-    public XdsPHIImportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset) {
+    public XdsPHIImportBuilder setSubmissionSetWithHomeCommunityId(XdsSubmitAuditDataset auditDataset, boolean xcaHomeCommunityId) {
         return addImportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
-                makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null));
+                makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
     }
 
     public XdsPHIImportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
-                                              XdsNonconstructiveDocumentSetRequestAuditDataset.Status status) {
+                                              XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
+                                              boolean xcaHomeCommunityId) {
         String[] documentIds = auditDataset.getDocumentIds(status);
         String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
         String[] repositoryIds = auditDataset.getRepositoryIds(status);
@@ -91,7 +92,8 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                         documentIds[i],
                         ParticipantObjectIdTypeCode.ReportNumber,
                         ParticipantObjectTypeCodeRole.Report,
-                        makeDocumentDetail(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i], studyInstanceIds[i])));
+                        makeDocumentDetail(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
+                                studyInstanceIds[i], xcaHomeCommunityId)));
         return self();
     }
 

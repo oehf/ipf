@@ -30,9 +30,16 @@ public interface AuditSource extends CodedValueType {
         return new AuditSourceImpl(code, codeSystemName, originalText);
     }
 
+    static AuditSource of(CodedValueType codedValueType) {
+        return new AuditSourceImpl(codedValueType);
+    }
+
     class AuditSourceImpl extends CodedValueTypeImpl implements AuditSource {
         public AuditSourceImpl(String code, String codeSystemName, String originalText) {
             super(code, codeSystemName, originalText);
+        }
+        public AuditSourceImpl(CodedValueType codedValueType) {
+            super(codedValueType);
         }
     }
 }

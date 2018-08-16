@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
@@ -69,13 +70,12 @@ public class Iti86AuditStrategyTest extends XdsAuditorTestBase {
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setUserName(USER_NAME);
         auditDataset.setSourceUserId(REPLY_TO_URI);
         auditDataset.setDestinationUserId(SERVER_URI);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
-        auditDataset.setPurposesOfUse(NEW_PURPOSES_OF_USE);
-        auditDataset.getUserRoles().addAll(NEW_USER_ROLES);
+        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
         auditDataset.getPatientIds().add(PATIENT_IDS[0]);
+        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
 
         for (int i = 0; i < 3; i++) {
             auditDataset.getDocuments().add(

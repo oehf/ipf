@@ -34,7 +34,7 @@ public class Expressions {
      * 
      * @return an expression object which will return the headers map.
      */
-    public static <E extends Exchange> Expression headersExpression() {
+    public static Expression headersExpression() {
         return new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
@@ -62,7 +62,7 @@ public class Expressions {
         };
     }
 
-    public static <E extends Exchange> Expression headersAndBuilderExpression() {
+    public static Expression headersAndBuilderExpression() {
         return new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {

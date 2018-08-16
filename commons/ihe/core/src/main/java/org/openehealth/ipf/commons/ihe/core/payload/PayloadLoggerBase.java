@@ -180,7 +180,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     /**
      * @return <code>true</code> when logging interceptors are generally enabled.
-     * @see #isLocallyEnabled()
+     * @see #isEnabled()
      * @deprecated use environment variable {@link #PROPERTY_DISABLED}
      */
     public static boolean isGloballyEnabled() {

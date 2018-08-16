@@ -26,7 +26,7 @@ import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.List_;
 import org.hl7.fhir.instance.model.Resource;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.util.Date;
 import java.util.UUID;

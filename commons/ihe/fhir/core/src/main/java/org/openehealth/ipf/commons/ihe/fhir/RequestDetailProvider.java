@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RequestDetailProvider extends InterceptorAdapter {
 
-    private static ThreadLocal<RequestDetails> requestDetails = new ThreadLocal<>();
+    private static final ThreadLocal<RequestDetails> requestDetails = new ThreadLocal<>();
 
     public static RequestDetails getRequestDetails() {
         return requestDetails.get();

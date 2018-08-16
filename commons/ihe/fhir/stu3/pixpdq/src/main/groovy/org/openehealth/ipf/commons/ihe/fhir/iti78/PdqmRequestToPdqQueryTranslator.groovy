@@ -17,13 +17,12 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
 import ca.uhn.hl7v2.model.Message
-import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.dstu3.model.Enumerations
 import org.hl7.fhir.dstu3.model.IdType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException

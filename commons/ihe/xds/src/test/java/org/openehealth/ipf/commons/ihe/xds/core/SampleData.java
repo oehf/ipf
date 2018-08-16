@@ -249,6 +249,8 @@ public abstract class SampleData {
         submissionSet.setSubmissionTime("1980");
         submissionSet.setTitle(new LocalizedString("Submission Set 01", "en-US", "UTF8"));
         submissionSet.setUniqueId("123");
+        submissionSet.setHomeCommunityId("urn:oid:1.2.3.4.5.6.2333.23");
+
         return submissionSet;
     }
 
@@ -338,8 +340,6 @@ public abstract class SampleData {
         request.getAssociations().add(docAssociation);
         request.getAssociations().add(folderAssociation);
         request.getAssociations().add(docFolderAssociation);
-
-        request.setTargetHomeCommunityId("urn:oid:1.2.3.4.5.6.2333.23");
 
         return request;
     }

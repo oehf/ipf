@@ -115,6 +115,10 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                     auditDataset.setSourceUserId(apropos.getReplyTo().getAddress().getValue());
                 }
 
+                if (auditDataset.getSourceUserId() == null) {
+                    auditDataset.setSourceUserId("unknown");
+                }
+
                 if (wsTransactionConfiguration.isAuditRequestPayload()) {
                     auditDataset.setRequestPayload(requestString);
                 }

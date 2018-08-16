@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Parameters;
@@ -89,6 +90,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
             @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
+        if (resourceId == null) throw new InvalidRequestException("Must provide ID with READ request");
         UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
 
         Parameters inParams = new Parameters();

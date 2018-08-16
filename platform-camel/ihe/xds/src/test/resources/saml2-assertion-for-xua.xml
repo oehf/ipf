@@ -43,7 +43,17 @@
         </ds:Signature>
         <saml:Subject>
             <saml:NameID SPProvidedID="alias2" Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">lipse</saml:NameID>
-            <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"/>
+            <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+                              NameQualifier="urn:gs1:gln">7601000000001</saml:NameID>
+                <saml:SubjectConfirmationData>
+                    <saml:AttributeStatement>
+                        <saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id">
+                            <saml:AttributeValue>Hannelore Fleissig</saml:AttributeValue>
+                        </saml:Attribute>
+                    </saml:AttributeStatement>
+                </saml:SubjectConfirmationData>
+            </saml:SubjectConfirmation>
         </saml:Subject>
         <saml:Conditions NotOnOrAfter="2011-03-29T09:54:40Z" NotBefore="2011-03-29T09:44:40Z">
             <saml:AudienceRestriction>
@@ -95,6 +105,14 @@
                              displayName="Law Enforcement"/>
                 </saml:AttributeValue>
                 <saml:AttributeValue>
+                    <Role xmlns="urn:hl7-org:v3"
+                          xsi:type="CE"
+                          code="HCP"
+                          codeSystem="2.16.756.5.30.1.127.3.10.4"
+                          codeSystemName="EPD Role Codes"
+                          displayName="Healthcare Practitioner"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
                     <PurposeOfUse xmlns="urn:hl7-org:v3"
                                   xsi:type="CE"
                                   code="13"
@@ -102,6 +120,9 @@
                                   codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
                                   displayName="Law Enforcement"/>
                 </saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id">
+                <saml:AttributeValue>Dr. Klaus-Peter Kohlrabi</saml:AttributeValue>
             </saml:Attribute>
         </saml:AttributeStatement>
         <saml:AttributeStatement>

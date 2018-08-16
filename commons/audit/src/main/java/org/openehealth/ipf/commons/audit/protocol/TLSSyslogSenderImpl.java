@@ -22,12 +22,14 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -54,13 +56,38 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
     private AtomicReference<Socket> socket = new AtomicReference<>();
+    private SocketFactory socketFactory = SSLSocketFactory.getDefault();
 
+    /**
+     * Constructor which uses default values for all parameters.
+     */
     public TLSSyslogSenderImpl() {
         this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
     }
 
+    /**
+     * @param socketFactory SSL socket factory to be used for creating the TCP socket.
+     */
+    public TLSSyslogSenderImpl(SSLSocketFactory socketFactory) {
+        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketFactory);
+    }
+
+    /**
+     * @param sendingHost    value of the SYSLOG header "HOSTNAME"
+     * @param sendingProcess value of the SYSLOG header "APP-NAME"
+     */
     public TLSSyslogSenderImpl(String sendingHost, String sendingProcess) {
         super(sendingHost, sendingProcess);
+    }
+
+    /**
+     * @param sendingHost    value of the SYSLOG header "HOSTNAME"
+     * @param sendingProcess value of the SYSLOG header "APP-NAME"
+     * @param socketFactory  SSL socket factory to be used for creating the TCP socket.
+     */
+    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SSLSocketFactory socketFactory) {
+        super(sendingHost, sendingProcess);
+        this.socketFactory = Objects.requireNonNull(socketFactory);
     }
 
     @Override
@@ -122,8 +149,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private Socket getTLSSocket(AuditContext auditContext) {
         try {
-            return SSLSocketFactory.getDefault()
-                    .createSocket(auditContext.getAuditRepositoryAddress(), auditContext.getAuditRepositoryPort());
+            return socketFactory.createSocket(auditContext.getAuditRepositoryAddress(), auditContext.getAuditRepositoryPort());
         } catch (IOException e) {
             throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
                     auditContext.getAuditRepositoryAddress().getHostAddress(),

@@ -89,5 +89,6 @@ class CompositeTest extends groovy.test.GroovyAssert {
         composite[4] = composite[5]
         assert composite[4].value == '11000'
     }
+
     
 }

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -210,7 +211,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case FIND_FOLDERS:
             case FIND_FOLDERS_MPQ:
                 return new QueryParameterValidation[]{
-                        // PatientId MUST BE supplied in  single patient query.
+                        // PatientId MUST BE supplied in single patient query.
                         // PatientId (list) MAY BE supplied in multi patient query.
                         // The validators for the two cases are otherwise identical.
                         queryType.equals(FIND_FOLDERS) ? new StringValidation(FOLDER_PATIENT_ID, cxValidator, false) : new StringListValidation(FOLDER_PATIENT_ID, cxValidator),
@@ -334,14 +335,25 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             }
         }
 
-        if (queryType == FIND_DOCUMENTS_MPQ) {
-            metaDataAssert(
-                    (!request.getSlotValues(DOC_ENTRY_CLASS_CODE.getSlotName()).isEmpty()) ||
-                            (!request.getSlotValues(DOC_ENTRY_EVENT_CODE.getSlotName()).isEmpty()) ||
-                            (!request.getSlotValues(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()).isEmpty()),
-                    ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER,
-                    "at least one of $XDSDocumentEntryClassCode, $XDSDocumentEntryEventCodeList, $XDSDocumentEntryHealthcareFacilityTypeCode");
+        switch (queryType) {
+            case FIND_DOCUMENTS_MPQ:
+                checkAtLeastOnePresent(request, DOC_ENTRY_PATIENT_ID, DOC_ENTRY_CLASS_CODE, DOC_ENTRY_EVENT_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
+                break;
+            case FIND_FOLDERS_MPQ:
+                checkAtLeastOnePresent(request, FOLDER_PATIENT_ID, FOLDER_CODES);
+                break;
         }
+    }
 
+    /**
+     * Checks that at least one of the given query parameters is provided in the message.
+     */
+    private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest request, QueryParameter... params) {
+        List<String> slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
+        slotNames.stream()
+                .map(request::getSlotValues)
+                .filter(slotList -> !slotList.isEmpty())
+                .findAny()
+                .orElseThrow(() -> new XDSMetaDataException(ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER, "one of " + StringUtils.join(slotNames, ", ")));
     }
 }

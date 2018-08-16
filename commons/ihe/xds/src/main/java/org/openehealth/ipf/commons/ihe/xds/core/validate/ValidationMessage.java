@@ -77,7 +77,7 @@ public enum ValidationMessage {
     EMPTY_URI("Empty URI although slot is specified"),
     INVALID_URI("Invalid URI: %1s"),
     PERSON_MISSING_NAME_AND_ID("Either an id number or a name has to be specified for a person: %1s"),
-    PERSON_HD_MISSING("If an id number is specified for a person, the assigning authority has to be specified as well: %1s"),
+    PERSON_HD_INOPPORTUNE("If an ID number is not specified for a person, the assigning authority shall be not specified as well: %1s"),
     ORGANIZATION_NAME_MISSING("An organization name has to be specified for an organization: %1s"),
     ORGANIZATION_TOO_MANY_COMPONENTS("An organization should not specify data other than its ID and name"),
     MISSING_DOC_ENTRY_FOR_DOCUMENT("A document was provided without a corresponding document entry. UUID=%1s", ErrorCode.MISSING_DOCUMENT_METADATA),
@@ -142,6 +142,7 @@ public enum ValidationMessage {
     MISSING_FOLDER_NAME("Folder name not provided in %s"),
     TIME_PRECISION_TOO_LOW("Precision of the timestamp is too low: %s"),
     ASSOCIATION_ID_MISSING("Attribute 'id' must be provided in the Association"),
+    OBJECT_NOT_UPDATABLE("%s %s is not updatable"),     // 1st param=object type, e.g. "Folder"; 2nd param=object UUID
     ;
 
 

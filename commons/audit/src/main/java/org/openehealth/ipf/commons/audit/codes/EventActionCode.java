@@ -43,4 +43,7 @@ public enum EventActionCode implements EnumeratedValueSet<String> {
         this.value = value;
     }
 
+    public static EventActionCode enumForCode(String code) {
+        return EnumeratedValueSet.enumForCode(EventActionCode.class, code);
+    }
 }

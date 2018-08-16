@@ -10,8 +10,8 @@ The module ihe-modules-fhir has been removed. There was no code, the module only
 The following classes were deprecated:
 
 * `org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators` : use `org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators`
-* `org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2` : use `org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator<Message>`
-* `org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir` : use `org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator<Message>`
+* `org.openehealth.ipf.commons.ihe.fhir.pixpdq.translation.TranslatorFhirToHL7v2` : use `org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator<Message>`
+* `org.openehealth.ipf.commons.ihe.fhir.pixpdq.translation.TranslatorHL7v2ToFhir` : use `org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator<Message>`
 
 
 The following deprecated classes have been removed:

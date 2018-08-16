@@ -11,7 +11,7 @@ model classes. These methods are used "under the hood" by the actual DSL.
 
 **Note**:
 IPF 2.x used a dedicated `ipf-modules-hl7dsl` library and achieved the same goal by using adapters
-wrapped around the [HAPI] model classes. With IPF 3.0, this library and all wrappers have been deprecated, and we
+wrapped around the [HAPI] model classes. With IPF 3.x, this library and all wrappers have been deprecated, and we
 strongly recommend to migrate your applications. With IPF 3.4, the library has finally been removed.
 
 ### Accessing HL7 messages

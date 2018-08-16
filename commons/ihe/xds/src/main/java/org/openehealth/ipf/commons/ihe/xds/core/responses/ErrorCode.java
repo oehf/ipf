@@ -142,14 +142,14 @@ public enum ErrorCode {
        --- contain the id attribute of the metadata object causing the error. --- */
 
     /** General metadata update error. Use only when more specific error code is not available or appropriate. */
-    @XmlEnumValue("XDSMetadataUpdateError") META_DATA_UPDATE_ERROR("XDSMetadataUpdateError"),
+    @XmlEnumValue("XDSMetadataUpdateError") METADATA_UPDATE_ERROR("XDSMetadataUpdateError"),
     /** Update encountered error where Patient IDs did not match. */
     @XmlEnumValue("XDSPatientIDReconciliationError") PATIENT_ID_RECONCILIATION_ERROR("XDSPatientIDReconciliationError"),
     /** Document Registry/Recipient cannot decode the requested metadata update. */
-    @XmlEnumValue("XDSMetadataUpdateOperationError") META_DATA_UPDATE_OPERATION_ERROR("XDSMetadataUpdateOperationError"),
+    @XmlEnumValue("XDSMetadataUpdateOperationError") METADATA_UPDATE_OPERATION_ERROR("XDSMetadataUpdateOperationError"),
     /** The version number included in the update request did not match the existing object.
      *  One cause of this is multiple simultaneous update attempts. */
-    @XmlEnumValue("XDSMetadataVersionError") META_DATA_VERSION_ERROR("XDSMetadataVersionError"),
+    @XmlEnumValue("XDSMetadataVersionError") METADATA_VERSION_ERROR("XDSMetadataVersionError"),
     /** The Document Repository was not able to remove the document. The codeContext shall indicate
      * the DocumentUniqueId of the document that caused the error.*/
     @XmlEnumValue("XDSRemoveDocumentsError") REMOVE_DOCUMENTS_ERROR("XDSRemoveDocumentsError"),
@@ -165,6 +165,20 @@ public enum ErrorCode {
      */
     @Deprecated     // error code XDSReplaceFailed is deprecated by IHE
     @XmlEnumValue("XDSReplaceFailed") REPLACE_FAILED("XDSReplaceFailed"),
+
+    /* --- codes for RMU --- */
+    /** The receiving actor cannot store the request as the objectType is either not supported or does not match the value of the existing object. */
+    @XmlEnumValue("XDSObjectTypeError") OBJECT_TYPE_ERROR("XDSObjectTypeError"),
+    /** The receiving actor cannot store the request because the identifier is in conflict with an existing known value. */
+    @XmlEnumValue("XDSMetadataIdentifierError") METADATA_IDENTIFIER_ERROR("XDSMetadataIdentifierError"),
+    /** The receiving actor detected that an initial version of a metadata object instance was received in an update transaction. */
+    @XmlEnumValue("XDSInvalidRequestException") INVALID_REQUEST_EXCEPTION("XDSInvalidRequestException"),
+    /** An update for a metadata object includes changes to values for attributes which are prohibited for the transaction. */
+    @XmlEnumValue("UnmodifiableMetadataError") UNMODIFIABLE_METADATA_ERROR("UnmodifiableMetadataError"),
+    /** The receiving actor has detected that the request is not permitted because of local policy restrictions or violation of a previously reached agreement. */
+    @XmlEnumValue("LocalPolicyRestrictionError") LOCAL_POLICY_RESTRICTION_ERROR("LocalPolicyRestrictionError"),
+    /** The receiving actor has detected an error with a SS-HM annotation. */
+    @XmlEnumValue("XDSMetadataAnnotationError") METADATA_ANNOTATION_ERROR("XDSMetadataAnnotationError"),
 
     /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
     /** An error occurred when executing an SQL query. */

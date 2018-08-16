@@ -31,7 +31,7 @@ import java.io.Writer;
  */
 public class Current implements SerializationStrategy {
 
-    public static final DICOM2017b INSTANCE = new DICOM2017b();
+    public static final DICOM2017c INSTANCE = new DICOM2017c();
 
     public static String toString(AuditMessage auditMessage, boolean pretty) {
         return INSTANCE.marshal(auditMessage, pretty);

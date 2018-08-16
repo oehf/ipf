@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf-dependencies</artifactId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.6-SNAPSHOT</version>
     <name>ipf-dependencies</name>
     <packaging>pom</packaging>
 
@@ -14,10 +14,9 @@
         <cxf-version>3.2.4</cxf-version>
         <groovy-version>2.4.15</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>3.2.0</hapi-fhir-version>
-        <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
-        <ipf-gazelle-version>1.3.0</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.6.0</ipf-oht-atna-version>
+        <hapi-fhir-version>3.4.0</hapi-fhir-version>
+        <herasaf-version>1.0.4.RELEASE</herasaf-version>
+        <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.0</jaxb-version>
         <javax-activation-version>1.2.0</javax-activation-version>
@@ -33,9 +32,10 @@
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.14.RELEASE</spring-version>
-        <spring-boot-version>1.5.10.RELEASE</spring-boot-version>
+        <spring-version>4.3.17.RELEASE</spring-version>
+        <spring-boot-version>1.5.14.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
+        <vibur-version>22.2</vibur-version>
         <webservices-api-version>2.1-b16</webservices-api-version>
         <xmlsec-version>2.1.0</xmlsec-version>
 
@@ -133,6 +133,11 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v271</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v28</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
@@ -180,6 +185,11 @@
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
                 <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.herasaf.xacml.core</groupId>
+                <artifactId>herasaf-xacml-core</artifactId>
+                <version>${herasaf-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>
@@ -457,18 +467,6 @@
                 <version>${slf4j-version}</version>
             </dependency>
 
-            <!-- FIXME remove -->
-            <dependency>
-                <groupId>org.openehealth.ipf.oht.atna</groupId>
-                <artifactId>ipf-oht-atna-auditor</artifactId>
-                <version>${ipf-oht-atna-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.oht.atna</groupId>
-                <artifactId>ipf-oht-atna-nodeauth</artifactId>
-                <version>${ipf-oht-atna-version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>
                 <artifactId>ipf-oht-mdht-uml-cda</artifactId>
@@ -604,6 +602,12 @@
                 <version>${vertx-version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.vibur</groupId>
+                <artifactId>vibur-object-pool</artifactId>
+                <version>${vibur-version}</version>
+            </dependency>
+
             <!-- All IPF dependencies -->
 
             <dependency>
@@ -664,6 +668,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-stu3-pixpdq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-stu3-qedm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -796,6 +805,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.platform-camel</groupId>
+                <artifactId>ipf-platform-camel-ihe-fhir-stu3-qedm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

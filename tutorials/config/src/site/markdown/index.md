@@ -103,7 +103,7 @@ Since it extends `CustomRouteBuilder`, the IPF extension mechanism will do that 
             class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
 
       <bean id="bidiMappingService"
-          class="org.openehealth.ipf.commons.map.SpringBidiMappingService" />
+          class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService" />
 
     ...
 
@@ -117,7 +117,7 @@ for the custom route builders. The `postProcessor` processes all defined configu
 
   <!-- Extension mechanism configurers and post processor -->
   <bean id="customMappingsConfigurer"
-      class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
+      class="org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer">
       <property name="mappingService" ref="bidiMappingService" />
   </bean>
 
@@ -130,7 +130,7 @@ for the custom route builders. The `postProcessor` processes all defined configu
         class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer" />
 
   <bean id="postProcessor"
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
     <property name="springConfigurers" >
       <list>
         <ref bean="customMappingsConfigurer" />

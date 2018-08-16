@@ -1,9 +1,23 @@
-
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -12,25 +26,25 @@ import java.util.List;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="DsmlModification"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;element name="value" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlValue" maxOccurs="unbounded" minOccurs="0"/&gt;
- *       &lt;/sequence&gt;
- *       &lt;attribute name="name" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}AttributeDescriptionValue" /&gt;
- *       &lt;attribute name="operation" use="required"&gt;
- *         &lt;simpleType&gt;
- *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *             &lt;enumeration value="add"/&gt;
- *             &lt;enumeration value="delete"/&gt;
- *             &lt;enumeration value="replace"/&gt;
- *           &lt;/restriction&gt;
- *         &lt;/simpleType&gt;
- *       &lt;/attribute&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="DsmlModification">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="value" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlValue" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="name" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}AttributeDescriptionValue" />
+ *       &lt;attribute name="operation" use="required">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *             &lt;enumeration value="add"/>
+ *             &lt;enumeration value="delete"/>
+ *             &lt;enumeration value="replace"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 
@@ -41,12 +55,13 @@ import java.util.List;
 })
 public class DsmlModification {
 
+    @XmlElement(type = String.class)
     @XmlSchemaType(name = "anySimpleType")
-    protected List<String> value;
+    protected List<Object> value;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "operation", required = true)
-    protected DsmlModification.ModificationOperationType operation;
+    protected ModificationOperationType operation;
 
     /**
      * Gets the value of the value property.
@@ -70,7 +85,7 @@ public class DsmlModification {
      * 
      * 
      */
-    public List<String> getValue() {
+    public List<Object> getValue() {
         if (value == null) {
             value = new ArrayList<>();
         }
@@ -106,10 +121,10 @@ public class DsmlModification {
      * 
      * @return
      *     possible object is
-     *     {@link DsmlModification.ModificationOperationType }
+     *     {@link ModificationOperationType }
      *     
      */
-    public DsmlModification.ModificationOperationType getOperation() {
+    public ModificationOperationType getOperation() {
         return operation;
     }
 
@@ -118,10 +133,10 @@ public class DsmlModification {
      * 
      * @param value
      *     allowed object is
-     *     {@link DsmlModification.ModificationOperationType }
+     *     {@link ModificationOperationType }
      *     
      */
-    public void setOperation(DsmlModification.ModificationOperationType value) {
+    public void setOperation(ModificationOperationType value) {
         this.operation = value;
     }
 
@@ -162,8 +177,8 @@ public class DsmlModification {
             return value;
         }
 
-        public static DsmlModification.ModificationOperationType fromValue(String v) {
-            for (DsmlModification.ModificationOperationType c: DsmlModification.ModificationOperationType.values()) {
+        public static ModificationOperationType fromValue(String v) {
+            for (ModificationOperationType c: ModificationOperationType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }

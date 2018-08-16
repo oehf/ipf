@@ -132,7 +132,7 @@ public class AdhocQueryRequestValidatorTest {
         valueList.clear();
         valueList.add("('lol')");
         valueList.add("('foo')");
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, ITI_18);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
 
         // at least one code -- should pass
         valueList.set(0, "('bar')");
@@ -215,6 +215,16 @@ public class AdhocQueryRequestValidatorTest {
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
     }
 
+    @Test
+    public void testAtLeastOneOfPresentMPQ() {
+        FindDocumentsForMultiplePatientsQuery query = (FindDocumentsForMultiplePatientsQuery) requestMpq.getQuery();
+        query.setPatientIds(null);
+        query.setClassCodes(null);
+        query.setEventCodes(null);
+        query.setHealthcareFacilityTypeCodes(null);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(requestMpq), ITI_51);
+    }
+
     // Folder and FolderMPQ test cases
     @Test
     public void testGoodCaseFolder() throws XDSMetaDataException {
@@ -228,9 +238,14 @@ public class AdhocQueryRequestValidatorTest {
     }
 
     @Test
-    public void testMissingPatientIdFolderMPQ() {
-        ((FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery()).setPatientIds(null);
+    public void testAtLeastOnePresentFolderMPQ() {
+        FindFoldersForMultiplePatientsQuery query = (FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery();
+        query.setPatientIds(null);
+        assertNotNull(query.getCodes());
         validator.validate(transformer.toEbXML(folderRequestMpq), ITI_51);
+
+        query.setCodes(null);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(folderRequestMpq), ITI_51);
     }
 
     @Test

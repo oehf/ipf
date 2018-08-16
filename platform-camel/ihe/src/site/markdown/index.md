@@ -39,12 +39,13 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | Module                               | Provided IHE transactions
 |--------------------------------------|-----------------------------------------
 | ipf-platform-camel-ihe-mllp          | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-64]
-| ipf-platform-camel-ihe-xds           | [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [ITI-86], [RAD-69], [RAD-75], [CH-XCMU]
+| ipf-platform-camel-ihe-xds           | [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [ITI-86], [RAD-69], [RAD-75], [ITI-92]
 | ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
 | ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59], [CH-PIDD]
 | ipf-platform-camel-ihe-fhir-mhd      | [ITI-65], [ITI-66], [ITI-67], [ITI-68]
 | ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
 | ipf-platform-camel-ihe-fhir-audit    | [ITI-81]
+| ipf-platform-camel-ihe-fhir-qedm     | [PCC-44]
 | ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
 
 ### Example
@@ -140,12 +141,13 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [ITI-81] Retrieve ATNA Audit Event
 * [ITI-83] Patient Identifier Cross-reference for Mobile
 * [ITI-86] Remove Documents
+* [ITI-92] Restricted Update Document Set
 * [RAD-69] Retrieve Imaging Document Set
 * [RAD-75] Cross-Gateway Retrieve Imaging Document Set
 * [PCC-1] Query for Existing Data
+* [PCC-44] Query for Existing Data Mobile
 * [PCD-01] Communicate Patient Care Device Data
 * [CH-PIDD] Provider Information Delta Download (Swiss EPR extension to HPD)
-* [CH-XCMU] Cross-Gateway Metadata Update (Swiss EPR extension to XDS MU)
 * [All] MLLP-based Dispatcher
 * [Custom] MLLP-based Custom Transactions
 
@@ -164,14 +166,14 @@ required dependencies, usage and parameters.
 | [ITI-10]     | PIX           | PIX Update Notfication               | `pix-iti10`             | MLLP(S)       | HL7 v2.5
 | [ITI-18]     | XDS           | Registry Stored Query                | `xds-iti18`             | SOAP/HTTP(S)  | ebXML
 | ITI-19       | ATNA          | Authenticate Node                    | n/a                     | n/a           | n/a
-| ITI-20       | ATNA          | Record Audit Event                   | n/a                     | Syslog (+TLS) | RFC-3881
+| ITI-20       | ATNA          | Record Audit Event                   | n/a                     | Syslog (+TLS) | DICOM/IHE Audit Message
 | [ITI-21]     | PDQ           | Patient Demographics Query           | `pdq-iti21`             | MLLP(S)       | HL7 v2.5
 | [ITI-22]     | PDQ           | Patient Demographics and Visit Query | `pdq-iti22`             | MLLP(S)       | HL7 v2.5
 | [ITI-30]     | PAM           | Patient Identity Management          | `pam-iti30`             | MLLP(S)       | HL7 v2.5
 | [ITI-31]     | PAM           | Patient Encounter Management         | `pam-iti31`             | MLLP(S)       | HL7 v2.5
 | [ITI-38]     | XCA           | Cross-Gateway Query                  | `xca-iti38`             | SOAP/HTTP(S)  | ebXML
 | [ITI-39]     | XCA           | Cross-Gateway Retrieve               | `xca-iti39`             | SOAP/HTTP(S)  | ebXML
-| [ITI-41], Continua HRN | XDS, Continua | Provide & Register Document Set | `xds-iti41`      | SOAP/HTTP(S)  | ebXML
+| [ITI-41], Continua HRN | XDS, XDM, XDR, Continua | Provide & Register Document Set | `xds-iti41`      | SOAP/HTTP(S)  | ebXML
 | [ITI-42]     | XDS           | Register Document Set                | `xds-iti42`             | SOAP/HTTP(S)  | ebXML
 | [ITI-43]     | XDS           | Retrieve Document Set                | `xds-iti43`             | SOAP/HTTP(S)  | ebXML
 | [ITI-44]     | PIXv3, XDS    | Patient Identity Feed v3             | `pixv3-iti44`,`xds-iti44` | SOAP/HTTP(S)| HL7v3
@@ -196,14 +198,17 @@ required dependencies, usage and parameters.
 | [ITI-81]     | ATNA          | Retrieve ATNA Audit Event            | `atna-iti81`            | REST/HTTP(S)  | FHIR
 | [ITI-83]     | PIXm          | Patient Identifier Cross-reference for Mobile | `pixm-iti83`   | REST/HTTP(S)  | FHIR
 | [ITI-86]     | RMD           | Remove Documents                     | `rmd-iti86`             | SOAP/HTTP(S)  | ebXML
-| [RAD-69]     | XDS-I, XCA-I  | Retrieve Imaging Document Set     | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
+| [ITI-92]     | RMU           | Restricted Update Document Set       | `rmu-iti92`             | SOAP/HTTP(S)  | ebXML
+| [RAD-69]     | XDS-I, XCA-I  | Retrieve Imaging Document Set        | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
 | [RAD-75]     | XCA-I         | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
-| [PCC-1]      | QED           | Query for Existing Data (QED)        | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
-| [PCD-01], Continua WAN | PCD, Continua | Communicate Patient Care Device (PCD) Data | `pcd-pcd01` | SOAP/HTTP(S) | HL7v2
-| [CH-PIDD]    | Swiss EPR     | Provider Information Delta Download  | `ch-pidd`               | SOAP/HTTP(S)  | DSMLv2
-| [CH-XCMU]    | Swiss EPR     | Cross-Gateway Metadata Zpdate        | `ch-xcmu`               | SOAP/HTTP(S)  | ebXML
-| [All] MLLP-based | n/a         | Accept requests for multiple MLLP-based transactions through a single TCP port | `mllp-dispatch` | MLLP(S) | HL7v2 |
-| [Custom] MLLP-based | n/a      | Accept requests for custom MLLP-based transactions | `mllp` | MLLP(S) | HL7v2 |
+| [PCC-1]      | QED           | Query for Existing Data              | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
+| [PCC-44]     | QEDm          | Query for Existing Data Mobile       | `qedm-pcc44`            | REST/HTTP(S)  | FHIR
+| [PCD-01], Continua WAN | PCD, Continua | Communicate Patient Care Device (PCD) Data | `pcd-pcd01` | SOAP/HTTP(S) | HL7 v2.6
+| [CH-PIDD]    | CH:HPD        | Provider Information Delta Download  | `ch-pidd`               | SOAP/HTTP(S)  | Custom/DSMLv2
+| [CH-PPQ-1]   | CH:PPQ        | Privacy Policy Feed                  | `ch-ppq1`               | SOAP/HTTP(S)  | Custom/XACML 2.0 
+| [CH-PPQ-2]   | CH:PPQ        | Privacy Policy Retrieve              | `ch-ppq2`               | SOAP/HTTP(S)  | XACML 2.0
+| [All] MLLP-based | n/a       | Accept requests for multiple MLLP-based transactions through a single TCP port | `mllp-dispatch` | MLLP(S) | HL7v2 |
+| [Custom] MLLP-based | n/a    | Accept requests for custom MLLP-based transactions | `mllp` | MLLP(S) | HL7v2 |
 
 [ITI-8]: ../ipf-platform-camel-ihe-mllp/iti8.html
 [ITI-9]: ../ipf-platform-camel-ihe-mllp/iti9.html
@@ -240,12 +245,15 @@ required dependencies, usage and parameters.
 [ITI-81]: ../ipf-platform-camel-ihe-fhir-stu3-atna/iti81.html
 [ITI-83]: ../ipf-platform-camel-ihe-fhir-stu3-pixpdq/iti83.html
 [ITI-86]: ../ipf-platform-camel-ihe-xds/iti86.html
+[ITI-92]: ../ipf-platform-camel-ihe-xds/iti92.html
 [RAD-69]: ../ipf-platform-camel-ihe-xds/rad69.html
 [RAD-75]: ../ipf-platform-camel-ihe-xds/rad75.html
 [PCC-1]: ../ipf-platform-camel-ihe-hl7v3/pcc1.html
+[PCC-44]: ../ipf-platform-camel-ihe-fhir-stu3-qedm/pcc44.html
 [PCD-01]: ../ipf-platform-camel-ihe-hl7v2ws/pcd01.html
 [CH-PIDD]: ../ipf-platform-camel-ihe-hpd/ch-pidd.html
-[CH-XCMU]: ../ipf-platform-camel-ihe-xds/ch-xcmu.html
+[CH-PPQ-1]: ../ipf-platform-camel-ihe-xacml20/ch-ppq1.html
+[CH-PPQ-2]: ../ipf-platform-camel-ihe-xacml20/ch-ppq2.html
 [All]: ../ipf-platform-camel-ihe-mllp/mllpDispatch.html
 [Custom]: ../ipf-platform-camel-ihe-mllp/mllpCustom.html
 [IHE]: https://www.ihe.net

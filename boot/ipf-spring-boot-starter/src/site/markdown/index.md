@@ -36,7 +36,7 @@ Apart from `ipf-spring-boot-starter`, the available starter modules are:
 These IPF starter modules transitively depend on `ipf-spring-boot-starter`, so there is no need to explicitly
 depend on this module.
 
-`ipf-spring-boot-starter` auto-configures `org.openehealth.ipf.commons.map.SpringBidiMappingService` and provides
+`ipf-spring-boot-starter` auto-configures `org.openehealth.ipf.commons.spring.map.SpringBidiMappingService` and provides
 Spring beans for picking up any `org.openehealth.ipf.commons.map.config.CustomMappings`. See [here](../dynamic.html) for details.
 If further sets up a `org.openehealth.ipf.commons.core.config.SpringRegistry`.
 

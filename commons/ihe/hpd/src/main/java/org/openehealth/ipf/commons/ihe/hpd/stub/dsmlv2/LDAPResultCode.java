@@ -1,4 +1,18 @@
-
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import javax.xml.bind.annotation.XmlEnum;
@@ -12,49 +26,49 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="LDAPResultCode"&gt;
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *     &lt;enumeration value="success"/&gt;
- *     &lt;enumeration value="operationsError"/&gt;
- *     &lt;enumeration value="protocolError"/&gt;
- *     &lt;enumeration value="timeLimitExceeded"/&gt;
- *     &lt;enumeration value="sizeLimitExceeded"/&gt;
- *     &lt;enumeration value="compareFalse"/&gt;
- *     &lt;enumeration value="compareTrue"/&gt;
- *     &lt;enumeration value="authMethodNotSupported"/&gt;
- *     &lt;enumeration value="strongAuthRequired"/&gt;
- *     &lt;enumeration value="referral"/&gt;
- *     &lt;enumeration value="adminLimitExceeded"/&gt;
- *     &lt;enumeration value="unavailableCriticalExtension"/&gt;
- *     &lt;enumeration value="confidentialityRequired"/&gt;
- *     &lt;enumeration value="saslBindInProgress"/&gt;
- *     &lt;enumeration value="noSuchAttribute"/&gt;
- *     &lt;enumeration value="undefinedAttributeType"/&gt;
- *     &lt;enumeration value="inappropriateMatching"/&gt;
- *     &lt;enumeration value="constraintViolation"/&gt;
- *     &lt;enumeration value="attributeOrValueExists"/&gt;
- *     &lt;enumeration value="invalidAttributeSyntax"/&gt;
- *     &lt;enumeration value="noSuchObject"/&gt;
- *     &lt;enumeration value="aliasProblem"/&gt;
- *     &lt;enumeration value="invalidDNSyntax"/&gt;
- *     &lt;enumeration value="aliasDerefencingProblem"/&gt;
- *     &lt;enumeration value="inappropriateAuthentication"/&gt;
- *     &lt;enumeration value="invalidCredentials"/&gt;
- *     &lt;enumeration value="insufficientAccessRights"/&gt;
- *     &lt;enumeration value="busy"/&gt;
- *     &lt;enumeration value="unavailable"/&gt;
- *     &lt;enumeration value="unwillingToPerform"/&gt;
- *     &lt;enumeration value="loopDetect"/&gt;
- *     &lt;enumeration value="namingViolation"/&gt;
- *     &lt;enumeration value="objectClassViolation"/&gt;
- *     &lt;enumeration value="notAllowedOnNonLeaf"/&gt;
- *     &lt;enumeration value="notAllowedOnRDN"/&gt;
- *     &lt;enumeration value="entryAlreadyExists"/&gt;
- *     &lt;enumeration value="objectClassModsProhibited"/&gt;
- *     &lt;enumeration value="affectMultipleDSAs"/&gt;
- *     &lt;enumeration value="other"/&gt;
- *   &lt;/restriction&gt;
- * &lt;/simpleType&gt;
+ * &lt;simpleType name="LDAPResultCode">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="success"/>
+ *     &lt;enumeration value="operationsError"/>
+ *     &lt;enumeration value="protocolError"/>
+ *     &lt;enumeration value="timeLimitExceeded"/>
+ *     &lt;enumeration value="sizeLimitExceeded"/>
+ *     &lt;enumeration value="compareFalse"/>
+ *     &lt;enumeration value="compareTrue"/>
+ *     &lt;enumeration value="authMethodNotSupported"/>
+ *     &lt;enumeration value="strongAuthRequired"/>
+ *     &lt;enumeration value="referral"/>
+ *     &lt;enumeration value="adminLimitExceeded"/>
+ *     &lt;enumeration value="unavailableCriticalExtension"/>
+ *     &lt;enumeration value="confidentialityRequired"/>
+ *     &lt;enumeration value="saslBindInProgress"/>
+ *     &lt;enumeration value="noSuchAttribute"/>
+ *     &lt;enumeration value="undefinedAttributeType"/>
+ *     &lt;enumeration value="inappropriateMatching"/>
+ *     &lt;enumeration value="constraintViolation"/>
+ *     &lt;enumeration value="attributeOrValueExists"/>
+ *     &lt;enumeration value="invalidAttributeSyntax"/>
+ *     &lt;enumeration value="noSuchObject"/>
+ *     &lt;enumeration value="aliasProblem"/>
+ *     &lt;enumeration value="invalidDNSyntax"/>
+ *     &lt;enumeration value="aliasDerefencingProblem"/>
+ *     &lt;enumeration value="inappropriateAuthentication"/>
+ *     &lt;enumeration value="invalidCredentials"/>
+ *     &lt;enumeration value="insufficientAccessRights"/>
+ *     &lt;enumeration value="busy"/>
+ *     &lt;enumeration value="unavailable"/>
+ *     &lt;enumeration value="unwillingToPerform"/>
+ *     &lt;enumeration value="loopDetect"/>
+ *     &lt;enumeration value="namingViolation"/>
+ *     &lt;enumeration value="objectClassViolation"/>
+ *     &lt;enumeration value="notAllowedOnNonLeaf"/>
+ *     &lt;enumeration value="notAllowedOnRDN"/>
+ *     &lt;enumeration value="entryAlreadyExists"/>
+ *     &lt;enumeration value="objectClassModsProhibited"/>
+ *     &lt;enumeration value="affectMultipleDSAs"/>
+ *     &lt;enumeration value="other"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
  */

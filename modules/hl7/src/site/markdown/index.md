@@ -5,7 +5,7 @@ mplemented standard for healthcare in the world.
 
 The HL7 Standard covers messages that exchange information in the general areas of Patient Demographics, Patient Charges and Accounting, Clinical Observations, Medical Records Document Management, and many more.
 
-HL7 Version 2.8 represents HL7's latest development efforts to the line of Version 2 Standards that date back to 1989, however, the underlying HAPI HL7 library currenty only supports versions 2.1 to 2.6.
+HL7 Version 2.8.1 represents HL7's latest development efforts to the line of Version 2 Standards that date back to 1989, and the underlying HAPI HL7 library supports all of them.
 
 
 ### Features

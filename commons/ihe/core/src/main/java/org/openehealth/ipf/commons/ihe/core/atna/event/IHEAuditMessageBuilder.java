@@ -17,14 +17,18 @@
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.event.DelegatingAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getHostFromUrl;
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
 
@@ -98,14 +102,16 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     }
 
     protected final T addHumanRequestor(AuditDataset auditDataset) {
-        if (auditDataset.getUserName() != null && !auditDataset.getUserName().isEmpty()) {
-            delegate.addActiveParticipant(auditDataset.getUserName(), null, auditDataset.getUserName(),
-                    true, auditDataset.getUserRoles(), null);
+        for (AuditDataset.HumanUser humanUser : auditDataset.getHumanUsers()) {
+            if (!humanUser.isEmpty()) {
+                delegate.addActiveParticipant(humanUser.getId(), humanUser.getName(), humanUser.getId(),
+                        true, humanUser.getRoles(), null);
+            }
         }
         return self();
     }
 
-    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId) {
+    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId, boolean xcaHomeCommunityId) {
         List<TypeValuePairType> tvp = new ArrayList<>();
         if (studyInstanceId != null) {
             tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
@@ -117,8 +123,45 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            tvp.add(new TypeValuePairType(IHE_HOME_COMMUNITY_ID, homeCommunityId));
+            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            tvp.add(new TypeValuePairType(type, homeCommunityId));
         }
         return tvp;
     }
+
+    /**
+     * Adds a Participant Object representing a Security Resource involved in the event
+     *
+     * @param participantObjectIdType transaction-specific participant object type code
+     * @param securityResourceId      security resource ID
+     * @return this
+     */
+    public T addSecurityResourceParticipantObject(ParticipantObjectIdType participantObjectIdType, String securityResourceId) {
+        delegate.addParticipantObjectIdentification(
+                participantObjectIdType,
+                null,
+                null,
+                null,
+                requireNonNull(securityResourceId),
+                ParticipantObjectTypeCode.System,
+                ParticipantObjectTypeCodeRole.SecurityResource,
+                null,
+                null);
+        return self();
+    }
+
+    /**
+     * Adds a list Participant Objects representing Security Resources involved in the event
+     *
+     * @param participantObjectIdType transaction-specific participant object type code
+     * @param securityResourceIds     list security resource IDs
+     * @return this
+     */
+    public T addSecurityResourceParticipantObjects(ParticipantObjectIdType participantObjectIdType, List<String> securityResourceIds) {
+        for (String securityResourceId : securityResourceIds) {
+            addSecurityResourceParticipantObject(participantObjectIdType, securityResourceId);
+        }
+        return self();
+    }
+
 }

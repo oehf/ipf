@@ -94,10 +94,11 @@ class XdsStandardTestContainer extends StandardTestContainer {
         assert auditSource.auditSourceID == sourceId
     }
 
-    void checkHumanRequestor(ActiveParticipantType human, String name, List<CodedValueType> roles = []) {
+    void checkHumanRequestor(ActiveParticipantType human, String id, String name, List<CodedValueType> roles = []) {
         assert human.userIsRequestor
-        assert human.userID == name
-        assert human.userName == name
+        assert human.userID == id
+        assert human.userName == id
+        assert human.alternativeUserID == name
         assert human.roleIDCodes.size() == roles.size()
         assert human.isUserIsRequestor()
         roles.eachWithIndex { CodedValueType cvt, int i ->

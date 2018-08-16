@@ -51,7 +51,7 @@ public class Iti39ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
                 EventActionCode.Create,
                 XdsEventTypeCode.CrossGatewayRetrieve, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status)
+                .addDocumentIds(auditDataset, status, false)
                 .getMessage();
     }
 }

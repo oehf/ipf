@@ -20,7 +20,7 @@ import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.support.FhirAuditStrategy;
 
 import java.util.Map;
 import java.util.Objects;

@@ -19,9 +19,7 @@ import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
-import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
@@ -31,19 +29,15 @@ import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLContext;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPFaultException;
-import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -91,57 +85,60 @@ public abstract class AbstractWsProducer<
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        // prepare
         InType body = exchange.getIn().getMandatoryBody(requestClass);
-        Object client = getClient();
-        configureClient(client);
-        BindingProvider bindingProvider = (BindingProvider) client;
-        WrappedMessageContext requestContext = (WrappedMessageContext) bindingProvider.getRequestContext();
-        cleanRequestContext(requestContext);
-
-        enrichRequestContext(exchange, requestContext);
-        processUserDefinedOutgoingHeaders(requestContext, exchange.getIn(), true);
-
-        // set request encoding based on Camel exchange property
-        String requestEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
-        if (requestEncoding != null) {
-            requestContext.put(org.apache.cxf.message.Message.ENCODING, requestEncoding);
-        }
-
-        // get and analyse WS-Addressing asynchrony configuration
-        String replyToHeader = exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
-        replyToHeader = replyToHeader != null ? replyToHeader.trim() : null;
-        String replyToUri =
-                getWsTransactionConfiguration().isAllowAsynchrony()
-                        ? (replyToHeader == null || replyToHeader.isEmpty() ? null : replyToHeader)
-                        : null;
-
-        // for asynchronous interaction: configure WSA headers and store correlation data
-        if ((replyToUri != null) ||
-                Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION))) {
-            String messageId = "urn:uuid:" + UUID.randomUUID().toString();
-            configureWSAHeaders(messageId, replyToUri, requestContext);
-
-            AsynchronyCorrelator<AuditDatasetType> correlator = getEndpoint().getCorrelator();
-            correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
-
-            String correlationKey = exchange.getIn().getHeader(
-                    AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME,
-                    String.class);
-            if (correlationKey != null) {
-                correlator.storeCorrelationKey(messageId, correlationKey);
-            }
-
-            String[] alternativeKeys = getAlternativeRequestKeys(exchange);
-            if (alternativeKeys != null) {
-                correlator.storeAlternativeKeys(messageId, alternativeKeys);
-            }
-        }
-
-        // invoke
-        exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
+        Object client = null;
+        BindingProvider bindingProvider = null;
+        String replyToUri = null;
         OutType result = null;
+
         try {
+            // prepare
+            client = clientFactory.getClient();
+            configureClient(client);
+            bindingProvider = (BindingProvider) client;
+            WrappedMessageContext requestContext = (WrappedMessageContext) bindingProvider.getRequestContext();
+            cleanRequestContext(requestContext);
+
+            enrichRequestContext(exchange, requestContext);
+            processUserDefinedOutgoingHeaders(requestContext, exchange.getIn(), true);
+
+            // set request encoding based on Camel exchange property
+            String requestEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            if (requestEncoding != null) {
+                requestContext.put(org.apache.cxf.message.Message.ENCODING, requestEncoding);
+            }
+
+            // get and analyse WS-Addressing asynchrony configuration
+            String replyToHeader = exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
+            replyToHeader = replyToHeader != null ? replyToHeader.trim() : null;
+            replyToUri = getWsTransactionConfiguration().isAllowAsynchrony()
+                    ? (replyToHeader == null || replyToHeader.isEmpty() ? null : replyToHeader)
+                    : null;
+
+            // for asynchronous interaction: configure WSA headers and store correlation data
+            if ((replyToUri != null) || Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION))) {
+                String messageId = "urn:uuid:" + UUID.randomUUID().toString();
+                configureWSAHeaders(messageId, replyToUri, requestContext);
+
+                AsynchronyCorrelator<AuditDatasetType> correlator = getEndpoint().getCorrelator();
+                correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
+
+                String correlationKey = exchange.getIn().getHeader(
+                        AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME,
+                        String.class);
+                if (correlationKey != null) {
+                    correlator.storeCorrelationKey(messageId, correlationKey);
+                }
+
+                String[] alternativeKeys = getAlternativeRequestKeys(exchange);
+                if (alternativeKeys != null) {
+                    correlator.storeAlternativeKeys(messageId, alternativeKeys);
+                }
+            }
+
+            // invoke
+            exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
+
             // normalize response type when called via reflection or similar non-type-safe mechanisms
             result = responseClass.cast(callService(client, body));
         } catch (SOAPFaultException fault) {
@@ -152,6 +149,8 @@ public abstract class AbstractWsProducer<
                     !(fault.getCause() instanceof WstxEOFException)) {
                 throw fault;
             }
+        } finally {
+            clientFactory.restoreClient(client);
         }
 
         // for synchronous interaction (replyToUri == null): handle response.
@@ -263,40 +262,6 @@ public abstract class AbstractWsProducer<
             apropos.setReplyTo(endpointReference);
         }
     }
-
-    /**
-     * Retrieves the client stub for the Web Service.
-     * <p>
-     * This method caches the client stub instance and therefore requires thread
-     * synchronization.
-     *
-     * @return the client stub.
-     */
-    protected Object getClient() {
-        return clientFactory.getClient(() -> {
-            // Only supply SSLContext if client has not been configured yet
-            SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
-            if (sslContextParameters == null && getEndpoint().isSecure()) {
-                Map<String, SSLContextParameters> sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
-                if (sslContextParameterMap.size() == 1) {
-                    Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
-                    sslContextParameters = entry.getValue();
-                } else if (sslContextParameterMap.size() > 1) {
-                    throw new AmbiguousBeanException(SSLContextParameters.class);
-                }
-            }
-            try {
-                SSLContext sslContext = sslContextParameters != null ?
-                        sslContextParameters.createSSLContext(getEndpoint().getCamelContext()) :
-                        null;
-                return new WsSecurityInformation(getEndpoint().isSecure(), sslContext, getEndpoint().getHostnameVerifier(),
-                        getEndpoint().getUsername(), getEndpoint().getPassword());
-            } catch (Exception e) {
-                throw new RuntimeCamelException(e);
-            }
-        });
-    }
-
 
     /**
      * @return the info describing the Web Service.

@@ -3,12 +3,9 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
-import ca.uhn.hl7v2.validation.MessageRule
-import ca.uhn.hl7v2.validation.ValidationException
-import ca.uhn.hl7v2.validation.ValidationException
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.validation.ValidationException
 import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
-
 
 /**
  * A private rule that may be used if no other message rule could be found

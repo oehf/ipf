@@ -21,6 +21,7 @@ import java.util.Set;
 
 /**
  * @author Martin Krasser
+ * @deprecated
  */
 public class Contexts {
 

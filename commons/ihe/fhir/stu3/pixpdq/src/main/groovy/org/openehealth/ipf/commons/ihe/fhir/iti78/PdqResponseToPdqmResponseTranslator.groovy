@@ -29,7 +29,7 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse
 import org.hl7.fhir.dstu3.model.codesystems.V3MaritalStatus
 import org.hl7.fhir.dstu3.model.codesystems.V3NullFlavor
 import org.hl7.fhir.dstu3.model.codesystems.V3ReligiousAffiliation
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -158,21 +158,17 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         if (!pid[14].empty) {
             convertTelecoms(pid[14](), patient.getTelecom(), ContactPointUse.WORK, ContactPointSystem.PHONE)
         }
-        // TODO may be needs conversion, expectation is something like en-US or de
+
         if (pid[15]?.value) {
-            CodeableConcept language = new CodeableConcept()
-            language.addCoding().setCode(pid[15].value)
-            patient.addCommunication().setLanguage(language)
+            patient.addCommunication().setLanguage(makeCodeableConcept(pid[15].value, pid[15].value, "urn:ietf:bcp:47", null))
         }
+
         if (pid[16]?.value) {
-            CodeableConcept maritalStatus = new CodeableConcept()
             String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
             def mappedMaritalStatus
             switch (mapped) {
                 case "UNK":
-                    mappedMaritalStatus = new Coding()
-                            .setSystem('http://hl7.org/fhir/v3/NullFlavor')
-                            V3NullFlavor.UNK; break
+                    mappedMaritalStatus = V3NullFlavor.UNK; break
                 case "U":
                     mappedMaritalStatus = new Coding()
                             .setSystem('http://hl7.org/fhir/marital-status')
@@ -180,15 +176,10 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                             .setDisplay('Unmarried'); break
                 default: mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
             }
-            maritalStatus.addCoding()
-                    .setCode(mapped)
-                    .setSystem(mappedMaritalStatus.system)
-                    .setDisplay(mappedMaritalStatus.display)
-            patient.setMaritalStatus(maritalStatus)
+            patient.setMaritalStatus(makeCodeableConcept(pid[16].value, mapped, mappedMaritalStatus.system, mappedMaritalStatus.display))
         }
 
         if (pid[17].value) {
-            CodeableConcept religion = new CodeableConcept()
             String mapped = pid[17].value.map('hl7v2fhir-patient-religion')
             def mappedReligion
             switch (mapped) {
@@ -196,11 +187,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     mappedReligion = V3NullFlavor.UNK; break
                 default: mappedReligion = V3ReligiousAffiliation.fromCode(mapped)
             }
-            religion.addCoding()
-                    .setCode(mapped)
-                    .setSystem(mappedReligion.system)
-                    .setDisplay(mappedReligion.display)
-            patient.addReligion(religion)
+            patient.addReligion(makeCodeableConcept(pid[17].value, mapped, mappedReligion.system, mappedReligion.display))
+
+
         }
 
         if (pid[18].value) {
@@ -231,7 +220,6 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
         // Citizenship
         if (pid[26].value) {
-            CodeableConcept citizenshipCode = new CodeableConcept()
             String mapped = pid[26].value.map('hl7v2fhir-patient-citizenship')
             def mappedCitizenship
             switch (mapped) {
@@ -242,13 +230,8 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     .setSystem("urn:iso:std:iso:3166")
                     .setDisplay(mapped)
             }
-            citizenshipCode.addCoding()
-                    .setCode(mapped)
-                    .setSystem(mappedCitizenship.system)
-                    .setDisplay(mappedCitizenship.display)
-            PdqPatient.Citizenship citizenship = new PdqPatient.Citizenship()
-            citizenship.setCode(citizenshipCode)
-            patient.addCitizenship(citizenship)
+            patient.addCitizenship()
+                    .setCode(makeCodeableConcept(pid[26].value, mapped, mappedCitizenship.system, mappedCitizenship.display))
         }
 
         // Death Indicators
@@ -259,6 +242,15 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         }
 
         patient
+    }
+
+    protected CodeableConcept makeCodeableConcept(String originalCode, String code, String system, String display) {
+        CodeableConcept codeableConcept = new CodeableConcept()
+        codeableConcept.addCoding()
+                .setCode(code)
+                .setSystem(system)
+                .setDisplay(display)
+        codeableConcept
     }
 
 
@@ -362,6 +354,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         if (xtn[4]?.value) {
             telecom.setSystem(ContactPointSystem.EMAIL)
                     .setValue(xtn[4].value)
+        }
+        if ("CP".equals(xtn[3]?.value)) {
+            telecom.setUse(ContactPointUse.MOBILE);
         }
         telecom
     }

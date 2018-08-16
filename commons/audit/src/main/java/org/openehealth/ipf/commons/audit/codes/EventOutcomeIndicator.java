@@ -42,5 +42,7 @@ public enum EventOutcomeIndicator implements EnumeratedValueSet<Integer> {
         this.value = value;
     }
 
-
+    public static EventOutcomeIndicator enumForCode(Integer code) {
+        return EnumeratedValueSet.enumForCode(EventOutcomeIndicator.class, code);
+    }
 }

@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.audit.codes;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 /**
  * Audit Active Participant Role ID Code as specified in
@@ -41,8 +42,8 @@ public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, Enum
 
     Application("110150", "Application"),
     ApplicationLauncher("110151", "Application Launcher"),
-    Destination("110152", "Destination"),
-    Source("110153", "Source"),
+    Destination("110152", "Destination Role ID"),
+    Source("110153", "Source Role ID"),
     DestinationMedia("110154", "Destination Media"),
     SourceMedia("110155", "Source Media");
 
@@ -51,6 +52,10 @@ public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, Enum
 
     ActiveParticipantRoleIdCode(String code, String displayName) {
         this.value = ActiveParticipantRoleId.of(code, "DCM", displayName);
+    }
+
+    public static ActiveParticipantRoleIdCode enumForCode(String code) {
+        return EnumeratedValueSet.enumForCode(ActiveParticipantRoleIdCode.class, code);
     }
 
 }

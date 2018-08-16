@@ -23,16 +23,13 @@ import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 /**
  *
  */
 abstract class AbstractTestIti67 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti67.class);
 
     public static void startServer(String contextDescriptor) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);

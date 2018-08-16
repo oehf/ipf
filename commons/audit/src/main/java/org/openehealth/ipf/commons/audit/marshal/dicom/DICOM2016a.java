@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Christian Ohr
@@ -36,8 +36,9 @@ import java.util.Base64;
  */
 public class DICOM2016a implements SerializationStrategy {
 
-    private static final XMLOutputter PRETTY = new XMLOutputter(Format.getPrettyFormat());
-    private static final XMLOutputter COMPACT = new XMLOutputter(Format.getCompactFormat());
+    // Omit XML declaration, because this is done as part of the RFC5424Protocol
+    private static final XMLOutputter PRETTY = new XMLOutputter(Format.getPrettyFormat().setOmitDeclaration(true));
+    private static final XMLOutputter COMPACT = new XMLOutputter(Format.getCompactFormat().setOmitDeclaration(true));
 
 
     @Override
@@ -70,7 +71,11 @@ public class DICOM2016a implements SerializationStrategy {
         element.setAttribute("UserIsRequestor", Boolean.toString(activeParticipant.isUserIsRequestor()));
         conditionallyAddAttribute(element, "NetworkAccessPointID", activeParticipant.getNetworkAccessPointID());
         conditionallyAddAttribute(element, "NetworkAccessPointTypeCode", activeParticipant.getNetworkAccessPointTypeCode());
-// TODO mediaidentifier/mediatype
+        if (activeParticipant.getMediaType() != null) {
+            element.addContent(
+                    new Element("MediaIdentifier")
+                            .addContent(codedValueType("MediaType", activeParticipant.getMediaType())));
+        }
         if (activeParticipant.getRoleIDCodes() != null) {
             activeParticipant.getRoleIDCodes().stream()
                     .map(roleIdCode -> codedValueType("RoleIDCode", roleIdCode))
@@ -120,7 +125,7 @@ public class DICOM2016a implements SerializationStrategy {
             }
             if (poi.getParticipantObjectQuery() != null) {
                 element.addContent(new Element("ParticipantObjectQuery")
-                        .addContent(Base64.getEncoder().encodeToString(poi.getParticipantObjectQuery())));
+                        .addContent(new String(poi.getParticipantObjectQuery(), StandardCharsets.UTF_8)));
             }
             poi.getParticipantObjectDetails().stream()
                     .map(participantObjectDetail -> typeValuePairType("ParticipantObjectDetail", participantObjectDetail))
@@ -162,7 +167,7 @@ public class DICOM2016a implements SerializationStrategy {
     protected Element typeValuePairType(String tagName, TypeValuePairType typeValuePair) {
         Element element = new Element(tagName);
         element.setAttribute("type", typeValuePair.getType());
-        element.setAttribute("value", new String(typeValuePair.getValue()));
+        element.setAttribute("value", new String(typeValuePair.getValue(), StandardCharsets.UTF_8));
         return element;
     }
 

@@ -46,4 +46,8 @@ class CodedValueTypeImpl implements CodedValueType {
         this.originalText = requireNonNull(originalText, "originalText of CodedValueType must be not null");
     }
 
+    CodedValueTypeImpl(CodedValueType codedValueType) {
+        this(codedValueType.getCode(), codedValueType.getCodeSystemName(), codedValueType.getOriginalText());
+    }
+
 }

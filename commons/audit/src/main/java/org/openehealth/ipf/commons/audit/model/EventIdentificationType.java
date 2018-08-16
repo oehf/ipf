@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.audit.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -38,8 +39,8 @@ import static java.util.Objects.requireNonNull;
 @EqualsAndHashCode
 public class EventIdentificationType implements Serializable, Validateable {
 
-    @Getter
-    private final EventId eventID;
+    @Getter @Setter @NonNull
+    private EventId eventID;
 
     /**
      * The EventDateTime is the date and time that the event being reported took place. Some events have a significant duration.
@@ -48,16 +49,16 @@ public class EventIdentificationType implements Serializable, Validateable {
      * Creators of audit messages may support leap-seconds, but are not required to. Recipients of audit messages shall be able
      * to process messages with leap-second information.
      */
-    @Getter
-    private final Instant eventDateTime;
+    @Getter @Setter @NonNull
+    private Instant eventDateTime;
 
-    @Getter
-    private final EventOutcomeIndicator eventOutcomeIndicator;
+    @Getter @Setter @NonNull
+    private EventOutcomeIndicator eventOutcomeIndicator;
 
     @Getter @Setter
     private String eventOutcomeDescription;
 
-    @Getter
+    @Getter @Setter
     private EventActionCode eventActionCode;
 
     private List<PurposeOfUse> purposesOfUse;
@@ -80,11 +81,6 @@ public class EventIdentificationType implements Serializable, Validateable {
         }
         return this.eventTypeCodes;
     }
-
-    public void setEventActionCode(EventActionCode eventActionCode) {
-        this.eventActionCode = eventActionCode;
-    }
-
 
     /**
      * <p>

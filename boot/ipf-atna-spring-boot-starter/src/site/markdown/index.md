@@ -19,7 +19,8 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 * `org.openehealth.ipf.commons.audit.AuditContext` bean
 * a basic listeners that write ATNA audit events upon application startup and shutdown, and authentication events
 
-`ipf-atna-spring-boot-starter` provides the following application properties:
+`ipf-atna-spring-boot-starter` provides the following application properties that configures the `AuditContext`
+as described [here](../ipf-commons-audit/index.html).
 
 | Property (`ipf.atna.`)         | Default               | Description                                         |
 |--------------------------------|-----------------------|-----------------------------------------------------|
@@ -29,11 +30,11 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 | `audit-repository-transport`   | UDP                   | Wire transport format (UDP, TLS)
 | `audit-source-id`              | `${spring.application.name}` | Source ID for ATNA events
 | `audit-enterprise-site-id`     |                       | Enterprise Site ID for ATNA events
+| `include-participants-from-response`| false            | Whether to include (patient) participants from responses as well
 | `audit-source-type`            | 4 (ApplicationServerProcess) | Type of Audit Source
 | `audit-queue-class`            | `org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue` | Queue implementation for auditing
-| `audit-sender-class`           | as indidcated by `audit-repository-transport` | ATNA sender implementation
+| `audit-sender-class`           | as indicated by `audit-repository-transport` | ATNA sender implementation
 | `audit-exception-handler-class`| `org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler`| Exception handler impleemntation
-| `include-participants-from-response`| false            | Whether to include (patient) participants from responses as well
 
 
 [Spring Boot]: https://projects.spring.io/spring-boot/

@@ -17,10 +17,11 @@
 package org.openehealth.ipf.boot.atna;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 
@@ -33,18 +34,21 @@ public class ApplicationStopEventListener implements ApplicationListener<Context
 
     private final AuditContext auditContext;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     public ApplicationStopEventListener(AuditContext auditContext) {
         this.auditContext = requireNonNull(auditContext);
     }
 
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
-        if (auditContext.isAuditEnabled()) {
+        if (auditContext.isAuditEnabled() && contextClosedEvent.getApplicationContext() == applicationContext) {
             auditContext.audit(
-                    new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
+                    new ApplicationActivityBuilder.ApplicationStop(EventOutcomeIndicator.Success)
                             .setAuditSource(auditContext)
                             .setApplicationParticipant(
-                                    contextClosedEvent.getApplicationContext().getApplicationName(),
+                                    applicationContext.getApplicationName(),
                                     null,
                                     null,
                                     AuditUtils.getLocalHostName())

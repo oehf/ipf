@@ -25,9 +25,9 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.NamingSystemService;
+import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
+import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -119,19 +119,24 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            IPagingProvider pagingProvider,
+            @Autowired(required = false) IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfFhirServlet(config.getFhirVersion());
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
-        fhirServlet.setPagingProvider(pagingProvider);
+
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
         fhirServlet.setStrictErrorHandler(servletProperties.isStrict());
         fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
-        fhirServlet.setNarrativeGenerator(narrativeGenerator);
+        if (narrativeGenerator != null) {
+            fhirServlet.setNarrativeGenerator(narrativeGenerator);
+        }
+        if (pagingProvider != null) {
+            fhirServlet.setPagingProvider(pagingProvider);
+        }
         return fhirServlet;
     }
 

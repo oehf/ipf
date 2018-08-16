@@ -23,7 +23,7 @@ import org.junit.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.audit.types.CodedValueType
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
@@ -159,11 +159,19 @@ class TestIti42 extends XdsStandardTestContainer {
         // check registry audit records
         AuditMessage message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
 
-        assert message.activeParticipants.size() == 3
+        assert message.activeParticipants.size() == 4
         assert message.participantObjectIdentifications.size() == 2
         
         checkEvent(message.eventIdentification, '110107', 'ITI-42', EventActionCode.Create, outcome)
         checkSource(message.activeParticipants[0], false)
+
+        def role1 = ActiveParticipantRoleId.of('ELE' as String, '1.2.3.4.5.6.777.1' as String, 'Electrician' as String)
+        def role2 = ActiveParticipantRoleId.of('HCP' as String, '2.16.756.5.30.1.127.3.10.4' as String, 'Healthcare Practitioner' as String)
+        def role3 = ActiveParticipantRoleId.of('GYN' as String, '1.2.3.4.5.6.777.2' as String, 'Gynecologist' as String)
+        def role4 = ActiveParticipantRoleId.of('ASSISTANT' as String, '2.16.756.5.30.1.127.3.10.4' as String, 'Assistant' as String)
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
+
         /* TODO fails with java 9
         checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
                 CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
@@ -178,11 +186,12 @@ class TestIti42 extends XdsStandardTestContainer {
         // check repository audit records
         message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
 
-        assert message.activeParticipants.size() == 3
+        assert message.activeParticipants.size() == 4
         assert message.participantObjectIdentifications.size() == 2
         
         checkEvent(message.eventIdentification, '110106', 'ITI-42', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], false)
+<<<<<<< .mine
         /* TODO fails with java 9
         checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
                 CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
@@ -190,6 +199,15 @@ class TestIti42 extends XdsStandardTestContainer {
         ])
         */
         checkDestination(message.activeParticipants[2], SERVICE2_ADDR, false)
+=======
+
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
+
+        checkDestination(message.activeParticipants[3], SERVICE2_ADDR, false)
+
+
+>>>>>>> .theirs
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])

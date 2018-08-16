@@ -18,8 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.*;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
 import java.util.*;
@@ -199,6 +202,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
+             if (profile == RMU.Interactions.ITI_92) {
+                 throw new XdsRuntimeException(ErrorCode.OBJECT_TYPE_ERROR, "Folders cannot be updated", Severity.ERROR, folder.getId());
+             }
+
             boolean limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_SCHEME, profile);
             runValidations(folder, getFolderSlotValidations(limitedMetadata));
 
@@ -215,8 +222,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(limitedMetadata || ((name != null) && (name.getValue() != null)),
                     MISSING_FOLDER_NAME, folder.getId());
 
-            if ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
-                validateUpdateObject(folder, container);
+            if (profile == XDS.Interactions.ITI_57) {
+                validateUpdateObject(folder, container, profile);
             }
         }
     }
@@ -244,10 +251,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, profile);
 
-            boolean onDemandExpected = (profile == XDS.Interactions.ITI_61);
+            // on-demand is required for ITI-61 and allowed for ITI-92
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
-            metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
-                    WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
+            if (onDemandProvided) {
+                metaDataAssert((profile == XDS.Interactions.ITI_61) || (profile == RMU.Interactions.ITI_92) || profile.isQuery(),
+                        WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
+            } else {
+                metaDataAssert(profile != XDS.Interactions.ITI_61, WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
+            }
 
             runValidations(docEntry, documentEntrySlotValidators(profile, onDemandProvided, limitedMetadata));
 
@@ -275,8 +286,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
-            if ((profile == XDS.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
-                validateUpdateObject(docEntry, container);
+            if ((profile == XDS.Interactions.ITI_57) || (profile == RMU.Interactions.ITI_92)) {
+                validateUpdateObject(docEntry, container, profile);
             }
         }
     }
@@ -437,11 +448,20 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return null;
     }
 
-    private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container) {
-        metaDataAssert(registryObject.getLid() != null, LOGICAL_ID_MISSING);
-        uuidValidator.validate(registryObject.getLid());
-        metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
-                registryObject.getLid(), registryObject.getId());
+    private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container, ValidationProfile profile) {
+
+        // logicalId is required for ITI-57 and optional for ITI-92
+        String logicalId = registryObject.getLid();
+        if (logicalId != null) {
+            uuidValidator.validate(logicalId);
+            if (logicalId.equals(registryObject.getId())) {
+                throw new XdsRuntimeException(ErrorCode.INVALID_REQUEST_EXCEPTION,
+                        "Initial version of the object was received in an update transaction",
+                        Severity.ERROR, registryObject.getId());
+            }
+        } else {
+            metaDataAssert(profile == RMU.Interactions.ITI_92, LOGICAL_ID_MISSING);
+        }
 
         boolean foundHasMemberAssociation = false;
         for (EbXMLAssociation association : container.getAssociations()) {
@@ -449,10 +469,24 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 && association.getTarget().equals(registryObject.getId())
                 && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null))
             {
-                metaDataAssert(association.getPreviousVersion() != null, MISSING_PREVIOUS_VERSION);
+                if (association.getPreviousVersion() == null) {
+                    throw new XdsRuntimeException(ErrorCode.METADATA_VERSION_ERROR,
+                            "previous version is missing in the SS-DE HasMember association",
+                            Severity.ERROR, association.getId());
+                }
+
+                if ((profile == RMU.Interactions.ITI_92) && Boolean.FALSE.equals(association.getAssociationPropagation())) {
+                    throw new XdsRuntimeException(ErrorCode.METADATA_ANNOTATION_ERROR,
+                            "association propagation shall be not disabled in the SS-DE HasMember association",
+                            Severity.ERROR, association.getId());
+                }
+                
                 foundHasMemberAssociation = true;
             }
         }
-        metaDataAssert(foundHasMemberAssociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
+        if (!foundHasMemberAssociation) {
+            throw new XdsRuntimeException(ErrorCode.METADATA_ANNOTATION_ERROR,
+                    "SS-DE HasMember association is missing", Severity.ERROR, registryObject.getId());
+        }
     }
 }

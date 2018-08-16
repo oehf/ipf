@@ -18,7 +18,7 @@ package org.openehealth.ipf.boot.fhir;
 
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
-import org.openehealth.ipf.commons.map.config.CustomMappings;
+import org.openehealth.ipf.commons.spring.map.config.CustomMappings;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

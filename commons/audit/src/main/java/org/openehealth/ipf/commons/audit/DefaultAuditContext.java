@@ -77,6 +77,9 @@ public class DefaultAuditContext implements AuditContext {
     private SerializationStrategy serializationStrategy = new Current();
 
     @Getter @Setter
+    private AuditMessagePostProcessor auditMessagePostProcessor = AuditMessagePostProcessor.noOp();
+
+    @Getter @Setter
     private AuditExceptionHandler auditExceptionHandler = new LoggingAuditExceptionHandler();
 
     @Getter @Setter

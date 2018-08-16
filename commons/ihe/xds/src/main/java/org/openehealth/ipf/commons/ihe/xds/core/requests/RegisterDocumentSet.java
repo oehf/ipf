@@ -53,7 +53,5 @@ public class RegisterDocumentSet implements Serializable {
     @Getter private final List<DocumentEntry> documentEntries = new ArrayList<>();
     @XmlElementRef
     @Getter private final List<Association> associations = new ArrayList<>();
-    @XmlAttribute
-    @Getter @Setter private String targetHomeCommunityId;
 
 }

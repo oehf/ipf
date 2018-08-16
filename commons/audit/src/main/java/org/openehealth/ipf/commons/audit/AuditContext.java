@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
 import java.net.InetAddress;
+import java.util.stream.Stream;
 
 /**
  * AuditContext is the central location where all aspects of serializing and sending out
@@ -81,6 +82,13 @@ public interface AuditContext {
     AuditMessageQueue getAuditMessageQueue();
 
     /**
+     * @return a post-processor for audit messages (defaults to a NO-OP implementation
+     */
+    default AuditMessagePostProcessor getAuditMessagePostProcessor() {
+        return AuditMessagePostProcessor.noOp();
+    }
+
+    /**
      * @return the serialization strategy (defaults to the latest relevant DICOM version)
      */
     default SerializationStrategy getSerializationStrategy() {
@@ -88,12 +96,14 @@ public interface AuditContext {
     }
 
     /**
-     * Sends out the audit messages as configured in this audit context
+     * Sends out the (potentially post-processed) audit messages as configured in this audit context
      *
      * @param messages audit messages to be sent
      */
     default void audit(AuditMessage... messages) {
-        getAuditMessageQueue().audit(this, messages);
+        getAuditMessageQueue().audit(this, Stream.of(messages)
+                .map(getAuditMessagePostProcessor())
+                .toArray(AuditMessage[]::new));
     }
 
     /**

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.audit.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
@@ -43,8 +44,8 @@ public class ActiveParticipantType implements Serializable, Validateable {
      * multiple participants as UserIsRequestor. If there are several known requestors, the reporting system shall pick
      * only one as UserIsRequestor.</p>
      */
-    @Getter
-    private final boolean userIsRequestor;
+    @Getter @Setter
+    private boolean userIsRequestor;
 
     /**
      * <p>Unique identifier for the user actively participating in the event.</p>
@@ -74,8 +75,8 @@ public class ActiveParticipantType implements Serializable, Validateable {
      * The UserID field for Media needs to be highly flexible given the large variety of media and transports that might be used.
      * </p>
      */
-    @Getter
-    private final String userID;
+    @Getter @Setter @NonNull
+    private String userID;
 
     /**
      * <p>

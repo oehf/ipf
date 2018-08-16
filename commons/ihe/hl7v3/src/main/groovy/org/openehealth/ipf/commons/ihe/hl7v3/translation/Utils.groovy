@@ -28,7 +28,9 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
  * @author Dmytro Rud, Marek Václavík
  */
 class Utils {
-    
+
+    public static final String HL7V2_NULL = '""'
+
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
      */
@@ -255,8 +257,7 @@ class Utils {
             boolean useNullFlavor,
             Composite cx)
     {
-        buildInstanceIdentifier(builder, elementName, useNullFlavor,
-                cx[4][2].value, cx[1].value, cx[4][1].value)
+        buildInstanceIdentifier(builder, elementName, useNullFlavor, cx[4][2].value, cx[1].value, cx[4][1].value)
     }
 
 }

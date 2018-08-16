@@ -28,8 +28,7 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
  */
 public enum HpdParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 
-    ProviderIdentifier("99SupHPD-ISO21091", "IHE", "ISO 21091 Identifier"),
-    DistinguishedName("DN", "RFC-4517", "Distinguished Name");
+    RelativeDistinguishedName("99SupHPD-ISO21091-RDN", "IHE", "ISO 21091 Relative Distinguished Name");
 
     @Getter
     private ParticipantObjectIdType value;

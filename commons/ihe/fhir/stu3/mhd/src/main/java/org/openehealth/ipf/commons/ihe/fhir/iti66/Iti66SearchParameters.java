@@ -19,16 +19,14 @@ package org.openehealth.ipf.commons.ihe.fhir.iti66;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.dstu3.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67SearchParameters;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,5 +62,20 @@ public class Iti66SearchParameters implements FhirSearchParameters {
             return Collections.singletonList(patientReference.toTokenParam(fhirContext));
 
         return Collections.singletonList(patientIdentifier);
+    }
+
+    public Iti66SearchParameters setAuthor(ReferenceAndListParam author) {
+        if (author != null) {
+            author.getValuesAsQueryTokens().forEach(param -> {
+                ReferenceParam ref = param.getValuesAsQueryTokens().get(0);
+                String authorChain = ref.getChain();
+                if (Practitioner.SP_FAMILY.equals(authorChain)) {
+                    setAuthorFamilyName(ref.toStringParam(getFhirContext()));
+                } else if (Practitioner.SP_GIVEN.equals(authorChain)) {
+                    setAuthorGivenName(ref.toStringParam(getFhirContext()));
+                }
+            });
+        }
+        return this;
     }
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.codes;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.EventId;
 
 /**
@@ -53,6 +54,9 @@ public enum EventIdCode implements EventId, EnumeratedCodedValue<EventId> {
         this.value = EventId.of(code, "DCM", displayName);
     }
 
+    public static EventIdCode enumForCode(String code) {
+        return EnumeratedValueSet.enumForCode(EventIdCode.class, code);
+    }
 }
 
 

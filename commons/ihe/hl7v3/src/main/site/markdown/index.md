@@ -45,7 +45,7 @@ For translation of PIX Feed and PDQ messages, the IPF [Mapping Service] must be 
 provided by IPF (which can be accessed as a classpath resource). Here is a snippet of Spring-based configuration:
 
 ```
-<bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+<bean id="mappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
     <property name="mappingResources">
         <list>
             <value>classpath:META-INF/map/hl7-v2-v3-translation.map</value>

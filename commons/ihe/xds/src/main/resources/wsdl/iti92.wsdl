@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<definitions
+        targetNamespace="urn:ihe:iti:rmu:2018"
+        name="UpdateResponder"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ihe="urn:ihe:iti:rmu:2018"
+        xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
+        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+        xmlns:wsaw="http://www.w3.org/2007/05/addressing/metadata">
+
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+                        schemaLocation="schema/ebRS30/rs.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
+                        schemaLocation="schema/ebRS30/lcm.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="RestrictedUpdateDocumentSet_Message">
+        <documentation>Restricted Update Document Set Request</documentation>
+        <part name="body" element="lcm:SubmitObjectsRequest"/>
+    </message>
+
+    <message name="RestrictedUpdateDocumentSetResponse_Message">
+        <documentation>Restricted Update Document Set Response</documentation>
+        <part name="body" element="rs:RegistryResponse"/>
+    </message>
+
+    <portType name="UpdateResponder_PortType">
+        <operation name="UpdateResponder_RestrictedUpdateDocumentSet">
+            <input message="ihe:RestrictedUpdateDocumentSet_Message"
+                   wsaw:Action="urn:ihe:iti:2018:RestrictedUpdateDocumentSet"/>
+            <output message="ihe:RestrictedUpdateDocumentSetResponse_Message"
+                    wsaw:Action="urn:ihe:iti:2018:RestrictedUpdateDocumentSetResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="UpdateResponder_Binding_Soap12" type="ihe:UpdateResponder_PortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="UpdateResponder_RestrictedUpdateDocumentSet">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="UpdateResponder_Service">
+        <port name="UpdateResponder_Port_Soap12" binding="ihe:UpdateResponder_Binding_Soap12">
+            <soap12:address location="http://servicelocation/UpdateResponder_Service12"/>
+        </port>
+    </service>
+
+</definitions>

@@ -32,6 +32,44 @@
         <jaxb:bindings node="//xs:complexType[@name='DsmlModification']/xs:attribute[@name='operation']/xs:simpleType">
             <jaxb:typesafeEnumClass name="ModificationOperationType"/>
         </jaxb:bindings>
+
+        <!-- Binding the the union DsmlValue type to become an Object -->
+        <jaxb:bindings node="//xs:complexType[@name='AttributeValueAssertion']/xs:sequence/xs:element[@name='value']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='SubstringFilter']/xs:sequence/xs:element[@name='initial']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='SubstringFilter']/xs:sequence/xs:element[@name='any']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='SubstringFilter']/xs:sequence/xs:element[@name='final']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='MatchingRuleAssertion']/xs:sequence/xs:element[@name='value']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='DsmlAttr']/xs:sequence/xs:element[@name='value']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='DsmlModification']/xs:sequence/xs:element[@name='value']">
+            <jaxb:property>
+                <jaxb:baseType name="java.lang.Object"/>
+            </jaxb:property>
+        </jaxb:bindings>
+
     </jaxb:bindings>
 
 </jaxb:bindings>

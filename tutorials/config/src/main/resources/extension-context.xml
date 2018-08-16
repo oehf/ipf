@@ -42,7 +42,7 @@ http://www.springframework.org/schema/lang/spring-lang.xsd">
      script-source="classpath:config/GenderTransmogrifier.groovy" />
 
   <bean id="genderMapping" 
-        class="org.openehealth.ipf.commons.map.config.CustomMappings">
+        class="org.openehealth.ipf.commons.spring.map.config.CustomMappings">
       <property name="mappingResource" value="classpath:config/gender.map" />
   </bean>
 

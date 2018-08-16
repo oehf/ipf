@@ -26,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class IpfFhirConfigurationProperties {
      * Which FHIR version to use
      */
     @Getter @Setter
-    private FhirVersionEnum fhirVersion;
+    private FhirVersionEnum fhirVersion = FhirVersionEnum.DSTU3;
 
     @NestedConfigurationProperty
     @Getter
@@ -58,9 +59,8 @@ public class IpfFhirConfigurationProperties {
     /**
      * Resource containing NamingSystems used for mapping between namespaces
      */
-    @NotNull(message = "Must provide a NamingSystems resource(s)")
     @Getter @Setter
-    private List<Resource> namingSystems;
+    private List<Resource> namingSystems = new ArrayList<>();
 
     /**
      * Whether to create a cached PagingProvider

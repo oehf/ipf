@@ -1,0 +1,94 @@
+<!--
+  Copyright 2018 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!--
+    To create the stubs, run:
+       mkdir target
+       set JAVA_TOOL_OPTIONS=-Duser.language=en
+       ${cxf_root}/bin/wsdl2java -validate -d target -b ch-ppq.xjb -p org.openehealth.ipf.commons.ihe.xacml20.chppq ch-ppq.wsdl
+    and add @XmlRootElement to all classes which correspond to request and response messages of transactions
+    -->
+
+    <jxb:bindings schemaLocation="../schema/access_control-xacml-2.0-context-schema-os.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.herasaf.xacml.core.context.impl"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/access_control-xacml-2.0-policy-schema-os.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.herasaf.xacml.core.policy.impl"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/xacml-2.0-profile-saml2.0-v2-schema-assertion-wd-14.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/epr-policy-administration-combined-schema-1.3-local.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/sstc-saml-schema-assertion-2.0.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/sstc-saml-schema-protocol-2.0.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/sstc-saml-delegation.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.delegation"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/ihe-appc-xacml-hl7-datatypes-base-1.0.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/xenc-schema.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.apache.xml.security.binding.xmlenc"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../schema/xmldsig-core-schema.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="org.apache.xml.security.binding.xmldsig"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+</jxb:bindings>

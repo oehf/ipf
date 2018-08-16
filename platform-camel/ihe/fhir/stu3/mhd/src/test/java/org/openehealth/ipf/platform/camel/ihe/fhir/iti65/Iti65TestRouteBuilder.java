@@ -22,7 +22,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
 import org.hl7.fhir.dstu3.model.*;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.util.Date;
 import java.util.UUID;

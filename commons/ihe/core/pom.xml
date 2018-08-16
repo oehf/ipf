@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.6-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -29,16 +29,15 @@
             <artifactId>spring-expression</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 
         <!-- dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.oht.atna</groupId>
-            <artifactId>ipf-oht-atna-auditor</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

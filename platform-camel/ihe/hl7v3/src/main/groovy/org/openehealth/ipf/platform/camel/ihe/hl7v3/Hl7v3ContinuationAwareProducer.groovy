@@ -21,7 +21,7 @@ import org.apache.camel.Exchange
 import org.apache.cxf.message.Message
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal
+import org.openehealth.ipf.commons.core.DomBuildersPool
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
@@ -53,7 +53,6 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
 class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, String, String> {
     private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
 
-    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
     private final Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration
@@ -198,7 +197,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
                 VALIDATOR.validate(fragmentString, wsTransactionConfiguration.responseValidationProfile)
             }
 
-            Document fragment = DOM_BUILDERS.get().parse(new ByteArrayInputStream(fragmentString.getBytes()))
+            Document fragment = DomBuildersPool.use { it.parse(new ByteArrayInputStream(fragmentString.getBytes())) }
             Element controlActProcess = getElementNS(fragment.documentElement, HL7V3_NSURI_SET, 'controlActProcess')
             Element queryAck = getElementNS(controlActProcess, HL7V3_NSURI_SET, 'queryAck')
 

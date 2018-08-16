@@ -22,37 +22,53 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
+
 /**
  * @author Dmytro Rud
  */
 public class HpdCamelValidators {
 
     private static final Processor ITI_58_REQUEST_VALIDATOR = exchange -> {
-        BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
-        new HpdValidator().validateBatchRequest(request);
+        if (validationEnabled(exchange)) {
+            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            HpdValidator.validateIti58Request(request);
+        }
     };
 
     private static final Processor ITI_58_RESPONSE_VALIDATOR = exchange -> {
-        BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
-        new HpdValidator().validateBatchResponse(response);
+        if (validationEnabled(exchange)) {
+            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            HpdValidator.validateIti58Response(response);
+        }
     };
 
     private static final Processor ITI_59_REQUEST_VALIDATOR = exchange -> {
-        // TODO
+        if (validationEnabled(exchange)) {
+            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            HpdValidator.validateIti59Request(request);
+        }
     };
 
     private static final Processor ITI_59_RESPONSE_VALIDATOR = exchange -> {
-        // TODO
+        if (validationEnabled(exchange)) {
+            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            HpdValidator.validateIti59Response(response);
+        }
     };
 
     private static final Processor CH_PIDD_REQUEST_VALIDATOR = exchange -> {
-        DownloadRequest request = exchange.getIn().getMandatoryBody(DownloadRequest.class);
-        new HpdValidator().validateDownloadRequest(request);
+        if (validationEnabled(exchange)) {
+            DownloadRequest request = exchange.getIn().getMandatoryBody(DownloadRequest.class);
+            HpdValidator.validateChPiddRequest(request);
+        }
     };
 
     private static final Processor CH_PIDD_RESPONSE_VALIDATOR = exchange -> {
-        DownloadResponse response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
-        new HpdValidator().validateDownloadResponse(response);
+        if (validationEnabled(exchange)) {
+            DownloadResponse response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
+            HpdValidator.validateChpiddResponse(response);
+        }
     };
 
     public static Processor iti58RequestValidator() {

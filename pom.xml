@@ -2,14 +2,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.6-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.6-SNAPSHOT</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -56,13 +56,9 @@
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
-        
+
         <groovy-eclipse-batch-version>2.4.15-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.2-04</groovy-eclipse-compiler-version>
-        
-<!--
-        <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-compiler-version>2.9.3-01</groovy-eclipse-compiler-version>
 -->
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
@@ -75,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.3</activemq-version>
+        <activemq-version>5.15.4</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
@@ -86,10 +82,10 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>21.0</guava-version>
+        <guava-version>23.0</guava-version>
         <httpclient4-version>4.5.5</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
-        <jetty-version>9.4.6.v20170531</jetty-version>
+        <jetty-version>9.4.11.v20180605</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.11.0</log4j-version>
@@ -97,7 +93,7 @@
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.29</tomcat-version>
+        <tomcat-version>8.5.32</tomcat-version>
         <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -205,6 +201,36 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>${compiler-plugin-version}</version>
@@ -248,6 +274,36 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/groovy</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -611,41 +667,39 @@
                             <configuration>
                                 <target>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
                                         <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://netdna.bootstrapcd</replacetoken>
                                         <replacevalue>https://netdna.bootstrapcd</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
                                         <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
                                         <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
                                         <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
                                     </replace>
-
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>http://ajax.googleapis</replacetoken>
                                         <replacevalue>https://ajax.googleapis</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
+                                        <include name="*.html"/>
                                         <replacetoken>\t</replacetoken>
-                                        <replacevalue>
-                                        </replacevalue>
+                                        <replacevalue/>
                                     </replace>
                                 </target>
                             </configuration>
@@ -744,15 +798,20 @@
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
                             commons/audit/generated-stubs:
                             commons/core/generated-stubs:
-                            commons/flow/generated-stubs:
                             commons/ihe/core/generated-stubs:
+                            commons/ihe/fhir/core/generated-stubs:
                             commons/ihe/fhir/stu3/core/generated-stubs:
                             commons/ihe/fhir/stu3/audit/generated-stubs:
                             commons/ihe/fhir/stu3/mhd/generated-stubs:
                             commons/ihe/fhir/stu3/pixpdq/generated-stubs:
+                            commons/ihe/fhir/stu3/qedm/generated-stubs:
                             commons/ihe/hl7v2/generated-stubs:
+                            commons/ihe/hl7v2ws/generated-stubs:
                             commons/ihe/hl7v3/generated-stubs:
+                            commons/ihe/hpd/generated-stubs:
                             commons/ihe/ws/generated-stubs:
+                            commons/ihe/xacml20/impl/generated-stubs:
+                            commons/ihe/xacml20/model/generated-stubs:
                             commons/ihe/xds/generated-stubs:
                             commons/ihe/xua/generated-stubs:
                             commons/map/generated-stubs:
@@ -771,12 +830,14 @@
                             platform-camel/ihe/fhir/stu3/audit/generated-stubs:
                             platform-camel/ihe/fhir/stu3/mhd/generated-stubs:
                             platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
+                            platform-camel/ihe/fhir/stu3/qedm/generated-stubs:
                             platform-camel/ihe/hl7v2/generated-stubs:
                             platform-camel/ihe/hl7v2ws/generated-stubs:
                             platform-camel/ihe/hl7v3/generated-stubs:
                             platform-camel/ihe/hpd/generated-stubs:
                             platform-camel/ihe/mllp/generated-stubs:
                             platform-camel/ihe/ws/generated-stubs:
+                            platform-camel/ihe/xacml20/generated-stubs:
                             platform-camel/ihe/xds/generated-stubs:
                             platform-camel/mdht/generated-stubs
                         </sourcepath>
@@ -904,38 +965,38 @@
                         <configuration>
                             <target>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
                                     <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://netdna.bootstrapcd</replacetoken>
                                     <replacevalue>https://netdna.bootstrapcd</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
                                     <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
                                     <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
                                     <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
                                 </replace>
 
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>http://ajax.googleapis</replacetoken>
                                     <replacevalue>https://ajax.googleapis</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
+                                    <include name="*.html"/>
                                     <replacetoken>\t</replacetoken>
                                     <replacevalue>
                                     </replacevalue>
@@ -1015,36 +1076,6 @@
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
@@ -1162,6 +1193,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${javadoc-plugin-version}</version>
+                <inherited>false</inherited>
                 <reportSets>
                     <reportSet>
                         <id>aggregate</id>
@@ -1241,6 +1273,17 @@
             <id>bintray</id>
             <name>Groovy Bintray</name>
             <url>https://dl.bintray.com/groovy/maven</url>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
             <releases>
                 <updatePolicy>never</updatePolicy>
             </releases>

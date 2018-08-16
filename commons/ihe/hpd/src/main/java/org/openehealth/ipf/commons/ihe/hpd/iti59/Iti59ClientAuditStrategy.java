@@ -16,15 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Christian Ohr
@@ -47,33 +49,18 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
                 HpdEventTypeCode.ProviderInformationFeed,
                 auditDataset.getPurposesOfUse()
         );
-        requestItem.getProviderIds().forEach(providerId ->
-                builder.addExportedEntity(
-                        providerId,
-                        HpdParticipantObjectIdTypeCode.ProviderIdentifier,
-                        ParticipantObjectTypeCode.Organization,
-                        ParticipantObjectTypeCodeRole.Provider,
-                        Collections.emptyList()
-                )
+
+        List<TypeValuePairType> details = StringUtils.isBlank(requestItem.getNewUid())
+                ? Collections.emptyList()
+                : Collections.singletonList(new TypeValuePairType("new uid", requestItem.getNewUid()));
+
+        builder.addExportedEntity(
+                requestItem.getUid(),
+                HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
+                requestItem.getParticipantObjectTypeCode(),
+                ParticipantObjectTypeCodeRole.Provider,
+                details
         );
-        if (requestItem.getDn() != null) {
-            builder.addExportedEntity(
-                    requestItem.getDn(),
-                    HpdParticipantObjectIdTypeCode.DistinguishedName,
-                    ParticipantObjectTypeCode.System,
-                    ParticipantObjectTypeCodeRole.Resource,
-                    Collections.emptyList()
-            );
-        }
-        if (requestItem.getNewRdn() != null) {
-            builder.addExportedEntity(
-                    requestItem.getNewRdn(),
-                    HpdParticipantObjectIdTypeCode.DistinguishedName,
-                    ParticipantObjectTypeCode.System,
-                    ParticipantObjectTypeCodeRole.Resource,
-                    Collections.emptyList()
-            );
-        }
 
         return builder.getMessage();
     }

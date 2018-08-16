@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.audit.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
@@ -42,13 +43,17 @@ public class ParticipantObjectIdentificationType implements Serializable, Valida
      * Identifies a specific instance of the participant object.
      */
     @Getter
-    private final String participantObjectID;
+    @Setter
+    @NonNull
+    private String participantObjectID;
 
     /**
      * Describes the identifier that is contained in Participant Object ID.
      */
     @Getter
-    private final ParticipantObjectIdType participantObjectIDTypeCode;
+    @Setter
+    @NonNull
+    private ParticipantObjectIdType participantObjectIDTypeCode;
 
     /**
      * An instance-specific descriptor of the Participant Object ID audited, such as a person's name.

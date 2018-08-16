@@ -17,10 +17,11 @@
 package org.openehealth.ipf.boot.atna;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -33,18 +34,21 @@ public class ApplicationStartEventListener implements ApplicationListener<Contex
 
     private final AuditContext auditContext;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     public ApplicationStartEventListener(AuditContext auditContext) {
         this.auditContext = requireNonNull(auditContext);
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        if (auditContext.isAuditEnabled()) {
+        if (auditContext.isAuditEnabled() && contextRefreshedEvent.getApplicationContext() == applicationContext) {
             auditContext.audit(
                     new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
                             .setAuditSource(auditContext)
                             .setApplicationParticipant(
-                                    contextRefreshedEvent.getApplicationContext().getApplicationName(),
+                                    applicationContext.getApplicationName(),
                                     null,
                                     null,
                                     AuditUtils.getLocalHostName())

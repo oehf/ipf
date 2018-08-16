@@ -21,7 +21,7 @@ import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX

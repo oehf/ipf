@@ -53,5 +53,7 @@ public enum ParticipantObjectDataLifeCycle implements EnumeratedValueSet<Short> 
         this.value = (short) value;
     }
 
-
+    public static ParticipantObjectDataLifeCycle enumForCode(Short code) {
+        return EnumeratedValueSet.enumForCode(ParticipantObjectDataLifeCycle.class, code);
+    }
 }

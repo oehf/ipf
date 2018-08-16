@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.audit.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
@@ -38,8 +39,8 @@ public class AuditSourceIdentificationType implements Serializable, Validateable
      * Although often the audit source is one of the participants, it could also be an external system
      * that is monitoring the activities of the participants (e.g., an add-on audit-generating device).
      */
-    @Getter
-    private final String auditSourceID;
+    @Getter @Setter @NonNull
+    private String auditSourceID;
 
     /**
      * <p>

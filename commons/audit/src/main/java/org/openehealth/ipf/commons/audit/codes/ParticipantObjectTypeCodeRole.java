@@ -76,4 +76,8 @@ public enum ParticipantObjectTypeCodeRole implements EnumeratedValueSet<Short> {
         this.value = (short) value;
     }
 
+    public static ParticipantObjectTypeCodeRole enumForCode(Short code) {
+        return EnumeratedValueSet.enumForCode(ParticipantObjectTypeCodeRole.class, code);
+    }
+
 }

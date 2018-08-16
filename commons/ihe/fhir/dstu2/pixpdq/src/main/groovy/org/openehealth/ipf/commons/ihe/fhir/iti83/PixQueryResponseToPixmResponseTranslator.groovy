@@ -19,7 +19,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.Parameters
-import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23

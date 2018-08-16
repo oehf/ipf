@@ -16,18 +16,20 @@
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
-import java.util.Collections;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
@@ -42,7 +44,12 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @Slf4j
 abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> {
 
-    private static final String ATTR_NAME = "hcIdentifier";
+    private static final Map<String, ParticipantObjectTypeCode> PARTICIPANT_OBJECT_CODE_MAP;
+    static {
+        PARTICIPANT_OBJECT_CODE_MAP = new HashMap<>();
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCProfessional".toLowerCase(), ParticipantObjectTypeCode.Person);
+        PARTICIPANT_OBJECT_CODE_MAP.put("HCRegulatedOrganization".toLowerCase(), ParticipantObjectTypeCode.Organization);
+    }
 
     protected Iti59AuditStrategy(boolean serverSide) {
         super(serverSide);
@@ -51,6 +58,29 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     @Override
     public Iti59AuditDataset createAuditDataset() {
         return new Iti59AuditDataset(isServerSide());
+    }
+
+    /**
+     * Enriches the given audit item with UID and participant object type code which correspond to the given DN.
+     * @param item      audit item to be enriched
+     * @param dn        current (old) LDAP DN value
+     */
+    private static void enrichAuditItem(Iti59AuditDataset.RequestItem item, String dn) {
+        try {
+            for (Rdn rdn : new LdapName(dn).getRdns()) {
+                String value = (String) rdn.getValue();
+                switch (rdn.getType().toLowerCase()) {
+                    case "uid":
+                        item.setUid(value);
+                        break;
+                    case "ou":
+                        item.setParticipantObjectTypeCode(PARTICIPANT_OBJECT_CODE_MAP.get(value.toLowerCase()));
+                        break;
+                }
+            }
+        } catch (InvalidNameException e) {
+            log.debug("Cannot parse DN", e);
+        }
     }
 
     @Override
@@ -70,42 +100,33 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
 
             if (dsmlMessage instanceof AddRequest) {
                 AddRequest addRequest = (AddRequest) dsmlMessage;
-                Set<String> providerIds = addRequest.getAttr().stream()
-                        .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
-                        .flatMap(x -> x.getValue().stream())
-                        .collect(Collectors.toSet());
-                requestItems[i] = new Iti59AuditDataset.RequestItem(
-                        trimToNull(addRequest.getRequestID()),
-                        EventActionCode.Create,
-                        providerIds);
+                requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(addRequest.getRequestID()), EventActionCode.Create);
+                enrichAuditItem(requestItems[i], addRequest.getDn());
 
             } else if (dsmlMessage instanceof ModifyRequest) {
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
-                Set<String> providerIds = modifyRequest.getModification().stream()
-                        .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
-                        .flatMap(x -> x.getValue().stream())
-                        .collect(Collectors.toSet());
-                requestItems[i] = new Iti59AuditDataset.RequestItem(
-                        trimToNull(modifyRequest.getRequestID()),
-                        EventActionCode.Update,
-                        providerIds);
+                requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyRequest.getRequestID()), EventActionCode.Update);
+                enrichAuditItem(requestItems[i], modifyRequest.getDn());
 
             } else if (dsmlMessage instanceof ModifyDNRequest) {
                 ModifyDNRequest modifyDNRequest = (ModifyDNRequest) dsmlMessage;
-                requestItems[i] = new Iti59AuditDataset.RequestItem(
-                        trimToNull(modifyDNRequest.getRequestID()),
-                        EventActionCode.Update,
-                        Collections.emptySet());
-                requestItems[i].setDn(modifyDNRequest.getDn());
-                requestItems[i].setNewRdn(modifyDNRequest.getNewrdn());
+                requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyDNRequest.getRequestID()), EventActionCode.Execute);
+                enrichAuditItem(requestItems[i], modifyDNRequest.getDn());
+                try {
+                    requestItems[i].setNewUid(new LdapName(modifyDNRequest.getNewrdn()).getRdns().stream()
+                            .filter(rdn -> "uid".equalsIgnoreCase(rdn.getType()))
+                            .map(rdn -> (String) rdn.getValue())
+                            .findAny()
+                            .orElse(null));
+                } catch (Exception e) {
+                    log.debug("Cannot parse new Rdn", e);
+                }
 
             } else if (dsmlMessage instanceof DelRequest) {
                 DelRequest delRequest = (DelRequest) dsmlMessage;
-                requestItems[i] = new Iti59AuditDataset.RequestItem(
-                        trimToNull(delRequest.getRequestID()),
-                        EventActionCode.Delete,
-                        Collections.emptySet());
-                requestItems[i].setDn(delRequest.getDn());
+                requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(delRequest.getRequestID()), EventActionCode.Delete);
+                enrichAuditItem(requestItems[i], delRequest.getDn());
+
             } else {
                 log.debug("Cannot handle ITI-59 request of type {}", getShortCanonicalName(dsmlMessage, "<null>"));
             }
@@ -206,7 +227,9 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset) {
+        // TODO: consider grouping multiple items per ATNA message based on a combination of action code and outcome code
         return Stream.of(auditDataset.getRequestItems())
+                .filter(requestItem -> StringUtils.isNotBlank(requestItem.getUid()))
                 .map(requestItem -> makeAuditMessage(auditContext, auditDataset, requestItem))
                 .toArray(AuditMessage[]::new);
     }

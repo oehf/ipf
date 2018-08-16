@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
 import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30Options;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 

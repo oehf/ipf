@@ -11,15 +11,13 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.6-SNAPSHOT</version>
     </parent>
 
     <modules>
-        <!--
-        <module>hl7dsl</module>
-        -->
         <module>hl7</module>
         <module>cda</module>
+        <module>hl7-kotlin</module>
     </modules>
 
     <dependencies>

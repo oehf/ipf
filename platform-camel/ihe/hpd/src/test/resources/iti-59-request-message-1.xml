@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Use Case 1: A new hospital “Nowehere General Hospital” has joined an existing Network
+“someHospitalNetwork”.
+ The hospital has two providers, “Michael Smith”, an endocronolist, and “Jackie Doe”, a cardiologist,
+ who need to be added to the Provider Information Directory. -->
+<dsml:batchRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="urn:oasis:names:tc:DSML:2:0:core http://www.oasisopen.org/committees/dsml/docs/DSMLv2.xsd"
+                   xmlns:dsml="urn:oasis:names:tc:DSML:2:0:core"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- Add a Hospital "Nowhere General Hospital" -->
+    <dsml:addRequest dn="uid=hpdtest:O1,ou=HCRegulatedOrganization,O=HPDTEST,DC=HPD,C=US">
+        <dsml:attr name="hcIdentifier">
+            <dsml:value>
+                2.16.10.89.200:FederalTax:800-801-8004:Active
+            </dsml:value>
+            <dsml:value>
+                2.16.840.1.113883.4.6:NPI:666789-804:Active
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcRegisteredName">
+            <dsml:value>
+                Nowhere General Hospital
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="o">
+            <dsml:value>Nowhere Hospital</dsml:value>
+            <dsml:value>Nowhere General Hospital</dsml:value>
+            <dsml:value>NGH</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="businessCategory">
+            <dsml:value>
+                Hospital
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcSpecialization">
+            <dsml:value>
+                Emergency
+            </dsml:value>
+            <dsml:value>
+                General Hospital
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderPracticeAddress">
+            <dsml:value>status=Primary $ addr=100 North Ave Nowheresville Some 98765-1234</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderMailingAddress">
+            <dsml:value>status=Primary $ addr=1 South Ave, Suite 100, Nowheresville Some 98765-1234</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdMedicalRecordsDeliveryEmailAddress">
+            <dsml:value>
+                medrecords@nowhere.org
+            </dsml:value>
+        </dsml:attr>
+        <!-- DN of Some Hospital Network Group-->
+        <dsml:attr name="memberof">
+            <dsml:value>cn=someHospitalNetworkGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="objectClass">
+            <dsml:value>hcRegulatedOrganizationl</dsml:value>
+            <dsml:value>organization</dsml:value>
+            <dsml:value>hpdProvider</dsml:value>
+            <dsml:value>top</dsml:value>
+        </dsml:attr>
+    </dsml:addRequest>
+    <!-- Add a Relationship Group for "Nowhere General Hospital" -->
+    <dsml:addRequest dn="cn=NowhereGeneralHospitalGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US">
+        <dsml:attr name="cn">
+            <dsml:value>
+                NowhereGeneralHospitalGroup
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="owner">
+            <!-- DN of Nowhere General Hospital -->
+            <dsml:value>
+                uid=hpdtest:O1,ou=HCRegulated Organization,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="objectClass">
+            <dsml:value>groupOfNames</dsml:value>
+            <dsml:value>top</dsml:value>
+        </dsml:attr>
+    </dsml:addRequest>
+
+    <!-- Add the relationship for "Nowhere General Hospital" to "someHospitalNetwork-->
+    <dsml:modifyRequest dn="cn=someHospitalNetworkGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US">
+        <dsml:modification operation="add" name="member">
+            <!-- DN of Nowhere General Hospital -->
+            <dsml:value>
+                uid=hpdtest:O1,ou=HCRegulatedOrganization,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:modification>
+    </dsml:modifyRequest>
+
+    <!-- Add a Provider "Michael Smith who practices as Endocronologist at Nowhere General Hospital" -->
+    <dsml:addRequest dn="uid=hpdtest:I6,ou=HCProfessional,O=HPDTEST,DC=HPD,C=US">
+        <dsml:attr name="cn">
+            <dsml:value>Michael Smith</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="displayName">
+            <dsml:value>Michael Smith</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="givenName">
+            <dsml:value>Mike</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="sn">
+            <dsml:value>Smith</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="uid">
+            <dsml:value>hpdtest:I6</dsml:value>
+        </dsml:attr>
+        <!-- Multiple Indetifiers associated with Provider: Local Hospital Id and NPI Id -->
+        <dsml:attr name="HcIdentifier">
+            <dsml:value>1.89.11.00.124:HospId:786868:Active</dsml:value>
+            <dsml:value>2.16.840.1.113883.4.6:NPI:90909090:Active</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderStatus">
+            <dsml:value>Active</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcProfession">
+            <dsml:value>Endocronologist</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="description">
+            <dsml:value>Thyroid specialist</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcSpecialization">
+            <dsml:value>Internal medicine</dsml:value>
+            <dsml:value>Endocrinology</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderLanguageSupported">
+            <dsml:value>en</dsml:value>
+            <dsml:value>es</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="gender">
+            <dsml:value>M</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderBillingAddress">
+            <dsml:value>status=Primary $ addr=1221 Circle Lane Nowheresville Some 98765 US</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderPracticeAddress">
+            <dsml:value>status=Primary $postalCode=98765 $ addr=100 North Ave Nowheresville Some 98765-
+                1234
+            </dsml:value>
+            <dsml:value>status=other $postalCode=90909 $ addr=8909 First St Nowheresville Some
+                90909
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="telephoneNumber">
+            <dsml:value>(042) 123 4567</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="credential">
+            <dsml:value>credentialNumber=ABFM OID:667789
+                ou=HPDCredentials,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:attr>
+        <!-- DN of Nowhere General Hospital group -->
+        <dsml:attr name="memberof">
+            <dsml:value>cn=NowhereGeneralHospitalGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="objectClass">
+            <dsml:value>HCProfessional</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>HPDProvider</dsml:value>
+            <dsml:value>naturalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+        </dsml:attr>
+    </dsml:addRequest>
+
+    <!-- Add a Provider "Jackie Doe who practices as Cardiologist at Nowhere General Hospital" -->
+    <dsml:addRequest dn="uid=hpdtest:I7,ou=HCProfessional,O=HPDTEST,DC=HPD,C=US">
+        <dsml:attr name="cn">
+            <dsml:value>Jackie Doe</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="displayName">
+            <dsml:value>Jacklene Doe</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="givenName">
+            <dsml:value>Jacklene</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="sn">
+            <dsml:value>Doe</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="uid">
+            <dsml:value>hpdtest:I7</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="HcIdentifier">
+            <dsml:value>1.89.11.00.124:HospId:786890:Active</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderStatus">
+            <dsml:value>Active</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcProfession">
+            <dsml:value>Cardiologist</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="description">
+            <dsml:value>Heart specialist</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hcSpecialization">
+            <dsml:value>Internal medicine</dsml:value>
+            <dsml:value>Cardiology</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderLanguageSupported">
+            <dsml:value>en</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="gender">
+            <dsml:value>F</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderBillingAddress">
+            <dsml:value>status=Primary $ addr=1230 Circle Lane Nowheresville Some 98765 US</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="hpdProviderPracticeAddress">
+            <dsml:value>status=Primary $postalCode=98765 $ addr=100 North Ave Nowheresville Some 98765-1234</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="mobile">
+            <dsml:value>(042) 234 4567</dsml:value>
+        </dsml:attr>
+        <dsml:attr name="credential">
+            <dsml:value>credentialNumber=ABFM OID:909090
+                ou=HPDCredentials,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:attr>
+        <!-- DN of Nowhere General Hospital Group-->
+        <dsml:attr name="memberof">
+            <dsml:value>cn=NowhereGeneralHospitalGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:attr>
+        <dsml:attr name="objectClass">
+            <dsml:value>HCProfessional</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>HPDProvider</dsml:value>
+            <dsml:value>naturalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+        </dsml:attr>
+    </dsml:addRequest>
+
+    <!-- Add the Relationship for both providers with "Nowhere General Hospital" -->
+    <dsml:modifyRequest dn="cn=NowhereGeneralHospitalGroup,ou=Relationship,O=HPDTEST,DC=HPD,C=US">
+        <dsml:modification operation="add" name="member">
+            <!-- DN of Michael Smith -->
+            <dsml:value>
+                uid=hpdtest:I6,ou=HCProfesional,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:modification>
+        <dsml:modification operation="add" name="member">
+            <!-- DN of jackie Doe -->
+            <dsml:value>
+                uid=hpdtest:I7,ou=HCProfesional,O=HPDTEST,DC=HPD,C=US
+            </dsml:value>
+        </dsml:modification>
+    </dsml:modifyRequest>
+</dsml:batchRequest>

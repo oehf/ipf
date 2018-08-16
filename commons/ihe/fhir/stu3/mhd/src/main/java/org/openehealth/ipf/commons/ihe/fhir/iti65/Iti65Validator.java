@@ -25,9 +25,9 @@ import org.hl7.fhir.dstu3.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.FhirUtils;
+import org.openehealth.ipf.commons.ihe.fhir.support.CustomValidationSupport;
+import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
 import java.util.*;

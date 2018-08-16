@@ -41,10 +41,11 @@ public class JaxWsRequestClientFactory<AuditDatasetType extends WsAuditDataset> 
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<AuditDatasetType> correlator)
+            AsynchronyCorrelator<AuditDatasetType> correlator,
+            WsSecurityInformation securityInformation)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
-                customInterceptors, features, properties, correlator);
+                customInterceptors, features, properties, correlator, securityInformation);
     }
 
     @Override

@@ -21,6 +21,7 @@ import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.HL7V2_NULL
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.buildInstanceIdentifier
 
 /**
@@ -83,19 +84,23 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                         id(nullFlavor: 'NA')
                         statusCode(code: 'active')
                         subject1(typeCode: 'SBJ') {
-                            def PIDSegment = getPID(adt)
+                            def pid = getPID(adt)
                             patient(classCode: 'PAT') {
-                                for (pid3 in PIDSegment[3]()) {
-                                    buildInstanceIdentifier(builder, 'id', false, pid3)
+                                def deletedIdsOids = []
+                                for (pid3 in pid[3]()) {
+                                    if (pid3[1].value == HL7V2_NULL) {
+                                        deletedIdsOids << pid3[4][2].value
+                                    } else {
+                                        buildInstanceIdentifier(builder, 'id', false, pid3)
+                                    }
                                 }
                                 statusCode(code: 'active')
                                 patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                    createPatientPersonElements(builder, PIDSegment)
-                                    createBirthPlaceElement(builder, PIDSegment)
+                                    createPatientPersonElements(builder, pid, deletedIdsOids)
+                                    createBirthPlaceElement(builder, pid)
                                 }
                                 providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                    buildInstanceIdentifier(builder, 'id', false,
-                                                      this.mpiSystemIdRoot, this.mpiSystemIdExtension)
+                                    buildInstanceIdentifier(builder, 'id', false, this.mpiSystemIdRoot, this.mpiSystemIdExtension, null)
                                     contactParty(classCode: 'CON'){
                                         contactPerson(classCode: 'PSN', determinerCode: 'INSTANCE'){
                                             name(nullFlavor: 'UNK')

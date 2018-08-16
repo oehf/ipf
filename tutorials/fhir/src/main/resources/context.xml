@@ -64,7 +64,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <constructor-arg index="2" value="uriToNamespace"/>
     </bean>
 
-    <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+    <bean id="mappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
         <property name="mappingResources">
             <list>
                 <value>classpath:mapping.map</value>

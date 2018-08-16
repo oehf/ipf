@@ -1,4 +1,18 @@
-
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,16 +27,16 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ModifyDNRequest"&gt;
- *   &lt;complexContent&gt;
- *     &lt;extension base="{urn:oasis:names:tc:DSML:2:0:core}DsmlMessage"&gt;
- *       &lt;attribute name="dn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" /&gt;
- *       &lt;attribute name="newrdn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlRDN" /&gt;
- *       &lt;attribute name="deleteoldrdn" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
- *       &lt;attribute name="newSuperior" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" /&gt;
- *     &lt;/extension&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="ModifyDNRequest">
+ *   &lt;complexContent>
+ *     &lt;extension base="{urn:oasis:names:tc:DSML:2:0:core}DsmlMessage">
+ *       &lt;attribute name="dn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" />
+ *       &lt;attribute name="newrdn" use="required" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlRDN" />
+ *       &lt;attribute name="deleteoldrdn" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" />
+ *       &lt;attribute name="newSuperior" type="{urn:oasis:names:tc:DSML:2:0:core}DsmlDN" />
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 

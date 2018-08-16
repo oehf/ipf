@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openehealth.ipf.boot</groupId>
         <artifactId>ipf-spring-boot</artifactId>
-        <version>3.5-SNAPSHOT</version>
+        <version>3.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>ipf-spring-boot-starter</artifactId>
@@ -25,6 +25,16 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-core</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 
         <!-- IPF Support -->

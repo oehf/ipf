@@ -18,7 +18,6 @@ package org.openehealth.ipf.modules.hl7.dsl
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.model.Visitable
-import ca.uhn.hl7v2.parser.EncodingCharacters
 import org.codehaus.groovy.runtime.InvokerHelper
 
 /**

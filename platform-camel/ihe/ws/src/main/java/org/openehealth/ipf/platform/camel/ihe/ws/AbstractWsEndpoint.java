@@ -18,11 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.util.jsse.SSLContextParameters;
-import org.apache.cxf.common.i18n.Exception;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
@@ -31,16 +31,15 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Map;
@@ -427,7 +426,7 @@ public abstract class AbstractWsEndpoint<
 
 
     @Override
-    public Consumer createConsumer(Processor processor) throws Exception {
+    public Consumer createConsumer(Processor processor) {
         AbstractWebService serviceInstance = getServiceInstance();
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         if (features != null) {
@@ -454,7 +453,7 @@ public abstract class AbstractWsEndpoint<
     }
 
     @Override
-    public Producer createProducer() throws java.lang.Exception {
+    public Producer createProducer() {
         return getProducer(this, getJaxWsClientFactory());
     }
 
@@ -494,5 +493,25 @@ public abstract class AbstractWsEndpoint<
         return getComponent().getWsTransactionConfiguration().isSwaOutSupport();
     }
 
+    public WsSecurityInformation getSecurityInformation() {
+        SSLContextParameters sslContextParameters = getSslContextParameters();
+        if (sslContextParameters == null && secure) {
+            Map<String, SSLContextParameters> sslContextParameterMap = getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+            if (sslContextParameterMap.size() == 1) {
+                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                sslContextParameters = entry.getValue();
+            } else if (sslContextParameterMap.size() > 1) {
+                throw new AmbiguousBeanException(SSLContextParameters.class);
+            }
+        }
+        try {
+            SSLContext sslContext = sslContextParameters != null ?
+                    sslContextParameters.createSSLContext(getCamelContext()) :
+                    null;
+            return new WsSecurityInformation(secure, sslContext, hostnameVerifier, username, password);
+        } catch (Exception e) {
+            throw new RuntimeCamelException(e);
+        }
+    }
 
 }

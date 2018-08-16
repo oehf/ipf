@@ -50,7 +50,7 @@ Here is a snippet of the required Spring-based configuration:
 
     <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forDstu2Hl7Org"/>
 
-    <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+    <bean id="mappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
         <property name="mappingResources">
             <list>
                  <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>
