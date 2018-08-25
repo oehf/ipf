@@ -21,6 +21,7 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.XuaProcessor;
@@ -76,15 +77,14 @@ public class BasicXuaProcessor implements XuaProcessor {
     private static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
     private static final QName SUBJECT_ROLE_ELEMENT_NAME   = new QName("urn:hl7-org:v3", "Role");
 
+    private static final String ROLE_OID = "2.16.756.5.30.1.127.3.10.6";
+    
     /** Map from principal role to assistant role */
     public static final Map<ActiveParticipantRoleId, ActiveParticipantRoleId> PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS;
     static {
         PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS = new HashMap<>();
-        // old (obsolete) and new coding system IDs
-        for (String codingSystemId : new String[]{"2.16.756.5.30.1.127.3.10.4", "2.16.756.5.30.1.127.3.10.6"}) {
-            PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("PAT", codingSystemId, ""), of("REP",       codingSystemId, "Representative"));
-            PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("HCP", codingSystemId, ""), of("ASSISTANT", codingSystemId, "Assistant"));
-        }
+        PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("PAT", ROLE_OID, ""), of("REP", ROLE_OID, "Representative"));
+        PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.put(of("HCP", ROLE_OID, ""), of("ASS", ROLE_OID, "Assistant"));
     }
 
     private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
@@ -163,17 +163,21 @@ public class BasicXuaProcessor implements XuaProcessor {
             message.getExchange().put(XUA_SAML_ASSERTION, assertion);
         }
 
+        WsAuditDataset.HumanUser iheUser = new WsAuditDataset.HumanUser();
         WsAuditDataset.HumanUser mainUser = new WsAuditDataset.HumanUser();
         WsAuditDataset.HumanUser assistantUser = new WsAuditDataset.HumanUser();
 
-        // extract information about the main user and the optional assistant
+        // extract information about the IHE user, main user and the optional assistant user
         if (assertion.getSubject() != null) {
-            mainUser.setId(createXuaUserId(assertion.getIssuer(), assertion.getSubject().getNameID()));
+            String xuaUserId = createXuaUserId(assertion.getIssuer(), assertion.getSubject().getNameID());
+            iheUser.setId(xuaUserId);
+            iheUser.setName(xuaUserId);
+            mainUser.setId(value(assertion.getSubject().getNameID()));
 
             // process information about the assistant (if any)
             for (SubjectConfirmation subjectConfirmation : assertion.getSubject().getSubjectConfirmations()) {
                 if ((subjectConfirmation.getNameID() != null) && (subjectConfirmation.getSubjectConfirmationData() != null)) {
-                    assistantUser.setId(createXuaUserId(assertion.getIssuer(), subjectConfirmation.getNameID()));
+                    assistantUser.setId(value(subjectConfirmation.getNameID()));
                     AttributeStatement statement = new AttributeStatementExtractor().extractAttributeStatement(subjectConfirmation);
                     statement.getAttributes().stream()
                             .filter(attr -> SUBJECT_NAME_ATTRIBUTE_NAME.equals(attr.getName()))
@@ -194,9 +198,10 @@ public class BasicXuaProcessor implements XuaProcessor {
                         mainUser.setName(extractSingleStringAttributeValue(attribute));
                         break;
                     case SUBJECT_ROLE_ATTRIBUTE_NAME:
-                        extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME).forEach(mainUserRoleId -> {
-                            mainUser.getRoles().add(mainUserRoleId);
-                            ActiveParticipantRoleId normalizedMainUserRoleId = of(mainUserRoleId.getCode(), mainUserRoleId.getCodeSystemName(), "");
+                        extractActiveParticipantRoleId(attribute, SUBJECT_ROLE_ELEMENT_NAME).forEach(roleId -> {
+                            iheUser.getRoles().add(roleId);
+                            mainUser.getRoles().add(roleId);
+                            ActiveParticipantRoleId normalizedMainUserRoleId = of(roleId.getCode(), roleId.getCodeSystemName(), "");
                             ActiveParticipantRoleId assistantUserRoleId = PRINCIPAL_ASSISTANT_ROLE_RELATIONSHIPS.get(normalizedMainUserRoleId);
                             if (assistantUserRoleId != null) {
                                 assistantUser.getRoles().add(assistantUserRoleId);
@@ -210,17 +215,24 @@ public class BasicXuaProcessor implements XuaProcessor {
             }
         }
 
-        if (!mainUser.isEmpty()) {
-            auditDataset.getHumanUsers().add(mainUser);
-        }
-        if (!assistantUser.isEmpty()) {
-            auditDataset.getHumanUsers().add(assistantUser);
+        conditionallyAddUser(iheUser, auditDataset);
+        conditionallyAddUser(mainUser, auditDataset);
+        conditionallyAddUser(assistantUser, auditDataset);
+    }
+
+    private static void conditionallyAddUser(AuditDataset.HumanUser user, AuditDataset auditDataset) {
+        if (!user.isEmpty()) {
+            auditDataset.getHumanUsers().add(user);
         }
     }
 
+    private static String value(NameIDType nameId) {
+        return (nameId != null) ? nameId.getValue() : null;
+    }
+
     private static String createXuaUserId(Issuer issuer, NameID nameID) {
-        String userName     = (nameID != null) ? nameID.getValue() : null;
-        String issuerName   = (issuer != null) ? issuer.getValue() : null;
+        String userName     = value(nameID);
+        String issuerName   = value(issuer);
         String spProvidedId = (nameID != null) ? StringUtils.stripToEmpty(nameID.getSPProvidedID()) : null;
 
         return StringUtils.isNoneEmpty(issuerName, userName)

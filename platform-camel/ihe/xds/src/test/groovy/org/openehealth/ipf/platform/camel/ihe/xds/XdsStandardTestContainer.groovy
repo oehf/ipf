@@ -97,8 +97,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
     void checkHumanRequestor(ActiveParticipantType human, String id, String name, List<CodedValueType> roles = []) {
         assert human.userIsRequestor
         assert human.userID == id
-        assert human.userName == id
-        assert human.alternativeUserID == name
+        assert human.userName == name
         assert human.roleIDCodes.size() == roles.size()
         assert human.isUserIsRequestor()
         roles.eachWithIndex { CodedValueType cvt, int i ->
