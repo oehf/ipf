@@ -44,6 +44,11 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
         doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, PDQV3.Interactions.ITI_47)
         doTestV2toV3ResponseTranslation('PDQ', 21, PDQV3.Interactions.ITI_47)
     }
+
+    @Test
+    void testUnusedGlobalNamespaceIssue() {
+        doTestV2toV3ResponseTranslation('PDQ_unused_global_namespace_issue', 21, PDQV3.Interactions.ITI_47)
+    }
      
     @Test @Ignore
     void testResponseWithPid4() {

@@ -60,6 +60,7 @@ class Hl7v3Utils {
     static GPathResult slurp(String document) {
         GPathResult xml = new XmlSlurper(false, true).parseText(document)
         xml.declareNamespace(
+            '': '',
             '*'   : 'urn:hl7-org:v3',              
             'xsi' : 'http://www.w3.org/2001/XMLSchema-instance',
             'xsd' : 'http://www.w3.org/2001/XMLSchema')
