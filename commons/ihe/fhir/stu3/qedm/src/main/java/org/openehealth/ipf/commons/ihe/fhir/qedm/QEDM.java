@@ -20,10 +20,8 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.openehealth.ipf.commons.ihe.fhir.*;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44ClientRequestFactory;
@@ -46,13 +44,15 @@ public class QEDM implements IntegrationProfile {
         @Getter
         FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
 
-        public void init(List<? extends FhirTransactionOptions> options) {
+        @Override
+        public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,
+                         List<? extends FhirTransactionOptions> options) {
             this.fhirTransactionConfiguration = new FhirTransactionConfiguration<>(
                     "qedm-pcc44",
                     "Mobile Query for Existing Data",
                     true,
-                    new Pcc44AuditStrategy(false),
-                    new Pcc44AuditStrategy(true),
+                    optionsProvider.getAuditStrategy(false),
+                    optionsProvider.getAuditStrategy(true),
                     FhirVersionEnum.DSTU3,
                     FhirTransactionOptions.concatProviders(options),
                     new Pcc44ClientRequestFactory(),

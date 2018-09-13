@@ -60,7 +60,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private FhirContext context;
 
     @Getter
-    @UriParam(defaultValue = "FhirServlet")
+    @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
     private String servletName = IpfFhirServlet.DEFAULT_SERVLET_NAME;
 
     @Getter

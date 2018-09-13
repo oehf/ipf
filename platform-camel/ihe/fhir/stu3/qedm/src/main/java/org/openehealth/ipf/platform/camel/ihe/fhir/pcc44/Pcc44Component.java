@@ -19,8 +19,9 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.pcc44;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44Options;
+import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44OptionsProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
@@ -54,12 +55,14 @@ public class Pcc44Component extends FhirComponent<FhirQueryAuditDataset> {
 
     @Override
     protected FhirEndpointConfiguration<FhirQueryAuditDataset> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
-        String options = getAndRemoveParameter(parameters, "options", String.class, Pcc44Options.ALL.name());
-        List<? extends FhirTransactionOptions> iti44Options = TransactionOptionUtils.split(options, Pcc44Options.class);
+        FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider =
+                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", FhirTransactionOptionsProvider.class, new Pcc44OptionsProvider());
+        String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+        List<? extends FhirTransactionOptions> iti44Options = TransactionOptionUtils.split(options, optionsProvider.getTransactionOptionsType());
         if (iti44Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for qedm-pcc44 is invalid");
         }
-        getInteractionId().init(iti44Options);
+        getInteractionId().init(optionsProvider, iti44Options);
         return super.createConfig(remaining, parameters);
     }
 

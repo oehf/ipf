@@ -14,30 +14,14 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.hl7v2.options;
+package org.openehealth.ipf.commons.ihe.fhir;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
-
-import java.util.Arrays;
-import java.util.List;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionsProvider;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
- * Options for ITI-30
+ * @author Christian Ohr
  */
-public enum Iti30Options implements Hl7v2TransactionOptions {
-
-    MERGE("A28", "A31", "A40", "A47"),
-    LINK_UNLINK("A24", "A28", "A31", "A37", "A47");
-
-    private List<String> supportedEvents;
-
-    Iti30Options(String... supportedEvents) {
-        this.supportedEvents = Arrays.asList(supportedEvents);
-    }
-
-    @Override
-    public List<String> getSupportedThings() {
-        return supportedEvents;
-    }
-
+public interface FhirTransactionOptionsProvider<S extends FhirAuditDataset, T extends Enum<T> & FhirTransactionOptions>
+        extends TransactionOptionsProvider<S, T> {
 }

@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.options;
 
 
-import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  *
  */
-public enum Iti31Options implements HL7v2TransactionOption {
+public enum Iti31Options implements Hl7v2TransactionOptions {
 
     BASIC("A01", "A03", "A04", "A11", "A13"),
     INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT(BASIC, "A02", "A05", "A06", "A07", "A12", "A38"),
@@ -43,11 +43,11 @@ public enum Iti31Options implements HL7v2TransactionOption {
     }
 
     Iti31Options(Iti31Options option, String... supportedEvents) {
-        this.supportedEvents = HL7v2TransactionOption.concat(option, Arrays.asList(supportedEvents));
+        this.supportedEvents = Hl7v2TransactionOptions.concat(option, Arrays.asList(supportedEvents));
     }
 
     Iti31Options(Iti31Options option1, Iti31Options option2, String... supportedEvents) {
-        this.supportedEvents = HL7v2TransactionOption.concat(option1, option2, Arrays.asList(supportedEvents));
+        this.supportedEvents = Hl7v2TransactionOptions.concat(option1, option2, Arrays.asList(supportedEvents));
     }
 
     @Override

@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 /**
  * @author Christian Ohr
  */
-public interface HL7v2TransactionOption extends TransactionOptions<String> {
+public interface Hl7v2TransactionOptions extends TransactionOptions<String> {
 
 
-    static List<String> concat(HL7v2TransactionOption options, List<String> suffix) {
+    static List<String> concat(Hl7v2TransactionOptions options, List<String> suffix) {
         if (suffix != null && !suffix.isEmpty()) {
             // Remove potential duplicates
             Set<String> events = new HashSet<>(options.getSupportedThings());
@@ -37,7 +37,7 @@ public interface HL7v2TransactionOption extends TransactionOptions<String> {
         return options.getSupportedThings();
     }
 
-    static List<String> concat(HL7v2TransactionOption option, HL7v2TransactionOption otherOption, List<String> suffix) {
+    static List<String> concat(Hl7v2TransactionOptions option, Hl7v2TransactionOptions otherOption, List<String> suffix) {
         List<String> events = concat(otherOption, suffix);
         return concat(option, events);
     }
@@ -49,7 +49,7 @@ public interface HL7v2TransactionOption extends TransactionOptions<String> {
      * @param <T>     TransactionOptions type
      * @return concatenated string
      */
-    static <T extends HL7v2TransactionOption> String concatAllToString(List<? extends T> options) {
+    static <T extends Hl7v2TransactionOptions> String concatAllToString(List<? extends T> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
                 .map(Object::toString)

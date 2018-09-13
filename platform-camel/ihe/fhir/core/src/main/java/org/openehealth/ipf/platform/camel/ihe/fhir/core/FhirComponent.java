@@ -43,17 +43,19 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
-    private FhirInteractionId fhirInteractionId;
+    private FhirInteractionId<AuditDatasetType> fhirInteractionId;
+    private FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration;
 
-
-    public FhirComponent(FhirInteractionId fhirInteractionId) {
+    public FhirComponent(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
+        this.fhirTransactionConfiguration = fhirInteractionId.getFhirTransactionConfiguration();
     }
 
-    public FhirComponent(CamelContext context, FhirInteractionId fhirInteractionId) {
+    public FhirComponent(CamelContext context, FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(context, FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
+        this.fhirTransactionConfiguration = fhirInteractionId.getFhirTransactionConfiguration();
     }
 
     /**
@@ -131,10 +133,19 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     protected abstract FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
 
     /**
-     * @return static component-specific configuration
+     * @return component-specific configuration
      */
     public FhirTransactionConfiguration<AuditDatasetType> getFhirTransactionConfiguration() {
-        return fhirInteractionId.getFhirTransactionConfiguration();
+        return fhirTransactionConfiguration;
+    }
+
+    /**
+     * Sets custom transaction configuration
+     *
+     * @param fhirTransactionConfiguration custom transaction configuration
+     */
+    public void setFhirTransactionConfiguration(FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration) {
+        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
     }
 
     @Override
@@ -147,7 +158,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         return getFhirTransactionConfiguration().getClientAuditStrategy();
     }
 
-    public FhirInteractionId getInteractionId() {
+    public FhirInteractionId<AuditDatasetType> getInteractionId() {
         return fhirInteractionId;
     }
 
@@ -155,7 +166,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * Sets the FHIR interactionID. Prefer setting the interactionId
      * @param fhirInteractionId
      */
-    public void setFhirInteractionId(FhirInteractionId fhirInteractionId) {
+    public void setFhirInteractionId(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         this.fhirInteractionId = fhirInteractionId;
     }
 }

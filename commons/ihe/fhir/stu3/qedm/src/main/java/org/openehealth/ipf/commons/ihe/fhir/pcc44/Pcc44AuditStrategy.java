@@ -34,7 +34,6 @@ public class Pcc44AuditStrategy extends FhirQueryAuditStrategy {
         super(serverSide);
     }
 
-
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
         return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobileQueryExistingData)

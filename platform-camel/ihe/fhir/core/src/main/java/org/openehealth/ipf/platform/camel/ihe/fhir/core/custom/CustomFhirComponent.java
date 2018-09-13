@@ -39,8 +39,6 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
     @Getter @Setter
     private boolean query;
 
-    private FhirTransactionConfiguration fhirTransactionConfiguration;
-
     public CustomFhirComponent() {
         super(null);
         setFhirInteractionId(this);
@@ -51,12 +49,4 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         return new CustomFhirEndpoint(uri, this, config);
     }
 
-    @Override
-    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
-        return fhirTransactionConfiguration;
-    }
-
-    public void setFhirTransactionConfiguration(FhirTransactionConfiguration fhirTransactionConfiguration) {
-        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
-    }
 }
