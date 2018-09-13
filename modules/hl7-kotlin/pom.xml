@@ -30,7 +30,7 @@
 
     <properties>
         <kotlin.dokka.version>0.9.17</kotlin.dokka.version>
-        <kotlin.version>1.2.50</kotlin.version>
+        <kotlin.version>1.2.51</kotlin.version>
         <kotlin.logging.version>1.5.4</kotlin.logging.version>
     </properties>
 

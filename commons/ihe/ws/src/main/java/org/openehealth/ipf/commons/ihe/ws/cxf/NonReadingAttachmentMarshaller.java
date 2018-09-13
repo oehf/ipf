@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
+import java.util.Objects;
+
 import javax.activation.DataHandler;
 import javax.xml.bind.attachment.AttachmentMarshaller;
 
@@ -49,9 +51,13 @@ public class NonReadingAttachmentMarshaller extends AttachmentMarshaller {
     }
 
     private static String attachmentDescription(String name, String size, String contentType) {
-        return "Attachment: name='" + name != null ? name : "[unknown]" +
-                "', size='" + size != null ? size : "[unknown]" +
-                "', content type='" + contentType != null ? contentType : "[unknown]" + '\'';
+        return "Attachment: name='" + valueOrUnknown(name) +
+                "', size='" + valueOrUnknown(size) +
+                "', content type='" + valueOrUnknown(contentType) + '\'';
+    }
+
+    private static String valueOrUnknown(String value) {
+        return Objects.toString(value, "[unknown]");
     }
 
 }
