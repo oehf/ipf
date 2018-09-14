@@ -132,7 +132,7 @@ public class ChPpqTest extends StandardTestContainer {
             assertEquals(ParticipantObjectTypeCode.System, queryParticipant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Query, queryParticipant.getParticipantObjectTypeCodeRole());
             assertEquals("ppq-query-id-1", queryParticipant.getParticipantObjectID());
-            assertTrue(queryParticipant.getParticipantObjectQuery().length > 50);
+            assertTrue(queryParticipant.getParticipantObjectQuery().length > 30);
             assertEquals(0, queryParticipant.getParticipantObjectDetails().size());
         }
     }
@@ -178,7 +178,7 @@ public class ChPpqTest extends StandardTestContainer {
             assertEquals(ParticipantObjectTypeCode.System, queryParticipant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Query, queryParticipant.getParticipantObjectTypeCodeRole());
             assertEquals("ppq-query-id-2", queryParticipant.getParticipantObjectID());
-            assertTrue(queryParticipant.getParticipantObjectQuery().length > 50);
+            assertTrue(queryParticipant.getParticipantObjectQuery().length > 30);
             assertEquals(0, queryParticipant.getParticipantObjectDetails().size());
         }
     }
@@ -330,7 +330,7 @@ public class ChPpqTest extends StandardTestContainer {
             ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Query, participant.getParticipantObjectTypeCodeRole());
-            assertTrue(participant.getParticipantObjectQuery().length > 200);
+            assertTrue(participant.getParticipantObjectQuery().length > 150);
         }
     }
 
