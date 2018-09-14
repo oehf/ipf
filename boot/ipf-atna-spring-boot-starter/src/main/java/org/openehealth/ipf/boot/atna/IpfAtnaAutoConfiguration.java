@@ -43,7 +43,12 @@ public class IpfAtnaAutoConfiguration {
                                                 @Value("${spring.application.name}") String appName) throws Exception {
         DefaultAuditContext auditContext = new DefaultAuditContext();
         auditContext.setAuditEnabled(config.isAuditEnabled());
-        auditContext.setAuditSourceId(appName);
+
+        String auditSourceId = config.getAuditSourceId() != null ?
+                config.getAuditSourceId() :
+                appName;
+
+        auditContext.setAuditSourceId(auditSourceId);
         auditContext.setAuditEnterpriseSiteId(config.getAuditEnterpriseSiteId());
         auditContext.setAuditRepositoryHost(config.getAuditRepositoryHost());
         auditContext.setAuditRepositoryPort(config.getAuditRepositoryPort());
@@ -73,21 +78,21 @@ public class IpfAtnaAutoConfiguration {
 
 
     @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
+    @ConditionalOnProperty(value = "ipf.atna.audit-enabled")
     @ConditionalOnMissingBean
     ApplicationStartEventListener applicationStartEventListener(AuditContext auditContext) {
         return new ApplicationStartEventListener(auditContext);
     }
 
     @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
+    @ConditionalOnProperty(value = "ipf.atna.audit-enabled")
     @ConditionalOnMissingBean
     ApplicationStopEventListener applicationStopEventListener(AuditContext auditContext) {
         return new ApplicationStopEventListener(auditContext);
     }
 
     @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
+    @ConditionalOnProperty(value = "ipf.atna.audit-enabled")
     @ConditionalOnClass(name = "org.springframework.security.authentication.event.AbstractAuthenticationEvent")
     @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
     AuthenticationListener loginListener(AuditContext auditContext) {

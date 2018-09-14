@@ -31,9 +31,7 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
-import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -111,7 +109,7 @@ public class TestPcc44Success extends AbstractTestPcc44 {
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Observation?patient=http://fhirserver.org/Patient/1",
-                new String(Base64.getDecoder().decode(query.getParticipantObjectQuery()), StandardCharsets.UTF_8));
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobileQueryExistingData, query.getParticipantObjectIDTypeCode());
 

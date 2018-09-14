@@ -34,13 +34,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "ipf.atna")
 public class IpfAtnaConfigurationProperties {
 
-
-
     @Getter @Setter
     private boolean auditEnabled = true;
 
     @Getter @Setter
     private AuditSource auditSourceType = AuditSourceType.ApplicationServerProcess;
+
+    @Getter @Setter
+    private String auditSourceId;
 
     @Getter @Setter
     private String auditSendingApplication;

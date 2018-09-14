@@ -35,6 +35,7 @@ public class AsynchronousAuditMessageQueueTest {
     public void sendMessageWithoutExecutor() throws Exception {
         final AuditTransmissionProtocol messageSender = mock(AuditTransmissionProtocol.class);
         final DefaultAuditContext context = new DefaultAuditContext();
+        context.setAuditEnabled(true);
         AsynchronousAuditMessageQueue queue = new AsynchronousAuditMessageQueue();
         context.setAuditMessageQueue(queue);
         context.setAuditTransmissionProtocol(messageSender);
@@ -50,6 +51,7 @@ public class AsynchronousAuditMessageQueueTest {
     public void sendMessageWithExecutor() throws Exception {
         final AuditTransmissionProtocol messageSender = mock(AuditTransmissionProtocol.class);
         final DefaultAuditContext context = new DefaultAuditContext();
+        context.setAuditEnabled(true);
         AsynchronousAuditMessageQueue queue = new AsynchronousAuditMessageQueue();
         context.setAuditMessageQueue(queue);
         context.setAuditTransmissionProtocol(messageSender);

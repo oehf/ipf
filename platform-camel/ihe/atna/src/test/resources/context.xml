@@ -29,6 +29,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
         <property name="auditMessageQueue" ref="camelEndpointSender"/>
+        <property name="auditEnabled" value="true"/>
     </bean>
 
     <bean id="camelEndpointSender"

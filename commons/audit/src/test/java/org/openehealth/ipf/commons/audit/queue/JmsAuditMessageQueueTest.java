@@ -68,6 +68,7 @@ public class JmsAuditMessageQueueTest {
         recorder = new RecordingAuditMessageTransmission();
         auditContext = new DefaultAuditContext();
         auditContext.setAuditTransmissionProtocol(recorder);
+        auditContext.setAuditEnabled(true);
     }
 
     @After

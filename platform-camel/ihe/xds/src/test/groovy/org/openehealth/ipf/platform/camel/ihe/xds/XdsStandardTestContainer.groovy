@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole
 import org.openehealth.ipf.commons.audit.model.*
 import org.openehealth.ipf.commons.audit.types.CodedValueType
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import java.nio.charset.StandardCharsets
@@ -119,8 +118,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
         assert query.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Query
         checkCode(query.participantObjectIDTypeCode, iti, 'IHE Transactions')
         assert query.participantObjectID == queryUuid
-        byte[] decodedBytes = Base64.getDecoder().decode(query.participantObjectQuery)
-        String decoded = new String(decodedBytes, StandardCharsets.UTF_8)
+        String decoded = new String(query.participantObjectQuery, StandardCharsets.UTF_8)
         assert decoded.contains(queryText)
     }
 
@@ -156,8 +154,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
 
     void checkParticipantObjectDetail(TypeValuePairType detail, String expectedType, String expectedValue) {
         assert detail.type == expectedType
-        byte[] decodedActualValue = Base64.getDecoder().decode(detail.value)
-        String actualValue = new String(decodedActualValue, StandardCharsets.UTF_8)
+        String actualValue = new String(detail.value, StandardCharsets.UTF_8)
         assert expectedValue == actualValue
     }
 

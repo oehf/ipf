@@ -107,7 +107,8 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
                                                                      ParticipantObjectTypeCodeRole role,
                                                                      String reason) {
         return addParticipantObjectIdentification(ParticipantObjectIdTypeCode.NodeID,
-                null, null,
+                null,
+                null,
                 reason != null ?
                         Collections.singletonList(getTypeValuePair("Alert Description", reason)) :
                         Collections.emptyList(),
@@ -128,7 +129,8 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
                                                                     ParticipantObjectTypeCodeRole role,
                                                                     String reason) {
         return addParticipantObjectIdentification(ParticipantObjectIdTypeCode.URI,
-                null, null,
+                null,
+                null,
                 reason != null ?
                         Collections.singletonList(getTypeValuePair("Alert Description", reason)) :
                         Collections.emptyList(),

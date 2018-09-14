@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti44AuditStrategyTest extends HL7v3AuditorTestBase {
+public class Iti44AuditStrategyTest extends HL7v3AuditorTestBase<Iti44AuditStrategy> {
 
     @Test
     public void testCreateServerSide() {
@@ -55,7 +55,12 @@ public class Iti44AuditStrategyTest extends HL7v3AuditorTestBase {
 
     private void testRequest(boolean serverSide, EventActionCode eventActionCode) {
         Iti44AuditStrategy strategy = new Iti44AuditStrategy(serverSide);
-        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy, eventActionCode);
+        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
+        switch (eventActionCode) {
+            case Create: auditDataset.setRequestType("PRPA_IN201301UV02"); break;
+            case Update: auditDataset.setRequestType("PRPA_IN201302UV02"); break;
+            case Delete: auditDataset.setRequestType("PRPA_IN201302UV03"); break;
+        }
         AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
@@ -68,23 +73,4 @@ public class Iti44AuditStrategyTest extends HL7v3AuditorTestBase {
                 true);
     }
 
-    private Hl7v3AuditDataset getHl7v3AuditDataset(Iti44AuditStrategy strategy, EventActionCode eventActionCode) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
-        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
-        // auditDataset.setLocalAddress(SERVER_URI);
-        auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setMessageId(MESSAGE_ID);
-        auditDataset.setPatientIds(PATIENT_IDS);
-        switch (eventActionCode) {
-            case Create: auditDataset.setRequestType("PRPA_IN201301UV02"); break;
-            case Update: auditDataset.setRequestType("PRPA_IN201302UV02"); break;
-            case Delete: auditDataset.setRequestType("PRPA_IN201302UV03"); break;
-        }
-
-        auditDataset.setSourceUserId(REPLY_TO_URI);
-        auditDataset.setDestinationUserId(SERVER_URI);
-        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
-        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
-        return auditDataset;
-    }
 }

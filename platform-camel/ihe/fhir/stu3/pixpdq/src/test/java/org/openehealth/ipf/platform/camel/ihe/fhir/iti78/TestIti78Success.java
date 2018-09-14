@@ -25,15 +25,13 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 
-import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -45,7 +43,7 @@ public class TestIti78Success extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }
@@ -110,7 +108,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Patient?family=Test",
-                new String(Base64.getDecoder().decode(patient.getParticipantObjectQuery()), StandardCharsets.UTF_8));
+                new String(patient.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
 

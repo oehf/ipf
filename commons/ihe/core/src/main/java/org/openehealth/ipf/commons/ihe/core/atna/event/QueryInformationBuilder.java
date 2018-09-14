@@ -118,7 +118,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         delegate.addParticipantObjectIdentification(
                 participantObjectIdType,
                 null,
-                Base64.getEncoder().encode(queryMessage.getBytes(StandardCharsets.UTF_8)),
+                queryMessage.getBytes(StandardCharsets.UTF_8),
                 details,
                 queryMessageIdentifier,
                 ParticipantObjectTypeCode.System,
@@ -138,7 +138,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         delegate.addParticipantObjectIdentification(
                 participantObjectIdType,
                 null,
-                Base64.getEncoder().encode(queryMessage.getBytes(StandardCharsets.UTF_8)),
+                queryMessage.getBytes(StandardCharsets.UTF_8),
                 details,
                 queryMessageIdentifier,
                 participantObjectTypeCode,

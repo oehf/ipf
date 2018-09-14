@@ -26,14 +26,13 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -114,7 +113,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn:oid:1.2.3.4|0815&targetSystem=urn:oid:1.2.3.4.6",
-                new String(Base64.getDecoder().decode(patient.getParticipantObjectQuery()), StandardCharsets.UTF_8));
+                new String(patient.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientIdentifierCrossReferenceQuery, patient.getParticipantObjectIDTypeCode());
 

@@ -53,14 +53,14 @@ public class TypeValuePairType implements Serializable {
      * @param value value string, NOT yet base64 encoded
      */
     public TypeValuePairType(String type, String value) {
-        this(type, Base64.getEncoder().encode(value.getBytes(StandardCharsets.UTF_8)));
+        this(type, value.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
      * Creates an instance
      *
      * @param type  type
-     * @param value value string, base64 encoded
+     * @param value value byte array, NOT yet base64 encoded
      */
     public TypeValuePairType(String type, byte[] value) {
         this.type = requireNonNull(type, "Type of TypeValuePairType must be not null");

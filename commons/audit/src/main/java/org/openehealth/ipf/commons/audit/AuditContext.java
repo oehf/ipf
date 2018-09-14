@@ -101,9 +101,11 @@ public interface AuditContext {
      * @param messages audit messages to be sent
      */
     default void audit(AuditMessage... messages) {
-        getAuditMessageQueue().audit(this, Stream.of(messages)
-                .map(getAuditMessagePostProcessor())
-                .toArray(AuditMessage[]::new));
+        if (isAuditEnabled()) {
+            getAuditMessageQueue().audit(this, Stream.of(messages)
+                    .map(getAuditMessagePostProcessor())
+                    .toArray(AuditMessage[]::new));
+        }
     }
 
     /**

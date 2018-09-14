@@ -35,7 +35,7 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(
                 getClass().getResourceAsStream("/xsd/prpa-invalid.xml"));
         CombinedXmlValidator validator = new CombinedXmlValidator();
-        validator.validate(message,PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
+        validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
 	}
 
 }

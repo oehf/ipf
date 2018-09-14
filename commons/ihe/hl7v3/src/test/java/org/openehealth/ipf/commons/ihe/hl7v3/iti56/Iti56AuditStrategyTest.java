@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti56AuditStrategyTest extends HL7v3AuditorTestBase {
+public class Iti56AuditStrategyTest extends HL7v3AuditorTestBase<Iti56AuditStrategy> {
 
     @Test
     public void testServerSide() {
@@ -57,18 +57,10 @@ public class Iti56AuditStrategyTest extends HL7v3AuditorTestBase {
                 serverSide);
     }
 
-    private Hl7v3AuditDataset getHl7v3AuditDataset(Iti56AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
-        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
-        // auditDataset.setLocalAddress(SERVER_URI);
-        auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setMessageId(MESSAGE_ID);
-        auditDataset.setPatientIds(PATIENT_IDS);
-        auditDataset.setSourceUserId(REPLY_TO_URI);
-        auditDataset.setDestinationUserId(SERVER_URI);
+    @Override
+    protected Hl7v3AuditDataset getHl7v3AuditDataset(Iti56AuditStrategy strategy) {
+        Hl7v3AuditDataset auditDataset = super.getHl7v3AuditDataset(strategy);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
-        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
-        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
         auditDataset.setHomeCommunityId(HOME_COMMUNITY_ID);
         return auditDataset;
     }
