@@ -35,7 +35,7 @@ import org.springframework.security.authentication.event.AbstractAuthenticationE
 public class IpfAtnaSpringSecurityAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(value = "ipf.atna.auditor-enabled")
+    @ConditionalOnProperty(value = "ipf.atna.audit-enabled")
     @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
     AuthenticationListener loginListener(AuditContext auditContext) {
         return new AuthenticationListener(auditContext);

@@ -86,6 +86,7 @@ public class AuditorIntegrationTest {
         auditContext.setAuditRepositoryPort(port);
         auditContext.setAuditRepositoryHost(LOCALHOST);
         auditContext.setAuditRepositoryTransport("TLS");
+        auditContext.setAuditEnabled(true);
         vertx = Vertx.vertx();
     }
 

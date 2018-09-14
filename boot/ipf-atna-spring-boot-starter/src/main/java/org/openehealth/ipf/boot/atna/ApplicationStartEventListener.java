@@ -43,7 +43,7 @@ public class ApplicationStartEventListener implements ApplicationListener<Contex
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        if (auditContext.isAuditEnabled() && contextRefreshedEvent.getApplicationContext() == applicationContext) {
+        if (contextRefreshedEvent.getApplicationContext() == applicationContext) {
             auditContext.audit(
                     new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
                             .setAuditSource(auditContext)

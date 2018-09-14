@@ -26,15 +26,12 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
-import javax.servlet.ServletException;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -46,7 +43,7 @@ public class TestIti66Success extends AbstractTestIti66 {
     private static final String CONTEXT_DESCRIPTOR = "iti-66.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
@@ -111,7 +108,7 @@ public class TestIti66Success extends AbstractTestIti66 {
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/DocumentManifest?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1",
-                new String(Base64.getDecoder().decode(query.getParticipantObjectQuery()), StandardCharsets.UTF_8));
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery, query.getParticipantObjectIDTypeCode());
     }

@@ -26,21 +26,15 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 
-
-import javax.servlet.ServletException;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -50,7 +44,7 @@ public class TestIti83Success extends AbstractTestIti83 {
     private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
@@ -112,14 +106,14 @@ public class TestIti83Success extends AbstractTestIti83 {
         ParticipantObjectIdentificationType patientIn = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.Person, patientIn.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patientIn.getParticipantObjectTypeCodeRole());
-        assertEquals("urn:oid:1.2.3.4|0815", new String(patientIn.getParticipantObjectID()));
+        assertEquals("urn:oid:1.2.3.4|0815", patientIn.getParticipantObjectID());
 
         // Query
         ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn:oid:1.2.3.4|0815&targetSystem=urn:oid:1.2.3.4.6",
-                new String(Base64.getDecoder().decode(patient.getParticipantObjectQuery()), StandardCharsets.UTF_8));
+                new String(patient.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientIdentifierCrossReferenceQuery, patient.getParticipantObjectIDTypeCode());
 

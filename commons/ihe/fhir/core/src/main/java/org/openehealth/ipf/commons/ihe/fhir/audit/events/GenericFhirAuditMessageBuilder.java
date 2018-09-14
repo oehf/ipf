@@ -94,7 +94,7 @@ public class GenericFhirAuditMessageBuilder extends
         delegate.addParticipantObjectIdentification(
                 FhirParticipantObjectIdTypeCode.fromResourceType(auditDataset.getAffectedResourceType()),
                 auditDataset.getAffectedResourceType(),
-                Base64.getEncoder().encode(auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8)),
+                auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8),
                 null,
                 "FHIR Restful Query",
                 ParticipantObjectTypeCode.System,

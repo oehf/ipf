@@ -61,7 +61,7 @@ public class RFC5424Protocol {
                 TRANSPORT_PRI,
                 Instant.now(),
                 senderHostName,
-                sendingApplication,
+                sendingApplication.replace(' ', '_'),
                 senderProcessId,
                 TRANSPORT_MSGID,
                 auditMessage);

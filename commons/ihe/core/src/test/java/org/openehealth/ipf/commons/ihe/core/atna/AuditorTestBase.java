@@ -30,9 +30,7 @@ import org.openehealth.ipf.commons.audit.types.EventId;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -127,14 +125,14 @@ public class AuditorTestBase {
             // Feeds
             if (!patient.getParticipantObjectDetails().isEmpty()) {
                 assertEquals(MESSAGE_ID, new String(
-                        Base64.getDecoder().decode(patient.getParticipantObjectDetails().get(0).getValue()),
+                        patient.getParticipantObjectDetails().get(0).getValue(),
                         StandardCharsets.UTF_8));
             }
 
             // Queries
             if (patient.getParticipantObjectQuery() != null) {
                 assertEquals(QUERY_PAYLOAD, new String(
-                        Base64.getDecoder().decode(patient.getParticipantObjectQuery()),
+                        patient.getParticipantObjectQuery(),
                         StandardCharsets.UTF_8));
             }
         }
