@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
@@ -27,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -96,7 +96,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                         participantObjectIdType,
                         null,
                         null,
-                        makeDetail(repositoryIds[i]),
+                        makeDetail(delegate, repositoryIds[i]),
                         documentIds[i],
                         ParticipantObjectTypeCode.System,
                         ParticipantObjectTypeCodeRole.Report,
@@ -105,9 +105,9 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
         return self();
     }
 
-    private List<TypeValuePairType> makeDetail(String repositoryId) {
-        List<TypeValuePairType> tvp = new LinkedList<>();
-        tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
-        return tvp;
+    private List<TypeValuePairType> makeDetail(PatientRecordBuilder builder, String repositoryId) {
+        return repositoryId != null && !repositoryId.isEmpty() ?
+                Collections.singletonList(delegate.getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId)) :
+                Collections.emptyList();
     }
 }

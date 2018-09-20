@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Builder for building IHE-specific DataExport events.
  * It automatically sets the AuditSource, local and remote ActiveParticipant and a Human Requestor
@@ -86,8 +88,11 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
 
     public T setPatient(String patientId) {
         if (patientId != null) {
-            delegate.addPatientParticipantObject(patientId, null,
-                    Collections.emptyList(), null);
+            delegate.addPatientParticipantObject(
+                    patientId,
+                    null,
+                    Collections.emptyList(),
+                    null);
         }
         return self();
     }
@@ -112,11 +117,11 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
-                participantObjectIdType,
+                requireNonNull(participantObjectIdType, "Exported entity ID type must not be null"),
                 null,
                 null,
                 details,
-                objectId,
+                objectId != null ? objectId : getAuditContext().getAuditValueIfMissing(),
                 participantObjectTypeCode,
                 participantObjectTypeCodeRole,
                 null,

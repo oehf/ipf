@@ -21,7 +21,6 @@ import lombok.Getter;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static java.util.Objects.requireNonNull;
 
@@ -53,7 +52,20 @@ public class TypeValuePairType implements Serializable {
      * @param value value string, NOT yet base64 encoded
      */
     public TypeValuePairType(String type, String value) {
-        this(type, value.getBytes(StandardCharsets.UTF_8));
+        this(type, value, null);
+    }
+
+    /**
+     * Creates an instance
+     *
+     * @param type  type
+     * @param value value string, NOT yet base64 encoded
+     * @param defaultValue default value string used when value is null, NOT yet base64 encoded
+     */
+    public TypeValuePairType(String type, String value, String defaultValue) {
+        this(type,
+                value != null ? value.getBytes(StandardCharsets.UTF_8) : null,
+                defaultValue != null ? defaultValue.getBytes(StandardCharsets.UTF_8) : null);
     }
 
     /**
@@ -63,8 +75,18 @@ public class TypeValuePairType implements Serializable {
      * @param value value byte array, NOT yet base64 encoded
      */
     public TypeValuePairType(String type, byte[] value) {
-        this.type = requireNonNull(type, "Type of TypeValuePairType must be not null");
-        this.value = requireNonNull(value, "Value of TypeValuePairType must be not null");
+        this(type, value, null);
     }
 
+    /**
+     * Creates an instance
+     *
+     * @param type  type
+     * @param value value byte array, NOT yet base64 encoded
+     * @param defaultValue default value byte array used when value is null, NOT yet base64 encoded
+     */
+    public TypeValuePairType(String type, byte[] value, byte[] defaultValue) {
+        this.type = requireNonNull(type, "Type of TypeValuePairType must not be null");
+        this.value = requireNonNull(value != null ? value : defaultValue, "Value of TypeValuePairType must not be null");
+    }
 }

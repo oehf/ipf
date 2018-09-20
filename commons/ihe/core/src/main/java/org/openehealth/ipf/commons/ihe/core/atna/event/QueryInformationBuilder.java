@@ -29,6 +29,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Builder for building IHE-specific Query events.
  * It automatically sets the AuditSource, local and remote ActiveParticipant and a Human Requestor
@@ -105,7 +107,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
                 queryMessageIdentifier,
                 participantObjectIdType,
                 queryMessage,
-                messageIdDesignator != null ?
+                messageIdDesignator != null && messageId != null ?
                         Collections.singletonList(getTypeValuePair(messageIdDesignator, messageId)) :
                         Collections.emptyList());
     }
@@ -116,11 +118,11 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
             String queryMessage,
             List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
-                participantObjectIdType,
+                requireNonNull(participantObjectIdType, "query ID type must not be null"),
                 null,
                 queryMessage.getBytes(StandardCharsets.UTF_8),
                 details,
-                queryMessageIdentifier,
+                queryMessageIdentifier != null ? queryMessageIdentifier : getAuditContext().getAuditValueIfMissing(),
                 ParticipantObjectTypeCode.System,
                 ParticipantObjectTypeCodeRole.Query,
                 null,
@@ -136,11 +138,11 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
-                participantObjectIdType,
+                requireNonNull(participantObjectIdType, "query ID type must not be null"),
                 null,
                 queryMessage.getBytes(StandardCharsets.UTF_8),
                 details,
-                queryMessageIdentifier,
+                requireNonNull(queryMessageIdentifier, "query ID must not be null"),
                 participantObjectTypeCode,
                 participantObjectTypeCodeRole,
                 null,

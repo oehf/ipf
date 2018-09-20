@@ -98,4 +98,6 @@ public class IpfAtnaConfigurationProperties {
     @Getter @Setter
     private boolean includeParticipantsFromResponse;
 
+    @Getter @Setter
+    private String auditValueIfMissing = "UNKNOWN";
 }
