@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getHostFromUrl;
@@ -50,9 +51,16 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
     public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
 
+    private final AuditContext auditContext;
+
     public IHEAuditMessageBuilder(AuditContext auditContext, D delegate) {
         super(delegate);
+        this.auditContext = requireNonNull(auditContext, "auditContext must be not null");
         delegate.setAuditSource(auditContext);
+    }
+
+    public AuditContext getAuditContext() {
+        return auditContext;
     }
 
     /**
@@ -111,6 +119,32 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         return self();
     }
 
+
+    public List<TypeValuePairType> documentDetails(String repositoryId,
+                                                   String homeCommunityId,
+                                                   String seriesInstanceId,
+                                                   String studyInstanceId,
+                                                   boolean xcaHomeCommunityId) {
+        List<TypeValuePairType> tvp = new ArrayList<>();
+        if (studyInstanceId != null) {
+            tvp.add(getTypeValuePair(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
+        }
+        if (seriesInstanceId != null) {
+            tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
+        }
+        if (repositoryId != null) {
+            tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
+        }
+        if (homeCommunityId != null) {
+            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            tvp.add(getTypeValuePair(type, homeCommunityId));
+        }
+        return tvp;
+    }
+
+    /**
+     * @deprecated use {@link IHEAuditMessageBuilder#documentDetails(String, String, String, String, boolean)}
+     */
     public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId, boolean xcaHomeCommunityId) {
         List<TypeValuePairType> tvp = new ArrayList<>();
         if (studyInstanceId != null) {
@@ -138,11 +172,11 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      */
     public T addSecurityResourceParticipantObject(ParticipantObjectIdType participantObjectIdType, String securityResourceId) {
         delegate.addParticipantObjectIdentification(
-                participantObjectIdType,
+                requireNonNull(participantObjectIdType, "security resource ID type must not be null"),
                 null,
                 null,
                 null,
-                requireNonNull(securityResourceId),
+                requireNonNull(securityResourceId, "security resource ID must not be null"),
                 ParticipantObjectTypeCode.System,
                 ParticipantObjectTypeCodeRole.SecurityResource,
                 null,
@@ -158,8 +192,10 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      * @return this
      */
     public T addSecurityResourceParticipantObjects(ParticipantObjectIdType participantObjectIdType, List<String> securityResourceIds) {
-        for (String securityResourceId : securityResourceIds) {
-            addSecurityResourceParticipantObject(participantObjectIdType, securityResourceId);
+        if (securityResourceIds != null) {
+            securityResourceIds.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(sri -> addSecurityResourceParticipantObject(participantObjectIdType, sri));
         }
         return self();
     }

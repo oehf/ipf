@@ -48,6 +48,10 @@ public interface AuditContext {
      */
     boolean isAuditEnabled();
 
+    /**
+     * @param auditEnabled enable or disable auditing
+     * @deprecated to be removed from the interface in order to prevent accidental change
+     */
     void setAuditEnabled(boolean auditEnabled);
 
     /**
@@ -106,6 +110,20 @@ public interface AuditContext {
                     .map(getAuditMessagePostProcessor())
                     .toArray(AuditMessage[]::new));
         }
+    }
+
+    /**
+     * Returns a value that is used when an otherwise mandatory attribute for an audit
+     * record in missing (e.g. a participant object ID). In this case, we can still write an audit
+     * record (e.g. documenting a failed request due to the missing attribute).
+     * <p>
+     * This can also be set to null at the risk that building the audit record might throw an
+     * exception.
+     *
+     * @return a value that is used when an otherwise mandatory attribute for an audit record in missing
+     */
+    default String getAuditValueIfMissing() {
+        return "UNKNOWN";
     }
 
     /**

@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.model.Validateable;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * Base interface for building DICOM audit messages
  *
@@ -46,14 +44,53 @@ public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends V
     /**
      * Create and set a Type Value Pair instance for a given type and value
      *
-     * @param type  The type to set
-     * @param value The value to set
-     * @return The Type Value Pair instance
+     * @param type  the type to set
+     * @param value the value to set
+     * @return the Type Value Pair instance
      */
     default TypeValuePairType getTypeValuePair(String type, Object value) {
+        return getTypeValuePair(type, value, null);
+    }
+
+    /**
+     * Create and set a Type Value Pair instance for a given type and value
+     *
+     * @param type  the type to set
+     * @param value the value to set
+     * @return the Type Value Pair instance
+     */
+    default TypeValuePairType getTypeValuePair(String type, byte[] value) {
+        return getTypeValuePair(type, value, (byte[])null);
+    }
+
+    /**
+     * Create and set a Type Value Pair instance for a given type and value
+     *
+     * @param type  the type to set
+     * @param value the value to set
+     * @param defaultValue the value to set if value is null
+     * @return the Type Value Pair instance
+     */
+    default TypeValuePairType getTypeValuePair(String type, Object value, String defaultValue) {
         return new TypeValuePairType(
-                requireNonNull(type, "Type of TypeValuePair must not be null"),
-                requireNonNull(value, "Value of TypeValuePair must not be null").toString());
+                type,
+                value != null ? value.toString() : null,
+                defaultValue);
+    }
+
+    /**
+     * Create and set a Type Value Pair instance for a given type and value
+     *
+     * @param type  the type to set
+     * @param value the value to set
+     * @param defaultValue the value to set if value is null
+     * @return the Type Value Pair instance
+     */
+    default TypeValuePairType getTypeValuePair(String type, byte[] value, byte[] defaultValue) {
+        return new TypeValuePairType(
+                type,
+                value != null ? value : null,
+                defaultValue);
     }
 
     /**

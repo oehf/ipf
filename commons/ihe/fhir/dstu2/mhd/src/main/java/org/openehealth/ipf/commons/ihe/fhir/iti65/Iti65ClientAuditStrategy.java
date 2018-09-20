@@ -39,7 +39,9 @@ public class Iti65ClientAuditStrategy extends Iti65AuditStrategy {
         return new PHIExportBuilder<>(auditContext, auditDataset, FhirEventTypeCode.ProvideDocumentBundle)
                 .setPatient(auditDataset.getPatientId())
                 .addExportedEntity(
-                        auditDataset.getDocumentManifestUuid(),
+                        auditDataset.getDocumentManifestUuid() != null ?
+                                auditDataset.getDocumentManifestUuid() :
+                                auditContext.getAuditValueIfMissing(),
                         ParticipantObjectIdTypeCode.XdsMetadata,
                         ParticipantObjectTypeCodeRole.Job,
                         Collections.emptyList())

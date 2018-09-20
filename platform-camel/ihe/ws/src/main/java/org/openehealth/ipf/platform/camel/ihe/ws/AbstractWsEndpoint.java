@@ -258,13 +258,6 @@ public abstract class AbstractWsEndpoint<
         return getAuditContext().isAuditEnabled();
     }
 
-    /**
-     * @param audit <code>true</code> if auditing shall be turned on.
-     */
-    public void setAudit(boolean audit) {
-        getAuditContext().setAuditEnabled(audit);
-    }
-
     @Override
     public AuditContext getAuditContext() {
         return auditContext;

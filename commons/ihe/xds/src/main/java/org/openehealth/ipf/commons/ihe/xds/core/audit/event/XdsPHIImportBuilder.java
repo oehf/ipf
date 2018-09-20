@@ -76,7 +76,7 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
         return addImportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
-                makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
+                documentDetails(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
     }
 
     public XdsPHIImportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
@@ -92,7 +92,7 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                         documentIds[i],
                         ParticipantObjectIdTypeCode.ReportNumber,
                         ParticipantObjectTypeCodeRole.Report,
-                        makeDocumentDetail(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
+                        documentDetails(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
                                 studyInstanceIds[i], xcaHomeCommunityId)));
         return self();
     }

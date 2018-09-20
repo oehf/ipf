@@ -192,7 +192,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
         HttpServletRequest request =
                 (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
         auditDataset.setRemoteAddress(request.getRemoteAddr());
-        auditDataset.setLocalAddress(request.getRequestURL().toString());
+        auditDataset.setLocalAddress(request.getServerName()); // #238
         auditDataset.setDestinationUserId(request.getRequestURL().toString());
     }
 

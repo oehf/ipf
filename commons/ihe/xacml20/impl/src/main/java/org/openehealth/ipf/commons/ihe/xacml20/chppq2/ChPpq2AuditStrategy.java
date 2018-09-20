@@ -32,15 +32,14 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import java.nio.charset.Charset;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.QUERY_ENCODING;
 
 /**
- * @since 3.5.1
  * @author Dmytro Rud
+ * @since 3.5.1
  */
 @Slf4j
 public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset> {
@@ -56,14 +55,16 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        List<TypeValuePairType> tvp = new LinkedList<>();
-        if (StringUtils.isNotEmpty(auditDataset.getRequestPayload())) {
-            tvp.add(new TypeValuePairType(QUERY_ENCODING, Charset.defaultCharset().toString()));
-        }
-
-        return new QueryInformationBuilder(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse())
+        QueryInformationBuilder builder = new QueryInformationBuilder(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
+        return builder
                 .addPatients(auditDataset.getPatientId())
-                .setQueryParameters(auditDataset.getQueryId(), ParticipantObjectIdType.of(PpqEventTypeCodes.PrivacyPolicyRetrieve), auditDataset.getRequestPayload(), tvp)
+                .setQueryParameters(
+                        auditDataset.getQueryId(),
+                        ParticipantObjectIdType.of(PpqEventTypeCodes.PrivacyPolicyRetrieve),
+                        auditDataset.getRequestPayload(),
+                        StringUtils.isNotEmpty(auditDataset.getRequestPayload()) ?
+                                Collections.singletonList(builder.getTypeValuePair(QUERY_ENCODING, Charset.defaultCharset().toString())) :
+                                Collections.emptyList())
                 .getMessages();
     }
 

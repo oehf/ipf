@@ -35,7 +35,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
 public class IpfAtnaAutoConfiguration {
 
-
     @Bean
     @ConfigurationProperties(prefix = "ipf.atna")
     @ConditionalOnMissingBean
@@ -55,6 +54,7 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditSource(config.getAuditSourceType());
         auditContext.setSendingApplication(config.getAuditSendingApplication());
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
+        auditContext.setAuditValueIfMissing(config.getAuditValueIfMissing());
         auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
 
         if (config.getAuditQueueClass() != null) {
