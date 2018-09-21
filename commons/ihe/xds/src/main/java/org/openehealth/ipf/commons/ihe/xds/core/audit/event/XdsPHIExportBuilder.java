@@ -74,7 +74,7 @@ public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
-                makeDocumentDetail(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
+                documentDetails(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
     }
 
     public XdsPHIExportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
@@ -90,7 +90,7 @@ public class XdsPHIExportBuilder extends PHIExportBuilder<XdsPHIExportBuilder> {
                         documentIds[i],
                         ParticipantObjectIdTypeCode.ReportNumber,
                         ParticipantObjectTypeCodeRole.Report,
-                        makeDocumentDetail(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
+                        documentDetails(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
                                 studyInstanceIds[i], xcaHomeCommunityId)));
         return self();
     }

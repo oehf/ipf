@@ -53,7 +53,7 @@ public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDat
                     auditDataset.getDocumentUniqueId(),
                     ParticipantObjectIdTypeCode.ReportNumber,
                     ParticipantObjectTypeCodeRole.Report,
-                    PHIExportBuilder.makeDocumentDetail(
+                    builder.documentDetails(
                             auditDataset.getRepositoryUniqueId(),
                             auditDataset.getHomeCommunityId(),
                             null, null, false));

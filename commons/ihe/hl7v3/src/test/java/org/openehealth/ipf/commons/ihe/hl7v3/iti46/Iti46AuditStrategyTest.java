@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Christian Ohr
  */
-public class Iti46AuditStrategyTest extends HL7v3AuditorTestBase {
+public class Iti46AuditStrategyTest extends HL7v3AuditorTestBase<Iti46AuditStrategy> {
 
     @Test
     public void testServerSide() {
@@ -57,17 +57,4 @@ public class Iti46AuditStrategyTest extends HL7v3AuditorTestBase {
                 true);
     }
 
-    private Hl7v3AuditDataset getHl7v3AuditDataset(Iti46AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
-        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
-        // auditDataset.setLocalAddress(SERVER_URI);
-        auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setMessageId(MESSAGE_ID);
-        auditDataset.setPatientIds(PATIENT_IDS);
-        auditDataset.setSourceUserId(REPLY_TO_URI);
-        auditDataset.setDestinationUserId(SERVER_URI);
-        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
-        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
-        return auditDataset;
-    }
 }

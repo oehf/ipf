@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +37,7 @@ import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBui
 /**
  * @author Christian Ohr
  */
-public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase {
+public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase<Iti55AuditStrategy> {
 
     @Test
     public void testServerSide() {
@@ -67,22 +67,15 @@ public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase {
                 .get(0).getParticipantObjectDetails().get(0);
         assertNotNull(detail);
         assertEquals(IHE_HOME_COMMUNITY_ID, detail.getType());
-        assertEquals(HOME_COMMUNITY_ID, new String(Base64.getDecoder().decode(detail.getValue()), StandardCharsets.UTF_8));
+        assertEquals(HOME_COMMUNITY_ID, new String(detail.getValue(), StandardCharsets.UTF_8));
     }
 
-    private Hl7v3AuditDataset getHl7v3AuditDataset(Iti55AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
-        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
-        // auditDataset.setLocalAddress(SERVER_URI);
-        auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
-        auditDataset.setMessageId(MESSAGE_ID);
-        auditDataset.setPatientIds(PATIENT_IDS);
-        auditDataset.setSourceUserId(REPLY_TO_URI);
-        auditDataset.setDestinationUserId(SERVER_URI);
+    @Override
+    protected Hl7v3AuditDataset getHl7v3AuditDataset(Iti55AuditStrategy strategy) {
+        Hl7v3AuditDataset auditDataset = super.getHl7v3AuditDataset(strategy);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
-        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
-        auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
         auditDataset.setHomeCommunityId(HOME_COMMUNITY_ID);
         return auditDataset;
     }
+
 }

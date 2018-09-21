@@ -66,7 +66,7 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
         ParticipantObjectIdentificationType participant = auditMessages[2].getParticipantObjectIdentifications().get(0);
         assertEquals(1, participant.getParticipantObjectDetails().size());
         assertEquals("new uid", participant.getParticipantObjectDetails().get(0).getType());
-        assertEquals("Mi4yMi4yMjIuMjIyMjprbG1ubw==", new String(participant.getParticipantObjectDetails().get(0).getValue()));
+        assertEquals("2.22.222.2222:klmno", new String(participant.getParticipantObjectDetails().get(0).getValue()));
     }
 
     private Iti59AuditDataset getHpdAuditDataset(Iti59AuditStrategy strategy) {

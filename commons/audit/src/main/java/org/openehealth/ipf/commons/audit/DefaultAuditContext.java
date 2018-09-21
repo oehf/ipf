@@ -85,6 +85,9 @@ public class DefaultAuditContext implements AuditContext {
     @Getter @Setter
     private boolean includeParticipantsFromResponse = false;
 
+    @Getter @Setter
+    private String auditValueIfMissing = "UNKNOWN";
+
     public void setAuditRepositoryHost(String auditRepositoryHost) throws UnknownHostException {
         this.auditRepositoryHostName = auditRepositoryHost;
         this.auditRepositoryAddress = InetAddress.getByName(auditRepositoryHost);

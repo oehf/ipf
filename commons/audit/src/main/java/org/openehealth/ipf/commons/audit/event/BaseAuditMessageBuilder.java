@@ -334,7 +334,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                 patientName,
                 null,
                 details,
-                requireNonNull(patientId),
+                requireNonNull(patientId, "patient ID must be not null"),
                 ParticipantObjectTypeCode.Person,
                 ParticipantObjectTypeCodeRole.Patient,
                 lifecycle,
@@ -354,7 +354,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                 studyId,
                 null,
                 objectDetails,
-                requireNonNull(studyId),
+                requireNonNull(studyId, "study ID must be not null"),
                 ParticipantObjectTypeCode.System,
                 ParticipantObjectTypeCodeRole.Report,
                 null,
@@ -413,17 +413,6 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         return IPV4.matcher(address).matches() || IPV6.matcher(address).matches() ?
                 NetworkAccessPointTypeCode.IPAddress :
                 NetworkAccessPointTypeCode.MachineName;
-    }
-
-    /**
-     * Create and set a Type Value Pair instance for a given type and value
-     *
-     * @param type  The type to set
-     * @param value The value to set
-     * @return The Type Value Pair instance
-     */
-    public TypeValuePairType getTypeValuePair(String type, Object value) {
-        return new TypeValuePairType(requireNonNull(type), requireNonNull(value).toString());
     }
 
 

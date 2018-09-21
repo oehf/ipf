@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Objects;
 
 /**
  * Builder for audit events related to generic FHIR transactions, using the resource type
@@ -72,7 +72,10 @@ public class GenericFhirAuditMessageBuilder extends
     }
 
     public GenericFhirAuditMessageBuilder addPatients(GenericFhirAuditDataset auditDataset) {
-        auditDataset.getPatientIds().forEach(patientId ->
+        if (auditDataset.getPatientIds() != null)
+        auditDataset.getPatientIds().stream()
+            .filter(Objects::nonNull)
+            .forEach(patientId ->
                 delegate.addParticipantObjectIdentification(
                         ParticipantObjectIdTypeCode.PatientNumber,
                         null,
@@ -92,9 +95,12 @@ public class GenericFhirAuditMessageBuilder extends
      */
     public GenericFhirAuditMessageBuilder addQueryParticipantObject(GenericFhirAuditDataset auditDataset) {
         delegate.addParticipantObjectIdentification(
-                FhirParticipantObjectIdTypeCode.fromResourceType(auditDataset.getAffectedResourceType()),
+                FhirParticipantObjectIdTypeCode.fromResourceType(
+                        auditDataset.getAffectedResourceType() != null ?
+                                auditDataset.getAffectedResourceType() :
+                                getAuditContext().getAuditValueIfMissing()),
                 auditDataset.getAffectedResourceType(),
-                Base64.getEncoder().encode(auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8)),
+                auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8),
                 null,
                 "FHIR Restful Query",
                 ParticipantObjectTypeCode.System,
@@ -112,7 +118,9 @@ public class GenericFhirAuditMessageBuilder extends
     public GenericFhirAuditMessageBuilder addResourceParticipantObject(GenericFhirAuditDataset auditDataset) {
         delegate.addParticipantObjectIdentification(
                 FhirParticipantObjectIdTypeCode.fromResourceType(
-                        auditDataset.getResourceId().getResourceType()),
+                        auditDataset.getAffectedResourceType() != null ?
+                                auditDataset.getAffectedResourceType() :
+                                getAuditContext().getAuditValueIfMissing()),
                 null,
                 null,
                 null,

@@ -53,7 +53,7 @@ public class StatusValidation implements QueryParameterValidation {
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
-        metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, slotValues);
+        metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),

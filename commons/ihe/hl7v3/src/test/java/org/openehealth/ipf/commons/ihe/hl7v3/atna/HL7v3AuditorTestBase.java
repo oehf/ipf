@@ -20,12 +20,15 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.EventId;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy;
 
 /**
  * @author Christian Ohr
  */
-public class HL7v3AuditorTestBase extends AuditorTestBase {
+public class HL7v3AuditorTestBase<T extends Hl7v3AuditStrategy> extends AuditorTestBase {
 
     protected void assertCommonV3AuditAttributes(AuditMessage auditMessage,
                                                  EventOutcomeIndicator eventOutcomeIndicator,
@@ -37,4 +40,16 @@ public class HL7v3AuditorTestBase extends AuditorTestBase {
                 REPLY_TO_URI, SERVER_URI, serverSide, requiresPatient);
     }
 
+    protected Hl7v3AuditDataset getHl7v3AuditDataset(T strategy) {
+        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
+        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
+        auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
+        auditDataset.setMessageId(MESSAGE_ID);
+        auditDataset.setPatientIds(PATIENT_IDS);
+        auditDataset.setSourceUserId(REPLY_TO_URI);
+        auditDataset.setDestinationUserId(SERVER_URI);
+        auditDataset.setPurposesOfUse(PURPOSES_OF_USE);
+        auditDataset.getHumanUsers().add(new AuditDataset.HumanUser(USER_ID, USER_NAME, USER_ROLES));
+        return auditDataset;
+    }
 }

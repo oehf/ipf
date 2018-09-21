@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.LogicalDeletion;
 import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.Origination;
@@ -60,7 +61,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     public IHEPatientRecordChangeLinkBuilder setLocalPatientId(Iti64AuditDataset auditDataset) {
         delegate.addPatient(auditDataset.getLocalPatientId(), null,
                 Arrays.asList(
-                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId()),
+                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "localPatientId")
                 ),
                 // If subsumedLocalPatientId is present, then this value shall
@@ -73,7 +74,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     public IHEPatientRecordChangeLinkBuilder setSubsumedLocalPatientId(Iti64AuditDataset auditDataset) {
         delegate.addPatient(auditDataset.getSubsumedLocalPatientId(), null,
                 Arrays.asList(
-                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId()),
+                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "subsumedPatientId")
                 ),
                 LogicalDeletion);
@@ -83,28 +84,26 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     public IHEPatientRecordChangeLinkBuilder setNewPatientId(Iti64AuditDataset auditDataset) {
         delegate.addPatient(auditDataset.getNewPatientId(), null,
                 Arrays.asList(
-                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId()),
+                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "newPatientId")
                 ),
                 // If newPatientId and previousPatientId are not equal, then this
                 // value shall equal "14" (Logical deletion). Otherwise, this value
                 // is not specialized.
-                auditDataset.getNewPatientId().equals(auditDataset.getPreviousPatientId()) ? null : Origination);
+                Objects.equals(auditDataset.getNewPatientId(), auditDataset.getPreviousPatientId()) ? null : Origination);
         return this;
     }
 
     public IHEPatientRecordChangeLinkBuilder setPreviousPatientId(Iti64AuditDataset auditDataset) {
         delegate.addPatient(auditDataset.getPreviousPatientId(), null,
                 Arrays.asList(
-                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId()),
+                        getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "previousPatientId")
                 ),
                 // If newPatientId and previousPatientId are not equal, then this
                 // value shall equal "14" (Logical deletion). Otherwise, this value
                 // is not specialized.
-                auditDataset.getNewPatientId().equals(auditDataset.getPreviousPatientId()) ?
-                        null :
-                        LogicalDeletion);
+                Objects.equals(auditDataset.getNewPatientId(), auditDataset.getPreviousPatientId()) ? null : LogicalDeletion);
         return this;
     }
 
