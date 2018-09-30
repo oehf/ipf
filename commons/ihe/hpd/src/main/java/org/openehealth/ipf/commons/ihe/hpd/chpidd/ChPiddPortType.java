@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.chpidd;
 
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -36,8 +39,8 @@ public interface ChPiddPortType {
     @WebMethod(operationName = "ProviderInformationDownloadRequest")
     @Action(input = "urn:ihe:iti:2010:ProviderInformationDownload", output = "urn:ihe:iti:2010:ProviderInformationDownloadResponse")
     @WebResult(name = "downloadResponse", targetNamespace = "urn:ehealth-suisse:names:tc:CS:1", partName = "body")
-    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse providerInformationDownloadRequest(
+    DownloadResponse providerInformationDownloadRequest(
             @WebParam(partName = "body", name = "downloadRequest", targetNamespace = "urn:ehealth-suisse:names:tc:CS:1")
-                    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest body
+                    DownloadRequest body
     );
 }

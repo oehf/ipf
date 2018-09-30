@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+        targetNamespace="urn:ch:admin:bag:epr:2017"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="urn:ch:admin:bag:epr:2017"
+        xmlns:dsml="urn:oasis:names:tc:DSML:2:0:core"
+        elementFormDefault="qualified">
+
+    <xs:import schemaLocation="DSMLv2.xsd" namespace="urn:oasis:names:tc:DSML:2:0:core"/>
+
+    <xs:element name="downloadRequest" type="DownloadRequest"/>
+    <xs:element name="downloadResponse" type="DownloadResponse"/>
+
+    <xs:complexType name="DownloadRequest">
+        <xs:attribute name="fromDate" type="xs:dateTime" use="required"/>
+        <xs:attribute name="toDate" type="xs:dateTime"/>
+        <xs:attribute name="requestID" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="DownloadResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="dsml:batchRequest"/>
+        </xs:sequence>
+        <xs:attribute name="requestID" type="xs:string"/>
+    </xs:complexType>
+</xs:schema>

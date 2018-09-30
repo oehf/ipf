@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.hpd.chcidd.ChCiddPortType;
+import org.openehealth.ipf.commons.ihe.hpd.chciq.ChCiqPortType;
 import org.openehealth.ipf.commons.ihe.hpd.chpidd.ChPiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti59.*;
@@ -40,7 +42,9 @@ public class HPD implements IntegrationProfile {
     @AllArgsConstructor
     public enum ReadInteractions implements WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
         ITI_58(ITI_58_WS_CONFIG),
-        CH_PIDD(CH_PIDD_WS_CONFIG);
+        CH_PIDD(CH_PIDD_WS_CONFIG),
+        CH_CIQ(CH_CIQ_WS_CONFIG),
+        CH_CIDD(CH_CIDD_WS_CONFIG);
 
         @Getter
         private WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
@@ -105,6 +109,38 @@ public class HPD implements IntegrationProfile {
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),
             false,
             "wsdl/ch-pidd.wsdl",
+            true,
+            false,
+            false,
+            false);
+
+    private final static WsTransactionConfiguration<WsAuditDataset> CH_CIQ_WS_CONFIG = new WsTransactionConfiguration<>(
+            "ch-ciq",
+            "Community Information Query (Swiss EPR transaction)",
+            true,
+            null, // audit trail is not defined for CH-CIQ
+            null, // audit trail is not defined for CH-CIQ
+            new QName("urn:ch:admin:bag:epr:cpi:2017", "CommunityPortalIndex"),
+            ChCiqPortType.class,
+            new QName("urn:ch:admin:bag:epr:cpi:2017", "WSHttpBinding_ICommunityPortalIndex"),
+            false,
+            "wsdl/ch-ciq.wsdl",
+            true,
+            false,
+            false,
+            false);
+
+    private final static WsTransactionConfiguration<WsAuditDataset> CH_CIDD_WS_CONFIG = new WsTransactionConfiguration<>(
+            "ch-cidd",
+            "Community Information Delta Download (Swiss EPR transaction)",
+            true,
+            null, // audit trail is not defined for CH-CIDD
+            null, // audit trail is not defined for CH-CIDD
+            new QName("urn:ch:admin:bag:epr:cpi:2017", "CommunityPortalIndex"),
+            ChCiddPortType.class,
+            new QName("urn:ch:admin:bag:epr:cpi:2017", "WSHttpBinding_ICommunityPortalIndex"),
+            false,
+            "wsdl/ch-cidd.wsdl",
             true,
             false,
             false,

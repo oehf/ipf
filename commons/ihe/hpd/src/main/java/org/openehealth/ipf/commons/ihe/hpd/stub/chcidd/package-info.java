@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@javax.xml.bind.annotation.XmlSchema(namespace = "urn:ehealth-suisse:names:tc:CS:1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package org.openehealth.ipf.commons.ihe.hpd.stub.chpidd;
+@javax.xml.bind.annotation.XmlSchema(namespace = "urn:ch:admin:bag:epr:2017", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+package org.openehealth.ipf.commons.ihe.hpd.stub.chcidd;

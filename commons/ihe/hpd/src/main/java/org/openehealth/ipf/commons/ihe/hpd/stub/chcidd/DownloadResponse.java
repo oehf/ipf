@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hpd.stub.chpidd;
+package org.openehealth.ipf.commons.ihe.hpd.stub.chcidd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,16 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="DownloadResponse"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;sequence&gt;
- *         &lt;element ref="{urn:oasis:names:tc:DSML:2:0:core}batchRequest" maxOccurs="unbounded" minOccurs="0"/&gt;
- *       &lt;/sequence&gt;
- *       &lt;attribute name="requestID" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="DownloadResponse">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{urn:oasis:names:tc:DSML:2:0:core}batchRequest" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="requestID" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 

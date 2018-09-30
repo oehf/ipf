@@ -1,18 +1,17 @@
 
-## `ch-pidd` component
+## `ch-ciq` component
 
-The `ch-pidd` component provides interfaces for actors of the *Provider Information Delta Download* transaction (CH:PIDD),
-which is described in the [National extensions to the IHE Technical Framework](https://www.e-health-suisse.ch/fileadmin/user_upload/Dokumente/2018/E/180629_Entwurf_EPDV-EDI_Anhang_5_E1_V1.4_e.pdf),
-Section 1.11.
+The `ch-ciq` component provides interfaces for actors of the *Community Information Query* transaction (CH:CIQ),
+which is part of the Swiss profile [CH:CPI ("Community Portal Index")](https://www.e-health-suisse.ch/fileadmin/user_upload/Dokumente/2018/E/180712_Entwurf_EPDV-EDI_E2A5_CPI_V0.94_e.pdf).
 
 ### Actors
 
 The transaction defines the following actors:
 
-![CH-PIDD actors](images/ch-pidd.png)
+![CH-CIQ actors](images/ch-ciq.png)
 
-Producer side corresponds to the *Provider Information Consumer* actor.
-Consumer side corresponds to the *Provider Information Directory* actor.
+Producer side corresponds to the *CPI Consumer* actor.
+Consumer side corresponds to the *CPI Provider* actor (a Swiss governmental service).
 
 ### Dependencies
 
@@ -30,10 +29,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `ch-pidd` component producers is:
+The endpoint URI format of `ch-ciq` component producers is:
 
 ```
-ch-pidd://hostname:port/path/to/service[?parameters]
+ch-ciq://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -42,10 +41,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `ch-pidd` component consumers is:
+The endpoint URI format of `ch-ciq` component consumers is:
 
 ```
-ch-pidd:serviceName[?parameters]
+ch-ciq:serviceName[?parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -59,24 +58,24 @@ contextPath = /IHE
 servletPath = /hpd/*
 ```
 
-and serviceName equals to `chPiddService`, then the ch-pidd consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/hpd/chPiddService`
+and serviceName equals to `chCiqService`, then the ch-pidd consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/hpd/chCiqService`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
 ### Data Types
 
-The CH-PIDD component produces and consumes objects based on the [DSMLv2](https://www.oasis-open.org/standards#dsmlv2) data model:
+The CH:CIQ component produces and consumes objects based on the [DSMLv2](https://www.oasis-open.org/standards#dsmlv2) data model:
 
-* Request message -- [`DownloadRequest`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/chpidd/DownloadRequest.html)
-* Response message -- [`DownloadResponse`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/chpidd/DownloadResponse.html)
+* Request message -- [`BatchRequest`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/dsmlv2/BatchRequest.html)
+* Response message -- [`BatchResponse`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/dsmlv2/BatchResponse.html)
 
 ### Example
 
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("ch-pidd:chPiddService?audit=false")
+    from("ch-ciq:chCiqService")
       .process(myProcessor)
       // process the incoming request and create a response
 ```
@@ -84,7 +83,7 @@ This is an example on how to use the component on the consumer side:
 
 ### Basic Common Component Features
 
-* ATNA Auditing is not defined for CH-PIDD
+* ATNA Auditing is not defined for CH:CIQ
 * [Message validation]
 
 ### Basic Web Service Component Features

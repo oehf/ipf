@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="CommunityPortalIndex"
+                  targetNamespace="urn:ch:admin:bag:epr:cpi:2017"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:tns="urn:ch:admin:bag:epr:cpi:2017"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:dsml2="urn:oasis:names:tc:DSML:2:0:core">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="urn:ch:admin:bag:epr:cpi:2017/Imports">
+            <xsd:import schemaLocation="../schema/DSMLv2.xsd" namespace="urn:oasis:names:tc:DSML:2:0:core"/>
+            <xsd:import schemaLocation="../schema/CIDD.xsd" namespace="urn:ch:admin:bag:epr:2017"/>
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="CommunityQueryRequestMessage">
+        <wsdl:part name="body" element="dsml2:batchRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CommunityQueryResponseMessage">
+        <wsdl:part name="body" element="dsml2:batchResponse"/>
+    </wsdl:message>
+
+    <wsdl:portType name="ICommunityPortalIndex">
+        <wsdl:operation name="CommunityQueryRequest">
+            <wsdl:input wsaw:Action="urn:ch:admin:bag:epr:2017:CommunityQuery"
+                        name="CommunityQueryRequestMessage"
+                        message="tns:CommunityQueryRequestMessage"/>
+            <wsdl:output wsaw:Action="urn:ch:admin:bag:epr:2017:CommunityQueryResponse"
+                         name="CommunityQueryResponseMessage"
+                         message="tns:CommunityQueryResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="WSHttpBinding_ICommunityPortalIndex" type="tns:ICommunityPortalIndex">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="CommunityQueryRequest">
+            <soap12:operation soapAction="urn:ch:admin:bag:epr:2017:CommunityQuery" style="document"/>
+            <wsdl:input name="CommunityQueryRequestMessage">
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CommunityQueryResponseMessage">
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="CommunityPortalIndex">
+        <wsdl:port name="WSHttpBinding_ICommunityPortalIndex" binding="tns:WSHttpBinding_ICommunityPortalIndex">
+            <soap12:address location="https://ws.epd-ad-r.bag.admin.ch/Cpi/CommunityPortalIndex.svc"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
