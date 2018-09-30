@@ -90,20 +90,20 @@ public class HpdValidator {
                 String value = (String) rdn.getValue();
                 switch (rdn.getType().toLowerCase()) {
                     case "dc":
-                        check(dc.equals(value), "DN.DC must be equal to " + dc);
+                        check(dc.equalsIgnoreCase(value), "DN.DC must be equal to " + dc);
                         break;
                     case "o":
                         if (o != null) {
-                            check(o.equals(value), "DN.O must be equal to " + o);
+                            check(o.equalsIgnoreCase(value), "DN.O must be equal to " + o);
                         } else {
-                            check(StringUtils.isNoneBlank(value), "DN.O must be not empty");
+                            check(StringUtils.isNotBlank(value), "DN.O must be not empty");
                         }
                         break;
                     case "c":
                         if (c != null) {
-                            check(c.equals(value), "DN.C must be equal to " + c);
+                            check(c.equalsIgnoreCase(value), "DN.C must be equal to " + c);
                         } else {
-                            check(StringUtils.isNoneBlank(value), "DN.C must be not empty");
+                            check(StringUtils.isNotBlank(value), "DN.C must be not empty");
                         }
                         break;
                 }
