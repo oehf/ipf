@@ -75,14 +75,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link EpdPolicyRepositoryResponse }
-     *
-     */
-    public EpdPolicyRepositoryResponse createEpdPolicyRepositoryResponse() {
-        return new EpdPolicyRepositoryResponse();
-    }
-
-    /**
      * Create an instance of {@link EprPolicyRepositoryResponse }
      *
      */

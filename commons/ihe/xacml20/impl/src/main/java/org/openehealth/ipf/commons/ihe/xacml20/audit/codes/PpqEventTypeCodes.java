@@ -26,28 +26,6 @@ import org.openehealth.ipf.commons.audit.types.EventType;
  * @since 3.5.1
  */
 public enum PpqEventTypeCodes implements EventType, EnumeratedCodedValue<EventType> {
-
-    /**
-     * @deprecated replaced by PPQ-1
-     */
-    @Deprecated
-    PrivacyPolicyQueryAddPolicy   ("PPQ", "Privacy Policy Query Add Policy"),
-    /**
-     * @deprecated replaced by PPQ-1
-     */
-    @Deprecated
-    PrivacyPolicyQueryUpdatePolicy("PPQ", "Privacy Policy Query Update Policy"),
-    /**
-     * @deprecated replaced by PPQ-1
-     */
-    @Deprecated
-    PrivacyPolicyQueryDeletePolicy("PPQ", "Privacy Policy Query Delete Policy"),
-    /**
-     * @deprecated replaced by PPQ-2
-     */
-    @Deprecated
-    PrivacyPolicyQueryPolicyQuery ("PPQ", "Privacy Policy Query Policy Query"),
-
     PrivacyPolicyFeed    ("PPQ-1", "Privacy Policy Feed"),
     PrivacyPolicyRetrieve("PPQ-2", "Privacy Policy Retrieve"),
     ;

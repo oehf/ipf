@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
@@ -48,15 +47,6 @@ public class MessageValidationTest {
 
     @Test
     public void testValidation() throws Exception {
-        validateChPpqRequest(loadFile("chppq/add-request.xml"));
-        validateChPpqRequest(loadFile("chppq/update-request.xml"));
-        validateChPpqRequest(loadFile("chppq/delete-request.xml"));
-        validateChPpqResponse(loadFile("chppq/ack.xml"));
-
-        validateChPpqRequest(loadFile("chppq/query-per-patient-id.xml"));
-        validateChPpqRequest(loadFile("chppq/query-per-policy-id.xml"));
-        validateChPpqResponse(loadFile("chppq/query-response.xml"));
-
         validateChPpq1Request(loadFile("chppq1/add-request.xml"));
         validateChPpq1Request(loadFile("chppq1/update-request.xml"));
         validateChPpq1Request(loadFile("chppq1/delete-request.xml"));

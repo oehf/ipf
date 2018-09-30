@@ -26,18 +26,6 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
  */
 public class Xacml20CamelValidators {
 
-    private static final Processor CH_PPQ_REQUEST_VALIDATOR = exchange -> {
-        if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpqRequest(exchange.getIn().getBody());
-        }
-    };
-
-    private static final Processor CH_PPQ_RESPONSE_VALIDATOR = exchange -> {
-        if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpqResponse(exchange.getIn().getBody());
-        }
-    };
-
     private static final Processor CH_PPQ_1_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
             Xacml20MessageValidator.validateChPpq1Request(exchange.getIn().getBody());
@@ -61,14 +49,6 @@ public class Xacml20CamelValidators {
             Xacml20MessageValidator.validateChPpq2Response(exchange.getIn().getBody());
         }
     };
-
-    public static Processor chPpqRequestValidator() {
-        return CH_PPQ_REQUEST_VALIDATOR;
-    }
-
-    public static Processor chPpqResponseValidator() {
-        return CH_PPQ_RESPONSE_VALIDATOR;
-    }
 
     public static Processor chPpq1RequestValidator() {
         return CH_PPQ_1_REQUEST_VALIDATOR;
