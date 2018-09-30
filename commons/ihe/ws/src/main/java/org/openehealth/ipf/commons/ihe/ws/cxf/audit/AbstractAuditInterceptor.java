@@ -168,18 +168,18 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
 
 
     /**
-     * Extracts ITI-40 XUA user name from the SAML2 assertion contained
-     * in the given CXF message, and stores it in the ATNA audit dataset.
+     * Enriches the given audit dataset with elements from the XUA token (SAML2 assertion)
+     * contained in the given CXF message.
      *
      * @param message         source CXF message.
      * @param headerDirection direction of the header containing the SAML2 assertion.
      * @param auditDataset    target ATNA audit dataset.
      */
-    protected static void extractXuaUserNameFromSaml2Assertion(
+    protected static void enrichAuditDatasetFromXuaToken(
             SoapMessage message,
             Header.Direction headerDirection,
             WsAuditDataset auditDataset) {
-        xuaProcessor.extractXuaUserNameFromSaml2Assertion(message, headerDirection, auditDataset);
+        xuaProcessor.enrichAuditDatasetFromXuaToken(message, headerDirection, auditDataset);
     }
 
 

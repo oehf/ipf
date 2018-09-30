@@ -34,7 +34,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessa
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EpdPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-import org.opensaml.saml.saml2.core.StatusCode;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
@@ -90,12 +89,12 @@ public class ChPpqTest extends StandardTestContainer {
 
     @Test
     public void testQueryPerPatientIdSuccess() throws Exception {
-        testQueryPerPatientId("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success);
+        testQueryPerPatientId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
     }
 
     @Test
     public void testQueryPerPatientIdFailure() throws Exception {
-        testQueryPerPatientId("failure", StatusCode.RESPONDER, EventOutcomeIndicator.SeriousFailure);
+        testQueryPerPatientId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
     }
 
     private void testQueryPerPatientId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
@@ -141,12 +140,12 @@ public class ChPpqTest extends StandardTestContainer {
 
     @Test
     public void testQueryPerPolicyIdSuccess() throws Exception {
-        testQueryPerPolicyId("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success);
+        testQueryPerPolicyId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
     }
 
     @Test
     public void testQueryPerPolicyIdFailure() throws Exception {
-        testQueryPerPolicyId("failure", StatusCode.RESPONDER, EventOutcomeIndicator.SeriousFailure);
+        testQueryPerPolicyId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
     }
 
     private void testQueryPerPolicyId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
