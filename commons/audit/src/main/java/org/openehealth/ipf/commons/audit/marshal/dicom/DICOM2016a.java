@@ -113,13 +113,13 @@ public class DICOM2016a implements SerializationStrategy {
         Element element = new Element("ParticipantObjectIdentification");
         if (poi != null) {
             conditionallyAddAttribute(element, "ParticipantObjectID", poi.getParticipantObjectID());
-            conditionallyAddAttribute(element, "ParticipantObjectTypeCode", poi.getParticipantObjectTypeCode().getValue().toString());
+            if (poi.getParticipantObjectTypeCode() != null) {
+                conditionallyAddAttribute(element, "ParticipantObjectTypeCode", poi.getParticipantObjectTypeCode().getValue().toString());
+            }
             conditionallyAddAttribute(element, "ParticipantObjectTypeCodeRole", poi.getParticipantObjectTypeCodeRole());
             conditionallyAddAttribute(element, "ParticipantObjectDataLifeCycle", poi.getParticipantObjectDataLifeCycle());
             conditionallyAddAttribute(element, "ParticipantObjectSensitivity", poi.getParticipantObjectSensitivity());
-            if (poi.getParticipantObjectIDTypeCode() != null) {
-                element.addContent(codedValueType("ParticipantObjectIDTypeCode", poi.getParticipantObjectIDTypeCode()));
-            }
+            element.addContent(codedValueType("ParticipantObjectIDTypeCode", poi.getParticipantObjectIDTypeCode()));
             if (poi.getParticipantObjectName() != null) {
                 element.addContent(new Element("ParticipantObjectName")
                         .addContent(poi.getParticipantObjectName()));
