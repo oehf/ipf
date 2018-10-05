@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
         <camel-version>2.21.2</camel-version>
-        <cxf-version>3.2.5</cxf-version>
+        <cxf-version>3.2.4</cxf-version>
         <groovy-version>2.4.15</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.2.0</hapi-fhir-version>
@@ -28,8 +28,8 @@
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.14.RELEASE</spring-version>
-        <spring-boot-version>1.5.10.RELEASE</spring-boot-version>
+        <spring-version>4.3.19.RELEASE</spring-version>
+        <spring-boot-version>1.5.16.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.0</xmlsec-version>
