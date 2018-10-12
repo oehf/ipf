@@ -59,7 +59,9 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setLocalPatientId(Iti64AuditDataset auditDataset) {
-        delegate.addPatient(auditDataset.getLocalPatientId(), null,
+        String patientId = auditDataset.getLocalPatientId() != null ?
+                auditDataset.getLocalPatientId() : getAuditContext().getAuditValueIfMissing();
+        delegate.addPatient(patientId, null,
                 Arrays.asList(
                         getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "localPatientId")
@@ -72,7 +74,9 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubsumedLocalPatientId(Iti64AuditDataset auditDataset) {
-        delegate.addPatient(auditDataset.getSubsumedLocalPatientId(), null,
+        String patientId = auditDataset.getSubsumedLocalPatientId() != null ?
+                auditDataset.getSubsumedLocalPatientId() : getAuditContext().getAuditValueIfMissing();
+        delegate.addPatient(patientId, null,
                 Arrays.asList(
                         getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "subsumedPatientId")
@@ -82,7 +86,9 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setNewPatientId(Iti64AuditDataset auditDataset) {
-        delegate.addPatient(auditDataset.getNewPatientId(), null,
+        String patientId = auditDataset.getNewPatientId() != null ?
+                auditDataset.getNewPatientId() : getAuditContext().getAuditValueIfMissing();
+        delegate.addPatient(patientId, null,
                 Arrays.asList(
                         getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "newPatientId")
@@ -95,7 +101,9 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setPreviousPatientId(Iti64AuditDataset auditDataset) {
-        delegate.addPatient(auditDataset.getPreviousPatientId(), null,
+        String patientId = auditDataset.getPreviousPatientId() != null ?
+                auditDataset.getPreviousPatientId() : getAuditContext().getAuditValueIfMissing();
+        delegate.addPatient(patientId, null,
                 Arrays.asList(
                         getTypeValuePair("MSH-10", auditDataset.getMessageControlId(), getAuditContext().getAuditValueIfMissing()),
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "previousPatientId")
@@ -108,13 +116,15 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubmissionSet(Iti64AuditDataset auditDataset) {
+        String submissionSetUuid = auditDataset.getSubmissionSetUuid() != null ?
+                auditDataset.getSubmissionSetUuid() : getAuditContext().getAuditValueIfMissing();
         if (auditDataset.getSubmissionSetUuid() != null) {
             delegate.addParticipantObjectIdentification(
                     ParticipantObjectIdTypeCode.XdsMetadata,
                     null,
                     null,
                     Collections.emptyList(),
-                    auditDataset.getSubmissionSetUuid(),
+                    submissionSetUuid,
                     ParticipantObjectTypeCode.System,
                     ParticipantObjectTypeCodeRole.Job,
                     null,
