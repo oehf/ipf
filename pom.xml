@@ -51,14 +51,14 @@
         <antrun-plugin-version>1.8</antrun-plugin-version>
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.11</build-helper-version>
-        <compiler-plugin-version>3.7.0</compiler-plugin-version>
+        <compiler-plugin-version>3.8.0</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.4.15-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.9.3-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.5.1-02</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>3.0.0-01</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>3.0.0</javadoc-plugin-version>
@@ -71,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.4</activemq-version>
+        <activemq-version>5.15.6</activemq-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
@@ -89,12 +89,12 @@
         <jetty-version>9.4.11.v20180605</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
-        <log4j-version>2.11.0</log4j-version>
+        <log4j-version>2.11.1</log4j-version>
         <lombok-version>1.18.2</lombok-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.32</tomcat-version>
+        <tomcat-version>8.5.34</tomcat-version>
         <woodstox-version>4.4.1</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
