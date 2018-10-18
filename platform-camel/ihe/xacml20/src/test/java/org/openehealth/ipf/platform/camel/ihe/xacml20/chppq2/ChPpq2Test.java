@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -41,8 +40,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @since 3.5.1
  * @author Dmytro Rud
+ * @since 3.5.1
  */
 public class ChPpq2Test extends StandardTestContainer {
 
@@ -85,7 +84,7 @@ public class ChPpq2Test extends StandardTestContainer {
         testQueryPerPatientId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
     }
 
-    @Test @Ignore
+    @Test
     public void testQueryPerPatientIdFailure() throws Exception {
         testQueryPerPatientId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
     }
@@ -136,7 +135,7 @@ public class ChPpq2Test extends StandardTestContainer {
         testQueryPerPolicyId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
     }
 
-    @Test @Ignore
+    @Test
     public void testQueryPerPolicyIdFailure() throws Exception {
         testQueryPerPolicyId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
     }

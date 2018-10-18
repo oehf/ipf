@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -42,8 +41,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @since 3.5.1
  * @author Dmytro Rud
+ * @since 3.5.1
  */
 public class ChPpq1Test extends StandardTestContainer {
 
