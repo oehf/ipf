@@ -99,7 +99,7 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(INarrativeGenerator.class)
     public INarrativeGenerator narrativeGenerator() {
-        return null;
+        return (context, resource, narrative) -> { };
     }
 
     @Bean
