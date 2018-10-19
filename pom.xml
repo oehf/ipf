@@ -2,14 +2,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.6-SNAPSHOT</version>
+    <version>3.6-20181019</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.6-SNAPSHOT</version>
+        <version>3.6-20181019</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -102,7 +102,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>HEAD</tag>
+       <tag>ipf-3.6-20181019</tag>
     </scm>
 
     <profiles>
@@ -677,39 +677,39 @@
                             <configuration>
                                 <target>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
                                         <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://netdna.bootstrapcd</replacetoken>
                                         <replacevalue>https://netdna.bootstrapcd</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
                                         <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
                                         <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
                                         <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>http://ajax.googleapis</replacetoken>
                                         <replacevalue>https://ajax.googleapis</replacevalue>
                                     </replace>
                                     <replace dir="target/site" summary="true">
-                                        <include name="*.html"/>
+                                        <include name="*.html" />
                                         <replacetoken>\t</replacetoken>
-                                        <replacevalue/>
+                                        <replacevalue />
                                     </replace>
                                 </target>
                             </configuration>
@@ -989,38 +989,38 @@
                         <configuration>
                             <target>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
                                     <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://netdna.bootstrapcd</replacetoken>
                                     <replacevalue>https://netdna.bootstrapcd</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
                                     <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
                                     <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
                                     <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
                                 </replace>
 
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>http://ajax.googleapis</replacetoken>
                                     <replacevalue>https://ajax.googleapis</replacevalue>
                                 </replace>
                                 <replace dir="target/site" summary="true">
-                                    <include name="*.html"/>
+                                    <include name="*.html" />
                                     <replacetoken>\t</replacetoken>
                                     <replacevalue>
                                     </replacevalue>
