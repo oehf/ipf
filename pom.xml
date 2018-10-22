@@ -101,7 +101,7 @@
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
         <tomcat-version>8.5.29</tomcat-version>
-        <woodstox-version>4.4.1</woodstox-version>
+        <woodstox-version>5.1.0</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -635,8 +635,8 @@
                 <version>${guava-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.woodstox</groupId>
-                <artifactId>woodstox-core-asl</artifactId>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
                 <version>${woodstox-version}</version>
             </dependency>
         </dependencies>
