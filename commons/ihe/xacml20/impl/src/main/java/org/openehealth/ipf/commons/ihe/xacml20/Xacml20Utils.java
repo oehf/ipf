@@ -27,7 +27,11 @@ import org.herasaf.xacml.core.simplePDP.initializers.api.Initializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3DataTypesInitializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3FunctionsInitializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UpdatePolicyRequest;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.XACMLPolicySetIdReferenceStatementType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.StatementAbstractType;
@@ -76,7 +80,8 @@ public class Xacml20Utils {
                     org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.ObjectFactory.class,
                     org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory.class,
                     org.apache.xml.security.binding.xmlenc.ObjectFactory.class,
-                    org.apache.xml.security.binding.xmldsig.ObjectFactory.class);
+                    org.apache.xml.security.binding.xmldsig.ObjectFactory.class,
+                    org.apache.xml.security.binding.xop.ObjectFactory.class);
         } catch (JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
