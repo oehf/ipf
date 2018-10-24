@@ -45,6 +45,7 @@ import javax.xml.ws.Action;
         org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory.class,
         org.apache.xml.security.binding.xmlenc.ObjectFactory.class,
         org.apache.xml.security.binding.xmldsig.ObjectFactory.class,
+        org.apache.xml.security.binding.xop.ObjectFactory.class,
         })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @DataBinding(Xacml20JaxbDataBinding.class)

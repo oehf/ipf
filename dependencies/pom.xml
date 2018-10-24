@@ -535,6 +535,10 @@
                         <groupId>com.google.guava</groupId>
                         <artifactId>guava</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>woodstox-core-asl</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
