@@ -30,7 +30,7 @@
         <spring-boot-version>2.0.6.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
         <vibur-version>22.2</vibur-version>
-        <xmlsec-version>2.1.0</xmlsec-version>
+        <xmlsec-version>2.1.2</xmlsec-version>
 
         <github.global.server>github</github.global.server>
 
