@@ -52,7 +52,7 @@ public class ContentMap {
     public <T> T getContent(Class<T> targetType) {
         T result = (T) map.get(targetType);
         if (result != null) {
-            LOG.debug("Return existing content of type " + targetType);
+            LOG.debug("Return existing content of type {}", targetType);
             return result;
         }
 
@@ -67,7 +67,7 @@ public class ContentMap {
                 if (conversionService.canConvert(sourceType, targetType)) {
                     result = conversionService.convert(map.get(sourceType), targetType);
                     if (result != null) {
-                        LOG.debug("Successfully generated " + targetType + " from " + sourceType);
+                        LOG.debug("Successfully generated {} from {}", targetType, sourceType);
                         setContent(targetType, result);
                         return result;
                     }
@@ -75,7 +75,7 @@ public class ContentMap {
             }
         }
 
-        LOG.debug("Could not find appropriate converter for the target type " + targetType);
+        LOG.debug("Could not find appropriate converter for the target type {}", targetType);
         return null;
     }
 

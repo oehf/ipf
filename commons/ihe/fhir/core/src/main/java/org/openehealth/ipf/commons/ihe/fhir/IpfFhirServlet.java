@@ -134,7 +134,7 @@ public class IpfFhirServlet extends RestfulServer {
             throw new ServletException(e);
         }
 
-        LOG.debug("Initializing IpfFhirServlet " + servletName);
+        LOG.debug("Initializing IpfFhirServlet {}", servletName);
 
         if (config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME) != null) {
             fhirVersion = FhirVersionEnum.valueOf(config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME));
