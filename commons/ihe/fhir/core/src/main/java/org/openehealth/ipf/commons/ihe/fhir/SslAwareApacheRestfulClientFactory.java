@@ -91,12 +91,23 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
     }
 
     /**
-     * Possibility to customize the
+     * Possibility to customize the HttpClientBuilder. The default implementation of this method
+     * does nothing.
      *
      * @param httpClientBuilder HttpClientBuilder
      */
     protected HttpClientBuilder customizeHttpClientBuilder(HttpClientBuilder httpClientBuilder) {
         return httpClientBuilder;
+    }
+
+    /**
+     * Possibility to instantiate a subclassed HttpClientBuilder. The default implementation
+     * calls {@link HttpClients#custom()}.
+     *
+     * @return HttpClientBuilder instance
+     */
+    protected HttpClientBuilder newHttpClientBuilder() {
+        return HttpClients.custom();
     }
 
     protected synchronized HttpClient getNativeHttpClient() {
@@ -111,7 +122,7 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                     .setStaleConnectionCheckEnabled(true)
                     .build();
 
-            HttpClientBuilder builder = HttpClients.custom()
+            HttpClientBuilder builder = newHttpClientBuilder()
                     .useSystemProperties()
                     .setDefaultRequestConfig(defaultRequestConfig)
                     .setMaxConnTotal(getPoolMaxTotal())
