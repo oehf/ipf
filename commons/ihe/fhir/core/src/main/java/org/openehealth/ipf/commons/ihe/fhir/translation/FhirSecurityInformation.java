@@ -49,17 +49,5 @@ public class FhirSecurityInformation extends SecurityInformation {
             }
         }
 
-        // This is currently done by the FhirProducer#getClient by attaching a ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor
-        // I wonder if the following wouldn't be better
-
-        /*
-        if (getUsername() != null) {
-            CredentialsProvider provider = new BasicCredentialsProvider();
-            AuthScope scope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM);
-            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(getUsername(), getPassword());
-            provider.setCredentials(scope, credentials);
-            builder.setDefaultCredentialsProvider(provider);
-        }
-        */
     }
 }

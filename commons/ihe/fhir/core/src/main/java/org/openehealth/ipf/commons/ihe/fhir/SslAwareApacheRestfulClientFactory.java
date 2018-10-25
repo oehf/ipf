@@ -40,7 +40,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * RestfulClientFactory that is aware of SSL context parameters
+ * RestfulClientFactory that is aware of SSL context parameters.
+ *
+ * @author Christian Ohr
  */
 public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
 
@@ -68,6 +70,12 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                 theHeaders);
     }
 
+    /**
+     * Sets a completely configured HttpClient to be used. No further configuration is done
+     * (timeouts, security etc.) before it is used.
+     *
+     * @param httpClient Http client instance
+     */
     @Override
     public void setHttpClient(Object httpClient) {
         this.httpClient = (HttpClient) httpClient;
@@ -80,6 +88,15 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
 
     public void setSecurityInformation(FhirSecurityInformation securityInformation) {
         this.securityInformation = securityInformation;
+    }
+
+    /**
+     * Possibility to customize the
+     *
+     * @param httpClientBuilder HttpClientBuilder
+     */
+    protected HttpClientBuilder customizeHttpClientBuilder(HttpClientBuilder httpClientBuilder) {
+        return httpClientBuilder;
     }
 
     protected synchronized HttpClient getNativeHttpClient() {
@@ -115,7 +132,10 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                 builder.setDefaultCredentialsProvider(credentialsProvider);
             }
 
-            httpClient = builder.build();
+            // Chance to override or instrument
+            ;
+
+            httpClient = customizeHttpClientBuilder(builder).build();
         }
 
         return httpClient;

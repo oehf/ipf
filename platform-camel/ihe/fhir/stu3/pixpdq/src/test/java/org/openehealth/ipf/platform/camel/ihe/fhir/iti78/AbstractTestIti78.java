@@ -35,7 +35,6 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     public static void startServer(String contextDescriptor, boolean secure) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
         startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, "FhirServlet");
-
     }
 
     public static void startClient() {

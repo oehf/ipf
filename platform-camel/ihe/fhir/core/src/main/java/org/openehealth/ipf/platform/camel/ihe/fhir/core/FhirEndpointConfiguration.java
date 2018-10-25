@@ -104,7 +104,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         this.path = path;
-        this.context = component.initializeFhirContext();
+
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
@@ -117,23 +117,35 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         hapiServerInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "hapiServerInterceptorFactories", List.class);
 
+        context = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "fhirContext", FhirContext.class);
 
-        String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
-        if (STRICT.equals(parserErrorHandling)) {
-            context.setParserErrorHandler(new StrictErrorHandler());
-        } else if (!LENIENT.equals(parserErrorHandling)) {
-            throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
-        }
-        Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
-        if (connectTimeout != null) {
-            setConnectTimeout(connectTimeout);
-        }
-        Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
-        if (timeout != null) {
-            setTimeout(timeout);
+        if (context == null) {
+            context = component.initializeFhirContext();
+            String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
+            if (STRICT.equals(parserErrorHandling)) {
+                context.setParserErrorHandler(new StrictErrorHandler());
+            } else if (!LENIENT.equals(parserErrorHandling)) {
+                throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
+            }
+
+            Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
+            if (connectTimeout != null) {
+                setConnectTimeout(connectTimeout);
+            }
+            Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
+            if (timeout != null) {
+                setTimeout(timeout);
+            }
+            setDisableServerValidation(
+                    component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class, false));
+        } else {
+            if (!component.isCompatibleContext(context)) {
+                throw new IllegalArgumentException("FhirContext with version [" + context.getVersion().getVersion() +
+                        "] is not compatible with component of class [" + component.getClass() + "]");
+            }
         }
 
-        setDisableServerValidation(component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class, false));
         lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
         cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
 

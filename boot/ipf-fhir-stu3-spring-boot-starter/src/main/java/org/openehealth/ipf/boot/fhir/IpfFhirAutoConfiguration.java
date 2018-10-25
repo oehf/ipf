@@ -57,8 +57,16 @@ public class IpfFhirAutoConfiguration {
     private IpfFhirConfigurationProperties config;
 
     @Bean
-    public FhirContext fhirContext() {
-        return new FhirContext(config.getFhirVersion());
+    public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
+        FhirContext fhirContext = new FhirContext(config.getFhirVersion());
+        fhirContextCustomizer.customizeFhirContext(fhirContext);
+        return fhirContext;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FhirContextCustomizer.class)
+    public FhirContextCustomizer fhirContextCustomizer() {
+        return FhirContextCustomizer.NOOP;
     }
 
     @Bean
@@ -120,11 +128,12 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(IpfFhirServlet.class)
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
+            FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
             @Autowired(required = false) IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
-        IpfFhirServlet fhirServlet = new IpfFhirServlet(config.getFhirVersion());
+        IpfFhirServlet fhirServlet = new IpfFhirServlet(fhirContext);
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
 
         fhirServlet.setLogging(servletProperties.isLogging());

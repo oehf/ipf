@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 
 /**
@@ -32,7 +32,7 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 false,
                 new Iti65ClientAuditStrategy(),
                 new Iti65ServerAuditStrategy(),
-                FhirContext.forDstu3(),
+                FhirVersionEnum.DSTU3,
                 new Iti65ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti65ClientRequestFactory(),                // Formulate requests
                 new Iti65Validator());

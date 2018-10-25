@@ -85,20 +85,39 @@ public class IpfFhirServlet extends RestfulServer {
     @Getter @Setter
     private INarrativeGenerator narrativeGenerator = null;
 
+    private FhirContext fhirContext;
+
     public IpfFhirServlet() {
         super();
     }
 
+    /**
+     * Initialize the servlet with a FHIR version. During initialization, a new FHIR Context
+     * is created and initialized with {@link #strictErrorHandler} and {@link #narrativeGenerator}.
+     *
+     * @param fhirVersion FHIR version
+     */
     public IpfFhirServlet(FhirVersionEnum fhirVersion) {
         super();
         this.fhirVersion = fhirVersion;
     }
 
     /**
+     * Initializes the servlet with a pre-instantiated FHIR Context. No further changes are done
+     * to this FHIRContext instance.
+     *
+     * @param fhirContext FHIR Context
+     */
+    public IpfFhirServlet(FhirContext fhirContext) {
+        super(fhirContext);
+        this.fhirContext = fhirContext;
+    }
+
+    /**
      * RestfulServer assumes that all resource providers are known at init time, which is not the case here.
      *
      * @param config servlet config
-     * @throws ServletException
+     * @throws ServletException servlet exception
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -198,6 +217,12 @@ public class IpfFhirServlet extends RestfulServer {
         return narrativeGenerator;
     }
 
+    @Override
+    public void setFhirContext(FhirContext fhirContext) {
+        super.setFhirContext(fhirContext);
+        this.fhirContext = fhirContext;
+    }
+
     /**
      * Called upon initialization of the servlet, which is too early to know about the existing FHIR consumers
      * initialization of Camel routes and endpoints.
@@ -206,7 +231,17 @@ public class IpfFhirServlet extends RestfulServer {
      */
     @Override
     protected void initialize() throws ServletException {
-        setFhirContext(new FhirContext(fhirVersion));
+        if (fhirContext == null) {
+            setFhirContext(new FhirContext(fhirVersion));
+
+            getFhirContext().setParserErrorHandler(strictErrorHandler ? new StrictErrorHandler() : new LenientErrorHandler());
+            /*
+             * Use a narrative generator. This is a completely optional step,
+             * but can be useful as it causes HAPI to generate narratives for
+             * resources which don't otherwise have one.
+             */
+            getFhirContext().setNarrativeGenerator(getDefaultNarrativeGenerator());
+        }
 
         // Provide some more details about the request for downstream processing
         registerInterceptor(new RequestDetailProvider());
@@ -227,18 +262,8 @@ public class IpfFhirServlet extends RestfulServer {
             registerInterceptor(interceptor);
         }
 
-        getFhirContext().setParserErrorHandler(strictErrorHandler ? new StrictErrorHandler() : new LenientErrorHandler());
-
         setPagingProvider(getDefaultPagingProvider(pagingProviderSize));
         setDefaultPrettyPrint(prettyPrint);
-
-        /*
-         * Use a narrative generator. This is a completely optional step,
-		 * but can be useful as it causes HAPI to generate narratives for
-		 * resources which don't otherwise have one.
-		 */
-        getFhirContext().setNarrativeGenerator(getDefaultNarrativeGenerator());
-
     }
 
 
