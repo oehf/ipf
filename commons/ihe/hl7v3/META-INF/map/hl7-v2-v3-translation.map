@@ -53,7 +53,7 @@ mappings = {
         'A': 'N',               // annulled
         'T': 'P',               // domestic partner
         'P': 'O',               // polygamic
-        (ELSE) : ''             // unknown stuff
+        (ELSE) : { it }         // unknown stuff
     )
 
     // v3: 2.16.840.1.113883.5.1100
