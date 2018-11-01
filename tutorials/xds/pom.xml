@@ -47,6 +47,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-ws</artifactId>
+            <classifier>tests</classifier>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>compile</scope>
