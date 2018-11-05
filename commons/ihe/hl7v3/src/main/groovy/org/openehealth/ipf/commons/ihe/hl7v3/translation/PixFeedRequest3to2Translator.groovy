@@ -286,8 +286,13 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
                     throw new Hl7TranslationException("Unknown telecom scheme ${type}, see HL7v3 NE 2008, section 2.19")
                 }
             }
-        }        
-        
+        }
+
+        // PID-15: languageCommunication
+        if (person.languageCommunication) {
+            grp.PID[15] = person.languageCommunication[0]?.languageCode?.@code
+        }
+
         // PID-16..                
         grp.PID[16] = person.maritalStatusCode.@code.text().map('hl7v2v3-patient-maritalStatus')
         grp.PID[17] = person.religiousAffiliationCode.@code.text()
