@@ -32,7 +32,7 @@
         <spring-boot-version>1.5.16.RELEASE</spring-boot-version>
         <vertx-version>3.5.0</vertx-version>
         <vibur-version>22.2</vibur-version>
-        <xmlsec-version>2.1.2</xmlsec-version>
+        <xmlsec-version>2.1.0</xmlsec-version>
 
         <github.global.server>github</github.global.server>
 
@@ -534,10 +534,6 @@
                     <exclusion>
                         <groupId>com.google.guava</groupId>
                         <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.codehaus.woodstox</groupId>
-                        <artifactId>woodstox-core-asl</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
