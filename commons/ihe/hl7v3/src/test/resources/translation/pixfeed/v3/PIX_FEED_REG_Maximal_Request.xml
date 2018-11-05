@@ -111,6 +111,9 @@
                         <name>Chicago</name>
                     </birthplace>
                 </birthPlace>
+                <languageCommunication>
+                    <languageCode code="eng"/>
+                </languageCommunication>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.840.114350.1.13.99998.8734"/>
