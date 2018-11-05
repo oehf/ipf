@@ -134,6 +134,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                                 }
                                                 // disallowed in ITI-47
                                                 // createBirthPlaceElement(builder, qr.PID)
+                                                createLanguageCommunicationElement(builder, qr.PID)
                                             }
                                             providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                                 id(root: this.mpiOrganizationIdRoot)
