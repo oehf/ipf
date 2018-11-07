@@ -58,6 +58,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
     private static final int MIN_SO_TIMEOUT = 1;
+    private static final Boolean DEFAULT_SOCKET_KEEPALIVE = Boolean.TRUE;
 
     private final AtomicReference<Socket> socket = new AtomicReference<>();
     private final SocketFactory socketFactory;
@@ -187,8 +188,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                 throw new FastSocketException(
                         "Read-test before write operation determined that the socket connection is dead.");
             }
-            LOG.debug("Socket connection is confirmed alive. Now writing out ATNA record.");
+            LOG.debug("Socket connection is confirmed to be alive.");
         }
+
+        LOG.debug("Now writing out ATNA record.");
 
         OutputStream out = socket.getOutputStream();
         out.write(syslogFrame);
@@ -215,6 +218,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         try {
             socket = (SSLSocket) socketFactory.createSocket(auditContext.getAuditRepositoryAddress(),
                     auditContext.getAuditRepositoryPort());
+            setSocketOptions(socket);
             if (socketTestPolicy != SocketTestPolicy.DONT_TEST_POLICY) {
                 // Need to perform the SSL handshake before we set the aggressive SO_TIMEOUT,
                 // otherwise the handshake will fail with a read-timeout.
@@ -230,6 +234,26 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
 
         return socket;
+    }
+
+    /**
+     * Override this method to set any socket option. The default implementation
+     * sets {@code SO_KEEPALIVE} to {@code true}. The method is called once for
+     * every new socket instance that is created before the first ATNA record is
+     * sent over that socket connection.
+     * <p>
+     * BEWARE: If your implementation specify any socket test policy other than
+     * {@link SocketTestPolicy#DONT_TEST_POLICY}, then {@code SO_TIMEOUT} will be
+     * set to 1 ms regardless of the value your implementation might set.
+     * 
+     * @param so Options for a newly created socket
+     * @throws SocketException
+     */
+    protected void setSocketOptions(final Socket socket) throws SocketException {
+        Objects.requireNonNull(socket);
+        if (socket != null) {
+            socket.setKeepAlive(DEFAULT_SOCKET_KEEPALIVE);
+        }
     }
 
     /**
@@ -346,4 +370,5 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             return null;
         }
     }
+
 }

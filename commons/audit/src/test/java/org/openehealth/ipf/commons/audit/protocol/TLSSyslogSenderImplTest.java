@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 
@@ -68,7 +70,7 @@ public class TLSSyslogSenderImplTest {
 	}
 
 	@Test
-	public void sendNoReadTest() throws Exception {
+	public void sendDontTestSocketConnectionTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
@@ -78,6 +80,7 @@ public class TLSSyslogSenderImplTest {
 		verify(socket, never()).startHandshake();
 		verify(socket, never()).setSoTimeout(any(Integer.class));
 		verify(socket, never()).getSoTimeout();
+		verify(socket, times(1)).setKeepAlive(true);
 		// write #1: syslog frame metadata
 		// write #2: audit message
 		verify(os, times(2)).write(streamWriteCaptor.capture());
@@ -101,6 +104,7 @@ public class TLSSyslogSenderImplTest {
 		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(1)).startHandshake();
 		verify(socket, times(1)).setSoTimeout(1);
+		verify(socket, times(1)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
 		handshakeBeforeSoTimeout.verify(socket).startHandshake();
 		handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
@@ -128,6 +132,7 @@ public class TLSSyslogSenderImplTest {
 		// Because we simulate a closed socket connection we open two sockets in total.
 		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
+		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
 		handshakeBeforeSoTimeout.verify(socket).startHandshake();
 		handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
@@ -157,6 +162,7 @@ public class TLSSyslogSenderImplTest {
 		
 		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(1)).setSoTimeout(1);
+		verify(socket, times(1)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
 		handshakeBeforeSoTimeout.verify(socket).startHandshake();
 		handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
@@ -185,6 +191,7 @@ public class TLSSyslogSenderImplTest {
 		// Because we simulate a closed socket connection we open two sockets in total.
 		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
+		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
 		handshakeBeforeSoTimeout.verify(socket).startHandshake();
 		handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
@@ -199,5 +206,42 @@ public class TLSSyslogSenderImplTest {
 		// is opened and then we succeed on the second attempt with the normal flow of one test before and one after the write
 		// operation.
 		verify(is, times(3)).read();
+	}
+	
+	@Test
+    public void sendDonTestPolicyWithSocketOptionOverrideTest() throws Exception {
+        ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
+        tssi = new SocketOptionOverrideTLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
+        tssi.send(auditContext, AUDIT_MESSAGE);
+        
+        verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
+        verify(socket, never()).startHandshake();
+        verify(socket, never()).setSoTimeout(any(Integer.class));
+        verify(socket, never()).getSoTimeout();
+        // The test sub-class calls the super implementation, so we should still see the call
+        verify(socket, times(1)).setKeepAlive(true);
+        // Call is done in our sub-class
+        verify(socket, times(1)).setReceiveBufferSize(5);
+        // write #1: syslog frame metadata
+        // write #2: audit message
+        verify(os, times(2)).write(streamWriteCaptor.capture());
+        final String auditMessageWithPreamble =  new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
+        // This is what counts: The DONT_TEST_POLICY shall not trigger any reads from the inputstream
+        verify(is, never()).read();
+    }
+	
+	private class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
+
+        public SocketOptionOverrideTLSSyslogSenderImpl(String sendingHost, String sendingProcess,
+                SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy) {
+            super(sendingHost, sendingProcess, socketFactory, socketTestPolicy);
+        }
+        
+        @Override
+        protected void setSocketOptions(final Socket socket) throws SocketException {
+            super.setSocketOptions(socket);
+            socket.setReceiveBufferSize(5);
+        }
 	}
 }
