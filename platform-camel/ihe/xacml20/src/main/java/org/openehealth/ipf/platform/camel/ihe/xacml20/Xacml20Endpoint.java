@@ -32,7 +32,7 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
     public Xacml20Endpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ? extends WsInteractionId> component,
+            AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>>> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass)
     {
