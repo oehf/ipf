@@ -41,12 +41,12 @@ import java.lang.reflect.Constructor
 class MessageUtils {
     
     private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
-    private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
+    // private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
     private static final Parser PARSER
 
     static {
         ParserConfiguration config = new ParserConfiguration()
-        config.setEscaping(ESCAPE)
+        // config.escaping = ESCAPE
         HapiContext context = new DefaultHapiContext()
         context.parserConfiguration = config
         PARSER = context.getGenericParser()
@@ -93,7 +93,7 @@ class MessageUtils {
      * 	from the passed message
      */
     static String encodeHL7String(String s, Message msg) {
-        Escaping escaping = msg?.parser?.parserConfiguration?.escaping ?: ESCAPE
+        Escaping escaping = msg?.parser?.parserConfiguration?.escaping ?: new DefaultEscaping() // FIXME DefaultEscaping.INSTANCE
         escaping.escape(s, encodingCharacters(msg))
     }
     
