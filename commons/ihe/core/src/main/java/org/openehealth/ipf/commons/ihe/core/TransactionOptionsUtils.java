@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 /**
  * Some utilities for {@link TransactionOptions}
  */
-public interface TransactionOptionUtils {
+public interface TransactionOptionsUtils {
 
     /**
      * Splits a string containing comma-separated {@link TransactionOptions transaction option enum names}

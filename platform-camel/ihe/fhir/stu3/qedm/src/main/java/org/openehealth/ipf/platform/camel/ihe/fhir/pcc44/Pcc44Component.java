@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.pcc44;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionsUtils;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
@@ -58,7 +58,7 @@ public class Pcc44Component extends FhirComponent<FhirQueryAuditDataset> {
         FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", FhirTransactionOptionsProvider.class, new Pcc44OptionsProvider());
         String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
-        List<? extends FhirTransactionOptions> iti44Options = TransactionOptionUtils.split(options, optionsProvider.getTransactionOptionsType());
+        List<? extends FhirTransactionOptions> iti44Options = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());
         if (iti44Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for qedm-pcc44 is invalid");
         }

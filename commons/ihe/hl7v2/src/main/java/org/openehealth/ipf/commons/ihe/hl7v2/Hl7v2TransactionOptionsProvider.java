@@ -22,5 +22,6 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 /**
  * @author Christian Ohr
  */
-public interface Hl7v2TransactionOptionsProvider<S extends MllpAuditDataset, T extends Enum<T> & Hl7v2TransactionOptions> extends TransactionOptionsProvider<S, T> {
+public interface Hl7v2TransactionOptionsProvider<S extends MllpAuditDataset, T extends Enum<T> & Hl7v2TransactionOptions>
+        extends TransactionOptionsProvider<S, T> {
 }

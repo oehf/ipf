@@ -19,25 +19,25 @@ package org.openehealth.ipf.commons.ihe.hl7v2.options;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti30.Iti30AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31.Iti31AuditStrategy;
 
 /**
  * @author Christian Ohr
  */
-public class Iti30OptionProvider implements Hl7v2TransactionOptionsProvider<FeedAuditDataset, Iti30Options> {
+public class Iti31OptionsProvider implements Hl7v2TransactionOptionsProvider<FeedAuditDataset, Iti31Options> {
 
     @Override
-    public Class<Iti30Options> getTransactionOptionsType() {
-        return Iti30Options.class;
+    public Class<Iti31Options> getTransactionOptionsType() {
+        return Iti31Options.class;
     }
 
     @Override
-    public Iti30Options getDefaultOption() {
-        return Iti30Options.MERGE;
+    public Iti31Options getDefaultOption() {
+        return Iti31Options.BASIC;
     }
 
     @Override
     public AuditStrategy<FeedAuditDataset> getAuditStrategy(boolean serverSide) {
-        return new Iti30AuditStrategy(serverSide);
+        return new Iti31AuditStrategy(serverSide);
     }
 }

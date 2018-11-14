@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti31;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionsUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30OptionProvider;
+import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30OptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti31Options;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
@@ -53,9 +53,9 @@ public class Iti31Component extends MllpTransactionComponent<FeedAuditDataset> {
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
         Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
-                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionProvider());
+                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
         String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
-        List<? extends Hl7v2TransactionOptions> iti31Options = TransactionOptionUtils.split(options, Iti31Options.class);
+        List<? extends Hl7v2TransactionOptions> iti31Options = TransactionOptionsUtils.split(options, Iti31Options.class);
         if (iti31Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");
         }
