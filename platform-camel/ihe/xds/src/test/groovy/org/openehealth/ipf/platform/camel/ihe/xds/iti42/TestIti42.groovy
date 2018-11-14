@@ -51,9 +51,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * @author Jens Riemschneider
  */
 class TestIti42 extends XdsStandardTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'iti-42.xml'
-    
+
     def SERVICE1 = "xds-iti42://localhost:${port}/xds-iti42-service1"
     def SERVICE2 = "xds-iti42://localhost:${port}/xds-iti42-service2"
     def SERVICE3 = "xds-iti42://localhost:${port}/xds-iti42-service3"
@@ -68,7 +68,7 @@ class TestIti42 extends XdsStandardTestContainer {
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
-    
+
     @BeforeClass
     static void classSetUp() {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance()
@@ -85,13 +85,13 @@ class TestIti42 extends XdsStandardTestContainer {
 
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
     @Before
     void setUp() {
         request = SampleData.createRegisterDocumentSet()
         docEntry = request.documentEntries[0]
     }
-    
+
     @Test
     void testIti42() {
         request.documentEntries[0].extraMetadata = [
@@ -117,15 +117,15 @@ class TestIti42 extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
-        
+
         checkAudit(EventOutcomeIndicator.Success)
     }
-    
+
     @Test
     void testIti42FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2
-        
+
         checkAudit(EventOutcomeIndicator.SeriousFailure)
     }
 
@@ -159,18 +159,19 @@ class TestIti42 extends XdsStandardTestContainer {
         // check registry audit records
         AuditMessage message = getAudit(EventActionCode.Create, SERVICE2_ADDR)[0]
 
-        assert message.activeParticipants.size() == 4
+        assert message.activeParticipants.size() == 5
         assert message.participantObjectIdentifications.size() == 2
-        
+
         checkEvent(message.eventIdentification, '110107', 'ITI-42', EventActionCode.Create, outcome)
         checkSource(message.activeParticipants[0], false)
 
         def role1 = ActiveParticipantRoleId.of('ELE' as String, '1.2.3.4.5.6.777.1' as String, 'Electrician' as String)
-        def role2 = ActiveParticipantRoleId.of('HCP' as String, '2.16.756.5.30.1.127.3.10.4' as String, 'Healthcare Practitioner' as String)
+        def role2 = ActiveParticipantRoleId.of('HCP' as String, '2.16.756.5.30.1.127.3.10.6' as String, 'Healthcare Practitioner' as String)
         def role3 = ActiveParticipantRoleId.of('GYN' as String, '1.2.3.4.5.6.777.2' as String, 'Gynecologist' as String)
-        def role4 = ActiveParticipantRoleId.of('ASSISTANT' as String, '2.16.756.5.30.1.127.3.10.4' as String, 'Assistant' as String)
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
+        def role4 = ActiveParticipantRoleId.of('ASS' as String, '2.16.756.5.30.1.127.3.10.6' as String, 'Assistant' as String)
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
 
         /* TODO fails with java 9
         checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
@@ -186,16 +187,17 @@ class TestIti42 extends XdsStandardTestContainer {
         // check repository audit records
         message = getAudit(EventActionCode.Read, SERVICE2_ADDR)[0]
 
-        assert message.activeParticipants.size() == 4
+        assert message.activeParticipants.size() == 5
         assert message.participantObjectIdentifications.size() == 2
-        
+
         checkEvent(message.eventIdentification, '110106', 'ITI-42', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], false)
 
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[2], '<7601000000001@demo.com>', 'Hannelore Fleissig', [role4])
+        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
 
-        checkDestination(message.activeParticipants[3], SERVICE2_ADDR, false)
+        checkDestination(message.activeParticipants[4], SERVICE2_ADDR, false)
         /* TODO fails with java 9
         checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', [
                 CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
@@ -206,7 +208,7 @@ class TestIti42 extends XdsStandardTestContainer {
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
     }
-    
+
     def sendIt(endpoint, value) {
         docEntry.comments = new LocalizedString(value)
         return send(endpoint, request, Response.class, camelHeaders)

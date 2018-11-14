@@ -42,9 +42,9 @@ public class Iti67TestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
         from("direct:input")
-                .toF("mhd-iti67:localhost:%d", FhirTestContainer.DEMO_APP_PORT);
+                .toF("mhd-iti67:localhost:%d?fhirContext=#fhirContext", FhirTestContainer.DEMO_APP_PORT);
 
-        from("mhd-iti67:translation?audit=true")
+        from("mhd-iti67:translation?audit=true&fhirContext=#fhirContext")
                 .errorHandler(noErrorHandler())
                 .transform(new Iti67Responder());
     }

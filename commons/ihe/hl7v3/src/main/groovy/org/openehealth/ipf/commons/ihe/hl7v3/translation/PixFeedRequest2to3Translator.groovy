@@ -98,6 +98,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                 patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
                                     createPatientPersonElements(builder, pid, deletedIdsOids)
                                     createBirthPlaceElement(builder, pid)
+                                    createLanguageCommunicationElement(builder, pid)
                                 }
                                 providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                     buildInstanceIdentifier(builder, 'id', false, this.mpiSystemIdRoot, this.mpiSystemIdExtension, null)

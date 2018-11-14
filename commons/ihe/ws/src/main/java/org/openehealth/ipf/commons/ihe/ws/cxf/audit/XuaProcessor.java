@@ -24,8 +24,8 @@ import org.apache.cxf.headers.Header;
 public interface XuaProcessor {
 
     /**
-     * Extracts ITI-40 XUA user name from the SAML2 assertion contained
-     * in the given CXF message, and stores it in the ATNA audit dataset.
+     * Enriches the given audit dataset with elements from the XUA token (SAML2 assertion)
+     * contained in the given CXF message.
      *
      * @param message
      *      source CXF message.
@@ -34,7 +34,7 @@ public interface XuaProcessor {
      * @param auditDataset
      *      target ATNA audit dataset.
      */
-    void extractXuaUserNameFromSaml2Assertion(
+    void enrichAuditDatasetFromXuaToken(
             SoapMessage message,
             Header.Direction headerDirection,
             WsAuditDataset auditDataset);

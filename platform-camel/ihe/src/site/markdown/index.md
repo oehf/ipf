@@ -41,7 +41,7 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | ipf-platform-camel-ihe-mllp          | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-64]
 | ipf-platform-camel-ihe-xds           | [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [ITI-86], [RAD-69], [RAD-75], [ITI-92]
 | ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
-| ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59], [CH-PIDD]
+| ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59], [CH-PIDD], [CH-CIQ], [CH-CIDD]
 | ipf-platform-camel-ihe-fhir-mhd      | [ITI-65], [ITI-66], [ITI-67], [ITI-68]
 | ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
 | ipf-platform-camel-ihe-fhir-audit    | [ITI-81]
@@ -148,6 +148,8 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [PCC-44] Query for Existing Data Mobile
 * [PCD-01] Communicate Patient Care Device Data
 * [CH-PIDD] Provider Information Delta Download (Swiss EPR extension to HPD)
+* [CH-CIQ] Community Information Query (Swiss EPR governmental service)
+* [CH-CIDD] Community Information Delta Download (Swiss EPR governmental service)
 * [All] MLLP-based Dispatcher
 * [Custom] MLLP-based Custom Transactions
 
@@ -205,8 +207,10 @@ required dependencies, usage and parameters.
 | [PCC-44]     | QEDm          | Query for Existing Data Mobile       | `qedm-pcc44`            | REST/HTTP(S)  | FHIR
 | [PCD-01], Continua WAN | PCD, Continua | Communicate Patient Care Device (PCD) Data | `pcd-pcd01` | SOAP/HTTP(S) | HL7 v2.6
 | [CH-PIDD]    | CH:HPD        | Provider Information Delta Download  | `ch-pidd`               | SOAP/HTTP(S)  | Custom/DSMLv2
-| [CH-PPQ-1]   | CH:PPQ        | Privacy Policy Feed                  | `ch-ppq1`               | SOAP/HTTP(S)  | Custom/XACML 2.0 
+| [CH-PPQ-1]   | CH:PPQ        | Privacy Policy Feed                  | `ch-ppq1`               | SOAP/HTTP(S)  | Custom/XACML 2.0
 | [CH-PPQ-2]   | CH:PPQ        | Privacy Policy Retrieve              | `ch-ppq2`               | SOAP/HTTP(S)  | XACML 2.0
+| [CH-CIQ]     | CH:CPI        | Community Information Query          | `ch-ciq`                | SOAP/HTTP(S)  | DSMLv2
+| [CH-CIDD]    | CH:CPI        | Community Information Delta Download | `ch-cidd`               | SOAP/HTTP(S)  | Custom/DSMLv2
 | [All] MLLP-based | n/a       | Accept requests for multiple MLLP-based transactions through a single TCP port | `mllp-dispatch` | MLLP(S) | HL7v2 |
 | [Custom] MLLP-based | n/a    | Accept requests for custom MLLP-based transactions | `mllp` | MLLP(S) | HL7v2 |
 
@@ -254,6 +258,8 @@ required dependencies, usage and parameters.
 [CH-PIDD]: ../ipf-platform-camel-ihe-hpd/ch-pidd.html
 [CH-PPQ-1]: ../ipf-platform-camel-ihe-xacml20/ch-ppq1.html
 [CH-PPQ-2]: ../ipf-platform-camel-ihe-xacml20/ch-ppq2.html
+[CH-CIQ]: ../ipf-platform-camel-ihe-hpd/ch-ciq.html
+[CH-CIDD]: ../ipf-platform-camel-ihe-hpd/ch-cidd.html
 [All]: ../ipf-platform-camel-ihe-mllp/mllpDispatch.html
 [Custom]: ../ipf-platform-camel-ihe-mllp/mllpCustom.html
 [IHE]: https://www.ihe.net

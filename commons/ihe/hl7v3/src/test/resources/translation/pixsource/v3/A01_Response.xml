@@ -52,6 +52,9 @@
                   <id root="2.71" />
                 </scopingOrganization>
               </asOtherIDs>
+              <languageCommunication>
+                <languageCode code="eng"/>
+              </languageCommunication>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.3" />

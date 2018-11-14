@@ -15,25 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.core.multiplast
 
+import static org.junit.Assert.assertTrue
+
+import java.security.AccessControlContext
+import java.security.AccessController
+import java.security.PrivilegedAction
+
+import javax.security.auth.Subject
+import javax.security.auth.SubjectDomainCombiner
+import javax.security.auth.login.LoginContext
+
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ExchangePattern
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
-import org.junit.Test
 import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.springframework.context.ApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
-
-import java.security.AccessControlContext
-import javax.security.auth.login.LoginContext
-import javax.security.auth.Subject
-import java.security.AccessController
-import javax.security.auth.SubjectDomainCombiner
-
-import static org.junit.Assert.assertTrue
-import java.security.PrivilegedAction
 
 /**
  * @author Dmytro Rud
@@ -98,8 +99,8 @@ class TestMultiplast {
 
     @Test
     void testMultiplastWithAccessContext() {
-        PrivilegedAction action = new PrivilegedAction() {
-            public Object run() throws Exception{
+        PrivilegedAction<?> action = new PrivilegedAction() {
+            public Object run() {
                 Exchange resultExchange = send('ear, war, jar', [ep('abc'), ep('def'), ep('ghi')].join(';'))
                 return Exchanges.resultMessage(resultExchange).body == 'ijklmnopr'
             }

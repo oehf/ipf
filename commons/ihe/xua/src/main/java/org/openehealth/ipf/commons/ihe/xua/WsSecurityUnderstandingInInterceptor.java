@@ -19,7 +19,6 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.phase.Phase;
-import org.opensaml.soap.wssecurity.WSSecurityConstants;
 
 import javax.xml.namespace.QName;
 import java.util.Collections;
@@ -31,8 +30,10 @@ import java.util.Set;
  */
 public class WsSecurityUnderstandingInInterceptor extends AbstractSoapInterceptor {
 
+    private static final String WSSE_NS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+
     private static final Set<QName> UNDERSTOOD_HEADERS =
-            Collections.singleton(new QName(WSSecurityConstants.WSSE_NS, "Security"));
+            Collections.singleton(new QName(WSSE_NS, "Security"));
 
     public WsSecurityUnderstandingInInterceptor() {
         super(Phase.PRE_PROTOCOL);

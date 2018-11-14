@@ -1,9 +1,9 @@
 
 ## `ch-pidd` component
 
-The ch-pidd component provides interfaces for actors of the *Provider Information Delta Download* transaction (CH-PIDD),
-which is described in the [National extensions to the IHE Technical Framework](https://www.bag.admin.ch/dam/bag/de/dokumente/nat-gesundheitsstrategien/strategie-ehealth/gesetzgebung-elektronisches-patientendossier/gesetze/SR%20816.111.1_ergaenzung-1-Anhang-5.pdf.download.pdf/SR%20816.111.1_Ergaenzung%201%20Anhang%205_DE.pdf),
-Section 1.10.
+The `ch-pidd` component provides interfaces for actors of the *Provider Information Delta Download* transaction (CH:PIDD),
+which is described in the [National extensions to the IHE Technical Framework](https://www.e-health-suisse.ch/fileadmin/user_upload/Dokumente/2018/E/180629_Entwurf_EPDV-EDI_Anhang_5_E1_V1.4_e.pdf),
+Section 1.11.
 
 ### Actors
 

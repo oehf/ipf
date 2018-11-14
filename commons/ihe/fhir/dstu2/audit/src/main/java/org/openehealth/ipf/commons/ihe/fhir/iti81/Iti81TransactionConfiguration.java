@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
-import ca.uhn.fhir.context.FhirContext;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * Standard Configuration for Iti81Component
@@ -34,7 +34,7 @@ public class Iti81TransactionConfiguration extends FhirTransactionConfiguration<
                 true,
                 new Iti81AuditStrategy(false),
                 new Iti81AuditStrategy(true),
-                FhirContext.forDstu2Hl7Org(),
+                FhirVersionEnum.DSTU2_HL7ORG,
                 new Iti81ResourceProvider(),       // Consumer side. accept audit searches
                 new Iti81ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);

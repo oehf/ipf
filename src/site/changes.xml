@@ -23,7 +23,15 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.5.2" description="IPF 3.5.2">
+        <release version="3.6" description="IPF 3.6 (or maybe 4.0...)">
+            <action dev="unixoid" issue="240" type="add">
+                Support for the Swiss CPI profile (Community Portal Index)
+            </action>
+            <action dev="unixoid" issue="204" type="update">
+                Better XUA token processing for ATNA; dropped OpenSAML dependency
+            </action>
+        </release>
+        <release version="3.5.2" description="IPF 3.5.2" date="16 Aug 2018">
             <action dev="unixoid" issue="214" type="update">
                 Implement changes of the RMU specification from 25 Jul 2018
             </action>

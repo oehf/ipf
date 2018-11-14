@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -23,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Static configuration for FHIR transaction components
@@ -32,27 +34,34 @@ import java.util.List;
  */
 public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
 
-    private final FhirContext fhirContext;
+    private final FhirVersionEnum fhirVersion;
+    private final Supplier<FhirContext> fhirContextProvider;
     private final List<? extends AbstractPlainProvider> staticResourceProviders;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
     private boolean deferModelScanning;
 
+    /**
+     * @deprecated
+     */
     public FhirTransactionConfiguration(
             String name,
             String description,
             boolean isQuery,
             AuditStrategy<T> clientAuditStrategy,
             AuditStrategy<T> serverAuditStrategy,
-            FhirContext fhirContext,
+            FhirContext defaultFhirContext,
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
-        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirContext,
+        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, defaultFhirContext,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
 
+    /**
+     * @deprecated
+     */
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -64,11 +73,45 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
-        this.fhirContext = fhirContext;
+        this.fhirVersion = fhirContext.getVersion().getVersion();
+        this.fhirContextProvider = () -> new FhirContext(fhirVersion);
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidator = fhirValidator;
     }
+
+    public FhirTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
+            FhirVersionEnum fhirVersion,
+            AbstractPlainProvider resourceProvider,
+            ClientRequestFactory<?> clientRequestFactory,
+            FhirTransactionValidator fhirValidator) {
+        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirVersion,
+                Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
+    }
+
+    public FhirTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<T> clientAuditStrategy,
+            AuditStrategy<T> serverAuditStrategy,
+            FhirVersionEnum fhirVersion,
+            List<? extends AbstractPlainProvider> resourceProviders,
+            ClientRequestFactory<?> clientRequestFactory,
+            FhirTransactionValidator fhirValidator) {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
+        this.fhirVersion = fhirVersion;
+        this.fhirContextProvider = () -> new FhirContext(fhirVersion);
+        this.staticResourceProviders = resourceProviders;
+        this.staticClientRequestFactory = clientRequestFactory;
+        this.fhirValidator = fhirValidator;
+    }
+
 
     public List<? extends AbstractPlainProvider> getStaticResourceProvider() {
         return staticResourceProviders;
@@ -78,12 +121,23 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return staticClientRequestFactory;
     }
 
+    /**
+     * Initializes the FHIR context by setting a SSL-aware REST client factory. Note that this method
+     * is only called when the endpoint does not configure its custom (pre-initialized) FhirContext
+     *
+     * @return the initialized FhirContext
+     */
     public FhirContext initializeFhirContext() {
+        FhirContext fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
         if (deferModelScanning) {
             fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
         }
         return fhirContext;
+    }
+
+    public FhirVersionEnum getFhirVersion() {
+        return fhirVersion;
     }
 
     public FhirTransactionValidator getFhirValidator() {
@@ -104,6 +158,9 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return supportsLazyLoading;
     }
 
+    /**
+     * @deprecated
+     */
     public boolean isDeferModelScanning() {
         return deferModelScanning;
     }
@@ -114,6 +171,8 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * on reasonably performant machines, on some devices it may be desirable to defer this scan. When the scan is deferred,
      * objects will only be scanned when they are actually accessed, meaning that only types that are actually used in an
      * application get scanned.
+     *
+     * @deprecated
      */
     public void setDeferModelScanning(boolean deferModelScanning) {
         this.deferModelScanning = deferModelScanning;

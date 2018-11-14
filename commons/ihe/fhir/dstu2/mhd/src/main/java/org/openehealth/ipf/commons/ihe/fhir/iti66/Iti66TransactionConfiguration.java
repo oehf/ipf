@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import ca.uhn.fhir.context.FhirContext;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * Standard Configuration for Iti66Component. Supports lazy-loading by default.
@@ -34,7 +34,7 @@ public class Iti66TransactionConfiguration extends FhirTransactionConfiguration<
                 true,
                 new Iti66AuditStrategy(false),
                 new Iti66AuditStrategy(true),
-                FhirContext.forDstu2Hl7Org(),
+                FhirVersionEnum.DSTU2_HL7ORG,
                 new Iti66ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti66ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);

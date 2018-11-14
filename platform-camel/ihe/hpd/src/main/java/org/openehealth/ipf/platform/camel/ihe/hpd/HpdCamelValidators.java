@@ -67,7 +67,37 @@ public class HpdCamelValidators {
     private static final Processor CH_PIDD_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
             DownloadResponse response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
-            HpdValidator.validateChpiddResponse(response);
+            HpdValidator.validateChPiddResponse(response);
+        }
+    };
+
+    private static final Processor CH_CIQ_REQUEST_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            HpdValidator.validateChCiqRequest(request);
+        }
+    };
+
+    private static final Processor CH_CIQ_RESPONSE_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            HpdValidator.validateChCiqResponse(response);
+        }
+    };
+
+    private static final Processor CH_CIDD_REQUEST_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest request =
+                    exchange.getIn().getMandatoryBody(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest.class);
+            HpdValidator.validateChCiddRequest(request);
+        }
+    };
+
+    private static final Processor CH_CIDD_RESPONSE_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse response =
+                    exchange.getIn().getMandatoryBody(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse.class);
+            HpdValidator.validateChCiddResponse(response);
         }
     };
 
@@ -93,6 +123,22 @@ public class HpdCamelValidators {
 
     public static Processor chPiddResponseValidator() {
         return CH_PIDD_RESPONSE_VALIDATOR;
+    }
+
+    public static Processor chCiqRequestValidator() {
+        return CH_CIQ_REQUEST_VALIDATOR;
+    }
+
+    public static Processor chCiqResponseValidator() {
+        return CH_CIQ_RESPONSE_VALIDATOR;
+    }
+
+    public static Processor chCiddRequestValidator() {
+        return CH_CIDD_REQUEST_VALIDATOR;
+    }
+
+    public static Processor chCiddResponseValidator() {
+        return CH_CIDD_RESPONSE_VALIDATOR;
     }
 
 }

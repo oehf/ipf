@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,7 +67,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         new SlotValueValidation(SLOT_NAME_AUTHOR_ROLE, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
         new SlotValueValidation(SLOT_NAME_AUTHOR_SPECIALTY, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
         new SlotValueValidation(SLOT_NAME_AUTHOR_TELECOM, xtnValidator, 0, Integer.MAX_VALUE)};
-    
+
     private final SlotValueValidation[] codingSchemeValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
 
@@ -92,6 +92,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
+            new ServiceTimeChronologyValidation(),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
                     needHashAndSize ? 1 : 0,
                     isOnDemand ? 0 : 1),
@@ -184,8 +185,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         notNull(profile, "profile must be set");
 
         slotLengthAndNameUniquenessValidator.validateContainer(container);
-    
-        // Note: The order of these checks is important!        
+
+        // Note: The order of these checks is important!
         validateSubmissionSet(container, profile);
         if (!profile.isQuery()) {
             validateUniquenessOfUUIDs(container);
@@ -233,7 +234,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         if (!profile.isQuery()) {
             metaDataAssert(submissionSets.size() == 1, EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST);
         }
-    
+
         for (EbXMLRegistryPackage submissionSet : submissionSets) {
             boolean limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, profile);
             runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
@@ -272,7 +273,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             if (name != null && name.getValue() != null) {
                 metaDataAssert("UTF8".equals(name.getCharset()) || "UTF-8".equals(name.getCharset()),
                         INVALID_TITLE_ENCODING, name.getCharset());
-                
+
                 metaDataAssert(name.getValue().length() <= 128,
                         TITLE_TOO_LONG, name.getValue());
             }
@@ -332,14 +333,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validatePatientIdsAreIdentical(EbXMLObjectContainer container) throws XDSMetaDataException {
         List<EbXMLRegistryPackage> submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
         EbXMLRegistryPackage submissionSet = submissionSets.get(0);
-    
+
         String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
-    
+
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(StringUtils.equals(patientId, patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
-        
+
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             String patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(StringUtils.equals(patientId, patientIdFolder), FOLDER_PATIENT_ID_WRONG);
@@ -480,7 +481,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                             "association propagation shall be not disabled in the SS-DE HasMember association",
                             Severity.ERROR, association.getId());
                 }
-                
+
                 foundHasMemberAssociation = true;
             }
         }

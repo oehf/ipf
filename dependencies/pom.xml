@@ -10,11 +10,11 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.22.1</camel-version>
-        <cxf-version>3.2.5</cxf-version>
-        <groovy-version>3.0.0-alpha-3</groovy-version>
+        <camel-version>2.22.2</camel-version>
+        <cxf-version>3.2.7</cxf-version>
+        <groovy-version>2.5.4</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>3.5.0</hapi-fhir-version>
+        <hapi-fhir-version>3.6.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -24,19 +24,17 @@
         <javax-annotation-version>1.3.2</javax-annotation-version>
         <jaxws-api-version>2.3.0</jaxws-api-version>
         <jdom-version>2.0.6</jdom-version>
-        <mina2-version>2.0.17</mina2-version>
-        <opensaml-version>3.3.0</opensaml-version>
-        <ph-schematron-version>5.0.4</ph-schematron-version>
-        <ph-commons-version>9.1.1</ph-commons-version>
+        <mina2-version>2.0.19</mina2-version>
+        <ph-schematron-version>5.0.6</ph-schematron-version>
+        <ph-commons-version>9.1.8</ph-commons-version>
 
-        <saxon-he-version>9.7.0-19</saxon-he-version>
+        <saxon-he-version>9.9.0-2</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>5.0.9.RELEASE</spring-version>
-        <spring-boot-version>2.0.5.RELEASE</spring-boot-version>
-        <vertx-version>3.5.3</vertx-version>
+        <spring-version>5.0.10.RELEASE</spring-version>
+        <spring-boot-version>2.0.6.RELEASE</spring-boot-version>
+        <vertx-version>3.5.4</vertx-version>
         <vibur-version>22.2</vibur-version>
-        <webservices-api-version>2.1-b16</webservices-api-version>
-        <xmlsec-version>2.1.0</xmlsec-version>
+        <xmlsec-version>2.1.2</xmlsec-version>
 
         <github.global.server>github</github.global.server>
 
@@ -413,6 +411,10 @@
                         <groupId>com.google.guava</groupId>
                         <artifactId>guava</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>woodstox-core-asl</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -515,49 +517,6 @@
                 <artifactId>ipf-oht-mdht-uml-cda-cdt</artifactId>
                 <version>${ipf-oht-mdht-version}</version>
                 <optional>true</optional>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-saml-impl</artifactId>
-                <version>${opensaml-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.santuario</groupId>
-                        <artifactId>xmlsec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xalan</groupId>
-                        <artifactId>serializer</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xalan</groupId>
-                        <artifactId>xalan</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15on</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.code.findbugs</groupId>
-                        <artifactId>jsr305</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.santuario</groupId>

@@ -38,12 +38,13 @@ import java.util.function.Consumer;
  * @author Dmytro Rud
  */
 public class HpdValidator {
-    private static final JAXBContext JAXB_CONTEXT;
+    public static final JAXBContext JAXB_CONTEXT;
     static {
         try {
             JAXB_CONTEXT = JAXBContext.newInstance(
                     org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory.class,
-                    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.ObjectFactory.class);
+                    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.ObjectFactory.class,
+                    org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.ObjectFactory.class);
         } catch (JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
@@ -82,24 +83,31 @@ public class HpdValidator {
         }
     }
 
-    private static void validateSearchRequest(SearchRequest request) {
+    private static void validateSearchRequest(SearchRequest request, String dc, String o, String c) {
         try {
             LdapName ldapName = new LdapName(request.getDn());
-            boolean oCheck = false;
-            boolean dcCheck = false;
             for (Rdn rdn : ldapName.getRdns()) {
                 String value = (String) rdn.getValue();
                 switch (rdn.getType().toLowerCase()) {
-                    case "o":
-                        oCheck = StringUtils.isNotBlank(value);
-                        break;
                     case "dc":
-                        dcCheck = "HPD".equals(value);
+                        check(dc.equalsIgnoreCase(value), "DN.DC must be equal to " + dc);
+                        break;
+                    case "o":
+                        if (o != null) {
+                            check(o.equalsIgnoreCase(value), "DN.O must be equal to " + o);
+                        } else {
+                            check(StringUtils.isNotBlank(value), "DN.O must be not empty");
+                        }
+                        break;
+                    case "c":
+                        if (c != null) {
+                            check(c.equalsIgnoreCase(value), "DN.C must be equal to " + c);
+                        } else {
+                            check(StringUtils.isNotBlank(value), "DN.C must be not empty");
+                        }
                         break;
                 }
             }
-            check(oCheck, "Missing DN.O");
-            check(dcCheck, "DN.DC not equal to 'HPD'");
         } catch (InvalidNameException e) {
             throw new HpdException(e, ErrorType.MALFORMED_REQUEST);
         }
@@ -109,7 +117,7 @@ public class HpdValidator {
         validateWithXsd(batchRequest, "/schema/DSMLv2.xsd");
         validateBatchRequest(batchRequest,
                 new Class[] {SearchRequest.class},
-                element -> validateSearchRequest((SearchRequest) element));
+                element -> validateSearchRequest((SearchRequest) element, "HPD", null, null));
     }
 
     public static void validateIti58Response(BatchResponse batchResponse) {
@@ -131,8 +139,34 @@ public class HpdValidator {
         validateWithXsd(downloadRequest, "/schema/PIDD.xsd");
     }
 
-    public static void validateChpiddResponse(DownloadResponse downloadResponse) {
+    public static void validateChPiddResponse(DownloadResponse downloadResponse) {
         validateWithXsd(downloadResponse, "/schema/PIDD.xsd");
+        if (downloadResponse.getBatchRequest() != null) {
+            for (BatchRequest batchRequest : downloadResponse.getBatchRequest()) {
+                validateBatchRequest(batchRequest,
+                        new Class[] {AddRequest.class, ModifyRequest.class, ModifyDNRequest.class, DelRequest.class},
+                        element -> { /* TODO */ });
+            }
+        }
+    }
+
+    public static void validateChCiqRequest(BatchRequest batchRequest) {
+        validateWithXsd(batchRequest, "/schema/DSMLv2.xsd");
+        validateBatchRequest(batchRequest,
+                new Class[] {SearchRequest.class},
+                element -> validateSearchRequest((SearchRequest) element, "CPI", "BAG", "CH"));
+    }
+
+    public static void validateChCiqResponse(BatchResponse batchResponse) {
+        validateWithXsd(batchResponse, "/schema/DSMLv2.xsd");
+    }
+
+    public static void validateChCiddRequest(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest downloadRequest) {
+        validateWithXsd(downloadRequest, "/schema/CIDD.xsd");
+    }
+
+    public static void validateChCiddResponse(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse downloadResponse) {
+        validateWithXsd(downloadResponse, "/schema/CIDD.xsd");
         if (downloadResponse.getBatchRequest() != null) {
             for (BatchRequest batchRequest : downloadResponse.getBatchRequest()) {
                 validateBatchRequest(batchRequest,

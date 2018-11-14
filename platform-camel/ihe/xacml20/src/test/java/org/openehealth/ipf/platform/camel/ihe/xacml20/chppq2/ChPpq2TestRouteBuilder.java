@@ -40,7 +40,7 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
         from("ch-ppq2:ch-ppq-success")
                 .process(chPpq2RequestValidator())
                 .process(exchange -> {
-                    InputStream stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq/ppq-query-backend-response.xml");
+                    InputStream stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq2/ppq-query-backend-response.xml");
                     Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
                     JAXBElement<?> jaxbElement = (JAXBElement) unmarshaller.unmarshal(stream);
                     exchange.getOut().setBody(jaxbElement.getValue());

@@ -1,6 +1,4 @@
 language: java
-before_script:
-- export MAVEN_OPTS=-Xmx2048m
 jdk:
 - oraclejdk8
 - oraclejdk9
@@ -8,11 +6,21 @@ addons:
   apt:
     packages:
     - wget
+  artifacts:
+    s3_region: "us-east-1"
+    bucket: builds.openehealth.org
+    key: AKIAIG3NJZOJH6AXNTLQ
+    secret:
+      secure: iAPFqtfyJAW7nAZ/jAXFH2kran0lKKULlF7fZnfnNPA8uC4QGXerEH340pdfbG4EfiRrY2MFDoEd96JNfUMB+RHuV2Zo5ueFQMFqB2FPMizM8Z2gIWds/bNbelnpiq0VMP80t4+APvu40If+80yUVitOVh+vxmKnJcy1vkYR9Cg=
+    paths:
+    - $(ls s3-upload/*.zip)
+    target_paths: "ipf"
 cache:
   timeout: 600
   directories:
   - $HOME/.m2
 before_script:
+- export MAVEN_OPTS=-Xmx2048m
 - wget -q https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/settings.xml --no-check-certificate
 - echo "MAVEN_OPTS=-Xmx2g" > ~/.mavenrc
 script:
@@ -24,16 +32,7 @@ after_success:
 after_failure:
 # Zip everything. Or use after_failure instead
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
-addons:
-  artifacts:
-    s3_region: "us-east-1"
-    bucket: builds.openehealth.org
-    key: AKIAIG3NJZOJH6AXNTLQ
-    secret:
-      secure: iAPFqtfyJAW7nAZ/jAXFH2kran0lKKULlF7fZnfnNPA8uC4QGXerEH340pdfbG4EfiRrY2MFDoEd96JNfUMB+RHuV2Zo5ueFQMFqB2FPMizM8Z2gIWds/bNbelnpiq0VMP80t4+APvu40If+80yUVitOVh+vxmKnJcy1vkYR9Cg=
-    paths:
-    - $(ls s3-upload/*.zip)
-    target_paths: "ipf"
+
 env:
   global:
   - secure: eaYsfS5TNVL6U27EFROe7XBab9Qkp3HmInbTIqaoor95+857+FL6X/XXELu1QR9Wia+S1vzK1rZIAV41AFG0f/4rvr883pMiARD+qLtTC5gj3vHiXF+vLjlScMd40F2T3O9rCt6Bd4A9eVO+5x8KS5MzyB1/TPTAoshYqltd+20=

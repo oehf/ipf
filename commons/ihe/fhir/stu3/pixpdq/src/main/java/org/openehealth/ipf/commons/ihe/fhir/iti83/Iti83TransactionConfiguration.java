@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import ca.uhn.fhir.context.FhirContext;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * Standard Configuration for Iti83Component. Lazy-loading of results is by default not supported.
@@ -35,7 +35,7 @@ public class Iti83TransactionConfiguration extends FhirTransactionConfiguration<
                 true,
                 new Iti83AuditStrategy(false),
                 new Iti83AuditStrategy(true),
-                FhirContext.forDstu3(),
+                FhirVersionEnum.DSTU3,
                 new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
                 new Iti83ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);

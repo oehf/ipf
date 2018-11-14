@@ -41,8 +41,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @since 3.5.1
  * @author Dmytro Rud
+ * @since 3.5.1
  */
 public class ChPpq1Test extends StandardTestContainer {
 

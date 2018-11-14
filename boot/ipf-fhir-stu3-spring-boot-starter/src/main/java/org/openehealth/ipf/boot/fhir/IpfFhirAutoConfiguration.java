@@ -24,6 +24,8 @@ import ca.uhn.fhir.rest.server.IServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.INarrative;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
@@ -55,8 +57,16 @@ public class IpfFhirAutoConfiguration {
     private IpfFhirConfigurationProperties config;
 
     @Bean
-    public FhirContext fhirContext() {
-        return new FhirContext(config.getFhirVersion());
+    public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
+        FhirContext fhirContext = new FhirContext(config.getFhirVersion());
+        fhirContextCustomizer.customizeFhirContext(fhirContext);
+        return fhirContext;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FhirContextCustomizer.class)
+    public FhirContextCustomizer fhirContextCustomizer() {
+        return FhirContextCustomizer.NOOP;
     }
 
     @Bean
@@ -99,7 +109,7 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(INarrativeGenerator.class)
     public INarrativeGenerator narrativeGenerator() {
-        return null;
+        return (context, resource, narrative) -> { };
     }
 
     @Bean
@@ -118,11 +128,12 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(IpfFhirServlet.class)
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
+            FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
             @Autowired(required = false) IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
-        IpfFhirServlet fhirServlet = new IpfFhirServlet(config.getFhirVersion());
+        IpfFhirServlet fhirServlet = new IpfFhirServlet(fhirContext);
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
 
         fhirServlet.setLogging(servletProperties.isLogging());

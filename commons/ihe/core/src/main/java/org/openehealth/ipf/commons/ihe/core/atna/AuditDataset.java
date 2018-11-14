@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +25,6 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

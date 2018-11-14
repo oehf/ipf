@@ -49,7 +49,6 @@ public class Xacml20MessageValidator {
     static {
         RESPONSE_SCHEMAS = new HashMap<>();
         RESPONSE_SCHEMAS.put(ResponseType.class, "schema/PolicyQueryResponse.xsd");
-        RESPONSE_SCHEMAS.put(EpdPolicyRepositoryResponse.class, "schema/epd-policy-administration-combined-schema-1.2-local.xsd");
         RESPONSE_SCHEMAS.put(EprPolicyRepositoryResponse.class, "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
     }
 
@@ -68,20 +67,12 @@ public class Xacml20MessageValidator {
         }
     }
 
-    public static void validateChPpqRequest(Object request, Class... allowedClasses) {
-        validateMessage(request, REQUEST_SCHEMAS, XACMLPolicyQueryType.class, AddPolicyRequest.class, UpdatePolicyRequest.class, DeletePolicyRequest.class);
-    }
-
     public static void validateChPpq1Request(Object request, Class... allowedClasses) {
         validateMessage(request, REQUEST_SCHEMAS, AddPolicyRequest.class, UpdatePolicyRequest.class, DeletePolicyRequest.class);
     }
 
     public static void validateChPpq2Request(Object request, Class... allowedClasses) {
         validateMessage(request, REQUEST_SCHEMAS, XACMLPolicyQueryType.class);
-    }
-
-    public static void validateChPpqResponse(Object request, Class... allowedClasses) {
-        validateMessage(request, RESPONSE_SCHEMAS, ResponseType.class, EpdPolicyRepositoryResponse.class);
     }
 
     public static void validateChPpq1Response(Object request, Class... allowedClasses) {

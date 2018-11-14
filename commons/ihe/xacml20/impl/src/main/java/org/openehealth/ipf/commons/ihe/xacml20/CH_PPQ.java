@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
-import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqPortType;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1ServerAuditStrategy;
@@ -44,12 +42,6 @@ public class CH_PPQ implements IntegrationProfile {
 
     @AllArgsConstructor
     public enum Interactions implements WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>> {
-        /**
-         * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
-         */
-        @Deprecated
-        CH_PPQ(CH_PPQ_WS_CONFIG),
-
         CH_PPQ_1(CH_PPQ_1_WS_CONFIG),
         CH_PPQ_2(CH_PPQ_2_WS_CONFIG);
 
@@ -60,26 +52,6 @@ public class CH_PPQ implements IntegrationProfile {
     public List<InteractionId> getInteractionIds() {
         return Arrays.asList(Interactions.values());
     }
-
-    /**
-     * @deprecated split into PPQ-1 and PPQ-2 in the Swiss EPR specification from March 2018.
-     */
-    @Deprecated
-    private final static WsTransactionConfiguration<ChPpqAuditDataset> CH_PPQ_WS_CONFIG = new WsTransactionConfiguration<>(
-            "ch-ppq",
-            "Privacy Policy Query",
-            false,
-            new ChPpqAuditStrategy(false),
-            new ChPpqAuditStrategy(true),
-            new QName("urn:ihe:iti:ppq:2016", "PolicyRepository_Service"),
-            ChPpqPortType.class,
-            new QName("urn:ihe:iti:ppq:2016", "PolicyRepository_Binding_Soap12"),
-            false,
-            "wsdl/ch-ppq.wsdl",
-            true,
-            false,
-            true,
-            false);
 
     private final static WsTransactionConfiguration<ChPpqAuditDataset> CH_PPQ_1_WS_CONFIG = new WsTransactionConfiguration<>(
             "ch-ppq1",

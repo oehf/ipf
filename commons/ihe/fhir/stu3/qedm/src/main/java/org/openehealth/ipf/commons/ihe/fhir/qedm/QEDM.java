@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.qedm;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
@@ -52,7 +53,7 @@ public class QEDM implements IntegrationProfile {
                     true,
                     new Pcc44AuditStrategy(false),
                     new Pcc44AuditStrategy(true),
-                    FhirContext.forDstu3(),
+                    FhirVersionEnum.DSTU3,
                     FhirTransactionOptions.concatProviders(options),
                     new Pcc44ClientRequestFactory(),
                     FhirTransactionValidator.NO_VALIDATION);

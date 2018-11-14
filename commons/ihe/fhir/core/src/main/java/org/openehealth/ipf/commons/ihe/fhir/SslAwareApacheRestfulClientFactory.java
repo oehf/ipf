@@ -40,7 +40,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * RestfulClientFactory that is aware of SSL context parameters
+ * RestfulClientFactory that is aware of SSL context parameters.
+ *
+ * @author Christian Ohr
  */
 public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
 
@@ -68,6 +70,12 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                 theHeaders);
     }
 
+    /**
+     * Sets a completely configured HttpClient to be used. No further configuration is done
+     * (timeouts, security etc.) before it is used.
+     *
+     * @param httpClient Http client instance
+     */
     @Override
     public void setHttpClient(Object httpClient) {
         this.httpClient = (HttpClient) httpClient;
@@ -82,6 +90,26 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
         this.securityInformation = securityInformation;
     }
 
+    /**
+     * Possibility to customize the HttpClientBuilder. The default implementation of this method
+     * does nothing.
+     *
+     * @param httpClientBuilder HttpClientBuilder
+     */
+    protected HttpClientBuilder customizeHttpClientBuilder(HttpClientBuilder httpClientBuilder) {
+        return httpClientBuilder;
+    }
+
+    /**
+     * Possibility to instantiate a subclassed HttpClientBuilder. The default implementation
+     * calls {@link HttpClients#custom()}.
+     *
+     * @return HttpClientBuilder instance
+     */
+    protected HttpClientBuilder newHttpClientBuilder() {
+        return HttpClients.custom();
+    }
+
     protected synchronized HttpClient getNativeHttpClient() {
         if (httpClient == null) {
 
@@ -94,7 +122,7 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                     .setStaleConnectionCheckEnabled(true)
                     .build();
 
-            HttpClientBuilder builder = HttpClients.custom()
+            HttpClientBuilder builder = newHttpClientBuilder()
                     .useSystemProperties()
                     .setDefaultRequestConfig(defaultRequestConfig)
                     .setMaxConnTotal(getPoolMaxTotal())
@@ -115,7 +143,10 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                 builder.setDefaultCredentialsProvider(credentialsProvider);
             }
 
-            httpClient = builder.build();
+            // Chance to override or instrument
+            ;
+
+            httpClient = customizeHttpClientBuilder(builder).build();
         }
 
         return httpClient;

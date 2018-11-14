@@ -18,16 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.camel.spi.HeaderFilterStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -41,7 +41,6 @@ import java.util.Map;
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     private IGenericClient client;
-    private HeaderFilterStrategy headerFilterStrategy;
 
     public FhirProducer(Endpoint endpoint) {
         super(endpoint);
@@ -50,10 +49,13 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     protected synchronized IGenericClient getClient(Exchange exchange) {
         if (client == null) {
             FhirContext context = getEndpoint().getContext();
-            SslAwareApacheRestfulClientFactory clientFactory = (SslAwareApacheRestfulClientFactory)context.getRestfulClientFactory();
+            IRestfulClientFactory clientFactory = context.getRestfulClientFactory();
             FhirEndpointConfiguration<AuditDatasetType> config = getEndpoint().getInterceptableConfiguration();
+
             FhirSecurityInformation securityInformation = config.getSecurityInformation();
-            clientFactory.setSecurityInformation(securityInformation);
+            if (clientFactory instanceof SslAwareApacheRestfulClientFactory) {
+                ((SslAwareApacheRestfulClientFactory)clientFactory).setSecurityInformation(securityInformation);
+            }
 
             // For the producer, the path is supposed to be the server URL
             String path = config.getPath();

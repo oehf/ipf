@@ -18,7 +18,7 @@ DSL element, can be obtained from the corresponding factories, depending on the 
 | IHE PIX, PDQ, XAD-PID                      | `org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators`
 | IHE PAM                                    | `org.openehealth.ipf.platform.camel.ihe.mllp.PamCamelValidators`
 | IHE PIXv3, PDQv3, XCPD, QED                | `org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators`
-| IHE HPD                                    | `org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators`
+| IHE HPD, Swiss CH:PIDD, CH:CPI             | `org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators`
 | IHE PCD, Continua WAN                      | `org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators`
 | Continua HRN                               | `org.openehealth.ipf.platform.camel.ihe.continua.hrn.ContinuaHrnCamelProcessors`
 | IHE FHIR-based profiles                    | `org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators` 

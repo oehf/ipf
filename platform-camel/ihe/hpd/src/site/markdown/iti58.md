@@ -1,7 +1,7 @@
 
 ## `hpd-iti58` component
 
-The hpd-iti58 component provides interfaces for actors of the *Provider Information Query* IHE transaction (ITI-58),
+The `hpd-iti58` component provides interfaces for actors of the *Provider Information Query* IHE transaction (ITI-58),
 which is described in the [IHE IT Infrastructure Technical Framework Supplement "Healthcare Provider Directory" (HPD), Volume 2b, Section 3.58](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_HPD.pdf).
 
 ### Actors
