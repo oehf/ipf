@@ -44,18 +44,15 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
     private FhirInteractionId<AuditDatasetType> fhirInteractionId;
-    private FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration;
 
     public FhirComponent(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
-        this.fhirTransactionConfiguration = fhirInteractionId.getFhirTransactionConfiguration();
     }
 
     public FhirComponent(CamelContext context, FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(context, FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
-        this.fhirTransactionConfiguration = fhirInteractionId.getFhirTransactionConfiguration();
     }
 
     /**
@@ -136,16 +133,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @return component-specific configuration
      */
     public FhirTransactionConfiguration<AuditDatasetType> getFhirTransactionConfiguration() {
-        return fhirTransactionConfiguration;
-    }
-
-    /**
-     * Sets custom transaction configuration
-     *
-     * @param fhirTransactionConfiguration custom transaction configuration
-     */
-    public void setFhirTransactionConfiguration(FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration) {
-        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
+        return getInteractionId().getFhirTransactionConfiguration();
     }
 
     @Override
