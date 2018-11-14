@@ -115,6 +115,11 @@
                                 <artifactId>webservices-api</artifactId>
                                 <version>${webservices-api-version}</version>
                             </dependency>
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>activation</artifactId>
+                                <version>${javax-activation-version}</version>
+                            </dependency>
                         </dependencies>
                         <configuration>
                             <sources>

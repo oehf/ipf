@@ -10,11 +10,11 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.22.0</camel-version>
+        <camel-version>2.22.1</camel-version>
         <cxf-version>3.2.5</cxf-version>
         <groovy-version>3.0.0-alpha-3</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>3.4.0</hapi-fhir-version>
+        <hapi-fhir-version>3.5.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -31,9 +31,9 @@
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.17.RELEASE</spring-version>
-        <spring-boot-version>1.5.14.RELEASE</spring-boot-version>
-        <vertx-version>3.5.0</vertx-version>
+        <spring-version>5.0.9.RELEASE</spring-version>
+        <spring-boot-version>2.0.5.RELEASE</spring-boot-version>
+        <vertx-version>3.5.3</vertx-version>
         <vibur-version>22.2</vibur-version>
         <webservices-api-version>2.1-b16</webservices-api-version>
         <xmlsec-version>2.1.0</xmlsec-version>
@@ -593,6 +593,8 @@
                 <groupId>com.helger</groupId>
                 <artifactId>ph-schematron</artifactId>
                 <version>${ph-schematron-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-core</artifactId>
                 <version>${jaxb-version}</version>
