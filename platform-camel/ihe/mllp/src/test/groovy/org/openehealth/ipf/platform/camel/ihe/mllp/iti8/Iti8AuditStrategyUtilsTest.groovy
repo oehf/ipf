@@ -26,23 +26,33 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNull
 
 /**
  *
  */
 class Iti8AuditStrategyUtilsTest {
 
+    private static final HapiContext CONTEXT = HapiContextFactory.createHapiContext(
+            CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8)
+
     @Test
     void testExtractPatientId(){
-        Message message = load(HapiContextFactory.createHapiContext(
-                CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8),
-                'iti8/iti8-a40.hl7')
+        Message message = load(CONTEXT, 'iti8/iti8-a40.hl7')
         FeedAuditDataset dataset = new FeedAuditDataset(true)
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message)
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'
                 + '~7200117317^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO'
                 + '~7200117355^^^CCC&2.16.840.1.113883.3.37.4.1.1.2.711.1&ISO', dataset.patientId)
         assertEquals('305010~7200117359^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO', dataset.oldPatientId)
+    }
+
+    @Test
+    void testExtractPatientIdWithoutPID(){
+        Message message = load(CONTEXT, 'iti8/iti8-a01-incomplete.hl7')
+        FeedAuditDataset dataset = new FeedAuditDataset(true)
+        Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message)
+        assertNull(dataset.patientId)
     }
 
     private static <T extends Message> T load(HapiContext context, String fileName) throws HL7Exception {
