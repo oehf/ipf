@@ -2,14 +2,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.6-SNAPSHOT</version>
+    <version>3.6-20181130</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.6-SNAPSHOT</version>
+        <version>3.6-20181130</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -102,7 +102,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>HEAD</tag>
+       <tag>ipf-3.6-20181130</tag>
     </scm>
 
     <profiles>
