@@ -47,7 +47,6 @@ public class DomBuildersPool {
         int poolSize = Integer.getInteger(POOL_SIZE_PROPERTY, -1);
         POOL = new ConcurrentPool<>(new ConcurrentLinkedQueueCollection<>(), new DocumentBuilderPoolFactory(),
                 0, (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE, false);
-
     }
 
 
@@ -64,7 +63,7 @@ public class DomBuildersPool {
      *
      * @param documentBuilder document builder, <code>null</code> values are safe.
      */
-    public static void restore (DocumentBuilder documentBuilder) {
+    public static void restore(DocumentBuilder documentBuilder) {
         if (documentBuilder != null) {
             documentBuilder.reset();
             POOL.restore(documentBuilder);

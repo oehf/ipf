@@ -48,7 +48,7 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
             MOUT_STREAM_FIELD = UTF8Writer.class.getDeclaredField("mOut");
             MOUT_STREAM_FIELD.setAccessible(true);
         } catch (NoSuchFieldException e) {
-            throw new IllegalStateException(e);
+            throw new ExceptionInInitializerError(e);
         }
     }
 
