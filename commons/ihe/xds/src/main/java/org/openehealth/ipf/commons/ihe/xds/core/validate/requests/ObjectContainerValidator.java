@@ -172,7 +172,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
         } else {
-            metaDataAssert(profile != XDM.Interactions.ITI_41,
+            metaDataAssert(profile != XDR.Interactions.ITI_41,
                     ValidationMessage.LIMITED_METADATA_REQUIRED, object.getId());
         }
         return limitedMetadata;
