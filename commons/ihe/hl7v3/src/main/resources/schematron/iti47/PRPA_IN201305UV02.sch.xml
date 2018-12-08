@@ -68,9 +68,6 @@
     <sch:pattern is-a="check-count-is-1" id="x13">
         <sch:param name="element" value="hl7:patientAddress" />
     </sch:pattern>
-    <sch:pattern is-a="check-count-is-1" id="x14">
-        <sch:param name="element" value="hl7:patientStatusCode" />
-    </sch:pattern>
 
     <!-- ========================================================================== 
                     RULES FOR CHECKS THAT count(SOMETHING/hl7:value) <= 1
