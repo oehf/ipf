@@ -26,8 +26,8 @@
 
         <saxon-he-version>9.9.0-2</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>5.1.2.RELEASE</spring-version>
-        <spring-boot-version>2.1.0.RELEASE</spring-boot-version>
+        <spring-version>5.1.3.RELEASE</spring-version>
+        <spring-boot-version>2.1.1.RELEASE</spring-boot-version>
         <vertx-version>3.5.4</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.2</xmlsec-version>
