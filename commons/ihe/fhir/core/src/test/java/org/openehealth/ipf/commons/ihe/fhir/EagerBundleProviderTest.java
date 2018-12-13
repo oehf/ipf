@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.easymock.EasyMock;
-import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
 import org.junit.Before;

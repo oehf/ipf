@@ -17,10 +17,10 @@ package org.openehealth.ipf.tutorials.fhir
 
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.rest.client.api.IGenericClient
-import org.hl7.fhir.instance.model.Parameters
-import org.hl7.fhir.instance.model.Patient
-import org.hl7.fhir.instance.model.StringType
-import org.hl7.fhir.instance.model.UriType
+import org.hl7.fhir.dstu3.model.Parameters
+import org.hl7.fhir.dstu3.model.Patient
+import org.hl7.fhir.dstu3.model.StringType
+import org.hl7.fhir.dstu3.model.UriType
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants
 

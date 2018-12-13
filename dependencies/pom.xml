@@ -154,22 +154,7 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-dstu2</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-validation</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
@@ -722,22 +707,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-core</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-audit</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-mhd</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-mhd</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-pixpdq</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-pixpdq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -763,6 +748,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-stu3-qedm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-r4-qedm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

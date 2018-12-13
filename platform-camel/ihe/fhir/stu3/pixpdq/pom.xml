@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+            <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
