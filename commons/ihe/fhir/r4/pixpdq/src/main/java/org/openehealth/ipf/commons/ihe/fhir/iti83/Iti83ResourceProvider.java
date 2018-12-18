@@ -21,12 +21,7 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Parameters;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.UriType;
+import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +42,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
     /**
      * Handles the PIXm Query
      *
+     * @param resourceId          resource ID, optional
      * @param sourceIdentifierParam Identifier to search for. Should be an {@link Identifier}, but obviously
      *                              non-primitive types are forbidden in GET operations
      * @param targetSystemParam     target system URI
@@ -55,46 +51,24 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
     @SuppressWarnings("unused")
     @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = {@OperationParam(name = "return", type = Identifier.class, max = 100)})
     public Parameters pixmQuery(
+            @IdParam(optional = true) IdType resourceId,
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifierParam,
             @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Identifier sourceIdentifier = new Identifier()
-                .setSystem(sourceIdentifierParam.getSystem())
-                .setValue(sourceIdentifierParam.getValue());
+        Identifier sourceIdentifier = new Identifier();
+
+        if (resourceId == null) {
+            sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
+                    .setValue(sourceIdentifierParam.getValue());
+        } else {
+            sourceIdentifier.setValue(resourceId.getIdPart());
+        }
         UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
 
         Parameters inParams = new Parameters();
         inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);
-        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
-
-        // Run down the route
-        return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Handles the PIXm Retrieve. Note that this is not part of the specification, but a useful variant that allows to use resource IDs
-     * in requests such as .../Patient/4711/$ihe-pix would be equivalent with .../Patient/$ihe-pix?sourceIdentifier=URI|4711 where URI
-     * identifies the NamingSystem used for resource IDs
-     *
-     * @param resourceId          resource ID
-     * @param targetSystemParam   target system URI
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return {@link Parameters} containing found identifiers
-     */
-    @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = {@OperationParam(name = "return", type = Identifier.class, max = 100)})
-    public Parameters pixmRetrieve(
-            @IdParam IdType resourceId,
-            @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        if (resourceId == null) throw new InvalidRequestException("Must provide ID with READ request");
-        UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
-
-        Parameters inParams = new Parameters();
-        inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(new Identifier().setValue(resourceId.getIdPart()));
         inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
 
         // Run down the route
