@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.*;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
 import ca.uhn.hl7v2.parser.PipeParser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -146,6 +147,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      * @return
      *      <code>true</code> if this XDS model object does not contain any usable data.
      */
+    @JsonIgnore
     public boolean isEmpty() {
         return XdsHl7v2Renderer.isEmpty(this);
     }
@@ -156,6 +158,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      HAPI composite holding the HL7 v2 element
      *      which corresponds to this XDS model object.
      */
+    @JsonIgnore
     public C getHapiObject() {
         return hapiObject;
     }

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -52,7 +54,23 @@ public class QueryList<T> implements Serializable {
     private static final long serialVersionUID = -2729640243221349924L;
     
     @XmlJavaTypeAdapter(ListOfListAdapter.class)
+    @JsonIgnore
     @Getter private List<List<T>> outerList = new ArrayList<>();
+
+    /**
+     * This method is private because it is used only for Jackson serialization.
+     */
+    @JsonProperty
+    private List<List<T>> getList() {
+        return outerList;
+    }
+
+    /**
+     * This method is private because it is used only for Jackson serialization.
+     */
+    private void setList(List<List<T>> list) {
+        outerList = list;
+    }
 
     /**
      * Constructs a query list.

@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -44,7 +45,7 @@ public class Folder extends XDSMetaClass implements Serializable {
     @Getter private final List<Code> codeList = new ArrayList<>();
     @Getter private Timestamp lastUpdateTime;
 
-
+    @JsonProperty
     public void setLastUpdateTime(Timestamp lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }

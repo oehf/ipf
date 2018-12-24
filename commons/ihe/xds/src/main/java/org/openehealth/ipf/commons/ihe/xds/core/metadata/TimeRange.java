@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -34,10 +35,11 @@ import java.io.Serializable;
 @ToString(doNotUseGetters = true)
 public class TimeRange implements Serializable {
     private static final long serialVersionUID = -5468726370729209318L;
-    
+
     @Getter private Timestamp from;
     @Getter private Timestamp to;
 
+    @JsonProperty
     public void setFrom(Timestamp from) {
         this.from = from;
     }
@@ -46,6 +48,7 @@ public class TimeRange implements Serializable {
         this.from = Timestamp.fromHL7(from);
     }
 
+    @JsonProperty
     public void setTo(Timestamp to) {
         this.to = to;
     }

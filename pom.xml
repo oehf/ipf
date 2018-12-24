@@ -84,6 +84,7 @@
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>23.0</guava-version>
         <httpclient4-version>4.5.5</httpclient4-version>
+        <jackson-version>2.9.7</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jetty-version>9.4.11.v20180605</jetty-version>
@@ -632,6 +633,16 @@
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
                 <version>${woodstox-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-joda</artifactId>
+                <version>${jackson-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

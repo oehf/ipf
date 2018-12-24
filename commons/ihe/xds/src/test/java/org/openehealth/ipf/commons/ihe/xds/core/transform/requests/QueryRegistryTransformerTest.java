@@ -21,20 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsAndAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 /**
  * Tests for {@link QueryRegistryTransformer}.

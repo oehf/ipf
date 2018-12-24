@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.Composite;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -44,7 +45,7 @@ import java.util.Objects;
 public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
-    protected Name() {
+    public Name() {
     }
 
     protected Name(T hapiObject) {
@@ -53,13 +54,19 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
 
 
     @XmlElement(name = "family")
+    @JsonProperty("family")
     abstract public String getFamilyName();                  // XCN.2.1, XPN.1.1
     @XmlElement(name = "given")
+    @JsonProperty("given")
     abstract public String getGivenName();                   // XCN.3, XPN.2
     @XmlElement(name = "secondAndFurtherGiven")
+    @JsonProperty("secondAndFurtherGiven")
     abstract public String getSecondAndFurtherGivenNames();  // XCN.4, XPN.3
+    @JsonProperty
     abstract public String getSuffix();                      // XCN.5, XPN.4
+    @JsonProperty
     abstract public String getPrefix();                      // XCN.6, XPN.5
+    @JsonProperty
     abstract public String getDegree();                      // XCN.7, XPN.6
 
     abstract public void setFamilyName(String value);                  // XCN.2.1, XPN.1.1
