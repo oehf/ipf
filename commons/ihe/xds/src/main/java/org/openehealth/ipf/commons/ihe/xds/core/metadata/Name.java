@@ -16,7 +16,9 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.Composite;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,6 +44,7 @@ import java.util.Objects;
 @XmlJavaTypeAdapter(value = NameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
@@ -52,21 +55,35 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
         super(hapiObject);
     }
 
+    /**
+     * Dummy field for JSON deserialization using Jackson.
+     */
+    @JsonProperty
+    private String type;
+
+    /**
+     * Class name-aware instance creator for JSON deserialization using Jackson.
+     */
+    @JsonCreator
+    private static Name createInstance(String type, String family, String given, String secondAndFurtherGiven, String suffix, String prefix, String degree) {
+        if (XcnName.class.getName().equals(type)) {
+            return new XcnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
+        }
+        if (XpnName.class.getName().equals(type)) {
+            return new XpnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
+        }
+        throw new ExceptionInInitializerError("Unknown name type " + type);
+    }
+
 
     @XmlElement(name = "family")
-    @JsonProperty("family")
     abstract public String getFamilyName();                  // XCN.2.1, XPN.1.1
     @XmlElement(name = "given")
-    @JsonProperty("given")
     abstract public String getGivenName();                   // XCN.3, XPN.2
     @XmlElement(name = "secondAndFurtherGiven")
-    @JsonProperty("secondAndFurtherGiven")
     abstract public String getSecondAndFurtherGivenNames();  // XCN.4, XPN.3
-    @JsonProperty
     abstract public String getSuffix();                      // XCN.5, XPN.4
-    @JsonProperty
     abstract public String getPrefix();                      // XCN.6, XPN.5
-    @JsonProperty
     abstract public String getDegree();                      // XCN.7, XPN.6
 
     abstract public void setFamilyName(String value);                  // XCN.2.1, XPN.1.1

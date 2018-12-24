@@ -28,7 +28,7 @@ import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.JsonUtils.createJsonMapper;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.JsonUtils.createObjectMapper;
 
 /**
  * Tests that all requests/responses and metadata classes can be serialized.
@@ -110,22 +110,22 @@ public class SerializationTest {
     }
 
     private void checkJacksonSerialization(Object original) throws IOException {
-        ObjectMapper objectMapper = createJsonMapper();
+        ObjectMapper objectMapper = createObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         String json = objectMapper.writeValueAsString(original);
-        System.out.println(json);
 
         Object unmarshalled = objectMapper.readValue(json, original.getClass());
         assertEquals(original, unmarshalled);
     }
 
     @Test
-    public void testXcnName() throws Exception {
-        XcnName original = new XcnName("Krause", "Wilhelm", "Klaus Peter", "Esq.", "Prince", "Dr.-Ing.");
-        ObjectMapper objectMapper = createJsonMapper();
+    public void testNameHandling() throws Exception {
+        Person original = new Person();
+        original.setName(new XpnName("Krause", "Wilhelm", "Klaus Peter", "Esq.", "Prince", "Dr.-Ing."));
+        ObjectMapper objectMapper = createObjectMapper();
         String json = objectMapper.writeValueAsString(original);
-        XcnName unmarshalled = objectMapper.readValue(json, XcnName.class);
+        Object unmarshalled = objectMapper.readValue(json, original.getClass());
         assertEquals(original, unmarshalled);
     }
 

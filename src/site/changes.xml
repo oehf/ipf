@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.6" description="IPF 3.6 (or maybe 4.0...)">
+            <action dev="unixoid" issue="252" type="add">
+                JSON serialization support for the simplified XDS data model
+            </action>
             <action dev="unixoid" issue="240" type="add">
                 Support for the Swiss CPI profile (Community Portal Index)
             </action>

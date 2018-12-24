@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XCN;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class represents a name.
@@ -69,7 +68,6 @@ public class XcnName extends Name<XCN> {
 
 
     @Override
-    @JsonProperty("family")
     public String getFamilyName() {
         return getHapiObject().getXcn2_FamilyName().getFn1_Surname().getValue();
     }
@@ -80,7 +78,6 @@ public class XcnName extends Name<XCN> {
     }
 
     @Override
-    @JsonProperty("given")
     public String getGivenName() {
         return getHapiObject().getXcn3_GivenName().getValue();
     }
@@ -91,7 +88,6 @@ public class XcnName extends Name<XCN> {
     }
 
     @Override
-    @JsonProperty("secondAndFurtherGiven")
     public String getSecondAndFurtherGivenNames() {
         return getHapiObject().getXcn4_SecondAndFurtherGivenNamesOrInitialsThereof().getValue();
     }
@@ -102,7 +98,6 @@ public class XcnName extends Name<XCN> {
     }
 
     @Override
-    @JsonProperty
     public String getSuffix() {
         return getHapiObject().getXcn5_SuffixEgJRorIII().getValue();
     }
@@ -113,7 +108,6 @@ public class XcnName extends Name<XCN> {
     }
 
     @Override
-    @JsonProperty
     public String getPrefix() {
         return getHapiObject().getXcn6_PrefixEgDR().getValue();
     }
@@ -124,7 +118,6 @@ public class XcnName extends Name<XCN> {
     }
 
     @Override
-    @JsonProperty
     public String getDegree() {
         return getHapiObject().getXcn7_DegreeEgMD().getValue();
     }

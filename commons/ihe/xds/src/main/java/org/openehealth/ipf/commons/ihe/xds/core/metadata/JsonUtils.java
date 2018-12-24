@@ -30,7 +30,7 @@ public class JsonUtils {
     /**
      * Creates and returns an ObjectMapper instance suitable for the simplified XDS data model.
      */
-    public static ObjectMapper createJsonMapper() {
+    public static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enableDefaultTyping();
         objectMapper.registerModule(new JodaModule());
