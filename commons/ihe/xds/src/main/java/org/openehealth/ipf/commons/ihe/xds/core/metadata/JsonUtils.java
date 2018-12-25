@@ -32,7 +32,6 @@ public class JsonUtils {
      */
     public static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enableDefaultTyping();
         objectMapper.registerModule(new JodaModule());
         objectMapper.registerModule(new JaxbAnnotationModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
