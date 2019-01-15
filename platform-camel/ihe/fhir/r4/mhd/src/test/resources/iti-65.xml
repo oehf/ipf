@@ -25,6 +25,36 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.fhir.iti65.Iti65TestRouteBuilder">
         <constructor-arg value="false"/>
+        <constructor-arg value="true"/>
+    </bean>
+
+    <bean id="batch" class="org.openehealth.ipf.platform.camel.ihe.fhir.core.custom.CustomFhirComponent">
+        <property name="name" value="batch"/>
+        <property name="fhirTransactionConfiguration">
+            <bean class="org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration">
+                <constructor-arg index="0" value="batch"/>
+                <constructor-arg index="1" value="description"/>
+                <constructor-arg index="2" value="false"/>
+                <constructor-arg index="3"><null/></constructor-arg>
+                <constructor-arg index="4"><null/></constructor-arg>
+                <constructor-arg index="5" ref="fhirContext"/>
+                <constructor-arg index="6">
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProvider"
+                          factory-method="getInstance"/>
+                </constructor-arg>
+                <constructor-arg index="7">
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionClientRequestFactory"
+                          factory-method="getInstance"/>
+                </constructor-arg>
+                <constructor-arg index="8"><null/></constructor-arg>
+
+                <property name="staticConsumerSelector">
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector">
+                        <constructor-arg value="http://thissucks.com"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
     </bean>
 
 </beans>

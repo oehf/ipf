@@ -91,7 +91,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
-                new IllegalStateException("Consumer is not initialized"));
+                new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
         Map<String, Object> headers = enrichParameters(null, httpServletRequest);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }

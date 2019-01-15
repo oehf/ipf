@@ -36,8 +36,8 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 new Iti65ClientAuditStrategy(),
                 new Iti65ServerAuditStrategy(),
                 FhirVersionEnum.DSTU3,
-                BatchTransactionResourceProvider.INSTANCE,      // Consumer side. accept registrations
-                BatchTransactionClientRequestFactory.INSTANCE,  // Formulate requests
+                BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
+                BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
                 new Iti65Validator());
         setStaticConsumerSelector(new BundleProfileSelector(Iti65Constants.ITI65_PROFILE));
     }

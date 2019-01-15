@@ -25,6 +25,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.fhir.iti65.Iti65TestRouteBuilder">
         <constructor-arg value="true"/>
+        <constructor-arg value="false"/>
     </bean>
 
 </beans>

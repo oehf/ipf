@@ -31,9 +31,13 @@ import java.util.Map;
  */
 public class BatchTransactionClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
 
-    public static final BatchTransactionClientRequestFactory INSTANCE = new BatchTransactionClientRequestFactory();
+    private static final BatchTransactionClientRequestFactory INSTANCE = new BatchTransactionClientRequestFactory();
 
     private BatchTransactionClientRequestFactory() {
+    }
+
+    public static BatchTransactionClientRequestFactory getInstance() {
+        return INSTANCE;
     }
 
     @Override

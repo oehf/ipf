@@ -152,7 +152,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
         cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
-        consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class, o -> true);
+        consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class);
 
         // Security stuff
         SSLContextParameters sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(

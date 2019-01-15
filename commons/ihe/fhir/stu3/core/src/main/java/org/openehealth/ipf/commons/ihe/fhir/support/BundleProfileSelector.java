@@ -21,9 +21,9 @@ import org.hl7.fhir.dstu3.model.UriType;
 import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * BundleProfileSelector can be used as selector for FHIR Consumers in batch/transaction
@@ -35,15 +35,13 @@ import java.util.stream.Collectors;
  */
 public class BundleProfileSelector implements Predicate<Object> {
 
-    private final Set<UriType> profileUris;
+    private final Set<String> profileUris;
 
     /**
      * @param profileUris Profile URIs expected in the Bundle's meta element
      */
     public BundleProfileSelector(String... profileUris) {
-        this.profileUris = Arrays.stream(profileUris)
-                .map(UriType::new)
-                .collect(Collectors.toSet());
+        this.profileUris = new HashSet<>(Arrays.asList(profileUris));
     }
 
     /**
@@ -53,7 +51,9 @@ public class BundleProfileSelector implements Predicate<Object> {
     @Override
     public boolean test(Object object) {
         Bundle bundle = (Bundle) object;
-        return bundle.getMeta().getProfile().stream()
+        boolean result = bundle.getMeta().getProfile().stream()
+                .map(UriType::getValueAsString)
                 .anyMatch(profileUris::contains);
+        return result;
     }
 }

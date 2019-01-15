@@ -34,10 +34,14 @@ public class BatchTransactionResourceProvider extends SharedFhirProvider {
     /**
      * Singleton instance of this resource provider
      */
-    public static final BatchTransactionResourceProvider INSTANCE = new BatchTransactionResourceProvider();
+    private static final BatchTransactionResourceProvider INSTANCE = new BatchTransactionResourceProvider();
 
     // Enforce to use singleton instance
     private BatchTransactionResourceProvider() {
+    }
+
+    public static BatchTransactionResourceProvider getInstance() {
+        return INSTANCE;
     }
 
     @SuppressWarnings("unused")
