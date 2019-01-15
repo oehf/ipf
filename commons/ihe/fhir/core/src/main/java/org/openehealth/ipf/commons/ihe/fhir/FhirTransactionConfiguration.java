@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -36,11 +37,12 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
 
     private final FhirVersionEnum fhirVersion;
     private final Supplier<FhirContext> fhirContextProvider;
-    private final List<? extends AbstractPlainProvider> staticResourceProviders;
+    private final List<? extends FhirProvider> staticResourceProviders;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
     private boolean deferModelScanning;
+    private Predicate<Object> staticConsumerSelector = o -> true;
 
     /**
      * @deprecated
@@ -52,7 +54,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             AuditStrategy<T> clientAuditStrategy,
             AuditStrategy<T> serverAuditStrategy,
             FhirContext defaultFhirContext,
-            AbstractPlainProvider resourceProvider,
+            FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, defaultFhirContext,
@@ -69,7 +71,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             AuditStrategy<T> clientAuditStrategy,
             AuditStrategy<T> serverAuditStrategy,
             FhirContext fhirContext,
-            List<? extends AbstractPlainProvider> resourceProviders,
+            List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
@@ -87,7 +89,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             AuditStrategy<T> clientAuditStrategy,
             AuditStrategy<T> serverAuditStrategy,
             FhirVersionEnum fhirVersion,
-            AbstractPlainProvider resourceProvider,
+            FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirVersion,
@@ -101,7 +103,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             AuditStrategy<T> clientAuditStrategy,
             AuditStrategy<T> serverAuditStrategy,
             FhirVersionEnum fhirVersion,
-            List<? extends AbstractPlainProvider> resourceProviders,
+            List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
@@ -113,12 +115,20 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     }
 
 
-    public List<? extends AbstractPlainProvider> getStaticResourceProvider() {
+    public List<? extends FhirProvider> getStaticResourceProvider() {
         return staticResourceProviders;
     }
 
     public ClientRequestFactory<?> getStaticClientRequestFactory() {
         return staticClientRequestFactory;
+    }
+
+    public void setStaticConsumerSelector(Predicate<Object> staticConsumerSelector) {
+        this.staticConsumerSelector = staticConsumerSelector;
+    }
+
+    public Predicate<Object> getStaticConsumerSelector() {
+        return staticConsumerSelector;
     }
 
     /**
@@ -177,4 +187,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     public void setDeferModelScanning(boolean deferModelScanning) {
         this.deferModelScanning = deferModelScanning;
     }
+
+
 }

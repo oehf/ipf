@@ -47,6 +47,11 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         setFhirInteractionId(this);
     }
 
+    public CustomFhirComponent(CamelContext context) {
+        super(context, null);
+        setFhirInteractionId(this);
+    }
+
     public CustomFhirComponent(FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration) {
         this();
         this.fhirTransactionConfiguration = fhirTransactionConfiguration;

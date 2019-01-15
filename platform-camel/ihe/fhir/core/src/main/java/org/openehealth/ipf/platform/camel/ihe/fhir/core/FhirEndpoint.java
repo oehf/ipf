@@ -24,8 +24,8 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
@@ -35,6 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.Produ
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Generic FHIR endpoint
@@ -73,7 +74,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be registered
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        for (AbstractPlainProvider provider : getResourceProviders()) {
+        for (FhirProvider provider : getResourceProviders()) {
             // Make consumer known to provider
             provider.setConsumer(consumer);
             fhirComponent.connect(consumer, provider);
@@ -88,7 +89,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception if resource provider could not be unregistered
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        for (AbstractPlainProvider provider : getResourceProviders()) {
+        for (FhirProvider provider : getResourceProviders()) {
             provider.unsetConsumer(consumer);
             fhirComponent.disconnect(consumer, provider);
         }
@@ -160,9 +161,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
 
     // Private stuff
 
-    private List<? extends AbstractPlainProvider> getResourceProviders() {
-        List<? extends AbstractPlainProvider> providers = config.getResourceProvider();
-        if (providers == null) {
+    private List<? extends FhirProvider> getResourceProviders() {
+        List<? extends FhirProvider> providers = config.getResourceProvider();
+        if (providers == null || providers.isEmpty()) {
             providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
         return providers;
@@ -174,6 +175,14 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
             factory = fhirComponent.getFhirTransactionConfiguration().getStaticClientRequestFactory();
         }
         return factory;
+    }
+
+    public Predicate<Object> getConsumerSelector() {
+        Predicate<Object> consumerSelector = config.getConsumerSelector();
+        if (consumerSelector == null) {
+            consumerSelector = fhirComponent.getFhirTransactionConfiguration().getStaticConsumerSelector();
+        }
+        return consumerSelector;
     }
 
 }

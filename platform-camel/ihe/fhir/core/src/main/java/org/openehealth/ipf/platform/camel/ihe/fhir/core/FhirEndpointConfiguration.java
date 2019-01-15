@@ -25,8 +25,8 @@ import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.jsse.SSLContextParameters;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
@@ -36,6 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import javax.net.ssl.HostnameVerifier;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,6 +53,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     static final String LENIENT = "lenient";
     static final String LAZY_LOAD_BUNDLES = "lazyLoadBundles";
     static final String CACHE_BUNDLES = "cacheBundles";
+    static final String CONSUMER_SELECTOR = "consumerSelector";
 
     @Getter
     private final String path;
@@ -65,7 +67,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam
-    private List<? extends AbstractPlainProvider> resourceProvider;
+    private List<? extends FhirProvider> resourceProvider;
 
     // Producer only
 
@@ -92,6 +94,8 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @Getter
     private FhirSecurityInformation securityInformation;
 
+    @Getter
+    private Predicate<Object> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
@@ -108,7 +112,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
-                parameters, "resourceProvider", AbstractPlainProvider.class);
+                parameters, "resourceProvider", FhirProvider.class);
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class);
         hapiClientInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
@@ -148,6 +152,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
         cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
+        consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class, o -> true);
 
         // Security stuff
         SSLContextParameters sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(

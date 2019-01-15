@@ -28,6 +28,7 @@ import java.util.Map;
  *
  * @author Christian Ohr
  * @since 3.4
+ * @deprecated use BatchTransactionClientRequestFactory
  */
 public class Iti65ClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
 
