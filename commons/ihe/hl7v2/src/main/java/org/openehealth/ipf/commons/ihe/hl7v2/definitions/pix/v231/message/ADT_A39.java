@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.model.v231.segment.EVN;
 import ca.uhn.hl7v2.model.v231.segment.MSH;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group.ADT_A39_PATIENT;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import java.util.List;
@@ -45,7 +44,6 @@ public class ADT_A39 extends AbstractMessage {
         s.put(MSH.class, Cardinality.REQUIRED);
         s.put(EVN.class, Cardinality.REQUIRED);
         s.put(ADT_A39_PATIENT.class, Cardinality.REQUIRED_REPEATING);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 
@@ -82,10 +80,10 @@ public class ADT_A39 extends AbstractMessage {
     }
 
     public ADT_A39_PATIENT insertPATIENT(int rep) throws HL7Exception {
-        return (ADT_A39_PATIENT)super.insertRepetition("PATIENT", rep);
+        return (ADT_A39_PATIENT) super.insertRepetition("PATIENT", rep);
     }
 
     public ADT_A39_PATIENT removePATIENT(int rep) throws HL7Exception {
-        return (ADT_A39_PATIENT)super.removeRepetition("PATIENT", rep);
+        return (ADT_A39_PATIENT) super.removeRepetition("PATIENT", rep);
     }
 }

@@ -34,6 +34,11 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

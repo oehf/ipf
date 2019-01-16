@@ -9,7 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-
+        <brave-version>5.6.0</brave-version>
         <camel-version>2.23.0</camel-version>
         <cxf-version>3.2.7</cxf-version>
         <groovy-version>2.5.4</groovy-version>
@@ -448,6 +448,31 @@
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-spring-beans</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-context-slf4j</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-instrumentation-httpclient</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-instrumentation-servlet</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-core</artifactId>
                 <version>${cxf-version}</version>
@@ -553,6 +578,21 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-features-logging</artifactId>
                 <version>${cxf-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-integration-tracing-brave</artifactId>
+                <version>${cxf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.zipkin.brave</groupId>
+                        <artifactId>brave</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.zipkin.brave</groupId>
+                        <artifactId>brave-instrumentation-http</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>

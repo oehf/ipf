@@ -36,6 +36,10 @@ class Iti8TestRouteBuilder extends RouteBuilder {
         from('pix-iti8://0.0.0.0:18082')
                 .transform(ack())
 
+        // normal processing with tracing
+        from('pix-iti8://0.0.0.0:18083?interceptorFactories=#consumerTracingInterceptor')
+                .transform(ack())
+
         // fictive route to test producer-side acceptance checking
         from('pix-iti8://0.0.0.0:18084')
                 .process {

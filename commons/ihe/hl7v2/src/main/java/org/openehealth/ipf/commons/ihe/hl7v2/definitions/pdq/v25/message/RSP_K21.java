@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,22 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
-import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.ZZI;
-import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v25.group.RSP_K21_QUERY_RESPONSE;
-import ca.uhn.hl7v2.model.v25.segment.DSC;
-import ca.uhn.hl7v2.model.v25.segment.ERR;
-import ca.uhn.hl7v2.model.v25.segment.MSA;
-import ca.uhn.hl7v2.model.v25.segment.MSH;
-import ca.uhn.hl7v2.model.v25.segment.QAK;
-import ca.uhn.hl7v2.model.v25.segment.SFT;
+import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.Map;
 
 /**
  * Adds a custom QPD segment instead of the standard one
@@ -66,7 +59,6 @@ public class RSP_K21 extends AbstractMessage {
         s.put(QPD.class, Cardinality.REQUIRED);
         s.put(RSP_K21_QUERY_RESPONSE.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DSC.class, Cardinality.OPTIONAL);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

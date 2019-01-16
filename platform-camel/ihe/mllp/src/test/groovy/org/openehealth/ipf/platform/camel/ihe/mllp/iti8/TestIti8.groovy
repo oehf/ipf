@@ -26,6 +26,7 @@ import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import zipkin2.Span
 
 import static org.junit.Assert.*
 
@@ -74,6 +75,22 @@ class TestIti8 extends MllpTestContainer {
     void testHappyCaseAndAudit3() {
         doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}", 0)
     }
+    @Test
+    void testHappyCaseAndTrace() {
+        doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor&timeout=${TIMEOUT}", 2)
+        MockReporter reporter = appContext.getBean(MockReporter)
+        assertEquals(2, reporter.spans.size())
+
+        Span clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT}
+        Span serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER}
+
+        assertFalse(clientSpan.tags().isEmpty())
+        assertEquals(clientSpan.tags(), serverSpan.tags())
+        assertNotEquals(clientSpan.id(), serverSpan.id())
+        assertEquals(clientSpan.id(), serverSpan.parentId())
+        assertTrue(clientSpan.durationAsLong() > serverSpan.durationAsLong())
+
+    }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('ADT^A01', '2.3.1')
@@ -92,23 +109,23 @@ class TestIti8 extends MllpTestContainer {
      * (it is really a feature, not a bug! ;-)) 
      */
     @Test
-    public void testInacceptanceOnConsumer1() {
+    void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.3.1')
     }
     @Test
-    public void testInacceptanceOnConsumer2() {
+    void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('ADT^A02', '2.3.1')
     }
     @Test
-    public void testInacceptanceOnConsumer3() {
+    void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('ADT^A01', '2.5')
     }
     @Test
-    public void testInacceptanceOnConsumer4() {
+    void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('ADT^A01', '3.1415926')
     }
     @Test
-    public void testInacceptanceOnConsumer5() {
+    void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('ADT^A01^ADT_A02', '2.3.1')
     }
     

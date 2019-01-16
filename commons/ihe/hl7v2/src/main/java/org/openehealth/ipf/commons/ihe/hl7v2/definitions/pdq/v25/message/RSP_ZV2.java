@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
-import java.util.Map;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.Map;
 
 /**
  * Represents a RSP_ZV2 message structure as described
@@ -58,7 +57,7 @@ public class RSP_ZV2 extends AbstractMessage {
 
     @Override
     protected Map<Class<? extends Structure>, Cardinality> structures(
-             Map<Class<? extends Structure>, Cardinality> s) {
+            Map<Class<? extends Structure>, Cardinality> s) {
         s.put(MSH.class, Cardinality.REQUIRED);
         s.put(MSA.class, Cardinality.REQUIRED);
         s.put(ERR.class, Cardinality.OPTIONAL);
@@ -66,7 +65,6 @@ public class RSP_ZV2 extends AbstractMessage {
         s.put(QPD.class, Cardinality.REQUIRED);
         s.put(RSP_ZV2_QUERY_RESPONSE.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DSC.class, Cardinality.OPTIONAL);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 
@@ -75,60 +73,60 @@ public class RSP_ZV2 extends AbstractMessage {
     }
 
     /**
-      * Returns MSH (Message Header) - creates it if necessary
-      */
+     * Returns MSH (Message Header) - creates it if necessary
+     */
     public MSH getMSH() {
         return getTyped("MSH", MSH.class);
     }
 
     /**
-      * Returns MSA (Message Acknowledgment) - creates it if necessary
-      */
+     * Returns MSA (Message Acknowledgment) - creates it if necessary
+     */
     public MSA getMSA() {
         return getTyped("MSA", MSA.class);
     }
 
     /**
-      * Returns ERR (Error) - creates it if necessary
-      */
+     * Returns ERR (Error) - creates it if necessary
+     */
     public ERR getERR() {
         return getTyped("ERR", ERR.class);
     }
 
     /**
-      * Returns QAK (Query Acknowledgment) - creates it if necessary
-      */
+     * Returns QAK (Query Acknowledgment) - creates it if necessary
+     */
     public QAK getQAK() {
         return getTyped("QAK", QAK.class);
     }
 
     /**
-      * Returns QPD (Query Parameter Definition) - creates it if necessary
-      */
+     * Returns QPD (Query Parameter Definition) - creates it if necessary
+     */
     public QPD getQPD() {
         return getTyped("QPD", QPD.class);
     }
 
     /**
-      * Returns first repetition of RSP_ZV2_QUERY_RESPONSE (a Group object) - creates it if necessary
-      */
+     * Returns first repetition of RSP_ZV2_QUERY_RESPONSE (a Group object) - creates it if necessary
+     */
     public RSP_ZV2_QUERY_RESPONSE getQUERY_RESPONSE() {
         return getTyped("QUERY_RESPONSE", RSP_ZV2_QUERY_RESPONSE.class);
     }
 
     /**
-      * Returns a specific repetition of RSP_ZV2_QUERY_RESPONSE
-      * (a Group object) - creates it if necessary
-      * throws HL7Exception if the repetition requested is more than one
-      * greater than the number of existing repetitions.
-      */
+     * Returns a specific repetition of RSP_ZV2_QUERY_RESPONSE
+     * (a Group object) - creates it if necessary
+     * throws HL7Exception if the repetition requested is more than one
+     * greater than the number of existing repetitions.
+     */
     public RSP_ZV2_QUERY_RESPONSE getQUERY_RESPONSE(int rep) {
         return getTyped("QUERY_RESPONSE", rep, RSP_ZV2_QUERY_RESPONSE.class);
     }
 
     /**
-      * Returns the number of existing repetitions of RSP_ZV2_QUERY_RESPONSE
-      */
+     * Returns the number of existing repetitions of RSP_ZV2_QUERY_RESPONSE
+     */
     public int getQUERY_RESPONSEReps() {
         return getReps("QUERY_RESPONSE");
     }
@@ -141,8 +139,8 @@ public class RSP_ZV2 extends AbstractMessage {
     }
 
     /**
-      * Returns DSC (Continuation Pointer) - creates it if necessary
-      */
+     * Returns DSC (Continuation Pointer) - creates it if necessary
+     */
     public DSC getDSC() {
         return getTyped("DSC", DSC.class);
     }
