@@ -44,6 +44,19 @@ public abstract class FhirProvider implements Serializable {
     protected abstract Optional<RequestConsumer> getConsumer(Object payload);
 
     /**
+     * Returns the (first) configured consumer if its {@link RequestConsumer#test(Object)}
+     * method always returns true.
+     *
+     * @return consumer
+     * @throws IllegalStateException if the consumer is not initialized or did reject
+     *                               being selected.
+     */
+    protected RequestConsumer getConsumer() {
+        return getConsumer(null).orElseThrow(() ->
+                new IllegalStateException("Consumer is not initialized"));
+    }
+
+    /**
      * Ensures that the provided consumer is considered by this provider
      *
      * @param consumer request consumer
@@ -60,7 +73,6 @@ public abstract class FhirProvider implements Serializable {
 
     /**
      * @return true if this provider must be registered at the {@link FhirRegistry}
-     *
      * @see FhirRegistry#register(Object)
      */
     public boolean requiresRegistration() {
@@ -69,7 +81,6 @@ public abstract class FhirProvider implements Serializable {
 
     /**
      * @return true if this provider must be unregistered at the {@link FhirRegistry}
-     *
      * @see FhirRegistry#unregister(Object)
      */
     public boolean requiresDeregistration() {
