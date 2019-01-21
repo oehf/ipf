@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
@@ -37,6 +38,7 @@ public class Iti59AuditDataset extends WsAuditDataset {
         @Getter @Setter private String uid;
         @Getter @Setter private String newUid;    // only for operation Rename
         @Getter @Setter private ParticipantObjectTypeCode participantObjectTypeCode;
+        @Getter @Setter private ParticipantObjectDataLifeCycle participantObjectDataLifeCycle;
 
         @Getter @Setter private EventOutcomeIndicator outcomeCode;
         @Getter @Setter private String outcomeDescription;

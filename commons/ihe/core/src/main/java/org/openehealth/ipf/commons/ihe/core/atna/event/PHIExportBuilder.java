@@ -17,10 +17,7 @@
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.event.DataExportBuilder;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
@@ -101,12 +98,14 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
             String objectId,
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+            ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
             List<TypeValuePairType> details) {
         return addExportedEntity(
                 objectId,
                 participantObjectIdType,
                 ParticipantObjectTypeCode.System,
                 participantObjectTypeCodeRole,
+                participantObjectDataLifeCycle,
                 details);
     }
 
@@ -115,6 +114,7 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCode participantObjectTypeCode,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+            ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
             List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
                 requireNonNull(participantObjectIdType, "Exported entity ID type must not be null"),
@@ -124,7 +124,7 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
                 objectId != null ? objectId : getAuditContext().getAuditValueIfMissing(),
                 participantObjectTypeCode,
                 participantObjectTypeCodeRole,
-                null,
+                participantObjectDataLifeCycle,
                 null);
         return self();
     }
