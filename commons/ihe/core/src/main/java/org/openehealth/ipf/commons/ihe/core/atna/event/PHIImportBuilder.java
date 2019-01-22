@@ -94,10 +94,9 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
             String objectId,
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
-            ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
             List<TypeValuePairType> details) {
         return addImportedEntity(objectId, participantObjectIdType, ParticipantObjectTypeCode.System,
-                participantObjectTypeCodeRole, participantObjectDataLifeCycle, details);
+                participantObjectTypeCodeRole, null, details);
     }
 
     public T addImportedEntity(

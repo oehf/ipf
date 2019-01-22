@@ -98,14 +98,13 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
             String objectId,
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
-            ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
             List<TypeValuePairType> details) {
         return addExportedEntity(
                 objectId,
                 participantObjectIdType,
                 ParticipantObjectTypeCode.System,
                 participantObjectTypeCodeRole,
-                participantObjectDataLifeCycle,
+                null,
                 details);
     }
 
