@@ -141,11 +141,12 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                 .addPatients(auditDataset);
         if (auditDataset.getAffectedResourceType() != null && auditDataset.getQueryString() != null) {
             builder.addQueryParticipantObject(auditDataset);
-        } else if (auditDataset.getResourceId() != null) {
+        } else if (auditDataset.getResourceId() != null &&
+                auditDataset.getResourceId().hasResourceType() &&
+                auditDataset.getResourceId().hasIdPart()) {
             builder.addResourceParticipantObject(auditDataset);
         }
         return builder.getMessages();
-
     }
 
     private void addResourceData(GenericFhirAuditDataset auditDataset, T resource) {
