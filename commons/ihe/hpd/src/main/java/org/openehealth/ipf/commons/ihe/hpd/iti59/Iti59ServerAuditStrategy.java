@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
@@ -25,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import java.util.Collections;
+
+import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.Translation;
 
 /**
  * @author Christian Ohr
@@ -50,9 +51,10 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
                 HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
                 requestItem.getParticipantObjectTypeCode(),
                 ParticipantObjectTypeCodeRole.Provider,
-                StringUtils.isBlank(requestItem.getNewUid())
+                requestItem.getParticipantObjectDataLifeCycle(),
+                Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
                         ? Collections.emptyList()
-                        : Collections.singletonList(builder.getTypeValuePair("new uid", requestItem.getNewUid())));
+                        : Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid())));
 
         return builder.getMessage();
     }

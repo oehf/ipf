@@ -17,10 +17,7 @@
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.event.DataImportBuilder;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
@@ -99,7 +96,7 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
             List<TypeValuePairType> details) {
         return addImportedEntity(objectId, participantObjectIdType, ParticipantObjectTypeCode.System,
-                participantObjectTypeCodeRole, details);
+                participantObjectTypeCodeRole, null, details);
     }
 
     public T addImportedEntity(
@@ -107,6 +104,7 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
             ParticipantObjectIdType participantObjectIdType,
             ParticipantObjectTypeCode participantObjectTypeCode,
             ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+            ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
             List<TypeValuePairType> details) {
             delegate.addParticipantObjectIdentification(
                     requireNonNull(participantObjectIdType, "Imported entity ID type must not be null"),
@@ -116,7 +114,7 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
                     objectId != null ? objectId : getAuditContext().getAuditValueIfMissing(),
                     participantObjectTypeCode,
                     participantObjectTypeCodeRole,
-                    null,
+                    participantObjectDataLifeCycle,
                     null);
         return self();
     }
