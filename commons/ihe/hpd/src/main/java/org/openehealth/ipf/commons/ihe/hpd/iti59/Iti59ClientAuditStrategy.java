@@ -49,14 +49,16 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
                 auditDataset.getPurposesOfUse()
         );
         builder.addExportedEntity(
-                requestItem.getUid(),
+                Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
+                        ? requestItem.getNewUid()
+                        : requestItem.getUid(),
                 HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
                 requestItem.getParticipantObjectTypeCode(),
                 ParticipantObjectTypeCodeRole.Provider,
                 requestItem.getParticipantObjectDataLifeCycle(),
                 Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
-                        ? Collections.emptyList()
-                        : Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid()))
+                        ? Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid()))
+                        : Collections.emptyList()
         );
         return builder.getMessage();
     }

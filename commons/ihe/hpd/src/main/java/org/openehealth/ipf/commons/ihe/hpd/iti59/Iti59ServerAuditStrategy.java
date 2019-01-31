@@ -44,17 +44,21 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
                 requestItem.getOutcomeDescription(),
                 requestItem.getActionCode(),
                 HpdEventTypeCode.ProviderInformationFeed,
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse()
+        );
 
         builder.addImportedEntity(
-                requestItem.getUid(),
+                Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
+                        ? requestItem.getNewUid()
+                        : requestItem.getUid(),
                 HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
                 requestItem.getParticipantObjectTypeCode(),
                 ParticipantObjectTypeCodeRole.Provider,
                 requestItem.getParticipantObjectDataLifeCycle(),
                 Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
-                        ? Collections.emptyList()
-                        : Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid())));
+                        ? Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid()))
+                        : Collections.emptyList()
+        );
 
         return builder.getMessage();
     }
