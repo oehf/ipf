@@ -147,7 +147,10 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                     } else if (resource instanceof DocumentReference) {
                         DocumentReference dr = (DocumentReference) resource;
                         for (DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
-                            expectedBinaryFullUrls.add(content.getAttachment().getUrl());
+                            String url = content.getAttachment().getUrl();
+                            if (!url.startsWith("http")) {
+                                expectedBinaryFullUrls.add(url);
+                            }
                         }
                         patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
                     } else if (resource instanceof ListResource) {
@@ -216,7 +219,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                     OperationOutcome.IssueType.INVALID,
                     null, null,
                     "DocumentReference with URLs %s referenced, but not present in this bundle",
-                    expectedBinaryFullUrls
+                    expectedReferenceFullUrls
             );
         }
 
