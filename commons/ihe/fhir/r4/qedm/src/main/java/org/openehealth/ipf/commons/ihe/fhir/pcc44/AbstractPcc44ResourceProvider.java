@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 
 // Must be public

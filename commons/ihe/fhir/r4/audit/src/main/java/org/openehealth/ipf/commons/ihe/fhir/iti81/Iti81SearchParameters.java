@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * @since 3.6
  */
 @Builder
 public class Iti81SearchParameters implements FhirSearchParameters {

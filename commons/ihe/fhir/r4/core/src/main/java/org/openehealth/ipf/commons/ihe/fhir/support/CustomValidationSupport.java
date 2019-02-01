@@ -30,7 +30,7 @@ import java.util.Scanner;
  * default.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 public class CustomValidationSupport extends DefaultProfileValidationSupport {
 

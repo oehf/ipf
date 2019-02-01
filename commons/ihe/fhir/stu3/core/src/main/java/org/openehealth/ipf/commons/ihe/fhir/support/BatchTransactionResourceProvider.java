@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * Resource provider for batch requests or transaction requests
  *
  * @author Christian Ohr
+ * @since 3.6
  */
 public class BatchTransactionResourceProvider extends SharedFhirProvider {
 

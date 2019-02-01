@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 public class Pcc44OptionsProvider implements FhirTransactionOptionsProvider<FhirQueryAuditDataset, Pcc44Options> {
 

@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  * bundle.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 public class AbstractNamingSystemServiceImpl implements NamingSystemService {
 

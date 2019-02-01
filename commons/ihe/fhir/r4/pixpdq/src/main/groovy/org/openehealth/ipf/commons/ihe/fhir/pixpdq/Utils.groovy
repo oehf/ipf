@@ -29,7 +29,7 @@ import org.openehealth.ipf.modules.hl7.dsl.Repeatable
  * Some common utilities used by FHIR translators
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.6
  */
 class Utils {
 

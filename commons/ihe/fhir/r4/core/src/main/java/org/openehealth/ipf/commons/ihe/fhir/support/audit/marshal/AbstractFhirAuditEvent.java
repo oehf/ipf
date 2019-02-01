@@ -35,6 +35,7 @@ import java.sql.Date;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 abstract class AbstractFhirAuditEvent implements SerializationStrategy {
 

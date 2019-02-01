@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- *
+ * @since 3.6
  */
 @Builder
 public class Iti78SearchParameters implements FhirSearchParameters {

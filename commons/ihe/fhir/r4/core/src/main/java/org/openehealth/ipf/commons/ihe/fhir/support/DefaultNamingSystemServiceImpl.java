@@ -31,7 +31,7 @@ import java.net.URL;
  * resources using a Reader or from a FHIR server.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceImpl {
 

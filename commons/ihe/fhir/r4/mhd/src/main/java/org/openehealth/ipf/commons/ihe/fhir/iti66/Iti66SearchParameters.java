@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * @since 3.6
  */
 @Builder @ToString
 public class Iti66SearchParameters implements FhirSearchParameters {

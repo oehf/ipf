@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
  * @author Christian Ohr
- * @since 3.5
+ * @since 3.6
  */
 public class Iti68AuditDataset extends FhirAuditDataset {
 

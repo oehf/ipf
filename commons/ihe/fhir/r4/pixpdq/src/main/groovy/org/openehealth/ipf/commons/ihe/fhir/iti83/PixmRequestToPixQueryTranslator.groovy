@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull
  * Translates a {@link IBaseResource} into a HL7v2 PIX Query message
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
 

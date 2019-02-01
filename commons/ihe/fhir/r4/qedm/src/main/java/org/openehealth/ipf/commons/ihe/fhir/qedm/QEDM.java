@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.qedm;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.*;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44ClientRequestFactory;
 
 import java.util.Arrays;
@@ -32,7 +29,7 @@ import java.util.List;
 
 /**
  * @author Christian Ohr
- * @since 3.5
+ * @since 3.6
  */
 public class QEDM implements IntegrationProfile {
 

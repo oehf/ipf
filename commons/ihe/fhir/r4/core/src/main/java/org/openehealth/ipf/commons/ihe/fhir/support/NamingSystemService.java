@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * caching all known naming systems and select specific ones.
  *
  * @author Christian Ohr
- * @since 3.3
+ * @since 3.6
  */
 public interface NamingSystemService {
 

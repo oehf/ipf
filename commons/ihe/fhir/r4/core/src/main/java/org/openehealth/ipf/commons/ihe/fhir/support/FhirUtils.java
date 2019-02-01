@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * Common utilities for handling FHIR resources
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 public final class FhirUtils {
 

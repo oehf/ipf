@@ -21,6 +21,7 @@ import ca.uhn.fhir.parser.IParser;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 public class FhirAuditXmlEvent extends AbstractFhirAuditEvent {
 

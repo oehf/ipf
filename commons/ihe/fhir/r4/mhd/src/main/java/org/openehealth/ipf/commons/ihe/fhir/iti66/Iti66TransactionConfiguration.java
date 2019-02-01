@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
  * Standard Configuration for Iti66Component. Supports lazy-loading by default.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 public class Iti66TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
 

@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull
  * FHIR framework
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.6
  */
 class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Message> {
 

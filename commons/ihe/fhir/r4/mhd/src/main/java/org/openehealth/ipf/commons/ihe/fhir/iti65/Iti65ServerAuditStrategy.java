@@ -27,6 +27,7 @@ import java.util.Collections;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 public class Iti65ServerAuditStrategy extends Iti65AuditStrategy {
 

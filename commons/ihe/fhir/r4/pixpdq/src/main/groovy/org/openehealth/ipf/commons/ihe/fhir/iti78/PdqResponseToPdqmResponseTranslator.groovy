@@ -49,7 +49,7 @@ import static java.util.Objects.requireNonNull
  * about whether to generate a bundle or a single patient resource.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.6
  */
 class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 

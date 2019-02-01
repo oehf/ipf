@@ -35,7 +35,7 @@ import java.util.Set;
  * MedicationRequest Resource Provider for QEDm (PCC-44)
  *
  * @author Christian Ohr
- * @since 3.5
+ * @since 3.6
  */
 public class MedicationRequestResourceProvider extends AbstractPcc44ResourceProvider<MedicationRequest> {
 

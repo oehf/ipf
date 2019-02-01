@@ -31,8 +31,7 @@ import static org.hl7.fhir.r4.model.NamingSystem.NamingSystemIdentifierType.*;
  * with a uniqueID of a certain type and returning a unique ID with a different type.
  *
  * @author Christian Ohr
- * @since 3.4
- *
+ * @since 3.6
  */
 public class NamingSystemUriMapper extends AbstractUriMapper {
 

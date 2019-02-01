@@ -24,6 +24,7 @@ import java.util.Comparator;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 public class OperationOutcomeOperations implements IBaseOperationOutcomeOperations {
 

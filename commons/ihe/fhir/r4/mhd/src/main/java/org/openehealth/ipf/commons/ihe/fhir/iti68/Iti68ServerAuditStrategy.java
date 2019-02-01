@@ -30,6 +30,7 @@ import java.util.Map;
 
 /**
  * @author Christian Ohr
+ * @since 3.6
  */
 public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDataset> {
 
