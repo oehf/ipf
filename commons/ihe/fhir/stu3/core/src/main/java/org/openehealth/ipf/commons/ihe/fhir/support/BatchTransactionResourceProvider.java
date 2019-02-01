@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.rest.annotation.Transaction;
 import ca.uhn.fhir.rest.annotation.TransactionParam;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
 
@@ -47,9 +48,10 @@ public class BatchTransactionResourceProvider extends SharedFhirProvider {
     @SuppressWarnings("unused")
     @Transaction
     public Bundle provideResponseBundle(@TransactionParam Bundle bundle,
+                                        RequestDetails requestDetails,
                                         HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse) {
-        return requestTransaction(bundle, Bundle.class, httpServletRequest, httpServletResponse);
+        return requestTransaction(bundle, Bundle.class, httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }
