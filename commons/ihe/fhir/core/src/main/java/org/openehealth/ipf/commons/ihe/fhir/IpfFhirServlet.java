@@ -24,6 +24,7 @@ import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import lombok.Getter;
@@ -217,6 +218,20 @@ public class IpfFhirServlet extends RestfulServer {
         return narrativeGenerator;
     }
 
+    /**
+     * @return the logging interceptor if {@link #logging} is true
+     */
+    protected IServerInterceptor getLoggingInterceptor() {
+        LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
+        loggingInterceptor.setLoggerName(IpfFhirServlet.class.getName());
+
+        // This is the format for each line. A number of substitution variables may
+        // be used here. See the JavaDoc for LoggingInterceptor for information on
+        // what is available.
+        loggingInterceptor.setMessageFormat("Source[${remoteAddr}] Operation[${operationType} ${idOrResourceName}] User-Agent[${requestHeader.user-agent}] Params[${requestParameters}]");
+        return loggingInterceptor;
+    }
+
     @Override
     public void setFhirContext(FhirContext fhirContext) {
         super.setFhirContext(fhirContext);
@@ -230,7 +245,7 @@ public class IpfFhirServlet extends RestfulServer {
      * @throws ServletException
      */
     @Override
-    protected void initialize() throws ServletException {
+    protected void initialize() {
         if (fhirContext == null) {
             setFhirContext(new FhirContext(fhirVersion));
 
@@ -247,24 +262,18 @@ public class IpfFhirServlet extends RestfulServer {
         registerInterceptor(new RequestDetailProvider());
 
         if (logging) {
-            LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
-            registerInterceptor(loggingInterceptor);
-            loggingInterceptor.setLoggerName(IpfFhirServlet.class.getName());
-
-            // This is the format for each line. A number of substitution variables may
-            // be used here. See the JavaDoc for LoggingInterceptor for information on
-            // what is available.
-            loggingInterceptor.setMessageFormat("Source[${remoteAddr}] Operation[${operationType} ${idOrResourceName}] User-Agent[${requestHeader.user-agent}] Params[${requestParameters}]");
+            registerInterceptor(getLoggingInterceptor());
         }
 
         if (responseHighlighting) {
-            ResponseHighlighterInterceptor interceptor = new ResponseHighlighterInterceptor();
-            registerInterceptor(interceptor);
+            registerInterceptor(new ResponseHighlighterInterceptor());
         }
 
         setPagingProvider(getDefaultPagingProvider(pagingProviderSize));
         setDefaultPrettyPrint(prettyPrint);
     }
+
+
 
 
 }

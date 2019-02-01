@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -50,6 +51,7 @@ public abstract class AbstractPcc44ResourceProvider<T extends IBaseResource> ext
      * its ID.
      *
      * @param id                  resource ID
+     * @param requestDetails      request details
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return {@link DocumentManifest} resource
@@ -58,10 +60,11 @@ public abstract class AbstractPcc44ResourceProvider<T extends IBaseResource> ext
     @Read(version = true)
     public T retrieve(
             @IdParam IdType id,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         // Run down the route
-        return requestResource(id, clazz, httpServletRequest, httpServletResponse);
+        return requestResource(id, null, clazz, httpServletRequest, httpServletResponse, requestDetails);
     }
 }

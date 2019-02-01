@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import org.hl7.fhir.dstu3.model.*;
@@ -56,6 +57,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
             @IdParam(optional = true) IdType resourceId,
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifierParam,
             @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -74,7 +76,8 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
         inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
 
         // Run down the route
-        return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);
+        return requestResource(inParams, null, Parameters.class,
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

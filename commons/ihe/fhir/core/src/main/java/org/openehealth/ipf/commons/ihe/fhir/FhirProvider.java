@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 
 import javax.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
@@ -92,9 +93,11 @@ public abstract class FhirProvider implements Serializable {
      *
      * @param parameters         query parameters
      * @param httpServletRequest servlet request
+     * @param requestDetails     request details
      * @return enriched map of parameters
      */
-    protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest) {
+    protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest,
+                                                   RequestDetails requestDetails) {
         // Populate some headers.
         Map<String, Object> enriched = new HashMap<>();
         enriched.put(Constants.HTTP_URI, httpServletRequest.getRequestURI());
@@ -119,6 +122,9 @@ public abstract class FhirProvider implements Serializable {
 
         if (parameters != null) {
             enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
+        }
+        if (requestDetails != null) {
+            enriched.put(Constants.FHIR_REQUEST_DETAILS, requestDetails);
         }
         return enriched;
     }

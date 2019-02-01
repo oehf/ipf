@@ -20,7 +20,8 @@ import org.hl7.fhir.r4.model.DocumentManifest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.ihe.fhir.support.FhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
 
     public Iti65AuditStrategy(boolean serverSide) {
-        super(serverSide);
+        super(serverSide, OperationOutcomeOperations.INSTANCE);
     }
 
     @Override

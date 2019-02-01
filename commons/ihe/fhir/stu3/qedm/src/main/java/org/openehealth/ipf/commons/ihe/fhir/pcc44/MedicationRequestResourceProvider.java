@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.dstu3.model.MedicationRequest;
@@ -51,6 +52,7 @@ public class MedicationRequestResourceProvider extends AbstractPcc44ResourceProv
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             @IncludeParam(reverse = true) Set<Include> revIncludeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -65,7 +67,8 @@ public class MedicationRequestResourceProvider extends AbstractPcc44ResourceProv
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, ResourceType.MedicationRequest.name(), httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.MedicationRequest.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

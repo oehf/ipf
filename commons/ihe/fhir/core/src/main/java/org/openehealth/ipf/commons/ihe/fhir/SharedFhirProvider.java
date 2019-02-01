@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,15 +85,34 @@ public abstract class SharedFhirProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
+     *
+     * @deprecated use {@link #requestTransaction(Object, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <T extends IBaseBundle> T requestTransaction(
             Object payload,
             Class<T> bundleClass,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
+        return requestTransaction(payload, bundleClass, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Submits a transaction request bundle, expecting a corresponding response bundle
+     *
+     * @param payload             transaction bundle
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @return result of processing
+     */
+    protected final <T extends IBaseBundle> T requestTransaction(
+            Object payload,
+            Class<T> bundleClass,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
-        Map<String, Object> headers = enrichParameters(null, httpServletRequest);
+        Map<String, Object> headers = enrichParameters(null, httpServletRequest, requestDetails);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }
 

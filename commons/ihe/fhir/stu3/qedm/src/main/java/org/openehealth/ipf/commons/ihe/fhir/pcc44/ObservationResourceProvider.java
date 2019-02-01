@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.*;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.ResourceType;
@@ -53,6 +54,7 @@ public class ObservationResourceProvider extends AbstractPcc44ResourceProvider<O
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             @IncludeParam(reverse = true) Set<Include> revIncludeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -70,7 +72,8 @@ public class ObservationResourceProvider extends AbstractPcc44ResourceProvider<O
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, ResourceType.Observation.name(), httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.Observation.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 

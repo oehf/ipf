@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -55,6 +56,7 @@ public class ConditionResourceProvider extends AbstractPcc44ResourceProvider<Con
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             @IncludeParam(reverse = true) Set<Include> revIncludeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -71,7 +73,8 @@ public class ConditionResourceProvider extends AbstractPcc44ResourceProvider<Con
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, ResourceType.Condition.name(), httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.Condition.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

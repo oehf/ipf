@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import ca.uhn.fhir.rest.param.TokenParam;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -38,8 +37,8 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
  */
 public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset> {
 
-    protected FhirQueryAuditStrategy(boolean serverSide) {
-        super(serverSide);
+    protected FhirQueryAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations) {
+        super(serverSide, operations);
     }
 
     /**

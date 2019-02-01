@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -56,6 +57,7 @@ public class DiagnosticReportResourceProvider extends AbstractPcc44ResourceProvi
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             @IncludeParam(reverse = true) Set<Include> revIncludeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -73,7 +75,8 @@ public class DiagnosticReportResourceProvider extends AbstractPcc44ResourceProvi
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, parameters, ResourceType.DiagnosticReport.name(), httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, parameters, ResourceType.DiagnosticReport.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

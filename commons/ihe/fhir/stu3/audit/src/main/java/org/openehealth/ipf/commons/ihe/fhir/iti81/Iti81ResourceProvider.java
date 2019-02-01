@@ -20,10 +20,12 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import org.hl7.fhir.dstu3.model.AuditEvent;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +57,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -76,7 +79,8 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, ResourceType.AuditEvent.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
 
     }
 

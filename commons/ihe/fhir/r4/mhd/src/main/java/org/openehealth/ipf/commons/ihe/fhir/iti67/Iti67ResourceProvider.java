@@ -20,12 +20,10 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
@@ -71,6 +69,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -102,7 +101,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         }
 
         // Run down the route
-        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, ResourceType.DocumentReference.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
     /**
@@ -113,16 +113,19 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
      * @param id                  resource ID
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
+     * @param requestDetails      request details
      * @return {@link DocumentReference} resource
      */
     @SuppressWarnings("unused")
     @Read(version = true, type = DocumentReference.class)
     public DocumentReference documentReferenceRetrieve(
             @IdParam IdType id,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
         if (id == null) throw new InvalidRequestException("Must provide ID with READ request");
         // Run down the route
-        return requestResource(id, DocumentReference.class, httpServletRequest, httpServletResponse);
+        return requestResource(id, null, DocumentReference.class,
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 }

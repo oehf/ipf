@@ -26,12 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Track the {@link RequestDetails} and make it available to downstream processing. This
- * needs to be thread local, because the request details are normally not forwarded to
- * the resource provider methods.
+ * Track the {@link RequestDetails} and make it available to downstream processing.
  *
  * @author Christian Ohr
  * @since 3.5
+ *
+ * @deprecated simply use a RequestDetails parameter in the resource provider
  */
 public class RequestDetailProvider extends InterceptorAdapter {
 

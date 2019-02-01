@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.instance.model.api.IBaseCoding;
+import org.hl7.fhir.instance.model.api.IBaseReference;
 import org.hl7.fhir.instance.model.api.IDomainResource;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -30,7 +31,6 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 import org.openehealth.ipf.commons.ihe.fhir.RequestDetailProvider;
-import org.openehealth.ipf.commons.ihe.fhir.audit.GenericFhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
 import java.util.List;
@@ -50,14 +50,16 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  */
 public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
-    private Function<T, Optional<Reference>> patientIdExtractor;
+    private Function<T, Optional<IBaseReference>> patientIdExtractor;
 
     /**
      * @param serverSide         server side auditing
+     * @param operations         operations for accessthe FHIR version-specific OperationOutcome
      * @param patientIdExtractor function that extracts a patient reference from a domain resource
      */
-    public GenericFhirAuditStrategy(boolean serverSide, Function<T, Optional<Reference>> patientIdExtractor) {
-        super(serverSide);
+    public GenericFhirAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations,
+                                    Function<T, Optional<IBaseReference>> patientIdExtractor) {
+        super(serverSide, operations);
         this.patientIdExtractor = requireNonNull(patientIdExtractor);
     }
 
@@ -69,18 +71,23 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     @Override
     public GenericFhirAuditDataset enrichAuditDatasetFromRequest(GenericFhirAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+        RequestDetails requestDetails = (RequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
+        if (requestDetails == null) {
+            requestDetails = RequestDetailProvider.getRequestDetails();
+        }
 
         String resourceType = (String) parameters.get(FHIR_RESOURCE_TYPE_HEADER);
-        if (resourceType == null && RequestDetailProvider.getRequestDetails() != null) {
-            resourceType = RequestDetailProvider.getRequestDetails().getResourceName();
+        if (resourceType == null && requestDetails != null) {
+            resourceType = requestDetails.getResourceName();
         }
         auditDataset.setAffectedResourceType(resourceType);
 
         RestOperationTypeEnum operation = (RestOperationTypeEnum) parameters.get(FHIR_OPERATION_HEADER);
-        if (operation == null && RequestDetailProvider.getRequestDetails() != null) {
-            operation = RequestDetailProvider.getRequestDetails().getRestOperationType();
+        if (operation == null && requestDetails != null) {
+            operation = requestDetails.getRestOperationType();
         }
         auditDataset.setOperation(operation);
+
 
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (request instanceof IDomainResource) {
@@ -157,7 +164,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         patientIdExtractor.apply(resource).ifPresent(patient ->
                 auditDataset.getPatientIds().add(patient.getResource() != null ?
                         patient.getResource().getIdElement().toUnqualifiedVersionless().getValue() :
-                        patient.getReference()));
+                        patient.getReferenceElement().getValue()));
 
         List<? extends IBaseCoding> securityLabels = resource.getMeta().getSecurity();
         if (!securityLabels.isEmpty()) {

@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +83,8 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> R requestResource(
             Object payload, Class<R> resultType,
@@ -99,13 +102,34 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> R requestResource(
             Object payload, FhirSearchParameters parameters, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return requestResource(payload, parameters, resultType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a single resource with parameters
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param parameters          FHIR parameters
+     * @param resultType          expected result type
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @param <R>                 Result type
+     * @return result of processing
+     */
+    protected final <R extends IBaseResource> R requestResource(
+            Object payload, FhirSearchParameters parameters, Class<R> resultType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleResourceRequest(payload, headers, resultType);
     }
 
@@ -117,6 +141,8 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
                                                                     HttpServletRequest httpServletRequest,
@@ -133,6 +159,8 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
@@ -150,14 +178,36 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return requestBundle(payload, parameters, resourceType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a list of resources with parameters
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param parameters          FHIR search parameters
+     * @param resourceType        FHIR resource type being searched
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @param <R>                 Result type
+     * @return result of processing
+     */
+    protected final <R extends IBaseResource> List<R> requestBundle(
+            Object payload, FhirSearchParameters parameters,
+            String resourceType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -174,6 +224,8 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return IBundleProvider
+     *
+     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
@@ -192,14 +244,38 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return IBundleProvider
+     *
+     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return requestBundleProvider(payload, searchParameters, resourceType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
+     * bundles. The type of the returned {@link IBundleProvider} instance is determined
+     * by the {@link #consumer RequestConsumer} impelmentation.
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param searchParameters    FHIR search parameters
+     * @param resourceType        FHIR resource type
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @return IBundleProvider
+     */
+    protected final IBundleProvider requestBundleProvider(
+            Object payload, FhirSearchParameters searchParameters,
+            String resourceType,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest);
+        Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -213,6 +289,8 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
+     *
+     * @deprecated use {@link #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final MethodOutcome requestAction(
             Object payload,
@@ -229,15 +307,35 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
+     *
+     * @deprecated use #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)
      */
     protected final MethodOutcome requestAction(
             Object payload,
             FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
+        return requestAction(payload, parameters, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Submits a resource to be created or updated
+     *
+     * @param payload             resource payload
+     * @param parameters          parameters
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @return result of processing
+     */
+    protected final MethodOutcome requestAction(
+            Object payload,
+            FhirSearchParameters parameters,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleAction(payload, headers);
     }
 
