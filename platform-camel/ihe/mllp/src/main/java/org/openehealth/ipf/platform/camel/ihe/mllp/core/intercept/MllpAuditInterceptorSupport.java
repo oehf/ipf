@@ -128,13 +128,13 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(Exchange exchange, Message msg) {
+        AuditDatasetType auditDataset = getAuditStrategy().createAuditDataset();
         try {
-            AuditDatasetType auditDataset = getAuditStrategy().createAuditDataset();
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             return getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from request", e);
-            return null;
+            LOG.warn("Exception when enriching audit dataset from request", e);
+            return auditDataset;
         }
     }
 
@@ -146,7 +146,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
         try {
             getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, msg, auditContext);
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from response", e);
+            LOG.warn("Exception when enriching audit dataset from response", e);
         }
     }
 
@@ -162,7 +162,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
                     !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
                     getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
-            LOG.error("Exception when determining message auditability, no audit will be performed", e);
+            LOG.warn("Exception when determining message auditability, no audit will be performed", e);
             return false;
         }
     }

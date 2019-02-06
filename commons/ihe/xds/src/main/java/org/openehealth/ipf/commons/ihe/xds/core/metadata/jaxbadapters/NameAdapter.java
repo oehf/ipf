@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XpnName;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XcnName;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -40,21 +40,20 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * serialized without change.
  * @author Michael Ottati
  */
-public class NameAdapter extends XmlAdapter<XpnName, Name> {
+public class NameAdapter extends XmlAdapter<XcnName, Name> {
     @Override
-    public Name unmarshal(XpnName v) throws Exception {
+    public Name unmarshal(XcnName v) throws Exception {
         return v;
     }
 
     @Override
-    public XpnName marshal(Name v) throws Exception {
-
-        return new XpnName( v.getFamilyName(),
-                            v.getGivenName(),
-                            v.getSecondAndFurtherGivenNames(),
-                            v.getSuffix(),
-                            v.getPrefix(),
-                            v.getDegree()
+    public XcnName marshal(Name v) throws Exception {
+        return new XcnName(v.getFamilyName(),
+                           v.getGivenName(),
+                           v.getSecondAndFurtherGivenNames(),
+                           v.getSuffix(),
+                           v.getPrefix(),
+                           v.getDegree()
         );
     }
 }

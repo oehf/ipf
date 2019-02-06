@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti30.Iti30AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31.Iti31AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
 
@@ -39,24 +37,26 @@ public class PAM implements IntegrationProfile {
     public enum Interactions implements Hl7v2InteractionId<FeedAuditDataset> {
         ITI_30 {
             @Override
-            public void init(List<? extends HL7v2TransactionOption> options) {
+            public void init(Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider,
+                             List<? extends Hl7v2TransactionOptions> options) {
                 init("pam-iti30",
                         "Patient Identity Management",
                         false,
-                        new Iti30AuditStrategy(false),
-                        new Iti30AuditStrategy(true),
+                        optionsProvider.getAuditStrategy(false),
+                        optionsProvider.getAuditStrategy(true),
                         PamTransactions.ITI30,
                         options);
             }
         },
         ITI_31 {
             @Override
-            public void init(List<? extends HL7v2TransactionOption> options) {
+            public void init(Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider,
+                             List<? extends Hl7v2TransactionOptions> options) {
                 init("pam-iti31",
                         "Patient Encounter Management",
                         false,
-                        new Iti31AuditStrategy(false),
-                        new Iti31AuditStrategy(true),
+                        optionsProvider.getAuditStrategy(false),
+                        optionsProvider.getAuditStrategy(true),
                         PamTransactions.ITI31,
                         options);
             }
@@ -72,7 +72,7 @@ public class PAM implements IntegrationProfile {
                 AuditStrategy<FeedAuditDataset> clientAuditStrategy,
                 AuditStrategy<FeedAuditDataset> serverAuditStrategy,
                 PamTransactions pamTransactions,
-                List<? extends HL7v2TransactionOption> options)
+                List<? extends Hl7v2TransactionOptions> options)
         {
             this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration<>(
                     name,
@@ -86,7 +86,7 @@ public class PAM implements IntegrationProfile {
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
                     new String[]{"ADT"},
-                    new String[]{HL7v2TransactionOption.concatAllToString(options)},
+                    new String[]{Hl7v2TransactionOptions.concatAllToString(options)},
                     new String[]{"ACK"},
                     new String[]{"*"},
                     new boolean[]{true},

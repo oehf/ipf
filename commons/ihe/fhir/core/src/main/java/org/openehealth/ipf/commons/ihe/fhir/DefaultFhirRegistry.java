@@ -61,17 +61,27 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     @Override
     public void register(Object resourceProvider) {
-        resourceProviders.add(resourceProvider);
-        for (RestfulServer servlet : servlets) {
-            servlet.registerProvider(resourceProvider);
+        if (!(resourceProvider instanceof FhirProvider) || ((FhirProvider)resourceProvider).requiresRegistration()) {
+            if (resourceProviders.add(resourceProvider)) {
+                for (RestfulServer servlet : servlets) {
+                    servlet.registerProvider(resourceProvider);
+                }
+            } else {
+                LOG.warn("Resource Provider {} was already registered. Ignored registration.", resourceProvider);
+            }
         }
     }
 
     @Override
-    public void unregister(Object resourceProvider) throws Exception {
-        resourceProviders.remove(resourceProvider);
-        for (RestfulServer provider : servlets) {
-            provider.unregisterProvider(resourceProvider);
+    public void unregister(Object resourceProvider) {
+        if (!(resourceProvider instanceof FhirProvider) || ((FhirProvider)resourceProvider).requiresDeregistration()) {
+            if (resourceProviders.remove(resourceProvider)) {
+                for (RestfulServer provider : servlets) {
+                    provider.unregisterProvider(resourceProvider);
+                }
+            } else {
+                LOG.warn("Resource Provider {} was not registered. Ignored deregistration.", resourceProvider);
+            }
         }
     }
 

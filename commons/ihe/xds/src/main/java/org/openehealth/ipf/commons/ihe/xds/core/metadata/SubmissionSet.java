@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,6 +71,7 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
         return authors.isEmpty() ? null : authors.get(0);
     }
 
+    @JsonProperty
     public void setSubmissionTime(Timestamp submissionTime) {
         this.submissionTime = submissionTime;
     }

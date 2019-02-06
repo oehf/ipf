@@ -15,7 +15,7 @@
 
     <modules>
         <module>core</module>
-        <module>dstu2</module>
+        <module>r4</module>
         <module>stu3</module>
     </modules>
 

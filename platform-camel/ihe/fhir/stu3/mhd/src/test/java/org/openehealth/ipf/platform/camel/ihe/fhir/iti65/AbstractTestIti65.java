@@ -131,6 +131,12 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
         return bundle;
     }
 
+    protected Bundle thisSucks() {
+        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        bundle.getMeta().addProfile("http://thissucks.com");
+        return bundle;
+    }
+
     protected Bundle sendManually(Bundle bundle) {
         return client.transaction().withBundle(bundle).execute();
     }

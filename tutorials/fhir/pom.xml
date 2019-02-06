@@ -35,11 +35,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir-dstu2-test</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-stu3-test</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
         </dependency>

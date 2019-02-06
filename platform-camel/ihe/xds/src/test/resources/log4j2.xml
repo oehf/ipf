@@ -9,6 +9,8 @@
     </Appenders>
     
     <Loggers>
+        <Logger name="org.openehealth.ipf.commons.ihe.core.payload" level="DEBUG"/>
+
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>
         </Root>

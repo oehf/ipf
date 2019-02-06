@@ -24,12 +24,12 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset
  * Groovy  audit strategy utils for ITI-9 (PIX Query).
  * @author Dmytro Rud
  */
-class Iti9AuditStrategyUtils  {    
+class Iti9AuditStrategyUtils {
 
     static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Message msg, Map<String, Object> parameters) {
-        if(msg.QPD) {
+        if (msg.QPD) {
             def patientId = msg.QPD[3].encode()
-            if(patientId) { 
+            if (patientId) {
                 auditDataset.patientIds = [patientId]
             }
         }
@@ -38,12 +38,12 @@ class Iti9AuditStrategyUtils  {
         auditDataset.payload = AuditUtils.getRequestString(parameters, msg)
     }
 
-    
+
     static boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg, AuditContext auditContext) {
-        if (msg.MSH[9][1].value == 'RSP' && msg.MSH[9][2].value == 'K23' && !msg.QUERY_RESPONSE?.PID?.empty) {
+        if (msg.MSH[9][1]?.value == 'RSP' && msg.MSH[9][2]?.value == 'K23' && !msg.QUERY_RESPONSE?.PID?.empty) {
             if (auditContext.isIncludeParticipantsFromResponse()) {
-                def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE.PID[3])
-                if ((!auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
+                def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE?.PID[3])
+                if ((!auditDataset.patientIds) || patientIds?.contains(auditDataset.patientIds[0])) {
                     auditDataset.patientIds = patientIds
                 } else {
                     patientIds << auditDataset.patientIds[0]

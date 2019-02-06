@@ -23,7 +23,6 @@ import ca.uhn.hl7v2.model.v25.segment.EVN;
 import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import java.util.List;
@@ -48,7 +47,6 @@ public class ADT_A43 extends AbstractMessage {
         s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
         s.put(EVN.class, Cardinality.REQUIRED);
         s.put(ADT_A43_PATIENT.class, Cardinality.REQUIRED_REPEATING);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

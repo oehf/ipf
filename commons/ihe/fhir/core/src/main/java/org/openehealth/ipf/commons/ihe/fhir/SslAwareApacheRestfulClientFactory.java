@@ -37,6 +37,7 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,11 +50,16 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
     private HttpClient httpClient;
     private HttpHost proxy;
     private FhirSecurityInformation securityInformation;
+    private final Optional<HttpClientBuilder> httpClientBuilder;
 
     public SslAwareApacheRestfulClientFactory(FhirContext theFhirContext) {
-        super(theFhirContext);
+        this(theFhirContext, Optional.empty());
     }
 
+    public SslAwareApacheRestfulClientFactory(FhirContext fhirContext, Optional<HttpClientBuilder> httpClientBuilder) {
+        super(fhirContext);
+        this.httpClientBuilder = httpClientBuilder;
+    }
     @Override
     protected IHttpClient getHttpClient(String theServerBase) {
         return new ApacheHttpClient(getNativeHttpClient(), new StringBuilder(theServerBase), null, null, null, null);
@@ -101,13 +107,15 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
     }
 
     /**
-     * Possibility to instantiate a subclassed HttpClientBuilder. The default implementation
-     * calls {@link HttpClients#custom()}.
+     * Possibility to instantiate a subclassed HttpClientBuilder for building HttpClients. This can be useful
+     * if e.g. created HttpClients need to be instrumented or specially configured.
+     *
+     * The default implementation uses (if present) {@link #httpClientBuilder} or else calls {@link HttpClients#custom()}.
      *
      * @return HttpClientBuilder instance
      */
     protected HttpClientBuilder newHttpClientBuilder() {
-        return HttpClients.custom();
+        return httpClientBuilder.orElse(HttpClients.custom());
     }
 
     protected synchronized HttpClient getNativeHttpClient() {
@@ -144,7 +152,6 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
             }
 
             // Chance to override or instrument
-            ;
 
             httpClient = customizeHttpClientBuilder(builder).build();
         }

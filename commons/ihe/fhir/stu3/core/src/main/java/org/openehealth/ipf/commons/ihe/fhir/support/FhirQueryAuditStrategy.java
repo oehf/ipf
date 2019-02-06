@@ -35,6 +35,8 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
  *
  * @author Christian Ohr
  * @since 3.4
+ *
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy}
  */
 public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset> {
 

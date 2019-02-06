@@ -21,11 +21,8 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
+import org.openehealth.ipf.commons.ihe.fhir.*;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -43,15 +40,14 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
-    private FhirInteractionId fhirInteractionId;
+    private FhirInteractionId<AuditDatasetType> fhirInteractionId;
 
-
-    public FhirComponent(FhirInteractionId fhirInteractionId) {
+    public FhirComponent(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
     }
 
-    public FhirComponent(CamelContext context, FhirInteractionId fhirInteractionId) {
+    public FhirComponent(CamelContext context, FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         super(context, FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
     }
@@ -63,7 +59,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @param resourceProvider the resource provider
      * @throws Exception can be thrown
      */
-    public void connect(FhirConsumer<AuditDatasetType> consumer, AbstractPlainProvider resourceProvider) throws Exception {
+    public void connect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) {
         String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
         DefaultFhirRegistry.getFhirRegistry(name).register(resourceProvider);
     }
@@ -74,7 +70,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @param consumer the consumer
      * @throws Exception can be thrown
      */
-    public void disconnect(FhirConsumer<AuditDatasetType> consumer, AbstractPlainProvider resourceProvider) throws Exception {
+    public void disconnect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) throws Exception {
         String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
         DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
     }
@@ -131,10 +127,10 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     protected abstract FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
 
     /**
-     * @return static component-specific configuration
+     * @return component-specific configuration
      */
     public FhirTransactionConfiguration<AuditDatasetType> getFhirTransactionConfiguration() {
-        return fhirInteractionId.getFhirTransactionConfiguration();
+        return getInteractionId().getFhirTransactionConfiguration();
     }
 
     @Override
@@ -147,7 +143,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         return getFhirTransactionConfiguration().getClientAuditStrategy();
     }
 
-    public FhirInteractionId getInteractionId() {
+    public FhirInteractionId<AuditDatasetType> getInteractionId() {
         return fhirInteractionId;
     }
 
@@ -155,7 +151,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * Sets the FHIR interactionID. Prefer setting the interactionId
      * @param fhirInteractionId
      */
-    public void setFhirInteractionId(FhirInteractionId fhirInteractionId) {
+    public void setFhirInteractionId(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
         this.fhirInteractionId = fhirInteractionId;
     }
 }

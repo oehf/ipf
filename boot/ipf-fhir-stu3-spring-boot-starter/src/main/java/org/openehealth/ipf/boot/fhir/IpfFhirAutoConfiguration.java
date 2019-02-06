@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Configuration
@@ -114,7 +115,7 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IPagingProvider.class)
-    @ConditionalOnProperty("ipf.fhir.caching")
+    @ConditionalOnProperty(value = "ipf.fhir.caching", havingValue = "true")
     public IPagingProvider pagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         CachingPagingProvider pagingProvider = new CachingPagingProvider(cacheManager, fhirContext);
@@ -130,23 +131,22 @@ public class IpfFhirAutoConfiguration {
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            @Autowired(required = false) IPagingProvider pagingProvider,
+            Optional<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
-        IpfFhirServlet fhirServlet = new IpfFhirServlet(fhirContext);
+        IpfFhirServlet fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
-
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
         fhirServlet.setStrictErrorHandler(servletProperties.isStrict());
         fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
+        fhirServlet.setPagingProviderSize(servletProperties.getPagingRequests());
+        fhirServlet.setMaximumPageSize(servletProperties.getMaxPageSize());
+        fhirServlet.setDefaultPageSize(servletProperties.getDefaultPageSize());
         if (narrativeGenerator != null) {
             fhirServlet.setNarrativeGenerator(narrativeGenerator);
-        }
-        if (pagingProvider != null) {
-            fhirServlet.setPagingProvider(pagingProvider);
         }
         return fhirServlet;
     }

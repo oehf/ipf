@@ -21,8 +21,6 @@ import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
 import org.hl7.fhir.dstu3.model.ContactPoint
 import org.hl7.fhir.dstu3.model.HumanName
-import org.hl7.fhir.dstu3.model.codesystems.ContactPointSystem
-import org.hl7.fhir.dstu3.model.codesystems.ContactPointUse
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

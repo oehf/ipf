@@ -102,17 +102,11 @@
     <sch:pattern is-a="check-value-count-is-1" id="x5">
         <sch:param name="element" value="hl7:livingSubjectName" />
     </sch:pattern>
-    <sch:pattern is-a="check-value-count-is-1" id="x6">
-        <sch:param name="element" value="hl7:patientAddress" />
-    </sch:pattern>
     <sch:pattern is-a="check-value-count-is-1" id="x7">
         <sch:param name="element" value="hl7:principalCareProviderId" />
     </sch:pattern>
     <sch:pattern is-a="check-value-count-is-1" id="x8">
         <sch:param name="element" value="hl7:mothersMaidenName" />
-    </sch:pattern>
-    <sch:pattern is-a="check-value-count-is-1" id="x9">
-        <sch:param name="element" value="hl7:patientTelecom" />
     </sch:pattern>
 
 
@@ -175,10 +169,10 @@
 
         <sch:rule context="/hl7:PRPA_IN201305UV02[hl7:controlActProcess/hl7:queryByParameter/hl7:responsePriorityCode/@code = 'D']">
             <sch:assert test="count(hl7:respondTo) = 1">
-                exactly one respondTo element must be present when responsePriorityCode equals 'D'
+                exactly one respondTo element must be present when responsePriorityCode equals to 'D'
             </sch:assert>
             <sch:assert test="hl7:respondTo[1]/hl7:telecom/@value">
-                deferred response URI must be specified when responsePriorityCode equals 'D'
+                deferred response URI must be specified when responsePriorityCode equals to 'D'
             </sch:assert>
         </sch:rule>
     </sch:pattern>

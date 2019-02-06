@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.options;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Options for ITI-30
  */
-public enum Iti30Options implements HL7v2TransactionOption {
+public enum Iti30Options implements Hl7v2TransactionOptions {
 
     MERGE("A28", "A31", "A40", "A47"),
     LINK_UNLINK("A24", "A28", "A31", "A37", "A47");

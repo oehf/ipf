@@ -36,5 +36,6 @@ public interface Hl7v2InteractionId<T extends MllpAuditDataset> extends Interact
      * Optional initialization with dynamic TransactionOptions
      * @param options transaction options
      */
-    default void init(List<? extends HL7v2TransactionOption> options) {}
+    default void init(Hl7v2TransactionOptionsProvider<T, ? extends Hl7v2TransactionOptions> optionsProvider,
+                      List<? extends Hl7v2TransactionOptions> options) {}
 }

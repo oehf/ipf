@@ -51,8 +51,7 @@ public class LocalizedString implements Serializable {
      * Constructs a localized string.
      */
     public LocalizedString() {
-        lang = "en-US";
-        charset = "UTF-8";
+        this(null);
     }
 
     /**
@@ -65,9 +64,9 @@ public class LocalizedString implements Serializable {
      *          the charset used in the string.
      */
     public LocalizedString(String value, String lang, String charset) {
-        this.value = value;
-        this.lang = lang;
-        this.charset = charset;
+        setValue(value);
+        setLang(lang);
+        setCharset(charset);
     }
 
     /**
@@ -76,9 +75,7 @@ public class LocalizedString implements Serializable {
      *          the value of the string.
      */
     public LocalizedString(String value) {
-        this.value = value;
-        lang = "en-US";
-        charset = "UTF-8";
+        this(value, "en-US", "UTF-8");
     }
 
     /**
@@ -108,7 +105,7 @@ public class LocalizedString implements Serializable {
      *          the charset used in the string.
      */
     public void setCharset(String charset) {
-        this.charset = charset;
+        this.charset = "UTF8".equalsIgnoreCase(charset) ? "UTF-8" : charset;
     }
     
     /**
@@ -125,6 +122,5 @@ public class LocalizedString implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-
 
 }

@@ -18,9 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.custom;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
@@ -38,12 +39,22 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
     private String description;
     @Getter @Setter
     private boolean query;
-
-    private FhirTransactionConfiguration fhirTransactionConfiguration;
+    @Getter @Setter
+    private FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration;
 
     public CustomFhirComponent() {
         super(null);
         setFhirInteractionId(this);
+    }
+
+    public CustomFhirComponent(CamelContext context) {
+        super(context, null);
+        setFhirInteractionId(this);
+    }
+
+    public CustomFhirComponent(FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration) {
+        this();
+        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
     }
 
     @Override
@@ -51,12 +62,4 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         return new CustomFhirEndpoint(uri, this, config);
     }
 
-    @Override
-    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
-        return fhirTransactionConfiguration;
-    }
-
-    public void setFhirTransactionConfiguration(FhirTransactionConfiguration fhirTransactionConfiguration) {
-        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
-    }
 }

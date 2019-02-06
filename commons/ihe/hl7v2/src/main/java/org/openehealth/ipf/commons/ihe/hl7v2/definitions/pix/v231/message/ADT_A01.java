@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.message;
-
-import java.util.List;
-import java.util.Map;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.message;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
@@ -24,8 +21,10 @@ import ca.uhn.hl7v2.model.v231.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group.ADT_A01_INSURANCE;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group.ADT_A01_PROCEDURE;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * ADT_A01 message with renamed groups PROCEDURE and INSURANCE.
@@ -61,7 +60,6 @@ public class ADT_A01 extends AbstractMessage {
         s.put(ACC.class, Cardinality.OPTIONAL);
         s.put(UB1.class, Cardinality.OPTIONAL);
         s.put(UB2.class, Cardinality.OPTIONAL);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 
@@ -334,11 +332,11 @@ public class ADT_A01 extends AbstractMessage {
     }
 
     private <T extends Structure> T insertRep(String name, int rep) throws HL7Exception {
-        return (T)insertRepetition(name, rep);
+        return (T) insertRepetition(name, rep);
     }
 
     private <T extends Structure> T removeRep(String name, int rep) throws HL7Exception {
-        return (T)removeRepetition(name, rep);
+        return (T) removeRepetition(name, rep);
     }
 
     private <T extends Structure> T getTyped(Class<T> clazz) {

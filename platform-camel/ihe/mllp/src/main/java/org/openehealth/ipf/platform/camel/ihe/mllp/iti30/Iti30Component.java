@@ -16,9 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.hl7v2.HL7v2TransactionOption;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptionsUtils;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30OptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30Options;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
@@ -32,6 +34,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
  * Camel component for ITI-30 (Patient Identity Management).
  * The endpoints take an additional parameter "options", that refer to the
  * transaction options as specified in {@link Iti30Options} that need to be supported.
+ * You can also provide different options specified by an additional parameter "optionsProvider".
  *
  * @author Christian Ohr
  */
@@ -49,12 +52,14 @@ public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
-        String options = getAndRemoveParameter(parameters, "options", String.class, Iti30Options.MERGE.name());
-        List<? extends HL7v2TransactionOption> iti30Options = TransactionOptionUtils.split(options, Iti30Options.class);
+        Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
+                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
+        String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+        List<? extends Hl7v2TransactionOptions> iti30Options = TransactionOptionsUtils.split(options, Iti30Options.class);
         if (iti30Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");
         }
-        getInteractionId().init(iti30Options);
+        getInteractionId().init(optionsProvider, iti30Options);
         return config;
     }
 

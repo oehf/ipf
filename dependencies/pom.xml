@@ -9,12 +9,12 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-
-        <camel-version>2.22.2</camel-version>
-        <cxf-version>3.2.7</cxf-version>
-        <groovy-version>2.5.4</groovy-version>
+        <brave-version>5.6.1</brave-version>
+        <camel-version>2.23.1</camel-version>
+        <cxf-version>3.3.0</cxf-version>
+        <groovy-version>2.5.6</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>3.6.0</hapi-fhir-version>
+        <hapi-fhir-version>3.7.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -30,9 +30,9 @@
 
         <saxon-he-version>9.9.0-2</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>5.0.10.RELEASE</spring-version>
-        <spring-boot-version>2.0.6.RELEASE</spring-boot-version>
-        <vertx-version>3.5.4</vertx-version>
+        <spring-version>5.1.4.RELEASE</spring-version>
+        <spring-boot-version>2.1.2.RELEASE</spring-boot-version>
+        <vertx-version>3.6.2</vertx-version>
         <vibur-version>22.2</vibur-version>
         <webservices-api-version>2.1-b16</webservices-api-version>
         <xmlsec-version>2.1.2</xmlsec-version>
@@ -55,16 +55,16 @@
 
         <dependencies>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring-version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-version}</version>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -161,22 +161,7 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-dstu2</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-validation</artifactId>
-                <version>${hapi-fhir-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
@@ -330,6 +315,31 @@
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-spring-beans</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-context-slf4j</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-instrumentation-httpclient</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-instrumentation-servlet</artifactId>
+                <version>${brave-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-core</artifactId>
                 <version>${cxf-version}</version>
@@ -427,6 +437,21 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-features-logging</artifactId>
                 <version>${cxf-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-integration-tracing-brave</artifactId>
+                <version>${cxf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.zipkin.brave</groupId>
+                        <artifactId>brave</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.zipkin.brave</groupId>
+                        <artifactId>brave-instrumentation-http</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
@@ -622,22 +647,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-core</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-audit</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-mhd</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-mhd</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-dstu2-pixpdq</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-r4-pixpdq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -663,6 +688,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-stu3-qedm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-r4-qedm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

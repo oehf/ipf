@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
@@ -35,23 +36,33 @@ import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidato
 public class Iti65TestRouteBuilder extends RouteBuilder {
 
     private final boolean returnError;
+    private final boolean startSecondRoute;
 
-    public Iti65TestRouteBuilder(boolean returnError) {
+    public Iti65TestRouteBuilder(boolean returnError, boolean startSecondRoute) {
         this.returnError = returnError;
+        this.startSecondRoute = startSecondRoute;
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .toF("mhd-iti65:localhost:%d", FhirTestContainer.DEMO_APP_PORT);
 
-        from("mhd-iti65:stub?audit=true")
+        from("mhd-iti65:stub?audit=true&fhirContext=#fhirContext")
                 .errorHandler(noErrorHandler())
                 .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, constant(true))
                 .setHeader(VALIDATION_MODE, constant(SCHEMA | SCHEMATRON )) // | MODEL))
                 .process(itiRequestValidator())
                 .transform(new Responder());
+
+        // Start up a second transaction route, sharing the same resource provider
+        // and the same FHIR context
+        if (startSecondRoute) {
+            from("batch:batch?audit=false&fhirContext=#fhirContext")
+                    .errorHandler(noErrorHandler())
+                    .throwException(new UnprocessableEntityException("This sucks"));
+        }
     }
 
 

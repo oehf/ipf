@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ipf-commons-ihe-fhir</artifactId>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <version>3.6-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>ipf-commons-ihe-fhir-r4</artifactId>
+    <name>ipf-commons-ihe-fhir-r4</name>
+    <description>FHIR-R4 specific IHE support</description>
+    <url>${site.url}/${project.artifactId}</url>
+
+    <modules>
+        <module>core</module>
+		<module>pixpdq</module>
+		<module>mhd</module>
+		<module>audit</module>
+        <module>qedm</module>
+    </modules>
+
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
+</project>

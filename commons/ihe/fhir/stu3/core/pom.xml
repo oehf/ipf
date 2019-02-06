@@ -9,7 +9,7 @@
 
     <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
     <name>ipf-commons-ihe-fhir-stu3-core</name>
-    <description>FHIR IHE support, independent of FHIR version</description>
+    <description>FHIR IHE support for STU3</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <dependencies>

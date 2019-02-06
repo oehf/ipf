@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.iti59;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
@@ -25,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
 import java.util.Collections;
+
+import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.Translation;
 
 /**
  * @author Christian Ohr
@@ -43,16 +44,21 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
                 requestItem.getOutcomeDescription(),
                 requestItem.getActionCode(),
                 HpdEventTypeCode.ProviderInformationFeed,
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse()
+        );
 
         builder.addImportedEntity(
-                requestItem.getUid(),
+                Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
+                        ? requestItem.getNewUid()
+                        : requestItem.getUid(),
                 HpdParticipantObjectIdTypeCode.RelativeDistinguishedName,
                 requestItem.getParticipantObjectTypeCode(),
                 ParticipantObjectTypeCodeRole.Provider,
-                StringUtils.isBlank(requestItem.getNewUid())
-                        ? Collections.emptyList()
-                        : Collections.singletonList(builder.getTypeValuePair("new uid", requestItem.getNewUid())));
+                requestItem.getParticipantObjectDataLifeCycle(),
+                Translation.equals(requestItem.getParticipantObjectDataLifeCycle())
+                        ? Collections.singletonList(builder.getTypeValuePair("old uid", requestItem.getUid()))
+                        : Collections.emptyList()
+        );
 
         return builder.getMessage();
     }

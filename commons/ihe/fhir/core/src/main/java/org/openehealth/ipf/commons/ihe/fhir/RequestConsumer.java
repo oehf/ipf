@@ -50,7 +50,20 @@ import java.util.Map;
 
 public interface RequestConsumer {
 
+    /**
+     * @return the FhirContext used by this consumer
+     */
     FhirContext getFhirContext();
+
+    /**
+     * Returns true if this RequestConsumer can handle the provided FHIR payload
+     *
+     * @param payload FHIR payload
+     * @return true if this RequestConsumer can handle the provided FHIR payload, false otherwise
+     */
+    default boolean test(Object payload) {
+        return true;
+    }
 
     /**
      * Handles a Create / Update / Validate / Delete action request.

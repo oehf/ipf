@@ -19,33 +19,59 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import org.hl7.fhir.instance.model.api.IBaseBundle;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Abstract plain provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer. Note that this can be subclassed for writing so-called
  * plain providers, while resource-specific providers should extend from {@link AbstractResourceProvider}.
  *
+ * Providers that inherit from this class may only be connected to one consumer.
+ *
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class AbstractPlainProvider implements Serializable {
+public abstract class AbstractPlainProvider extends FhirProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPlainProvider.class);
 
     private RequestConsumer consumer;
 
+    @Override
     protected FhirContext getFhirContext() {
-        return consumer.getFhirContext();
+        return consumer != null ? consumer.getFhirContext() : null;
+    }
+
+    @Override
+    protected Optional<RequestConsumer> getConsumer(Object payload) {
+        return Optional.ofNullable(consumer)
+                .filter(c -> c.test(payload));
+    }
+
+    @Override
+    public void setConsumer(RequestConsumer consumer) {
+        if (this.consumer != null) {
+            throw new IllegalStateException("This provider is already used by a different consumer: " + consumer);
+        }
+        this.consumer = consumer;
+        LOG.info("Connected consumer {} to provider {}", consumer, this);
+    }
+
+    @Override
+    public void unsetConsumer(RequestConsumer consumer) {
+        if (this.consumer == consumer) {
+            this.consumer = null;
+            LOG.info("Disconnected consumer {} from provider {}", consumer, this);
+        }
     }
 
     /**
@@ -57,6 +83,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> R requestResource(
             Object payload, Class<R> resultType,
@@ -74,14 +102,34 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> R requestResource(
             Object payload, FhirSearchParameters parameters, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        if (consumer == null) {
-            throw new IllegalStateException("Consumer is not initialized");
-        }
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        return requestResource(payload, parameters, resultType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a single resource with parameters
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param parameters          FHIR parameters
+     * @param resultType          expected result type
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @param <R>                 Result type
+     * @return result of processing
+     */
+    protected final <R extends IBaseResource> R requestResource(
+            Object payload, FhirSearchParameters parameters, Class<R> resultType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
+        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+                new IllegalStateException("Consumer is not initialized"));
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleResourceRequest(payload, headers, resultType);
     }
 
@@ -93,6 +141,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
                                                                     HttpServletRequest httpServletRequest,
@@ -109,6 +159,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
@@ -126,15 +178,36 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @param <R>                 Result type
      * @return result of processing
+     *
+     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        if (consumer == null) {
-            throw new IllegalStateException("Consumer is not initialized");
-        }
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        return requestBundle(payload, parameters, resourceType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a list of resources with parameters
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param parameters          FHIR search parameters
+     * @param resourceType        FHIR resource type being searched
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @param <R>                 Result type
+     * @return result of processing
+     */
+    protected final <R extends IBaseResource> List<R> requestBundle(
+            Object payload, FhirSearchParameters parameters,
+            String resourceType,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
+        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+                new IllegalStateException("Consumer is not initialized"));
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -151,6 +224,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return IBundleProvider
+     *
+     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
@@ -169,15 +244,38 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return IBundleProvider
+     *
+     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        if (consumer == null) {
-            throw new IllegalStateException("Consumer is not initialized");
-        }
-        Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest);
+        return requestBundleProvider(payload, searchParameters, resourceType, httpServletRequest, httpServletResponse, null);
+    }
+
+    /**
+     * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
+     * bundles. The type of the returned {@link IBundleProvider} instance is determined
+     * by the {@link #consumer RequestConsumer} impelmentation.
+     *
+     * @param payload             FHIR request resource (often null)
+     * @param searchParameters    FHIR search parameters
+     * @param resourceType        FHIR resource type
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param requestDetails      request details
+     * @return IBundleProvider
+     */
+    protected final IBundleProvider requestBundleProvider(
+            Object payload, FhirSearchParameters searchParameters,
+            String resourceType,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
+        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+                new IllegalStateException("Consumer is not initialized"));
+        Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -191,6 +289,8 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
+     *
+     * @deprecated use {@link #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
     protected final MethodOutcome requestAction(
             Object payload,
@@ -207,114 +307,37 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
+     *
+     * @deprecated use #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)
      */
     protected final MethodOutcome requestAction(
             Object payload,
             FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
-        if (consumer == null) {
-            throw new IllegalStateException("Consumer is not initialized");
-        }
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        return consumer.handleAction(payload, headers);
+        return requestAction(payload, parameters, httpServletRequest, httpServletResponse, null);
     }
 
     /**
-     * Submits a transaction request bundle, expecting a corresponding response bundle
+     * Submits a resource to be created or updated
      *
-     * @param payload             transaction bundle
+     * @param payload             resource payload
+     * @param parameters          parameters
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
      */
-     protected final <T extends IBaseBundle> T requestTransaction(
+    protected final MethodOutcome requestAction(
             Object payload,
-            Class<T> bundleClass,
+            FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        if (consumer == null) {
-            throw new IllegalStateException("Consumer is not initialized");
-        }
-        Map<String, Object> headers = enrichParameters(null, httpServletRequest);
-         return consumer.handleTransactionRequest(payload, headers, bundleClass);
+            HttpServletResponse httpServletResponse,
+            RequestDetails requestDetails) {
+        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+                new IllegalStateException("Consumer is not initialized"));
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
+        return consumer.handleAction(payload, headers);
     }
 
-    protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest) {
-        // Populate some headers.
-        Map<String, Object> enriched = new HashMap<>();
-        enriched.put(Constants.HTTP_URI, httpServletRequest.getRequestURI());
-        enriched.put(Constants.HTTP_URL, httpServletRequest.getRequestURL().toString());
-        enriched.put(Constants.HTTP_METHOD, httpServletRequest.getMethod());
-        enriched.put(Constants.HTTP_QUERY, httpServletRequest.getQueryString());
-        enriched.put(Constants.HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());
-        enriched.put(Constants.HTTP_CONTENT_TYPE, httpServletRequest.getContentType());
-        enriched.put(Constants.HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
-        enriched.put(Constants.HTTP_SCHEME, httpServletRequest.getScheme());
-        enriched.put(Constants.HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
-        enriched.put(Constants.HTTP_LOCALES, Collections.list(httpServletRequest.getLocales()));
-        enriched.put(Constants.HTTP_USER, httpServletRequest.getUserPrincipal());
-
-        Map<String, List<String>> headers = extractHttpHeaders(httpServletRequest);
-        enriched.put(Constants.HTTP_HEADERS, headers);
-
-        String cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
-        if (cipherSuite != null) {
-            enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute(X509Certificate.class.getName()));
-        }
-
-        if (parameters != null) {
-            enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
-        }
-        return enriched;
-    }
-
-    /**
-     * @param httpServletRequest HTTP servlet request.
-     * @return A map mapping header names to list of header values.
-     */
-    private static Map<String, List<String>> extractHttpHeaders(HttpServletRequest httpServletRequest) {
-        Map<String, List<String>> result = new HashMap<>();
-        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                Enumeration<String> headers = httpServletRequest.getHeaders(name);
-                if (headers != null) {
-                    List<String> list = new ArrayList<>();
-                    while (headers.hasMoreElements()) {
-                        list.add(headers.nextElement());
-                    }
-                    if (!list.isEmpty()) {
-                        result.put(name, list);
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * @return the configured consumer
-     */
-    public RequestConsumer getConsumer() {
-        return consumer;
-    }
-
-    // Ensure this is only used once!
-    public void setConsumer(RequestConsumer consumer) {
-        if (this.consumer != null) {
-            throw new IllegalStateException("This provider is already used by a different consumer: " + consumer);
-        }
-        this.consumer = consumer;
-        LOG.info("Connected consumer {} to provider {}", consumer, this);
-    }
-
-    public void unsetConsumer(RequestConsumer consumer) {
-        if (this.consumer == consumer) {
-            this.consumer = null;
-            LOG.info("Disconnected consumer {} from provider {}", consumer, this);
-        }
-    }
 
 }

@@ -58,6 +58,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     @Override
+    public boolean test(Object payload) {
+        return getEndpoint().getConsumerSelector().test(payload);
+    }
+
+    @Override
     public String getName() {
         return getEndpoint().getId();
     }

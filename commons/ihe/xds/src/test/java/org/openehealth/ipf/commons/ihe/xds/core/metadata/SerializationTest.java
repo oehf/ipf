@@ -15,16 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -32,11 +24,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocum
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.JsonUtils.createObjectMapper;
+
 /**
  * Tests that all requests/responses and metadata classes can be serialized.
  * @author Jens Riemschneider
  */
 public class SerializationTest {
+
     @Test
     public void testProvideAndRegisterDocumentSet() throws Exception {
         ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
@@ -86,8 +85,13 @@ public class SerializationTest {
         }
         checkSerialization(response);
     }
-    
-    private void checkSerialization(Object original) throws IOException, ClassNotFoundException {
+
+    private void checkSerialization(Object original) throws Exception {
+        checkJavaSerialization(original);
+        checkJacksonSerialization(original);
+    }
+
+    private void checkJavaSerialization(Object original) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(out);
         ObjectInputStream ois = null;
@@ -104,4 +108,25 @@ public class SerializationTest {
             IOUtils.closeQuietly(ois);
         }
     }
+
+    private void checkJacksonSerialization(Object original) throws IOException {
+        ObjectMapper objectMapper = createObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        String json = objectMapper.writeValueAsString(original);
+
+        Object unmarshalled = objectMapper.readValue(json, original.getClass());
+        assertEquals(original, unmarshalled);
+    }
+
+    @Test
+    public void testNameHandling() throws Exception {
+        Person original = new Person();
+        original.setName(new XpnName("Krause", "Wilhelm", "Klaus Peter", "Esq.", "Prince", "Dr.-Ing."));
+        ObjectMapper objectMapper = createObjectMapper();
+        String json = objectMapper.writeValueAsString(original);
+        Object unmarshalled = objectMapper.readValue(json, original.getClass());
+        assertEquals(original, unmarshalled);
+    }
+
 }

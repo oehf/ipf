@@ -21,10 +21,12 @@ import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
@@ -56,6 +58,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * @param httpServletResponse servlet response
      * @param sortSpec            sort specification
      * @param includeSpec         include specification
+     * @param requestDetails      request details
      * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
@@ -78,7 +81,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Patient.SP_TELECOM) StringParam telecom,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
-
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -102,7 +105,8 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
                 .build();
 
         // Run down the route
-        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, ResourceType.Patient.name(),
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 
@@ -110,6 +114,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * Handles the PDQm Retrieve
      *
      * @param id                  resource ID
+     * @param requestDetails      request details
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return patient resource
@@ -118,12 +123,14 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     @Read(version = true, type = Patient.class)
     public Patient pdqmRetrieve(
             @IdParam IdType id,
+            RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         if (id == null) throw new InvalidRequestException("Must provide ID with READ request");
         // Run down the route
-        return requestResource(id, Patient.class, httpServletRequest, httpServletResponse);
+        return requestResource(id, null, Patient.class,
+                httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

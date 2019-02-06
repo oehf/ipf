@@ -18,8 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.annotation.Transaction;
 import ca.uhn.fhir.rest.annotation.TransactionParam;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +30,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Christian Ohr
  * @since 3.4
+ * @deprecated use BatchTransactionResourceProvider.INSTANCE
  */
-public class Iti65ResourceProvider extends AbstractPlainProvider {
+public class Iti65ResourceProvider extends SharedFhirProvider {
 
     public Iti65ResourceProvider() {
         super();
@@ -38,9 +40,10 @@ public class Iti65ResourceProvider extends AbstractPlainProvider {
 
     @Transaction
     public Bundle provideDocumentBundle(@TransactionParam Bundle bundle,
+                                     RequestDetails requestDetails,
                                      HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
 
-        return requestTransaction(bundle, Bundle.class, httpServletRequest, httpServletResponse);
+        return requestTransaction(bundle, Bundle.class, httpServletRequest, httpServletResponse, requestDetails);
     }
 }

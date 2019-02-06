@@ -33,5 +33,6 @@ public interface FhirInteractionId<T extends FhirAuditDataset> extends Interacti
      * Optional initialization with dynamic TransactionOptions
      * @param options transaction options
      */
-    default void init(List<? extends FhirTransactionOptions> options) {}
+    default void init(FhirTransactionOptionsProvider<T, ? extends FhirTransactionOptions> optionsProvider,
+                      List<? extends FhirTransactionOptions> options) {}
 }

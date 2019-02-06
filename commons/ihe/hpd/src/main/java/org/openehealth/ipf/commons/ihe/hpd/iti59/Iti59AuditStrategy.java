@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
+import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle.*;
 
 /**
  * Audit strategy for the ITI-59 transaction.
@@ -101,16 +102,19 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
             if (dsmlMessage instanceof AddRequest) {
                 AddRequest addRequest = (AddRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(addRequest.getRequestID()), EventActionCode.Create);
+                requestItems[i].setParticipantObjectDataLifeCycle(Origination);
                 enrichAuditItem(requestItems[i], addRequest.getDn());
 
             } else if (dsmlMessage instanceof ModifyRequest) {
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyRequest.getRequestID()), EventActionCode.Update);
+                requestItems[i].setParticipantObjectDataLifeCycle(Amendment);
                 enrichAuditItem(requestItems[i], modifyRequest.getDn());
 
             } else if (dsmlMessage instanceof ModifyDNRequest) {
                 ModifyDNRequest modifyDNRequest = (ModifyDNRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyDNRequest.getRequestID()), EventActionCode.Execute);
+                requestItems[i].setParticipantObjectDataLifeCycle(Translation);
                 enrichAuditItem(requestItems[i], modifyDNRequest.getDn());
                 try {
                     requestItems[i].setNewUid(new LdapName(modifyDNRequest.getNewrdn()).getRdns().stream()
@@ -125,6 +129,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
             } else if (dsmlMessage instanceof DelRequest) {
                 DelRequest delRequest = (DelRequest) dsmlMessage;
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(delRequest.getRequestID()), EventActionCode.Delete);
+                requestItems[i].setParticipantObjectDataLifeCycle(PermanentErasure);
                 enrichAuditItem(requestItems[i], delRequest.getDn());
 
             } else {

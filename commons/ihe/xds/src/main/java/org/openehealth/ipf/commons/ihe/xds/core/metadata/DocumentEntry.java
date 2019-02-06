@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,6 +101,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     }
 
 
+    @JsonProperty
     public void setCreationTime(Timestamp creationTime) {
         this.creationTime = creationTime;
     }
@@ -108,6 +110,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
         this.creationTime = Timestamp.fromHL7(creationTime);
     }
 
+    @JsonProperty
     public void setServiceStartTime(Timestamp serviceStartTime) {
         this.serviceStartTime = serviceStartTime;
     }
@@ -116,6 +119,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
         this.serviceStartTime = Timestamp.fromHL7(serviceStartTime);
     }
 
+    @JsonProperty
     public void setServiceStopTime(Timestamp serviceStopTime) {
         this.serviceStopTime = serviceStopTime;
     }

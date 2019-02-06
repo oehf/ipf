@@ -72,4 +72,32 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="iti8MllpExceptionHandler"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8MllpExceptionHandler" />
 
+    <!-- Tracing -->
+
+    <bean id="mockReporter" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.MockReporter"/>
+
+    <bean id="tracing" class="brave.spring.beans.TracingFactoryBean">
+        <property name="spanReporter" ref="mockReporter"/>
+        <property name="localServiceName" value="Iti8Test"/>
+        <property name="currentTraceContext">
+            <bean class="brave.spring.beans.CurrentTraceContextFactoryBean">
+                <property name="scopeDecorators">
+                    <bean class="brave.context.slf4j.MDCScopeDecorator" factory-method="create"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="messageTracer" class="org.openehealth.ipf.commons.ihe.hl7v2.tracing.MessageTracer">
+        <constructor-arg ref="tracing"/>
+    </bean>
+
+    <bean id="consumerTracingInterceptor" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTracingInterceptor.Factory">
+        <constructor-arg ref="messageTracer"/>
+    </bean>
+
+    <bean id="producerTracingInterceptor" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor.Factory">
+        <constructor-arg ref="messageTracer"/>
+    </bean>
+
 </beans>

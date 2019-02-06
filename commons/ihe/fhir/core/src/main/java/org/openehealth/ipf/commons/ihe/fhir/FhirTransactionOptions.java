@@ -29,13 +29,15 @@ public interface FhirTransactionOptions extends TransactionOptions<Class<? exten
     static List<? extends AbstractResourceProvider> concatProviders(List<? extends FhirTransactionOptions> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
-                .map(c -> {
-                    try {
-                        return c.newInstance();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+                .map(FhirTransactionOptions::createResourceProvider)
                 .collect(Collectors.toList());
+    }
+
+    static AbstractResourceProvider createResourceProvider(Class<? extends AbstractResourceProvider> c) {
+        try {
+            return c.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

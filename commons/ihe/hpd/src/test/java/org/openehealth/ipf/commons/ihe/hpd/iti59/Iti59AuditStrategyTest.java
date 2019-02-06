@@ -65,8 +65,9 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
 
         ParticipantObjectIdentificationType participant = auditMessages[2].getParticipantObjectIdentifications().get(0);
         assertEquals(1, participant.getParticipantObjectDetails().size());
-        assertEquals("new uid", participant.getParticipantObjectDetails().get(0).getType());
-        assertEquals("2.22.222.2222:klmno", new String(participant.getParticipantObjectDetails().get(0).getValue()));
+        assertEquals("old uid", participant.getParticipantObjectDetails().get(0).getType());
+        assertEquals("1.11.111.1111:klmno", new String(participant.getParticipantObjectDetails().get(0).getValue()));
+        assertEquals("2.22.222.2222:klmno", participant.getParticipantObjectID());
     }
 
     private Iti59AuditDataset getHpdAuditDataset(Iti59AuditStrategy strategy) {
@@ -101,6 +102,7 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
         requestItem4.setUid("1.11.111.1111:klmno");
         requestItem4.setNewUid("2.22.222.2222:klmno");
         requestItem4.setParticipantObjectTypeCode(ParticipantObjectTypeCode.Organization);
+        requestItem4.setParticipantObjectDataLifeCycle(ParticipantObjectDataLifeCycle.Translation);
         requestItem4.setOutcomeCode(EventOutcomeIndicator.Success);
 
         auditDataset.setRequestItems(new Iti59AuditDataset.RequestItem[]{requestItem1, requestItem2, requestItem3, requestItem4});

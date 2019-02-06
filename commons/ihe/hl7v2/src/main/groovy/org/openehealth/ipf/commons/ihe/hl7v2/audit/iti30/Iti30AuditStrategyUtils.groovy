@@ -25,7 +25,10 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset
 final class Iti30AuditStrategyUtils {
 
     static void enrichAuditDatasetFromRequest(FeedAuditDataset auditDataset, Message msg) {
-        auditDataset.patientId = msg.findPID()[3].encodeRepetitions()
+        def pid = msg.findPID()
+        if (pid) {
+            auditDataset.patientId = pid[3].encodeRepetitions()
+        }
         if(msg.MSH[9][2].value == 'A40') {
             auditDataset.oldPatientId = msg.PATIENT.MRG[1].encodeRepetitions()
         }

@@ -15,12 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
-import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.ZZI;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
-import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v25.segment.DSC;
@@ -28,6 +22,10 @@ import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.RCP;
 import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -65,7 +63,6 @@ public class QBP_Q21 extends AbstractMessage {
         s.put(QPD.class, Cardinality.REQUIRED);
         s.put(RCP.class, Cardinality.REQUIRED);
         s.put(DSC.class, Cardinality.OPTIONAL);
-        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

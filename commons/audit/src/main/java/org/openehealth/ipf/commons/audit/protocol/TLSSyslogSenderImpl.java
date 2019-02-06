@@ -246,14 +246,12 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * {@link SocketTestPolicy#DONT_TEST_POLICY}, then {@code SO_TIMEOUT} will be
      * set to 1 ms regardless of the value your implementation might set.
      * 
-     * @param so Options for a newly created socket
+     * @param socket Socket to configure
      * @throws SocketException
      */
     protected void setSocketOptions(final Socket socket) throws SocketException {
         Objects.requireNonNull(socket);
-        if (socket != null) {
-            socket.setKeepAlive(DEFAULT_SOCKET_KEEPALIVE);
-        }
+        socket.setKeepAlive(DEFAULT_SOCKET_KEEPALIVE);
     }
 
     /**
@@ -325,7 +323,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * 
      * @author taastrad
      */
-    public static enum SocketTestPolicy {
+    public enum SocketTestPolicy {
 
         DONT_TEST_POLICY(false, false),
         TEST_BEFORE_WRITE(true, false),
