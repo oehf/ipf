@@ -57,8 +57,8 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.5.4-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>3.0.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.5.6-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>3.3.0-01</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
@@ -95,7 +95,7 @@
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.35</tomcat-version>
+        <tomcat-version>8.5.37</tomcat-version>
         <woodstox-version>5.1.0</woodstox-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -812,6 +812,7 @@
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:
                             boot/ipf-fhir-stu3-spring-boot-starter/generated-stubs:
+                            boot/ipf-fhir-r4-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
@@ -826,6 +827,11 @@
                             commons/ihe/fhir/stu3/mhd/generated-stubs:
                             commons/ihe/fhir/stu3/pixpdq/generated-stubs:
                             commons/ihe/fhir/stu3/qedm/generated-stubs:
+                            commons/ihe/fhir/r4/core/generated-stubs:
+                            commons/ihe/fhir/r4/audit/generated-stubs:
+                            commons/ihe/fhir/r4/mhd/generated-stubs:
+                            commons/ihe/fhir/r4/pixpdq/generated-stubs:
+                            commons/ihe/fhir/r4/qedm/generated-stubs:
                             commons/ihe/hl7v2/generated-stubs:
                             commons/ihe/hl7v2ws/generated-stubs:
                             commons/ihe/hl7v3/generated-stubs:
@@ -852,6 +858,10 @@
                             platform-camel/ihe/fhir/stu3/mhd/generated-stubs:
                             platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
                             platform-camel/ihe/fhir/stu3/qedm/generated-stubs:
+                            platform-camel/ihe/fhir/r4/audit/generated-stubs:
+                            platform-camel/ihe/fhir/r4/mhd/generated-stubs:
+                            platform-camel/ihe/fhir/r4/pixpdq/generated-stubs:
+                            platform-camel/ihe/fhir/r4/qedm/generated-stubs:
                             platform-camel/ihe/hl7v2/generated-stubs:
                             platform-camel/ihe/hl7v2ws/generated-stubs:
                             platform-camel/ihe/hl7v3/generated-stubs:

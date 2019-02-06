@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Christian Ohr
  * @since 3.5
  *
- * @deprecated simply use a RequestDetails parameter in the resource provider
+ * @deprecated simply use the RequestDetails parameter in the resource provider
  */
 public class RequestDetailProvider extends InterceptorAdapter {
 

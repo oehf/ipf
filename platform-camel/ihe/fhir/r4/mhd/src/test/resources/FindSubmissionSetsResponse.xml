@@ -57,17 +57,9 @@
                     <reference value="Patient/8294784675"/>
                 </subject>
                 <created value="2011-01-03T11:00:41+01:00"/>
-                <agent>
-                    <type>
-                        <coding>
-                            <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"/>
-                            <code value="AUT"/>
-                        </coding>
-                    </type>
-                    <who>
-                        <reference value="#1"/>
-                    </who>
-                </agent>
+                <author>
+                    <reference value="#1"/>
+                </author>
                 <source value="1.3.6.1.4.1.21367.2005.3.41"/>
                 <content>
                     <reference value="what do I know"/>

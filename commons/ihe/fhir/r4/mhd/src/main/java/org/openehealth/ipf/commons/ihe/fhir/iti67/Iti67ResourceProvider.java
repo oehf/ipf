@@ -55,7 +55,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
-            @OptionalParam(name = DocumentReference.SP_AGENT, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,

@@ -91,8 +91,8 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
                 .setDate(timestamp) // creation of document reference resource
                 .setDescription("Physical")
                 .setSubject(new Reference("Patient/a2"))
-                .addAgent(new DocumentReference.DocumentReferenceAgentComponent().setWho(new Reference("Practitioner/a3")))
-                .addAgent(new DocumentReference.DocumentReferenceAgentComponent().setWho(new Reference("Practitioner/a4")))
+                .addAuthor(new Reference("Practitioner/a3"))
+                .addAuthor(new Reference("Practitioner/a4"))
                 .setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
         reference.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         reference.getText().setDivAsString("<div>empty</div>");

@@ -44,7 +44,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider documentManifestSearch(
             @RequiredParam(name = DocumentManifest.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentManifest.SP_CREATED) DateRangeParam created,
-            @OptionalParam(name = DocumentManifest.SP_AGENT, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
+            @OptionalParam(name = DocumentManifest.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_SOURCE) TokenOrListParam source,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,

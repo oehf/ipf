@@ -79,17 +79,9 @@
                     <reference value="Patient/1"/>
                 </subject>
                 <date value="1965-12-17T01:00:00.000+01:00"/>
-                <agent>
-                    <type>
-                        <coding>
-                            <system value="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"/>
-                            <code value="AUT"/>
-                        </coding>
-                    </type>
-                    <who>
-                        <reference value="#1"/>
-                    </who>
-                </agent>
+                <author>
+                    <reference value="#1"/>
+                </author>
                 <description value="Document 01"/>
                 <securityLabel>
                     <coding>
