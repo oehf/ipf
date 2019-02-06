@@ -116,6 +116,11 @@
                                 <version>${jaxb-version}</version>
                             </dependency>
                             <dependency>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                                <version>${jaxb-version}</version>
+                            </dependency>
+                            <dependency>
                                 <groupId>javax.xml</groupId>
                                 <artifactId>webservices-api</artifactId>
                                 <version>${webservices-api-version}</version>
@@ -136,6 +141,7 @@
                         </configuration>
                         <executions>
                             <execution>
+                                <id>jdk9-schemagen</id>
                                 <phase>process-classes</phase>
                                 <goals>
                                     <goal>schemagen</goal>
@@ -163,6 +169,7 @@
                         </configuration>
                         <executions>
                             <execution>
+                                <id>jdk8-schemagen</id>
                                 <phase>process-classes</phase>
                                 <goals>
                                     <goal>schemagen</goal>

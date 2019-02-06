@@ -34,6 +34,7 @@
         <spring-boot-version>2.0.6.RELEASE</spring-boot-version>
         <vertx-version>3.5.4</vertx-version>
         <vibur-version>22.2</vibur-version>
+        <webservices-api-version>2.1-b16</webservices-api-version>
         <xmlsec-version>2.1.2</xmlsec-version>
 
         <github.global.server>github</github.global.server>
@@ -452,6 +453,17 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
+                <version>${spring-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
                 <version>${spring-version}</version>
                 <exclusions>
                     <exclusion>

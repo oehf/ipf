@@ -62,7 +62,7 @@
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
-        <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
+        <jaxb-plugin-version>2.4</jaxb-plugin-version>
         <lombok-plugin-version>1.18.4.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
