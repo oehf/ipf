@@ -115,11 +115,11 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, "resourceProvider", FhirProvider.class);
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class);
-        hapiClientInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "hapiClientInterceptorFactories", List.class);
-        // TODO: make use of use hapiServerInterceptorFactories
-        hapiServerInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "hapiServerInterceptorFactories", List.class);
+        hapiClientInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
+                parameters, "hapiClientInterceptorFactories", HapiClientInterceptorFactory.class);
+        // TODO: make use of hapiServerInterceptorFactories
+        hapiServerInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
+                parameters, "hapiServerInterceptorFactories", HapiServerInterceptorFactory.class);
 
         context = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
