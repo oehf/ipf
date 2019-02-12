@@ -41,6 +41,7 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
         XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = super.createAuditDataset();
+        // This is also an error in the spec.
         auditDataset.setSourceUserIsRequestor(false);
         return auditDataset;
     }

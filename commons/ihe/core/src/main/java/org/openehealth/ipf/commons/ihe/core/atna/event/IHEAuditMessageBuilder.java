@@ -72,13 +72,19 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      */
     protected final T setLocalParticipant(AuditDataset auditDataset) {
         if (auditDataset.isServerSide())
-            delegate.addDestinationActiveParticipant(auditDataset.getDestinationUserId(),
+            delegate.addDestinationActiveParticipant(
+                    auditDataset.getDestinationUserId() != null ?
+                            auditDataset.getDestinationUserId() :
+                            auditContext.getAuditValueIfMissing(),
                     getProcessId(),
                     null,
                     auditDataset.getLocalAddress(),
                     auditDataset.isDestinationUserIsRequestor());
         else
-            delegate.addSourceActiveParticipant(auditDataset.getSourceUserId(),
+            delegate.addSourceActiveParticipant(
+                    auditDataset.getSourceUserId() != null ?
+                            auditDataset.getSourceUserId() :
+                            auditContext.getAuditValueIfMissing(),
                     getProcessId(),
                     auditDataset.getSourceUserName(),
                     auditDataset.getLocalAddress(),
@@ -95,25 +101,46 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      */
     protected final T setRemoteParticipant(AuditDataset auditDataset) {
         if (auditDataset.isServerSide())
-            delegate.addSourceActiveParticipant(auditDataset.getSourceUserId(),
-                    null,
+            delegate.addSourceActiveParticipant(
+                    auditDataset.getSourceUserId() != null ?
+                            auditDataset.getSourceUserId() :
+                            auditContext.getAuditValueIfMissing(),
+                    getRemoteAltUserId(),
                     auditDataset.getSourceUserName(),
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isSourceUserIsRequestor());
         else
-            delegate.addDestinationActiveParticipant(auditDataset.getDestinationUserId(),
-                    null,
+            delegate.addDestinationActiveParticipant(
+                    auditDataset.getDestinationUserId() != null ?
+                            auditDataset.getDestinationUserId() :
+                            auditContext.getAuditValueIfMissing(),
+                    getRemoteAltUserId(),
                     null,
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isDestinationUserIsRequestor());
         return self();
     }
 
+    /**
+     * @return the remote AltUserId. Usually null, except for ITI-43 where there is
+     * an error in the spec
+     */
+    protected String getRemoteAltUserId() {
+        return null;
+    }
+
     protected final T addHumanRequestor(AuditDataset auditDataset) {
         for (AuditDataset.HumanUser humanUser : auditDataset.getHumanUsers()) {
             if (!humanUser.isEmpty()) {
-                delegate.addActiveParticipant(humanUser.getId(), null, humanUser.getName(),
-                        true, humanUser.getRoles(), null);
+                delegate.addActiveParticipant(
+                        humanUser.getId() != null ?
+                                humanUser.getId() :
+                                auditContext.getAuditValueIfMissing(),
+                        null,
+                        humanUser.getName(),
+                        true,
+                        humanUser.getRoles(),
+                        null);
             }
         }
         return self();
