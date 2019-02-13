@@ -333,7 +333,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         private final boolean beforeWrite;
         private final boolean afterWrite;
 
-        private SocketTestPolicy(boolean beforeWrite, boolean afterWrite) {
+        SocketTestPolicy(boolean beforeWrite, boolean afterWrite) {
             this.beforeWrite = beforeWrite;
             this.afterWrite = afterWrite;
         }
