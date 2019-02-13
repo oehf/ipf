@@ -19,35 +19,22 @@
     <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
     <sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
 
+    <sch:extends href="../generic.sch.xml" />
+
     <!-- ========================================================================== 
                                 RULES FOR xsi:DATATYPE CHECKS 
          ========================================================================== -->
-    <sch:pattern abstract="true" id="check-type">
-        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/$element/hl7:value">
-            <sch:assert test="not(.) or (@xsi:type = '$type')">
-                sub-element 'value' is constrained to data type $type
-            </sch:assert>
-        </sch:rule>
-    </sch:pattern>
-
     <sch:pattern is-a="check-type" id="x1">
-        <sch:param name="element" value="hl7:matchCriterionList/hl7:matchAlgorithm" />
+        <sch:param name="element" value="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:matchCriterionList/hl7:matchAlgorithm/hl7:value" />
         <sch:param name="type" value="ST" />
     </sch:pattern>
 
     <sch:pattern is-a="check-type" id="x2">
-        <sch:param name="element" value="hl7:matchCriterionList/hl7:minimumDegreeMatch" />
+        <sch:param name="element" value="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:matchCriterionList/hl7:minimumDegreeMatch/hl7:value" />
         <sch:param name="type" value="INT" />
     </sch:pattern>
 
-    <!--  
-    <sch:pattern is-a="check-type">
-        <sch:param name="element" value="hl7:parameterList/hl7:livingSubjectName" />
-        <sch:param name="type" value="PN" />
-    </sch:pattern>
-    -->
-    
-    
+
     <!-- ========================================================================== 
                     RULES FOR CHECKS THAT count(SOMETHING) <= 1
          ========================================================================== -->
