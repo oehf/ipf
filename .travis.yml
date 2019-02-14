@@ -6,15 +6,6 @@ addons:
   apt:
     packages:
     - wget
-  artifacts:
-    s3_region: "us-east-1"
-    bucket: builds.openehealth.org
-    key: AKIAIG3NJZOJH6AXNTLQ
-    secret:
-      secure: iAPFqtfyJAW7nAZ/jAXFH2kran0lKKULlF7fZnfnNPA8uC4QGXerEH340pdfbG4EfiRrY2MFDoEd96JNfUMB+RHuV2Zo5ueFQMFqB2FPMizM8Z2gIWds/bNbelnpiq0VMP80t4+APvu40If+80yUVitOVh+vxmKnJcy1vkYR9Cg=
-    paths:
-    - $(ls s3-upload/*.zip)
-    target_paths: "ipf"
 cache:
   timeout: 600
   directories:
@@ -29,9 +20,6 @@ script:
 after_success:
 # Deploy
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_after_success.sh | sh
-after_failure:
-# Zip everything. Or use after_failure instead
-- wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
 
 env:
   global:
