@@ -5,34 +5,28 @@
     <parent>
         <groupId>org.openehealth.ipf.boot</groupId>
         <artifactId>ipf-spring-boot</artifactId>
-        <version>3.6-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>ipf-atna-spring-boot-starter</artifactId>
     <name>ipf-atna-spring-boot-starter</name>
     <description>Spring Boot support for Audit Trail</description>
 
-    <profiles>
-        <profile>
-            <id>jigsaw</id>
-            <activation>
-                <jdk>[1.9,)</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                    <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                    <groupId>javax.validation</groupId>
-                    <artifactId>validation-api</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
 	<dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

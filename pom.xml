@@ -2,14 +2,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.6-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.6-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -55,11 +55,7 @@
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
-        <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
-
-        <groovy-eclipse-batch-version>2.5.6-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>3.3.0-01</groovy-eclipse-compiler-version>
-
+        <gmavenplus-plugin-version>1.6.2</gmavenplus-plugin-version>
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
         <jaxb-plugin-version>2.4</jaxb-plugin-version>
@@ -107,18 +103,6 @@
     </scm>
 
     <profiles>
-        <profile>
-            <id>jigsaw</id>
-            <activation>
-                <jdk>[9,)</jdk>
-            </activation>
-        </profile>
-        <profile>
-            <id>no-jigsaw</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-        </profile>		
         <profile>
             <!-- This profile generates groovystubs and delomboked sources with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->
@@ -192,7 +176,7 @@
                 </dependency>
             </dependencies>
         </profile>
-
+<!--
         <profile>
             <id>groovy</id>
             <activation>
@@ -239,10 +223,7 @@
                         <configuration>
                             <release>11</release>
                             <compilerId>groovy-eclipse-compiler</compilerId>
-                            <source>${maven.compiler.source}</source>
-                            <target>${maven.compiler.target}</target>
                             <fork>true</fork>
-                            <verbose>false</verbose>
                             <compilerArguments>
                                 <javaAgentClass>lombok.launch.Agent</javaAgentClass>
                             </compilerArguments>
@@ -314,11 +295,7 @@
                         <configuration>
                             <release>11</release>
                             <compilerId>groovy-eclipse-compiler</compilerId>
-                            <source>${maven.compiler.source}</source>
-                            <target>${maven.compiler.target}</target>
                             <fork>true</fork>
-                            <verbose>false</verbose>
-                            <!--<compilerArgument>indy</compilerArgument>-->
                             <compilerArguments>
                                 <javaAgentClass>lombok.launch.Agent</javaAgentClass>
                             </compilerArguments>
@@ -344,6 +321,7 @@
                 </plugins>
             </build>
         </profile>
+-->
     </profiles>
 
     <dependencyManagement>
@@ -946,13 +924,44 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>compileTests</goal>
+                            <goal>removeStubs</goal>
+                            <goal>removeTestStubs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <!-- any version of Groovy \>= 1.8.2 should work here -->
+                        <version>${groovy-version}</version>
+                        <type>pom</type>
+                    </dependency>
+                    <dependency>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                        <version>1.3.0-alpha4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
                     <release>11</release>
-                    <source>1.8</source>
-                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -203,7 +203,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
      * a <tt>QCN^J01</tt> message will be created.
      * See paragraph 5.6.3 in HL7 v2.5 specification.
      */
-    private static String createCancelMessage(Message request, Parser parser) throws HL7Exception {
+    public static String createCancelMessage(Message request, Parser parser) throws HL7Exception {
         return (request.getVersion().charAt(2) < '4') ?
             createCnqMessage(request, parser) :
             createQcnJ01Message(request, parser);
