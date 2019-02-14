@@ -1,0 +1,103 @@
+		<PRPA_IN201306UV02 xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+			<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.2.3.4.5" extension="30"/>
+			<creationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TS" value="20190213143707"/>
+			<versionCode code="V3PR1"/>
+			<interactionId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="2.16.840.1.113883" extension="PRPA_IN201306UV02"/>
+			<processingCode code="P"/>
+			<processingModeCode code="T"/>
+			<acceptAckCode code="NE"/>
+			<receiver typeCode="RCV">
+				<device classCode="DEV" determinerCode="INSTANCE">
+					<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.2.3.4"/>
+					<asAgent classCode="AGNT">
+						<representedOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="2.16.756.5.30.1.109.6.1"/>
+						</representedOrganization>
+					</asAgent>
+				</device>
+			</receiver>
+			<sender typeCode="SND">
+				<device classCode="DEV" determinerCode="INSTANCE">
+					<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.2.3.6"/>
+				</device>
+			</sender>
+			<acknowledgement>
+				<typeCode code="AA"/>
+				<targetMessage>
+					<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.5.4.3.2.1" extension="8aa49c86-bfc9-4d9e-9482-2399958ab14c"/>
+				</targetMessage>
+			</acknowledgement>
+			<controlActProcess classCode="CACT" moodCode="EVN">
+				<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CD" code="PRPA_TE201306UV02"/>
+				<subject typeCode="SUBJ" contextConductionInd="false">
+					<registrationEvent classCode="REG" moodCode="EVN">
+						<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" nullFlavor="NA"/>
+						<statusCode code="active"/>
+						<subject1 typeCode="SBJ">
+							<patient classCode="PAT">
+								<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.3.6.1.4.1.21367.2017.2.5.45" extension="75cdb42a-7da9-4843-afd5-e3db80aba2a9" assigningAuthorityName="XDS Affinity Domain"/>
+								<statusCode code="active"/>
+								<patientPerson classCode="PSN" determinerCode="INSTANCE">
+									<name xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PN">
+										<given>Dave Mathew Sarita</given>
+										<family>URBANKOVA</family>
+									</name>
+									<administrativeGenderCode code="M"/>
+									<birthTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TS" value="19910529"/>
+								</patientPerson>
+								<providerOrganization classCode="ORG" determinerCode="INSTANCE">
+									<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.3.6.1.4.1.21367.2017.2.6.19"/>
+									<contactParty classCode="CON"/>
+								</providerOrganization>
+								<subjectOf1>
+									<queryMatchObservation classCode="COND" moodCode="EVN">
+										<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CD" code="IHE_PDQ"/>
+										<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="INT" value="100"/>
+									</queryMatchObservation>
+								</subjectOf1>
+							</patient>
+						</subject1>
+						<custodian typeCode="CST">
+							<assignedEntity classCode="ASSIGNED">
+								<id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.3.6.1.4.1.21367.2017.2.6.19"/>
+								<code code="NotHealthDataLocator" codeSystem="1.3.6.1.4.1.19376.1.2.27.2"/>
+								<assignedOrganization classCode="ORG" determinerCode="INSTANCE">
+									<name xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="EN">
+										<given>org</given>
+									</name>
+								</assignedOrganization>
+							</assignedEntity>
+						</custodian>
+					</registrationEvent>
+				</subject>
+				<queryAck>
+					<queryId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.8.7.6.5.4.3.2.1.1" extension="5c9d27fb-4988-412c-b1d5-c19275065840"/>
+					<statusCode code="deliveredResponse"/>
+					<queryResponseCode code="OK"/>
+				</queryAck>
+				<queryByParameter>
+					<queryId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="1.8.7.6.5.4.3.2.1.1" extension="5c9d27fb-4988-412c-b1d5-c19275065840"/>
+					<statusCode code="new"/>
+					<responseModalityCode code="R"/>
+					<responsePriorityCode code="I"/>
+					<parameterList>
+						<livingSubjectBirthTime>
+							<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS" value="19910529"/>
+							<semanticsText>LivingSubject.birthTime</semanticsText>
+						</livingSubjectBirthTime>
+						<livingSubjectId>
+							<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="II" root="2.16.756.5.30.1.127.3.10.3" extension="761337610411406240"/>
+							<semanticsText>LivingSubject.id</semanticsText>
+						</livingSubjectId>
+						<livingSubjectName>
+							<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="EN" use="L">
+								<family>URBANKOVA</family>
+								<family>URBANKOVA</family>
+								<given>Dave Mathew Sarita</given>
+							</value>
+							<semanticsText>LivingSubject.name</semanticsText>
+						</livingSubjectName>
+					</parameterList>
+				</queryByParameter>
+			</controlActProcess>
+		</PRPA_IN201306UV02>

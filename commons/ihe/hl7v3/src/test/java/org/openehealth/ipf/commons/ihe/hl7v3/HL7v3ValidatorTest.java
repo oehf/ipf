@@ -38,4 +38,47 @@ public class HL7v3ValidatorTest {
         validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
 	}
 
+	/**
+	 * With namespace prefix, correct value.
+	 */
+	@Test
+	public void testQnameComparisonNsGood() throws Exception {
+		String message = IOUtils.readStringFromStream(
+				getClass().getResourceAsStream("/validation/type-ns-good.xml"));
+		CombinedXmlValidator validator = new CombinedXmlValidator();
+		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+	}
+
+	/**
+	 * Without namespace prefix, correct value.
+	 */
+	@Test
+	public void testQnameComparisonNoNsGood() throws Exception {
+		String message = IOUtils.readStringFromStream(
+				getClass().getResourceAsStream("/validation/type-nons-good.xml"));
+		CombinedXmlValidator validator = new CombinedXmlValidator();
+		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+	}
+
+	/**
+	 * With namespace prefix, correct value.
+	 */
+	@Test(expected = ValidationException.class)
+	public void testQnameComparisonNsWrong() throws Exception {
+		String message = IOUtils.readStringFromStream(
+				getClass().getResourceAsStream("/validation/type-ns-wrong.xml"));
+		CombinedXmlValidator validator = new CombinedXmlValidator();
+		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+	}
+
+	/**
+	 * Without namespace prefix, wrong value.
+	 */
+	@Test(expected = ValidationException.class)
+	public void testQnameComparisonNoNsWrong() throws Exception {
+		String message = IOUtils.readStringFromStream(
+				getClass().getResourceAsStream("/validation/type-nons-wrong.xml"));
+		CombinedXmlValidator validator = new CombinedXmlValidator();
+		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+	}
 }
