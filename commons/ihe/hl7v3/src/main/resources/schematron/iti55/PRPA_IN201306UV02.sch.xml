@@ -19,7 +19,9 @@
     <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
 	<sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
 
-    <!-- ========================================================================== 
+    <sch:extends href="../generic.sch.xml" />
+
+    <!-- ==========================================================================
                   Rules based on Section 3.55.4.2.2.2 of IHE XCPD supplement
          ========================================================================== -->
     <sch:pattern id="patient-constraints-section_3_55_4_2_2_2">
@@ -32,10 +34,6 @@
             <sch:assert test="@classCode = 'PAT'">classCode must equal to 'PAT'</sch:assert>
             <sch:assert test="count(hl7:id) = 1">exactly one main patient ID must be present (use asOtherIds for additional IDs)</sch:assert>
             <sch:assert test="hl7:statusCode/@code = 'active'">statusCode must equal to 'active'</sch:assert>
-            
-            <sch:assert test="hl7:subjectOf1/hl7:queryMatchObservation/hl7:value/@xsi:type = 'INT'">
-                this element is constrained to data type 'INT'
-            </sch:assert>
         </sch:rule>
 
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
@@ -81,6 +79,11 @@
             <sch:assert test="hl7:politicalNation/@classCode = 'NAT'">politicalNation.classCode must equal to 'NAT'</sch:assert>
             <sch:assert test="hl7:politicalNation/@determinerCode = 'INSTANCE'">politicalNation.determinerCode must equal to 'INSTANCE'</sch:assert>
         </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-type" id="patient-constraints-section_3_55_4_2_2_2-a">
+        <sch:param name="element" value="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:subjectOf1/hl7:queryMatchObservation/hl7:value" />
+        <sch:param name="type" value="INT" />
     </sch:pattern>
 
     <!-- ========================================================================== 

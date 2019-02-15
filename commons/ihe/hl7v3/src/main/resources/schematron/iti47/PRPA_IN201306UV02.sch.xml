@@ -19,7 +19,9 @@
     <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
 	<sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
 
-    <!-- ========================================================================== 
+    <sch:extends href="../generic.sch.xml" />
+
+    <!-- ==========================================================================
                   Rules based on Section 3.47.4.2.2.2 of IHE ITI TF Volume 2b
          ========================================================================== -->
     <sch:pattern id="patient-constraints-section_3_47_4_2_2_2">
@@ -32,10 +34,6 @@
             <sch:assert test="@classCode = 'PAT'">classCode must equal to 'PAT'</sch:assert>
             <sch:assert test="count(hl7:id) ge 1">at least one main patient ID must be present</sch:assert>
             <sch:assert test="hl7:statusCode/@code = 'active'">statusCode must equal to 'active'</sch:assert>
-
-            <sch:assert test="hl7:subjectOf1/hl7:queryMatchObservation/hl7:value/@xsi:type = 'INT'">
-                this element is constrained to data type 'INT'
-            </sch:assert>
 
             <sch:assert test="hl7:providerOrganization">providerOrganization must be present</sch:assert>
         </sch:rule>
@@ -70,6 +68,10 @@
         </sch:rule>
     </sch:pattern>
 
+    <sch:pattern is-a="check-type" id="patient-constraints-section_3_47_4_2_2_2-a">
+        <sch:param name="element" value="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:subjectOf1/hl7:queryMatchObservation/hl7:value" />
+        <sch:param name="type" value="INT" />
+    </sch:pattern>
 
     <!-- ==========================================================================
                   Rules based on Section O.2.2 of IHE ITI TF Volume 2x

@@ -28,7 +28,7 @@
         <ph-schematron-version>5.0.6</ph-schematron-version>
         <ph-commons-version>9.1.8</ph-commons-version>
 
-        <saxon-he-version>9.9.0-2</saxon-he-version>
+        <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>5.1.4.RELEASE</spring-version>
         <spring-boot-version>2.1.2.RELEASE</spring-boot-version>

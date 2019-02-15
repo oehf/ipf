@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.audit.queue;
 
+import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
@@ -37,14 +38,18 @@ import java.util.stream.Stream;
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
+    @Setter
+    private boolean pretty = false;
+
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
+        if (auditMessages != null) {
+            String[] auditRecords = Stream.of(auditMessages)
+                    .map(msg -> auditContext.getSerializationStrategy().marshal(msg, pretty))
+                    .toArray(value -> new String[auditMessages.length]);
 
-        String[] auditRecords = Stream.of(auditMessages)
-                .map(msg -> auditContext.getSerializationStrategy().marshal(msg, false))
-                .toArray(value -> new String[auditMessages.length]);
-
-        handle(auditContext, auditRecords);
+            handle(auditContext, auditRecords);
+        }
     }
 
     protected abstract void handle(AuditContext auditContext, String... auditRecords);
