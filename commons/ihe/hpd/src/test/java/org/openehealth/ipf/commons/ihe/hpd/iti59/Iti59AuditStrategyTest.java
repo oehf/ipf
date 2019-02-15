@@ -49,7 +49,7 @@ public class Iti59AuditStrategyTest extends HpdAuditorTestBase {
 
         for (AuditMessage auditMessage : auditMessages) {
             auditMessage.validate();
-             System.out.println(printAuditMessage(auditMessage));
+            // System.out.println(printAuditMessage(auditMessage));
 
             assertEquals(1, auditMessage.getParticipantObjectIdentifications().size());
             ParticipantObjectIdentificationType participant = auditMessage.getParticipantObjectIdentifications().get(0);
