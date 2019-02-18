@@ -174,7 +174,7 @@ class TestIti42 extends XdsStandardTestContainer {
         checkHumanRequestor(message.activeParticipants[2], 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
         checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
 
-        checkDestination(message.activeParticipants[2], SERVICE2_ADDR, false)
+        checkDestination(message.activeParticipants[4], SERVICE2_ADDR, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
@@ -193,12 +193,6 @@ class TestIti42 extends XdsStandardTestContainer {
         checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
 
         checkDestination(message.activeParticipants[4], SERVICE2_ADDR, false)
-        codedValueTypes = [
-                CodedValueType.of('ELE', '1.2.3.4.5.6.777.1', 'Electrician'),
-                CodedValueType.of('GYN', '1.2.3.4.5.6.777.2', 'Gynecologist')
-        ]
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>',
-                'alias2<lipse@demo.com>',codedValueTypes)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
         checkPatient(message.participantObjectIdentifications[0])
         checkSubmissionSet(message.participantObjectIdentifications[1])
