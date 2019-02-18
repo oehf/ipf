@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import lombok.experimental.Delegate;
+import org.apache.camel.*;
 import org.apache.camel.component.mina2.Mina2Consumer;
+import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.spi.ExceptionHandler;
+import org.apache.camel.spi.UnitOfWork;
 import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IoSession;
@@ -32,14 +35,110 @@ public class MllpConsumer extends DefaultConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpConsumer.class);
 
-    // The reason for this interface is to convince the Delegate annotation to *not* delegate
-    // the stop method. Weird API, really.
-    private interface DoStop {
-        @SuppressWarnings("unused")
-        void stop() throws Exception;
+    public void start() throws Exception {
+        this.consumer.start();
     }
 
-    @Delegate(excludes = DoStop.class)
+    public Processor getProcessor() {
+        return this.consumer.getProcessor();
+    }
+
+    public AsyncProcessor getAsyncProcessor() {
+        return this.consumer.getAsyncProcessor();
+    }
+
+    public boolean isSuspendingOrSuspended() {
+        return this.consumer.isSuspendingOrSuspended();
+    }
+
+    public IoAcceptor getAcceptor() {
+        return this.consumer.getAcceptor();
+    }
+
+    public boolean isSuspending() {
+        return this.consumer.isSuspending();
+    }
+
+    public boolean isStoppingOrStopped() {
+        return this.consumer.isStoppingOrStopped();
+    }
+
+    public boolean isStopping() {
+        return this.consumer.isStopping();
+    }
+
+    public Route getRoute() {
+        return this.consumer.getRoute();
+    }
+
+    public void setRoute(Route route) {
+        this.consumer.setRoute(route);
+    }
+
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.consumer.setExceptionHandler(exceptionHandler);
+    }
+
+    public boolean isStopped() {
+        return this.consumer.isStopped();
+    }
+
+    public boolean isStarting() {
+        return this.consumer.isStarting();
+    }
+
+    public boolean isRunAllowed() {
+        return this.consumer.isRunAllowed();
+    }
+
+    public String getVersion() {
+        return this.consumer.getVersion();
+    }
+
+    public void setAcceptor(IoAcceptor acceptor) {
+        this.consumer.setAcceptor(acceptor);
+    }
+
+    public void shutdown() throws Exception {
+        this.consumer.shutdown();
+    }
+
+    public UnitOfWork createUoW(Exchange exchange) throws Exception {
+        return this.consumer.createUoW(exchange);
+    }
+
+    public ServiceStatus getStatus() {
+        return this.consumer.getStatus();
+    }
+
+    public void resume() throws Exception {
+        this.consumer.resume();
+    }
+
+    public ExceptionHandler getExceptionHandler() {
+        return this.consumer.getExceptionHandler();
+    }
+
+    public boolean isSuspended() {
+        return this.consumer.isSuspended();
+    }
+
+    public boolean isStarted() {
+        return this.consumer.isStarted();
+    }
+
+    public Mina2Endpoint getEndpoint() {
+        return this.consumer.getEndpoint();
+    }
+
+    public void doneUoW(Exchange exchange) {
+        this.consumer.doneUoW(exchange);
+    }
+
+    public void suspend() throws Exception {
+        this.consumer.suspend();
+    }
+
     private final Mina2Consumer consumer;
 
     MllpConsumer(Mina2Consumer consumer) {
@@ -49,18 +148,9 @@ public class MllpConsumer extends DefaultConsumer {
     }
 
     @Override
-    protected void handleException(String message, Throwable t) {
-        super.handleException(message, t);
-    }
-
-    @Override
-    protected void handleException(Throwable t) {
-        super.handleException(t);
-    }
-
-    @Override
     public void stop() throws Exception {
-        super.stop();
+        this.consumer.stop();
+        // super.stop();
     }
 
     @Override

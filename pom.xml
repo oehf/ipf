@@ -779,7 +779,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin-version}</version>
                     <configuration>
-                        <argLine>-Xms64m -Xmx512m</argLine>
+                        <argLine>-Xms64m -Xmx1024m</argLine>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -800,7 +800,7 @@
                         <source>1.8</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                        <additionalJOption>-J-Xmx512m</additionalJOption>
+                        <additionalJOption>-J-Xmx1024m</additionalJOption>
                         <doclint>none</doclint>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
@@ -940,6 +940,9 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- When using IntilliJ Idea, make sure to install the gmavenplus
+                 plugin, which adds the groovy source dirs to be compiled and
+                 ignores the generated stubs -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -964,11 +967,6 @@
                         <artifactId>groovy-all</artifactId>
                         <version>${groovy-version}</version>
                         <type>pom</type>
-                    </dependency>
-                    <dependency>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>logback-classic</artifactId>
-                        <version>1.2.3</version>
                     </dependency>
                 </dependencies>
             </plugin>

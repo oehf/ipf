@@ -55,7 +55,7 @@ class TestIti8 extends MllpTestContainer {
     //   4. Incomplete audit datasets
     //   5. Exceptions in the route
     //   6. Alternative HL7 codec factory
-    //   7. Secure Esnpoint
+    //   7. Secure Endpoint
     // -----------------------------------
     
     
