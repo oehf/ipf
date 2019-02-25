@@ -36,6 +36,9 @@
             <action dev="stanojevic-boris" issue="254" type="fix">
                 ATNA audit update for ITI-59
             </action>
+            <action dev="ohr" type="update">
+                Add possibility to TLSSyslogSender to test the TCP connection before writing audit records. Thanks to Ralf Steppacher for the pull request.
+            </action>
             <action dev="ohr" issue="253" type="update">
                 Allow FHIR components to share a Resource Provider, particularly for batch/transaction requests
             </action>
