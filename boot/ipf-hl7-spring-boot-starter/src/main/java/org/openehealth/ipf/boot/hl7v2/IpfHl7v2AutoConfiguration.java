@@ -49,6 +49,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
@@ -133,15 +134,21 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnMissingBean(HapiContext.class)
     public HapiContext hapiContext(CustomModelClassFactory modelClassFactory, ProfileStore profileStore,
                                    ValidationContext validationContext, ParserConfiguration parserConfiguration,
-                                   IDGenerator idGenerator) {
+                                   Optional<IDGenerator> idGenerator) {
         HapiContext context = new DefaultHapiContext();
         context.setModelClassFactory(modelClassFactory);
         context.setValidationContext(validationContext);
         context.setProfileStore(profileStore);
         context.setParserConfiguration(parserConfiguration);
-        context.getParserConfiguration().setIdGenerator(idGenerator);
+        idGenerator.ifPresent(ig -> parserConfiguration.setIdGenerator(ig));
         context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         return context;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(HapiContextCustomizer.class)
+    public HapiContextCustomizer hapiContextCustomizer() {
+        return HapiContextCustomizer.NOOP;
     }
 
     // Provide bean for MLLP endpoint dispatching
