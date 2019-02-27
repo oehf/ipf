@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  *
  */
-@ConfigurationProperties(prefix = "ipf.hdm")
+@ConfigurationProperties(prefix = "ipf.hpd")
 public class IpfHpdConfigurationProperties {
 
 }
