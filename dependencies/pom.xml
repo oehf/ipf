@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.6.1</brave-version>
         <camel-version>2.23.1</camel-version>
-        <cxf-version>3.3.0</cxf-version>
+        <cxf-version>3.3.1</cxf-version>
         <groovy-version>2.5.6</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.7.0</hapi-fhir-version>
