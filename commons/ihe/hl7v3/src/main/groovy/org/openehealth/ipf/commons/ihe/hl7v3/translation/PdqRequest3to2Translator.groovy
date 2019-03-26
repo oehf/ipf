@@ -83,8 +83,8 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         Message v2request = PDQ.Interactions.ITI_21.hl7v2TransactionConfiguration.request()
         
         // Segment MSH
-        fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)
-        if (! outputMessageStructure) {
+        fillMshFromSlurper(v3request, v2request, this.useSenderDeviceName, this.useReceiverDeviceName)
+        if (! this.outputMessageStructure) {
             v2request.MSH[9][3] = ''
         }
 
@@ -101,7 +101,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         
         // Segment QPD
-        v2request.QPD[1] = queryName
+        v2request.QPD[1] = this.queryName
         v2request.QPD[2] = idString(queryByParameter.queryId)
         
         fillFacets(queryParams, v2request.QPD[3])
@@ -117,7 +117,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         // Segment RCP
         v2request.RCP[1] = 'I'
-        if (translateInitialQuantity) {
+        if (this.translateInitialQuantity) {
             v2request.RCP[2][1] = queryByParameter.initialQuantity.@value.text()
             v2request.RCP[2][2] = 'RD'
         }
@@ -131,7 +131,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
 
     protected void addIdentifierParameters(identifierValues, queryParams) {
-        identifierValues.findAll{ it.@root != accountNumberRoot }.each {
+        identifierValues.findAll{ it.@root != this.accountNumberRoot }.each {
             queryParams.add([
                     '@PID.3.1'  : it.@extension.text(),
                     '@PID.3.4.1': it.@assigningAuthorityName.text(),
@@ -139,7 +139,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
                     '@PID.3.4.3': getIso(it),
             ])
         }
-        identifierValues.findAll{ it.@root == accountNumberRoot }.each {
+        identifierValues.findAll{ it.@root == this.accountNumberRoot }.each {
             queryParams.add([
                     '@PID.18.1'  : it.@extension.text(),
                     '@PID.18.4.2': it.@root.text(),

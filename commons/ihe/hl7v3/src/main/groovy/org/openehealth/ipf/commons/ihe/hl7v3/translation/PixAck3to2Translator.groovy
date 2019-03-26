@@ -49,9 +49,9 @@ class PixAck3to2Translator implements Hl7TranslatorV3toV2 {
 
         Message rsp = originalNotification.generateACK()
         rsp.MSH[7][1] = xml.creationTime.@value.text()
-        rsp.MSH[9][3] = outputMessageStructure ? 'ACK' : ''
+        rsp.MSH[9][3] = this.outputMessageStructure ? 'ACK' : ''
         rsp.MSH[10]   = xml.id.@extension.text()
-        rsp.MSA[1]    = ackCodeFirstCharacter[0] + xml.acknowledgement.typeCode.@code.text()[1]
+        rsp.MSA[1]    = this.ackCodeFirstCharacter[0] + xml.acknowledgement.typeCode.@code.text()[1]
         rsp.MSA[2]    = xml.acknowledgement.targetMessage.id.@extension.text()
 
         postprocess(rsp, xml)
