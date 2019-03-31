@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
@@ -164,6 +165,13 @@ class TestIti42 extends XdsStandardTestContainer {
 
         checkEvent(message.eventIdentification, '110107', 'ITI-42', EventActionCode.Create, outcome)
         checkSource(message.activeParticipants[0], false)
+
+        assert message.eventIdentification.purposesOfUse.size() == 5
+        assert PurposeOfUse.of('12', '1.0.14265.12', 'Law Enforcement') in message.eventIdentification.purposesOfUse
+        assert PurposeOfUse.of('13', '1.0.14265.13', 'Law Enforcement') in message.eventIdentification.purposesOfUse
+        assert PurposeOfUse.of('14', '1.0.14265.14', 'Law Enforcement') in message.eventIdentification.purposesOfUse
+        assert PurposeOfUse.of('15', '1.0.14265.15', 'Law Enforcement') in message.eventIdentification.purposesOfUse
+        assert PurposeOfUse.of('16', '1.0.14265.16', 'Law Enforcement') in message.eventIdentification.purposesOfUse
 
         def role1 = ActiveParticipantRoleId.of('ELE' as String, '1.2.3.4.5.6.777.1' as String, 'Electrician' as String)
         def role2 = ActiveParticipantRoleId.of('HCP' as String, '2.16.756.5.30.1.127.3.10.6' as String, 'Healthcare Practitioner' as String)

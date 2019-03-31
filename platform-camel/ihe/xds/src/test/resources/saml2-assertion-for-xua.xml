@@ -165,7 +165,7 @@
                     <PurposeOfUse xmlns="urn:hl7-org:v0000"
                                   xsi:type="CWE"
                                   code="16"
-                                  codeSystem="1.0.14265.15"
+                                  codeSystem="1.0.14265.16"
                                   codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
                                   displayName="Law Enforcement"/>
                 </saml:AttributeValue>
