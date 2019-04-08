@@ -17,11 +17,15 @@ package org.openehealth.ipf.commons.ihe.xds.iti62;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPatientRecordEventBuilder;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Client audit strategy for ITI-62.
@@ -38,8 +42,9 @@ public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsRemoveMetadataAuditDataset auditDataset) {
         return new XdsPatientRecordEventBuilder(auditContext, auditDataset, EventActionCode.Delete,
                 XdsEventTypeCode.RemoveMetadata, auditDataset.getPurposesOfUse())
-                .addPatients(auditDataset.getPatientIds())
-                .addObjectIds(auditDataset.getObjectIds())
-                .getMessages();
+                        .addPatients(auditDataset.getPatientIds())
+                        .addObjectIds(auditDataset.getObjectIds() != null ? Arrays.asList(auditDataset.getObjectIds())
+                                : Collections.emptyList(), ParticipantObjectDataLifeCycle.PermanentErasure)
+                        .getMessages();
     }
 }

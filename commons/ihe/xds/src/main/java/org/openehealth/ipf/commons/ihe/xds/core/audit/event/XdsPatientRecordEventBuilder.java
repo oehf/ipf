@@ -17,7 +17,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.EventType;
@@ -30,7 +34,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * @author Christian Ohr
@@ -65,9 +68,9 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                 patientIds.toArray(new String[patientIds.size()]));
     }
 
-    public XdsPatientRecordEventBuilder addObjectIds(String... objectIds) {
+    public XdsPatientRecordEventBuilder addObjectIds(List<String> objectIds, ParticipantObjectDataLifeCycle lifeCycle) {
         if (objectIds != null) {
-            Stream.of(objectIds).forEach(objectId ->
+            objectIds.forEach(objectId ->
                     delegate.addParticipantObjectIdentification(
                             ParticipantObjectIdType.of(
                                     "urn:ihe:iti:2017:ObjectRef",
@@ -79,7 +82,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                             objectId,
                             ParticipantObjectTypeCode.System,
                             ParticipantObjectTypeCodeRole.Report,
-                            null,
+                            lifeCycle,
                             null));
         }
         return self();
