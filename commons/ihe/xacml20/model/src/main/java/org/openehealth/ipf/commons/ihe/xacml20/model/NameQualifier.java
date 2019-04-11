@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 public enum NameQualifier {
     PATIENT("urn:e-health-suisse:2015:epr-spid"),
     PROFESSIONAL("urn:gs1:gln"),
-    CUSTODIAN_OR_GUARDIAN("urn:e-health-suisse:custodian-id"),
+    REPRESENTATIVE("urn:e-health-suisse:representative-id"),
     ;
 
     @Getter private final String qualifier;
