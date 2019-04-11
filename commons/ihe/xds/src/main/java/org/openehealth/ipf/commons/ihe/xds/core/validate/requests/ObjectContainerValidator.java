@@ -460,8 +460,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                         "Initial version of the object was received in an update transaction",
                         Severity.ERROR, registryObject.getId());
             }
-        } else {
-            metaDataAssert(profile == RMU.Interactions.ITI_92, LOGICAL_ID_MISSING);
+        } else if (profile == XDS.Interactions.ITI_57) {
+            throw new XdsRuntimeException(
+                    ErrorCode.METADATA_UPDATE_ERROR,
+                    "logical ID is missing in the XDS Metadata Update request",
+                    Severity.ERROR,
+                    registryObject.getId());
         }
 
         boolean foundHasMemberAssociation = false;
