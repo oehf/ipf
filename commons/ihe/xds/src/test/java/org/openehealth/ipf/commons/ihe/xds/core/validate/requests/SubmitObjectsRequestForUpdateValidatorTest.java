@@ -56,7 +56,7 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
         expectXdsMetadataException(LOGICAL_ID_SAME, request, ITI_57);
 
         request.getExtrinsicObjects().get(0).setLid(null);
-        expectXdsMetadataException(LOGICAL_ID_MISSING, request, ITI_57);
+        expectXdsRuntimeException(ErrorCode.METADATA_UPDATE_ERROR, request, ITI_57);
 
         request.getExtrinsicObjects().get(0).setLid(request.getExtrinsicObjects().get(0).getId());
         expectXdsRuntimeException(ErrorCode.INVALID_REQUEST_EXCEPTION, request, ITI_57);
