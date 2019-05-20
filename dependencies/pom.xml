@@ -20,7 +20,7 @@
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
-        <mina2-version>2.0.20</mina2-version>
+        <mina2-version>2.0.21</mina2-version>
         <ph-schematron-version>5.0.6</ph-schematron-version>
         <ph-commons-version>9.1.8</ph-commons-version>
 
