@@ -30,14 +30,14 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>2.22.0</surefire-plugin-version>
+        <surefire-plugin-version>2.22.2</surefire-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
         <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
 
         <github.global.server>github</github.global.server>
         <site.path>${project.version}</site.path>
@@ -49,25 +49,25 @@
 
         <!-- Plugin version properties -->
         <antrun-plugin-version>1.8</antrun-plugin-version>
-        <assembly-plugin-version>2.6</assembly-plugin-version>
-        <build-helper-version>1.11</build-helper-version>
-        <compiler-plugin-version>3.8.0</compiler-plugin-version>
+        <assembly-plugin-version>3.1.1</assembly-plugin-version>
+        <build-helper-version>3.0.0</build-helper-version>
+        <compiler-plugin-version>3.8.1</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
-        <gmavenplus-plugin-version>1.6.2</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>1.7.0</gmavenplus-plugin-version>
         <jar-plugin-version>3.1.0</jar-plugin-version>
-        <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
+        <javadoc-plugin-version>3.1.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.4</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.4.0</lombok-plugin-version>
+        <lombok-plugin-version>1.18.6.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
-        <sources-plugin-version>3.0.1</sources-plugin-version>
+        <sources-plugin-version>3.1.0</sources-plugin-version>
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.8</activemq-version>
+        <activemq-version>5.15.9</activemq-version>
         <asm-version>7.0</asm-version>
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-codec-version>1.11</commons-codec-version>
@@ -79,15 +79,15 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>23.0</guava-version>
+        <guava-version>27.1-jre</guava-version>
         <httpclient4-version>4.5.5</httpclient4-version>
-        <jackson-version>2.9.7</jackson-version>
+        <jackson-version>2.9.8</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <jetty-version>9.4.11.v20180605</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.11.1</log4j-version>
-        <lombok-version>1.18.4</lombok-version>
+        <lombok-version>1.18.8</lombok-version>
         <mockito-version>2.22.0</mockito-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>

@@ -79,21 +79,21 @@ class TestMultiplast {
 
         // normal parallel processing
         long startTimestamp = System.currentTimeMillis()
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
+        resultExchange = send('abc, def, ghi', [endpoint(10000), endpoint(10001), endpoint(10002)].join(';'))
         assert Exchanges.resultMessage(resultExchange).body == '123456789'
 
         // TODO: the check below fails on nodes with high CPU load
         // assert System.currentTimeMillis() - startTimestamp < 4000L
 
         // normal parallel processing again -- to check in logs whether redundant sessions are being created
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
+        resultExchange = send('abc, def, ghi', [endpoint(10000), endpoint(10001), endpoint(10002)].join(';'))
+        resultExchange = send('abc, def, ghi', [endpoint(10000), endpoint(10001), endpoint(10002)].join(';'))
 
         // different lengths of bodies' and recipients' lists -- should fail
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001)].join(';'))
+        resultExchange = send('abc, def, ghi', [endpoint(10000), endpoint(10001)].join(';'))
         assert resultExchange.failed
 
-        resultExchange = send('abc, def', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
+        resultExchange = send('abc, def', [endpoint(10000), endpoint(10001), endpoint(10002)].join(';'))
         assert resultExchange.failed
     }
 

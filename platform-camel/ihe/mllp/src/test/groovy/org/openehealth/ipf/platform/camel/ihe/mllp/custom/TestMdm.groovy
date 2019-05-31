@@ -22,6 +22,7 @@ import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
@@ -210,7 +211,7 @@ class TestMdm extends MllpTestContainer {
         fail()
     }
 
-    @Test
+    @Test @Ignore
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('MDM^T01', '2.5')
         def endpointUri = 'mdm://localhost:19088?sslContextParameters=#sslContextParameters&audit=false'

@@ -71,7 +71,7 @@ class MllpTestContainer {
     
     @AfterClass
     static void tearDownAfterClass() {
-        appContext?.destroy()
+        appContext?.close()
     }
     
     
