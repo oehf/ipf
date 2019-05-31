@@ -47,6 +47,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     /**
      * @deprecated
      */
+    @Deprecated
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -64,6 +65,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     /**
      * @deprecated
      */
+    @Deprecated
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -171,6 +173,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     /**
      * @deprecated
      */
+    @Deprecated
     public boolean isDeferModelScanning() {
         return deferModelScanning;
     }
@@ -184,6 +187,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      *
      * @deprecated
      */
+    @Deprecated
     public void setDeferModelScanning(boolean deferModelScanning) {
         this.deferModelScanning = deferModelScanning;
     }

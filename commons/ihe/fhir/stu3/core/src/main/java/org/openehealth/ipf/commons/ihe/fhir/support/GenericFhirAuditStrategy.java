@@ -51,6 +51,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.audit.GenericFhirAuditStrategy}
  */
+@Deprecated
 public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
     private Function<T, Optional<IBaseReference>> patientIdExtractor;

@@ -79,6 +79,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      * @return configuration object filled with values from the provided parameter map
      * @deprecated use {@link #createConfig(String, Map)}
      */
+    @Deprecated
     protected ConfigType createConfig(Map<String, Object> parameters) throws Exception {
         return createConfig(MllpEndpointConfiguration.UNKNOWN_URI, parameters);
     }

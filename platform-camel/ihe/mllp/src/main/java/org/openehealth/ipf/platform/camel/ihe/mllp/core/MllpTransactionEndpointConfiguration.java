@@ -43,6 +43,7 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     /**
      * @deprecated
      */
+    @Deprecated
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }

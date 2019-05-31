@@ -36,7 +36,6 @@ import org.springframework.context.annotation.Configuration;
 public class IpfAtnaAutoConfiguration {
 
     @Bean
-    @ConfigurationProperties(prefix = "ipf.atna")
     @ConditionalOnMissingBean
     public AuditContext atnaAuditorModuleConfig(IpfAtnaConfigurationProperties config,
                                                 @Value("${spring.application.name}") String appName) throws Exception {
@@ -58,19 +57,23 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
 
         if (config.getAuditQueueClass() != null) {
-            auditContext.setAuditMessageQueue(config.getAuditQueueClass().newInstance());
+            auditContext.setAuditMessageQueue(
+                    config.getAuditQueueClass().getDeclaredConstructor().newInstance());
         }
 
         if (config.getAuditExceptionHandlerClass() != null) {
-            auditContext.setAuditExceptionHandler(config.getAuditExceptionHandlerClass().newInstance());
+            auditContext.setAuditExceptionHandler(
+                    config.getAuditExceptionHandlerClass().getDeclaredConstructor().newInstance());
         }
 
         if (config.getAuditSenderClass() != null) {
-            auditContext.setAuditTransmissionProtocol(config.getAuditSenderClass().newInstance());
+            auditContext.setAuditTransmissionProtocol(
+                    config.getAuditSenderClass().getDeclaredConstructor().newInstance());
         }
 
         if (config.getAuditMessagePostProcessorClass() != null) {
-            auditContext.setAuditMessagePostProcessor(config.getAuditMessagePostProcessorClass().newInstance());
+            auditContext.setAuditMessagePostProcessor(
+                    config.getAuditMessagePostProcessorClass().getDeclaredConstructor().newInstance());
         }
 
         return auditContext;

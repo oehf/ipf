@@ -86,6 +86,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <R extends IBaseResource> R requestResource(
             Object payload, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -105,6 +106,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <R extends IBaseResource> R requestResource(
             Object payload, FhirSearchParameters parameters, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -144,6 +146,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
                                                                     HttpServletRequest httpServletRequest,
                                                                     HttpServletResponse httpServletResponse) {
@@ -162,6 +165,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -181,6 +185,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, FhirSearchParameters parameters,
             String resourceType,
@@ -227,6 +232,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -247,6 +253,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final IBundleProvider requestBundleProvider(
             Object payload, FhirSearchParameters searchParameters,
             String resourceType,
@@ -292,6 +299,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final MethodOutcome requestAction(
             Object payload,
             HttpServletRequest httpServletRequest,
@@ -310,6 +318,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @deprecated use #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)
      */
+    @Deprecated
     protected final MethodOutcome requestAction(
             Object payload,
             FhirSearchParameters parameters,

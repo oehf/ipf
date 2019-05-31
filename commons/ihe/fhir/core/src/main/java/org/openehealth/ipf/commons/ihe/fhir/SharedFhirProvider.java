@@ -88,6 +88,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
      *
      * @deprecated use {@link #requestTransaction(Object, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
      */
+    @Deprecated
     protected final <T extends IBaseBundle> T requestTransaction(
             Object payload,
             Class<T> bundleClass,

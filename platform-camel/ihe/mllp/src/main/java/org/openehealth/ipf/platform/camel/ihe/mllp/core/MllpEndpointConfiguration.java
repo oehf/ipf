@@ -64,6 +64,7 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
     /**
      * @deprecated
      */
+    @Deprecated
     protected MllpEndpointConfiguration(MllpComponent<?, ?> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }

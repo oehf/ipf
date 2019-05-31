@@ -30,6 +30,7 @@ import java.util.Map;
  * @since 3.4
  * @deprecated use BatchTransactionClientRequestFactory
  */
+@Deprecated
 public class Iti65ClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
 
     @Override

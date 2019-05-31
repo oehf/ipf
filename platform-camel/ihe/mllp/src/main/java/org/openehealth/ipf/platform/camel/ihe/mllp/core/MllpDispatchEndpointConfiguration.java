@@ -34,6 +34,7 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
     /**
      * @deprecated
      */
+    @Deprecated
     protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
         this(component, UNKNOWN_URI, parameters);
     }

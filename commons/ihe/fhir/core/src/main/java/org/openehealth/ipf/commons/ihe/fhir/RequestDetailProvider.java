@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @deprecated simply use the RequestDetails parameter in the resource provider
  */
+@Deprecated
 public class RequestDetailProvider extends InterceptorAdapter {
 
     private static final ThreadLocal<RequestDetails> requestDetails = new ThreadLocal<>();

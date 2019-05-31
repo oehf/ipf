@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 3.4
  * @deprecated use BatchTransactionResourceProvider.INSTANCE
  */
+@Deprecated
 public class Iti65ResourceProvider extends SharedFhirProvider {
 
     public Iti65ResourceProvider() {

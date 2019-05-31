@@ -28,6 +28,7 @@ import java.util.Comparator;
  *
  * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy}
  */
+@Deprecated
 public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends AbstractFhirAuditStrategy<T, OperationOutcome> {
 
     public FhirAuditStrategy(boolean serverSide) {

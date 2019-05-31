@@ -35,7 +35,7 @@ import java.util.Objects;
  *
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType
 @XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode",
         "areaCityCode", "localNumber", "extension", "unformattedPhoneNumber"})
 public class Telecom extends Hl7v2Based<XTN> {
@@ -93,6 +93,7 @@ public class Telecom extends Hl7v2Based<XTN> {
      * @param extension
      * @deprecated
      */
+    @Deprecated
     public Telecom(Integer countryCode, Integer areaCityCode, Integer localNumber, Integer extension) {
         this(
                 countryCode == null ? null : countryCode.longValue(),
