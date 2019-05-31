@@ -60,16 +60,6 @@ class Iti8TestRouteBuilder extends RouteBuilder {
                     .maximumRedeliveries(0)
                     .end()
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
-        
-        from('xds-iti8://0.0.0.0:18087?audit=false&'+
-                'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=SSLv3,TLSv1&' +
-                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
-                .transform(ack())
-
-        from('xds-iti8://0.0.0.0:18088?audit=false&'+
-                'sslContextParameters=#sslContextParameters')
-                .transform(ack())
 
         from('xds-iti8://0.0.0.0:18089?audit=false&'+
                 'codec=#alternativeCodec&' +

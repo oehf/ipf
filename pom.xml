@@ -91,7 +91,7 @@
         <mockito-version>2.22.0</mockito-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <servlet-api-version>4.0.1</servlet-api-version>
+        <servlet-api-version>4.0.2</servlet-api-version>
         <tomcat-version>9.0.20</tomcat-version>
         <woodstox-version>5.2.1</woodstox-version>
         <xbean-spring-version>4.14</xbean-spring-version>
@@ -133,7 +133,7 @@
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                                    <stubsOutputDirectory>${output-folder}/generated-stubs</stubsOutputDirectory>
                                     <targetBytecode>${maven.compiler.target}</targetBytecode>
                                 </configuration>
                             </execution>
@@ -534,8 +534,8 @@
                 <version>${jetty-version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
                 <version>${servlet-api-version}</version>
             </dependency>
             <dependency>
@@ -940,9 +940,9 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- When using IntilliJ Idea, make sure to install the gmavenplus
-                 plugin, which adds the groovy source dirs to be compiled and
-                 ignores the generated stubs -->
+            <!-- When using IntelliJ Idea, make sure to install the gmavenplus
+                 plugin, which adds the groovy source dirs to the build and
+                 removes the generated stubs from the build -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
