@@ -23,15 +23,45 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.6" description="IPF 3.6 (or maybe 4.0...)">
+        <release version="3.6" description="IPF 3.6" date="28 Feb 2019">
+            <action dev="ohr" issue="259" type="change">
+                Updates of Spring (5.1.5), Spring Boot (2.1.3), CXF (3.3.0), Groovy (2.5.6), HAPI FHIR (3.7.0)
+            </action>
+            <action dev="ohr" issue="257" type="update">
+                FHIR RequestDetails are passed into the Camel route
+            </action>
+            <action dev="ohr" issue="255" type="fix">
+                Avoid NullPointerException during auditing if non-SOAP requests are sent to SOAP endpoints
+            </action>
+            <action dev="stanojevic-boris" issue="254" type="fix">
+                ATNA audit update for ITI-59
+            </action>
+            <action dev="ohr" type="update">
+                Add possibility to TLSSyslogSender to test the TCP connection before writing audit records. Thanks to Ralf Steppacher for the pull request.
+            </action>
+            <action dev="ohr" issue="253" type="update">
+                Allow FHIR components to share a Resource Provider, particularly for batch/transaction requests
+            </action>
             <action dev="unixoid" issue="252" type="add">
                 JSON serialization support for the simplified XDS data model
+            </action>
+            <action dev="unixoid" issue="249" type="fix">
+                Fix ITI-55 schematron validation
+            </action>
+            <action dev="ohr" issue="247" type="fix">
+                Allow to configure PagingProvider on FHIR Servlet
+            </action>
+            <action dev="ohr" issue="241" type="update">
+                Allow FHIR components to share a common FHIR context
             </action>
             <action dev="unixoid" issue="240" type="add">
                 Support for the Swiss CPI profile (Community Portal Index)
             </action>
             <action dev="unixoid" issue="204" type="update">
                 Better XUA token processing for ATNA; dropped OpenSAML dependency
+            </action>
+            <action dev="ohr" issue="131" type="add">
+                Support distributed tracing with HL7v2 by passing on B3 Tracing headers in a Z segement using Consumer/ProducerTracingInterceptor
             </action>
         </release>
         <release version="3.5.2" description="IPF 3.5.2" date="16 Aug 2018">

@@ -31,7 +31,8 @@ import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingS
 @XmlEnum
 public enum PurposeOfUse {
     NORMAL   (new CE("NORM", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Normal")),
-    EMERGENCY(new CE("EMER", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Emergency"));
+    EMERGENCY(new CE("EMER", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Emergency")),
+    AUTO     (new CE("AUTO", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Machine Access"));
 
     @Getter private final CE code;
 

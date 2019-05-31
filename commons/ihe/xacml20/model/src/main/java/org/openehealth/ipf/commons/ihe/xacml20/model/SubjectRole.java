@@ -30,12 +30,14 @@ import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingS
 @XmlType(name = "SubjectRole", namespace = "http://www.openehealth.org/ipf/ppq")
 @XmlEnum
 public enum SubjectRole {
-    PATIENT       (new CE("PAT", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Patient")),
-    PROFESSIONAL  (new CE("HCP", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Healthcare Professional")),
-    ASSISTANT     (new CE("ASS", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Assistant")),
-    REPRESENTATIVE(new CE("REP", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Representative")),
-    ADMINISTRATOR (new CE("ADM", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Administrator")),
-    TECHNICAL_USER(new CE("TCU", CodingSystemIds.SWISS_SUBJECT_ROLE_OLD, "eHealth Suisse EPD Akteure", "Technical User")),
+    PATIENT       (new CE("PAT",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Patient")),
+    PROFESSIONAL  (new CE("HCP",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Healthcare Professional")),
+    ASSISTANT     (new CE("ASS",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Assistant")),
+    REPRESENTATIVE(new CE("REP",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Representative")),
+    ADMINISTRATOR (new CE("ADM",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Administrator")),       // obsolete
+    DOCUMENT_ADMIN(new CE("DADM", CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Document Administrator")),
+    POLICY_ADMIN  (new CE("PADM", CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Policy Administrator")),
+    TECHNICAL_USER(new CE("TCU",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Technical User")),
     ;
 
     @Getter private final CE code;

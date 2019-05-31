@@ -61,7 +61,7 @@ public class HL7v3ValidatorTest {
 	}
 
 	/**
-	 * With namespace prefix, correct value.
+	 * With namespace prefix, wrong value.
 	 */
 	@Test(expected = ValidationException.class)
 	public void testQnameComparisonNsWrong() throws Exception {

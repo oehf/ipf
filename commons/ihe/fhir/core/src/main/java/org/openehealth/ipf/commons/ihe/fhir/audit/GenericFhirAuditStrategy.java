@@ -50,7 +50,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  */
 public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
-    private Function<T, Optional<IBaseReference>> patientIdExtractor;
+    private Function<T, Optional<? extends IBaseReference>> patientIdExtractor;
 
     /**
      * @param serverSide         server side auditing
@@ -58,7 +58,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
      * @param patientIdExtractor function that extracts a patient reference from a domain resource
      */
     public GenericFhirAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations,
-                                    Function<T, Optional<IBaseReference>> patientIdExtractor) {
+                                    Function<T, Optional<? extends IBaseReference>> patientIdExtractor) {
         super(serverSide, operations);
         this.patientIdExtractor = requireNonNull(patientIdExtractor);
     }

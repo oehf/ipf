@@ -89,7 +89,7 @@ class BasicXuaProcessor implements XuaProcessor {
         // extract purpose of use, patient id, etc.
         def purposesOfUse = []
         for (pou in gpath.AttributeStatement.Attribute.findAll { it.@Name == PURPOSE_OF_USE_ATTRIBUTE_NAME }.AttributeValue.PurposeOfUse) {
-            purposesOfUse << [PurposeOfUse.of(pou.@code.text(), pou.@codeSystem.text(), pou.@displayName.text())]
+            purposesOfUse << PurposeOfUse.of(pou.@code.text(), pou.@codeSystem.text(), pou.@displayName.text())
         }
         auditDataset.purposesOfUse = purposesOfUse as PurposeOfUse[]
         auditDataset.xuaPatientId = gpath.AttributeStatement.Attribute.find { it.@Name == PATIENT_ID_ATTRIBUTE_NAME }.AttributeValue[0].text()

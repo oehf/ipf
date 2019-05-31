@@ -54,7 +54,6 @@ public class PpqConstants {
 
     public static class CodingSystemIds {
         public static final String SWISS_PATIENT_ID       = "2.16.756.5.30.1.127.3.10.3";
-        public static final String SWISS_SUBJECT_ROLE_OLD = "2.16.756.5.30.1.127.3.10.4";   // obsolete
         public static final String SWISS_PURPOSE_OF_USE   = "2.16.756.5.30.1.127.3.10.5";
         public static final String SWISS_SUBJECT_ROLE     = "2.16.756.5.30.1.127.3.10.6";
         public static final String SNOMED_CT              = "2.16.840.1.113883.6.96";
