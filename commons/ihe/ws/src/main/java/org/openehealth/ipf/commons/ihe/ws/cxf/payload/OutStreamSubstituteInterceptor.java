@@ -56,32 +56,30 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
         super(Phase.PRE_STREAM);
         addAfter(StaxOutInterceptor.class.getName());
     }
-    
+
+    private static void checkClass(Object x, Class<?> expectedClass) {
+        Class<?> realClass = x.getClass();
+        if (!expectedClass.isAssignableFrom(realClass)) {
+            throw new IllegalStateException("Expected " + expectedClass.getName() + ", got " + realClass.getName());
+        }
+    }
+
     @Override
     public void handleMessage(Message message) {
         try {
-            boolean success = false;
             Object x = message.getContent(XMLStreamWriter.class);
-            if (x instanceof BaseStreamWriter) {
-                x = MWRITER_FIELD.get(x);
-                if (x instanceof BufferingXmlWriter) {
-                    x = MOUT_WRITER_FIELD.get(x);
-                    if (x instanceof UTF8Writer) {
-                        UTF8Writer writer = (UTF8Writer) x;
-                        x = MOUT_STREAM_FIELD.get(writer);
-                        if (x instanceof OutputStream) {
-                            OutputStream os = (OutputStream) x;
-                            WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
-                            message.setContent(OutputStream.class, wrapper);
-                            MOUT_STREAM_FIELD.set(writer, wrapper);
-                            success = true;
-                        }
-                    }
-                }
-            }
-            if (!success) {
-                throw new IllegalStateException("Unable to wrap the output stream, check involved classes");
-            }
+            checkClass(x, BaseStreamWriter.class);
+            x = MWRITER_FIELD.get(x);
+            checkClass(x, BufferingXmlWriter.class);
+            x = MOUT_WRITER_FIELD.get(x);
+            checkClass(x, UTF8Writer.class);
+            UTF8Writer writer = (UTF8Writer) x;
+            x = MOUT_STREAM_FIELD.get(writer);
+            checkClass(x, OutputStream.class);
+            OutputStream os = (OutputStream) x;
+            WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
+            message.setContent(OutputStream.class, wrapper);
+            MOUT_STREAM_FIELD.set(writer, wrapper);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
