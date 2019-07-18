@@ -13,7 +13,7 @@ Core concepts of IHE profiles are:
 | Concept          | IHE Definition (Technical Framework, Volume 1) | Description  | Example
 |------------------|------------------------------------------------|--------------|--------
 | Actor            | Actors are information systems or components of information systems that produce, manage, or act on categories of information required by operational activities in the enterprise. | An application role in a distributed system | Patient Identity Cross-Reference Manager aka PIX Manager.
-| Transaction      | Transactions are interactions between actors that communicate the required information through standards-based messages. 	                                                         | A message exchange between actors           | Patient Identity Deed between the Patient Identity Source and the PIX Manager
+| Transaction      | Transactions are interactions between actors that communicate the required information through standards-based messages. 	                                                         | A message exchange between actors           | Patient Identity Feed between the Patient Identity Source and the PIX Manager
 | Profile          | Each integration profile is a representation of a real-world capability that is supported by a set of actors that interact through transactions.                                    | A set of actors and transactions            | PIX profile
 
 IPF is a development framework with special support for the implementation of IHE concepts (i.e. profiles).
