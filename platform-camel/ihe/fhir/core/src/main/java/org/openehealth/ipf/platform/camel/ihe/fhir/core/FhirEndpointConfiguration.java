@@ -163,7 +163,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         String username = component.getAndRemoveParameter(parameters, "username", String.class);
         String password = component.getAndRemoveParameter(parameters, "password", String.class);
 
-        if (sslContextParameters == null) {
+        if (secure && sslContextParameters == null) {
             Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
             if (sslContextParameterMap.size() == 1) {
                 Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
