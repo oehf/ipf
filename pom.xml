@@ -57,13 +57,13 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.5.7-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>3.3.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.5.8-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>3.4.0-01</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.4.0</lombok-plugin-version>
+        <lombok-plugin-version>1.18.8.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
@@ -71,33 +71,33 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.9</activemq-version>
-        <commons-beanutils-version>1.9.3</commons-beanutils-version>
-        <commons-codec-version>1.11</commons-codec-version>
-        <commons-dbcp2-version>2.2.0</commons-dbcp2-version>
+        <activemq-version>5.15.10</activemq-version>
+        <commons-beanutils-version>1.9.4</commons-beanutils-version>
+        <commons-codec-version>1.13</commons-codec-version>
+        <commons-dbcp2-version>2.7.0</commons-dbcp2-version>
         <commons-io-version>2.6</commons-io-version>
-        <commons-lang3-version>3.7</commons-lang3-version>
+        <commons-lang3-version>3.9</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>27.0.1-jre</guava-version>
-        <httpclient4-version>4.5.5</httpclient4-version>
-        <jackson-version>2.9.8</jackson-version>
+        <httpclient4-version>4.5.10</httpclient4-version>
+        <jackson-version>2.9.9</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.11.v20180605</jetty-version>
+        <jetty-version>9.4.19.v20190610</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
-        <log4j-version>2.11.1</log4j-version>
-        <lombok-version>1.18.8</lombok-version>
+        <log4j-version>2.12.1</log4j-version>
+        <lombok-version>1.18.10</lombok-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.41</tomcat-version>
+        <tomcat-version>8.5.45</tomcat-version>
         <woodstox-version>5.1.0</woodstox-version>
-        <xbean-spring-version>4.5</xbean-spring-version>
+        <xbean-spring-version>4.14</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
 
