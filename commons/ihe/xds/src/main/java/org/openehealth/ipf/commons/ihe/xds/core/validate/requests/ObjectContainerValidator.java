@@ -288,7 +288,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     LOGICAL_ID_SAME, docEntry.getLid());
 
             String mimeType = docEntry.getMimeType();
-            metaDataAssert(mimeType != null && !mimeType.isEmpty(), MIME_TYPE_MUST_BE_SPECIFIED);
+            metaDataAssert(StringUtils.isNotEmpty(mimeType), MIME_TYPE_MUST_BE_SPECIFIED);
 
             if ((profile == XDS.Interactions.ITI_57) || (profile == RMU.Interactions.ITI_92)) {
                 validateUpdateObject(docEntry, container, profile);
