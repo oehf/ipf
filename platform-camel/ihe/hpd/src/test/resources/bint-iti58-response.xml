@@ -1,0 +1,17 @@
+<batchResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+               xmlns="urn:oasis:names:tc:DSML:2:0:core"
+               xmlns:s01="urn:oasis:names:tc:DSML:2:0:core"
+               xsi:type="s01:BatchResponse"
+               requestID="5">
+    <searchResponse xsi:type="s01:SearchResponse" requestID="5-a">
+        <searchResultEntry xsi:type="s01:SearchResultEntry"
+                           dn="uid=CommunityA:00000001000,ou=HCRegulatedOrganization,dc=HPD,o=BAG,c=CH">
+            <attr xsi:type="s01:DsmlAttr" name="uid">
+                <value xsi:type="s01:DsmlValue">CommunityA:00000001000</value>
+            </attr>
+        </searchResultEntry>
+        <searchResultDone xsi:type="s01:LDAPResult">
+            <resultCode xsi:type="s01:ResultCode" code="0"></resultCode>
+        </searchResultDone>
+    </searchResponse>
+</batchResponse>
