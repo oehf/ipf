@@ -15,9 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti58
 
+import org.apache.cxf.jaxb.JAXBDataBinding
+import org.apache.cxf.jaxb.io.DataReaderImpl
+import org.apache.cxf.staxutils.StaxUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -68,6 +72,13 @@ class TestIti58 extends StandardTestContainer {
         return send(endpoint, request, BatchResponse.class)
     }
 
-
+    @Test
+    void testDsmlValueJaxb() {
+        def inputStream = getClass().classLoader.getResourceAsStream('bint-iti58-response.xml')
+        def reader = StaxUtils.createXMLStreamReader(inputStream)
+        def dataReader = new DataReaderImpl(new JAXBDataBinding(HpdValidator.JAXB_CONTEXT), false);
+        def obj = dataReader.read(reader)
+        assert obj != null
+    }
 }
 
