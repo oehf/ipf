@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import org.apache.camel.ResolveEndpointFailedException;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
@@ -108,5 +109,14 @@ abstract public class AbstractWsComponent<
      */
     public ConfigType getWsTransactionConfiguration() {
         return interactionId.getWsTransactionConfiguration();
+    }
+
+    @Override
+    protected void validateParameters(String uri, Map<String, Object> parameters, String optionPrefix) {
+        try {
+            super.validateParameters(uri, parameters, optionPrefix);
+        } catch (ResolveEndpointFailedException ignored) {
+            // nop
+        }
     }
 }

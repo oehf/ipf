@@ -66,7 +66,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    LOG.error('', e)
                 }
             }
             .delay(ASYNC_DELAY)
@@ -90,7 +90,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    LOG.error('', e)
                 }
             }
             .delay(ASYNC_DELAY)
@@ -109,7 +109,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    LOG.error('', e)
                 }
 
                 // create response, inclusive SOAP and HTTP headers

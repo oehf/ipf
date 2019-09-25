@@ -61,7 +61,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                 .throwException(new RuntimeException("Alles schlimm..."));
 
         // throws an UnknownPolicySetId SOAP Fault (for UPDATE and DELETE)
-        from("ch-ppq1:ch-ppq-exception")
+        from("ch-ppq1:ch-ppq-exception?nobodyknowswhatthisparametermeans=neitheriknow")
                 .process(chPpq1RequestValidator())
                 .process(exchange -> {
                     UnknownPolicySetId unknownSetId = new UnknownPolicySetId();
