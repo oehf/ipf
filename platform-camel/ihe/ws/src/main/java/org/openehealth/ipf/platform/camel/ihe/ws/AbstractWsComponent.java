@@ -111,12 +111,4 @@ abstract public class AbstractWsComponent<
         return interactionId.getWsTransactionConfiguration();
     }
 
-    @Override
-    protected void validateParameters(String uri, Map<String, Object> parameters, String optionPrefix) {
-        try {
-            super.validateParameters(uri, parameters, optionPrefix);
-        } catch (ResolveEndpointFailedException ignored) {
-            // nop
-        }
-    }
 }
