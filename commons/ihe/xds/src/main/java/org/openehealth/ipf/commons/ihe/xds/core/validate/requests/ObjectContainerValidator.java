@@ -166,8 +166,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return validators;
     }
 
-    private boolean checkLimitedMetadata(EbXMLRegistryObject object, String limitedMetadataClassScheme, ValidationProfile profile) {
-        boolean limitedMetadata = ! object.getClassifications(limitedMetadataClassScheme).isEmpty();
+    private boolean checkLimitedMetadata(EbXMLRegistryObject object, String limitedMetadataClassNode, ValidationProfile profile) {
+        boolean limitedMetadata = object.getClassifications().stream().anyMatch(cl -> limitedMetadataClassNode.equals(cl.getClassificationNode()));
         if (limitedMetadata) {
             metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
@@ -207,7 +207,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                  throw new XdsRuntimeException(ErrorCode.OBJECT_TYPE_ERROR, "Folders cannot be updated", Severity.ERROR, folder.getId());
              }
 
-            boolean limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_SCHEME, profile);
+            boolean limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_NODE, profile);
             runValidations(folder, getFolderSlotValidations(limitedMetadata));
 
             AvailabilityStatus status = folder.getStatus();
@@ -236,7 +236,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
 
         for (EbXMLRegistryPackage submissionSet : submissionSets) {
-            boolean limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, profile);
+            boolean limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE, profile);
             runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
 
             AvailabilityStatus status = submissionSet.getStatus();
@@ -250,7 +250,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, profile);
+            boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_NODE, profile);
 
             // on-demand is required for ITI-61 and allowed for ITI-92
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());

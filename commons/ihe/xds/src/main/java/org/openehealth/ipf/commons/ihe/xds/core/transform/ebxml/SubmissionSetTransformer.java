@@ -26,13 +26,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_INTENDED_RECIPIENT;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_TIME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID;
@@ -45,8 +44,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMI
  * @author Jens Riemschneider
  */
 public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegistryPackage, SubmissionSet> {
-    private final EbXMLFactory factory;
-    
     private final AuthorTransformer authorTransformer;
     private final CodeTransformer codeTransformer;
 
@@ -61,11 +58,9 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
         super(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
                 SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID,
                 SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID,
-                SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);
-        
-        notNull(factory, "factory cannot be null");
-
-        this.factory = factory;
+                SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID,
+                SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE,
+                factory);
         authorTransformer = new AuthorTransformer(factory);
         codeTransformer = new CodeTransformer(factory);
     }
@@ -127,9 +122,6 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
 
         EbXMLClassification contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
         set.setContentTypeCode(codeTransformer.fromEbXML(contentType));
-
-        List<EbXMLClassification> limitedMetadata = regPackage.getClassifications(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
-        set.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
     
     @Override
@@ -143,12 +135,6 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
 
         EbXMLClassification contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
-
-        if (set.isLimitedMetadata()) {
-            EbXMLClassification classification = factory.createClassification(objectLibrary);
-            classification.setClassificationScheme(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
-            regPackage.addClassification(classification, SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
-        }
     }
     
     @Override
