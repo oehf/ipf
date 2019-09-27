@@ -58,7 +58,7 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     private static String getUri(String suffix) {
-        return "ch-ppq1://localhost:" + getPort() + "/ch-ppq-" + suffix + "?nobodyknowswhatthisparametermeans=neitheriknow";
+        return "ch-ppq1://localhost:" + getPort() + "/ch-ppq-" + suffix;
     }
 
     private static <T> T loadFile(String fn) throws Exception {
