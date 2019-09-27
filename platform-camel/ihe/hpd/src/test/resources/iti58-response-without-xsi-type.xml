@@ -1,0 +1,19 @@
+<batchResponse xmlns="urn:oasis:names:tc:DSML:2:0:core"
+               xmlns:s01="urn:oasis:names:tc:DSML:2:0:core"
+               requestID="eb22d8a9-6bc8-45a1-bf64-a71638efa66a">
+    <searchResponse requestID="b6aac37e-c4a0-4dea-9c70-c3ebefa5c843">
+        <searchResultEntry dn="cn=CommunityB:00000003001,ou=Relationship,dc=HPD,o=BAG,c=CH">
+            <attr name="owner">
+                <value>uid=CommunityB:00000002000,ou=HCRegulatedOrganization,dc=HPD,o=BAG,c=CH</value>
+            </attr>
+            <attr name="member">
+                <value>uid=CommunityB:00000000101,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+                <value>uid=CommunityB:00000000102,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+                <value>uid=CommunityB:00000004000,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+            </attr>
+        </searchResultEntry>
+        <searchResultDone >
+            <resultCode code="0"></resultCode>
+        </searchResultDone>
+    </searchResponse>
+</batchResponse>

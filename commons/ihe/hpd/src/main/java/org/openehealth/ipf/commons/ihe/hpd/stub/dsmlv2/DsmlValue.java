@@ -18,9 +18,58 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
 
+/**
+ * <p>Java class for DsmlValue simple type.
+ *
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ *
+ * <pre>
+ * &lt;simpleType name="DsmlValue">
+ *   &lt;union memberTypes=" {http://www.w3.org/2001/XMLSchema}string {http://www.w3.org/2001/XMLSchema}base64Binary {http://www.w3.org/2001/XMLSchema}anyURI">
+ *   &lt;/union>
+ * &lt;/simpleType>
+ * </pre>
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DsmlValue")
+@XmlType(name = "DsmlValue", propOrder = {
+    "value"
+})
 public class DsmlValue {
 
+    @XmlValue
+    protected String value;
+
+    /**
+     * Gets the value of the value property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * Sets the value of the value property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Make this class usable in Groovy code where String is expected.
+     */
+    @Override
+    public String toString() {
+        return value;
+    }
 }

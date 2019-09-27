@@ -62,7 +62,6 @@ class TestIti58 extends StandardTestContainer {
                 ],
         )
 
-
         BatchResponse response = sendIt(SERVICE1, request)
         assert response != null
         assert response.getBatchResponses().empty
@@ -72,13 +71,39 @@ class TestIti58 extends StandardTestContainer {
         return send(endpoint, request, BatchResponse.class)
     }
 
-    @Test
-    void testDsmlValueJaxb() {
-        def inputStream = getClass().classLoader.getResourceAsStream('bint-iti58-response.xml')
+    void doTestDsmlValueJaxb(String fileName, Class expectedClass) {
+        def inputStream = getClass().classLoader.getResourceAsStream(fileName)
         def reader = StaxUtils.createXMLStreamReader(inputStream)
         def dataReader = new DataReaderImpl(new JAXBDataBinding(HpdValidator.JAXB_CONTEXT), false);
-        def obj = dataReader.read(reader)
-        assert obj != null
+
+        BatchResponse batchResponse = dataReader.read(reader).value
+        assert batchResponse.batchResponses.size() == 1
+        SearchResponse searchResponse = batchResponse.batchResponses[0].value
+        assert searchResponse.searchResultEntry.size() == 1
+
+        def memberIds = searchResponse.searchResultEntry[0].attr
+                .findAll { it.name == 'member' }
+                .collect { it.value }
+                .flatten()
+                .findAll { it.class == expectedClass }
+                .collect { it.toString() }
+
+        assert memberIds == [
+                'uid=CommunityB:00000000101,ou=HCProfessional,dc=HPD,o=BAG,c=CH',
+                'uid=CommunityB:00000000102,ou=HCProfessional,dc=HPD,o=BAG,c=CH',
+                'uid=CommunityB:00000004000,ou=HCProfessional,dc=HPD,o=BAG,c=CH',
+        ]
     }
+
+    @Test
+    void testDsmlValueJaxbWithXsiType() {
+        doTestDsmlValueJaxb('iti58-response-with-xsi-type.xml', DsmlValue.class)
+    }
+
+    @Test
+    void testDsmlValueJaxbWithoutXsiType() {
+        doTestDsmlValueJaxb('iti58-response-without-xsi-type.xml', String.class)
+    }
+
 }
 
