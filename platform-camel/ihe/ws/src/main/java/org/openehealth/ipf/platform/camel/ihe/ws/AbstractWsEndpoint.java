@@ -507,8 +507,4 @@ public abstract class AbstractWsEndpoint<
         }
     }
 
-    @Override
-    public boolean isLenientProperties() {
-        return true;
-    }
 }
