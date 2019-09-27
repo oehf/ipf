@@ -83,7 +83,7 @@ public enum ValidationMessage {
     MISSING_DOC_ENTRY_FOR_DOCUMENT("A document was provided without a corresponding document entry. UUID=%1s", ErrorCode.MISSING_DOCUMENT_METADATA),
     MISSING_DOCUMENT_FOR_DOC_ENTRY("A document entry was provided without a corresponding document. UUID=%1s", ErrorCode.MISSING_DOCUMENT),
     DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY("Document attachment is not allowed in entry with UUID=%1s"),
-    UNKNOWN_QUERY_TYPE("Unknown query type: %1s"),
+    UNKNOWN_QUERY_TYPE("Unknown query type: %1s", ErrorCode.UNKNOWN_STORED_QUERY),
     UNSUPPORTED_QUERY_TYPE("Query type not supported: %s"),
     MISSING_SQL_QUERY_TEXT("Missing SQL query text"),
     UNKNOWN_RETURN_TYPE("Unknown return type: %1s"),
