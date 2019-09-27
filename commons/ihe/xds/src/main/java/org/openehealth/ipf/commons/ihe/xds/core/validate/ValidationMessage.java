@@ -39,7 +39,7 @@ public enum ValidationMessage {
     TOO_MANY_SUBMISSION_SET_STATES("Exactly one submission set status must be defined for each association involving a document entry as its source"),
     INVALID_SUBMISSION_SET_STATUS("Association specifies an unknown submission set status label"),
     MISSING_ORIGINAL("Association specifies an original document entry, but it was not provided"),
-    SOURCE_UUID_NOT_FOUND("The source of an association for a document relationship did not specify a valid UUID of a document entry contained in the request"),
+    SOURCE_UUID_NOT_FOUND("The source of an association for a document relationship did not specify a valid UUID of a document entry contained in the request", ErrorCode.UNRESOLVED_REFERENCE_EXCEPTION),
     WRONG_NUMBER_OF_CLASSIFICATIONS("Unexpected amount of classifications of scheme %1s, allowed = [%2s-%3s], Was = %4s"),
     NO_CLASSIFIED_OBJ("Classification does not classify any object: %1s"),
     NO_CLASSIFICATION_NAME_OBJ("Required a display name element for classification scheme %s and classified object %s. The name is used to communicate the meaning of scheme %2$s to a human reader."),
