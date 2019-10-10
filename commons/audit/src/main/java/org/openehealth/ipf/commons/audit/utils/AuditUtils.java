@@ -79,7 +79,7 @@ public class AuditUtils {
      * @return the name of the user running the process
      */
     public static String getUserName() {
-        return systemData.computeIfAbsent(HOST, s -> System.getProperty("user.name"));
+        return systemData.computeIfAbsent(USER, s -> System.getProperty("user.name"));
     }
 
     /**
