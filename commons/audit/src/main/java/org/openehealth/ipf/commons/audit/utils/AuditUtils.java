@@ -37,7 +37,7 @@ public class AuditUtils {
 
     private static final String PID = "PID";
     private static final String IP = "IP";
-    private static final String HOST = "IP";
+    private static final String HOST = "HOST";
     private static final String USER = "USER";
 
     /**
