@@ -66,7 +66,8 @@ public class XDS implements XdsIntegrationProfile {
         ITI_57(ITI_57_WS_CONFIG),
         ITI_61(ITI_61_WS_CONFIG),
         ITI_62(ITI_62_WS_CONFIG),
-        ITI_86(ITI_86_WS_CONFIG);
+        ITI_86(ITI_86_WS_CONFIG),
+        PHARM_1(ITI_PHARM1_WS_CONFIG);
 
         @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
@@ -234,6 +235,23 @@ public class XDS implements XdsIntegrationProfile {
             true,
             false,
             false,
+            false);
+
+
+    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_PHARM1_WS_CONFIG = new WsTransactionConfiguration<>(
+            "xds-iti18",
+            "Registry Stored Query",
+            true,
+            new Iti18AuditStrategy(false),
+            new Iti18AuditStrategy(true),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti18PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti18.wsdl",
+            true,
+            false,
+            true,
             false);
 
 }
