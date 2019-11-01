@@ -43,6 +43,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86PortType;
+import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1PortType;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -245,10 +246,10 @@ public class XDS implements XdsIntegrationProfile {
             new Iti18AuditStrategy(false),
             new Iti18AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
-            Iti18PortType.class,
+            Pharm1PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
             false,
-            "wsdl/iti18.wsdl",
+            "wsdl/pharm1.wsdl",
             true,
             false,
             true,

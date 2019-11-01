@@ -35,7 +35,7 @@
         <part name="body" element="query:AdhocQueryRequest"/>
     </message>
 
-    <!-- TODO QueryPharmacyDocumentsResponse_Message or QueryPharmacyDocumentsResponse_Message ?? -->
+    <!-- TODO QueryPharmacyDocuments_Response_Message or QueryPharmacyDocumentsResponse_Message ?? -->
     <message name="QueryPharmacyDocumentsResponse_Message">
         <documentation>Query Pharmacy Documents Response</documentation>
         <part name="body" element="query:AdhocQueryResponse"/>

@@ -15,13 +15,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.Iti18Service;
 
+
+/**
+ * The Camel component for the PHARM-1 transaction.
+ */
 public class Pharm1Component extends XdsComponent<XdsQueryAuditDataset> {
+
     public Pharm1Component() {
-        super(XDS.Interactions.ITI_18);
+        super(XDS.Interactions.PHARM_1);
     }
 
+    @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this, parameters, Iti18Service.class) {
+            @Override
             public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint, JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer(endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }

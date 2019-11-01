@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * All possible query types.
  * @author Jens Riemschneider
  * @author Michael Ottati
+ * @author Quentin Ligier
  */
 @XmlType(name = "QueryType")
 @XmlEnum
@@ -63,8 +64,21 @@ public enum QueryType {
     /** Returns all documents with a given relation to a specified entry. */
     @XmlEnumValue("GetRelatedDocuments") GET_RELATED_DOCUMENTS("urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class),
     /** Cross-Community Fetch query (ITI-63). */
-    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class);
-    // TODO
+    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class),
+    /** Find planned medication documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindMedicationTreatmentPlans") FIND_MEDICATION_TREATMENT_PLANS("urn:uuid:c85f5ade-81c1-44b6-8f7c-48b9cd6b9489", FindMedicationTreatmentPlansQuery.class),
+    /** Find prescriptions and their related documents (PHARM-1). */
+    @XmlEnumValue("FindPrescriptions") FIND_PRESCRIPTIONS("urn:uuid:0e6095c5-dc3d-47d9-a219-047064086d92", FindPrescriptionsQuery.class),
+    /** Find dispense documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindDispenses") FIND_DISPENSES("urn:uuid:ac79c7c7-f21b-4c88-ab81-57e4889e8758", FindDispensesQuery.class),
+    /** Find administered medication documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindMedicationAdministrations") FIND_MEDICATION_ADMINISTRATIONS("urn:uuid:fdbe8fb8-7b5c-4470-9383-8abc7135f462", FindMedicationAdministrationsQuery.class),
+    /** Find prescriptions and their related documents containing Prescription Items ready to be validated (PHARM-1). */
+    @XmlEnumValue("FindPrescriptionsForValidation") FIND_PRESCRIPTIONS_FOR_VALIDATION("urn:uuid:c1a43b20-0254-102e-8469-a6af440562e8", FindPrescriptionsForValidationQuery.class),
+    /** Find prescriptions and their related documents containing Prescription Items ready to be dispensed (PHARM-1). */
+    @XmlEnumValue("FindPrescriptionsForDispense") FIND_PRESCRIPTIONS_FOR_DISPENSE("urn:uuid:c875eb9c-0254-102e-8469-a6af440562e8", FindPrescriptionsForDispenseQuery.class),
+    /** Find the medication list to the patient (PHARM-1). */
+    @XmlEnumValue("FindMedicationList") FIND_MEDICATION_LIST("urn:uuid:80ebbd83-53c1-4453-9860-349585962af6", FindMedicationListQuery.class);
 
     private final String id;
     private final Class<? extends Query> type; 

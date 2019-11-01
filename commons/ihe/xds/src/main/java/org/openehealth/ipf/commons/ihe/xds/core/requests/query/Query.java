@@ -75,7 +75,13 @@ public abstract class Query implements Serializable {
         void visit(FindSubmissionSetsQuery query);
         void visit(FetchQuery query);
         void visit(FindDocumentsByReferenceIdQuery query);
-        // TODO
+        void visit(FindMedicationTreatmentPlansQuery query);
+        void visit(FindPrescriptionsQuery query);
+        void visit(FindDispensesQuery query);
+        void visit(FindMedicationAdministrationsQuery query);
+        void visit(FindPrescriptionsForValidationQuery query);
+        void visit(FindPrescriptionsForDispenseQuery query);
+        void visit(FindMedicationListQuery query);
     }
     
     /**
