@@ -1,10 +1,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
 import javax.xml.bind.annotation.*;
 
@@ -17,10 +14,8 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "findPrescriptionsForDispenseQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindPrescriptionsForDispenseQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+public class FindPrescriptionsForDispenseQuery extends Pharm1StableDocumentsQuery {
     private static final long serialVersionUID = -2056362879334066497L;
-
-    @Getter @Setter private Identifiable patientId;
 
     /**
      * Constructs the query.
