@@ -15,21 +15,26 @@
  */
 package org.openehealth.ipf.commons.audit.marshal.dicom;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
-import org.openehealth.ipf.commons.audit.model.*;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
+import org.openehealth.ipf.commons.audit.model.DicomObjectDescriptionType;
+import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 /**
  * @author Christian Ohr
@@ -72,15 +77,15 @@ public class DICOM2016a implements SerializationStrategy {
         element.setAttribute("UserIsRequestor", Boolean.toString(activeParticipant.isUserIsRequestor()));
         conditionallyAddAttribute(element, "NetworkAccessPointID", activeParticipant.getNetworkAccessPointID());
         conditionallyAddAttribute(element, "NetworkAccessPointTypeCode", activeParticipant.getNetworkAccessPointTypeCode());
+        if (activeParticipant.getRoleIDCodes() != null) {
+            activeParticipant.getRoleIDCodes().stream()
+                .map(roleIdCode -> codedValueType("RoleIDCode", roleIdCode))
+                .forEach(element::addContent);
+        }
         if (activeParticipant.getMediaType() != null) {
             element.addContent(
                     new Element("MediaIdentifier")
                             .addContent(codedValueType("MediaType", activeParticipant.getMediaType())));
-        }
-        if (activeParticipant.getRoleIDCodes() != null) {
-            activeParticipant.getRoleIDCodes().stream()
-                    .map(roleIdCode -> codedValueType("RoleIDCode", roleIdCode))
-                    .forEach(element::addContent);
         }
         return element;
     }
