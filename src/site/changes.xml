@@ -23,6 +23,37 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="3.6.3" description="IPF 3.6.3" date="tbd">
+            <action dev="ohr" issue="276" type="fix">
+                Outgoing PIX Feed v3 Messages created by PixFeedRequest2to3Translator do not pass Gazelle validation due to
+                missing attribute and placement of other IDs
+            </action>
+            <action dev="rsteppac" issue="275" type="fix">
+                Fix marshalling order MediaType vs RoleId code to comply with schema
+            </action>
+        </release>
+        <release version="3.6.2" description="IPF 3.6.2" date="01 Oct 2019">
+            <action dev="thopap" issue="270" type="fix">
+                XDS validations on Document Relationships should use the qualified error code UnresolvedReferenceException when applicable
+            </action>
+            <action dev="thopap" issue="267" type="change">
+                Validation of required mimetype attribute added for XDS document metadata
+            </action>
+            <action dev="ohr" issue="266" type="fix">
+                FHIR SSLContextParameter shoud not be looked up when secure=false
+            </action>
+            <action dev="ohr" issue="265" type="fix">
+                Avoid writing an ParticipantObjectName attribute to audit message when the transaction is a query
+            </action>
+        </release>
+        <release version="3.6.1" description="IPF 3.6.1" date="22 May 2019">
+            <action dev="thopap" issue="262" type="fix">
+                Add required ParticipantObjectDataLifeCycle attribute to ITI-62 audit message
+            </action>
+            <action dev="thopap" issue="261" type="fix">
+                Fixed wrong XDS ErrorCode for MetadataUpdate on missing LogicalId
+            </action>
+        </release>
         <release version="3.6" description="IPF 3.6" date="28 Feb 2019">
             <action dev="ohr" issue="259" type="change">
                 Updates of Spring (5.1.5), Spring Boot (2.1.3), CXF (3.3.0), Groovy (2.5.6), HAPI FHIR (3.7.0)
