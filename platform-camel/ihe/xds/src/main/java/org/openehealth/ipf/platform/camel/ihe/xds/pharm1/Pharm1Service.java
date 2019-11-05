@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1PortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAdhocQueryService;
 
 /**
- * Service implementation for the IHE PHARM-1 transaction (Registry Stored Query).
+ * Service implementation for the IHE PHARM-1 transaction (Query Pharmacy Documents).
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *

@@ -17,7 +17,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti18.Iti18Service;
 
 
 /**
- * The Camel component for the PHARM-1 transaction.
+ * The Camel component for the IHE PHARM-1 transaction.
  */
 public class Pharm1Component extends XdsComponent<XdsQueryAuditDataset> {
 

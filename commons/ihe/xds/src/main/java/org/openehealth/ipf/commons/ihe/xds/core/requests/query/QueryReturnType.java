@@ -23,16 +23,15 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Return types for XDS queries (ITI-18, ITI-38, ITI-51, ITI-63).
+ * Return types for XDS queries (ITI-18, ITI-38, ITI-51, ITI-63, PHARM-1).
  * @author Dmytro Rud
  */
 @XmlType(name = "QueryReturnType")
 @XmlEnum(String.class)
 public enum QueryReturnType {
-    // for ITI-18, ITI-38 and ITI-51
+    // for ITI-18, ITI-38, ITI-51 and PHARM-1
     @XmlEnumValue("LeafClass") LEAF_CLASS("LeafClass"),
     @XmlEnumValue("ObjectRef") OBJECT_REF("ObjectRef"),
-    // TODO
 
     // for ITI-63
     @XmlEnumValue("LeafClassWithRepositoryItem") LEAF_CLASS_WITH_REPOSITORY_ITEM("LeafClassWithRepositoryItem");

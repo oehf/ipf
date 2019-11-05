@@ -22,7 +22,7 @@
     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
     xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
 
-    <documentation>IHE XDS.b Document Registry = PHARM-1 adaptor = Registry Stored Query</documentation>
+    <documentation>IHE XDS.b Document Registry = PHARM-1 adaptor = Query Pharmacy Documents</documentation>
 
     <types>
         <xsd:schema elementFormDefault="qualified">
@@ -35,7 +35,7 @@
         <part name="body" element="query:AdhocQueryRequest"/>
     </message>
 
-    <!-- TODO QueryPharmacyDocuments_Response_Message or QueryPharmacyDocumentsResponse_Message ?? -->
+    <!-- TODO:QLIG QueryPharmacyDocuments_Response_Message or QueryPharmacyDocumentsResponse_Message ?? -->
     <message name="QueryPharmacyDocumentsResponse_Message">
         <documentation>Query Pharmacy Documents Response</documentation>
         <part name="body" element="query:AdhocQueryResponse"/>
