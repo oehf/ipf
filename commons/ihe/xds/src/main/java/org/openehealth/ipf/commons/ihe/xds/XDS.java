@@ -240,14 +240,14 @@ public class XDS implements XdsIntegrationProfile {
 
 
     private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_PHARM1_WS_CONFIG = new WsTransactionConfiguration<>(
-            "xds-iti18",
-            "Registry Stored Query",
+            "xds-pharm1",
+            "Query Pharmacy Documents",
             true,
             new Iti18AuditStrategy(false),
             new Iti18AuditStrategy(true),
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_Service", "ihe"),
             Pharm1PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_Binding_Soap12", "ihe"),
             false,
             "wsdl/pharm1.wsdl",
             true,

@@ -35,7 +35,6 @@
         <part name="body" element="query:AdhocQueryRequest"/>
     </message>
 
-    <!-- TODO:QLIG QueryPharmacyDocuments_Response_Message or QueryPharmacyDocumentsResponse_Message ?? -->
     <message name="QueryPharmacyDocumentsResponse_Message">
         <documentation>Query Pharmacy Documents Response</documentation>
         <part name="body" element="query:AdhocQueryResponse"/>
@@ -45,32 +44,20 @@
         <operation name="CommunityPharmacyManager_QueryPharmacyDocuments">
             <input message="ihe:QueryPharmacyDocuments_Message"
                    wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments"/>
-            <output message="ihe:RegistryStoredQueryResponse_Message"
+            <output message="ihe:QueryPharmacyDocumentsResponse_Message"
                     wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocumentsResponse"/>
         </operation>
     </portType>
 
-    <binding name="DocumentRegistry_Binding_Soap12" type="ihe:DocumentRegistry_PortType">
+    <binding name="CommunityPharmacyManager_Binding_Soap12" type="ihe:CommunityPharmacyManager_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="DocumentRegistry_RegistryStoredQuery">
+        <operation name="CommunityPharmacyManager_QueryPharmacyDocuments">
             <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>
             </input>
             <output>
                 <soap12:body use="literal"/>
-            </output>
-        </operation>
-    </binding>
-
-    <binding name="DocumentRegistry_Binding_Soap11" type="ihe:DocumentRegistry_PortType">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="DocumentRegistry_RegistryStoredQuery">
-            <input>
-                <soap:body use="literal"/>
-            </input>
-            <output>
-                <soap:body use="literal"/>
             </output>
         </operation>
     </binding>

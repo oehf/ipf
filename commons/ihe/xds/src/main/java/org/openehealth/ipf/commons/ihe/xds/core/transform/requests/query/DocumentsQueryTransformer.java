@@ -44,7 +44,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
         super.toEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
+
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, toHL7(query.getCreationTime().getFrom()));
@@ -82,7 +82,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
         super.fromEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
+
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));

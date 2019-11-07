@@ -23,13 +23,16 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         if (query == null || ebXML == null) {
             return;
         }
-
+// TODO:QLIG Check all param names
         super.toEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
         slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
+
+        slots.fromStringList(DOC_ENTRY_UUID, query.getUuids());
+        slots.fromStringList(DOC_ENTRY_UNIQUE_ID, query.getUniqueIds());
 
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, toHL7(query.getCreationTime().getFrom()));
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_TO, toHL7(query.getCreationTime().getTo()));
@@ -44,6 +47,9 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
+        slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
+
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
     /**
@@ -59,21 +65,23 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         if (query == null || ebXML == null) {
             return;
         }
-
+// TODO:QLIG
         super.fromEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
         query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
-
         query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
-
+        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
 
         String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
+
+        query.setUniqueIds(slots.toStringList(DOC_ENTRY_UNIQUE_ID));
+        query.setUuids(slots.toStringList(DOC_ENTRY_UUID));
 
         query.getCreationTime().setFrom(slots.toNumber(DOC_ENTRY_CREATION_TIME_FROM));
         query.getCreationTime().setTo(slots.toNumber(DOC_ENTRY_CREATION_TIME_TO));
@@ -83,5 +91,7 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
 
         query.getServiceStopTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
         query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
+
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

@@ -15,61 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDispensesQuery;
 
 /**
  * Transforms between {@link FindDispensesQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Quentin Ligier
  */
-public class FindDispensesQueryTransformer extends AbstractStoredQueryTransformer<FindDispensesQuery> {
-
-    /**
-     * Transforms the query into its EbXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query to transform.
-     * @param ebXML
-     *          the EbXML representation.
-     */
-    @Override
-    public void toEbXML(FindDispensesQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-
-        slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-    }
-
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
-    @Override
-    public void fromEbXML(FindDispensesQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-
-        String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-    }
+public class FindDispensesQueryTransformer extends Pharm1StableDocumentsQueryTransformer<FindDispensesQuery> {
 }
