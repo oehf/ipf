@@ -46,10 +46,9 @@ public class FindMedicationListQueryTransformer extends AbstractStoredQueryTrans
 
         super.toEbXML(query, ebXML);
 
-        // TODO:QLIG
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
-        slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
+        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
 
         slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, toHL7(query.getServiceStartTime().getFrom()));
         slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, toHL7(query.getServiceStartTime().getTo()));
@@ -80,10 +79,9 @@ public class FindMedicationListQueryTransformer extends AbstractStoredQueryTrans
 
         super.fromEbXML(query, ebXML);
 
-        // TODO:QLIG
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
-        String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
+        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
 
         query.getServiceStartTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_START_TIME_FROM));

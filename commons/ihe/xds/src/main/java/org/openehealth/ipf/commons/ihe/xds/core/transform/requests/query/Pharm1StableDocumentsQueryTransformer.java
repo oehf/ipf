@@ -8,6 +8,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Pharm1StableDocum
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
+/**
+ * Base transformations for all stable-documents PHARM-1 queries.
+ * @author Quentin Ligier
+ */
 abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocumentsQuery> extends AbstractStoredQueryTransformer<T> {
 
     /**
@@ -23,12 +27,12 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         if (query == null || ebXML == null) {
             return;
         }
-// TODO:QLIG Check all param names
+
         super.toEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
-        slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
+        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
         slots.fromStringList(DOC_ENTRY_UUID, query.getUuids());
@@ -65,7 +69,7 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         if (query == null || ebXML == null) {
             return;
         }
-// TODO:QLIG
+
         super.fromEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
@@ -76,7 +80,7 @@ abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocum
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
 
-        String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
+        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
 
