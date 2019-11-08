@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 
+import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes.PrivacyPolicyFeed;
+
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
-
-import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes.PrivacyPolicyFeed;
 
 /**
  * @since 3.5.1
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCo
 public class ChPpq1ClientAuditStrategy extends ChPpq1AuditStrategy {
 
     public ChPpq1ClientAuditStrategy() {
-        super(true);
+        super(false);
     }
 
     @Override
