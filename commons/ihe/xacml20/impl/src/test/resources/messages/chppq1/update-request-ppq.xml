@@ -1,0 +1,62 @@
+<ns7:UpdatePolicyRequest
+    xmlns:ns10="urn:hl7-org:v3"
+    xmlns:ns9="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+    xmlns:ns7="urn:e-health-suisse:2015:policy-administration"
+    xmlns:ns3="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:ns2="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+    xmlns="urn:oasis:names:tc:xacml:2.0:context:schema:os">
+    <ns3:Assertion Version="2.0" ID="COLA-27af38b4-5404-4794-adad-874c495bdb7b" IssueInstant="2019-11-07T16:14:36+01:00">
+        <ns3:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:2.999.1</ns3:Issuer>
+        <ns3:Statement
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns9:XACMLPolicyStatementType">
+            <ns2:PolicySet PolicySetId="COLA-0219ed1a-3b5d-4fb3-a5be-08bba51757b1"
+                PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:deny-overrides">
+                <ns2:Description>Patient specific PolicySet for User Assignment 301 - allowing a user (health professional) to access the patient's EPD
+                    according to the scope of the referenced access level (PolicySetIdReference below)
+                </ns2:Description>
+                <ns2:Target>
+                    <ns2:Subjects>
+                        <ns2:Subject>
+                            <ns2:SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                                <ns2:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">123456789123</ns2:AttributeValue>
+                                <ns2:SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
+                                    DataType="http://www.w3.org/2001/XMLSchema#string" />
+                            </ns2:SubjectMatch>
+                            <ns2:SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                                <ns2:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">urn:gs1:gln</ns2:AttributeValue>
+                                <ns2:SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id-qualifier"
+                                    DataType="http://www.w3.org/2001/XMLSchema#string" />
+                            </ns2:SubjectMatch>
+                            <ns2:SubjectMatch MatchId="urn:hl7-org:v3:function:CV-equal">
+                                <ns2:AttributeValue DataType="urn:hl7-org:v3#CV">
+                                    <ns10:CodedValue code="HCP" codeSystem="2.16.756.5.30.1.127.3.10.6" />
+                                </ns2:AttributeValue>
+                                <ns2:SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role" DataType="urn:hl7-org:v3#CV" />
+                            </ns2:SubjectMatch>
+                        </ns2:Subject>
+                    </ns2:Subjects>
+                    <ns2:Resources>
+                        <ns2:Resource>
+                            <ns2:ResourceMatch MatchId="urn:hl7-org:v3:function:II-equal">
+                                <ns2:AttributeValue DataType="urn:hl7-org:v3#II">
+                                    <ns10:InstanceIdentifier root="2.16.756.5.30.1.127.3.10.3" extension="761337610411265304" />
+                                </ns2:AttributeValue>
+                                <ns2:ResourceAttributeDesignator AttributeId="urn:e-health-suisse:2015:epr-spid" DataType="urn:hl7-org:v3#II" />
+                            </ns2:ResourceMatch>
+                        </ns2:Resource>
+                    </ns2:Resources>
+                    <ns2:Environments>
+                        <ns2:Environment>
+                            <ns2:EnvironmentMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:date-greater-than-or-equal">
+                                <ns2:AttributeValue DataType="http://www.w3.org/2001/XMLSchema#date">2019-11-29</ns2:AttributeValue>
+                                <ns2:EnvironmentAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-date"
+                                    DataType="http://www.w3.org/2001/XMLSchema#date" />
+                            </ns2:EnvironmentMatch>
+                        </ns2:Environment>
+                    </ns2:Environments>
+                </ns2:Target>
+                <ns2:PolicySetIdReference>urn:e-health-suisse:2015:policies:access-level:restricted</ns2:PolicySetIdReference>
+            </ns2:PolicySet>
+        </ns3:Statement>
+    </ns3:Assertion>
+</ns7:UpdatePolicyRequest>

@@ -15,6 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.InputStream;
+import java.util.List;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,13 +38,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Dmytro Rud
@@ -90,8 +89,14 @@ public class ChPpq1Test extends StandardTestContainer {
         testAddPolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure);
     }
 
+    @Test
+    public void testAddPolicyPPQ1Success() throws Exception {
+        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success);
+    }
+
     private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
-        EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request.xml"), EprPolicyRepositoryResponse.class);
+        EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request-ppq.xml"),
+            EprPolicyRepositoryResponse.class);
         assertEquals(statusCode, response.getStatus());
 
         List messages = getAuditSender().getMessages();
@@ -120,12 +125,12 @@ public class ChPpq1Test extends StandardTestContainer {
             ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("1.2.840.113619.20.2.9.0", participant.getParticipantObjectID());
+            assertEquals("COLA-fd27a474-c9cf-4272-9dee-55f2721d2f8d", participant.getParticipantObjectID());
 
             participant = message.getParticipantObjectIdentifications().get(1);
-            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
-            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("3644dc70-4dec-11e3-8f96-0800200c9a66", participant.getParticipantObjectID());
+            assertEquals(ParticipantObjectTypeCode.Person, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.Patient, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("761337610411265304^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
         }
     }
 
@@ -146,7 +151,8 @@ public class ChPpq1Test extends StandardTestContainer {
 
     private void testUpdatePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectSoapFault) throws Exception {
         try {
-            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("update-request.xml"), EprPolicyRepositoryResponse.class);
+            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("update-request-ppq.xml"),
+                EprPolicyRepositoryResponse.class);
             assertEquals(statusCode, response.getStatus());
         } catch (UnknownPolicySetIdFaultMessage exception) {
             if (!expectSoapFault) {
@@ -180,12 +186,12 @@ public class ChPpq1Test extends StandardTestContainer {
             ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("1.2.840.113619.20.2.9.0", participant.getParticipantObjectID());
+            assertEquals("COLA-0219ed1a-3b5d-4fb3-a5be-08bba51757b1", participant.getParticipantObjectID());
 
             participant = message.getParticipantObjectIdentifications().get(1);
-            assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
-            assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("3644dc70-4dec-11e3-8f96-0800200c9a66", participant.getParticipantObjectID());
+            assertEquals(ParticipantObjectTypeCode.Person, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.Patient, participant.getParticipantObjectTypeCodeRole());
+            assertEquals("761337610411265304^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
         }
     }
 
