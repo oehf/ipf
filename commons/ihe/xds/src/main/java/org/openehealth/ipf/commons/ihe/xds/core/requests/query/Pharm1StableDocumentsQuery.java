@@ -31,17 +31,14 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Pharm1StableDocumentsQuery", propOrder = {
-        "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
-        "patientId", "confidentialityCodes", "eventCodes", "uuids",
-        "healthcareFacilityTypeCodes", "practiceSettingCodes", "uniqueIds",
-        "status", "metadataLevel"})
+        "authorPersons", "creationTime", "confidentialityCodes", "eventCodes",
+        "uuids", "healthcareFacilityTypeCodes", "practiceSettingCodes", "uniqueIds"})
 @XmlRootElement(name = "abstractPharm1StableDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public abstract class Pharm1StableDocumentsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery {
     private static final long serialVersionUID = 7497052735222205532L;
 
-    @Getter @Setter private Identifiable patientId;
     @XmlElement(name = "uuid")
     @Getter @Setter private List<String> uuids;
     @XmlElement(name = "uniqueId")
@@ -49,8 +46,6 @@ public abstract class Pharm1StableDocumentsQuery extends StoredQuery implements 
     @XmlElement(name = "practiceSettingCode")
     @Getter @Setter private List<Code> practiceSettingCodes;
     @Getter private final TimeRange creationTime = new TimeRange();
-    @Getter private final TimeRange serviceStartTime = new TimeRange();
-    @Getter private final TimeRange serviceStopTime = new TimeRange();
     @XmlElement(name = "healthcareFacilityTypeCode")
     @Getter @Setter private List<Code> healthcareFacilityTypeCodes;
     @XmlElement(name = "eventCode")
@@ -59,8 +54,6 @@ public abstract class Pharm1StableDocumentsQuery extends StoredQuery implements 
     @Getter @Setter private QueryList<Code> confidentialityCodes;
     @XmlElement(name = "authorPerson")
     @Getter @Setter private List<String> authorPersons;
-    @Getter @Setter private List<AvailabilityStatus> status;
-    @Getter @Setter private Integer metadataLevel;
 
     /**
      * For JAXB serialization only.

@@ -66,6 +66,7 @@ public interface Pharm1PortType {
             @WebParam(
                     partName = "body",
                     name = "AdhocQueryRequest",
-                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0") AdhocQueryRequest body
+                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+                    AdhocQueryRequest body
     );
 }

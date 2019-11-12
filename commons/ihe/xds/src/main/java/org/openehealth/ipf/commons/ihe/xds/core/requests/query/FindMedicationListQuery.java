@@ -17,20 +17,13 @@ import java.util.List;
  * @author Quentin Ligier
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindMedicationListQuery", propOrder = {
-        "patientId", "serviceStartTime", "serviceStopTime", "status",
-        "formatCodes", "typeCodes", "metadataLevel"})
+@XmlType(name = "FindMedicationListQuery", propOrder = {"formatCodes", "typeCodes"})
 @XmlRootElement(name = "findMedicationListQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindMedicationListQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+public class FindMedicationListQuery extends PharmacyDocumentsQuery {
     private static final long serialVersionUID = 7810851265303915098L;
 
-    @Getter @Setter private Identifiable patientId;
-    @Getter private final TimeRange serviceStartTime = new TimeRange();
-    @Getter private final TimeRange serviceStopTime = new TimeRange();
-    @Getter @Setter private List<AvailabilityStatus> status;
-    @Getter @Setter private Integer metadataLevel;
     @XmlElement(name = "formatCode")
     @Getter @Setter private List<Code> formatCodes;
     @XmlElement(name = "typeCode")
