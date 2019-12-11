@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq2;
 
+import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.QUERY_ENCODING;
+
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
@@ -30,12 +34,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
-
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Map;
-
-import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.QUERY_ENCODING;
 
 /**
  * @author Dmytro Rud

@@ -52,6 +52,12 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
     String receiverAgentIdAssigningAuthority = 'RAA'
 
     /**
+     * Predefined value of provider organization root that assigns primary patient
+     * identifiers.
+     */
+    String providerOrganizationIdRoot = '1.2.3'
+
+    /**
      * Predefined fix value of
      * <code>//registrationEvent/custodian/assignedEntity/id/@root</code>.
      * In productive environments to be set to the <code>id/@root</code>
@@ -85,7 +91,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      * @param deletedIdsOids
      *      root OIDs of patient IDs which are to be deleted from the patient record.
      */
-    void createPatientPersonElements(MarkupBuilder builder, Segment pid, List<String> deletedIdsOids) {
+    void createPatientPersonElements(MarkupBuilder builder, Segment pid, Map<String, String> otherIDs) {
         for (pid5 in pid[5]()) {
             createName(builder, pid5)
         }
@@ -157,14 +163,20 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
-        def pid4collection = pid[4]()
-        if (pid4collection) {
-            builder.asOtherIDs(classCode: 'PAT') {
-                for(pid4 in pid4collection) {
-                    buildInstanceIdentifier(builder, 'id', false, pid4)
+        otherIDs.each { oid, idValue ->
+            if (idValue) {
+                builder.asOtherIDs(classCode: 'PAT') {
+                    id(root: oid, extension: idValue)
+                    scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                        id(root: oid)
+                    }
                 }
-                scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                    id(nullFlavor: 'UNK')
+            } else {
+                builder.asOtherIDs(classCode: 'PAT') {
+                    id(nullFlavor: 'NA')
+                    scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                        id(root: oid)
+                    }
                 }
             }
         }
@@ -178,14 +190,19 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
-        for (deletedIdOid in deletedIdsOids) {
+        def pid4collection = pid[4]()
+        if (pid4collection) {
             builder.asOtherIDs(classCode: 'PAT') {
-                id(nullFlavor: 'NA')
+                for(pid4 in pid4collection) {
+                    buildInstanceIdentifier(builder, 'id', false, pid4)
+                }
                 scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                    id(root: deletedIdOid)
+                    id(nullFlavor: 'UNK')
                 }
             }
         }
+
+
     }
 
     void createBirthPlaceElement(MarkupBuilder builder, Segment pid) {
