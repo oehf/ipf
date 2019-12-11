@@ -57,7 +57,7 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.5.8-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-batch-version>2.5.8-02</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>3.4.0-01</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
@@ -82,9 +82,9 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>27.0.1-jre</guava-version>
+        <guava-version>28.1-jre</guava-version>
         <httpclient4-version>4.5.10</httpclient4-version>
-        <jackson-version>2.9.9</jackson-version>
+        <jackson-version>2.10.0</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jetty-version>9.4.19.v20190610</jetty-version>

@@ -19,6 +19,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Parameters
+import org.hl7.fhir.r4.model.Reference
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -37,6 +38,7 @@ import static java.util.Objects.requireNonNull
 class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Message> {
 
     private final UriMapper uriMapper
+    String pixSupplierResourceIdentifierUri
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -69,6 +71,11 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
                 parameters.addParameter()
                         .setName('targetIdentifier')
                         .setValue(identifier)
+                if (pixSupplierResourceIdentifierUri && identifier.system == pixSupplierResourceIdentifierUri) {
+                    parameters.addParameter()
+                        .setName('targetId')
+                        .setValue(new Reference("Patient/${identifier.value}"))
+                }
             }
         }
         parameters
