@@ -92,6 +92,8 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      */
     private DocumentBuilder newSafeDocumentBuilder() throws ParserConfigurationException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
         factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
         factory.setFeature("http://apache.org/xml/features/xinclude", false);
         factory.setXIncludeAware(false);
