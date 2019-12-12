@@ -28,6 +28,8 @@ import org.openehealth.ipf.commons.core.modules.api.ParseException;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Stefan Ivanov
@@ -49,7 +51,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
     /**
      * Parses a {@link ClinicalDocument} from an {@link InputStream}. This parser is not vulnerable to XXE injections.
      * Parsing an XML document with a Doctype will throw a {@link ParseException} and all
-     * &lt;include xmlns="http://www.w3.org/2001/XInclude"/gt; tags will be ignored.
+     * &lt;include xmlns="http://www.w3.org/2001/XInclude"/gt; tags will be striped.
      *
      * <p>The MDHT parser is unsafe, so the clinical document is parsed to a {@link org.w3c.dom.Document} here
      * before being passed to MDHT.
@@ -60,7 +62,16 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
             throws IOException {
         try {
             final DocumentBuilder documentBuilder = this.newSafeDocumentBuilder();
-            return CDAUtil.load(documentBuilder.parse(is));
+            final Document document = documentBuilder.parse(is);
+
+            NodeList nodeList = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+            for (int i = nodeList.getLength() - 1; i >= 0; --i) {
+                if (nodeList.item(i) != null && nodeList.item(i).getParentNode() != null) {
+                    nodeList.item(i).getParentNode().removeChild(nodeList.item(i));
+                }
+            }
+
+            return CDAUtil.load(document);
 
         } catch (final Exception exception) {
             throw new ParseException(exception);
