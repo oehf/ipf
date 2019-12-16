@@ -17,14 +17,29 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.IncludeParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceOrListParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IAnyResource;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +69,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
+            @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
@@ -75,6 +91,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
 
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)
+                .identifier(identifier)
                 .date(date)
                 .category(category)
                 .type(type)

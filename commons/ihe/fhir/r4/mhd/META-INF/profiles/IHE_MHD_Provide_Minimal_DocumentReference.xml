@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+
+    <text>
+        <status value="additional" />
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            StructureDefinition for DocumentRefererence as represented in the Provide Document Bundle (ITI-65) transaction with Minimal Metadata compliance in the
+            IHE IT Infrastructure Technical Framework Supplement <a href="http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)">Mobile access to Health Documents (MHD) Rev. 3.1</a>.
+            The IHE MHD Profile text is Normative, this conformance resource is Informative.
+        </div>
+    </text>
+    <url value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Minimal_DocumentReference" />
+    <name value="IHE_MHD_Provide_Minimal_DocumentReference" />
+    <title value="IHE MHD Profile on DocumentReference (DocumentEntry) when used in the Provide Transaction with Minimal Metadata, see Table 3:4.3.1-3." />
+    <status value="active" />
+    <experimental value="false" />
+    <date value="2019-07-05" />
+    <publisher value="Integrating the Healthcare Enterprise (IHE)" />
+    <contact>
+        <name value="IHE" />
+        <telecom>
+            <system value="url" />
+            <value value="http://ihe.net" />
+        </telecom>
+    </contact>
+    <contact>
+        <name value="John Moehrke" />
+        <telecom>
+            <system value="email" />
+            <value value="JohnMoehrke@gmail.com" />
+        </telecom>
+    </contact>
+    <description value="Profile on DocumentReference based on IHE IT Infrastructure Technical Framework Supplement - Mobile access to Health Documents (MHD) Rev. 3.1.  See http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)   The IHE MHD Profile text is Normative, this conformance resource is Informative." />
+
+    <copyright value="IHE http://www.ihe.net/Governance/#Intellectual_Property" />
+    <fhirVersion value="4.0.0" />
+    <kind value="resource" />
+    <abstract value="false" />
+    <type value="DocumentReference" />
+    <baseDefinition value="http://hl7.org/fhir/StructureDefinition/DocumentReference" />
+    <derivation value="constraint" />
+    <differential>
+        <element id="DocumentReference.text">
+            <path value="DocumentReference.text" />
+            <comment value="DocumentEntry comment" />
+        </element>
+        <element id="DocumentReference.masterIdentifier">
+            <path value="DocumentReference.masterIdentifier" />
+            <comment value="See ITI TF-2x: Z.9.1.1 Identifier and CDA root plus extension." />
+            <min value="1" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.identifier">
+            <path value="DocumentReference.identifier" />
+            <comment value="When the DocumentReference.identifier carries the entryUUID then the DocumentReference.identifier use shall be ‘official’." />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.status">
+            <path value="DocumentReference.status" />
+            <comment value="approved -&gt; status=current&#xD;&#xA;deprecated -&gt; status=superseded" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.docStatus">
+            <path value="DocumentReference.docStatus" />
+            <comment value="These HL7 FHIR elements are not used in XDS, therefore would not be present. Document Consumers&#xD;&#xA;should be robust to these elements holding values" />
+            <max value="0" />
+        </element>
+        <element id="DocumentReference.type">
+            <path value="DocumentReference.type" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.category">
+            <path value="DocumentReference.category" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.subject">
+            <path value="DocumentReference.subject" />
+            <comment value="Must not be a contained resource. URL Points to an existing Patient Resource representing the XDS Affinity Domain Patient." />
+            <type>
+                <code value="Reference" />
+                <targetProfile value="http://hl7.org/fhir/StructureDefinition/Patient" />
+                <aggregation value="referenced" />
+            </type>
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.date">
+            <path value="DocumentReference.date" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.author">
+            <path value="DocumentReference.author" />
+            <comment value="Contained resource of type Practitioner with:&#xD;&#xA;* authorInstitution: Organization&#xD;&#xA;* authorPerson: Practitioner.identifier and Practitioner.name&#xD;&#xA;* authorSpecialty: Practitioner.qualification&#xD;&#xA;* authorTelecommunication: Practitioner.telecom" />
+            <type>
+                <code value="Reference" />
+                <aggregation value="contained" />
+            </type>
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.authenticator">
+            <path value="DocumentReference.authenticator" />
+            <comment value="Contained resource " />
+            <type>
+                <code value="Reference" />
+                <aggregation value="contained" />
+            </type>
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.custodian">
+            <path value="DocumentReference.custodian" />
+            <comment value="These HL7 FHIR elements are not used in XDS, therefore would not be present. Document Consumers should be robust to these elements holding values." />
+            <max value="0" />
+        </element>
+        <element id="DocumentReference.relatesTo">
+            <path value="DocumentReference.relatesTo" />
+            <comment value="See ITI TF-2c: 3.65.4.1.2.3" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.description">
+            <path value="DocumentReference.description" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.securityLabel">
+            <path value="DocumentReference.securityLabel" />
+            <comment value="Note: This is NOT the DocumentReference.meta, as that holds the meta tags for the DocumentReference itself." />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content">
+            <path value="DocumentReference.content" />
+            <max value="1" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content.attachment">
+            <path value="DocumentReference.content.attachment" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content.attachment.contentType">
+            <path value="DocumentReference.content.attachment.contentType" />
+            <min value="1" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content.attachment.language">
+            <path value="DocumentReference.content.attachment.language" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content.attachment.data">
+            <path value="DocumentReference.content.attachment.data" />
+            <comment value="These HL7 FHIR elements are not used in XDS, therefore would not be present. Document Consumers should be robust to these elements holding values." />
+            <max value="0" />
+        </element>
+        <element id="DocumentReference.content.attachment.url">
+            <path value="DocumentReference.content.attachment.url" />
+            <min value="1" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.content.attachment.size">
+            <path value="DocumentReference.content.attachment.size" />
+            <comment value="The size is calculated on the data prior to base64 encoding, if the data is base64 encoded." />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.content.attachment.hash">
+            <path value="DocumentReference.content.attachment.hash" />
+            <comment value="The IHE Document Sharing metadata element hash holds the SHA1 hash of the document. The hash is encoded in FHIR in base64Binary, whereas in XDS hexbinary is used. The hash is calculated on the data prior to base64 encoding, if the data is base64 encoded." />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.content.attachment.title">
+            <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+                <valueBoolean value="true" />
+            </extension>
+            <path value="DocumentReference.content.attachment.title" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.content.attachment.creation">
+            <path value="DocumentReference.content.attachment.creation" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.content.format">
+            <path value="DocumentReference.content.format" />
+            <mustSupport value="true" />
+            <binding>
+                <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+                    <valueString value="DocumentFormat" />
+                </extension>
+                <strength value="preferred" />
+                <valueSet value="http://ihe.net/fhir/ValueSet/IHE.formatcode.vs" />
+            </binding>
+        </element>
+        <element id="DocumentReference.context">
+            <path value="DocumentReference.context" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.context.encounter">
+            <path value="DocumentReference.context.encounter" />
+            <comment value="When referenceIdList contains an encounter, and a FHIR Encounter is available, it may be referenced." />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.context.event">
+            <path value="DocumentReference.context.event" />
+            <mustSupport value="false" />
+        </element>
+        <element id="DocumentReference.context.period">
+            <path value="DocumentReference.context.period" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.context.facilityType">
+            <path value="DocumentReference.context.facilityType" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.context.practiceSetting">
+            <path value="DocumentReference.context.practiceSetting" />
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.context.sourcePatientInfo">
+            <path value="DocumentReference.context.sourcePatientInfo" />
+            <comment value="Contained Patient resource with Patient.identifier.use element set to ‘usual’.&#xD;&#xA;&#xD;&#xA;Indicates that the data within the XDS document entry be represented as a contained resource. See Section 4.5.4.4.7" />
+            <type>
+                <code value="Reference" />
+                <aggregation value="contained" />
+            </type>
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentReference.context.related">
+            <path value="DocumentReference.context.related" />
+            <comment value="May be filled with URL pointers to Resources or Identifiers found in referenceIdList" />
+            <mustSupport value="false" />
+        </element>
+    </differential>
+</StructureDefinition>

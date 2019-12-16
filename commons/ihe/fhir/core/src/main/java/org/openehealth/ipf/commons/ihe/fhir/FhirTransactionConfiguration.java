@@ -143,6 +143,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         if (deferModelScanning) {
             fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
         }
+        fhirValidator.initialize(fhirContext);
         return fhirContext;
     }
 

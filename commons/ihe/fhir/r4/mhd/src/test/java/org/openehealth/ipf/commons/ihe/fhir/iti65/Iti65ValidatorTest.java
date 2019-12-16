@@ -1,66 +1,92 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import ca.uhn.fhir.context.FhirVersionEnum;
-import org.hl7.fhir.r4.model.*;
-import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.utilities.xhtml.NodeType;
-import org.hl7.fhir.utilities.xhtml.XhtmlNode;
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import org.hl7.fhir.r4.model.Attachment;
+import org.hl7.fhir.r4.model.Binary;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DocumentManifest;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.Enumerations;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Narrative;
+import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.Reference;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
-import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
 import java.security.MessageDigest;
+import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
+
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE;
 
 /**
- *
+ * @author Christian Ohr
  */
-abstract class AbstractTestIti65 extends FhirTestContainer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti65.class);
+public class Iti65ValidatorTest {
 
     private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
     private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
     private static final String MANIFEST_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bd";
 
-    public static void startServer(String contextDescriptor) {
-        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.R4);
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
-        startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
+    @Test
+    public void testBundle() throws Exception {
+        FhirContext context = FhirContext.forR4();
+        Bundle bundle = provideAndRegister();
+        try {
+            Iti65Validator iti65Validator = new Iti65Validator();
+            iti65Validator.initialize(context);
+            iti65Validator.validateRequest(context, bundle, Collections.emptyMap());
+        } catch (UnprocessableEntityException e) {
+            OperationOutcome oo = (OperationOutcome) e.getOperationOutcome();
+            oo.getIssue().stream()
+                    .forEach(ooc -> System.out.println(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
+        }
     }
 
-    protected Bundle provideAndRegister() throws Exception {
+    private Bundle provideAndRegister() throws Exception {
         Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 
         DocumentManifest manifest = new DocumentManifest();
-        manifest.setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
+        manifest.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE);
+        manifest.setMasterIdentifier(
+                new Identifier()
+                        .setSystem("urn:ietf:rfc:3986")
+                        .setValue("urn:oid:129.6.58.92.88336"))
+                .addIdentifier(new Identifier()
+                        .setSystem("urn:ietf:rfc:3986")
+                        .setValue("urn:oid:129.6.58.92.88336"))
+                .setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
                 .setCreated(new Date())
                 .setDescription("description")
                 .setSource("source")
-                .setSubject(new Reference("Patient/a2"))
+                .setSubject(new Reference("http://server/Patient/a2"))
                 .setId("id");
         manifest.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         manifest.getText().setDivAsString("<div>empty</div>");
@@ -81,18 +107,24 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
                 .withDate(2013, 7, 1)
                 .withTime(13, 11, 33, 0)
                 .withZone(DateTimeZone.UTC).toDate();
+
+        Practitioner practitioner = new Practitioner();
         DocumentReference reference = new DocumentReference();
+        reference.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE);
         reference.getMeta().setLastUpdated(timestamp);
 
-        reference.setMasterIdentifier(
-                new Identifier()
+        reference
+                .setMasterIdentifier(
+                        new Identifier()
+                                .setSystem("urn:ietf:rfc:3986")
+                                .setValue("urn:oid:129.6.58.92.88336"))
+                .addIdentifier(new Identifier()
                         .setSystem("urn:ietf:rfc:3986")
                         .setValue("urn:oid:129.6.58.92.88336"))
                 .setDate(timestamp) // creation of document reference resource
                 .setDescription("Physical")
-                .setSubject(new Reference("Patient/a2"))
-                .addAuthor(new Reference("Practitioner/a3"))
-                .addAuthor(new Reference("Practitioner/a4"))
+                .setSubject(new Reference("http://server/Patient/a2"))
+                .addAuthor(new Reference(practitioner))
                 .setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
         reference.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         reference.getText().setDivAsString("<div>empty</div>");
@@ -131,20 +163,4 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         return bundle;
     }
-
-    protected Bundle thisSucks() {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile("http://thissucks.com");
-        return bundle;
-    }
-
-    protected Bundle sendManually(Bundle bundle) {
-        return client.transaction().withBundle(bundle).encodedXml().execute();
-    }
-
-    protected void printAsXML(IBaseResource resource) {
-        LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
-    }
-
-
 }

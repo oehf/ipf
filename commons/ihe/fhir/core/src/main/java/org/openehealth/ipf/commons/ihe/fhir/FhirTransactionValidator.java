@@ -29,6 +29,9 @@ public interface FhirTransactionValidator {
 
     FhirTransactionValidator NO_VALIDATION = new Support();
 
+    default void initialize(FhirContext context) {
+    }
+
     /**
      * Validates a FHIR request, throwing an {@link ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException}
      * on validation failure

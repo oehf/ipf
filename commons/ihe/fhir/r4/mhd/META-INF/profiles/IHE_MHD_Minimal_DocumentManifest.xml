@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2019 the original author or authors.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<StructureDefinition xmlns="http://hl7.org/fhir">
+
+    <text>
+        <status value="additional" />
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            StructureDefinition for DocumentManifest as represented in the Provide and Query interactions in the
+            IHE IT Infrastructure Technical Framework Supplement <a href="http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)">Mobile access to Health Documents (MHD) Rev. 3.1</a>.
+            The IHE MHD Profile text is Normative, this conformance resource is Informative.</div>
+    </text>
+    <url value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Minimal_DocumentManifest" />
+    <name value="IHE_MHD_Minimal_DocumentManifest" />
+    <title value="IHE MHD Profile on DocumentManifest for Minimal Metadata (SubmissionSet)" />
+    <status value="active" />
+    <experimental value="false" />
+    <date value="2019-07-05" />
+    <publisher value="Integrating the Healthcare Enterprise (IHE)" />
+    <contact>
+        <name value="IHE" />
+        <telecom>
+            <system value="url" />
+            <value value="http://ihe.net" />
+        </telecom>
+    </contact>
+    <contact>
+        <name value="John Moehrke" />
+        <telecom>
+            <system value="email" />
+            <value value="JohnMoehrke@gmail.com" />
+        </telecom>
+    </contact>
+    <description value="Profile on DocumentManifest based on IHE IT Infrastructure Technical Framework Supplement - Mobile access to Health Documents (MHD) Rev. 3.1.  See http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)  The IHE MHD Profile text is Normative, this conformance resource is Informative."  />
+
+    <copyright value="IHE http://www.ihe.net/Governance/#Intellectual_Property" />
+    <fhirVersion value="4.0.0" />
+    <kind value="resource" />
+    <abstract value="false" />
+    <type value="DocumentManifest" />
+    <baseDefinition value="http://hl7.org/fhir/StructureDefinition/DocumentManifest" />
+    <derivation value="constraint" />
+    <differential>
+        <element id="DocumentManifest.text">
+            <path value="DocumentManifest.text" />
+            <mapping>
+                <identity value="XDS" />
+                <map value="SubmissionSet.comment" />
+            </mapping>
+        </element>
+        <element id="DocumentManifest.masterIdentifier">
+            <path value="DocumentManifest.masterIdentifier" />
+            <min value="1" />
+        </element>
+        <element id="DocumentManifest.identifier">
+            <path value="DocumentManifest.identifier" />
+            <min value="1" />
+        </element>
+        <element id="DocumentManifest.status">
+            <path value="DocumentManifest.status" />
+            <comment value="approved -&gt; status=current" />
+        </element>
+        <element id="DocumentManifest.type">
+            <path value="DocumentManifest.type" />
+        </element>
+        <element id="DocumentManifest.subject">
+            <path value="DocumentManifest.subject" />
+            <comment value="Must not be a contained resource. URL Points to an existing Patient resource representing Affinity Domain Patient" />
+            <type>
+                <code value="Reference" />
+                <targetProfile value="http://hl7.org/fhir/StructureDefinition/Patient" />
+                <aggregation value="referenced" />
+            </type>
+        </element>
+        <element id="DocumentManifest.created">
+            <path value="DocumentManifest.created" />
+            <min value="1" />
+        </element>
+        <element id="DocumentManifest.author">
+            <path value="DocumentManifest.author" />
+            <comment value="Contained resource of type Practitioner or Organization with:&#xD;&#xA;* authorInstitution: Organization&#xD;&#xA;For Practionioner, also with:&#xD;&#xA;* authorPerson: Practitioner.identifier and Practitioner.name&#xD;&#xA;* authorRole:—Not supported in STU3&#xD;&#xA;* authorSpecialty: Practitioner.qualification&#xD;&#xA;* authorTelecommunication: Practitioner.telecom" />
+            <type>
+                <code value="Reference" />
+                <targetProfile value="http://hl7.org/fhir/StructureDefinition/Practitioner" />
+                <targetProfile value="http://hl7.org/fhir/StructureDefinition/Organization" />
+                <aggregation value="contained" />
+            </type>
+            <mustSupport value="true" />
+        </element>
+        <element id="DocumentManifest.source">
+            <path value="DocumentManifest.source" />
+            <min value="1" />
+        </element>
+        <element id="DocumentManifest.content">
+            <path value="DocumentManifest.content" />
+            <type>
+                <code value="Reference" />
+                <targetProfile value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Minimal_DocumentBundle" />
+                <targetProfile value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Query_Minimal_DocumentReference" />
+                <!--<targetProfile value="http://hl7.org/fhir/StructureDefinition/DocumentReference" />-->
+                <targetProfile value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Minimal_List" />
+
+            </type>
+        </element>
+        <element id="DocumentManifest.related">
+            <path value="DocumentManifest.related" />
+            <comment value="These HL7 FHIR elements are not used in XDS, therefore would not be present. Document Consumers should be robust to these elements holding values." />
+            <max value="0" />
+        </element>
+    </differential>
+</StructureDefinition>
