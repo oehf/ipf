@@ -45,16 +45,18 @@ public abstract class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extend
 
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
-        if (request.getDocumentRequest() != null) {
-            request.getDocumentRequest().forEach(document ->
-                    auditDataset.getDocuments().add(new Document(
-                            document.getDocumentUniqueId(),
-                            document.getRepositoryUniqueId(),
-                            document.getHomeCommunityId(),
-                            null,
-                            null,
-                            getDefaultDocumentStatus())));
+        if (pojo instanceof RetrieveDocumentSetRequestType) {
+            RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
+            if (request.getDocumentRequest() != null) {
+                request.getDocumentRequest().forEach(document ->
+                        auditDataset.getDocuments().add(new Document(
+                                document.getDocumentUniqueId(),
+                                document.getRepositoryUniqueId(),
+                                document.getHomeCommunityId(),
+                                null,
+                                null,
+                                getDefaultDocumentStatus())));
+            }
         }
         return auditDataset;
     }

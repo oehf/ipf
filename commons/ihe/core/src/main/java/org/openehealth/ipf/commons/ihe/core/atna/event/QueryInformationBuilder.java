@@ -120,7 +120,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         delegate.addParticipantObjectIdentification(
                 requireNonNull(participantObjectIdType, "query ID type must not be null"),
                 null,
-                queryMessage.getBytes(StandardCharsets.UTF_8),
+                queryMessage != null ? queryMessage.getBytes(StandardCharsets.UTF_8) : new byte[0],
                 details,
                 queryMessageIdentifier != null ? queryMessageIdentifier : getAuditContext().getAuditValueIfMissing(),
                 ParticipantObjectTypeCode.System,
@@ -140,7 +140,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         delegate.addParticipantObjectIdentification(
                 requireNonNull(participantObjectIdType, "query ID type must not be null"),
                 null,
-                queryMessage.getBytes(StandardCharsets.UTF_8),
+                queryMessage != null ? queryMessage.getBytes(StandardCharsets.UTF_8) : new byte[0],
                 details,
                 requireNonNull(queryMessageIdentifier, "query ID must not be null"),
                 participantObjectTypeCode,
