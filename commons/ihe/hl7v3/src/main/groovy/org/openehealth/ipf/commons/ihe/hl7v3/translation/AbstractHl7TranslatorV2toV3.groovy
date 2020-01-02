@@ -237,6 +237,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     void translateTelecom(MarkupBuilder builder, Repeatable repeatableXTN, String defaultUse) {
         repeatableXTN.each { telecom ->
+            String use
             String number = telecom[1].value ?: telecom[4].value
             if (number) {
                 String schema = 'tel'
