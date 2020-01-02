@@ -20,7 +20,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 
 /**
  * Utility related to Camel {@link Exchange}s.
@@ -46,11 +46,7 @@ public class Exchanges {
      * @return result message.
      */
     public static Message resultMessage(Exchange exchange) {
-        if (exchange.getPattern().isOutCapable()) {
-            return exchange.getOut();
-        } else {
-            return exchange.getIn();
-        }
+        return exchange.getMessage();
     }
 
     /**
@@ -128,13 +124,9 @@ public class Exchanges {
             return;
         }
         
-        // copy in message
-        target.getIn().copyFrom(source.getIn());
-    
-        // copy out message
-        if (source.hasOut()) {
-            resultMessage(target).copyFrom(source.getOut());
-        }
+        // copy message
+        target.getMessage().copyFrom(source.getMessage());
+
         
         // copy exception
         target.setException(source.getException());

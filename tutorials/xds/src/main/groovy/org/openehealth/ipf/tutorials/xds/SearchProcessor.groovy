@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Exchange
-import org.apache.camel.processor.DelegateProcessor
+import org.apache.camel.support.processor.DelegateProcessor
 import org.openehealth.ipf.tutorials.xds.DataStore
 
 /**

@@ -23,6 +23,7 @@ import java.util.Set;
  * @author Martin Krasser
  * @deprecated
  */
+@Deprecated(forRemoval = true)
 public class Contexts {
 
     public static <T> T bean(Class<T> type, CamelContext camelContext) {

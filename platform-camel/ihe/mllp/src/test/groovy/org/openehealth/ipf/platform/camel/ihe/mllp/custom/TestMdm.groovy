@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test

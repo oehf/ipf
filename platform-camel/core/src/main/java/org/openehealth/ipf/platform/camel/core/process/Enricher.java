@@ -19,12 +19,12 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.copyExchang
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.createExchange;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.support.ServiceSupport;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.support.service.ServiceSupport;
 
 /**
  * A content enricher that enriches input data by first obtaining additional

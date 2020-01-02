@@ -58,8 +58,7 @@ public class TransmogrifierRouteTest extends AbstractRouteTest {
             exchange1.getIn().setHeader("x", "y");
             exchange1.getIn().setBody(new Dog("Willi"));
         });
-        assertTrue(exchange.hasOut());
-        assertEquals("y", exchange.getOut().getHeader("x"));
+        assertEquals("y", exchange.getMessage().getHeader("x"));
     }
 
 }

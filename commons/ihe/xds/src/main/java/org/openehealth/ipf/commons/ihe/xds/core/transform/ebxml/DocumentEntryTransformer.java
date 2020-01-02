@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -35,8 +34,6 @@ import java.util.stream.Collectors;
  * @author Jens Riemschneider
  */
 public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtrinsicObject, DocumentEntry> {
-    private final EbXMLFactory factory;
-    
     private final AuthorTransformer authorTransformer;
     private final CodeTransformer codeTransformer;
     
@@ -51,11 +48,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, 
                 DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID, 
                 DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID,
-                DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
+                DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID,
+                DOC_ENTRY_LIMITED_METADATA_CLASS_NODE,
+                factory);
         
-        notNull(factory, "factory cannot be null");
-
-        this.factory = factory;
         authorTransformer = new AuthorTransformer(factory);
         codeTransformer = new CodeTransformer(factory);
     }
@@ -187,8 +183,6 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
                 .map(codeTransformer::fromEbXML)
                 .collect(Collectors.toList()));
 
-        List<EbXMLClassification> limitedMetadata = extrinsic.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME);
-        docEntry.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
 
     @Override
@@ -223,11 +217,6 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         for (Code eventCode : docEntry.getEventCodeList()) {
             EbXMLClassification event = codeTransformer.toEbXML(eventCode, objectLibrary);
             extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
-        }
-
-        if (docEntry.isLimitedMetadata()) {
-            EbXMLClassification classification = factory.createClassification(objectLibrary);
-            extrinsic.addClassification(classification, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME);
         }
     }
 }

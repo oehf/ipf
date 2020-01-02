@@ -496,4 +496,8 @@ public class ObjectFactory {
         return new JAXBElement<ErrorResponse>(_BatchResponseErrorResponse_QNAME, ErrorResponse.class, BatchResponse.class, value);
     }
 
+    public DsmlValue createDsmlValue() {
+        return new DsmlValue();
+    }
+
 }

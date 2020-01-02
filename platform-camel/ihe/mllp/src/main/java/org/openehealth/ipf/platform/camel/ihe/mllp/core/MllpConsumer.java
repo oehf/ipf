@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.*;
-import org.apache.camel.component.mina2.Mina2Consumer;
-import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.component.mina.MinaConsumer;
+import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.support.DefaultConsumer;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.camel.spi.UnitOfWork;
 import org.apache.mina.core.future.CloseFuture;
@@ -28,14 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MllpConsumer wraps a Mina2Consumer for having a hook to shutdown some Mina
+ * MllpConsumer wraps a MinaConsumer for having a hook to shutdown some Mina
  * resources when the consumer is closing
  */
 public class MllpConsumer extends DefaultConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpConsumer.class);
 
-    public void start() throws Exception {
+    public void start() {
         this.consumer.start();
     }
 
@@ -91,15 +91,11 @@ public class MllpConsumer extends DefaultConsumer {
         return this.consumer.isRunAllowed();
     }
 
-    public String getVersion() {
-        return this.consumer.getVersion();
-    }
-
     public void setAcceptor(IoAcceptor acceptor) {
         this.consumer.setAcceptor(acceptor);
     }
 
-    public void shutdown() throws Exception {
+    public void shutdown() {
         this.consumer.shutdown();
     }
 
@@ -111,7 +107,7 @@ public class MllpConsumer extends DefaultConsumer {
         return this.consumer.getStatus();
     }
 
-    public void resume() throws Exception {
+    public void resume() {
         this.consumer.resume();
     }
 
@@ -127,7 +123,7 @@ public class MllpConsumer extends DefaultConsumer {
         return this.consumer.isStarted();
     }
 
-    public Mina2Endpoint getEndpoint() {
+    public MinaEndpoint getEndpoint() {
         return this.consumer.getEndpoint();
     }
 
@@ -135,20 +131,20 @@ public class MllpConsumer extends DefaultConsumer {
         this.consumer.doneUoW(exchange);
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
         this.consumer.suspend();
     }
 
-    private final Mina2Consumer consumer;
+    private final MinaConsumer consumer;
 
-    MllpConsumer(Mina2Consumer consumer) {
+    MllpConsumer(MinaConsumer consumer) {
         // Everything will be delegated
         super(consumer.getEndpoint(), consumer.getProcessor());
         this.consumer = consumer;
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         this.consumer.stop();
         // super.stop();
     }

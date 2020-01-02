@@ -19,16 +19,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 
-import org.eclipse.emf.common.util.URI;
 import org.openehealth.ipf.commons.core.modules.api.ParseException;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
-import org.openhealthtools.mdht.uml.cda.CDAPackage;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
-import org.openhealthtools.mdht.uml.cda.DocumentRoot;
-import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResource;
+import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 /**
  * @author Stefan Ivanov
  */
@@ -46,20 +48,34 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
         }
     }
 
-    /* (non-Javadoc)
+    /**
+     * Parses a {@link ClinicalDocument} from an {@link InputStream}. This parser is not vulnerable to XXE injections.
+     * Parsing an XML document with a Doctype will throw a {@link ParseException} and all
+     * &lt;include xmlns="http://www.w3.org/2001/XInclude"/gt; tags will be striped.
+     *
+     * <p>The MDHT parser is unsafe, so the clinical document is parsed to a {@link org.w3c.dom.Document} here
+     * before being passed to MDHT.
+     *
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.InputStream, java.lang.Object[])
      */
     public ClinicalDocument parse(InputStream is, Object... options)
             throws IOException {
-        CDAResource resource = (CDAResource) CDAResource.Factory.INSTANCE.createResource(URI
-            .createURI(CDAPackage.eNS_URI));
-        if (options != null && options.length > 0 && options[0] instanceof Map<?, ?>) {
-            resource.load(is, (Map<?, ?>) options[0]);
-        } else {
-            resource.load(is, null);
+        try {
+            final DocumentBuilder documentBuilder = this.newSafeDocumentBuilder();
+            final Document document = documentBuilder.parse(is);
+
+            NodeList nodeList = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+            for (int i = nodeList.getLength() - 1; i >= 0; --i) {
+                if (nodeList.item(i) != null && nodeList.item(i).getParentNode() != null) {
+                    nodeList.item(i).getParentNode().removeChild(nodeList.item(i));
+                }
+            }
+
+            return CDAUtil.load(document);
+
+        } catch (final Exception exception) {
+            throw new ParseException(exception);
         }
-        DocumentRoot root = (DocumentRoot) resource.getContents().get(0);
-        return root.getClinicalDocument();
     }
 
     /*
@@ -76,6 +92,26 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      */
     public ClinicalDocument parse(Reader reader, Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Initiliazes and configures a {@link DocumentBuilder} that is not vulnerable to XXE injections (XInclude,
+     * Billions Laugh Attack, ...).
+     *
+     * @return A configured DocumentBuilder.
+     * @throws ParserConfigurationException If the parser is not Xerces2 compatible.
+     */
+    private DocumentBuilder newSafeDocumentBuilder() throws ParserConfigurationException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://apache.org/xml/features/xinclude", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        return factory.newDocumentBuilder();
     }
 
 }

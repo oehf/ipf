@@ -79,8 +79,8 @@ public abstract class Vocabulary {
     public static final String DOC_ENTRY_TYPE_CODE_CLASS_SCHEME =
         "urn:uuid:f0306f51-975f-434e-a61c-c59651d33983";
 
-    /** limitedMetadata External Classification Scheme of the Document Entry */
-    public static final String DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME =
+    /** limitedMetadata External Classification Node of the Document Entry */
+    public static final String DOC_ENTRY_LIMITED_METADATA_CLASS_NODE =
         "urn:uuid:ab9b591b-83ab-4d03-8f5d-f93b1fb92e85";
 
     /** patientId ExternalIdentifier of the Document Entry */
@@ -108,8 +108,8 @@ public abstract class Vocabulary {
     public static final String FOLDER_CODE_LIST_CLASS_SCHEME =
         "urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5";
 
-    /** limitedMetadata External Classification Scheme of the Folder */
-    public static final String FOLDER_LIMITED_METADATA_CLASS_SCHEME =
+    /** limitedMetadata External Classification Node of the Folder */
+    public static final String FOLDER_LIMITED_METADATA_CLASS_NODE =
         "urn:uuid:2c144a76-29a9-4b7c-af54-b25409fe7d03";
 
     /** patientId ExternalIdentifier of the Folder */
@@ -142,8 +142,8 @@ public abstract class Vocabulary {
     public static final String SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME = 
         "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500";
 
-    /** limitedMetadata External Classification Scheme of the Submission Set */
-    public static final String SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME =
+    /** limitedMetadata External Classification Node of the Submission Set */
+    public static final String SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE =
         "urn:uuid:5003a9db-8d8d-49e6-bf0c-990e34ac7707";
 
     /** patientId ExternalIdentifier of the Submission Set */

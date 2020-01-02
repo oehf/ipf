@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.SimpleBundleProvider;
 import lombok.Getter;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  * The PagingProvider is used whenever there are more results than the client has requested.
  * <p>
  * Note that {@link IBundleProvider} is not serializable, so if {@link #isDistributed()} returns true,
- * only the bundles are stored. When the result list is {@link #retrieveResultList(String) retrieved}
+ * only the bundles are stored. When the result list is {@link #retrieveResultList(RequestDetails, String) retrieved}
  * a new instance of {@link SimpleBundleProvider} is created and returned instead. This does
  * not work with {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
  * as this class relies on a completely initialized result list.
@@ -73,7 +74,7 @@ public class CachingPagingProvider implements IPagingProvider {
     }
 
     @Override
-    public String storeResultList(IBundleProvider bundleProvider) {
+    public String storeResultList(RequestDetails requestDetails, IBundleProvider bundleProvider) {
         String key = UUID.randomUUID().toString();
         cache.put(key, distributed ?
                 serialize(bundleProvider) :
@@ -82,7 +83,7 @@ public class CachingPagingProvider implements IPagingProvider {
     }
 
     @Override
-    public IBundleProvider retrieveResultList(String id) {
+    public IBundleProvider retrieveResultList(RequestDetails requestDetails, String id) {
         return distributed ?
                 deserialize(cache.get(id, List.class)) :
                 cache.get(id, IBundleProvider.class);

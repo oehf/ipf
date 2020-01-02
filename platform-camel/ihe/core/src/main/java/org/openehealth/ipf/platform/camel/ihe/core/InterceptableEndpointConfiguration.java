@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.support.DefaultComponent;
 import org.apache.camel.spi.UriParam;
 
 import java.util.List;

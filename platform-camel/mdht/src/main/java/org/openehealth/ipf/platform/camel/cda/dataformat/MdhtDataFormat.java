@@ -47,4 +47,11 @@ public class MdhtDataFormat implements DataFormat {
         return parser.parse(stream, (Object[]) null);
     }
 
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

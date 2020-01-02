@@ -45,20 +45,21 @@ public class AuditDefinition extends DelegateDefinition {
     public void setAuditProcessor(Processor auditProcessor) {
         this.auditProcessor = auditProcessor;
     }
-    
+
     /**
      * @param auditProcessorBeanName the auditProcessorBeanName to set
      */
     public void setAuditProcessorBeanName(String auditProcessorBeanName) {
         this.auditProcessorBeanName = auditProcessorBeanName;
     }
-    
-    @Override
-    protected Processor doCreateDelegate(RouteContext routeContext) {
-        if (auditProcessorBeanName != null) {
-            auditProcessor = routeContext.lookup(auditProcessorBeanName, Processor.class);
-        }
+
+
+    public Processor getAuditProcessor() {
         return auditProcessor;
+    }
+
+    public String getAuditProcessorBeanName() {
+        return auditProcessorBeanName;
     }
 
     private static class Noop implements Processor {

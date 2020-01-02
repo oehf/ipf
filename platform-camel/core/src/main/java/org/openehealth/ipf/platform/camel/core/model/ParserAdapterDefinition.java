@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.*;
 public class ParserAdapterDefinition extends ProcessorAdapterDefinition {
 
     @XmlTransient
-    private Parser parser;
+    private Parser<?> parser;
     @XmlAttribute
     private String parserBean;
 
@@ -57,12 +57,11 @@ public class ParserAdapterDefinition extends ProcessorAdapterDefinition {
         return "parserAdapter";
     }
 
-    @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
-        if (parserBean != null) {
-            parser = routeContext.lookup(parserBean, Parser.class);
-        }
-        return new ParserAdapter(parser);
+    public Parser<?> getParser() {
+        return parser;
     }
 
+    public String getParserBean() {
+        return parserBean;
+    }
 }

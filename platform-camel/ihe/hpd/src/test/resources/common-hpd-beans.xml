@@ -40,7 +40,15 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     </bean>
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
-    
-	<ipf:globalContext id="globalContext"/>
+
+    <bean id="inLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
+        <constructor-arg value="dummy"/>
+    </bean>
+    <bean id="outLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
+        <constructor-arg value="dummy"/>
+    </bean>
+
+
+    <ipf:globalContext id="globalContext"/>
 
 </beans>

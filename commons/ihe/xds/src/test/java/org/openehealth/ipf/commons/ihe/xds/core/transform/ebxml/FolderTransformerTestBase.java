@@ -99,7 +99,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);
 
-        assertClassification(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+        assertClassification(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
 
         assertEquals(3, ebXML.getClassifications().size());
         assertEquals(1, ebXML.getSlots().size());

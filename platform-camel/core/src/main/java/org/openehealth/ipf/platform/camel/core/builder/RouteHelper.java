@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.Builder;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.apache.camel.util.CamelContextHelper;
+import org.apache.camel.support.CamelContextHelper;
 import org.openehealth.ipf.commons.core.modules.api.*;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;

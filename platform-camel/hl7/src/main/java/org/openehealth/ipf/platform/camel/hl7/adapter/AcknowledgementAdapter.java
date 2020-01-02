@@ -20,6 +20,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
+import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.util.ObjectHelper;
 
 /**
@@ -45,7 +46,7 @@ public class AcknowledgementAdapter extends HapiAdapter {
             }
             return message.generateACK(acknowledgementCode == null ? AcknowledgmentCode.AA : acknowledgementCode, hl7e);
         } catch (Exception e) {
-            throw ObjectHelper.wrapRuntimeCamelException(e);
+            throw RuntimeCamelException.wrapRuntimeCamelException(e);
         }
 
     }

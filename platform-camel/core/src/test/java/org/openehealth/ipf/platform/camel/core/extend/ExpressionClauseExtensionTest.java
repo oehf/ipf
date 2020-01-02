@@ -49,7 +49,7 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         Exchange received = mockOutput.getExchanges().get(0);
         assertEquals("message rejected", result.getException().getMessage());
-        assertEquals("message rejected", result.getOut().getBody());
+        assertEquals("message rejected", result.getMessage().getBody());
         assertNull(received.getException());
     }
     

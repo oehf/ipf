@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
-import org.apache.camel.component.mina2.Mina2Component;
-import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.camel.component.mina.MinaComponent;
+import org.apache.camel.component.mina.MinaEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -41,7 +41,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration, AuditDatasetType extends MllpAuditDataset>
-        extends Mina2Component implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
+        extends MinaComponent implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
 
@@ -87,11 +87,11 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     /**
      * Creates an endpoint object.
      *
-     * @param wrappedEndpoint standard Camel MINA2 endpoint instance.
+     * @param wrappedEndpoint standard Camel MINA endpoint instance.
      * @param config          endpoint configuration.
-     * @return configured MLLP endpoint instance which wraps the MINA2 one.
+     * @return configured MLLP endpoint instance which wraps the MINA one.
      */
-    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
+    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(MinaEndpoint wrappedEndpoint, ConfigType config);
 
 
     /**
@@ -133,7 +133,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
         // construct the endpoint
         Endpoint endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
-        Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
+        MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
 
         // wrap and return
         return createEndpoint(minaEndpoint, config);

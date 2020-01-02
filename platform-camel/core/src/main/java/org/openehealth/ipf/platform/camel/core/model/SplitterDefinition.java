@@ -15,24 +15,27 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
-import static org.apache.camel.util.ObjectHelper.notNull;
 import groovy.lang.Closure;
-
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Expression;
-import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregationStrategy;
 import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+import static org.apache.camel.util.ObjectHelper.notNull;
 
 /**
  * {@link OutputDefinition} for the {@link Splitter} processor
@@ -82,27 +85,6 @@ public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
         notNull(expressionBean, "expressionBean");
         this.expressionBean = expressionBean;
     }
-
-    @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Processor childProcessor = createChildProcessor(routeContext, false);
-        if (aggregationStrategy == null) {
-            aggregationStrategy = new UseLatestAggregationStrategy();
-        }
-        if (expressionBean != null) {
-            expressionDefinition = new ExpressionDefinition(routeContext.lookup(expressionBean, Expression.class));
-        }
-        Expression expression = expressionDefinition.createExpression(routeContext);
-        Splitter splitter = createSplitterInstance(expression, childProcessor);
-        
-        splitter.aggregate(aggregationStrategy);
-        
-        return splitter;
-    }
-
-    protected Splitter createSplitterInstance(Expression expression, Processor processor) {
-        return new Splitter(expression, processor);
-    }
     
     @Override
     public String getShortName() {
@@ -134,5 +116,16 @@ public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
         this.aggregationStrategy = aggregationStrategy;
         return this;
     }
-    
+
+    public AggregationStrategy getAggregationStrategy() {
+        return aggregationStrategy;
+    }
+
+    public ExpressionDefinition getExpressionDefinition() {
+        return expressionDefinition;
+    }
+
+    public String getExpressionBean() {
+        return expressionBean;
+    }
 }

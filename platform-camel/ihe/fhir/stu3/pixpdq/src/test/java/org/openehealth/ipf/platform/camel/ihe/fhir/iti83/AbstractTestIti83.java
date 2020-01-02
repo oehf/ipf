@@ -74,6 +74,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
+                .encodedXml()
                 .execute();
         return result;
     }
@@ -84,6 +85,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
+                .encodedXml()
                 .execute();
         return result;
     }

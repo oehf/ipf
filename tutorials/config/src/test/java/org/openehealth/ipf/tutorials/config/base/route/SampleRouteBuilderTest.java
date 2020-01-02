@@ -47,7 +47,7 @@ public class SampleRouteBuilderTest {
     @EndpointInject(uri = "mock:file")
     MockEndpoint mockFile;
     
-    private final String JETTY_URI = "http4://0.0.0.0:8800";
+    private final String JETTY_URI = "http://0.0.0.0:8800";
     
     @Before
     public void setUp(){

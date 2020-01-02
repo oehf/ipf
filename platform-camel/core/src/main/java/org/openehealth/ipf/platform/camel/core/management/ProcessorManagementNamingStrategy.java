@@ -20,7 +20,7 @@ import javax.management.ObjectName;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Processor;
-import org.apache.camel.management.DefaultManagementNamingStrategy;
+import org.apache.camel.management.DefaultManagementObjectNameStrategy;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.ProcessorDefinitionHelper;
 import org.apache.camel.model.RouteDefinition;
@@ -28,8 +28,7 @@ import org.apache.camel.model.RouteDefinition;
 /**
  * @author Reinhard Luft
  */
-public class ProcessorManagementNamingStrategy extends
-        DefaultManagementNamingStrategy {
+public class ProcessorManagementNamingStrategy extends DefaultManagementObjectNameStrategy {
 
     public static final String KEY_ROUTE = "route";
 

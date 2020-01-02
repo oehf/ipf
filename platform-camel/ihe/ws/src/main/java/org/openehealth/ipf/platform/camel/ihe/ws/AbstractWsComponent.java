@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.support.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
@@ -109,4 +109,5 @@ abstract public class AbstractWsComponent<
     public ConfigType getWsTransactionConfiguration() {
         return interactionId.getWsTransactionConfiguration();
     }
+
 }

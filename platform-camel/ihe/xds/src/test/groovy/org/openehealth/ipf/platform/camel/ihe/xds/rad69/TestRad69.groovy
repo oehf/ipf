@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 
 import org.apache.camel.Exchange
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass

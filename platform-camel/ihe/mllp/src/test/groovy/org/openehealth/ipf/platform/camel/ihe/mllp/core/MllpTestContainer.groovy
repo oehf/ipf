@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.camel.spi.Synchronization
 import org.junit.After
 import org.junit.AfterClass

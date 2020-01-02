@@ -22,7 +22,7 @@ import java.net.URL;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.spi.TransactedPolicy;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.cxf.transport.servlet.CXFServlet;

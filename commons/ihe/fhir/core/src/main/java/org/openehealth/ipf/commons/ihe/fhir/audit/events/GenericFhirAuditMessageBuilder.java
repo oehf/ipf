@@ -99,7 +99,7 @@ public class GenericFhirAuditMessageBuilder extends
                         auditDataset.getAffectedResourceType() != null ?
                                 auditDataset.getAffectedResourceType() :
                                 getAuditContext().getAuditValueIfMissing()),
-                auditDataset.getAffectedResourceType(),
+                null,
                 auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8),
                 null,
                 "FHIR Restful Query",

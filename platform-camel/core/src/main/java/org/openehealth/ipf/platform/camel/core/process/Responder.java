@@ -20,8 +20,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.copyExchang
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.processor.DelegateProcessor;
+import org.apache.camel.support.DefaultExchange;
+import org.apache.camel.support.processor.DelegateProcessor;
 
 /**
  * Implements a response generation process. For generating a response the

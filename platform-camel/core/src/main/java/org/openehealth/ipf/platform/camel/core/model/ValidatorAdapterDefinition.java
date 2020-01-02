@@ -43,7 +43,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
 
     @XmlTransient
-    private Validator validator;
+    private Validator<?, ?> validator;
     @XmlAttribute
     private String validatorBean;
     @XmlTransient
@@ -55,7 +55,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         this(new AlwaysValid());
     }
     
-    public ValidatorAdapterDefinition(Validator validator) {
+    public ValidatorAdapterDefinition(Validator<?, ?> validator) {
         this.validator = validator;
     }
     
@@ -63,7 +63,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         this.validatorBean = validatorBean;
     }
     
-    public void setValidator(Validator validator) {
+    public void setValidator(Validator<?, ?> validator) {
         this.validator = validator;
     }
     
@@ -99,7 +99,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
      *          the profile closure
      */
     public ProcessorAdapterDefinition profile(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
-                                                      Closure profileExpression) {
+                                                      Closure<?> profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }
@@ -130,19 +130,20 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         return "validatorAdapter";
     }
 
-    @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
-        if (validatorBean != null) {
-            validator = routeContext.lookup(validatorBean, Validator.class);
-        }
-        ValidatorAdapter adapter = new ValidatorAdapter(validator);
-        if (profile != null) {
-            return adapter.staticProfile(profile);
-        }
-        if (profileExpression != null) {
-            return adapter.profile(profileExpression);
-        }
-        return adapter;
+    public Validator<?, ?> getValidator() {
+        return validator;
+    }
+
+    public String getValidatorBean() {
+        return validatorBean;
+    }
+
+    public Object getProfile() {
+        return profile;
+    }
+
+    public Expression getProfileExpression() {
+        return profileExpression;
     }
 
     private static class AlwaysValid implements Validator<Object, Object> {

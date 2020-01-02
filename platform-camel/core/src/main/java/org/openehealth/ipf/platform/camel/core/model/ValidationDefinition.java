@@ -21,7 +21,11 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Martin Krasser
@@ -51,13 +55,6 @@ public class ValidationDefinition extends OutputDefinition<ValidationDefinition>
     private ValidationDefinition(Processor responseGeneratorProcessor, String responseGeneratorUri) {
         this.responseGeneratorProcessor = responseGeneratorProcessor;
         this.responseGeneratorUri = responseGeneratorUri;
-    }
-    
-    @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Validation validation = createValidationProcessor(routeContext);
-        validation.setProcessor(createChildProcessor(routeContext, false));
-        return validation;
     }
     
     private Validation createValidationProcessor(RouteContext routeContext) throws Exception {

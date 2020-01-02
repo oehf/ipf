@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 import groovy.lang.Closure;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 

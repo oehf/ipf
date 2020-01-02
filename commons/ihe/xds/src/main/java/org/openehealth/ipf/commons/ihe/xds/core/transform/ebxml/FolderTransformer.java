@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
@@ -34,8 +33,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
  * @author Jens Riemschneider
  */
 public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPackage, Folder> {
-    private final EbXMLFactory factory;
-
     private final CodeTransformer codeTransformer;
 
     /**
@@ -47,11 +44,10 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         super(FOLDER_PATIENT_ID_EXTERNAL_ID, 
                 FOLDER_LOCALIZED_STRING_PATIENT_ID, 
                 FOLDER_UNIQUE_ID_EXTERNAL_ID,
-                FOLDER_LOCALIZED_STRING_UNIQUE_ID);
+                FOLDER_LOCALIZED_STRING_UNIQUE_ID,
+                FOLDER_LIMITED_METADATA_CLASS_NODE,
+                factory);
 
-        notNull(factory, "factory cannot be null");
-
-        this.factory = factory;
         codeTransformer = new CodeTransformer(factory);
     }
     
@@ -101,9 +97,6 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         codes.addAll(regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
                 .collect(Collectors.toList()));
-
-        List<EbXMLClassification> limitedMetadata = regPackage.getClassifications(FOLDER_LIMITED_METADATA_CLASS_SCHEME);
-        folder.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
 
     @Override
@@ -113,11 +106,6 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         for (Code codeListElem : folder.getCodeList()) {
             EbXMLClassification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
             regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
-        }
-
-        if (folder.isLimitedMetadata()) {
-            EbXMLClassification classification = factory.createClassification(objectLibrary);
-            regPackage.addClassification(classification, FOLDER_LIMITED_METADATA_CLASS_SCHEME);
         }
     }
 }

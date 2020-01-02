@@ -27,6 +27,7 @@ public interface CDAR2Constants {
     String IHE_LAB_SCHEMA = "/schema/ihe_lab/infrastructure/cda/LabCDA.xsd";
 
     /** @deprecated use HITSP_32_2_4_SCHEMA **/
+    @Deprecated()
     String HITSP_24_SCHEMA = "/schema/hitspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
 
     String HITSP_32_2_4_SCHEMA = "/schema/hitspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
@@ -41,6 +42,7 @@ public interface CDAR2Constants {
     String CDA_PHMR_SCHEMATRON_RULES = "/schematron/cda_phmr/PHMR.sch";
 
     /** @deprecated use HITSP_32_2_4_SCHEMATRON_RULES **/
+    @Deprecated()
     String HITSP_24_SCHEMATRON_RULES = "/schematron/hitsp32_v2.4_20090414/HITSP_C32.sch";
 
     String HITSP_32_2_4_SCHEMATRON_RULES = "/schematron/hitsp32_v2.4_20090414/HITSP_C32.sch";

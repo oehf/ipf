@@ -23,8 +23,8 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.camel.util.EndpointHelper;
-import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.support.EndpointHelper;
+import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -163,7 +163,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         String username = component.getAndRemoveParameter(parameters, "username", String.class);
         String password = component.getAndRemoveParameter(parameters, "password", String.class);
 
-        if (sslContextParameters == null) {
+        if (secure && sslContextParameters == null) {
             Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
             if (sslContextParameterMap.size() == 1) {
                 Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();

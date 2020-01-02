@@ -42,21 +42,21 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 new MultiplastAggregationStrategy(),
                 privilegedThreadPool)
 
-        from('mina2:tcp://localhost:10000?textline=true&sync=true')
+        from('mina:tcp://localhost:10000?textline=true&sync=true')
             .process {
                 assert it.in.body == 'abc'
                 Exchanges.resultMessage(it).body = '123'
             }
             .delay(1000L)
         
-        from('mina2:tcp://localhost:10001?textline=true&sync=true')
+        from('mina:tcp://localhost:10001?textline=true&sync=true')
             .process {
                 assert it.in.body == 'def'
                 Exchanges.resultMessage(it).body = '456'
             }
             .delay(1000L)
         
-        from('mina2:tcp://localhost:10002?textline=true&sync=true')
+        from('mina:tcp://localhost:10002?textline=true&sync=true')
             .process {
                 assert it.in.body == 'ghi'
                 Exchanges.resultMessage(it).body = '789'

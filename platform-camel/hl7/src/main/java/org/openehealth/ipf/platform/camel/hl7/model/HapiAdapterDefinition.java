@@ -33,15 +33,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Metadata(label = "ipf,hl7,eip,transformation")
 @XmlRootElement(name = "ack")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HapiAdapterDefinition<T extends HapiAdapter> extends ProcessorAdapterDefinition {
+public class HapiAdapterDefinition extends ProcessorAdapterDefinition {
 
     @XmlTransient
-    private T adapter;
+    private HapiAdapter adapter;
 
     public HapiAdapterDefinition() {
     }
 
-    public HapiAdapterDefinition(T adapter) {
+    public HapiAdapterDefinition(HapiAdapter adapter) {
         this.adapter = adapter;
     }
 
@@ -55,8 +55,7 @@ public class HapiAdapterDefinition<T extends HapiAdapter> extends ProcessorAdapt
         return "hapiAdapter";
     }
 
-    @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    public HapiAdapter getAdapter() {
         return adapter;
     }
 }

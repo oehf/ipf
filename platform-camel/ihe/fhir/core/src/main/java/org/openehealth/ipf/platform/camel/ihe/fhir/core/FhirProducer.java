@@ -24,7 +24,7 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
@@ -40,48 +40,45 @@ import java.util.Map;
  */
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
-    private IGenericClient client;
 
     public FhirProducer(Endpoint endpoint) {
         super(endpoint);
     }
 
-    protected synchronized IGenericClient getClient(Exchange exchange) {
-        if (client == null) {
-            FhirContext context = getEndpoint().getContext();
-            IRestfulClientFactory clientFactory = context.getRestfulClientFactory();
-            FhirEndpointConfiguration<AuditDatasetType> config = getEndpoint().getInterceptableConfiguration();
+    protected IGenericClient getClient(Exchange exchange) {
+        FhirContext context = getEndpoint().getContext();
+        IRestfulClientFactory clientFactory = context.getRestfulClientFactory();
+        FhirEndpointConfiguration<AuditDatasetType> config = getEndpoint().getInterceptableConfiguration();
 
-            FhirSecurityInformation securityInformation = config.getSecurityInformation();
-            if (clientFactory instanceof SslAwareApacheRestfulClientFactory) {
-                ((SslAwareApacheRestfulClientFactory)clientFactory).setSecurityInformation(securityInformation);
-            }
-
-            // For the producer, the path is supposed to be the server URL
-            String path = config.getPath();
-
-            path = (config.getSecurityInformation().isSecure() ? "https://" : "http://") + path;
-            client = clientFactory.newGenericClient(path);
-
-            if (securityInformation != null && securityInformation.getUsername() != null) {
-                client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
-            }
-
-            // deploy user-defined HAPI interceptors
-            List<HapiClientInterceptorFactory> factories = config.getHapiClientInterceptorFactories();
-            if (factories != null) {
-                for (HapiClientInterceptorFactory factory : factories) {
-                    client.registerInterceptor(factory.newInstance(getEndpoint(), exchange));
-                }
-            }
-
+        FhirSecurityInformation securityInformation = config.getSecurityInformation();
+        if (clientFactory instanceof SslAwareApacheRestfulClientFactory) {
+            ((SslAwareApacheRestfulClientFactory) clientFactory).setSecurityInformation(securityInformation);
         }
+
+        // For the producer, the path is supposed to be the server URL
+        String path = config.getPath();
+
+        path = (config.getSecurityInformation().isSecure() ? "https://" : "http://") + path;
+        IGenericClient client = clientFactory.newGenericClient(path);
+
+        if (securityInformation != null && securityInformation.getUsername() != null) {
+            client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
+        }
+
+        // deploy user-defined HAPI interceptors
+        List<HapiClientInterceptorFactory> factories = config.getHapiClientInterceptorFactories();
+        if (factories != null) {
+            for (HapiClientInterceptorFactory factory : factories) {
+                client.registerInterceptor(factory.newInstance(getEndpoint(), exchange));
+            }
+        }
+
         return client;
     }
 
     @Override
     public FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>)super.getEndpoint();
+        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>) super.getEndpoint();
     }
 
     /**

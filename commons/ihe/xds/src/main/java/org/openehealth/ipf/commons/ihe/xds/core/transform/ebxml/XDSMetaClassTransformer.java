@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
@@ -34,10 +36,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  * @author Jens Riemschneider
  */
 public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C extends XDSMetaClass> {
+    final EbXMLFactory factory;
     private final String patientIdExternalId;
     private final String patientIdLocalizedString;
     private final String uniqueIdExternalId;
     private final String uniqueIdLocalizedString;
+    private final String limitedMetadataAttributeName;
+    
 
     /**
      * Constructs the transformer using various constants from {@link Vocabulary}.
@@ -49,17 +54,24 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      *          the external ID of the unique ID.
      * @param uniqueIdLocalizedString
      *          the localized string of the unique ID.
+     * @param limitedMetadataAttributeName
+     *          the classification defining the limitedMetadata.
      */
     protected XDSMetaClassTransformer(
             String patientIdExternalId,
             String patientIdLocalizedString, 
             String uniqueIdExternalId,
-            String uniqueIdLocalizedString) {
+            String uniqueIdLocalizedString,
+            String limitedMetadataAttributeName,
+            EbXMLFactory factory) {
+        
+        this.factory = notNull(factory, "factory cannot be null");
         
         this.patientIdExternalId = patientIdExternalId;
         this.patientIdLocalizedString = patientIdLocalizedString;
         this.uniqueIdExternalId = uniqueIdExternalId;
         this.uniqueIdLocalizedString = uniqueIdLocalizedString;
+        this.limitedMetadataAttributeName = limitedMetadataAttributeName;
     }
 
     /**
@@ -87,6 +99,12 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         if (ebXML instanceof ExtraMetadataHolder) {
             ((ExtraMetadataHolder) ebXML).setExtraMetadata(metaData.getExtraMetadata());
         }
+        
+        if (metaData.isLimitedMetadata()) {
+            EbXMLClassification classification = factory.createClassification(objectLibrary);
+            classification.setClassificationNode(limitedMetadataAttributeName);
+            ebXML.addClassification(classification, limitedMetadataAttributeName);
+        }
 
         return ebXML;
     }
@@ -112,6 +130,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         if (ebXML instanceof ExtraMetadataHolder) {
             metaData.setExtraMetadata(((ExtraMetadataHolder) ebXML).getExtraMetadata());
         }
+        
+        metaData.setLimitedMetadata(ebXML.getClassifications().stream()
+                .filter(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode()))
+                .findFirst().isPresent());
 
         return metaData;
     }

@@ -39,8 +39,8 @@ final class ProxyUtils {
         if (proxyClass.isAssignableFrom(Advised.class)) {
             ++nonUserInterfaceCount;
         }
-        Class[] proxyInterfaces = proxyClass.getInterfaces();
-        Class[] userInterfaces = new Class[proxyInterfaces.length - nonUserInterfaceCount];
+        Class<?>[] proxyInterfaces = proxyClass.getInterfaces();
+        Class<?>[] userInterfaces = new Class[proxyInterfaces.length - nonUserInterfaceCount];
         System.arraycopy(proxyInterfaces, 0, userInterfaces, 0, userInterfaces.length);
         Assert.notEmpty(userInterfaces, "JDK proxy must implement one or more interfaces");
         return (Class<T>)userInterfaces[0];

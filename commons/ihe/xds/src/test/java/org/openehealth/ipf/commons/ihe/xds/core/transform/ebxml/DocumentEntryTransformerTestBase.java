@@ -224,7 +224,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertExternalIdentifier(DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
 
-        assertClassification(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+        assertClassification(DOC_ENTRY_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
 
         assertEquals(12, ebXML.getClassifications().size());
         assertEquals(13, ebXML.getSlots().size());

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.core.modules.api.ParseException;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
 /**
@@ -64,6 +65,21 @@ public class CDAR2ParserTest {
         ClinicalDocument clinicalDocument = parser.parse(is);
         String result = renderer.render(clinicalDocument, (Object[]) null);
         Assert.assertTrue(result.length() > 0);
+    }
+
+    @Test
+    public void testParseDocumentWithXInclude() throws Exception {
+        InputStream is = getClass().getResourceAsStream(
+                "/builders/content/document/CDADocumentWithXInclude.xml");
+        ClinicalDocument clinicalDocument = parser.parse(is);
+        Assert.assertEquals("", clinicalDocument.getTitle().getText());
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseDocumentWithXXEInjection() throws Exception {
+        InputStream is = getClass().getResourceAsStream(
+                "/builders/content/document/CDADocumentWithXXEInjection.xml");
+        ClinicalDocument clinicalDocument = parser.parse(is);
     }
     
 }

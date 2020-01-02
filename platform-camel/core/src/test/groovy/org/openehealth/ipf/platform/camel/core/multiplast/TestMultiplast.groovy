@@ -29,7 +29,7 @@ import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ExchangePattern
 import org.apache.camel.ProducerTemplate
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -66,7 +66,7 @@ class TestMultiplast {
 
     
     private String endpoint(int port) {
-        return "mina2:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
+        return "mina:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
     }
 
     private String ep(String key) {

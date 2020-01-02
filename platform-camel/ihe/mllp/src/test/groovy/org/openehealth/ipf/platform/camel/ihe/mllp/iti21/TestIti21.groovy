@@ -21,7 +21,7 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.*
 import org.apache.camel.component.mock.MockEndpoint
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Rule

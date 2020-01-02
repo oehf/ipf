@@ -49,39 +49,39 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     public void setUp() {
         validator = new ProvideAndRegisterDocumentSetRequestValidator();
         EbXMLFactory factory = new EbXMLFactory30();
-        
+
         request = SampleData.createProvideAndRegisterDocumentSet();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
 
         docEntry = request.getDocuments().get(0).getDocumentEntry();
     }
-    
+
     @Test
     public void testValidateGoodCase() {
         validator.validate(transformer.toEbXML(request), ITI_41);
     }
-    
+
     @Test
     public void testValidateDelegatesToSubmitObjectsRequestValidator() {
         // Try a failure that is produced by the SubmitObjectsRequestValidator
         docEntry.getAuthors().get(0).getAuthorInstitution().add(new Organization(null, "LOL", null));
-        expectFailure(ORGANIZATION_NAME_MISSING);            
+        expectFailure(ORGANIZATION_NAME_MISSING);
     }
-    
+
     @Test
     public void testValidateMissingDocEntryForDocument() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.addDocument("lol", SampleData.createDataHandler());
         expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML, ITI_41);
     }
-    
+
     @Test
     public void testValidateMissingDocumentForDocEntry() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.removeDocument("document01");
         expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML, ITI_41);
     }
-    
+
     @Test
     public void testRepositoryUniqueIdIsNotNecessary() {
         docEntry.setRepositoryUniqueId(null);
@@ -98,6 +98,12 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     public void testWrongTargetHomeCommunityId() {
         request.setTargetHomeCommunityId("urn:oid:1.2.3.foobar");
         expectFailure(INVALID_OID);
+    }
+
+    @Test
+    public void testMissingMimeType() {
+        docEntry.setMimeType("");
+        expectFailure(MIME_TYPE_MUST_BE_SPECIFIED);
     }
 
     private void expectFailure(ValidationMessage expectedMessage) {

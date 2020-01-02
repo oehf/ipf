@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.core.extend
 
+import org.apache.camel.AggregationStrategy
 import org.apache.camel.Exchange
 import org.apache.camel.Expression
 import org.apache.camel.Processor
@@ -23,7 +24,6 @@ import org.apache.camel.builder.*
 import org.apache.camel.model.DataFormatDefinition
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.model.RouteDefinition
-import org.apache.camel.processor.aggregate.AggregationStrategy
 import org.apache.camel.spi.DataFormat
 import org.openehealth.ipf.commons.core.modules.api.*
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter

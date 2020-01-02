@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Martin Krasser
@@ -76,15 +75,14 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
     public void testSuccess(String endpoint) throws InterruptedException {
         mockOutput.expectedBodiesReceived("blah");
         Exchange result = producerTemplate.request(endpoint, exchange -> exchange.getIn().setBody("blah"));
-        assertEquals("result", result.getOut().getBody());
+        assertEquals("result", result.getMessage().getBody());
         mockOutput.assertIsSatisfied();
     }
 
     public void testFault(String endpoint) throws InterruptedException {
         mockOutput.expectedMessageCount(0);
         Exchange result = producerTemplate.request(endpoint, exchange -> exchange.getIn().setBody("blah"));
-        assertEquals("failed", result.getOut().getBody());
-        assertTrue(result.getOut().isFault());
+        assertEquals("failed", result.getMessage().getBody());
         mockOutput.assertIsSatisfied();
     }
     

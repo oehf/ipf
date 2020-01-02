@@ -148,7 +148,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, GenericFhirAuditDataset auditDataset) {
         GenericFhirAuditMessageBuilder builder = new GenericFhirAuditMessageBuilder(auditContext, auditDataset)
                 .addPatients(auditDataset);
-        if (auditDataset.getAffectedResourceType() != null && auditDataset.getQueryString() != null) {
+        if (auditDataset.getQueryString() != null) {
             builder.addQueryParticipantObject(auditDataset);
         } else if (auditDataset.getResourceId() != null &&
                 auditDataset.getResourceId().hasResourceType() &&

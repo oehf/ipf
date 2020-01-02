@@ -1,0 +1,22 @@
+<batchResponse xmlns="urn:oasis:names:tc:DSML:2:0:core"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:s01="urn:oasis:names:tc:DSML:2:0:core"
+               xsi:type="s01:BatchResponse"
+               requestID="eb22d8a9-6bc8-45a1-bf64-a71638efa66a">
+    <searchResponse xsi:type="s01:SearchResponse" requestID="b6aac37e-c4a0-4dea-9c70-c3ebefa5c843">
+        <searchResultEntry xsi:type="s01:SearchResultEntry"
+                           dn="cn=CommunityB:00000003001,ou=Relationship,dc=HPD,o=BAG,c=CH">
+            <attr xsi:type="s01:DsmlAttr" name="owner">
+                <value xsi:type="s01:DsmlValue">uid=CommunityB:00000002000,ou=HCRegulatedOrganization,dc=HPD,o=BAG,c=CH</value>
+            </attr>
+            <attr xsi:type="s01:DsmlAttr" name="member">
+                <value xsi:type="s01:DsmlValue">uid=CommunityB:00000000101,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+                <value xsi:type="s01:DsmlValue">uid=CommunityB:00000000102,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+                <value xsi:type="s01:DsmlValue">uid=CommunityB:00000004000,ou=HCProfessional,dc=HPD,o=BAG,c=CH</value>
+            </attr>
+        </searchResultEntry>
+        <searchResultDone xsi:type="s01:LDAPResult">
+            <resultCode xsi:type="s01:ResultCode" code="0"></resultCode>
+        </searchResultDone>
+    </searchResponse>
+</batchResponse>

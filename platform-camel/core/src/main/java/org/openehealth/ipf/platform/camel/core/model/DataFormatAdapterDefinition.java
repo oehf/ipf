@@ -49,14 +49,12 @@ public class DataFormatAdapterDefinition extends DataFormatDefinition {
     public static DataFormatAdapterDefinition forRendererBean(String beanName) {
         return new DataFormatAdapterDefinition(null, beanName);
     }
-    
-    @Override
-    public DataFormat getDataFormat(RouteContext routeContext) {
-        if (parserBeanName != null) {
-            return new DataFormatAdapter(routeContext.lookup(parserBeanName, Parser.class));
-        } else {
-            return new DataFormatAdapter(routeContext.lookup(rendererBeanName, Renderer.class));
-        }
+
+    public String getParserBeanName() {
+        return parserBeanName;
     }
 
+    public String getRendererBeanName() {
+        return rendererBeanName;
+    }
 }

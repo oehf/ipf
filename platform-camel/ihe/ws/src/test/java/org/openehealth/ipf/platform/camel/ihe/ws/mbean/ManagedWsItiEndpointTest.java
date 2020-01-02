@@ -15,24 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
-import java.util.Set;
+import org.apache.camel.CamelContext;
+import org.apache.camel.ContextTestSupport;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.management.DefaultManagementObjectNameStrategy;
+import org.apache.camel.util.CastUtils;
+import org.junit.Test;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
-
-import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.management.DefaultManagementNamingStrategy;
-import org.apache.camel.management.ManagementTestSupport;
-import org.apache.camel.util.CastUtils;
+import java.util.Set;
 
 /**
  * 
  * @author Stefan Ivanov
  * 
  */
-public class ManagedWsItiEndpointTest extends ManagementTestSupport {
+public class ManagedWsItiEndpointTest extends ContextTestSupport {
     
     @Override
     protected boolean useJmx() {
@@ -42,13 +42,14 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
     protected CamelContext createCamelContext() throws Exception {
         CamelContext context = super.createCamelContext();
         context.addComponent("some-ws-iti", new SomeItiComponent());
-        DefaultManagementNamingStrategy naming = (DefaultManagementNamingStrategy) context
-            .getManagementStrategy().getManagementNamingStrategy();
+        DefaultManagementObjectNameStrategy naming = (DefaultManagementObjectNameStrategy) context
+            .getManagementStrategy().getManagementObjectNameStrategy();
         naming.setHostName("localhost");
         naming.setDomainName("org.apache.camel");
         return context;
     }
-    
+
+    @Test
     public void testInit() throws Exception {
         MBeanServer mbeanServer = getMBeanServer();
         ObjectName on = ObjectName
@@ -57,7 +58,7 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
         assertNotNull(oi);
     }
 
-
+    @Test
     public void testEndpointAttributes() throws Exception {
         MBeanServer mbeanServer = getMBeanServer();
         
@@ -65,11 +66,11 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
             "org.apache.camel:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
         ObjectName on = (ObjectName) s.toArray()[0];
         assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
-            ((Boolean) mbeanServer.getAttribute(on, "Addressing")).booleanValue());
+                mbeanServer.getAttribute(on, "Addressing"));
         assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),
-            ((Boolean) mbeanServer.getAttribute(on, "Mtom")).booleanValue());
+                mbeanServer.getAttribute(on, "Mtom"));
         assertEquals(SomeItiComponent.WS_CONFIG.isSwaOutSupport(),
-            ((Boolean) mbeanServer.getAttribute(on, "SwaOutSupport")).booleanValue());
+                mbeanServer.getAttribute(on, "SwaOutSupport"));
     }
     
     @Override
@@ -82,4 +83,7 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
         };
     }
 
+    protected MBeanServer getMBeanServer() {
+        return context.getManagementStrategy().getManagementAgent().getMBeanServer();
+    }
 }

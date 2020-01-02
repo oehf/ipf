@@ -23,7 +23,7 @@ import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultProducerTemplate;
+import org.apache.camel.impl.engine.DefaultProducerTemplate;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;

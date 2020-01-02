@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.atna;
 
 import lombok.Getter;
-import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.support.DefaultComponent;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;

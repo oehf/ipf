@@ -17,8 +17,6 @@
 package org.openehealth.ipf.boot.hl7v2;
 
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
@@ -30,7 +28,6 @@ import org.springframework.cache.CacheManager;
  */
 public class CachingUnsolicitedFragmentionStorage implements UnsolicitedFragmentationStorage {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(CachingUnsolicitedFragmentionStorage.class);
     private static final String UNSOLICITED_FRAGMENTATION_STORAGE = "unsolicitedFragmentionStorage";
     private final Cache cache;
 

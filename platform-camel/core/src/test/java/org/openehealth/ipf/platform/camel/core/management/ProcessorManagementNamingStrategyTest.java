@@ -59,7 +59,7 @@ public class ProcessorManagementNamingStrategyTest {
     @AfterClass
     public static void tearDownAfterClass() {
 
-        appContext.destroy();
+        appContext.close();
     }
 
     private ObjectName queryForNamedObjects(String query) throws Exception {

@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
@@ -59,7 +60,14 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
     @Override
     public void configure(CustomRouteBuilder configuration) throws Exception{
         if (configuration.getIntercepted() != null) {
-            configuration.getIntercepted().includeRoutes(configuration);
+            // FIXME this piece of code (includeRoutes) was removed in Camel 3
+            RouteBuilder intercepted = configuration.getIntercepted();
+            configuration.setContext(intercepted.getContext());
+            configuration.setRouteCollection(intercepted.getRouteCollection());
+            configuration.setRestCollection(intercepted.getRestCollection());
+            configuration.setErrorHandlerBuilder(intercepted.getErrorHandlerBuilder());
+            // must invoke configure on the original builder so it adds its configuration to me
+            configuration.configure();
         } else {
             camelContext.addRoutes(configuration);
         }

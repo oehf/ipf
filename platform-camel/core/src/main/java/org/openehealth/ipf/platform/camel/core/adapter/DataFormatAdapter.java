@@ -63,4 +63,11 @@ public class DataFormatAdapter extends AdapterSupport implements DataFormat {
         return parser.parse(stream, params);
     }
 
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

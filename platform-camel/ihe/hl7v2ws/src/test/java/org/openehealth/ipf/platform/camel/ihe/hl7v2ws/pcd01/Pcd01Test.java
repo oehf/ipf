@@ -21,7 +21,7 @@ import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.util.CastUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;

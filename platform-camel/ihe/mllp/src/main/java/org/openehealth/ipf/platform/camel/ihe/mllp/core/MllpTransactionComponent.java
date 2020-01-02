@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.camel.component.mina.MinaEndpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
@@ -50,7 +50,7 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    protected MllpEndpoint<?, ?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?, ?> createEndpoint(MinaEndpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
         return new MllpTransactionEndpoint<>(this, wrappedEndpoint, config);
     }
 

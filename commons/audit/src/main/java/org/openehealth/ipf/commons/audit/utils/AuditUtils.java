@@ -37,7 +37,7 @@ public class AuditUtils {
 
     private static final String PID = "PID";
     private static final String IP = "IP";
-    private static final String HOST = "IP";
+    private static final String HOST = "HOST";
     private static final String USER = "USER";
 
     /**
@@ -79,7 +79,7 @@ public class AuditUtils {
      * @return the name of the user running the process
      */
     public static String getUserName() {
-        return systemData.computeIfAbsent(HOST, s -> System.getProperty("user.name"));
+        return systemData.computeIfAbsent(USER, s -> System.getProperty("user.name"));
     }
 
     /**

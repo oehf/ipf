@@ -161,7 +161,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertExternalIdentifier(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, ebXML,
                 "sourceId", SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
 
-        assertClassification(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+        assertClassification(SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
 
         assertEquals(4, ebXML.getClassifications().size());
         assertEquals(2, ebXML.getSlots().size());

@@ -17,9 +17,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
-import org.apache.camel.util.EndpointHelper;
-import org.apache.camel.util.jsse.ClientAuthentication;
-import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.support.EndpointHelper;
+import org.apache.camel.support.jsse.ClientAuthentication;
+import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;

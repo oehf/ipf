@@ -66,7 +66,7 @@ class Utils {
         true
     }
 
-    // PIXm, Error Case 3
+    // PIXm, Error Case 3.83.4.2.2.2
     static BaseServerResponseException unknownPatientId() {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
@@ -76,7 +76,7 @@ class Utils {
         return new ResourceNotFoundException('Unknown Patient ID', oo)
     }
 
-    // PIXm, Error Case 4
+    // PIXm, Error Case 3.83.4.2.2.3
     static BaseServerResponseException unknownSourceDomainCode(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
@@ -86,7 +86,7 @@ class Utils {
         return new InvalidRequestException("Unknown Assigning Authority Domain ${domain ?: ''}", oo)
     }
 
-    // PIXm, Error Case 5
+    // PIXm, Error Case 3.83.4.2.2.4
     static BaseServerResponseException unknownTargetDomainCode(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()

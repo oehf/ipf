@@ -38,14 +38,14 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
     @XmlTransient
-    private Transmogrifier transmogrifier;
+    private Transmogrifier<?, ?> transmogrifier;
     @XmlAttribute
     private String transmogrifierBean;
 
     public TransmogrifierAdapterDefinition() {
     }
 
-    public TransmogrifierAdapterDefinition(Transmogrifier transmogrifier) {
+    public TransmogrifierAdapterDefinition(Transmogrifier<?, ?> transmogrifier) {
         this.transmogrifier = transmogrifier;
         params().headers();
     }
@@ -124,13 +124,11 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 
-    
-    @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
-        if (transmogrifierBean != null) {
-            transmogrifier = routeContext.lookup(transmogrifierBean, Transmogrifier.class);
-        }
-        return new TransmogrifierAdapter(transmogrifier);
+    public Transmogrifier<?, ?> getTransmogrifier() {
+        return transmogrifier;
     }
 
+    public String getTransmogrifierBean() {
+        return transmogrifierBean;
+    }
 }
