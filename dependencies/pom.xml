@@ -187,6 +187,12 @@
                 <groupId>org.herasaf.xacml.core</groupId>
                 <artifactId>herasaf-xacml-core</artifactId>
                 <version>${herasaf-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>
