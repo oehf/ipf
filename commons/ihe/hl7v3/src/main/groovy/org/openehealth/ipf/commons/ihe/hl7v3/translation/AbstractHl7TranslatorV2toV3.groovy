@@ -237,7 +237,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     void translateTelecom(MarkupBuilder builder, Repeatable repeatableXTN, String defaultUse) {
         repeatableXTN.each { telecom ->
-            String use
+            String use = defaultUse
             String number = telecom[1].value ?: telecom[4].value
             if (number) {
                 String schema = 'tel'
@@ -249,14 +249,9 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
                     case 'WPN':
                         use = workPhoneCode
                         break
-                    default:
-                        use = defaultUse
                 }
 
                 switch (telecom[3].value) {
-                    case 'PH':
-                        use = defaultUse
-                        break
                     case 'CP':
                         use = 'MC'
                         break
