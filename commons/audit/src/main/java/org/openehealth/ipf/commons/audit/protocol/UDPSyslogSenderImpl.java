@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -62,14 +63,15 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             try (DatagramSocket socket = new DatagramSocket()) {
                 for (String auditMessage : auditMessages) {
                     byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                    LOG.debug("Auditing to {}:{}",
-                            auditContext.getAuditRepositoryAddress().getHostAddress(),
+                    InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
+                    LOG.info("Auditing to {}:{}",
+                            inetAddress.getHostAddress(),
                             auditContext.getAuditRepositoryPort());
                     LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
                     DatagramPacket packet = new DatagramPacket(
                             msgBytes,
                             Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
-                            auditContext.getAuditRepositoryAddress(),
+                            inetAddress,
                             auditContext.getAuditRepositoryPort());
                     socket.send(packet);
                 }

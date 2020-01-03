@@ -15,26 +15,6 @@
  */
 package org.openehealth.ipf.commons.audit.protocol;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
-
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,11 +26,26 @@ import org.mockito.junit.MockitoRule;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl.SocketTestPolicy;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
 public class TLSSyslogSenderImplTest {
 
 	private static final String SENDING_HOST = "blah";
 	private static final String SENDING_PROCESS = "blub";
 	private static final String AUDIT_MESSAGE = "Quot erat demonstrandum!";
+	private static final String AUDIT_REPO_HOST = "localhost";
 	private static final Integer AUDIT_REPO_PORT = 9999;
 
 	@Mock
@@ -63,8 +58,6 @@ public class TLSSyslogSenderImplTest {
 	private InputStream is;
 	@Mock
 	private AuditContext auditContext;
-	@Mock
-	private InetAddress inetAddress;
 
 	private TLSSyslogSenderImpl tssi;
 
@@ -74,12 +67,10 @@ public class TLSSyslogSenderImplTest {
 	@Before
 	public void setup() throws IOException {
 		when(auditContext.getSendingApplication()).thenReturn(SENDING_PROCESS);
-		when(auditContext.getAuditRepositoryAddress()).thenReturn(inetAddress);
+		when(auditContext.getAuditRepositoryHostName()).thenReturn(AUDIT_REPO_HOST);
 		when(auditContext.getAuditRepositoryPort()).thenReturn(AUDIT_REPO_PORT);
 		
-		when(inetAddress.getHostAddress()).thenReturn(SENDING_HOST);
-		
-		when(socketFactory.createSocket(inetAddress, AUDIT_REPO_PORT)).thenReturn(socket);
+		when(socketFactory.createSocket(AUDIT_REPO_HOST, AUDIT_REPO_PORT)).thenReturn(socket);
 		
 		when(socket.getOutputStream()).thenReturn(os);
 	}
@@ -91,7 +82,7 @@ public class TLSSyslogSenderImplTest {
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
 		tssi.send(auditContext, AUDIT_MESSAGE);
 		
-		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
+		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
 		verify(socket, never()).startHandshake();
 		verify(socket, never()).setSoTimeout(any(Integer.class));
 		verify(socket, never()).getSoTimeout();
@@ -116,7 +107,7 @@ public class TLSSyslogSenderImplTest {
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_AND_AFTER_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
 		
-		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
+		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
 		verify(socket, times(1)).startHandshake();
 		verify(socket, times(1)).setSoTimeout(1);
 		verify(socket, times(1)).setKeepAlive(true);
@@ -145,7 +136,7 @@ public class TLSSyslogSenderImplTest {
 		tssi.send(auditContext, AUDIT_MESSAGE);
 		
 		// Because we simulate a closed socket connection we open two sockets in total.
-		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
+		verify(socketFactory, times(2)).createSocket(any(String.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
 		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -175,7 +166,7 @@ public class TLSSyslogSenderImplTest {
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
 		
-		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
+		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
 		verify(socket, times(1)).setSoTimeout(1);
 		verify(socket, times(1)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -204,7 +195,7 @@ public class TLSSyslogSenderImplTest {
 		tssi.send(auditContext, AUDIT_MESSAGE);
 		
 		// Because we simulate a closed socket connection we open two sockets in total.
-		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
+		verify(socketFactory, times(2)).createSocket(any(String.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
 		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -229,7 +220,7 @@ public class TLSSyslogSenderImplTest {
         tssi = new SocketOptionOverrideTLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
         tssi.send(auditContext, AUDIT_MESSAGE);
         
-        verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
+        verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
         verify(socket, never()).startHandshake();
         verify(socket, never()).setSoTimeout(any(Integer.class));
         verify(socket, never()).getSoTimeout();

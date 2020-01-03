@@ -15,6 +15,15 @@
  */
 package org.openehealth.ipf.commons.audit.protocol;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,16 +33,6 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Simple client implementation of RFC 5425 TLS syslog transport for sending
@@ -68,7 +67,11 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * Constructor which uses default values for all parameters.
      */
     public TLSSyslogSenderImpl() {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
+        this(SocketTestPolicy.TEST_BEFORE_WRITE);
+    }
+
+    public TLSSyslogSenderImpl(SocketTestPolicy socketTestPolicy) {
+        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketTestPolicy);
     }
 
     /**
@@ -77,7 +80,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      */
     public TLSSyslogSenderImpl(SSLSocketFactory socketFactory) {
         this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketFactory,
-                SocketTestPolicy.DONT_TEST_POLICY);
+                SocketTestPolicy.TEST_BEFORE_WRITE);
     }
 
     /**
@@ -96,9 +99,19 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * @param sendingProcess value of the SYSLOG header "APP-NAME"
      */
     public TLSSyslogSenderImpl(String sendingHost, String sendingProcess) {
+        this(sendingHost, sendingProcess, SocketTestPolicy.TEST_BEFORE_WRITE);
+    }
+
+    /**
+     * @param sendingHost      value of the SYSLOG header "HOSTNAME"
+     * @param sendingProcess   value of the SYSLOG header "APP-NAME"
+     * @param socketTestPolicy Determining if and when to test the socket for a
+     *                         connection close/reset
+     */
+    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SocketTestPolicy socketTestPolicy) {
         super(sendingHost, sendingProcess);
         this.socketFactory = SSLSocketFactory.getDefault();
-        this.socketTestPolicy = SocketTestPolicy.DONT_TEST_POLICY;
+        this.socketTestPolicy = socketTestPolicy;
     }
 
     /**
@@ -110,7 +123,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SSLSocketFactory socketFactory) {
         super(sendingHost, sendingProcess);
         this.socketFactory = Objects.requireNonNull(socketFactory);
-        this.socketTestPolicy = SocketTestPolicy.DONT_TEST_POLICY;
+        this.socketTestPolicy = SocketTestPolicy.TEST_BEFORE_WRITE;
     }
 
     /**
@@ -145,8 +158,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             for (String auditMessage : auditMessages) {
                 byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                 byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
-                LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryAddress().getHostAddress(),
-                        auditContext.getAuditRepositoryPort());
+                LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
                 LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
                 try {
                     doSend(auditContext, syslogFrame, msgBytes);
@@ -181,42 +193,41 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         final Socket socket = getSocket(auditContext);
 
         if (socketTestPolicy.isBeforeWrite()) {
-            LOG.debug("Testing whether socket connection is alive and well before attempting to write.");
+            LOG.trace("Testing whether socket connection is alive and well before attempting to write");
             if (!isSocketConnectionAlive(socket)) {
                 closeSocket(socket);
-                // FIXME: Usage of exceptions for control flow is an anti-pattern
                 throw new FastSocketException(
-                        "Read-test before write operation determined that the socket connection is dead.");
+                        "Read-test before write operation determined that the socket connection is dead");
             }
             LOG.debug("Socket connection is confirmed to be alive.");
         }
 
-        LOG.debug("Now writing out ATNA record.");
+        LOG.trace("Now writing out ATNA record");
 
         OutputStream out = socket.getOutputStream();
         out.write(syslogFrame);
         out.write(msgBytes);
         out.flush();
 
-        LOG.debug("ATNA record has been written out.");
+        LOG.debug("ATNA record has been written ({} bytes)", syslogFrame.length + msgBytes.length);
 
         if (socketTestPolicy.isAfterWrite()) {
-            LOG.debug(
-                    "Testing whether socket connection is alive and well after write to confirm the write operation.");
+            LOG.trace(
+                    "Testing whether socket connection is alive and well after write to confirm the write operation");
             if (!isSocketConnectionAlive(socket)) {
                 closeSocket(socket);
-                // FIXME: Usage of exceptions for control flow is an anti-pattern
                 throw new FastSocketException(
-                        "Read-test after write operation determined that the socket connection is dead.");
+                        "Read-test after write operation determined that the socket connection is dead");
             }
-            LOG.debug("Socket connection is confirmed alive. Assuming write operation has succeeded.");
+            LOG.debug("Socket connection is confirmed alive. Assuming write operation has succeeded");
         }
     }
 
     private Socket getTLSSocket(AuditContext auditContext) {
         final SSLSocket socket;
         try {
-            socket = (SSLSocket) socketFactory.createSocket(auditContext.getAuditRepositoryAddress(),
+            socket = (SSLSocket) socketFactory.createSocket(
+                    auditContext.getAuditRepositoryHostName(),
                     auditContext.getAuditRepositoryPort());
             setSocketOptions(socket);
             if (socketTestPolicy != SocketTestPolicy.DONT_TEST_POLICY) {
@@ -229,7 +240,8 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             }
         } catch (IOException e) {
             throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                    auditContext.getAuditRepositoryAddress().getHostAddress(), auditContext.getAuditRepositoryPort()),
+                    auditContext.getAuditRepositoryHostName(),
+                    auditContext.getAuditRepositoryPort()),
                     e);
         }
 
@@ -355,7 +367,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * 
      * @author taastrad
      */
-    private class FastSocketException extends SocketException {
+    private static class FastSocketException extends SocketException {
         private static final long serialVersionUID = 1L;
 
         public FastSocketException(final String msg) {
