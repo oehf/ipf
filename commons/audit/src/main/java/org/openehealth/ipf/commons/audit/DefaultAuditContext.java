@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.audit.protocol.VertxTLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -43,11 +42,8 @@ public class DefaultAuditContext implements AuditContext {
 
     static final AuditContext NO_AUDIT = new DefaultAuditContext();
 
-    @Getter
+    @Getter @Setter
     private String auditRepositoryHostName = "localhost";
-
-    @Getter
-    private InetAddress auditRepositoryAddress = AuditUtils.localInetAddress().orElse(null);
 
     @Getter @Setter
     private int auditRepositoryPort = 514;
@@ -88,13 +84,12 @@ public class DefaultAuditContext implements AuditContext {
     @Getter @Setter
     private String auditValueIfMissing = "UNKNOWN";
 
-    public void setAuditRepositoryHost(String auditRepositoryHost) throws UnknownHostException {
-        this.auditRepositoryHostName = auditRepositoryHost;
-        this.auditRepositoryAddress = InetAddress.getByName(auditRepositoryHost);
-    }
-
     public String getAuditRepositoryTransport() {
         return auditTransmissionProtocol.getTransportName();
+    }
+
+    public void setAuditRepositoryHost(String host) {
+        setAuditRepositoryHostName(host);
     }
 
     public void setAuditRepositoryTransport(String transport) {
@@ -106,4 +101,12 @@ public class DefaultAuditContext implements AuditContext {
         }
     }
 
+    @Override
+    public InetAddress getAuditRepositoryAddress() {
+        try {
+            return InetAddress.getByName(auditRepositoryHostName);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.concurrent.CountDownLatch;
@@ -69,7 +70,7 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                 byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
                 LOG.debug("Auditing to {}:{}",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort());
                 LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
                 Buffer buffer = new BufferImpl()
@@ -110,10 +111,10 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
             NetClient client = vertx.createNetClient(options);
             client.connect(
                     auditContext.getAuditRepositoryPort(),
-                    auditContext.getAuditRepositoryAddress().getHostAddress(),
+                    auditContext.getAuditRepositoryHostName(),
                     event -> {
                         LOG.info("Attempt to connect to {}:{} : {}",
-                                auditContext.getAuditRepositoryAddress().getHostAddress(),
+                                auditContext.getAuditRepositoryHostName(),
                                 auditContext.getAuditRepositoryPort(),
                                 event.succeeded());
                         if (event.succeeded()) {
@@ -139,7 +140,7 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 latch.await(10000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort()));
             }
         }
