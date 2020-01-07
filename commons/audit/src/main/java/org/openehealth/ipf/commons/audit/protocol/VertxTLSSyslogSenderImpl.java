@@ -109,9 +109,10 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
             }
 
             NetClient client = vertx.createNetClient(options);
+            InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
             client.connect(
                     auditContext.getAuditRepositoryPort(),
-                    auditContext.getAuditRepositoryHostName(),
+                    inetAddress.getHostAddress(),
                     event -> {
                         LOG.info("Attempt to connect to {}:{} : {}",
                                 auditContext.getAuditRepositoryHostName(),
@@ -137,10 +138,10 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
 
             // Ensure that connection is established before returning
             try {
-                latch.await(10000, TimeUnit.MILLISECONDS);
+                latch.await(2000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                        auditContext.getAuditRepositoryHostName(),
+                        inetAddress.getHostAddress(),
                         auditContext.getAuditRepositoryPort()));
             }
         }
