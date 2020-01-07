@@ -15,6 +15,26 @@
  */
 package org.openehealth.ipf.commons.audit.protocol;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,26 +46,11 @@ import org.mockito.junit.MockitoRule;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl.SocketTestPolicy;
 
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
 public class TLSSyslogSenderImplTest {
 
 	private static final String SENDING_HOST = "blah";
 	private static final String SENDING_PROCESS = "blub";
 	private static final String AUDIT_MESSAGE = "Quot erat demonstrandum!";
-	private static final String AUDIT_REPO_HOST = "localhost";
 	private static final Integer AUDIT_REPO_PORT = 9999;
 
 	@Mock
@@ -58,31 +63,33 @@ public class TLSSyslogSenderImplTest {
 	private InputStream is;
 	@Mock
 	private AuditContext auditContext;
+	@Mock
+	private InetAddress inetAddress;
 
 	private TLSSyslogSenderImpl tssi;
 
 	@Rule
 	public MockitoRule rule = MockitoJUnit.rule();
-	
+
 	@Before
 	public void setup() throws IOException {
 		when(auditContext.getSendingApplication()).thenReturn(SENDING_PROCESS);
-		when(auditContext.getAuditRepositoryHostName()).thenReturn(AUDIT_REPO_HOST);
+		when(auditContext.getAuditRepositoryAddress()).thenReturn(inetAddress);
 		when(auditContext.getAuditRepositoryPort()).thenReturn(AUDIT_REPO_PORT);
-		
-		when(socketFactory.createSocket(AUDIT_REPO_HOST, AUDIT_REPO_PORT)).thenReturn(socket);
-		
+
+		when(socketFactory.createSocket(inetAddress, AUDIT_REPO_PORT)).thenReturn(socket);
+
 		when(socket.getOutputStream()).thenReturn(os);
 	}
 
 	@Test
 	public void sendDontTestSocketConnectionTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
-		
+
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
 		tssi.send(auditContext, AUDIT_MESSAGE);
-		
-		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
+
+		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, never()).startHandshake();
 		verify(socket, never()).setSoTimeout(any(Integer.class));
 		verify(socket, never()).getSoTimeout();
@@ -95,19 +102,19 @@ public class TLSSyslogSenderImplTest {
 		// This is what counts: The DONT_TEST_POLICY shall not trigger any reads from the inputstream
 		verify(is, never()).read();
 	}
-	
+
 	@Test
 	public void sendReadBeforeAndAfterSockeConnectionOKTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
-		// Socket read timeout is used as signal that socket connection is alive and well. 
+		// Socket read timeout is used as signal that socket connection is alive and well.
 		when(is.read()).thenThrow(new SocketTimeoutException());
-		
+
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_AND_AFTER_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
-		
-		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
+
+		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(1)).startHandshake();
 		verify(socket, times(1)).setSoTimeout(1);
 		verify(socket, times(1)).setKeepAlive(true);
@@ -122,21 +129,21 @@ public class TLSSyslogSenderImplTest {
 		// This is what counts: The TEST_BEFORE_AND_AFTER_WRITE shall trigger a read before and after the write operation
 		verify(is, times(2)).read();
 	}
-	
+
 	@Test
 	public void sendReadBeforeAndAfterSockeConnectionClosedTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
 		// Reading -1 from socket signals connection close -> new socket
-		// Socket read timeout is used as signal that socket connection is alive and well. 
+		// Socket read timeout is used as signal that socket connection is alive and well.
 		when(is.read()).thenReturn(-1).thenThrow(new SocketTimeoutException());
-		
+
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_AND_AFTER_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
-		
+
 		// Because we simulate a closed socket connection we open two sockets in total.
-		verify(socketFactory, times(2)).createSocket(any(String.class), any(Integer.class));
+		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
 		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -154,19 +161,19 @@ public class TLSSyslogSenderImplTest {
 		// operation.
 		verify(is, times(3)).read();
 	}
-	
+
 	@Test
 	public void sendReadBeforeSockeConnectionOKTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
-		// Socket read timeout is used as signal that socket connection is alive and well. 
+		// Socket read timeout is used as signal that socket connection is alive and well.
 		when(is.read()).thenThrow(new SocketTimeoutException());
-		
+
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
-		
-		verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
+
+		verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(1)).setSoTimeout(1);
 		verify(socket, times(1)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -181,21 +188,21 @@ public class TLSSyslogSenderImplTest {
 		// Matter of fact, we cannot tell when the read happened. We just have to assume at this point.
 		verify(is, times(1)).read();
 	}
-	
+
 	@Test
 	public void sendReadBeforeAndAfterSockeConnectionDeadTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
 		// On first read we throw an IOException to signal a broken socket connection -> new socket
-		// Socket read timeout is used as signal that socket connection is alive and well. 
+		// Socket read timeout is used as signal that socket connection is alive and well.
 		when(is.read()).thenThrow(new IOException()).thenThrow(new SocketTimeoutException());
-		
+
 		tssi = new TLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.TEST_BEFORE_AND_AFTER_WRITE);
 		tssi.send(auditContext, AUDIT_MESSAGE);
-		
+
 		// Because we simulate a closed socket connection we open two sockets in total.
-		verify(socketFactory, times(2)).createSocket(any(String.class), any(Integer.class));
+		verify(socketFactory, times(2)).createSocket(any(InetAddress.class), any(Integer.class));
 		verify(socket, times(2)).setSoTimeout(1);
 		verify(socket, times(2)).setKeepAlive(true);
 		InOrder handshakeBeforeSoTimeout = inOrder(socket);
@@ -213,14 +220,14 @@ public class TLSSyslogSenderImplTest {
 		// operation.
 		verify(is, times(3)).read();
 	}
-	
+
 	@Test
     public void sendDonTestPolicyWithSocketOptionOverrideTest() throws Exception {
         ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
         tssi = new SocketOptionOverrideTLSSyslogSenderImpl(SENDING_HOST, SENDING_PROCESS, socketFactory, SocketTestPolicy.DONT_TEST_POLICY);
         tssi.send(auditContext, AUDIT_MESSAGE);
-        
-        verify(socketFactory, times(1)).createSocket(any(String.class), any(Integer.class));
+
+        verify(socketFactory, times(1)).createSocket(any(InetAddress.class), any(Integer.class));
         verify(socket, never()).startHandshake();
         verify(socket, never()).setSoTimeout(any(Integer.class));
         verify(socket, never()).getSoTimeout();
@@ -236,14 +243,14 @@ public class TLSSyslogSenderImplTest {
         // This is what counts: The DONT_TEST_POLICY shall not trigger any reads from the inputstream
         verify(is, never()).read();
     }
-	
+
 	private class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
 
         public SocketOptionOverrideTLSSyslogSenderImpl(String sendingHost, String sendingProcess,
                 SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy) {
             super(sendingHost, sendingProcess, socketFactory, socketTestPolicy);
         }
-        
+
         @Override
         protected void setSocketOptions(final Socket socket) throws SocketException {
             super.setSocketOptions(socket);

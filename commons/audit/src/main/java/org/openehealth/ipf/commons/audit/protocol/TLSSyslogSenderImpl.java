@@ -27,6 +27,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -225,9 +226,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private Socket getTLSSocket(AuditContext auditContext) {
         final SSLSocket socket;
+        InetAddress auditRepositoryAddress = auditContext.getAuditRepositoryAddress();
         try {
             socket = (SSLSocket) socketFactory.createSocket(
-                    auditContext.getAuditRepositoryHostName(),
+                    auditRepositoryAddress,
                     auditContext.getAuditRepositoryPort());
             setSocketOptions(socket);
             if (socketTestPolicy != SocketTestPolicy.DONT_TEST_POLICY) {
@@ -240,11 +242,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             }
         } catch (IOException e) {
             throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                    auditContext.getAuditRepositoryHostName(),
+                    auditRepositoryAddress.getHostAddress(),
                     auditContext.getAuditRepositoryPort()),
                     e);
         }
-
         return socket;
     }
 
@@ -284,7 +285,6 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      */
     private boolean isSocketConnectionAlive(final Socket socket) {
         boolean isAlive;
-
         try {
             if (socket.getSoTimeout() > 0) {
                 final int nextByte = socket.getInputStream().read();
@@ -305,7 +305,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             LOG.debug("Socket read timed out; assuming the connection is still alive.");
             isAlive = true;
         } catch (IOException e) {
-            LOG.warn("Socket read failed for non-timeout reason; assuming the connection is dead.", e);
+            LOG.warn("Socket read failed for non-timeout reason; assuming the connection is dead.");
             isAlive = false;
         }
 
