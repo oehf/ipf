@@ -160,7 +160,9 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                 byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                 byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
                 LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
-                LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                }
                 try {
                     doSend(auditContext, syslogFrame, msgBytes);
                 } catch (SocketException | SocketTimeoutException e) {
@@ -241,9 +243,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                 socket.setSoTimeout(MIN_SO_TIMEOUT);
             }
         } catch (IOException e) {
-            throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                    auditRepositoryAddress.getHostAddress(),
-                    auditContext.getAuditRepositoryPort()),
+            throw new AuditException(String.format("Could not establish TLS connection to %s:%d (%s)",
+                    auditContext.getAuditRepositoryHostName(),
+                    auditContext.getAuditRepositoryPort(),
+                    auditRepositoryAddress.getHostAddress()),
                     e);
         }
         return socket;

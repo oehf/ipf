@@ -64,10 +64,13 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                 for (String auditMessage : auditMessages) {
                     byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                     InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
-                    LOG.debug("Auditing to {}:{}",
-                            inetAddress.getHostAddress(),
-                            auditContext.getAuditRepositoryPort());
-                    LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
+                    LOG.debug("Auditing to {}:{} ({})",
+                            auditContext.getAuditRepositoryHostName(),
+                            auditContext.getAuditRepositoryPort(),
+                            inetAddress.getHostAddress());
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                    }
                     DatagramPacket packet = new DatagramPacket(
                             msgBytes,
                             Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),

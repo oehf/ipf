@@ -72,7 +72,9 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 LOG.debug("Auditing to {}:{}",
                         auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort());
-                LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                }
                 Buffer buffer = new BufferImpl()
                         .appendBytes(syslogFrame)
                         .appendBytes(msgBytes);
@@ -114,9 +116,10 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                     auditContext.getAuditRepositoryPort(),
                     inetAddress.getHostAddress(),
                     event -> {
-                        LOG.info("Attempt to connect to {}:{} : {}",
+                        LOG.info("Attempt to connect to {}:{} ({}), : {}",
                                 auditContext.getAuditRepositoryHostName(),
                                 auditContext.getAuditRepositoryPort(),
+                                inetAddress.getHostAddress(),
                                 event.succeeded());
                         if (event.succeeded()) {
                             NetSocket socket = event.result();
@@ -138,11 +141,12 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
 
             // Ensure that connection is established before returning
             try {
-                latch.await(2000, TimeUnit.MILLISECONDS);
+                latch.await(5000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                        inetAddress.getHostAddress(),
-                        auditContext.getAuditRepositoryPort()));
+                throw new AuditException(String.format("Could not establish TLS connection to %s:%d (%s)",
+                        auditContext.getAuditRepositoryHostName(),
+                        auditContext.getAuditRepositoryPort(),
+                        inetAddress.getHostAddress()));
             }
         }
         return writeHandlerId.get();
