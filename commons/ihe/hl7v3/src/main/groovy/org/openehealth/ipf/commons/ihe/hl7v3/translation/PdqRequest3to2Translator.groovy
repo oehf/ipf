@@ -155,15 +155,15 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
             queryParams.add([
                     '@PID.5.1': wildcardize(it.family.find { !it.@qualifier.text() }.text(), needWildcard),
                     '@PID.5.2': wildcardize(usableGivenNames[0].text(), needWildcard),
-                    '@PID.5.3': wildcardize(usableGivenNames[1].text(), needWildcard),
+                    '@PID.5.3': wildcardize(usableGivenNames[1].text(), needWildcard)
             ])
         }
     }
 
     protected void addOtherParameters(parameterList, queryParams) {
         queryParams.add([
-                '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender'),
-                '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-patient-maritalStatus'),
+                '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text(),
+                '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
         ])
     }
 
@@ -174,12 +174,12 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
                     '@PID.11.3': it.city.text(),
                     '@PID.11.4': it.state.text(),
                     '@PID.11.5': it.postalCode.text(),
-                    '@PID.11.6': it.country.text(),
+                    '@PID.11.6': it.country.text()
             ])
         }
     }
 
-    protected String wildcardize(String value, boolean needWildcard) {
+    protected static String wildcardize(String value, boolean needWildcard) {
         return (value && needWildcard) ? "*${value}*" : value 
     }
 
