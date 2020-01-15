@@ -23,7 +23,27 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.6.3" description="IPF 3.6.3" date="tbd">
+        <release version="3.6.4" description="IPF 3.6.4" date="16 Jan 2020">
+            <action dev="ohr" issue="288" type="fix">
+                Gender query parameter must be translated between PDQv3 and PDQv2
+            </action>
+            <action dev="ohr" issue="286" type="fix">
+                Re-resolve InetAddress of audit repository for every new connection.
+            </action>
+            <action dev="ohr" issue="284" type="change">
+                When translating v2 to v3 make codes for home phone and work phone use configurable
+            </action>
+            <action dev="ohr" issue="283" type="fix">
+                Fix some more NPE issues during auditing of very incomplete IHE requests
+            </action>
+            <action dev="ohr" issue="281" type="fix">
+                Fix audit record written for PIX Feed v3: only one patientID must be written and participating object
+            </action>
+            <action dev="ohr" issue="260" type="fix">
+                Fix Fe path for ITI-65 model validation. Thanks to rbastiaansen732 for reporting.
+            </action>
+        </release>
+        <release version="3.6.3" description="IPF 3.6.3" date="14 Nov 2019">
             <action dev="ohr" issue="276" type="fix">
                 Outgoing PIX Feed v3 Messages created by PixFeedRequest2to3Translator do not pass Gazelle validation due to
                 missing attribute and placement of other IDs
