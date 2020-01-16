@@ -46,7 +46,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return a stream of {@link NamingSystem} instances that match the provided {@link Predicate}
      */
-    Stream<? extends NamingSystem> findNamingSystems(String id, Predicate<NamingSystem> predicate);
+    Stream<? extends NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
 
     /**
      * Returns the first {@link NamingSystem} instances that match the provided {@link Predicate}
@@ -55,7 +55,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return {@link NamingSystem} instance that match the provided {@link Predicate}
      */
-    default Optional<? extends NamingSystem> findFirstNamingSystem(String id, Predicate<NamingSystem> predicate) {
+    default Optional<? extends NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
         return findNamingSystems(id, predicate).findFirst();
     }
 

@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
@@ -29,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.iti68bin.Iti68BinaryTransactionConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +67,14 @@ public class MHD implements IntegrationProfile {
         TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
     }
 
+    @AllArgsConstructor
+    public enum RetrieveBinaryInteractions implements InteractionId {
+        ITI_68_BIN(ITI_68_BIN_CONFIG);
+
+        @Getter
+        TransactionConfiguration<FhirAuditDataset> transactionConfiguration;
+    }
+
     @Override
     public List<InteractionId> getInteractionIds() {
         List<InteractionId> interactions = new ArrayList<>();
@@ -78,4 +88,5 @@ public class MHD implements IntegrationProfile {
     private static final Iti66TransactionConfiguration ITI_66_CONFIG = new Iti66TransactionConfiguration();
     private static final Iti67TransactionConfiguration ITI_67_CONFIG = new Iti67TransactionConfiguration();
     private static final Iti68TransactionConfiguration ITI_68_CONFIG = new Iti68TransactionConfiguration();
+    private static final Iti68BinaryTransactionConfiguration ITI_68_BIN_CONFIG = new Iti68BinaryTransactionConfiguration();
 }

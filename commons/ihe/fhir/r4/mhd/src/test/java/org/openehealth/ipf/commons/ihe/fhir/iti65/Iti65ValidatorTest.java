@@ -62,7 +62,7 @@ public class Iti65ValidatorTest {
             iti65Validator.validateRequest(context, bundle, Collections.emptyMap());
         } catch (UnprocessableEntityException e) {
             OperationOutcome oo = (OperationOutcome) e.getOperationOutcome();
-            oo.getIssue().stream()
+            oo.getIssue()
                     .forEach(ooc -> System.out.println(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
         }
     }
@@ -83,7 +83,6 @@ public class Iti65ValidatorTest {
                         .setSystem("urn:ietf:rfc:3986")
                         .setValue("urn:oid:129.6.58.92.88336"))
                 .setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
-                .setCreated(new Date())
                 .setDescription("description")
                 .setSource("source")
                 .setSubject(new Reference("http://server/Patient/a2"))

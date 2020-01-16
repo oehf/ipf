@@ -22,6 +22,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
  */
 public interface Iti65Constants {
 
+    String ITI65_LEGACY_METADATA_PROFILE = "http://ihe.net/fhir/tag/iti-65";
     String ITI65_COMPREHENSIVE_METADATA_PROFILE = "http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Comprehensive_DocumentBundle";
     String ITI65_MINIMAL_METADATA_PROFILE = "http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Minimal_DocumentBundle";
 

@@ -149,7 +149,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         Map<ResourceType, List<Bundle.BundleEntryComponent>> entries = FhirUtils.getBundleEntries(bundle);
 
         // Verify that the bundle has all required resources
-        // This should be done by the StructureDefinition, but apparently HAPI has a problem with slices
+        // This should be done by the StructureDefinition, but apparently HAPI has a problem with slices...
 
         if (entries.getOrDefault(ResourceType.DocumentManifest, Collections.emptyList()).size() != 1) {
             throw FhirUtils.unprocessableEntity(

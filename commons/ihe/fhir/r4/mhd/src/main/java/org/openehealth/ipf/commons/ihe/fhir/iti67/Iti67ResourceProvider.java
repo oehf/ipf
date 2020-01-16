@@ -64,6 +64,10 @@ import java.util.Set;
  */
 public class Iti67ResourceProvider extends AbstractPlainProvider {
 
+    private static final String STU3_INDEXED = "indexed";
+    private static final String STU3_CLASS = "class";
+    private static final String STU3_RELATED_ID = "related-id";
+
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
     public IBundleProvider documentReferenceSearch(
@@ -71,8 +75,10 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
+            @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
+            @OptionalParam(name = STU3_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
             @OptionalParam(name = DocumentReference.SP_PERIOD) DateRangeParam period,
@@ -81,6 +87,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATED) ReferenceOrListParam related,
+            @OptionalParam(name = STU3_RELATED_ID) ReferenceOrListParam relatedId,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -89,11 +96,16 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
+        // Be graceful and accept STU3 parameters as well
+        DateRangeParam dateParam = date != null ? date : indexed;
+        TokenOrListParam categoryParam = category != null ? category : class_;
+        ReferenceOrListParam relatedParam = related != null ? related : relatedId;
+
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
-                .date(date)
-                .category(category)
+                .date(dateParam)
+                .category(categoryParam)
                 .type(type)
                 .setting(setting)
                 .period(period)
@@ -101,7 +113,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabel)
                 .format(format)
-                .related(related)
+                .related(relatedParam)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)
