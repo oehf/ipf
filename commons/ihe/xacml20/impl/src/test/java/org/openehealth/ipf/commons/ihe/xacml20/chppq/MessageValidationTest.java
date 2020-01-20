@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq1Request;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq1Response;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Request;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Response;
 
+import java.io.InputStream;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
 /**
  * @since 3.5.1
@@ -47,8 +50,8 @@ public class MessageValidationTest {
 
     @Test
     public void testValidation() throws Exception {
-        validateChPpq1Request(loadFile("chppq1/add-request.xml"));
-        validateChPpq1Request(loadFile("chppq1/update-request.xml"));
+        validateChPpq1Request(loadFile("chppq1/add-request-ppq.xml"));
+        validateChPpq1Request(loadFile("chppq1/update-request-ppq.xml"));
         validateChPpq1Request(loadFile("chppq1/delete-request.xml"));
         validateChPpq1Response(loadFile("chppq1/ack.xml"));
 

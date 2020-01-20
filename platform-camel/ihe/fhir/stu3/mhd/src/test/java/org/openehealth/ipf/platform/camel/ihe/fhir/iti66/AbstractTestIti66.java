@@ -50,6 +50,7 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
                 .forResource(DocumentManifest.class)
                 .where(requestData)
                 .returnBundle(Bundle.class)
+                .encodedXml()
                 .execute();
     }
 

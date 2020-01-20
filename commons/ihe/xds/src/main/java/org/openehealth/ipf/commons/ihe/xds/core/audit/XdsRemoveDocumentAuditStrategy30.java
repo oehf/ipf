@@ -43,18 +43,20 @@ public abstract class XdsRemoveDocumentAuditStrategy30 extends XdsNonconstructiv
 
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
-        if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
-            auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));
-        } else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&
-                (response.getRegistryErrorList() != null) &&
-                (response.getRegistryErrorList().getRegistryError() != null)) {
-            for (RegistryError error : response.getRegistryErrorList().getRegistryError()) {
-                if (Severity.ERROR.getOpcode30().equals(error.getSeverity())) {
-                    auditDataset.getDocuments().stream()
-                            .filter(document -> error.getCodeContext().contains(document.getDocumentUniqueId()))
-                            .findAny()
-                            .ifPresent(document -> document.setStatus(NOT_SUCCESSFUL));
+        if (pojo instanceof RegistryResponseType) {
+            RegistryResponseType response = (RegistryResponseType) pojo;
+            if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
+                auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));
+            } else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&
+                    (response.getRegistryErrorList() != null) &&
+                    (response.getRegistryErrorList().getRegistryError() != null)) {
+                for (RegistryError error : response.getRegistryErrorList().getRegistryError()) {
+                    if (Severity.ERROR.getOpcode30().equals(error.getSeverity())) {
+                        auditDataset.getDocuments().stream()
+                                .filter(document -> error.getCodeContext().contains(document.getDocumentUniqueId()))
+                                .findAny()
+                                .ifPresent(document -> document.setStatus(NOT_SUCCESSFUL));
+                    }
                 }
             }
         }

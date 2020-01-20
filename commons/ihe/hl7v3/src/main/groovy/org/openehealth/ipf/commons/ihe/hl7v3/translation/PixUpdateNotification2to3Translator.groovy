@@ -54,7 +54,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') { 
                 code(code: 'PRPA_TE201302UV02', codeSystem: '2.16.840.1.113883.1.6')
-                subject(typeCode: 'SUBJ') {
+                subject(typeCode: 'SUBJ', contextConductionInd: 'false') {
                     registrationEvent(classCode: 'REG', moodCode: 'EVN') {
                         id(nullFlavor: 'NA')
                         statusCode(code: 'active')

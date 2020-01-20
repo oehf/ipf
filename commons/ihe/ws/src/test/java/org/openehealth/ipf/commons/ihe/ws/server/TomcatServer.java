@@ -69,7 +69,7 @@ public class TomcatServer extends ServletServer {
         }
 
         context.addChild(wrapper);
-        context.addServletMapping(getServletPath(), servletName);
+        context.addServletMappingDecoded(getServletPath(), servletName);
 
         /*
         VirtualWebappLoader loader = new VirtualWebappLoader(this.getClass().getClassLoader());

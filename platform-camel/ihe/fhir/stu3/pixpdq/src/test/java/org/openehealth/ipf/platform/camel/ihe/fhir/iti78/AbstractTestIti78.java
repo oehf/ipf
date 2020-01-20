@@ -50,6 +50,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
                 .forResource(PdqPatient.class)
                 .where(requestData)
                 .returnBundle(Bundle.class)
+                .encodedXml()
                 .execute();
     }
 
@@ -59,6 +60,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
                 .where(requestData)
                 .count(count)
                 .returnBundle(Bundle.class)
+                .encodedXml()
                 .execute();
     }
 

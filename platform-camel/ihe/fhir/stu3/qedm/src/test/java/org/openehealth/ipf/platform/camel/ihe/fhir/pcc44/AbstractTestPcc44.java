@@ -48,6 +48,7 @@ abstract class AbstractTestPcc44 extends FhirTestContainer {
                 .forResource(Observation.class)
                 .where(requestData)
                 .returnBundle(Bundle.class)
+                .encodedXml()
                 .execute();
     }
 

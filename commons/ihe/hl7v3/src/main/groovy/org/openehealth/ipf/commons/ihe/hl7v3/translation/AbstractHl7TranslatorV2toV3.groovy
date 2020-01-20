@@ -52,6 +52,12 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
     String receiverAgentIdAssigningAuthority = 'RAA'
 
     /**
+     * Predefined value of provider organization root that assigns primary patient
+     * identifiers.
+     */
+    String providerOrganizationIdRoot = '1.2.3'
+
+    /**
      * Predefined fix value of
      * <code>//registrationEvent/custodian/assignedEntity/id/@root</code>.
      * In productive environments to be set to the <code>id/@root</code>
@@ -74,6 +80,9 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     String nationalIdentifierRoot = '2.16.840.1.113883.4.1'
 
+    String homePhoneCode = 'H'
+    String workPhoneCode = 'WP'
+
 
     /**
      * Creates sub-elements of the element "patientPerson", which
@@ -85,13 +94,13 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      * @param deletedIdsOids
      *      root OIDs of patient IDs which are to be deleted from the patient record.
      */
-    void createPatientPersonElements(MarkupBuilder builder, Segment pid, List<String> deletedIdsOids) {
+    void createPatientPersonElements(MarkupBuilder builder, Segment pid, Map<String, String> otherIDs) {
         for (pid5 in pid[5]()) {
             createName(builder, pid5)
         }
 
-        translateTelecom(builder, pid[13], 'H')
-        translateTelecom(builder, pid[14], 'WP')
+        translateTelecom(builder, pid[13], homePhoneCode)
+        translateTelecom(builder, pid[14], workPhoneCode)
 
         String gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
         String maritalStatus = (pid[16].value ?: '').mapReverse('hl7v2v3-patient-maritalStatus')
@@ -103,7 +112,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             builder.birthTime(value: pid[7][1].value)
 
         if ('Y' == pid[30].value || pid[29].value) {
-            builder.deceasedInd(value:true)
+            builder.deceasedInd(value: true)
             if (pid[29].value)
                 builder.deceasedTime(value: pid[29][1].value)
         } else if ('N' == pid[30].value) {
@@ -157,10 +166,37 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
+        otherIDs.each { oid, idValue ->
+            if (idValue) {
+                builder.asOtherIDs(classCode: 'PAT') {
+                    id(root: oid, extension: idValue)
+                    scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                        id(root: oid)
+                    }
+                }
+            } else {
+                builder.asOtherIDs(classCode: 'PAT') {
+                    id(nullFlavor: 'NA')
+                    scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                        id(root: oid)
+                    }
+                }
+            }
+        }
+
+        if (pid[19].value) {
+            builder.asOtherIDs(classCode: 'PAT') {
+                id(root: this.nationalIdentifierRoot, extension: pid[19].value)
+                scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                    id(root: this.nationalIdentifierRoot)
+                }
+            }
+        }
+
         def pid4collection = pid[4]()
         if (pid4collection) {
             builder.asOtherIDs(classCode: 'PAT') {
-                for(pid4 in pid4collection) {
+                for (pid4 in pid4collection) {
                     buildInstanceIdentifier(builder, 'id', false, pid4)
                 }
                 scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
@@ -169,23 +205,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
-        if (pid[19].value) {
-            builder.asOtherIDs(classCode: 'PAT') {
-                id(root: nationalIdentifierRoot, extension: pid[19].value)
-                scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                    id(root: nationalIdentifierRoot)
-                }
-            }
-        }
 
-        for (deletedIdOid in deletedIdsOids) {
-            builder.asOtherIDs(classCode: 'PAT') {
-                id(nullFlavor: 'NA')
-                scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                    id(root: deletedIdOid)
-                }
-            }
-        }
     }
 
     void createBirthPlaceElement(MarkupBuilder builder, Segment pid) {
@@ -217,34 +237,31 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     void translateTelecom(MarkupBuilder builder, Repeatable repeatableXTN, String defaultUse) {
         repeatableXTN.each { telecom ->
+            String use = defaultUse
             String number = telecom[1].value ?: telecom[4].value
             if (number) {
-                String use = defaultUse
                 String schema = 'tel'
 
                 switch (telecom[2].value) {
-                case 'PRN':
-                    use = 'H'
-                    break
-                case 'WPN':
-                    use = 'WP'
-                    break
+                    case 'PRN':
+                        use = homePhoneCode
+                        break
+                    case 'WPN':
+                        use = workPhoneCode
+                        break
                 }
 
                 switch (telecom[3].value) {
-                case 'PH':
-                    // take the defaults
-                    break
-                case 'CP':
-                    use = 'MC'
-                    break
-                case 'FX':
-                    schema = 'fax'
-                    break
-                case 'Internet':
-                case 'X.400':
-                    schema = 'mailto'
-                    break
+                    case 'CP':
+                        use = 'MC'
+                        break
+                    case 'FX':
+                        schema = 'fax'
+                        break
+                    case 'Internet':
+                    case 'X.400':
+                        schema = 'mailto'
+                        break
                 }
                 builder.telecom(value: "${schema}:${number}", use: use)
             }

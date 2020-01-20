@@ -79,29 +79,33 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: interactId.replace('IN', 'TE'))
-                subject(typeCode: 'SUBJ') {
+                subject(typeCode: 'SUBJ', contextConductionInd: 'false') {
                     registrationEvent(classCode: 'REG', moodCode: 'EVN') {
                         id(nullFlavor: 'NA')
                         statusCode(code: 'active')
                         subject1(typeCode: 'SBJ') {
                             def pid = getPID(adt)
                             patient(classCode: 'PAT') {
-                                def deletedIdsOids = []
+                                def otherIds = [:]
+                                // #276: only add IDs of the providerOrganizationIdRoot here. the rest goes to otherIDs
                                 for (pid3 in pid[3]()) {
                                     if (pid3[1].value == HL7V2_NULL) {
-                                        deletedIdsOids << pid3[4][2].value
+                                        otherIds.put(pid3[4][2].value, null)
+                                    } else if (pid3[4][2].value != this.providerOrganizationIdRoot) {
+                                        otherIds.put(pid3[4][2].value, pid3[1].value)
                                     } else {
                                         buildInstanceIdentifier(builder, 'id', false, pid3)
                                     }
                                 }
                                 statusCode(code: 'active')
                                 patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                    createPatientPersonElements(builder, pid, deletedIdsOids)
+                                    createPatientPersonElements(builder, pid, otherIds)
                                     createBirthPlaceElement(builder, pid)
                                     createLanguageCommunicationElement(builder, pid)
                                 }
+
                                 providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                    buildInstanceIdentifier(builder, 'id', false, this.mpiSystemIdRoot, this.mpiSystemIdExtension, null)
+                                    buildInstanceIdentifier(builder, 'id', false, this.providerOrganizationIdRoot, null, null)
                                     contactParty(classCode: 'CON'){
                                         contactPerson(classCode: 'PSN', determinerCode: 'INSTANCE'){
                                             name(nullFlavor: 'UNK')

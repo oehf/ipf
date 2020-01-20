@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE replace [<!ENTITY entity "VULNERABLE"> ]>
+<ClinicalDocument xmlns="urn:hl7-org:v3">
+    <title>&entity;</title>
+</ClinicalDocument>

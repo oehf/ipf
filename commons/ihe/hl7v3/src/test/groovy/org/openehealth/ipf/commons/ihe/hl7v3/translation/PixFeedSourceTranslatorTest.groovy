@@ -33,9 +33,11 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 
     @BeforeClass
     static void setUpClass() {
+		PixFeedRequest2to3Translator translator = new PixFeedRequest2to3Translator()
+		translator.providerOrganizationIdRoot = '2.16.840.1.113883.3.37.4.1.1.2.1.1'
         doSetUp('pixsource',
                 null,
-                new PixFeedRequest2to3Translator(),
+				translator,
                 HapiContextFactory.createHapiContext(
                         CustomModelClassUtils.createFactory("pix", "2.3.1"),
                         PixPdqTransactions.ITI8))
