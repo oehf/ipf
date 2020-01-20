@@ -37,9 +37,9 @@ mappings = {
     )
 
     'hl7v2v3-bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
-		'M': 'M',
- 		'F': 'F',
- 		'U': 'O'
+		'M' : 'M',
+ 		'F' : 'F',
+ 		'U' : 'O'
     )
 
     // patient marital status v3 -> v2

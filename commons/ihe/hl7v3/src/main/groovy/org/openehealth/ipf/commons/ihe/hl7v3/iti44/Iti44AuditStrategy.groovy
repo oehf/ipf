@@ -82,15 +82,18 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
         }
     }
 
-    protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
-                                                     final Hl7v3AuditDataset auditDataset,
-                                                     EventActionCode eventActionCode,
-                                                     boolean newPatientId) {
-        String[] patientIds = newPatientId ? auditDataset.patientIds : [ auditDataset.oldPatientId ] as String[]
+    private static AuditMessage patientRecordAuditMessage(AuditContext auditContext,
+                                                            final Hl7v3AuditDataset auditDataset,
+                                                            EventActionCode eventActionCode,
+                                                            boolean newPatientId) {
+        // #281: only one patient ID must be audited. just taking the first one
+        String patientId = newPatientId ?
+                (auditDataset.patientIds?.length > 0 ? auditDataset.patientIds.head() : null) :
+                auditDataset.oldPatientId
         return new PatientRecordEventBuilder<>(auditContext, auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
 
         // Type=II (the literal string), Value=the value of the message ID (from the message content, base64 encoded)
-                .addPatients("II", auditDataset.messageId, patientIds)
+                .addPatients("II", auditDataset.messageId, patientId)
                 .getMessage()
     }
 

@@ -36,23 +36,25 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
 
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        RetrieveImagingDocumentSetRequestType request = (RetrieveImagingDocumentSetRequestType) pojo;
-        List<RetrieveImagingDocumentSetRequestType.StudyRequest> requestedStudies = request.getStudyRequest();
-        if (requestedStudies != null) {
-            for (RetrieveImagingDocumentSetRequestType.StudyRequest studyRequest : requestedStudies) {
-                List<RetrieveImagingDocumentSetRequestType.SeriesRequest> requestedSeries = studyRequest.getSeriesRequest();
-                if (requestedSeries != null) {
-                    for (RetrieveImagingDocumentSetRequestType.SeriesRequest seriesRequest : requestedSeries) {
-                        List<RetrieveDocumentSetRequestType.DocumentRequest> requestedDocuments = seriesRequest.getDocumentRequests();
-                        if (requestedDocuments != null) {
-                            for (RetrieveDocumentSetRequestType.DocumentRequest document : requestedDocuments) {
-                                auditDataset.getDocuments().add(new Document(
-                                        document.getDocumentUniqueId(),
-                                        document.getRepositoryUniqueId(),
-                                        document.getHomeCommunityId(),
-                                        studyRequest.getStudyInstanceUID(),
-                                        seriesRequest.getSeriesInstanceUID(),
-                                        getDefaultDocumentStatus()));
+        if (pojo instanceof RetrieveImagingDocumentSetRequestType) {
+            RetrieveImagingDocumentSetRequestType request = (RetrieveImagingDocumentSetRequestType) pojo;
+            List<RetrieveImagingDocumentSetRequestType.StudyRequest> requestedStudies = request.getStudyRequest();
+            if (requestedStudies != null) {
+                for (RetrieveImagingDocumentSetRequestType.StudyRequest studyRequest : requestedStudies) {
+                    List<RetrieveImagingDocumentSetRequestType.SeriesRequest> requestedSeries = studyRequest.getSeriesRequest();
+                    if (requestedSeries != null) {
+                        for (RetrieveImagingDocumentSetRequestType.SeriesRequest seriesRequest : requestedSeries) {
+                            List<RetrieveDocumentSetRequestType.DocumentRequest> requestedDocuments = seriesRequest.getDocumentRequests();
+                            if (requestedDocuments != null) {
+                                for (RetrieveDocumentSetRequestType.DocumentRequest document : requestedDocuments) {
+                                    auditDataset.getDocuments().add(new Document(
+                                            document.getDocumentUniqueId(),
+                                            document.getRepositoryUniqueId(),
+                                            document.getHomeCommunityId(),
+                                            studyRequest.getStudyInstanceUID(),
+                                            seriesRequest.getSeriesInstanceUID(),
+                                            getDefaultDocumentStatus()));
+                                }
                             }
                         }
                     }

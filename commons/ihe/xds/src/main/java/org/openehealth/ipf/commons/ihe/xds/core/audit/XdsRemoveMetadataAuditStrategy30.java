@@ -36,15 +36,17 @@ public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
 
     @Override
     public XdsRemoveMetadataAuditDataset enrichAuditDatasetFromRequest(XdsRemoveMetadataAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
+        if (pojo instanceof RemoveObjectsRequest) {
+            RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
 
-        List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
-        if (references != null) {
-            int size = references.size();
-            auditDataset.setObjectIds(new String[size]);
-            for (int i = 0; i < size; ++i) {
-                ObjectRefType reference = references.get(i);
-                auditDataset.getObjectIds()[i] = reference.getId();
+            List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
+            if (references != null) {
+                int size = references.size();
+                auditDataset.setObjectIds(new String[size]);
+                for (int i = 0; i < size; ++i) {
+                    ObjectRefType reference = references.get(i);
+                    auditDataset.getObjectIds()[i] = reference.getId();
+                }
             }
         }
         return auditDataset;

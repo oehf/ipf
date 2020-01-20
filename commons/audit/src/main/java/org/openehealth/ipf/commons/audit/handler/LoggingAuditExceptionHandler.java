@@ -32,9 +32,11 @@ public class LoggingAuditExceptionHandler implements AuditExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(LoggingAuditExceptionHandler.class);
 
     @Override
-    public void handleException(AuditContext auditContext, Throwable t, String... auditMessages) {
-        LOG.warn(String.format("Failed to send ATNA audit event to destination [%s:%d]",
+    public void handleException(AuditContext auditContext, Throwable throwable, String... auditMessages) {
+        LOG.warn("Failed to send ATNA audit event to destination {}:{} ({})",
+                auditContext.getAuditRepositoryHostName(),
+                auditContext.getAuditRepositoryPort(),
                 auditContext.getAuditRepositoryAddress().getHostAddress(),
-                auditContext.getAuditRepositoryPort()), t);
+                throwable);
     }
 }

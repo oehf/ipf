@@ -48,13 +48,15 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
 
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
-        RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
-        if (response.getDocumentResponse() != null) {
-            for (DocumentResponse documentResponse : response.getDocumentResponse()) {
-                auditDataset.registerProcessedDocument(
-                        documentResponse.getDocumentUniqueId(),
-                        documentResponse.getRepositoryUniqueId(),
-                        documentResponse.getHomeCommunityId());
+        if (pojo instanceof RetrieveDocumentSetResponseType) {
+            RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
+            if (response.getDocumentResponse() != null) {
+                for (DocumentResponse documentResponse : response.getDocumentResponse()) {
+                    auditDataset.registerProcessedDocument(
+                            documentResponse.getDocumentUniqueId(),
+                            documentResponse.getRepositoryUniqueId(),
+                            documentResponse.getHomeCommunityId());
+                }
             }
         }
 
