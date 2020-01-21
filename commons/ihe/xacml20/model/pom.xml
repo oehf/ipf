@@ -27,7 +27,7 @@
                 </executions>
                 <configuration>
                     <sources>
-                        <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/Dummy.java</source>
+                        <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/CodeFirstSchema.java</source>
                     </sources>
                     <clearOutputDir>false</clearOutputDir>
                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>

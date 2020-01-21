@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  * This class is used only to create the XML Schema.
  * @author Dmytro Rud
  */
-@XmlType(name = "Dummy", namespace = "dummy", propOrder = {"cx", "nameQualifier", "purposeOfUse", "subjectRole"})
-public class Dummy {
+@XmlType(name = "CodeFirstSchema", namespace = "codeFirstSchema", propOrder = {"cx", "nameQualifier", "purposeOfUse", "subjectRole"})
+public class CodeFirstSchema {
     @XmlElement
     CX cx;
 
