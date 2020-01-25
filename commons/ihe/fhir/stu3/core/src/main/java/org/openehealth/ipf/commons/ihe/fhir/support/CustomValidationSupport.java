@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.context.FhirContext;
-import org.hl7.fhir.dstu3.hapi.validation.DefaultProfileValidationSupport;
+import org.hl7.fhir.dstu3.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.dstu3.model.StructureDefinition;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 

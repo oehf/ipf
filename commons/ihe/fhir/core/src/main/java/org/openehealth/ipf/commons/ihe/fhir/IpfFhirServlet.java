@@ -221,7 +221,7 @@ public class IpfFhirServlet extends RestfulServer {
     /**
      * @return the logging interceptor if {@link #logging} is true
      */
-    protected IServerInterceptor getLoggingInterceptor() {
+    protected Object getLoggingInterceptor() {
         LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
         loggingInterceptor.setLoggerName(IpfFhirServlet.class.getName());
 

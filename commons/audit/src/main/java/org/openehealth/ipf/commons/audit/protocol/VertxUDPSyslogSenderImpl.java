@@ -61,7 +61,7 @@ public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 // Could use a Vertx codec for this
                 byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                 LOG.debug("Auditing to {}:{}",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort());
                 LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
                 Buffer buffer = new BufferImpl().appendBytes(msgBytes);
@@ -69,7 +69,7 @@ public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 // The net socket has registered itself on the Vertx EventBus
                 socket.send(buffer,
                         auditContext.getAuditRepositoryPort(),
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryHostName(),
                         event -> {
                             if (event.failed()) {
                                 LOG.warn("Sending Audit Event via UDP failed");

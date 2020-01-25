@@ -109,7 +109,7 @@ public class TestIti67Success extends AbstractTestIti67 {
         ParticipantObjectIdentificationType query = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/DocumentReference?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1",
+        assertEquals("http://localhost:8999/DocumentReference?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1&_format=xml",
                 new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobileDocumentReferenceQuery, query.getParticipantObjectIDTypeCode());
