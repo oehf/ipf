@@ -86,7 +86,6 @@ public class EbXMLFactory30 implements EbXMLFactory {
     public EbXMLSubmitObjectsRequest createSubmitObjectsRequest() {
         SubmitObjectsRequest request = LCM_FACTORY.createSubmitObjectsRequest();
         request.setRegistryObjectList(RIM_FACTORY.createRegistryObjectListType());
-        request.setRequestSlotList(RIM_FACTORY.createSlotListType());
         return new EbXMLSubmitObjectsRequest30(request, createObjectLibrary());
     }
 
