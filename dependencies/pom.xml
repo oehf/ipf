@@ -18,6 +18,7 @@
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
+        <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
@@ -618,9 +619,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.openehealth.ipf.oht.mdht</groupId>
-                <artifactId>ipf-oht-mdht-uml-cda</artifactId>
-                <version>${ipf-oht-mdht-version}</version>
+                <groupId>org.openhealthtools.mdht.cda</groupId>
+                <artifactId>org.openhealthtools.mdht.uml.cda</artifactId>
+                <version>${oht-mdht-cda-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>
@@ -1215,6 +1216,14 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>projects.suisse-open-exchange.healthcare-rel</id>
+            <name>projects.suisse-open-exchange.healthcare-releases</name>
+            <url>https://projects.suisse-open-exchange.healthcare/artifactory/releases</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
