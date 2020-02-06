@@ -97,7 +97,7 @@ class TestRad69 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.eventIdentification, '110106', 'RAD-69', EventActionCode.Read, outcome)
+        checkEvent(message.eventIdentification, '110103', 'RAD-69', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
         checkDestination(message.activeParticipants[1], false, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
