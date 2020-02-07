@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.ImageAccessAuditBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DicomInstancesTransferredAuditBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
@@ -36,9 +36,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
  * @quthor Eugen Fischer
  * @since 3.5
  */
-public class ImageAccessBuilder extends ImageAccessAuditBuilder<ImageAccessBuilder> {
+public class DicomInstancesTransferredEventBuilder extends
+        DicomInstancesTransferredAuditBuilder<DicomInstancesTransferredEventBuilder> {
 
-    public ImageAccessBuilder(final AuditContext auditContext,
+    public DicomInstancesTransferredEventBuilder(final AuditContext auditContext,
             final AuditDataset auditDataset,
             final EventOutcomeIndicator eventOutcomeIndicator,
             final String eventOutcomeDescription,
@@ -49,14 +50,14 @@ public class ImageAccessBuilder extends ImageAccessAuditBuilder<ImageAccessBuild
                 purposesOfUse);
     }
 
-    public ImageAccessBuilder setSubmissionSet(final XdsSubmitAuditDataset auditDataset) {
+    public DicomInstancesTransferredEventBuilder setSubmissionSet(final XdsSubmitAuditDataset auditDataset) {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
                 ParticipantObjectTypeCodeRole.Job,
                 Collections.emptyList());
     }
 
-    public ImageAccessBuilder setSubmissionSetWithHomeCommunityId(final XdsSubmitAuditDataset auditDataset,
+    public DicomInstancesTransferredEventBuilder setSubmissionSetWithHomeCommunityId(final XdsSubmitAuditDataset auditDataset,
             final boolean xcaHomeCommunityId) {
         return addExportedEntity(auditDataset.getSubmissionSetUuid(),
                 ParticipantObjectIdTypeCode.XdsMetadata,
@@ -64,7 +65,7 @@ public class ImageAccessBuilder extends ImageAccessAuditBuilder<ImageAccessBuild
                 documentDetails(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
     }
 
-    public ImageAccessBuilder addDocumentIds(final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+    public DicomInstancesTransferredEventBuilder addDocumentIds(final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
             final XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
             final boolean xcaHomeCommunityId) {
         final String[] documentIds = auditDataset.getDocumentIds(status);

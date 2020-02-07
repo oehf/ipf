@@ -35,27 +35,18 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 /**
- * Builder for building IHE-specific DataExport events. It automatically sets the AuditSource, local and remote
- * ActiveParticipant and a Human Requestor and provides methods for adding patient IDs.
+ * Builder for building IHE-specific event if SOP Instances from a specific study are created, modified or accessed. It
+ * automatically sets the AuditSource, local and remote ActiveParticipant and a Human Requestor and provides methods for
+ * adding patient IDs.
  *
  * @author Christian Ohr
  * @author Eugen Fischer
  * @since 3.5
  */
-public class ImageAccessAuditBuilder<T extends ImageAccessAuditBuilder<T>>
+public class DicomInstancesAccessedAuditBuilder<T extends DicomInstancesAccessedAuditBuilder<T>>
         extends IHEAuditMessageBuilder<T, DicomInstancesAccessedBuilder> {
 
-    public ImageAccessAuditBuilder(final AuditContext auditContext,
-            final AuditDataset auditDataset,
-            final EventActionCode eventActionCode,
-            final EventType eventType,
-            final PurposeOfUse... purposesOfUse) {
-        this(auditContext, auditDataset, auditDataset.getEventOutcomeIndicator(),
-                auditDataset.getEventOutcomeDescription(),
-                eventActionCode, eventType, purposesOfUse);
-    }
-
-    public ImageAccessAuditBuilder(final AuditContext auditContext,
+    public DicomInstancesAccessedAuditBuilder(final AuditContext auditContext,
             final AuditDataset auditDataset,
             final EventOutcomeIndicator eventOutcomeIndicator,
             final String eventOutcomeDescription,

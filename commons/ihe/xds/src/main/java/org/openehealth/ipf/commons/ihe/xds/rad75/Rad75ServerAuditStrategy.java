@@ -24,10 +24,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy3
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.event.ImageAccessBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.DicomInstancesTransferredEventBuilder;
 
 /**
- * Audit strategy for RAD-75.
+ * Audit strategy for Cross Gateway Retrieve Imaging Document Set [RAD-75] as "Responding Imaging Gateway" actor
  *
  * @author Clay Sebourn
  * @author Christian Ohr
@@ -41,16 +41,21 @@ public class Rad75ServerAuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
     @Override
     public AuditMessage[] makeAuditMessage(
-            final AuditContext auditContext, final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
                 .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(
-            final AuditContext auditContext, final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, final Status status) {
-        return new ImageAccessBuilder(auditContext, auditDataset,
+    private static AuditMessage doMakeAuditMessage(
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+            final Status status) {
+
+        return new DicomInstancesTransferredEventBuilder(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(status), null,
                 EventActionCode.Read,
                 XdsEventTypeCode.CrossGatewayRetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
