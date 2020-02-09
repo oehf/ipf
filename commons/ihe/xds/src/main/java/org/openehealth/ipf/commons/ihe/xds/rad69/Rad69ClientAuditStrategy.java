@@ -15,22 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.rad69;
 
+import java.util.stream.Stream;
+
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIImportBuilder;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
-
-import java.util.stream.Stream;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.DicomInstancesAccessedEventBuilder;
 
 /**
- * Audit strategy for RAD-69.
+ * Audit strategy for Retrieve Imaging Document Set [RAD-69] as "Imaging Document Consumer" actor
  *
  * @author Clay Sebourn
  * @author Christian Ohr
+ * @author Eugen Fischer
  */
 public class Rad69ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
@@ -39,15 +40,22 @@ public class Rad69ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
                 .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsPHIImportBuilder(auditContext, auditDataset,
+    private static AuditMessage doMakeAuditMessage(
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+            final Status status) {
+
+        return new DicomInstancesAccessedEventBuilder(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(status), null,
                 EventActionCode.Create,
                 XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
@@ -55,6 +63,5 @@ public class Rad69ClientAuditStrategy extends XdsIRetrieveAuditStrategy30 {
                 .addDocumentIds(auditDataset, status, false)
                 .getMessage();
     }
-
 
 }
