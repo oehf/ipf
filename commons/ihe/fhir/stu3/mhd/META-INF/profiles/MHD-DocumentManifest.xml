@@ -4512,7 +4512,7 @@
       </base>
       <type>
         <code value="Reference" />
-        <profile value="http://oehf.github.io/ipf/fhir/MHD-DocumentReference" />
+        <!--<profile value="http://oehf.github.io/ipf/fhir/MHD-DocumentReference" /> -->
       </type>
       <condition value="ele-1" />
       <constraint>
@@ -6248,7 +6248,7 @@
       <sliceName value="pReference" />
       <type>
         <code value="Reference" />
-        <profile value="http://oehf.github.io/ipf/fhir/MHD-DocumentReference" />
+        <!--<profile value="http://oehf.github.io/ipf/fhir/MHD-DocumentReference" />-->
       </type>
     </element>
     <element id="DocumentManifest.related">

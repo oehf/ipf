@@ -67,6 +67,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     private static final String STU3_INDEXED = "indexed";
     private static final String STU3_CLASS = "class";
     private static final String STU3_RELATED_ID = "related-id";
+    private static final String STU3_SECURITY_LABEL = "securitylabel";
 
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
@@ -85,6 +86,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_FACILITY) TokenOrListParam facility,
             @OptionalParam(name = DocumentReference.SP_EVENT) TokenOrListParam event,
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
+            @OptionalParam(name = STU3_SECURITY_LABEL) TokenOrListParam label,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATED) ReferenceOrListParam related,
             @OptionalParam(name = STU3_RELATED_ID) ReferenceOrListParam relatedId,
@@ -100,6 +102,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         DateRangeParam dateParam = date != null ? date : indexed;
         TokenOrListParam categoryParam = category != null ? category : class_;
         ReferenceOrListParam relatedParam = related != null ? related : relatedId;
+        TokenOrListParam securityLabelParam = securityLabel != null ? securityLabel : label;
 
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)

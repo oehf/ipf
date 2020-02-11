@@ -53,7 +53,7 @@ public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
 
         assertCommonXdsAuditAttributes(auditMessage,
                 EventOutcomeIndicator.Success,
-                serverSide ? EventIdCode.Export : EventIdCode.Import,
+                serverSide ? EventIdCode.DICOMInstancesTransferred : EventIdCode.DICOMInstancesAccessed,
                 serverSide ? EventActionCode.Read : EventActionCode.Create,
                 serverSide,
                 true);

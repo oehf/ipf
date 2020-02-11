@@ -68,9 +68,10 @@ public class TCPSyslogServer extends AbstractVerticle {
 
     @Override
     public void start() {
+        LOG.info("Starting syslog server");
         NetServer netServer = vertx.createNetServer(nsOptions);
         netServer.connectHandler(netSocket -> netSocket.handler(buffer -> {
-            LOG.debug("Received content on port {} ({}) : {}", port, async.count(), buffer.toString());
+            LOG.debug("Received content on port {} ({} bytes)", port, buffer.length());
             async.countDown();
         })).listen(port);
     }

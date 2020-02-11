@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.concurrent.CountDownLatch;
@@ -69,9 +70,11 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
                 byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
                 byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
                 LOG.debug("Auditing to {}:{}",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort());
-                LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                }
                 Buffer buffer = new BufferImpl()
                         .appendBytes(syslogFrame)
                         .appendBytes(msgBytes);
@@ -108,13 +111,15 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
             }
 
             NetClient client = vertx.createNetClient(options);
+            InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
             client.connect(
                     auditContext.getAuditRepositoryPort(),
-                    auditContext.getAuditRepositoryAddress().getHostAddress(),
+                    inetAddress.getHostAddress(),
                     event -> {
-                        LOG.info("Attempt to connect to {}:{} : {}",
-                                auditContext.getAuditRepositoryAddress().getHostAddress(),
+                        LOG.info("Attempt to connect to {}:{} ({}), : {}",
+                                auditContext.getAuditRepositoryHostName(),
                                 auditContext.getAuditRepositoryPort(),
+                                inetAddress.getHostAddress(),
                                 event.succeeded());
                         if (event.succeeded()) {
                             NetSocket socket = event.result();
@@ -136,11 +141,12 @@ public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTr
 
             // Ensure that connection is established before returning
             try {
-                latch.await(10000, TimeUnit.MILLISECONDS);
+                latch.await(5000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
-                        auditContext.getAuditRepositoryAddress().getHostAddress(),
-                        auditContext.getAuditRepositoryPort()));
+                throw new AuditException(String.format("Could not establish TLS connection to %s:%d (%s)",
+                        auditContext.getAuditRepositoryHostName(),
+                        auditContext.getAuditRepositoryPort(),
+                        inetAddress.getHostAddress()));
             }
         }
         return writeHandlerId.get();
