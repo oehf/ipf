@@ -147,7 +147,7 @@ public class ParticipantObjectIdentificationType implements Serializable, Valida
     @Override
     public void validate() {
         if (participantObjectIDTypeCode == ParticipantObjectIdTypeCode.StudyInstanceUID &&
-                participantObjectDescriptions.isEmpty())
+                getParticipantObjectDescriptions().isEmpty())
             throw new AuditException("DICOM Object Descriptions must be present for StudyInstanceUID participant object ID types");
     }
 }
