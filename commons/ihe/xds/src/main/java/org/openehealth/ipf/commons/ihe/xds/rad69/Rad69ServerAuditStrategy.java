@@ -60,7 +60,7 @@ public class Rad69ServerAuditStrategy extends XdsIRetrieveAuditStrategy30 {
                 EventActionCode.Read,
                 XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status, false)
+                .addTransferredStudy(auditDataset, status, false)
                 .getMessage();
     }
 

@@ -196,10 +196,10 @@ public class DICOM2016a implements SerializationStrategy {
             pod.addContent(sopClass);
         });
         if (!dicomObjectDescription.getStudyIDs().isEmpty()) {
-            Element participantObjectContainsStudy = new Element("ParticipantObjectContainsStudy ");
+            Element participantObjectContainsStudy = new Element("ParticipantObjectContainsStudy");
             dicomObjectDescription.getStudyIDs().forEach(studyID ->
                     participantObjectContainsStudy.addContent(
-                            new Element("StudyIDs ")
+                            new Element("StudyIDs")
                                     .setAttribute("UID", studyID)));
             pod.addContent(participantObjectContainsStudy);
         }

@@ -117,6 +117,11 @@ public class DicomInstancesTransferredAuditBuilder<T extends DicomInstancesTrans
         return self();
     }
 
+    public T addTransferredStudyParticipantObject(final String studyId, final List<TypeValuePairType> objectDetails) {
+        delegate.addStudyParticipantObject(studyId, objectDetails);
+        return self();
+    }
+
     @Override
     public void validate() {
         super.validate();

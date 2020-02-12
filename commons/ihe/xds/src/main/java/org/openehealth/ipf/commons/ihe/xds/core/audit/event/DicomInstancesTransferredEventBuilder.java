@@ -65,21 +65,25 @@ public class DicomInstancesTransferredEventBuilder extends
                 documentDetails(null, auditDataset.getHomeCommunityId(), null, null, xcaHomeCommunityId));
     }
 
-    public DicomInstancesTransferredEventBuilder addDocumentIds(final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+    public DicomInstancesTransferredEventBuilder addTransferredStudy(
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
             final XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
             final boolean xcaHomeCommunityId) {
+
         final String[] documentIds = auditDataset.getDocumentIds(status);
         final String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
         final String[] repositoryIds = auditDataset.getRepositoryIds(status);
         final String[] seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
         final String[] studyInstanceIds = auditDataset.getStudyInstanceIds(status);
-        IntStream.range(0, documentIds.length).forEach(i ->
-                addExportedEntity(
-                        documentIds[i],
-                        ParticipantObjectIdTypeCode.ReportNumber,
-                        ParticipantObjectTypeCodeRole.Report,
-                        documentDetails(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
-                                studyInstanceIds[i], xcaHomeCommunityId)));
+
+        for (int i = 0; i < studyInstanceIds.length; i++) {
+            addTransferredStudyParticipantObject(studyInstanceIds[i],
+                    dicomDetails(repositoryIds[i],
+                            homeCommunityIds[i],
+                            documentIds[i],
+                            seriesInstanceIds[i],
+                            xcaHomeCommunityId));
+        }
         return self();
     }
 
