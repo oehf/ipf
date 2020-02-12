@@ -394,6 +394,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                     .filter(Objects::nonNull)
                     .forEach(objectDetail -> poit.getParticipantObjectDetails().add(objectDetail));
         }
+        if(ParticipantObjectIdTypeCode.StudyInstanceUID.equals(objectIDTypeCode)){
+            final DicomObjectDescriptionType dicomObjectDescriptionType = new DicomObjectDescriptionType();
+            dicomObjectDescriptionType.getStudyIDs().add(objectID);
+            poit.getParticipantObjectDescriptions().add(dicomObjectDescriptionType);
+        }
         poit.setParticipantObjectTypeCode(objectTypeCode);
         poit.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
         poit.setParticipantObjectDataLifeCycle(objectDataLifeCycle);
