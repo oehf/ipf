@@ -365,23 +365,26 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
     /**
-     * Adds a Participant Object representing a studies involved in the event
+     * Adds a Participant Object representing a study involved in the event
      *
      * @param studyId       Identifier of the involved study
      * @param objectDetails objectDetails
      * @return this
      */
     public T addStudyParticipantObject(final String studyId, final List<TypeValuePairType> objectDetails) {
-        final ParticipantObjectIdentificationType poit =
-                new ParticipantObjectIdentificationType(studyId, ParticipantObjectIdTypeCode.StudyInstanceUID);
-        poit.setParticipantObjectName(studyId);
-        poit.getParticipantObjectDetails().addAll(objectDetails);
         final DicomObjectDescriptionType dicomObjectDescriptionType = new DicomObjectDescriptionType();
         dicomObjectDescriptionType.getStudyIDs().add(studyId);
-        poit.getParticipantObjectDescriptions().add(dicomObjectDescriptionType);
-        poit.setParticipantObjectTypeCode(ParticipantObjectTypeCode.System);
-        poit.setParticipantObjectTypeCodeRole(ParticipantObjectTypeCodeRole.Report);
-        return addParticipantObjectIdentification(poit);
+        return addParticipantObjectIdentification(
+                ParticipantObjectIdTypeCode.StudyInstanceUID,
+                studyId,
+                null,
+                objectDetails,
+                studyId,
+                ParticipantObjectTypeCode.System,
+                ParticipantObjectTypeCodeRole.Report,
+                null,
+                null,
+                Collections.singletonList(dicomObjectDescriptionType));
     }
 
 
@@ -408,6 +411,37 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
             final ParticipantObjectTypeCodeRole objectTypeCodeRole,
             final ParticipantObjectDataLifeCycle objectDataLifeCycle,
             final String objectSensitivity) {
+        return addParticipantObjectIdentification(
+                objectIDTypeCode, objectName, objectQuery, objectDetails,
+                objectID, objectTypeCode, objectTypeCodeRole, objectDataLifeCycle, objectSensitivity,
+                Collections.emptyList());
+    }
+
+    /**
+     * Create and add an Participant Object Identification block to this audit event message
+     *
+     * @param objectIDTypeCode    The Participant Object ID Type code
+     * @param objectName          The Participant Object Name
+     * @param objectQuery         The Participant Object Query data
+     * @param objectDetails       The Participant Object detail
+     * @param objectID            The Participant Object ID
+     * @param objectTypeCode      The Participant Object Type Code
+     * @param objectTypeCodeRole  The Participant Object Type Code's ROle
+     * @param objectDataLifeCycle The Participant Object Data Life Cycle
+     * @param objectSensitivity   The Participant Object sensitivity
+     * @param dicomDescriptions   The Participant Object DICOM descriptions
+     * @return this
+     */
+    public T addParticipantObjectIdentification(final ParticipantObjectIdType objectIDTypeCode,
+                                                final String objectName,
+                                                final byte[] objectQuery,
+                                                final List<TypeValuePairType> objectDetails,
+                                                final String objectID,
+                                                final ParticipantObjectTypeCode objectTypeCode,
+                                                final ParticipantObjectTypeCodeRole objectTypeCodeRole,
+                                                final ParticipantObjectDataLifeCycle objectDataLifeCycle,
+                                                final String objectSensitivity,
+                                                final List<DicomObjectDescriptionType> dicomDescriptions) {
         final ParticipantObjectIdentificationType poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
         poit.setParticipantObjectName(objectName);
@@ -421,6 +455,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         poit.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
         poit.setParticipantObjectDataLifeCycle(objectDataLifeCycle);
         poit.setParticipantObjectSensitivity(objectSensitivity);
+        if (null != dicomDescriptions) {
+            dicomDescriptions.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(description -> poit.getParticipantObjectDescriptions().add(description));
+        }
         return addParticipantObjectIdentification(poit);
     }
 
