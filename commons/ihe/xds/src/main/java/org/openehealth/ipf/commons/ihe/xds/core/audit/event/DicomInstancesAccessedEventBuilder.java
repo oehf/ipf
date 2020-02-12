@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 /**
  * @author Christian Ohr
- * @quthor Eugen Fischer
+ * @author Eugen Fischer
  * @since 3.5
  */
 public class DicomInstancesAccessedEventBuilder
@@ -94,14 +94,13 @@ public class DicomInstancesAccessedEventBuilder
         final String[] seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
         final String[] studyInstanceIds = auditDataset.getStudyInstanceIds(status);
 
-        for (int i = 0; i < studyInstanceIds.length; i++) {
+        IntStream.range(0, studyInstanceIds.length).forEach(i ->
             addTransferredStudyParticipantObject(studyInstanceIds[i],
                     dicomDetails(repositoryIds[i],
                             homeCommunityIds[i],
                             documentIds[i],
                             seriesInstanceIds[i],
-                            xcaHomeCommunityId));
-        }
+                            xcaHomeCommunityId)));
         return self();
     }
 
