@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ValidatorRouteTest extends AbstractRouteTest {
 
-    @EndpointInject(uri = "mock:error")
+    @EndpointInject(value = "mock:error")
     protected MockEndpoint error;
 
     @After

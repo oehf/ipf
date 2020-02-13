@@ -63,7 +63,7 @@ class Iti8TestRouteBuilder extends RouteBuilder {
 
         from('xds-iti8://0.0.0.0:18089?audit=false&'+
                 'codec=#alternativeCodec&' +
-                'consumer.exceptionHandler=#iti8MllpExceptionHandler')
+                'exceptionHandler=#iti8MllpExceptionHandler')
                 .transform(ack())
 
     }

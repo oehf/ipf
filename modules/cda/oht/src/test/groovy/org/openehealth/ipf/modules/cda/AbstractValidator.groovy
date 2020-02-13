@@ -18,8 +18,8 @@ package org.openehealth.ipf.modules.cda
 import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import groovy.util.slurpersupport.GPathResult
-import groovy.util.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
 
 
 /**

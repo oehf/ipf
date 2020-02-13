@@ -31,8 +31,7 @@ public class ManagementNamingStrategyTestRouteBuilder extends
         from("direct:input")
                 .routeId("namingStrategyRoute")
                 .process(exchange -> {})
-                .id("namingStrategyProcessor")
-                .end();
+                    .id("namingStrategyProcessor");
     }
 
 }

@@ -42,7 +42,7 @@ public class TransportTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     protected MockEndpoint mockOutput;
     
     @After

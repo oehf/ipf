@@ -41,11 +41,11 @@ public abstract class AbstractRouteTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:mock")
+    @EndpointInject(value="mock:mock")
     protected MockEndpoint mock;
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mock.reset();
     }
 

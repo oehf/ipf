@@ -41,7 +41,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocu
  * All of these can be converted into each other with the appropriate factories or constructors.
  * @author Jens Riemschneider
  */
-@Converter
+@Converter(generateLoader = true)
 public class EbXML30Converters {
     private final static EbXMLFactory30 factory = new EbXMLFactory30();
     

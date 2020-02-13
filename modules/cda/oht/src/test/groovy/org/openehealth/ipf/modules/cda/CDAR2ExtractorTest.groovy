@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.modules.cda
 
-import org.openehealth.ipf.modules.cda.CDAR2Parser
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.modules.cda.CDAR2Parser
+
 import static org.junit.Assert.*
-import groovy.util.slurpersupport.GPathResult
 
 /**
  * @author Christian Ohr

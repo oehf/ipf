@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
 import java.util.concurrent.ExecutorService;
 
-import groovy.util.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;

@@ -42,7 +42,7 @@ public class CamelAuditMessageQueueTest {
     @Autowired
     private AuditContext auditContext;
 
-    @EndpointInject(uri = "mock:mock")
+    @EndpointInject(value = "mock:mock")
     private MockEndpoint mock;
 
     @After

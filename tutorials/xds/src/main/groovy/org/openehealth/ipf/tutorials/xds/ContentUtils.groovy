@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils
 
 /**
  * Utility functionality for document content.
+ *
  * @author Jens Riemschneider
  */
 abstract class ContentUtils {

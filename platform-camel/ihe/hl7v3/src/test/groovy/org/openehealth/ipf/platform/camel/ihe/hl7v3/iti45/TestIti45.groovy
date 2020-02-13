@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
+import groovy.xml.XmlSlurper
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test

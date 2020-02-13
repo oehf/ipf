@@ -18,9 +18,12 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Martin Krasser

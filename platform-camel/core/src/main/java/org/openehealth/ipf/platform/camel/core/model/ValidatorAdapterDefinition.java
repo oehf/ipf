@@ -15,23 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
-import static org.apache.camel.builder.Builder.bodyAs;
 import groovy.lang.Closure;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.transform.stream.StreamSource;
-
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
 import org.apache.camel.Expression;
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.transform.stream.StreamSource;
+
+import static org.apache.camel.builder.Builder.bodyAs;
 
 /**
  * @author Martin Krasser
@@ -99,7 +100,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
      *          the profile closure
      */
     public ProcessorAdapterDefinition profile(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
-                                                      Closure<?> profileExpression) {
+                                                      Closure<Object> profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }

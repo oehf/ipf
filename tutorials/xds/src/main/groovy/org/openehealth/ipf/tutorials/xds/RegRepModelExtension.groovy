@@ -15,123 +15,147 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.camel.Expression
-import org.joda.time.DateTime
-
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
 import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.support.ExpressionAdapter
+import org.joda.time.DateTime
 import org.openehealth.ipf.commons.core.config.ContextFacade
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingProcessor
+import org.slf4j.Logger
+
 import javax.activation.DataHandler
 
 /**
  * The DSL for the registry and repository route implementations.
+ *
  * @author Jens Riemschneider
  */
 class RegRepModelExtension {
      
     static ProcessorDefinition store(ProcessorDefinition self) {
-        self.process { dataStore().store(it.in.body.entry) }
+        self.process(toProcessor {
+            dataStore().store(it.in.body.entry)
+        })
     }
     
     static ProcessorDefinition retrieve(ProcessorDefinition self) {
-        self.transform ({exchange, type ->
-            new RetrievedDocument(dataStore().get(
-                exchange.in.body.documentUniqueId),
-                exchange.in.body,
-                null, 
-                null, 
-                'text/plain')
-        } as Expression)
+        self.transform(new ExpressionAdapter() {
+            @Override
+            Object evaluate(Exchange exchange) {
+                new RetrievedDocument(dataStore().get(
+                        exchange.in.body.documentUniqueId),
+                        exchange.in.body,
+                        null,
+                        null,
+                        'text/plain')
+            }
+        })
     }
     
-    static ProcessorDefinition search(ProcessorDefinition self, resultTypes) {
+    static SearchDefinition search(ProcessorDefinition self, resultTypes) {
        def answer = new SearchDefinition(resultTypes)
        self.addOutput(answer)
        answer    
     }
     
-    static ProcessorDefinition fail(ProcessorDefinition self, message) {
-        self.process { throw new XDSMetaDataException(message) }
+    static ProcessorDefinition fail(ProcessorDefinition self, ValidationMessage message) {
+        self.process(toProcessor { throw new XDSMetaDataException(message) })
     }
     
     static ProcessorDefinition updateWithRepositoryData(ProcessorDefinition self) {
-        self.process {
+        self.process(toProcessor {
             def documentEntry = it.in.body.entry.documentEntry
             def dataHandler = it.in.body.entry.getContent(DataHandler)
             documentEntry.hash = ContentUtils.sha1(dataHandler)
             documentEntry.size = ContentUtils.size(dataHandler)
             documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
-        }
+        })
     }
     
-    static ProcessorDefinition splitEntries(ProcessorDefinition self, entriesClosure) {
-        self.split ({ exchange, type ->
-            def body = exchange.in.body
-            def entries = entriesClosure(body) 
-            entries.collect { entry -> body.clone() + [entry: entry] }
-        } as Expression)
+    static ProcessorDefinition splitEntries(ProcessorDefinition self, Closure<?> entriesClosure) {
+        self.split(new ExpressionAdapter() {
+            @Override
+            Object evaluate(Exchange exchange) {
+                def body = exchange.in.body
+                def entries = entriesClosure.call(body)
+                entries.collect { entry -> body.clone() + [entry: entry] }
+            }
+        })
     }
 
     static ProcessorDefinition assignUuid(ProcessorDefinition self) {
-        self.process {
+        self.process(toProcessor {
             def entry = it.in.body.entry
             if (!entry.entryUuid.startsWith('urn:uuid:')) {
                 def newEntryUuid = 'urn:uuid:' + UUID.randomUUID()
                 it.in.body.uuidMap[entry.entryUuid] = newEntryUuid
                 entry.entryUuid = newEntryUuid
             }
-        }
+            null
+        })
     }
     
     static ProcessorDefinition changeAssociationUuids(ProcessorDefinition self) {
-        self.process {
+        self.process(toProcessor {
             def assoc = it.in.body.entry
             def uuidMap = it.in.body.uuidMap
             def sourceUuid = uuidMap[assoc.sourceUuid]
             if (sourceUuid != null) assoc.sourceUuid = sourceUuid
             def targetUuid = uuidMap[assoc.targetUuid]
             if (targetUuid != null) assoc.targetUuid = targetUuid
-        }
+            null
+        })
     }
     
-    static ProcessorDefinition status(ProcessorDefinition self, status) {
-        self.process {
+    static ProcessorDefinition status(ProcessorDefinition self, AvailabilityStatus status) {
+        self.process(toProcessor {
             it.in.body.entry.availabilityStatus = status
-        }
+        })
     }
 
     // Updates the last update time and ensures that the time is actually changed
     static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
-        self.process {
+        self.process(toProcessor {
             it.in.body.entry.lastUpdateTime = new Timestamp(DateTime.now(), Timestamp.Precision.SECOND)
-        }
+        })
     }
     
-        // Converts entries to ObjectReferences
-    static ProcessorDefinition convertToObjectRefs(ProcessorDefinition self, closure) {
-        self.process {
+    // Converts entries to ObjectReferences
+    static ProcessorDefinition convertToObjectRefs(ProcessorDefinition self, Closure closure) {
+        self.process(toProcessor {
             def entries = closure.call(it.in.body)
             it.in.body.resp.references.addAll(entries.collect { 
                 new ObjectReference(it.entryUuid)
             })
             entries.clear()
-        }
+        })
     }
     
-    static ProcessorDefinition processBody(ProcessorDefinition self, closure) {
-        self.process {closure(it.in.body)}
+    static ProcessorDefinition processBody(ProcessorDefinition self, Closure closure) {
+        self.process(toProcessor {
+            closure(it.in.body)
+        })
     }
 
-    static ProcessorDefinition log(ProcessorDefinition self, log, closure) {
-        self.process {
-            log.info(closure.call(it))
-        }
+    static ProcessorDefinition logExchange(ProcessorDefinition self, Logger log, Closure closure) {
+        self.process(toProcessor {
+            log.info(closure.call(it).toString())
+        })
     }
 
     private static DataStore dataStore() {
         ContextFacade.getBean(DataStore)
     }
+
+    private static Processor toProcessor(final Closure<?> closure) {
+        new DelegatingProcessor(closure)
+    }
+
 }

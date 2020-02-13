@@ -106,7 +106,7 @@ public class TLSSyslogSenderImplTest {
 	}
 	
 	@Test
-	public void sendReadBeforeAndAfterSockeConnectionOKTest() throws Exception {
+	public void sendReadBeforeAndAfterSocketConnectionOKTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
@@ -133,7 +133,7 @@ public class TLSSyslogSenderImplTest {
 	}
 	
 	@Test
-	public void sendReadBeforeAndAfterSockeConnectionClosedTest() throws Exception {
+	public void sendReadBeforeAndAfterSocketConnectionClosedTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
@@ -165,7 +165,7 @@ public class TLSSyslogSenderImplTest {
 	}
 	
 	@Test
-	public void sendReadBeforeSockeConnectionOKTest() throws Exception {
+	public void sendReadBeforeSocketConnectionOKTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
@@ -192,7 +192,7 @@ public class TLSSyslogSenderImplTest {
 	}
 	
 	@Test
-	public void sendReadBeforeAndAfterSockeConnectionDeadTest() throws Exception {
+	public void sendReadBeforeAndAfterSocketConnectionDeadTest() throws Exception {
 		ArgumentCaptor<byte[]> streamWriteCaptor = ArgumentCaptor.forClass(byte[].class);
 		when(socket.getSoTimeout()).thenReturn(1);
 		when(socket.getInputStream()).thenReturn(is);
@@ -246,7 +246,7 @@ public class TLSSyslogSenderImplTest {
         verify(is, never()).read();
     }
 	
-	private class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
+	private static class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
 
         public SocketOptionOverrideTLSSyslogSenderImpl(String sendingHost, String sendingProcess,
                 SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy) {

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.pcc1
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder

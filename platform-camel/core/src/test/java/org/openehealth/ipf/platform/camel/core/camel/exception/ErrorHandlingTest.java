@@ -33,16 +33,16 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = {"/context-camel-error.xml"})
 public class ErrorHandlingTest extends TestSupport {
 
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     private MockEndpoint output;
     
-    @EndpointInject(uri="mock:inter")
+    @EndpointInject(value="mock:inter")
     private MockEndpoint inter;
     
-    @EndpointInject(uri="mock:check")
+    @EndpointInject(value="mock:check")
     private MockEndpoint check;
     
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     private MockEndpoint error;
 
     @After

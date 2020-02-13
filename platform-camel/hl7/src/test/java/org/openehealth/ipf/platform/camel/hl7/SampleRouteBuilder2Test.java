@@ -36,10 +36,10 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
     private static String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
     private static String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
     
-    @EndpointInject(uri="mock:output1")
+    @EndpointInject(value="mock:output1")
     private MockEndpoint mockOutput1;
     
-    @EndpointInject(uri="mock:output2")
+    @EndpointInject(value="mock:output2")
     private MockEndpoint mockOutput2;
     
     private String resource = "message/msg-01.hl7";

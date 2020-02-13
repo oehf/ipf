@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46
 
+import groovy.xml.XmlSlurper
 import org.apache.camel.Exchange
 import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -24,7 +25,6 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Tests for ITI-46.

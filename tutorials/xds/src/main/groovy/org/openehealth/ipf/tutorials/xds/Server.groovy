@@ -25,6 +25,7 @@ import org.springframework.core.io.ClassPathResource
  * @author Jens Riemschneider
  */
 class Server {
+
     private static final int SYSLOG_PORT = 514
 
     /**

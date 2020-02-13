@@ -24,7 +24,7 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
-@Converter
+@Converter(generateLoader = true)
 public class MdhtTypeConverter {
 
     private final static CDAR2Renderer renderer = new CDAR2Renderer();

@@ -41,7 +41,7 @@ class SearchProcessor extends DelegateProcessor {
          super.processNext(exchange)
      }
      
-     private def get(body, resultField) {
+     private static def get(body, resultField) {
          def fields = resultField.split('\\.')
          fields.inject(body) { obj, field -> 
              if (obj[field] == null) {

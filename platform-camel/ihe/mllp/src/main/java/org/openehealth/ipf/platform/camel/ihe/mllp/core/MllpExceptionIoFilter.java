@@ -36,7 +36,7 @@ import static org.apache.camel.component.mina.MinaPayloadHelper.getOut;
  * This {@link IoFilterAdapter} is used to catch all exceptions occurred inside the {@link MllpConsumer} filterChain,
  * before the message reaches the CamelRoute, and send appropriate response created by defined exceptionHandler
  * either over RouteBuilder exception handling using "consumer.bridgeErrorHandler=true" or directly by
- * "consumer.exceptionHandler=#myExceptionHandlerBean"
+ * "exceptionHandler=#myExceptionHandlerBean"
  *
  * @author Boris Stanojevic
  *

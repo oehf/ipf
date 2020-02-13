@@ -41,7 +41,6 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     @Test
     public void testReply() {
         Exchange exchange = producerTemplate.request("direct:reply", exchange1 -> exchange1.getIn().setBody("abc"));
-        assertEquals("abc", exchange.getIn().getBody());
         assertEquals("abcxyz", exchange.getMessage().getBody());
     }
 

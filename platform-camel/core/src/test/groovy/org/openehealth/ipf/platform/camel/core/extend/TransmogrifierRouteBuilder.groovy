@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-import static org.openehealth.ipf.commons.xml.AbstractCachingXmlProcessor.RESOURCE_LOCATION
-
-import javax.xml.transform.dom.DOMResult
-import javax.xml.transform.stream.StreamSource
-
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
 import org.openehealth.ipf.platform.camel.core.support.transform.ext.StaticTransmogrifier
 import org.openehealth.ipf.platform.camel.core.transform.TestTransmogrifier
+
+import javax.xml.transform.dom.DOMResult
+import javax.xml.transform.stream.StreamSource
+
+import static org.openehealth.ipf.commons.xml.AbstractCachingXmlProcessor.RESOURCE_LOCATION
 
 /**
  * @author Martin Krasser

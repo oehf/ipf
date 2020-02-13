@@ -35,7 +35,7 @@ public abstract class AbstractExtensionTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     protected MockEndpoint mockOutput;
 
     

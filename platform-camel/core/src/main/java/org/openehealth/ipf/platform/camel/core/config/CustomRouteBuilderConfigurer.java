@@ -58,20 +58,21 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
     }
     
     @Override
-    public void configure(CustomRouteBuilder configuration) throws Exception{
-        if (configuration.getIntercepted() != null) {
-            // FIXME this piece of code (includeRoutes) was removed in Camel 3
-            RouteBuilder intercepted = configuration.getIntercepted();
-            configuration.setContext(intercepted.getContext());
-            configuration.setRouteCollection(intercepted.getRouteCollection());
-            configuration.setRestCollection(intercepted.getRestCollection());
-            configuration.setErrorHandlerBuilder(intercepted.getErrorHandlerBuilder());
+    public void configure(CustomRouteBuilder customRouteBuilder) throws Exception{
+        if (customRouteBuilder.getIntercepted() != null) {
+            RouteBuilder intercepted = customRouteBuilder.getIntercepted();
+            customRouteBuilder.setContext(camelContext);
+            customRouteBuilder.setRouteCollection(intercepted.getRouteCollection());
+            customRouteBuilder.setRestCollection(intercepted.getRestCollection());
+            customRouteBuilder.setErrorHandlerBuilder(intercepted.getErrorHandlerBuilder());
+
             // must invoke configure on the original builder so it adds its configuration to me
-            configuration.configure();
+            customRouteBuilder.configure();
+
         } else {
-            camelContext.addRoutes(configuration);
+            camelContext.addRoutes(customRouteBuilder);
         }
-        LOG.debug("Custom route builder configured: {}", configuration);
+        LOG.debug("Custom route builder configured: {}", customRouteBuilder);
     }
 
     public CamelContext getCamelContext() {

@@ -1,7 +1,6 @@
 package org.openehealth.ipf.platform.camel.core.reifier;
 
 import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.reifier.ProcessorReifier;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.platform.camel.core.adapter.ParserAdapter;
@@ -13,14 +12,9 @@ import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition;
  */
 public class ParserAdapterReifier extends ProcessorAdapterReifier<ParserAdapterDefinition> {
 
-    static {
-        ProcessorReifier.registerReifier(ParserAdapterReifier.class, ParserAdapterReifier::new);
-    }
-
     public ParserAdapterReifier(ProcessorDefinition<?> definition) {
         super((ParserAdapterDefinition) definition);
     }
-
 
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {

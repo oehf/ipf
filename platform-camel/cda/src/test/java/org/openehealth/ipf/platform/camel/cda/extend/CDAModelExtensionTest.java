@@ -31,7 +31,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     private String cdaExample = "/message/SampleCDADocument.xml";
     private String ccdExample = "/message/SampleCCDDocument.xml";
 
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
     @Test

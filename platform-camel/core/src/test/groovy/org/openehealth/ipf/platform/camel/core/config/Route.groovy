@@ -5,6 +5,8 @@ import org.apache.camel.spring.SpringRouteBuilder
 class Route extends SpringRouteBuilder {
 	
 	void configure() {
-	    from('direct:input').log('Inside Input').to('mock:output')
+	    from('direct:input')
+				.log('Inside Input')
+				.to('mock:output')
 	}
 }

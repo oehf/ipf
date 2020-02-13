@@ -25,11 +25,11 @@ import org.apache.camel.Processor
 
 /**
  * Model class to add the Search processor to route implementations.
+ *
  * @author Jens Riemschneider
  */
 class SearchDefinition extends OutputDefinition<SearchDefinition> {
     def filters = []
-	def containerClosure
 	def resultTypes
 	def resultField
 	def indexEvals = [:]
@@ -144,16 +144,6 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	def withoutHash(field) {
 	    by { entry, param -> !equals(get(param, field), entry.hash) }
 	}
-	
-	Processor createProcessor(RouteContext routeContext) throws Exception {
-		new SearchProcessor(
-				indexEvals : indexEvals,
-		        filters : filters,
-		        resultTypes : resultTypes, 
-		        resultField : resultField,
-				store : routeContext.lookup('dataStore', DataStore.class),
-				processor : createChildProcessor(routeContext, false))
-	}    
 
     private static def get(body, resultField) {
         resultField.split('\\.').inject(body) { obj, field -> obj[field] } 

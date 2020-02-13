@@ -15,18 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
-import org.apache.camel.AggregationStrategy;
-import org.apache.camel.Endpoint;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.Builder;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.support.CamelContextHelper;
 import org.openehealth.ipf.commons.core.modules.api.*;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 import org.openehealth.ipf.platform.camel.core.adapter.*;
-import org.openehealth.ipf.platform.camel.core.process.Enricher;
-import org.openehealth.ipf.platform.camel.core.process.Validation;
 
 import javax.xml.transform.stream.StreamSource;
 
@@ -247,76 +241,6 @@ public class RouteHelper {
     public DataFormatAdapter dataFormatRenderer(String rendererBeanName) {
         return new DataFormatAdapter(routeBuilder.getContext().getRegistry()
                 .lookupByNameAndType(rendererBeanName, Renderer.class));
-    }
-    
-    // ----------------------------------------------------------------
-    //  Processor
-    // ----------------------------------------------------------------
-
-    /**
-     * Creates a new {@link Enricher}.
-     * 
-     * @param aggregationStrategy
-     *            aggregation strategy to combine input data and additional
-     *            data.
-     * @param resourceUri
-     *            URI of resource endpoint for obtaining additional data.
-     * @return an enricher.
-     * @throws Exception
-     *             if a producer cannot be created for the endpoint represented
-     *             by <code>resourceUri</code>.
-     */
-    public Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) throws Exception {
-        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(routeBuilder.getContext(), resourceUri);
-        return new Enricher(aggregationStrategy, endpoint.createProducer());
-    }
-    
-    /**
-     * Creates a new {@link Enricher} using an {@link AggregatorAdapter} that
-     * adapts an {@link Aggregator} Spring bean identified by name
-     * <code>aggregatorBeanName</code>. The adapter is configured to obtain
-     * the enrichment data from the resource's response-message's body (i.e.
-     * from the out-message's body of the exchange used to communicate with the
-     * resource).
-     * 
-     * @param aggregatorBeanName
-     *            name of the {@link Aggregator} bean.
-     * @param resourceUri
-     *            URI of resource endpoint for obtaining additional data.
-     * @return an enricher.
-     * @throws Exception
-     *             if a producer cannot be created for the endpoint represented
-     *             by <code>resourceUri</code>.
-     */
-    public Enricher enricher(String aggregatorBeanName, String resourceUri) throws Exception {
-        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(routeBuilder.getContext(), resourceUri);
-        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(routeBuilder.body()), endpoint.createProducer());
-    }
-
-    /**
-     * Creates a {@link Validation} process object.
-     * 
-     * @param validatorUri
-     *            URI of the endpoint that validates an exchange.
-     * @return a validation process object.
-     * @throws Exception
-     *             if a producer cannot be created for the endpoint represented
-     *             by <code>validatorUri</code>.
-     */
-    public Validation validation(String validatorUri) throws Exception {
-        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(routeBuilder.getContext(), validatorUri);
-        return new Validation(endpoint.createProducer());
-    }
-    
-    /**
-     * Creates a {@link Validation} process object.
-     * 
-     * @param validator
-     *            processor that validates an exchange.
-     * @return a validation process object.
-     */
-    public Validation validation(Processor validator) {
-        return new Validation(validator);
     }
     
 }

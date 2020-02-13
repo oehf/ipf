@@ -95,7 +95,7 @@ public class TransactedRouteTest extends StandardTestContainer {
                 getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(body);
         final Exchange response = getProducerTemplate().send(url, exchange);
-        return response.getOut().getBody(String.class);
+        return response.getMessage().getBody(String.class);
     }
     
     private static class TestRoutes extends RouteBuilder {

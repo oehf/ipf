@@ -38,7 +38,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
     private static String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
 
 
-    @EndpointInject(uri = "mock:output")
+    @EndpointInject(value = "mock:output")
     private MockEndpoint mockOutput;
 
     private String resource = "/message/msg-01.hl7";

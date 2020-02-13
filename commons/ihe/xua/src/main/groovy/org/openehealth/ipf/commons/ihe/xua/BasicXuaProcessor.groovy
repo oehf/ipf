@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xua
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import org.apache.cxf.binding.soap.Soap11
 import org.apache.cxf.binding.soap.Soap12
 import org.apache.cxf.binding.soap.SoapMessage

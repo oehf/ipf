@@ -9,10 +9,10 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.6.3</brave-version>
-        <camel-version>3.0.0</camel-version>
-        <cxf-version>3.3.4</cxf-version>
-        <groovy-version>2.5.8</groovy-version>
+        <brave-version>5.9.2</brave-version>
+        <camel-version>3.0.1</camel-version>
+        <cxf-version>3.3.5</cxf-version>
+        <groovy-version>3.0.0</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>4.1.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
@@ -30,9 +30,9 @@
         <ph-commons-version>9.3.8</ph-commons-version>
 
         <saxon-he-version>9.9.1-1</saxon-he-version>
-        <slf4j-version>1.7.29</slf4j-version>
-        <spring-version>5.2.2.RELEASE</spring-version>
-        <spring-boot-version>2.2.1.RELEASE</spring-boot-version>
+        <slf4j-version>1.7.30</slf4j-version>
+        <spring-version>5.2.3.RELEASE</spring-version>
+        <spring-boot-version>2.2.4.RELEASE</spring-boot-version>
         <vertx-version>3.8.4</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.4</xmlsec-version>

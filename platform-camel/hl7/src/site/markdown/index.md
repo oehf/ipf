@@ -37,56 +37,9 @@ Otherwise, the following dependency must be registered in `pom.xml`:
 The [Camel HL7 component][camel-hl7] already provides a convenient set of features, e.g. to marshal and unmarshal
 messages, validate them or create acknowledgement responses. Please refer to the [documentation][camel-hl7] for details.
 
+### Validation
 
-### IPF Extensions to Camel HL7 support
-
-IPF adds a few more features to the [Camel HL7 component][camel-hl7], which are described below.
-
-
-#### Validation
-
-HL7 v2 messages can be validated in routes with the `verify().hl7()` extension. This differs from the `HL7.messageConforms()`
-predicate of Camel in one important aspect:
-
-The Camel predicate can be used for filters or validators, however, by design it just returns `true` or `false`, and the
-resulting [`PredicateValidationException`](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/validation/PredicateValidationException.html)
-gives no details whatsoever about the details, i.e. *why* the HL7 validation as
-failed and the location of the failure in the message.
-
-In contrast, the IPF validator throws a [`ValidationException`](../apidocs/org/openehealth/ipf/commons/core/modules/api/ValidationException.html) containing all the details
-about the validation failure that was provided by the [HAPI] validator classes.
-
-```groovy
-
-    from(...)
-      .unmarshal().hl7()
-      .verify().hl7()
-      ...
-
-```
-
-The code above uses the [HAPI] [`ValidationContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html)
-associated with the [`HapiContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/HapiContext.html) under which the message was
-parsed. A different validation context can be used by specifying the `.profile(Expression)` or `.staticProfile(Object)` modifiers:
-
-```groovy
-
-    from(...)
-      .unmarshal().hl7()
-      .verify().hl7().profile { exchange ->
-         // Calculate `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
-      ...
-
-    from(...)
-      .unmarshal().hl7()
-      // context can be a `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
-      .verify().hl7().staticProfile(context)
-
-      ...
-
-```
-
-When using plain Java routes, the same behavior can be obtained by using the corresponding Camel processors:
+HL7 v2 messages can be validated in routes with a validating processor from the camel-hl7 module:
 
 ```java
 
@@ -101,6 +54,11 @@ When using plain Java routes, the same behavior can be obtained by using the cor
       .process(HL7v2.validatingProcessor(myOtherHapiContext))
 
 ```
+
+
+### IPF Extensions to Camel HL7 support
+
+IPF adds a few more features to the [Camel HL7 component][camel-hl7], which are described below.
 
 
 #### Expressions

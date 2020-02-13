@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy

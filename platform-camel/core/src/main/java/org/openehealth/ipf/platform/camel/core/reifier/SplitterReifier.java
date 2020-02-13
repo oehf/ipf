@@ -16,10 +16,6 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  */
 public class SplitterReifier extends ProcessorReifier<SplitterDefinition> {
 
-    static {
-        ProcessorReifier.registerReifier(SplitterReifier.class, SplitterReifier::new);
-    }
-
     public SplitterReifier(ProcessorDefinition<?> definition) {
         super((SplitterDefinition) definition);
     }

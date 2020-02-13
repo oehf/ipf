@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*
  * @author Jens Riemschneider
  */
 class QueryMatcher {
-    def matches(SubmissionSet entry, FindSubmissionSetsQuery query) {
+    static def matches(SubmissionSet entry, FindSubmissionSetsQuery query) {
         equals(query.patientId, entry.patientId) &&
         contains(query.status, entry.availabilityStatus) &&
         contains(query.sourceIds, entry.sourceId) &&
@@ -36,15 +36,15 @@ class QueryMatcher {
         isInRange(query.submissionTime, entry.submissionTime) &&
         matchesAuthor(query.authorPerson, entry.authors)
     }
-    
-    def matches(Folder entry, FindFoldersQuery query) {        
+
+    static def matches(Folder entry, FindFoldersQuery query) {
         equals(query.patientId, entry.patientId) &&
         contains(query.status, entry.availabilityStatus) &&
         isInRange(query.lastUpdateTime, entry.lastUpdateTime) &&
         evalQueryList(query.codes, entry.codeList)
     }
-    
-    def matches(DocumentEntry entry, FindDocumentsQuery query) {
+
+    static def matches(DocumentEntry entry, FindDocumentsQuery query) {
         equals(query.patientId, entry.patientId) &&
         contains(query.status, entry.availabilityStatus) &&
         isInRange(query.creationTime, entry.creationTime) &&

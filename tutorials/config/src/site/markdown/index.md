@@ -60,7 +60,6 @@ the SampleRouteBuilder extends the `org.openehealth.ipf.platform.camel.core.conf
             from('jetty:http://0.0.0.0:8800/map')
                 .convertBodyTo(String.class)
                 .unmarshal().hl7()
-                .verify().hl7()
                 .to('direct:map')
 
             // Marshal mapped message and write into file
