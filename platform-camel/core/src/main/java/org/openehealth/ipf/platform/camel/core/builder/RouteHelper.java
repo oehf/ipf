@@ -17,10 +17,23 @@ package org.openehealth.ipf.platform.camel.core.builder;
 
 import org.apache.camel.builder.Builder;
 import org.apache.camel.builder.RouteBuilder;
-import org.openehealth.ipf.commons.core.modules.api.*;
+import org.openehealth.ipf.commons.core.modules.api.Aggregator;
+import org.openehealth.ipf.commons.core.modules.api.Converter;
+import org.openehealth.ipf.commons.core.modules.api.Parser;
+import org.openehealth.ipf.commons.core.modules.api.Predicate;
+import org.openehealth.ipf.commons.core.modules.api.Renderer;
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.openehealth.ipf.platform.camel.core.adapter.*;
+import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.ConverterAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.ParserAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 import javax.xml.transform.stream.StreamSource;
 

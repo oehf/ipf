@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.core;
 
 import org.apache.camel.support.DefaultComponent;
-import org.apache.camel.spi.UriParam;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ import java.util.Map;
  */
 public abstract class InterceptableEndpointConfiguration {
 
-    @UriParam
     private List<InterceptorFactory> customInterceptorFactories;
 
     protected InterceptableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {

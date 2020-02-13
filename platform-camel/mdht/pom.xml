@@ -18,16 +18,17 @@
             <artifactId>ipf-platform-camel-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-cda-mdht</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.oht.mdht</groupId>
             <artifactId>ipf-oht-mdht-uml-cda-ccd</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mock</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
