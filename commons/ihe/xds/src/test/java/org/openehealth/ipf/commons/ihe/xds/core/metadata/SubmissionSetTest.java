@@ -44,19 +44,6 @@ public class SubmissionSetTest {
     }
 
     @Test
-    public void testSetAuthorResetsAuthorList() {
-        submissionSet.getAuthors().add(author1);
-        submissionSet.getAuthors().add(author2);
-        submissionSet.setAuthor(author3);
-        assertEquals(Collections.singletonList(author3), submissionSet.getAuthors());
-    }
-
-    @Test
-    public void testGetAuthorOnEmptyAuthorList() {
-        assertTrue(null, submissionSet.getAuthors().isEmpty());
-    }
-
-    @Test
     public void testGetAuthorOnAuthorListContainingMultipleAuthors() {
         submissionSet.getAuthors().add(author1);
         submissionSet.getAuthors().add(author2);

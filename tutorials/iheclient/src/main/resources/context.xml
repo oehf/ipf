@@ -87,12 +87,12 @@ http://cxf.apache.org/schemas/configuration/security.xsd">
 
     <bean id="inLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
         <constructor-arg value="#{@adapterLogFileNamePrefix}-in.txt"/>
-        <property name="locallyEnabled" value="true"/>
+        <property name="enabled" value="true"/>
     </bean>
 
     <bean id="outLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
         <constructor-arg value="#{@adapterLogFileNamePrefix}-out.txt"/>
-        <property name="locallyEnabled" value="true"/>
+        <property name="enabled" value="true"/>
     </bean>
 
 </beans>

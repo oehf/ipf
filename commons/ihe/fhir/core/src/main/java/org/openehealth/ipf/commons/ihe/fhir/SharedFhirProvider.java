@@ -85,25 +85,6 @@ public abstract class SharedFhirProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
-     *
-     * @deprecated use {@link #requestTransaction(Object, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    @Deprecated
-    protected final <T extends IBaseBundle> T requestTransaction(
-            Object payload,
-            Class<T> bundleClass,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        return requestTransaction(payload, bundleClass, httpServletRequest, httpServletResponse, null);
-    }
-
-    /**
-     * Submits a transaction request bundle, expecting a corresponding response bundle
-     *
-     * @param payload             transaction bundle
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return result of processing
      */
     protected final <T extends IBaseBundle> T requestTransaction(
             Object payload,

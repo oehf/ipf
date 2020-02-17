@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XTN;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -47,13 +46,6 @@ public class Telecom extends Hl7v2Based<XTN> {
 
     public Telecom(XTN xtn) {
         super(xtn);
-    }
-
-    @Deprecated
-    public Telecom(String address, String addressType) {
-        this();
-        setAddress(address);
-        setAddressType(addressType);
     }
 
     /**
@@ -87,22 +79,6 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param countryCode
-     * @param areaCityCode
-     * @param localNumber
-     * @param extension
-     * @deprecated
-     */
-    @Deprecated
-    public Telecom(Integer countryCode, Integer areaCityCode, Integer localNumber, Integer extension) {
-        this(
-                countryCode == null ? null : countryCode.longValue(),
-                areaCityCode == null ? null : areaCityCode.longValue(),
-                localNumber == null ? null : localNumber.longValue(),
-                extension == null ? null : extension.longValue());
-    }
-
-    /**
      * @return telecom use code (XTN-2) according to HL7 v.2.5 Table 0201.
      */
     @XmlElement(name = "use")
@@ -133,25 +109,6 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @return telecommunication equipment type (XTN-3) according to HL7 v.2.5 Table 0202.
-     * @deprecated use {@link #getType()} instead.
-     */
-    @Deprecated
-    @XmlTransient
-    public String getAddressType() {
-        return getType();
-    }
-
-    /**
-     * @param addressType telecommunication equipment type (XTN-3) according to HL7 v.2.5 Table 0202.
-     * @deprecated use {@link #setType(String)} instead.
-     */
-    @Deprecated
-    public void setAddressType(String addressType) {
-        setType(addressType);
-    }
-
-    /**
      * @return E-mail address (XTN-4).
      */
     @XmlElement(name = "email")
@@ -164,25 +121,6 @@ public class Telecom extends Hl7v2Based<XTN> {
      */
     public void setEmail(String email) {
         setValue(getHapiObject().getXtn4_EmailAddress(), email);
-    }
-
-    /**
-     * @return E-mail address (XTN-4).
-     * @deprecated use {@link #getEmail()} instead.
-     */
-    @Deprecated
-    @XmlTransient
-    public String getAddress() {
-        return getEmail();
-    }
-
-    /**
-     * @param address E-mail address (XTN-4).
-     * @deprecated use {@link #setEmail(String)} instead.
-     */
-    @Deprecated
-    public void setAddress(String address) {
-        setEmail(address);
     }
 
     /**

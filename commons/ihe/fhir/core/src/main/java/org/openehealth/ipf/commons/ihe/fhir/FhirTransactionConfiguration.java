@@ -41,13 +41,8 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
-    private boolean deferModelScanning;
     private Predicate<Object> staticConsumerSelector = o -> true;
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -62,10 +57,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -78,7 +69,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirTransactionValidator fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
-        this.fhirContextProvider = () -> new FhirContext(fhirVersion);
+        this.fhirContextProvider = () -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidator = fhirValidator;
@@ -142,9 +133,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     public FhirContext initializeFhirContext() {
         FhirContext fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
-        if (deferModelScanning) {
-            fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
-        }
         return fhirContext;
     }
 
@@ -168,28 +156,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
 
     public boolean supportsLazyLoading() {
         return supportsLazyLoading;
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public boolean isDeferModelScanning() {
-        return deferModelScanning;
-    }
-
-    /**
-     * By default, HAPI will scan each model type it encounters as soon as it encounters it. This scan includes a check
-     * for all fields within the type, and makes use of reflection to do this. While this process is not particularly significant
-     * on reasonably performant machines, on some devices it may be desirable to defer this scan. When the scan is deferred,
-     * objects will only be scanned when they are actually accessed, meaning that only types that are actually used in an
-     * application get scanned.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void setDeferModelScanning(boolean deferModelScanning) {
-        this.deferModelScanning = deferModelScanning;
     }
 
 

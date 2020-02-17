@@ -58,7 +58,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="serverInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor$Factory">
         <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
-        <property name="locallyEnabled" value="true" />
+        <property name="enabled" value="true" />
     </bean>
 
     <bean id="serverOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor$Factory">

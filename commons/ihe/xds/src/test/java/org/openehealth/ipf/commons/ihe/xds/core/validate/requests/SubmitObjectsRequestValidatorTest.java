@@ -507,7 +507,7 @@ public class SubmitObjectsRequestValidatorTest {
 
         Author author = new Author();
         author.getAuthorRole().add(new Identifiable("clown", new AssigningAuthority("1.3.14.15", "ISO")));
-        request.getSubmissionSet().setAuthor(author);
+        request.getSubmissionSet().getAuthors().add(author);
         ebXml = transformer.toEbXML(request);
 
         boolean failed = false;

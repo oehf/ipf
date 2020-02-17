@@ -72,17 +72,6 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      */
     protected abstract ConfigType createConfig(String uri, Map<String, Object> parameters) throws Exception;
 
-    /**
-     * Creates a configuration object.
-     *
-     * @param parameters URL parameters.
-     * @return configuration object filled with values from the provided parameter map
-     * @deprecated use {@link #createConfig(String, Map)}
-     */
-    @Deprecated
-    protected ConfigType createConfig(Map<String, Object> parameters) throws Exception {
-        return createConfig(MllpEndpointConfiguration.UNKNOWN_URI, parameters);
-    }
 
     /**
      * Creates an endpoint object.

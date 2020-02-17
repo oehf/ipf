@@ -34,47 +34,6 @@ abstract class AbstractMessage(factory: ModelClassFactory = DefaultModelClassFac
         }
     }
 
-    @Deprecated("use AbstractMessage#getTyped(String, Class)",
-            ReplaceWith("getTyped(structureClass.simpleName, structureClass)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected operator fun <T : Structure> get(structureClass: Class<T>): T {
-        return super.getTyped(structureClass.simpleName, structureClass)
-    }
-
-
-    @Deprecated("use AbstractMessage#getTyped(String, Class)",
-            ReplaceWith("getTyped(structure, structureClass)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected operator fun <T : Structure> get(structure: String, structureClass: Class<T>): T {
-        return super.getTyped(structure, structureClass)
-    }
-
-
-    @Deprecated("use AbstractMessage#getTyped(String, int, Class)",
-            ReplaceWith("getTyped(structureClass.simpleName, rep, structureClass)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected operator fun <T : Structure> get(structureClass: Class<T>, rep: Int): T {
-        return super.getTyped(structureClass.simpleName, rep, structureClass)
-    }
-
-
-    @Deprecated("use AbstractMessage#getTyped(String, int, Class)",
-            ReplaceWith("getTyped(structure, rep, structureClass)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected operator fun <T : Structure> get(structure: String, structureClass: Class<T>, rep: Int): T {
-        return super.getTyped(structure, rep, structureClass)
-    }
-
-
-    @Deprecated("use AbstractGroup#getReps(String)",
-            ReplaceWith("getReps(structureClass.simpleName)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected fun <T : Structure> getReps(structureClass: Class<T>): Int {
-        return super.getReps(structureClass.simpleName)
-    }
-
-
-    @Deprecated("use AbstractGroup#getReps(String)",
-            ReplaceWith("getReps(structure)", "ca.uhn.hl7v2.model.AbstractMessage"))
-    protected fun <T : Structure> getReps(structure: String, structureClass: Class<T>): Int {
-        return super.getReps(structure)
-    }
-
     protected abstract fun structures(
             structures: Map<Class<out Structure>, Cardinality>): Map<Class<out Structure>, Cardinality>
 

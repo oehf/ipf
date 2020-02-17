@@ -31,13 +31,6 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
 
     @Getter private final String[] routes;
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
-        this(component, UNKNOWN_URI, parameters);
-    }
 
     protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);

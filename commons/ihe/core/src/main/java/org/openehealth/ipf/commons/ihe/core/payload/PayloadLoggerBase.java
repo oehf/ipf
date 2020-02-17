@@ -161,42 +161,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     }
 
     /**
-     * @return <code>true</code> if this logging interceptor instance is enabled.
-     * @deprecated use {@link #isEnabled()}
-     */
-    @Deprecated
-    public boolean isLocallyEnabled() {
-        return isEnabled();
-    }
-
-    /**
-     * @param locallyEnabled <code>true</code> when this logging interceptor instance should be enabled.
-     * @deprecated use {@link #setEnabled(boolean)}
-     */
-    @Deprecated
-    public void setLocallyEnabled(boolean locallyEnabled) {
-        setEnabled(locallyEnabled);
-    }
-
-    /**
-     * @return <code>true</code> when logging interceptors are generally enabled.
-     * @see #isEnabled()
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static boolean isGloballyEnabled() {
-        return !Boolean.getBoolean(PROPERTY_DISABLED);
-    }
-
-    /**
-     * @param globallyEnabled <code>true</code> when logging interceptors shall be generally enabled.
-     * @see #setLocallyEnabled(boolean)
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static void setGloballyEnabled(boolean globallyEnabled) {
-        System.setProperty(PROPERTY_DISABLED, Boolean.toString(!globallyEnabled));
-    }
-
-    /**
      * @return maximal allowed count of file creation errors,
      * negative value (the default) means "no limit".
      */

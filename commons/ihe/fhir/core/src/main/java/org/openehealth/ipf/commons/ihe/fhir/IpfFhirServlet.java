@@ -258,9 +258,6 @@ public class IpfFhirServlet extends RestfulServer {
             getFhirContext().setNarrativeGenerator(getDefaultNarrativeGenerator());
         }
 
-        // Provide some more details about the request for downstream processing
-        registerInterceptor(new RequestDetailProvider());
-
         if (logging) {
             registerInterceptor(getLoggingInterceptor());
         }

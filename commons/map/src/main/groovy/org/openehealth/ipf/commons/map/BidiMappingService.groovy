@@ -61,20 +61,6 @@ class BidiMappingService implements MappingService {
         evaluateMappingScripts(scripts)
     }
 
-    /**
-     * @deprecated use #setMappingScript
-     */
-    void addMappingScript(URL script) {
-        evaluateMappingScript(script)
-    }
-
-    /**
-     * @deprecated use #setMappingScript
-     */
-    void addMappingScripts(URL[] scripts) {
-        evaluateMappingScripts(scripts)
-    }
-
     void clearMappings() {
         scripts = []
         map.clear()

@@ -46,16 +46,4 @@ class Hl7ExtensionModule {
         return answer
     }
 
-    /**
-     * Validates a message using {@link HL7v2#validatingProcessor()}
-     *
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing
-     *
-     * @deprecated use {@link HL7v2#validatingProcessor()}
-     */
-    static ProcessorDefinition validateMessage(ProcessorDefinition self) {
-        return self.process(HL7v2.validatingProcessor())
-    }
-    
-
 }

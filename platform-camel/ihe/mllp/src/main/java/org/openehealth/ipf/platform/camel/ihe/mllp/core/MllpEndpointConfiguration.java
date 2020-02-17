@@ -61,14 +61,6 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
     @Getter
     private ConsumerDispatchingInterceptor dispatcher;
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    protected MllpEndpointConfiguration(MllpComponent<?, ?> component, Map<String, Object> parameters) throws Exception {
-        this(component, UNKNOWN_URI, parameters);
-    }
-
     protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);

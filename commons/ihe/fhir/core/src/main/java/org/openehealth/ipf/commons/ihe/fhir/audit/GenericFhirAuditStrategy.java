@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
-import org.openehealth.ipf.commons.ihe.fhir.RequestDetailProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
 import java.util.List;
@@ -40,7 +39,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_OPERATION_HEADER;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_DETAILS;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_RESOURCE_TYPE_HEADER;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
 
 /**
  * Generic Audit Strategy for FHIR interfaces. The audit written is built alongside what is
@@ -72,9 +74,6 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     public GenericFhirAuditDataset enrichAuditDatasetFromRequest(GenericFhirAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         RequestDetails requestDetails = (RequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
-        if (requestDetails == null) {
-            requestDetails = RequestDetailProvider.getRequestDetails();
-        }
 
         String resourceType = (String) parameters.get(FHIR_RESOURCE_TYPE_HEADER);
         if (resourceType == null && requestDetails != null) {

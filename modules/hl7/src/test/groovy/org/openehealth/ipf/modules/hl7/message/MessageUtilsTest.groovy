@@ -162,8 +162,8 @@ public class MessageUtilsTest {
     void testPipeEncode() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = parser.parse(msgText)
-        assert MessageUtils.pipeEncode(msg.MSH) == 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|XYZ_HOSPITAL|||QBP^Q22|11350110|P|2.5'
-        assert MessageUtils.pipeEncode(msg.MSH.messageType) == 'QBP^Q22'
+        assert msg.MSH.encode() == 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|XYZ_HOSPITAL|||QBP^Q22|11350110|P|2.5'
+        assert msg.MSH.messageType.encode() == 'QBP^Q22'
     }
     
     @Test

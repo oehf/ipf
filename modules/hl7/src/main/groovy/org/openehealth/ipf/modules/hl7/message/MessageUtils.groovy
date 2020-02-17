@@ -98,24 +98,6 @@ class MessageUtils {
     }
     
     /**
-     * @return ER7-formatted representation of the type
-     * 
-     * @deprecated use {@link Type#encode()}
-     */
-    static String pipeEncode(Type t) {
-		t.encode()
-    }
-    
-    /**
-     * @return ER7-formatted representation of the segment
-     * 
-     * @deprecated use {@link Segment#encode()}
-     */
-    static String pipeEncode(Segment s) {
-        s.encode()
-    }
-    
-    /**
      * @return event type of the message, e.g. 'ADT'
      */
     static String eventType(Message msg) {
@@ -142,15 +124,6 @@ class MessageUtils {
      */
     static String messageStructure(Message msg) {
         return messageStructure(eventType(msg), triggerEvent(msg), msg.version, msg.parser.hapiContext.modelClassFactory)
-    }
-
-    /**
-     * @param msg
-     * @return acknowledgement for the msg
-     * @deprecated use {@link Message#generateACK()}
-     */
-    static Message ack(Message msg) {
-        return msg.generateACK()
     }
 
     /** 
@@ -361,14 +334,6 @@ class MessageUtils {
             }
         }
         composite
-    }
-    
-    /** 
-     *  @return a hierarchical dump of the message
-     *  @deprecated use {@link Message#printStructure()}
-     */
-    static String dump(Message msg) {
-        msg.printStructure()
     }
 
     // Some stuff rescued from MessageAdapters, creating HL7 messages from resources/streams

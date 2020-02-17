@@ -78,12 +78,6 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         return this;
     }
     
-    @Deprecated
-    public ValidatorAdapterDefinition profile(Object profile) {
-        this.profile = profile;
-        return this;
-    }
-    
     /**
      * Defines the profile for the validation via the given expression 
      * @param profileExpression
