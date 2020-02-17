@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd
 
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse
 
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.chPiddRequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.chPiddResponseValidator
@@ -28,10 +27,8 @@ class ChPiddTestRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
         from('ch-pidd:ch-pidd-service1')
-            .process(chPiddRequestValidator())
-            .process {
-                it.out.body = new DownloadResponse(requestID : '456')
-            }
-            .process(chPiddResponseValidator())
+                .process(chPiddRequestValidator())
+                .transform().constant(new org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse(requestID: '456'))
+                .process(chPiddResponseValidator())
     }
 }

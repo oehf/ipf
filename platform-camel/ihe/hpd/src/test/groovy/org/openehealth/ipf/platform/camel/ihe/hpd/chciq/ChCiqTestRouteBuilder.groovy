@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.chciq
 
 import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
 
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.chCiqRequestValidator
@@ -29,9 +30,7 @@ class ChCiqTestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         from('ch-ciq:ch-ciq-service1')
             .process(chCiqRequestValidator())
-            .process {
-                it.out.body = new BatchResponse(requestID : '456')
-            }
+                .transform().constant(new BatchResponse(requestID : '456'))
             .process(chCiqResponseValidator())
     }
 }

@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -60,7 +59,7 @@ class Iti47TestRouteBuilder extends RouteBuilder {
 
 
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
 
         int freePort = ServletServer.getFreePort()
 
@@ -82,45 +81,44 @@ class Iti47TestRouteBuilder extends RouteBuilder {
 
 
         from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
-            .process {
-                Exchanges.resultMessage(it).body = '<PRPA_IN201306UV02 xmlns="urn:hl7-org:v3" from="PDSupplier"/>'
-            }
+            .transform().constant('<PRPA_IN201306UV02 xmlns="urn:hl7-org:v3" from="PDSupplier"/>')
 
 
         // check Hl7v3 exception handling (NAK with issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak1')
-            .throwException(new Hl7v3Exception(
-                    message: 'message1',
-                    detectedIssueEventCode: 'ISSUE',
-                    detectedIssueManagementCode: 'ABCD',
-                    typeCode: 'XX',
-                    statusCode: 'revised',
-                    queryResponseCode: 'YY',
-                    acknowledgementDetailCode: 'FEHLER'))
+            .process { throw Hl7v3Exception.make(
+                    'message1',
+                    null,
+                    'XX',
+                    'revised',
+                    'FEHLER',
+                    'YY',
+                    'ISSUE',
+                    'ABCD')
+            }
 
 
         // check Hl7v3 exception handling (NAK without issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak2')
-            .throwException(new Hl7v3Exception(
-                    message: 'message1',
-                    detectedIssueEventCode: 'ISSUE',
-                    typeCode: 'XX',
-                    statusCode: 'revised',
-                    queryResponseCode: 'YY',
-                    acknowledgementDetailCode: 'FEHLER'))
+                .process {
+                    throw Hl7v3Exception.make(
+                            'message1',
+                            null,
+                            'XX',
+                            'revised',
+                            'FEHLER',
+                            'YY',
+                            'ISSUE')
+                }
 
 
         // check validation exception handling
         from('pdqv3-iti47:pdqv3-iti47-serviceNakValidate')
-            .process {
-                throw new ValidationException('message2')
-            }
+             .throwException(new ValidationException('message2'))
 
 
         from("pdq-iti21://0.0.0.0:${freePort}?supportInteractiveContinuation=true&interactiveContinuationStorage=#hl7v2ContinuationStorage")
-                .process {
-            Exchanges.resultMessage(it).body = V2_RESPONSE
-        }
+                .transform().constant(V2_RESPONSE)
 
         // routes for v3-v2 continuation interoperability test
         from('pdqv3-iti47:pdqv3-iti47-serviceV2Conti')

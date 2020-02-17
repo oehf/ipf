@@ -38,14 +38,12 @@ class Iti45TestRouteBuilder extends RouteBuilder {
 
 
         from('pixv3-iti45:pixv3-iti45-service2?audit=false')
-            .process {
-                Exchanges.resultMessage(it).body = '''
+            .transform().constant('''
                     <!-- comment 1 -->
                     <!-- comment 2 -->
                     <PRPA_IN201310UV02 xmlns="urn:hl7-org:v3" from="PIX Manager"/>
                     <!-- comment 3 -->
-                '''
-            }
+                ''')
 
     }
 }
