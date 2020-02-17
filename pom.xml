@@ -52,13 +52,12 @@
         <assembly-plugin-version>3.1.1</assembly-plugin-version>
         <build-helper-version>3.0.0</build-helper-version>
         <compiler-plugin-version>3.8.1</compiler-plugin-version>
-        <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.8.1</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
-        <javadoc-plugin-version>3.1.0</javadoc-plugin-version>
+        <javadoc-plugin-version>3.1.1</javadoc-plugin-version>
         <jaxb-plugin-version>2.4</jaxb-plugin-version>
         <lombok-plugin-version>1.18.8.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
@@ -80,21 +79,20 @@
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>28.2-jre</guava-version>
-        <httpclient4-version>4.5.10</httpclient4-version>
-        <jackson-version>2.10.0</jackson-version>
+        <httpclient4-version>4.5.11</httpclient4-version>
+        <jackson-version>2.10.2</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.19.v20190610</jetty-version>
+        <jetty-version>9.4.26.v20200117</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.12.1</log4j-version>
-        <lombok-version>1.18.10</lombok-version>
-        <mockito-version>2.22.0</mockito-version>
-        <quartz-version>2.2.3</quartz-version>
+        <lombok-version>1.18.12</lombok-version>
+        <mockito-version>3.2.4</mockito-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
-        <tomcat-version>9.0.30</tomcat-version>
-        <woodstox-version>5.2.1</woodstox-version>
+        <tomcat-version>9.0.31</tomcat-version>
+        <woodstox-version>6.0.3</woodstox-version>
         <xbean-spring-version>4.14</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -326,17 +324,6 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${quartz-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>c3p0</groupId>
-                        <artifactId>c3p0</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>joda-time</groupId>
@@ -778,11 +765,6 @@
                     <version>${enforcer-plugin-version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-eclipse-plugin</artifactId>
-                    <version>${eclipse-plugin-version}</version>
-                </plugin>
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build-helper-version}</version>
@@ -971,22 +953,6 @@
             </plugin>
             -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>${eclipse-plugin-version}</version>
-                <configuration>
-                    <projectnatures>
-                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
-                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
-                    </projectnatures>
-                    <downloadSources>true</downloadSources>
-                    <ajdtVersion>none</ajdtVersion>
-                    <classpathContainers>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
                 <version>${github-site-version}</version>
@@ -1045,28 +1011,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
 
         </plugins>
         <resources>
