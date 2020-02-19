@@ -60,7 +60,10 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam event;
     @Getter @Setter private TokenOrListParam securityLabel;
     @Getter @Setter private TokenOrListParam format;
-    @Getter @Setter private ReferenceOrListParam related;
+
+    // This is normally a ReferenceParameter but we assume that we are chaining this
+    // with identifier
+    @Getter @Setter private TokenOrListParam related;
     @Getter @Setter private TokenParam _id;
 
     @Getter @Setter private SortSpec sortSpec;

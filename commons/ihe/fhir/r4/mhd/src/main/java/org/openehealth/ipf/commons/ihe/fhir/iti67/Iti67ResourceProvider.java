@@ -88,8 +88,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = STU3_SECURITY_LABEL) TokenOrListParam label,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
-            @OptionalParam(name = DocumentReference.SP_RELATED) ReferenceOrListParam related,
-            @OptionalParam(name = STU3_RELATED_ID) ReferenceOrListParam relatedId,
+            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "identifier"}) ReferenceOrListParam related,
+            @OptionalParam(name = STU3_RELATED_ID) TokenOrListParam relatedId,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -101,8 +101,16 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         // Be graceful and accept STU3 parameters as well
         DateRangeParam dateParam = date != null ? date : indexed;
         TokenOrListParam categoryParam = category != null ? category : class_;
-        ReferenceOrListParam relatedParam = related != null ? related : relatedId;
         TokenOrListParam securityLabelParam = securityLabel != null ? securityLabel : label;
+
+        TokenOrListParam relatedTokenParam = related != null ?
+                new TokenOrListParam() :
+                relatedId;
+        if (related != null) {
+            related.getValuesAsQueryTokens().stream()
+                    .map(referenceParam -> referenceParam.toTokenParam(getFhirContext()))
+                    .forEach(relatedTokenParam::addOr);
+        }
 
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)
@@ -116,7 +124,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabel)
                 .format(format)
-                .related(relatedParam)
+                .related(relatedTokenParam)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)
