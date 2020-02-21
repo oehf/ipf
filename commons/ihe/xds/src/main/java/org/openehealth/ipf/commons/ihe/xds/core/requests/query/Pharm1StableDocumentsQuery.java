@@ -93,31 +93,4 @@ public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery 
     public List<Person> getTypedAuthorPersons() {
         return QuerySlotHelper.parse(this.authorPersons, Person.class);
     }
-
-    // TODO:QLIG
-    /**
-     * FMTP  FindMedicationTreatmentPlans
-     * FP    FindPrescriptions
-     * FD    FindDispenses
-     * FMA   FindMedicationAdministrations
-     * FPV   FindPrescriptionsForValidation
-     * FPD   FindPrescriptionsForDispense
-     * FML   FindMedicationList
-     */
-    // PatientId                  x FMTP FP FD FMA FPV FPD FML
-    // EntryUUID                  x FMTP FP FD FMA FPV FPD
-    // UniqueId                   x FMTP FP FD FMA FPV FPD
-    // PracticeSettingCode        x FMTP FP FD FMA FPV FPD
-    // CreationTime               x FMTP FP FD FMA FPV FPD
-    // ServiceStartTime           x FMTP FP FD FMA FPV FPD FML
-    // ServiceStopTime            x FMTP FP FD FMA FPV FPD FML
-    // HealthcareFacilityTypeCode x FMTP FP FD FMA FPV FPD
-    // EventCodeList              x FMTP FP FD FMA FPV FPD
-    // ConfidentialityCode        x FMTP FP FD FMA FPV FPD
-    // AuthorPerson               x FMTP FP FD FMA FPV FPD
-    // Status                     x FMTP FP FD FMA FPV FPD FML
-    // MetadataLevel              x FMTP FP FD FMA FPV FPD FML
-    // FormatCode                   FML
-    // Type                         FML
-
 }
