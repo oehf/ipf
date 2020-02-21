@@ -81,9 +81,9 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "fhirServletRegistration")
     @ConditionalOnWebApplication
-    public ServletRegistrationBean fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
+    public ServletRegistrationBean<IpfFhirServlet> fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
         String urlMapping = config.getFhirMapping();
-        ServletRegistrationBean registration = new ServletRegistrationBean(camelFhirServlet, urlMapping);
+        ServletRegistrationBean<IpfFhirServlet> registration = new ServletRegistrationBean<>(camelFhirServlet, urlMapping);
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         registration.setLoadOnStartup(servletProperties.getLoadOnStartup());
         registration.setName(servletProperties.getName());

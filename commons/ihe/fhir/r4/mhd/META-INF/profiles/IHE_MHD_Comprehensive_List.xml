@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+
+    <text>
+        <status value="additional" />
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            StructureDefinition for List Resource supporting XDS Folders in the
+            IHE IT Infrastructure Technical Framework Supplement <a href="http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)">Mobile access to Health Documents (MHD) Rev. 3.1</a>.
+            The IHE MHD Profile text is Normative, this conformance resource is Informative.</div>
+    </text>
+    <url value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Comprehensive_List" />
+    <name value="IHE_MHD_Comprehensive_List" />
+    <title value="IHE MHD Profile on List with Comprehensive Metadata (Folder)" />
+    <status value="active" />
+    <experimental value="false" />
+    <date value="2019-07-05" />
+    <publisher value="Integrating the Healthcare Enterprise (IHE)" />
+    <contact>
+        <name value="IHE" />
+        <telecom>
+            <system value="url" />
+            <value value="http://ihe.net" />
+        </telecom>
+    </contact>
+    <contact>
+        <name value="John Moehrke" />
+        <telecom>
+            <system value="email" />
+            <value value="JohnMoehrke@gmail.com" />
+        </telecom>
+    </contact>
+    <description value="Profile on List for use as a Document Folder based on IHE IT Infrastructure Technical Framework Supplement - Mobile access to Health Documents (MHD) Rev. 3.1.  See http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)  The IHE MHD Profile text is Normative, this conformance resource is Informative." />
+
+    <copyright value="IHE http://www.ihe.net/Governance/#Intellectual_Property" />
+    <fhirVersion value="4.0.0" />
+    <kind value="resource" />
+    <abstract value="false" />
+    <type value="List" />
+    <baseDefinition value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Minimal_List" />
+    <derivation value="constraint" />
+    <differential>
+        <element id="List.title">
+            <path value="List.title" />
+            <min value="1" />
+        </element>
+        <element id="List.code">
+            <path value="List.code" />
+            <comment value="code is Required." />
+            <min value="1" />
+        </element>
+        <element id="List.subject">
+            <path value="List.subject" />
+            <comment value="URL Points to an existing Patient resource representing Affinity Domain Patient." />
+            <min value="1" />
+        </element>
+    </differential>
+</StructureDefinition>

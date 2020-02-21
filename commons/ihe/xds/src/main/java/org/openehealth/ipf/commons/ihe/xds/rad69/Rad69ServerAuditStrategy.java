@@ -15,22 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.rad69;
 
+import java.util.stream.Stream;
+
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
-
-import java.util.stream.Stream;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.event.DicomInstancesTransferredEventBuilder;
 
 /**
- * Audit strategy for RAD-69.
+ * Audit strategy for Retrieve Imaging Document Set [RAD-69] as "Imaging Document Source" actor
  *
  * @author Clay Sebourn
  * @author Christian Ohr
+ * @author Eugen Fischer
  */
 public class Rad69ServerAuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
@@ -39,20 +40,27 @@ public class Rad69ServerAuditStrategy extends XdsIRetrieveAuditStrategy30 {
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+    public AuditMessage[] makeAuditMessage(
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
+
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
                 .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
-    private AuditMessage doMakeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Status status) {
-        return new XdsPHIExportBuilder(auditContext, auditDataset,
+    private static AuditMessage doMakeAuditMessage(
+            final AuditContext auditContext,
+            final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
+            final Status status) {
+
+        return new DicomInstancesTransferredEventBuilder(auditContext, auditDataset,
                 auditDataset.getEventOutcomeIndicator(status), null,
                 EventActionCode.Read,
                 XdsEventTypeCode.RetrieveImagingDocumentSet, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .addDocumentIds(auditDataset, status, false)
+                .addTransferredStudy(auditDataset, status, false)
                 .getMessage();
     }
 

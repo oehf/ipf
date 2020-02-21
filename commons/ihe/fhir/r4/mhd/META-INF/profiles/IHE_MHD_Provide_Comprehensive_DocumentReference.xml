@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+
+    <text>
+        <status value="additional" />
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            StructureDefinition for DocumentRefeence as represented in the Provide Document Bundle (ITI-65) transaction with Comprehensive (XDS-on-FHIR) metadata compliance in the
+            IHE IT Infrastructure Technical Framework Supplement <a href="http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)">Mobile access to Health Documents (MHD) Rev. 2.3</a>.
+            The IHE MHD Profile text is Normative, this conformance resource is Informative.
+        </div>
+    </text>
+    <url value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Comprehensive_DocumentReference" />
+    <name value="IHE_MHD_Provide_Comprehensive_DocumentReference" />
+    <title value="IHE MHD Profile on DocumentReference (DocumentEntry) when used in the Provide Transaction with Comprehensive (aka XDS-on-FHIR) Metadata, see Table 3:4.3.1-3." />
+    <status value="active" />
+    <experimental value="false" />
+    <date value="2019-07-05" />
+    <publisher value="Integrating the Healthcare Enterprise (IHE)" />
+    <contact>
+        <name value="IHE" />
+        <telecom>
+            <system value="url" />
+            <value value="http://ihe.net" />
+        </telecom>
+    </contact>
+    <contact>
+        <name value="John Moehrke" />
+        <telecom>
+            <system value="email" />
+            <value value="JohnMoehrke@gmail.com" />
+        </telecom>
+    </contact>
+    <description value="Profile on DocumentReference based on IHE IT Infrastructure Technical Framework Supplement - Mobile access to Health Documents (MHD) Rev. 3.1.  See http://wiki.ihe.net/index.php/Mobile_access_to_Health_Documents_(MHD)   The IHE MHD Profile text is Normative, this conformance resource is Informative." />
+
+    <copyright value="IHE http://www.ihe.net/Governance/#Intellectual_Property" />
+    <fhirVersion value="4.0.0" />
+    <kind value="resource" />
+    <abstract value="false" />
+    <type value="DocumentReference" />
+    <baseDefinition value="http://ihe.net/fhir/StructureDefinition/IHE_MHD_Provide_Minimal_DocumentReference" />
+    <derivation value="constraint" />
+    <differential>
+        <element id="DocumentReference.type">
+            <path value="DocumentReference.type" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.category">
+            <path value="DocumentReference.category" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.subject">
+            <path value="DocumentReference.subject" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.date">
+            <path value="DocumentReference.date" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.securityLabel">
+            <path value="DocumentReference.securityLabel" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.content.attachment.language">
+            <path value="DocumentReference.content.attachment.language" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.content.attachment.creation">
+            <path value="DocumentReference.content.attachment.creation" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.content.format">
+            <path value="DocumentReference.content.format" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.context.facilityType">
+            <path value="DocumentReference.context.facilityType" />
+            <min value="1" />
+        </element>
+        <element id="DocumentReference.context.practiceSetting">
+            <path value="DocumentReference.context.practiceSetting" />
+            <min value="1" />
+        </element>
+    </differential>
+</StructureDefinition>

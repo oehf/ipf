@@ -21,6 +21,10 @@ import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionClientReques
 import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector;
 
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_COMPREHENSIVE_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_LEGACY_METADATA_PROFILE;
+
 /**
  * Standard Configuration for Iti65Component.
  *
@@ -39,7 +43,10 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
                 new Iti65Validator());
-        setStaticConsumerSelector(new BundleProfileSelector(Iti65Constants.ITI65_PROFILE));
+        setStaticConsumerSelector(new BundleProfileSelector(
+                ITI65_COMPREHENSIVE_METADATA_PROFILE,
+                ITI65_MINIMAL_METADATA_PROFILE,
+                ITI65_LEGACY_METADATA_PROFILE));
     }
 
     @Override

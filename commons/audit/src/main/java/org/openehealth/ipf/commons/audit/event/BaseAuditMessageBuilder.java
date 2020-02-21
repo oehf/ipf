@@ -15,16 +15,39 @@
  */
 package org.openehealth.ipf.commons.audit.event;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.*;
-import org.openehealth.ipf.commons.audit.types.*;
+import static java.util.Objects.requireNonNull;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static java.util.Objects.requireNonNull;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
+import org.openehealth.ipf.commons.audit.model.DicomObjectDescriptionType;
+import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.types.AuditSource;
+import org.openehealth.ipf.commons.audit.types.EventId;
+import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.MediaType;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 /**
  * AuditMessage builder with some protected helper methods that are called by subclasses in order to add
@@ -342,23 +365,26 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
     /**
-     * Adds a Participant Object representing a studies involved in the event
+     * Adds a Participant Object representing a study involved in the event
      *
      * @param studyId       Identifier of the involved study
      * @param objectDetails objectDetails
      * @return this
      */
-    public T addStudyParticipantObject(String studyId, List<TypeValuePairType> objectDetails) {
+    public T addStudyParticipantObject(final String studyId, final List<TypeValuePairType> objectDetails) {
+        final DicomObjectDescriptionType dicomObjectDescriptionType = new DicomObjectDescriptionType();
+        dicomObjectDescriptionType.getStudyIDs().add(studyId);
         return addParticipantObjectIdentification(
                 ParticipantObjectIdTypeCode.StudyInstanceUID,
                 studyId,
                 null,
                 objectDetails,
-                requireNonNull(studyId, "study ID must be not null"),
+                studyId,
                 ParticipantObjectTypeCode.System,
                 ParticipantObjectTypeCodeRole.Report,
                 null,
-                null);
+                null,
+                Collections.singletonList(dicomObjectDescriptionType));
     }
 
 
@@ -376,20 +402,51 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @param objectSensitivity   The Participant Object sensitivity
      * @return this
      */
-    public T addParticipantObjectIdentification(ParticipantObjectIdType objectIDTypeCode,
-                                                String objectName,
-                                                byte[] objectQuery,
-                                                List<TypeValuePairType> objectDetails,
-                                                String objectID,
-                                                ParticipantObjectTypeCode objectTypeCode,
-                                                ParticipantObjectTypeCodeRole objectTypeCodeRole,
-                                                ParticipantObjectDataLifeCycle objectDataLifeCycle,
-                                                String objectSensitivity) {
-        ParticipantObjectIdentificationType poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
+    public T addParticipantObjectIdentification(final ParticipantObjectIdType objectIDTypeCode,
+            final String objectName,
+            final byte[] objectQuery,
+            final List<TypeValuePairType> objectDetails,
+            final String objectID,
+            final ParticipantObjectTypeCode objectTypeCode,
+            final ParticipantObjectTypeCodeRole objectTypeCodeRole,
+            final ParticipantObjectDataLifeCycle objectDataLifeCycle,
+            final String objectSensitivity) {
+        return addParticipantObjectIdentification(
+                objectIDTypeCode, objectName, objectQuery, objectDetails,
+                objectID, objectTypeCode, objectTypeCodeRole, objectDataLifeCycle, objectSensitivity,
+                Collections.emptyList());
+    }
+
+    /**
+     * Create and add an Participant Object Identification block to this audit event message
+     *
+     * @param objectIDTypeCode    The Participant Object ID Type code
+     * @param objectName          The Participant Object Name
+     * @param objectQuery         The Participant Object Query data
+     * @param objectDetails       The Participant Object detail
+     * @param objectID            The Participant Object ID
+     * @param objectTypeCode      The Participant Object Type Code
+     * @param objectTypeCodeRole  The Participant Object Type Code's ROle
+     * @param objectDataLifeCycle The Participant Object Data Life Cycle
+     * @param objectSensitivity   The Participant Object sensitivity
+     * @param dicomDescriptions   The Participant Object DICOM descriptions
+     * @return this
+     */
+    public T addParticipantObjectIdentification(final ParticipantObjectIdType objectIDTypeCode,
+                                                final String objectName,
+                                                final byte[] objectQuery,
+                                                final List<TypeValuePairType> objectDetails,
+                                                final String objectID,
+                                                final ParticipantObjectTypeCode objectTypeCode,
+                                                final ParticipantObjectTypeCodeRole objectTypeCodeRole,
+                                                final ParticipantObjectDataLifeCycle objectDataLifeCycle,
+                                                final String objectSensitivity,
+                                                final List<DicomObjectDescriptionType> dicomDescriptions) {
+        final ParticipantObjectIdentificationType poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
         poit.setParticipantObjectName(objectName);
         poit.setParticipantObjectQuery(objectQuery);
-        if (objectDetails != null) {
+        if (null != objectDetails) {
             objectDetails.stream()
                     .filter(Objects::nonNull)
                     .forEach(objectDetail -> poit.getParticipantObjectDetails().add(objectDetail));
@@ -398,6 +455,11 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
         poit.setParticipantObjectTypeCodeRole(objectTypeCodeRole);
         poit.setParticipantObjectDataLifeCycle(objectDataLifeCycle);
         poit.setParticipantObjectSensitivity(objectSensitivity);
+        if (null != dicomDescriptions) {
+            dicomDescriptions.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(description -> poit.getParticipantObjectDescriptions().add(description));
+        }
         return addParticipantObjectIdentification(poit);
     }
 

@@ -97,7 +97,7 @@ class TestRad69 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.eventIdentification, '110106', 'RAD-69', EventActionCode.Read, outcome)
+        checkEvent(message.eventIdentification, '110104', 'RAD-69', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
         checkDestination(message.activeParticipants[1], false, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
@@ -115,7 +115,7 @@ class TestRad69 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.eventIdentification, '110107', 'RAD-69', EventActionCode.Create, outcome)
+        checkEvent(message.eventIdentification, '110103', 'RAD-69', EventActionCode.Create, outcome)
         checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
         checkDestination(message.activeParticipants[1], false, false)
         checkImageDocument(message.participantObjectIdentifications[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')

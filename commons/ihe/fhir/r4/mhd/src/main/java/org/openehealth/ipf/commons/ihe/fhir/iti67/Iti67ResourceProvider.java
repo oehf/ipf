@@ -17,14 +17,29 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.IncludeParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceOrListParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IAnyResource;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,22 +64,32 @@ import java.util.Set;
  */
 public class Iti67ResourceProvider extends AbstractPlainProvider {
 
+    private static final String STU3_INDEXED = "indexed";
+    private static final String STU3_CLASS = "class";
+    private static final String STU3_RELATED_ID = "related-id";
+    private static final String STU3_SECURITY_LABEL = "securitylabel";
+
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
     public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
+            @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
+            @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
+            @OptionalParam(name = STU3_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
             @OptionalParam(name = DocumentReference.SP_PERIOD) DateRangeParam period,
             @OptionalParam(name = DocumentReference.SP_FACILITY) TokenOrListParam facility,
             @OptionalParam(name = DocumentReference.SP_EVENT) TokenOrListParam event,
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
+            @OptionalParam(name = STU3_SECURITY_LABEL) TokenOrListParam label,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
-            @OptionalParam(name = DocumentReference.SP_RELATED) ReferenceOrListParam related,
+            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "identifier"}) ReferenceOrListParam related,
+            @OptionalParam(name = STU3_RELATED_ID) TokenOrListParam relatedId,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -73,10 +98,25 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
+        // Be graceful and accept STU3 parameters as well
+        DateRangeParam dateParam = date != null ? date : indexed;
+        TokenOrListParam categoryParam = category != null ? category : class_;
+        TokenOrListParam securityLabelParam = securityLabel != null ? securityLabel : label;
+
+        TokenOrListParam relatedTokenParam = related != null ?
+                new TokenOrListParam() :
+                relatedId;
+        if (related != null) {
+            related.getValuesAsQueryTokens().stream()
+                    .map(referenceParam -> referenceParam.toTokenParam(getFhirContext()))
+                    .forEach(relatedTokenParam::addOr);
+        }
+
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
                 .status(status)
-                .date(date)
-                .category(category)
+                .identifier(identifier)
+                .date(dateParam)
+                .category(categoryParam)
                 .type(type)
                 .setting(setting)
                 .period(period)
@@ -84,7 +124,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabel)
                 .format(format)
-                .related(related)
+                .related(relatedTokenParam)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)

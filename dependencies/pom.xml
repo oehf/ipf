@@ -9,15 +9,16 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.6.1</brave-version>
-        <camel-version>2.24.3</camel-version>
+        <brave-version>5.9.2</brave-version>
+        <camel-version>2.25.0</camel-version>
         <cxf-version>3.3.4</cxf-version>
-        <groovy-version>2.5.8</groovy-version>
+        <groovy-version>2.5.9</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>4.1.0</hapi-fhir-version>
+        <hapi-fhir-version>4.2.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
+        <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
@@ -25,7 +26,7 @@
         <ph-commons-version>9.3.8</ph-commons-version>
 
         <saxon-he-version>9.9.1-1</saxon-he-version>
-        <slf4j-version>1.7.28</slf4j-version>
+        <slf4j-version>1.7.30</slf4j-version>
         <spring-version>5.1.12.RELEASE</spring-version>
         <spring-boot-version>2.1.11.RELEASE</spring-boot-version>
         <vertx-version>3.8.4</vertx-version>
@@ -618,9 +619,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.openehealth.ipf.oht.mdht</groupId>
-                <artifactId>ipf-oht-mdht-uml-cda</artifactId>
-                <version>${ipf-oht-mdht-version}</version>
+                <groupId>org.openhealthtools.mdht.cda</groupId>
+                <artifactId>org.openhealthtools.mdht.uml.cda</artifactId>
+                <version>${oht-mdht-cda-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>
@@ -859,22 +860,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-audit</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-r4-audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-mhd</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-r4-mhd</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-r4-pixpdq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-test</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-r4-test</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
@@ -948,7 +949,7 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
-                <artifactId>ipf-fhir-dstu2-spring-boot-starter</artifactId>
+                <artifactId>ipf-fhir-r4-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -1215,6 +1216,14 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>projects.suisse-open-exchange.healthcare-rel</id>
+            <name>projects.suisse-open-exchange.healthcare-releases</name>
+            <url>https://projects.suisse-open-exchange.healthcare/artifactory/releases</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

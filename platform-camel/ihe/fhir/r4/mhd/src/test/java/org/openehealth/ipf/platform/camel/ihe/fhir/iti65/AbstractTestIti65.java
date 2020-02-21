@@ -51,7 +51,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     protected Bundle provideAndRegister() throws Exception {
         Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile(Iti65Constants.ITI65_PROFILE);
+        bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 
