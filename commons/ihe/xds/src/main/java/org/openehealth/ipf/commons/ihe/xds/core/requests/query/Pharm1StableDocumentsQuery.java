@@ -31,8 +31,9 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Pharm1StableDocumentsQuery", propOrder = {
-        "authorPersons", "creationTime", "confidentialityCodes", "eventCodes",
-        "uuids", "healthcareFacilityTypeCodes", "practiceSettingCodes", "uniqueIds"})
+        "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
+        "confidentialityCodes", "eventCodes", "uuids", "healthcareFacilityTypeCodes",
+        "practiceSettingCodes", "uniqueIds"})
 @XmlRootElement(name = "abstractPharm1StableDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
@@ -46,6 +47,8 @@ public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery 
     @XmlElement(name = "practiceSettingCode")
     @Getter @Setter private List<Code> practiceSettingCodes;
     @Getter private final TimeRange creationTime = new TimeRange();
+    @Getter private final TimeRange serviceStartTime = new TimeRange();
+    @Getter private final TimeRange serviceStopTime = new TimeRange();
     @XmlElement(name = "healthcareFacilityTypeCode")
     @Getter @Setter private List<Code> healthcareFacilityTypeCodes;
     @XmlElement(name = "eventCode")

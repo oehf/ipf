@@ -19,15 +19,13 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationListQuery;
 
 /**
  * Transforms between {@link FindMedicationListQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Quentin Ligier
  */
-public class FindMedicationListQueryTransformer extends AbstractStoredQueryTransformer<FindMedicationListQuery> {
+public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTransformer<FindMedicationListQuery> {
 
     /**
      * Transforms the query into its EbXML representation.
@@ -45,21 +43,16 @@ public class FindMedicationListQueryTransformer extends AbstractStoredQueryTrans
         }
 
         super.toEbXML(query, ebXML);
-
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-
-        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, toHL7(query.getServiceStartTime().getFrom()));
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, toHL7(query.getServiceStartTime().getTo()));
-
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, toHL7(query.getServiceStopTime().getFrom()));
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, toHL7(query.getServiceStopTime().getTo()));
 
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
-        slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
-        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_FROM, toHL7(query.getServiceStart().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_TO, toHL7(query.getServiceStart().getTo()));
+
+        slots.fromNumber(DOC_ENTRY_SERVICE_END_FROM, toHL7(query.getServiceEnd().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_END_TO, toHL7(query.getServiceEnd().getTo()));
     }
 
     /**
@@ -78,21 +71,15 @@ public class FindMedicationListQueryTransformer extends AbstractStoredQueryTrans
         }
 
         super.fromEbXML(query, ebXML);
-
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-
-        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-
-        query.getServiceStartTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_START_TIME_FROM));
-        query.getServiceStartTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_START_TIME_TO));
-
-        query.getServiceStopTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
-        query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
 
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
-        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
-        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
+
+        query.getServiceStart().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_START_FROM));
+        query.getServiceStart().setTo(slots.toNumber(DOC_ENTRY_SERVICE_START_TO));
+
+        query.getServiceEnd().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_END_FROM));
+        query.getServiceEnd().setTo(slots.toNumber(DOC_ENTRY_SERVICE_END_TO));
     }
 }
