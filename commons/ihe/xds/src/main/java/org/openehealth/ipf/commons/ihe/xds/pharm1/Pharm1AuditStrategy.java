@@ -36,9 +36,9 @@ public class Pharm1AuditStrategy extends XdsQueryAuditStrategy30 {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsQueryAuditDataset auditDataset) {
-        return new XdsQueryInformationBuilder(auditContext, auditDataset, XdsEventTypeCode.RegistryStoredQuery, auditDataset.getPurposesOfUse())
+        return new XdsQueryInformationBuilder(auditContext, auditDataset, XdsEventTypeCode.QueryPharmacyDocuments, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.getPatientId())
-                .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.RegistryStoredQuery)
+                .setQueryParameters(auditDataset, XdsParticipantObjectIdTypeCode.QueryPharmacyDocuments)
                 .getMessages();
     }
 }
