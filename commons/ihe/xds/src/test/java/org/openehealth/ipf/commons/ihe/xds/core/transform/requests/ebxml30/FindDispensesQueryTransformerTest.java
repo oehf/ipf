@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -50,7 +51,7 @@ public class FindDispensesQueryTransformerTest {
         transformer = new FindDispensesQueryTransformer();
 
         query = new FindDispensesQuery();
-        query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("uni3", "uniType3")));
         query.setHomeCommunityId("12.21.41");
         QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
@@ -86,7 +87,7 @@ public class FindDispensesQueryTransformerTest {
 
         assertEquals(QueryType.FIND_DISPENSES.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
-        assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
+        assertEquals(Collections.singletonList("'id3^^^&uni3&uniType3'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
         List<EbXMLSlot> confidentialitySlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, confidentialitySlots.size());

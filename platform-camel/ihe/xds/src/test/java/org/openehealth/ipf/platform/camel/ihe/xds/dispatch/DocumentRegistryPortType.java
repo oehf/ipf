@@ -79,4 +79,22 @@ public interface DocumentRegistryPortType {
             SubmitObjectsRequest body
     );
 
+    /**
+     * Performs a stored query according to the PHARM-1 specification.
+     * @param body
+     *          the query request.
+     * @return the query response.
+     */
+    @WebResult(name = "AdhocQueryResponse",
+            targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0",
+            partName = "body")
+    @Action(input = "urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments",
+            output = "urn:ihe:pharm:cmpd:2010:QueryPharmacyDocumentsResponse")
+    @WebMethod(operationName = "CommunityPharmacyManager_QueryPharmacyDocuments")
+    public AdhocQueryResponse communityPharmacyManagerQueryPharmacyDocuments(
+            @WebParam(partName = "body",
+                    name = "AdhocQueryRequest",
+                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+            AdhocQueryRequest body
+    );
 }

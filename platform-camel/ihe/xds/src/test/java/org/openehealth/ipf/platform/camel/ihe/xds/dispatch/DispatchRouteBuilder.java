@@ -40,6 +40,8 @@ public class DispatchRouteBuilder extends RouteBuilder {
                     .to("direct:handle-iti18")
                 .when(header(CxfConstants.OPERATION_NAME).isEqualTo("DocumentRegistry_RegisterDocumentSet-b"))
                     .to("direct:handle-iti42")
+                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("CommunityPharmacyManager_QueryPharmacyDocuments"))
+                    .to("direct:handle-pharm1")
                 .otherwise()
                     .to("direct:unsupportedOperation");
 
@@ -64,6 +66,17 @@ public class DispatchRouteBuilder extends RouteBuilder {
                 })
                 .convertBodyTo(RegistryResponseType.class)
                 .process(XdsCamelValidators.iti42ResponseValidator());
+
+        from("direct:handle-pharm1")
+                .process(XdsCamelValidators.pharm1RequestValidator())
+                .transform(new Expression() {
+                    @Override
+                    public <T> T evaluate(Exchange exchange, Class<T> type) {
+                        return (T) SampleData.createQueryResponseWithObjRef();
+                    }
+                })
+                .convertBodyTo(AdhocQueryResponse.class)
+                .process(XdsCamelValidators.pharm1ResponseValidator());
 
         from("direct:unsupportedOperation")
                 .throwException(new SOAPFaultException(SOAPFactory.newInstance().createFault(
