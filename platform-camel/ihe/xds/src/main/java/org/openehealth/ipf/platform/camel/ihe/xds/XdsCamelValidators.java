@@ -565,4 +565,40 @@ public abstract class XdsCamelValidators {
     public static Processor rad75ResponseValidator() {
         return RAD_75_RESPONSE_VALIDATOR;
     }
+
+    private static final Processor PHARM_1_REQUEST_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLAdhocQueryRequest30 message =
+                new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
+        new AdhocQueryRequestValidator().validate(message, PHARM_1);
+    };
+
+    private static final Processor PHARM_1_RESPONSE_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLQueryResponse30 message =
+                new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
+        new QueryResponseValidator().validate(message, PHARM_1);
+    };
+
+    /**
+     * Returns a validating processor for PHARM-1 request messages.
+     *
+     * @return PHARM_1_REQUEST_VALIDATOR
+     */
+    public static Processor pharm1RequestValidator() {
+        return PHARM_1_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for PHARM-1 response messages.
+     *
+     * @return PHARM_1_RESPONSE_VALIDATOR
+     */
+    public static Processor pharm1ResponseValidator() {
+        return PHARM_1_RESPONSE_VALIDATOR;
+    }
 }

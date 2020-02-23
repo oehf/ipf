@@ -44,6 +44,7 @@ public enum XdsEventTypeCode implements EventType, EnumeratedCodedValue<EventTyp
     CrossGatewayDocumentProvide("ITI-80", "CrossGatewayDocumentProvide"),
     RemoveDocuments("ITI-86", "Remove Documents"),
     RestrictedUpdateDocumentSet("ITI-92", "Restricted Update Document Set"),
+    QueryPharmacyDocuments("PHARM-1", "Query Pharmacy Documents"),
     RetrieveImagingDocumentSet("RAD-69", "Retrieve Imaging Document Set"),
     CrossGatewayRetrieveImagingDocumentSet("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
 

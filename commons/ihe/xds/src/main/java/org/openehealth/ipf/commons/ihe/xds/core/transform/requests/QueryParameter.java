@@ -82,6 +82,14 @@ public enum QueryParameter {
     DOC_ENTRY_DOCUMENT_AVAILABILITY("$XDSDocumentEntryDocumentAvailability"),
     /** Used to filter {@link DocumentEntry#logicalUuid}. */
     DOC_ENTRY_LOGICAL_ID("$XDSDocumentEntryLogicalID"),
+    /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
+    DOC_ENTRY_SERVICE_START_FROM("$XDSDocumentEntryServiceStartFrom"),
+    /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
+    DOC_ENTRY_SERVICE_START_TO("$XDSDocumentEntryServiceStartTo"),
+    /** Used to filter {@link DocumentEntry#getServiceStopTime()}. */
+    DOC_ENTRY_SERVICE_END_FROM("$XDSDocumentEntryServiceEndFrom"),
+    /** Used to filter {@link DocumentEntry#getServiceStopTime()}. */
+    DOC_ENTRY_SERVICE_END_TO("$XDSDocumentEntryServiceEndTo"),
      
     /** Used to filter {@link Folder#getCodeList()}. */
     FOLDER_CODES("$XDSFolderCodeList"),

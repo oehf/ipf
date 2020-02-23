@@ -201,6 +201,7 @@ required dependencies, usage and parameters.
 | [ITI-83]     | PIXm          | Patient Identifier Cross-reference for Mobile | `pixm-iti83`   | REST/HTTP(S)  | FHIR
 | [ITI-86]     | RMD           | Remove Documents                     | `rmd-iti86`             | SOAP/HTTP(S)  | ebXML
 | [ITI-92]     | RMU           | Restricted Update Document Set       | `rmu-iti92`             | SOAP/HTTP(S)  | ebXML
+| [PHARM-1]    | XDS           | Query Pharmacy Documents             | `xds-pharm1`            | SOAP/HTTP(S)  | ebXML
 | [RAD-69]     | XDS-I, XCA-I  | Retrieve Imaging Document Set        | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
 | [RAD-75]     | XCA-I         | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
 | [PCC-1]      | QED           | Query for Existing Data              | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
@@ -250,6 +251,7 @@ required dependencies, usage and parameters.
 [ITI-83]: ../ipf-platform-camel-ihe-fhir-stu3-pixpdq/iti83.html
 [ITI-86]: ../ipf-platform-camel-ihe-xds/iti86.html
 [ITI-92]: ../ipf-platform-camel-ihe-xds/iti92.html
+[PHARM-1]: ../ipf-platform-camel-ihe-xds/pharm1.html
 [RAD-69]: ../ipf-platform-camel-ihe-xds/rad69.html
 [RAD-75]: ../ipf-platform-camel-ihe-xds/rad75.html
 [PCC-1]: ../ipf-platform-camel-ihe-hl7v3/pcc1.html
