@@ -43,8 +43,6 @@ import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86PortType;
-import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1PortType;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -68,8 +66,7 @@ public class XDS implements XdsIntegrationProfile {
         ITI_57(ITI_57_WS_CONFIG),
         ITI_61(ITI_61_WS_CONFIG),
         ITI_62(ITI_62_WS_CONFIG),
-        ITI_86(ITI_86_WS_CONFIG),
-        PHARM_1(ITI_PHARM1_WS_CONFIG);
+        ITI_86(ITI_86_WS_CONFIG);
 
         @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
@@ -237,23 +234,6 @@ public class XDS implements XdsIntegrationProfile {
             true,
             false,
             false,
-            false);
-
-
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_PHARM1_WS_CONFIG = new WsTransactionConfiguration<>(
-            "xds-pharm1",
-            "Query Pharmacy Documents",
-            true,
-            new Pharm1AuditStrategy(false),
-            new Pharm1AuditStrategy(true),
-            new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_Service", "ihe"),
-            Pharm1PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/pharm1.wsdl",
-            true,
-            false,
-            true,
             false);
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,14 @@ import javax.xml.bind.annotation.*;
 /**
  * Represents a stored query for FindPrescriptionsForDispenseQuery (PHARM-1).
  * @author Quentin Ligier
+ * @since 3.7
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindPrescriptionsForDispenseQuery", propOrder = {})
 @XmlRootElement(name = "findPrescriptionsForDispenseQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindPrescriptionsForDispenseQuery extends Pharm1StableDocumentsQuery {
+public class FindPrescriptionsForDispenseQuery extends PharmacyStableDocumentsQuery {
     private static final long serialVersionUID = -2056362879334066497L;
 
     /**

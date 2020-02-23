@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
 /**
  * Base transformations for all PHARM-1 queries.
  * @author Quentin Ligier
+ * @since 3.7
  */
 abstract class PharmacyDocumentsQueryTransformer<T extends PharmacyDocumentsQuery> extends AbstractStoredQueryTransformer<T> {
 

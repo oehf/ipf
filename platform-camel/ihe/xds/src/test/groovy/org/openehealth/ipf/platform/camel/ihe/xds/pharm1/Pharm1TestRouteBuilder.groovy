@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,25 +34,25 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
  */
 class Pharm1TestRouteBuilder extends SpringRouteBuilder {
     void configure() throws Exception {
-        from('xds-pharm1:xds-pharm1-service1')
+        from('cmpd-pharm1:cmpd-pharm1-service1')
             .id('service1route')
             .process(pharm1RequestValidator())
             .process { checkValue(it, 'service 1') }
             .process(pharm1ResponseValidator())
 
-        from('xds-pharm1:xds-pharm1-service2')
+        from('cmpd-pharm1:cmpd-pharm1-service2')
             .process { checkValue(it, 'service 2') }
 
         // three endpoints intended for SOAP version check
-        from('xds-pharm1:xds-pharm1-service21')
+        from('cmpd-pharm1:cmpd-pharm1-service21')
             .process { checkValue(it, 'implicit SOAP 1.2') }
-        from('xds-pharm1:xds-pharm1-service22')
+        from('cmpd-pharm1:cmpd-pharm1-service22')
             .process { checkValue(it, 'SOAP 1.2') }
-        from('xds-pharm1:xds-pharm1-service23')
+        from('cmpd-pharm1:cmpd-pharm1-service23')
             .process { checkValue(it, 'SOAP 1.1') }
 
 
-        from('xds-pharm1:myPharm1Service?features=#loggingFeature')
+        from('cmpd-pharm1:myPharm1Service?features=#loggingFeature')
             .convertBodyTo(QueryRegistry.class)
             .choice()
                 // Return an object reference for a find dispenses query or a find medication list query
@@ -72,7 +72,7 @@ class Pharm1TestRouteBuilder extends SpringRouteBuilder {
             .otherwise()
                 .process { resultMessage(it).body = new QueryResponse(FAILURE) }
 
-        from('xds-pharm1:featuresTest?features=#policyFeature,#gzipFeature')
+        from('cmpd-pharm1:featuresTest?features=#policyFeature,#gzipFeature')
                 .process(pharm1RequestValidator())
                 .process { checkValue(it, 'service 1') }
                 .process(pharm1ResponseValidator())

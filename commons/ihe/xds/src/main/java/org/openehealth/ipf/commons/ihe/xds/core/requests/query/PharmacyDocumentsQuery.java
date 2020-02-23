@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ import java.util.List;
 /**
  * Base class for Pharmacy Documents Queries (PHARM-1).
  * @author Quentin Ligier
+ * @since 3.7
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PharmacyDocumentsQuery", propOrder = {
-        "patientId", "status", "metadataLevel" })
+@XmlType(name = "PharmacyDocumentsQuery", propOrder = {"patientId", "status", "metadataLevel"})
 @XmlRootElement(name = "pharmacyDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)

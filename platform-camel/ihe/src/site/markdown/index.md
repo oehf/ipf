@@ -39,7 +39,7 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | Module                               | Provided IHE transactions
 |--------------------------------------|-----------------------------------------
 | ipf-platform-camel-ihe-mllp          | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-64]
-| ipf-platform-camel-ihe-xds           | [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [ITI-86], [RAD-69], [RAD-75], [ITI-92]
+| ipf-platform-camel-ihe-xds           | [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [ITI-86], [RAD-69], [RAD-75], [ITI-92], [PHARM-1]
 | ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
 | ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59], [CH-PIDD], [CH-CIQ], [CH-CIDD]
 | ipf-platform-camel-ihe-fhir-mhd      | [ITI-65], [ITI-66], [ITI-67], [ITI-68]
@@ -99,62 +99,6 @@ The most IPF eHealth components are named according to the profile and the trans
 (transaction IDs and profiles relate to IHE, when not stated otherwise).
 A special case is the MLLP dispatcher component which allows to accept requests for multiple MLLP-based transactions through a single TCP port.
 
-
-----
-
-#### Transactions
-
-*  [ITI-8] Patient Identity Feed
-*  [ITI-9] PIX Query
-* [ITI-10] PIX Update Notification
-* [ITI-18] Registry Stored Query
-*  ITI-19  Authenticate Node
-*  ITI-20  Record Audit Event
-* [ITI-21] Patient Demographics Query
-* [ITI-22] Patient Demographics and Visit Query
-* [ITI-30] Patient Identity Management
-* [ITI-31] Patient Encounter Management
-* [ITI-38] Cross-Gateway Query
-* [ITI-39] Cross-Gateway Retrieve
-* [ITI-41] Provide & Register Document Set
-* [ITI-42] Register Document Set
-* [ITI-43] Retrieve Document Set
-* [ITI-44] Patient Identity Feed v3
-* [ITI-45] PIX Query v3
-* [ITI-46] PIX Update Notification v3
-* [ITI-47] Patient Demographics Query (PDQ) v3
-* [ITI-51] Multi-Patient Stored Query
-* [ITI-55] Cross-Gateway Patient Discovery
-* [ITI-56] Cross-Gateway Patient Location Query
-* [ITI-57] Update Document Set
-* [ITI-58] Provider Information Query
-* [ITI-59] Provider Information Feed
-* [ITI-61] Register On-Demand Document Entry
-* [ITI-62] Remove Metadata
-* [ITI-63] Cross-Gateway Fetch
-* [ITI-64] Notify XAD-PID Link Change
-* [ITI-65] Provide Document Bundle
-* [ITI-66] Find Document Manifests
-* [ITI-67] Find Document References
-* [ITI-68] Retrieve Document
-* [ITI-78] Patient Demographics Query for Mobile
-* [ITI-81] Retrieve ATNA Audit Event
-* [ITI-83] Patient Identifier Cross-reference for Mobile
-* [ITI-86] Remove Documents
-* [ITI-92] Restricted Update Document Set
-* [RAD-69] Retrieve Imaging Document Set
-* [RAD-75] Cross-Gateway Retrieve Imaging Document Set
-* [PCC-1] Query for Existing Data
-* [PCC-44] Query for Existing Data Mobile
-* [PCD-01] Communicate Patient Care Device Data
-* [CH-PIDD] Provider Information Delta Download (Swiss EPR extension to HPD)
-* [CH-CIQ] Community Information Query (Swiss EPR governmental service)
-* [CH-CIDD] Community Information Delta Download (Swiss EPR governmental service)
-* [All] MLLP-based Dispatcher
-* [Custom] MLLP-based Custom Transactions
-
----
-
 ### Supported Transactions
 
 The table below references all supported eHealth transactions. Click on the link in the first column for details about
@@ -201,7 +145,7 @@ required dependencies, usage and parameters.
 | [ITI-83]     | PIXm          | Patient Identifier Cross-reference for Mobile | `pixm-iti83`   | REST/HTTP(S)  | FHIR
 | [ITI-86]     | RMD           | Remove Documents                     | `rmd-iti86`             | SOAP/HTTP(S)  | ebXML
 | [ITI-92]     | RMU           | Restricted Update Document Set       | `rmu-iti92`             | SOAP/HTTP(S)  | ebXML
-| [PHARM-1]    | XDS           | Query Pharmacy Documents             | `xds-pharm1`            | SOAP/HTTP(S)  | ebXML
+| [PHARM-1]    | CMPD          | Query Pharmacy Documents             | `cmpd-pharm1`           | SOAP/HTTP(S)  | ebXML
 | [RAD-69]     | XDS-I, XCA-I  | Retrieve Imaging Document Set        | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
 | [RAD-75]     | XCA-I         | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
 | [PCC-1]      | QED           | Query for Existing Data              | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3

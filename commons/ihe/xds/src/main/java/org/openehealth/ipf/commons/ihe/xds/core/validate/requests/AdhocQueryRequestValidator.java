@@ -29,9 +29,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
-import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Pharm1StableDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.PharmacyStableDocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
@@ -24,8 +24,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
 /**
  * Base transformations for all stable-documents PHARM-1 queries.
  * @author Quentin Ligier
+ * @since 3.7
  */
-abstract class Pharm1StableDocumentsQueryTransformer<T extends Pharm1StableDocumentsQuery> extends PharmacyDocumentsQueryTransformer<T> {
+abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableDocumentsQuery> extends PharmacyDocumentsQueryTransformer<T> {
 
     /**
      * Transforms the query into its ebXML representation.

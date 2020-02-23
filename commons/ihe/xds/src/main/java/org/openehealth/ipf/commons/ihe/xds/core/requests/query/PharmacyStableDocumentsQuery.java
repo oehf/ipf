@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,16 +28,17 @@ import java.util.List;
 /**
  * Abstract stored query for PHARM-1 stable documents queries.
  * @author Quentin Ligier
+ * @since 3.7
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Pharm1StableDocumentsQuery", propOrder = {
+@XmlType(name = "PharmacyStableDocumentsQuery", propOrder = {
         "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
         "confidentialityCodes", "eventCodes", "uuids", "healthcareFacilityTypeCodes",
         "practiceSettingCodes", "uniqueIds"})
 @XmlRootElement(name = "abstractPharm1StableDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery {
+public abstract class PharmacyStableDocumentsQuery extends PharmacyDocumentsQuery {
     private static final long serialVersionUID = 7497052735222205532L;
 
     @XmlElement(name = "uuid")
@@ -61,7 +62,7 @@ public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery 
     /**
      * For JAXB serialization only.
      */
-    public Pharm1StableDocumentsQuery() {
+    public PharmacyStableDocumentsQuery() {
     }
 
     /**
@@ -69,7 +70,7 @@ public abstract class Pharm1StableDocumentsQuery extends PharmacyDocumentsQuery 
      * @param queryType
      *          the type of the query.
      */
-    protected Pharm1StableDocumentsQuery(final QueryType queryType) {
+    protected PharmacyStableDocumentsQuery(final QueryType queryType) {
         super(queryType);
     }
 

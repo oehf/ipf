@@ -1,7 +1,7 @@
 
-## `xds-pharm1` component
+## `cmpd-pharm1` component
 
-The xds-pharm1 component provides interfaces for actors of the *Query Pharmacy Documents* IHE transaction (PHARM-1),
+The cmpd-pharm1 component provides interfaces for actors of the *Query Pharmacy Documents* IHE transaction (PHARM-1),
 which is described in the [IHE Pharmacy Technical Framework Supplement, Community Medication Prescription and Dispense, Section 3.1](https://www.ihe.net/uploadedFiles/Documents/Pharmacy/IHE_Pharmacy_Suppl_CMPD.pdf).
 It is very similar to the Registry Stored Query transaction ([ITI-18]).
 
@@ -9,10 +9,10 @@ It is very similar to the Registry Stored Query transaction ([ITI-18]).
 
 The transaction defines the following actors:
 
-![ITI-18 actors](images/iti18.png)
+![PHARM-1 actors](images/pharm1.png)
 
-Producer side corresponds to the *Document Consumer* actor.
-Consumer side corresponds to the *Document Registry* actor.
+Producer side corresponds to the *Queueing Actor*
+Consumer side corresponds to the *Community Pharmacy Manager* actor.
 
 ### Dependencies
 
@@ -30,10 +30,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `xds-pharm1` component producers is:
+The endpoint URI format of `cmpd-pharm1` component producers is:
 
 ```
-xds-pharm1://hostname:port/path/to/service[?parameters]
+cmpd-pharm1://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -42,10 +42,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `xds-pharm1` component consumers is:
+The endpoint URI format of `cmpd-pharm1` component consumers is:
 
 ```
-xds-pharm1:serviceName[?parameters]
+cmpd-pharm1:serviceName[?parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -56,11 +56,11 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /xds/*
+servletPath = /cmpd/*
 ```
 
-and serviceName equals to `pharm1Service`, then the xds-iti18 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/xds/pharm1Service`
+and serviceName equals to `pharm1Service`, then the cmpd-iti18 consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/cmpd/pharm1Service`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
@@ -70,7 +70,7 @@ Additional URI parameters are optional and control special features as described
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("xds-pharm1:pharm1Service?audit=true")
+    from("cmpd-pharm1:pharm1Service?audit=true")
       .process(myProcessor)
       // process the incoming request and create a response
 ```
@@ -86,7 +86,7 @@ This is an example on how to use the component on the consumer side:
 * [Secure transport]
 * [File-Based payload logging]
 
-### Basic XDS Component Features
+### Basic Component Features
 
 * [Message types]
 
@@ -97,7 +97,7 @@ This is an example on how to use the component on the consumer side:
 * [Handling automatically rejected messages]
 * [Using CXF features]
 
-### Advanced XDS Component Features
+### Advanced Component Features
 
 * [Handling extra query parameters and extra metadata elements]
 

@@ -82,6 +82,8 @@ public enum QueryParameter {
     DOC_ENTRY_DOCUMENT_AVAILABILITY("$XDSDocumentEntryDocumentAvailability"),
     /** Used to filter {@link DocumentEntry#logicalUuid}. */
     DOC_ENTRY_LOGICAL_ID("$XDSDocumentEntryLogicalID"),
+
+    // specific for PHARM-1
     /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
     DOC_ENTRY_SERVICE_START_FROM("$XDSDocumentEntryServiceStartFrom"),
     /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */

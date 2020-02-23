@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.platform.camel.ihe.xds.pharm1;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -27,11 +26,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsAdhocQueryService;
  * This implementation delegates to a Camel consumer by creating an exchange.
  *
  * @author Quentin Ligier
+ * @since 3.7
  */
 public class Pharm1Service extends XdsAdhocQueryService implements Pharm1PortType {
 
     public Pharm1Service() {
-        super((String)null);
+        super(null);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsParticipantObject
 import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
 /**
- * Client audit strategy for PHARM-1.
+ * Audit strategy for PHARM-1.
  *
  * @author Quentin Ligier
+ * @since 3.7
  */
 public class Pharm1AuditStrategy extends XdsQueryAuditStrategy30 {
 

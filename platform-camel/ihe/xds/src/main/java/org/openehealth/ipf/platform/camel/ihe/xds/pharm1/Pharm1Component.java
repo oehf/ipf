@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.PHARM_1;
+import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 
 /**
  * The Camel component for the IHE PHARM-1 transaction.
+ *
+ * @author Quentin Ligier
+ * @since 3.7
  */
 public class Pharm1Component extends XdsComponent<XdsQueryAuditDataset> {
 
@@ -45,7 +48,7 @@ public class Pharm1Component extends XdsComponent<XdsQueryAuditDataset> {
         return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this, parameters, Pharm1Service.class) {
             @Override
             public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint, JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
-                return new SimpleWsProducer(endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
+                return new SimpleWsProducer<>(endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }
         };
     }

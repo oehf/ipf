@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,11 +44,11 @@ class TestPharm1 extends XdsStandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'pharm-1.xml'
 
-    def SERVICE1 = "xds-pharm1://localhost:${port}/xds-pharm1-service1"
-    def SERVICE2 = "xds-pharm1://localhost:${port}/xds-pharm1-service2"
-    def SAMPLE_SERVICE = "xds-pharm1://localhost:${port}/myPharm1Service?features=#loggingFeature"
+    def SERVICE1 = "cmpd-pharm1://localhost:${port}/cmpd-pharm1-service1"
+    def SERVICE2 = "cmpd-pharm1://localhost:${port}/cmpd-pharm1-service2"
+    def SAMPLE_SERVICE = "cmpd-pharm1://localhost:${port}/myPharm1Service?features=#loggingFeature"
 
-    def SERVICE2_ADDR = "http://localhost:${port}/xds-pharm1-service2"
+    def SERVICE2_ADDR = "http://localhost:${port}/cmpd-pharm1-service2"
 
     QueryRegistry request
     FindDispensesQuery query
