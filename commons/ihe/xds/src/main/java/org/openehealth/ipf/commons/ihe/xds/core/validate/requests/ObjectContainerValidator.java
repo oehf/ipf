@@ -426,7 +426,6 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
 
             AssociationLabel status = AssociationLabel.fromOpcode(slotValues.get(0));
-            metaDataAssert(status != null, INVALID_SUBMISSION_SET_STATUS);
 
             if (status == AssociationLabel.ORIGINAL && !profile.isQuery()) {
                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
