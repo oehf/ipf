@@ -26,25 +26,25 @@ import java.util.List;
 
 /**
  * An {@link ProcessorReifier} that combines the {@link Processor} created by
- * {@link #doCreateDelegate(RouteContext)} and the child processor created by
+ * {@link #doCreateDelegate()} and the child processor created by
  * {@link #createChildProcessor} into a {@link Pipeline}.
  * This base class supports the implementation of parameterizable DSL extensions
  * without forcing implementors to create DelegateProcessor instances.
  * Instead, plain {@link Processor} instances can be returned by
- * {@link #doCreateDelegate(RouteContext)} implementations.
+ * {@link #doCreateDelegate()} implementations.
  *
  * @author Martin Krasser
  */
 public abstract class DelegateReifier<T extends DelegateDefinition> extends ProcessorReifier<T> {
 
-    public DelegateReifier(T definition) {
-        super(definition);
+    public DelegateReifier(RouteContext routeContext, T definition) {
+        super(routeContext, definition);
     }
 
     @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Processor delegate = doCreateDelegate(routeContext);
-        Processor next = createChildProcessor(routeContext, false);
+    public Processor createProcessor() throws Exception {
+        Processor delegate = doCreateDelegate();
+        Processor next = createChildProcessor(false);
         
         List<Processor> processors = new ArrayList<>();
         processors.add(delegate);
@@ -56,12 +56,10 @@ public abstract class DelegateReifier<T extends DelegateDefinition> extends Proc
 
     /**
      * Creates a {@link Processor} for this DSL element.
-     * 
-     * @param routeContext
-     *            the current route context.
+     *
      * @return a {@link Processor} instance.
      * @throws Exception
      */
-    protected abstract Processor doCreateDelegate(RouteContext routeContext);
+    protected abstract Processor doCreateDelegate();
     
 }

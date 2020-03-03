@@ -12,12 +12,12 @@ import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefini
  */
 public class TransmogrifierAdapterReifier extends ProcessorAdapterReifier<TransmogrifierAdapterDefinition> {
 
-    public TransmogrifierAdapterReifier(ProcessorDefinition<?> definition) {
-        super((TransmogrifierAdapterDefinition) definition);
+    public TransmogrifierAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (TransmogrifierAdapterDefinition) definition);
     }
 
     @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    protected ProcessorAdapter doCreateProcessor() {
         Transmogrifier<?, ?> transmogrifier = definition.getTransmogrifier();
         String transmogrifierBean = definition.getTransmogrifierBean();
         if (transmogrifierBean != null) {

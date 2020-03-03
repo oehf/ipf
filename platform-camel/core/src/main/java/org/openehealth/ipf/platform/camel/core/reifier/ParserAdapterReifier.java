@@ -12,12 +12,12 @@ import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition;
  */
 public class ParserAdapterReifier extends ProcessorAdapterReifier<ParserAdapterDefinition> {
 
-    public ParserAdapterReifier(ProcessorDefinition<?> definition) {
-        super((ParserAdapterDefinition) definition);
+    public ParserAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (ParserAdapterDefinition) definition);
     }
 
     @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    protected ProcessorAdapter doCreateProcessor() {
         Parser<?> parser = definition.getParser();
         String parserBean = definition.getParserBean();
         if (parserBean != null) {

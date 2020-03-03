@@ -130,7 +130,7 @@ class StandardTestContainer {
      */
     def send(endpoint, input, outType, Map headers = null) {
         Exchange result = send(endpoint, input, headers)
-        Exchanges.resultMessage(result).getBody(outType)
+        result.getMessage().getBody(outType)
     }
 
     /**

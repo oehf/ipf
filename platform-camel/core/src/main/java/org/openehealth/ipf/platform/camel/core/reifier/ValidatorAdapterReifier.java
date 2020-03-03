@@ -12,12 +12,12 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
  */
 public class ValidatorAdapterReifier extends ProcessorAdapterReifier<ValidatorAdapterDefinition> {
 
-    public ValidatorAdapterReifier(ProcessorDefinition<?> definition) {
-        super((ValidatorAdapterDefinition) definition);
+    public ValidatorAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (ValidatorAdapterDefinition) definition);
     }
 
     @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    protected ProcessorAdapter doCreateProcessor() {
         Validator<?, ?> validator = definition.getValidator();
         if (definition.getValidatorBean() != null) {
             validator = routeContext.lookup(definition.getValidatorBean(), Validator.class);

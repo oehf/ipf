@@ -11,13 +11,13 @@ import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
  */
 public abstract class ProcessorAdapterReifier<T extends ProcessorAdapterDefinition> extends DelegateReifier<T> {
 
-    public ProcessorAdapterReifier(T definition) {
-        super(definition);
+    public ProcessorAdapterReifier(RouteContext routeContext, T definition) {
+        super(routeContext, definition);
     }
 
     @Override
-    protected Processor doCreateDelegate(RouteContext routeContext) {
-        ProcessorAdapter adapter = doCreateProcessor(routeContext);
+    protected Processor doCreateDelegate() {
+        ProcessorAdapter adapter = doCreateProcessor();
         if (definition.getInputExpression() != null) {
             adapter.input(definition.getInputExpression());
         }
@@ -27,5 +27,5 @@ public abstract class ProcessorAdapterReifier<T extends ProcessorAdapterDefiniti
         return adapter;
     }
 
-    protected abstract ProcessorAdapter doCreateProcessor(RouteContext routeContext);
+    protected abstract ProcessorAdapter doCreateProcessor();
 }

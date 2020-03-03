@@ -20,6 +20,8 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina.MinaComponent;
 import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.mina.MinaEndpointConfigurer;
+import org.apache.camel.spi.PropertyConfigurer;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -138,4 +140,8 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         return Collections.emptyList();
     }
 
+    @Override
+    public PropertyConfigurer getEndpointPropertyConfigurer() {
+        return new MinaEndpointConfigurer();
+    }
 }

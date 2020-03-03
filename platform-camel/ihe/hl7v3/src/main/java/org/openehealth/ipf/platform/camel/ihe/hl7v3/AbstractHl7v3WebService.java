@@ -63,7 +63,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
             log.info("HL7 v3 service failed", exception);
             return createNak(requestString, exception);
         }
-        return Exchanges.resultMessage(result).getBody(String.class);
+        return result.getMessage().getBody(String.class);
     }
 
     /**

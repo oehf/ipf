@@ -57,6 +57,6 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
             errorResponse.getErrors().get(0).setLocation(homeCommunityId);
             return EbXML30Converters.convert(errorResponse);
         }
-        return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);
+        return result.getMessage().getBody(AdhocQueryResponse.class);
     }
 }

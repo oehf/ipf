@@ -16,17 +16,22 @@
 
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.*
+
+import org.apache.camel.AggregationStrategy
+import org.apache.camel.Exchange
+import org.apache.camel.Expression
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.builder.ExpressionClause
 import org.apache.camel.builder.NoErrorHandlerBuilder
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.model.*
-import org.apache.camel.spi.IdempotentRepository
+import org.apache.camel.model.DataFormatDefinition
+import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.model.RouteDefinition
 import org.openehealth.ipf.commons.core.modules.api.*
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter
-import org.openehealth.ipf.platform.camel.core.closures.*
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator
 import org.openehealth.ipf.platform.camel.core.model.*
 import org.openehealth.ipf.platform.camel.core.util.Expressions
 
@@ -45,250 +50,6 @@ import static org.apache.camel.builder.Builder.body
  */
 @SuppressWarnings("unused")
 class CoreExtensionModule {
-
-    // FIXME this can be removed with Camel 3.1 and Groovy 3.0
-
-    static ProcessorDefinition process(ProcessorDefinition self, Closure<?> processorLogic) {
-        self.process(toProcessor(processorLogic))
-    }
-
-    static WireTapDefinition newExchange(WireTapDefinition self, Closure<?> processorLogic) {
-        self.newExchange(toProcessor(processorLogic))
-    }
-
-    static OnExceptionDefinition onRedelivery(OnExceptionDefinition self, Closure<Exchange> processorLogic) {
-        self.onRedelivery(toProcessor(processorLogic))
-    }
-
-    static ProcessorDefinition enrich(ProcessorDefinition self, String resourceUri, Closure<Exchange> aggregationLogic) {
-        self.enrich(resourceUri, toAggregationStrategy(aggregationLogic))
-    }
-
-    static ProcessorDefinition pollEnrich(ProcessorDefinition self, String resourceUri, Closure<Exchange> aggregationLogic) {
-        self.pollEnrich(resourceUri, toAggregationStrategy(aggregationLogic))
-    }
-
-    static ProcessorDefinition pollEnrich(ProcessorDefinition self, String resourceUri, long timeout, Closure<Exchange> aggregationLogic) {
-        self.pollEnrich(resourceUri, timeout, toAggregationStrategy(aggregationLogic))
-    }
-
-    static MulticastDefinition aggregationStrategy(MulticastDefinition self, Closure<Exchange> aggregationLogic) {
-        self.aggregationStrategy(toAggregationStrategy(aggregationLogic))
-    }
-
-    static RecipientListDefinition aggregationStrategy(RecipientListDefinition self, Closure<Exchange> aggregationLogic) {
-        self.aggregationStrategy(toAggregationStrategy(aggregationLogic))
-    }
-
-    static SplitDefinition aggregationStrategy(SplitDefinition self, Closure<Exchange> aggregationLogic) {
-        self.aggregationStrategy(toAggregationStrategy(aggregationLogic))
-    }
-
-    static AggregateDefinition aggregationStrategy(AggregateDefinition self, Closure<Exchange> aggregationLogic) {
-        self.aggregationStrategy(toAggregationStrategy(aggregationLogic))
-    }
-
-    static MulticastDefinition onPrepare(MulticastDefinition self, Closure<Exchange> processorLogic) {
-        self.onPrepare(toProcessor(processorLogic))
-    }
-
-    static RecipientListDefinition onPrepare(RecipientListDefinition self, Closure<Exchange> processorLogic) {
-        self.onPrepare(toProcessor(processorLogic))
-    }
-
-    static SplitDefinition onPrepare(SplitDefinition self, Closure<Exchange> processorLogic) {
-        self.onPrepare(toProcessor(processorLogic))
-    }
-
-    static WireTapDefinition onPrepare(WireTapDefinition self, Closure<Exchange> processorLogic) {
-        self.onPrepare(toProcessor(processorLogic))
-    }
-
-    // Extension Methods that use Closures as expressions
-
-    static ProcessorDefinition transform(ProcessorDefinition self, Closure<?> expression) {
-        self.transform(toExpression(expression))
-    }
-
-    static ProcessorDefinition setProperty(ProcessorDefinition self, String name, Closure<?> expression) {
-        self.setProperty(name, toExpression(expression))
-    }
-
-    static ProcessorDefinition setHeader(ProcessorDefinition self, String name, Closure<?> expression) {
-        self.setHeader(name, toExpression(expression))
-    }
-
-    static ProcessorDefinition setBody(ProcessorDefinition self, Closure<?> expression) {
-        self.setBody(toExpression(expression))
-    }
-
-    static ProcessorDefinitionsort(ProcessorDefinition self, Closure<?> expression) {
-        self.sort(toExpression(expression))
-    }
-
-    static IdempotentConsumerDefinition idempotentConsumer(ProcessorDefinition self, Closure<?> expression) {
-        self.idempotentConsumer(toExpression(expression))
-    }
-
-    static IdempotentConsumerDefinition idempotentConsumer(ProcessorDefinition self, IdempotentRepository rep, Closure<?> expression) {
-        self.idempotentConsumer(toExpression(expression), rep)
-    }
-
-    static RecipientListDefinition recipientList(ProcessorDefinition self, Closure<?> recipients) {
-        self.recipientList(toExpression(recipients))
-    }
-
-    static RecipientListDefinition recipientList(ProcessorDefinition self, String delimiter, Closure<?> recipients) {
-        self.recipientList(toExpression(recipients), delimiter)
-    }
-
-    static RoutingSlipDefinition routingSlip(ProcessorDefinition self, Closure<?> recipients) {
-        self.routingSlip(toExpression(recipients))
-    }
-
-    static RoutingSlipDefinition routingSlip(ProcessorDefinition self, String delimiter, Closure<?> recipients) {
-        self.routingSlip(toExpression(recipients), delimiter)
-    }
-
-    static DynamicRouterDefinition dynamicRouter(ProcessorDefinition self, Closure<?> expression) {
-        self.dynamicRouter(toExpression(expression))
-    }
-
-    static SplitDefinition split(ProcessorDefinition self, Closure<?> expression) {
-        self.split(toExpression(expression))
-    }
-
-    static ResequenceDefinition resequence(ProcessorDefinition self, Closure<?> expression) {
-        self.resequence(toExpression(expression))
-    }
-
-    static AggregateDefinition aggregate(ProcessorDefinition self, Closure<?> correlationExpression) {
-        self.aggregate(toExpression(correlationExpression))
-    }
-
-    static AggregateDefinition completionSize(AggregateDefinition self, Closure<?> expression) {
-        self.completionSize(toExpression(expression))
-    }
-
-    static AggregateDefinition completionTimeout(AggregateDefinition self, Closure<?> expression) {
-        self.completionTimeout(toExpression(expression))
-    }
-
-    static DelayDefinition delay(ProcessorDefinition self, Closure<?> expression) {
-        self.delay(toExpression(expression))
-    }
-
-    static ThrottleDefinition throttle(ProcessorDefinition self, Closure<?> expression) {
-        self.throttle(toExpression(expression))
-    }
-
-    static LoopDefinition loop(ProcessorDefinition self, Closure<?> expression) {
-        self.loop(toExpression(expression))
-    }
-
-    static WireTapDefinition newExchangeBody(WireTapDefinition self, Closure<?> expression) {
-        self.newExchangeBody(toExpression(expression))
-    }
-
-    static WireTapDefinition newExchangeHeader(WireTapDefinition self, String header, Closure<?> expression) {
-        self.newExchangeHeader(header, toExpression(expression))
-    }
-
-    // Extension Methods that use Closures as predicates
-
-    static FilterDefinition filter(ProcessorDefinition self, Closure<Boolean> predicate) {
-        self.filter(toPredicate(predicate))
-    }
-
-    static ProcessorDefinition validate(ProcessorDefinition self, Closure<Boolean> predicate) {
-        self.validate(toPredicate(predicate))
-    }
-
-    static ChoiceDefinition when(ChoiceDefinition self, Closure<Boolean> predicate) {
-        self.when(toPredicate(predicate))
-    }
-
-    static TryDefinition onWhen(TryDefinition self, Closure<Boolean> predicate) {
-        self.onWhen(toPredicate(predicate))
-    }
-
-    static OnExceptionDefinition onWhen(OnExceptionDefinition self, Closure<Boolean> predicate) {
-        self.onWhen(toPredicate(predicate))
-    }
-
-    static OnExceptionDefinition handled(OnExceptionDefinition self, Closure<Boolean> predicate) {
-        self.handled(toPredicate(predicate))
-    }
-
-    static OnExceptionDefinition continued(OnExceptionDefinition self, Closure<Boolean> predicate) {
-        self.continued(toPredicate(predicate))
-    }
-
-    static OnExceptionDefinition retryWhile(OnExceptionDefinition self, Closure<Boolean> predicate) {
-        self.retryWhile(toPredicate(predicate))
-    }
-
-    static OnCompletionDefinition onWhen(OnCompletionDefinition self, Closure<Boolean> predicate) {
-        self.onWhen(toPredicate(predicate))
-    }
-
-    static CatchDefinition onWhen(CatchDefinition self, Closure<Boolean> predicate) {
-        self.onWhen(toPredicate(predicate))
-    }
-
-    static AggregateDefinition completionPredicate(AggregateDefinition self, Closure<Boolean> predicate) {
-        self.completionPredicate(toPredicate(predicate))
-    }
-
-    static InterceptDefinition when(InterceptDefinition self, Closure<Boolean> predicate) {
-        self.when(toPredicate(predicate))
-    }
-
-    static InterceptSendToEndpointDefinition when(InterceptSendToEndpointDefinition self, Closure<Boolean> predicate) {
-        self.when(toPredicate(predicate))
-    }
-
-    // Bridging generic attribution of expressions, predicates etc.
-
-    static AggregationStrategy aggregator(RouteBuilder self, Closure<Exchange> aggregationLogic) {
-        toAggregationStrategy(aggregationLogic)
-    }
-
-    static Expression expression(RouteBuilder self, Closure<?> expression) {
-        toExpression(expression)
-    }
-
-    static Predicate predicate(RouteBuilder self, Closure<Boolean> predicate) {
-        toPredicate(predicate)
-    }
-
-    static Processor processor(RouteBuilder self, Closure<Exchange> processor) {
-        toProcessor(processor)
-    }
-
-    static expression(ExpressionClause self, Closure<?> expression) {
-        self.expression(toExpression(expression))
-    }
-
-    // Private Helpers
-
-    private static Expression toExpression(final Closure<?> closure) {
-        new DelegatingExpression(closure)
-    }
-
-    private static Predicate toPredicate(final Closure<?> closure) {
-        new ClosurePredicate(closure)
-    }
-
-    private static Processor toProcessor(final Closure<?> closure) {
-        new DelegatingProcessor(closure)
-    }
-
-    private static AggregationStrategy toAggregationStrategy(final Closure<Exchange> closure) {
-        new DelegatingAggregationStrategy(closure)
-    }
-
-    // FIXME end of FIXME
 
     // Groovy-specific data formats
 
@@ -587,12 +348,12 @@ class CoreExtensionModule {
             ExecutorService executorService = null) {
         String uuid = UUID.randomUUID().toString()
         String dispatcherEndpointUri = 'direct:multiplast-' + uuid
-        def definition = routeBuilder.from(dispatcherEndpointUri)
-        process(definition) {
-            int index = it.properties[Exchange.SPLIT_INDEX]
-            it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index]
-        }
-                .recipientList().header('multiplast.uri')
+        routeBuilder.from(dispatcherEndpointUri)
+            .process {
+                int index = it.properties[Exchange.SPLIT_INDEX]
+                it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index]
+            }
+            .recipientList().header('multiplast.uri')
 
         def fromNode = routeBuilder.from('direct:split-execution-' + uuid)
                 .split(body())
@@ -605,16 +366,16 @@ class CoreExtensionModule {
                 .to(dispatcherEndpointUri)
                 .end()
 
-        process(self) {
+        self.process {
             List bodies = splittingExpression.evaluate(it, List.class)
             List endpointUris = recipientListExpression.evaluate(it, List.class)
             if (bodies.size() != endpointUris.size()) {
                 throw new RuntimeException('lists of bodies and endpoints must be of the same length')
             }
-
             it.in.body = bodies
             it.properties['multiplast.endpointUris'] = endpointUris
-        }.to('direct:split-execution-' + uuid)
+        }
+        .to('direct:split-execution-' + uuid)
     }
 
 

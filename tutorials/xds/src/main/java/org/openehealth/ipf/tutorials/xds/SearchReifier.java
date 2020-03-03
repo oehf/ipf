@@ -10,19 +10,19 @@ import org.apache.camel.spi.RouteContext;
  */
 public class SearchReifier extends ProcessorReifier<SearchDefinition> {
 
-    SearchReifier(ProcessorDefinition<?> definition) {
-        super((SearchDefinition) definition);
+    SearchReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (SearchDefinition) definition);
     }
 
     @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
+    public Processor createProcessor() throws Exception {
         SearchProcessor searchProcessor = new SearchProcessor();
         searchProcessor.setIndexEvals(definition.getIndexEvals());
         searchProcessor.setFilters(definition.getFilters());
         searchProcessor.setResultTypes(definition.getResultTypes());
         searchProcessor.setResultField(definition.getResultField());
         searchProcessor.setStore(routeContext.lookup("dataStore", DataStore.class));
-        searchProcessor.setProcessor(createChildProcessor(routeContext, false));
+        searchProcessor.setProcessor(createChildProcessor(false));
         return searchProcessor;
     }
 }

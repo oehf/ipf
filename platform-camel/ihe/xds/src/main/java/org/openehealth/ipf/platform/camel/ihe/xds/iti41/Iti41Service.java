@@ -50,6 +50,6 @@ public class Iti41Service extends AbstractWebService implements Iti41PortType {
             return EbXML30Converters.convert(errorResponse);
         }
         
-        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            
+        return result.getMessage().getBody(RegistryResponseType.class);
     }
 }

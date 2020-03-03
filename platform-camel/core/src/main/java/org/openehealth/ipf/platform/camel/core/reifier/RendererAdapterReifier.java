@@ -12,13 +12,13 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
  */
 public class RendererAdapterReifier extends ProcessorAdapterReifier<RendererAdapterDefinition> {
 
-    public RendererAdapterReifier(ProcessorDefinition<?> definition) {
-        super((RendererAdapterDefinition) definition);
+    public RendererAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (RendererAdapterDefinition) definition);
     }
 
 
     @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    protected ProcessorAdapter doCreateProcessor() {
         Renderer<?> renderer = definition.getRenderer();
         String rendererBean = definition.getRendererBean();
         if (rendererBean != null) {

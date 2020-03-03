@@ -16,13 +16,13 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  */
 public class SplitterReifier extends ProcessorReifier<SplitterDefinition> {
 
-    public SplitterReifier(ProcessorDefinition<?> definition) {
-        super((SplitterDefinition) definition);
+    public SplitterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (SplitterDefinition) definition);
     }
 
     @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Processor childProcessor = createChildProcessor(routeContext, false);
+    public Processor createProcessor() throws Exception {
+        Processor childProcessor = createChildProcessor(false);
         AggregationStrategy aggregationStrategy = definition.getAggregationStrategy();
         if (aggregationStrategy == null) {
             aggregationStrategy = new UseLatestAggregationStrategy();
@@ -32,7 +32,7 @@ public class SplitterReifier extends ProcessorReifier<SplitterDefinition> {
         if (expressionBean != null) {
             expressionDefinition = new ExpressionDefinition(routeContext.lookup(expressionBean, Expression.class));
         }
-        Expression expression = expressionDefinition.createExpression(routeContext);
+        Expression expression = expressionDefinition.createExpression(camelContext);
         Splitter splitter = createSplitterInstance(expression, childProcessor);
 
         splitter.aggregate(aggregationStrategy);

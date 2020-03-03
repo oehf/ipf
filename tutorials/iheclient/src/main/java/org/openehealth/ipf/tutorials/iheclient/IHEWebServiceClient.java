@@ -122,7 +122,7 @@ public class IHEWebServiceClient implements CamelContextAware {
 
     private <T> T send(String endpoint, Object input, Class<T> outType) throws Exception {
         Exchange result = send(endpoint, input);
-        return Exchanges.resultMessage(result).getBody(outType);
+        return result.getMessage().getBody(outType);
     }
 
     private Exchange send(String endpoint, Object body) throws Exception {

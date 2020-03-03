@@ -16,7 +16,6 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Exchange
-import org.apache.camel.Processor
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.support.ExpressionAdapter
 import org.joda.time.DateTime
@@ -27,7 +26,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingProcessor
 import org.slf4j.Logger
 
 import javax.activation.DataHandler
@@ -40,9 +38,9 @@ import javax.activation.DataHandler
 class RegRepModelExtension {
      
     static ProcessorDefinition store(ProcessorDefinition self) {
-        self.process(toProcessor {
+        self.process {
             dataStore().store(it.in.body.entry)
-        })
+        }
     }
     
     static ProcessorDefinition retrieve(ProcessorDefinition self) {
@@ -66,17 +64,17 @@ class RegRepModelExtension {
     }
     
     static ProcessorDefinition fail(ProcessorDefinition self, ValidationMessage message) {
-        self.process(toProcessor { throw new XDSMetaDataException(message) })
+        self.process { throw new XDSMetaDataException(message) }
     }
     
     static ProcessorDefinition updateWithRepositoryData(ProcessorDefinition self) {
-        self.process(toProcessor {
+        self.process {
             def documentEntry = it.in.body.entry.documentEntry
             def dataHandler = it.in.body.entry.getContent(DataHandler)
             documentEntry.hash = ContentUtils.sha1(dataHandler)
             documentEntry.size = ContentUtils.size(dataHandler)
             documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
-        })
+        }
     }
     
     static ProcessorDefinition splitEntries(ProcessorDefinition self, Closure<?> entriesClosure) {
@@ -91,7 +89,7 @@ class RegRepModelExtension {
     }
 
     static ProcessorDefinition assignUuid(ProcessorDefinition self) {
-        self.process(toProcessor {
+        self.process {
             def entry = it.in.body.entry
             if (!entry.entryUuid.startsWith('urn:uuid:')) {
                 def newEntryUuid = 'urn:uuid:' + UUID.randomUUID()
@@ -99,11 +97,11 @@ class RegRepModelExtension {
                 entry.entryUuid = newEntryUuid
             }
             null
-        })
+        }
     }
     
     static ProcessorDefinition changeAssociationUuids(ProcessorDefinition self) {
-        self.process(toProcessor {
+        self.process {
             def assoc = it.in.body.entry
             def uuidMap = it.in.body.uuidMap
             def sourceUuid = uuidMap[assoc.sourceUuid]
@@ -111,51 +109,47 @@ class RegRepModelExtension {
             def targetUuid = uuidMap[assoc.targetUuid]
             if (targetUuid != null) assoc.targetUuid = targetUuid
             null
-        })
+        }
     }
     
     static ProcessorDefinition status(ProcessorDefinition self, AvailabilityStatus status) {
-        self.process(toProcessor {
+        self.process {
             it.in.body.entry.availabilityStatus = status
-        })
+        }
     }
 
     // Updates the last update time and ensures that the time is actually changed
     static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
-        self.process(toProcessor {
+        self.process {
             it.in.body.entry.lastUpdateTime = new Timestamp(DateTime.now(), Timestamp.Precision.SECOND)
-        })
+        }
     }
     
     // Converts entries to ObjectReferences
     static ProcessorDefinition convertToObjectRefs(ProcessorDefinition self, Closure closure) {
-        self.process(toProcessor {
+        self.process {
             def entries = closure.call(it.in.body)
             it.in.body.resp.references.addAll(entries.collect { 
                 new ObjectReference(it.entryUuid)
             })
             entries.clear()
-        })
+        }
     }
     
     static ProcessorDefinition processBody(ProcessorDefinition self, Closure closure) {
-        self.process(toProcessor {
+        self.process {
             closure(it.in.body)
-        })
+        }
     }
 
     static ProcessorDefinition logExchange(ProcessorDefinition self, Logger log, Closure closure) {
-        self.process(toProcessor {
+        self.process {
             log.info(closure.call(it).toString())
-        })
+        }
     }
 
     private static DataStore dataStore() {
         ContextFacade.getBean(DataStore)
-    }
-
-    private static Processor toProcessor(final Closure<?> closure) {
-        new DelegatingProcessor(closure)
     }
 
 }

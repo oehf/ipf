@@ -126,7 +126,7 @@ class MllpTestContainer {
         if (result.exception) {
             throw result.exception
         }
-        def response = Exchanges.resultMessage(result)
+        def response = result.getMessage()
         response.getBody(Message.class)
     }
 

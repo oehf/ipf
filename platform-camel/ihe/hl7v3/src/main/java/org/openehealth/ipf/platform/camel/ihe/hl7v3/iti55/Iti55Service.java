@@ -188,7 +188,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         Exception exception = Exchanges.extractException(result);
         return (exception != null) ?
             nak(exception, requestXml) :
-            Exchanges.resultMessage(result).getBody(String.class);
+            result.getMessage().getBody(String.class);
     }
 
 

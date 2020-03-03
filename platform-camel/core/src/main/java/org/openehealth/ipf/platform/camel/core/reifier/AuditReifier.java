@@ -10,12 +10,12 @@ import org.openehealth.ipf.platform.camel.core.model.AuditDefinition;
  */
 public class AuditReifier extends DelegateReifier<AuditDefinition> {
 
-    public AuditReifier(ProcessorDefinition<?> definition) {
-        super((AuditDefinition) definition);
+    public AuditReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (AuditDefinition) definition);
     }
 
     @Override
-    protected Processor doCreateDelegate(RouteContext routeContext) {
+    protected Processor doCreateDelegate() {
         if (definition.getAuditProcessorBeanName() != null) {
             definition.setAuditProcessor(
                     routeContext.lookup(definition.getAuditProcessorBeanName(), Processor.class));

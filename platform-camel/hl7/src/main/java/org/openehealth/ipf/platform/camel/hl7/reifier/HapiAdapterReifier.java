@@ -11,12 +11,12 @@ import org.openehealth.ipf.platform.camel.hl7.model.HapiAdapterDefinition;
  */
 public class HapiAdapterReifier extends ProcessorAdapterReifier<HapiAdapterDefinition> {
 
-    public HapiAdapterReifier(ProcessorDefinition<?> definition) {
-        super((HapiAdapterDefinition) definition);
+    public HapiAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
+        super(routeContext, (HapiAdapterDefinition) definition);
     }
 
     @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+    protected ProcessorAdapter doCreateProcessor() {
         return definition.getAdapter();
     }
 }

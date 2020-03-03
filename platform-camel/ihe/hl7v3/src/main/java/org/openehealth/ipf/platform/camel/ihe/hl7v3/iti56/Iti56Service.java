@@ -38,7 +38,7 @@ public class Iti56Service extends AbstractWebService implements Iti56PortType {
             throw new Fault(exception);
         }
         
-        return Exchanges.resultMessage(result).getBody(String.class);
+        return result.getMessage().getBody(String.class);
     }
 
 }
