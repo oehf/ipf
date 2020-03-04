@@ -187,9 +187,6 @@ class Hl7v3NakFactory {
                             statusCode(code: statusCode0)
                         }
                         queryResponseCode(code: queryResponseCode0)
-                        resultTotalQuantity(value: '0')
-                        resultCurrentQuantity(value: '0')
-                        resultRemainingQuantity(value: '0')
                     }
 
                     yieldElement(qbp, builder, HL7V3_NSURI)
