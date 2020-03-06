@@ -101,7 +101,8 @@ public class PIXV3 implements IntegrationProfile {
             false,
             false,
             ITI_44_REQUEST_VALIDATION_PROFILE,
-            ITI_44_RESPONSE_VALIDATION_PROFILE);
+            ITI_44_RESPONSE_VALIDATION_PROFILE,
+            true);
 
     private final static Hl7v3WsTransactionConfiguration ITI_44_XDS_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xds-iti44",
@@ -119,7 +120,8 @@ public class PIXV3 implements IntegrationProfile {
             false,
             false,
             ITI_44_REQUEST_VALIDATION_PROFILE,
-            ITI_44_RESPONSE_VALIDATION_PROFILE);
+            ITI_44_RESPONSE_VALIDATION_PROFILE,
+            true);
 
     private static final Hl7v3WsTransactionConfiguration ITI_45_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "pixv3-iti45",
@@ -137,7 +139,8 @@ public class PIXV3 implements IntegrationProfile {
             false,
             false,
             ITI_45_REQUEST_VALIDATION_PROFILE,
-            ITI_45_RESPONSE_VALIDATION_PROFILE);
+            ITI_45_RESPONSE_VALIDATION_PROFILE,
+            true);
 
     private final static Hl7v3WsTransactionConfiguration ITI_46_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "pixv3-iti46",
@@ -155,6 +158,7 @@ public class PIXV3 implements IntegrationProfile {
             false,
             false,
             ITI_46_REQUEST_VALIDATION_PROFILE,
-            ITI_46_RESPONSE_VALIDATION_PROFILE);
+            ITI_46_RESPONSE_VALIDATION_PROFILE,
+            true);
 
 }

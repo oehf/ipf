@@ -41,7 +41,8 @@ class Hl7v3NakFactory {
             Throwable throwable,
             String rootElementName,
             String controlActProcessCode,
-            boolean useCAckTypeCodes)
+            boolean useCAckTypeCodes,
+            boolean includeQuantities)
     {
         GPathResult xml
         try {
@@ -50,7 +51,7 @@ class Hl7v3NakFactory {
             xml = slurp('<dummy/>')
         }
 
-        return response(xml, throwable, rootElementName, controlActProcessCode, useCAckTypeCodes)
+        return response(xml, throwable, rootElementName, controlActProcessCode, useCAckTypeCodes, includeQuantities)
     }
 
 
@@ -74,6 +75,10 @@ class Hl7v3NakFactory {
      *      <tt>CA</tt>, <tt>CE</tt>, <tt>CR</tt> will be used instead of the default
      *      <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.  Ignored when the parameter
      *      <code>throwable</code> contanis an instance of {@link Hl7v3Exception}.
+     * @param includeQuantities
+     *      if <code>true</code>, the attributes <tt>QueryAck.resultTotalQuantity</tt>,
+     *      <tt>QueryAck.resultCurrentQuantity</tt>, <tt>QueryAck.resultRemainingQuantity</tt>
+     *      will be included in NAK.
      * @return
      *      HL7v3 response as XML String.
      */
@@ -82,7 +87,8 @@ class Hl7v3NakFactory {
         Throwable throwable,
         String rootElementName,
         String controlActProcessCode,
-        boolean useCAckTypeCodes)
+        boolean useCAckTypeCodes,
+        boolean includeQuantities)
     {
         if (controlActProcessCode && ! throwable) {
             throw new IllegalArgumentException("Cannot generate positive ACKs with <controlActProcess>")
@@ -187,6 +193,11 @@ class Hl7v3NakFactory {
                             statusCode(code: statusCode0)
                         }
                         queryResponseCode(code: queryResponseCode0)
+                        if (includeQuantities) {
+                            resultTotalQuantity(value: '0')
+                            resultCurrentQuantity(value: '0')
+                            resultRemainingQuantity(value: '0')
+                        }
                     }
 
                     yieldElement(qbp, builder, HL7V3_NSURI)
