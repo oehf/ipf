@@ -123,4 +123,39 @@ final class FromEbXMLVisitor implements Visitor {
     public void visit(FindDocumentsByReferenceIdQuery query) {
         new FindDocumentsByReferenceIdQueryTransformer().fromEbXML(query, ebXML);
     }
+
+    @Override
+    public void visit(FindMedicationTreatmentPlansQuery query) {
+        new FindMedicationTreatmentPlansQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindPrescriptionsQuery query) {
+        new FindPrescriptionsQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindDispensesQuery query) {
+        new FindDispensesQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindMedicationAdministrationsQuery query) {
+        new FindMedicationAdministrationsQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindPrescriptionsForValidationQuery query) {
+        new FindPrescriptionsForValidationQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindPrescriptionsForDispenseQuery query) {
+        new FindPrescriptionsForDispenseQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindMedicationListQuery query) {
+        new FindMedicationListQueryTransformer().fromEbXML(query, ebXML);
+    }
 }

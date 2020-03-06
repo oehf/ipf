@@ -1,25 +1,21 @@
-## Message types in IPF XDS/XCA/XCF/RAD Components
+## Message types in IPF XDS/XCA/XCF/RAD/... Components
 
-IPF XDS/XCA Components support both the "raw" ebXML format prescribed by the IHE specification as well as simplified data representation.
+IPF XD* components support both the "raw" ebXML format prescribed by the IHE specification as well as simplified data representation.
 See corresponding sections below for details.
 
 ### ebXML data model
 
-According to the IHE specification, XDS/XCA/XCF/RAD transactions
+According to the IHE specification, XD* transactions
 use [ebXML 3.0](http://www.oasis-open.org/committees/regrep/documents/3.0/) data models for incoming and outgoing messages.
 
-| ebXML version | IHE Transaction
-|---------------|-----------------------------------------------------
-| 3.0           | ITI-18, ITI-38, ITI-39, ITI-41, ITI-42, ITI-43, ITI-51, ITI-57, ITI-61, ITI-62, ITI-63, ITI-86, ITI-92, RAD-69, RAD-75
-
-IPF XDS/XCA components use Java stub classes instead of plain XML payload. All conversions are performed automatically when needed.
+Corresponding IPF components use Java stub classes instead of plain XML payload. All conversions are performed automatically when needed.
 
 
 Data types for the *request* message of the supported transactions are listed in the table below:
 
 | Transaction              | Request Message Type (`org.openehealth.ipf.commons.ihe.xds.core...`)
 |--------------------------|--------------------------------------------------------------------------------------------------
-| ITI-18,38,51,63          | [`.stub.ebrs30.query.AdhocQueryRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryRequest.html)
+| ITI-18,38,51,63; PHARM-1 | [`.stub.ebrs30.query.AdhocQueryRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryRequest.html)
 | ITI-39,43 	           | [`.ebxml.ebxml30.RetrieveDocumentSetRequestType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetRequestType.html)
 | ITI-41 	               | [`.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/ProvideAndRegisterDocumentSetRequestType.html)
 | ITI-42,57,61,92          | [`.stub.ebrs30.lcm.SubmitObjectsRequest`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/SubmitObjectsRequest.html)
@@ -32,7 +28,7 @@ Data types for the *response* message of the supported transactions are listed i
 
 | Transaction                       | Response Message Type (`org.openehealth.ipf.commons.ihe.xds.core...`)
 |-----------------------------------|--------------------------------------------------------------------------------------------------
-| ITI-18,38,51,63                   | [`.stub.ebrs30.query.AdhocQueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryResponse.html)
+| ITI-18,38,51,63; PHARM-1          | [`.stub.ebrs30.query.AdhocQueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/query/AdhocQueryResponse.html)
 | ITI-39,43; RAD-69,75              | [`.ebxml.ebxml30.RetrieveDocumentSetResponseType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html)
 | ITI-41,42,57,61,62,86,92          | [`.stub.ebrs30.rs.RegistryResponseType`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/rs/RegistryResponseType.html)
 
@@ -48,7 +44,7 @@ Data types for the *request* message of the supported transactions are listed in
 |--------------------------|--------------------------------------------------------------------------------------------------
 | ITI-42,57,61,92          | [`.RegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RegisterDocumentSet.html)
 | ITI-41                   | [`.ProvideAndRegisterDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/ProvideAndRegisterDocumentSet.html)
-| ITI-18,38,51,63          | [`.QueryRegistry`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html)
+| ITI-18,38,51,63; PHARM-1 | [`.QueryRegistry`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html)
 | ITI-39,43 	           | [`.RetrieveDocumentSet`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocumentSet.html)
 | ITI-62 	               | [`.RemoveMetadata`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveMetadata.html)
 | ITI-86       	           | [`.RemoveDocuments`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocuments.html)
@@ -59,7 +55,7 @@ Data types for the *response* message of the supported transactions are listed i
 | Transaction                          | Response Message Type (`org.openehealth.ipf.commons.ihe.xds.core.responses...`)
 |--------------------------------------|--------------------------------------------------------------------------------------------------
 | ITI-41,42,57,61,62,86,92             | [`.Response`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/Response.html)
-| ITI-18,38,51,63                      | [`.QueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html)
+| ITI-18,38,51,63; PHARM-1             | [`.QueryResponse`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html)
 | ITI-39,43; RAD-69,75                 | [`.RetrievedDocumentSet`](../staging/apidocs/org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html)
 
 Some XDS model classes from the package `org.openehealth.ipf.commons.ihe.xds.core.metadata` wrap [HAPI] objects:

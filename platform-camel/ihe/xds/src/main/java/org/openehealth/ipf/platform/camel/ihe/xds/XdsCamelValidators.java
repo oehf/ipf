@@ -25,16 +25,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.NonconstructiveDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveImagingDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocumentSetResponseValidator;
 
+import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_69;
 import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
@@ -532,8 +528,6 @@ public abstract class XdsCamelValidators {
 
     /**
      * Returns a validating processor for RAD-69 request messages.
-     *
-     * @return RAD_69_REQUEST_VALIDATOR
      */
     public static Processor rad69RequestValidator() {
         return RAD_69_REQUEST_VALIDATOR;
@@ -541,8 +535,6 @@ public abstract class XdsCamelValidators {
 
     /**
      * Returns a validating processor for RAD-69 response messages.
-     *
-     * @return RAD_69_RESPONSE_VALIDATOR
      */
     public static Processor rad69ResponseValidator() {
         return RAD_69_RESPONSE_VALIDATOR;
@@ -550,8 +542,6 @@ public abstract class XdsCamelValidators {
 
     /**
      * Returns a validating processor for RAD-75 request messages.
-     *
-     * @return RAD_75_REQUEST_VALIDATOR
      */
     public static Processor rad75RequestValidator() {
         return RAD_75_REQUEST_VALIDATOR;
@@ -559,10 +549,40 @@ public abstract class XdsCamelValidators {
 
     /**
      * Returns a validating processor for RAD-75 response messages.
-     *
-     * @return RAD_75_RESPONSE_VALIDATOR
      */
     public static Processor rad75ResponseValidator() {
         return RAD_75_RESPONSE_VALIDATOR;
+    }
+
+    private static final Processor PHARM_1_REQUEST_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLAdhocQueryRequest30 message =
+                new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
+        new AdhocQueryRequestValidator().validate(message, PHARM_1);
+    };
+
+    private static final Processor PHARM_1_RESPONSE_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLQueryResponse30 message =
+                new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
+        new QueryResponseValidator().validate(message, PHARM_1);
+    };
+
+    /**
+     * Returns a validating processor for PHARM-1 request messages.
+     */
+    public static Processor pharm1RequestValidator() {
+        return PHARM_1_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for PHARM-1 response messages.
+     */
+    public static Processor pharm1ResponseValidator() {
+        return PHARM_1_RESPONSE_VALIDATOR;
     }
 }

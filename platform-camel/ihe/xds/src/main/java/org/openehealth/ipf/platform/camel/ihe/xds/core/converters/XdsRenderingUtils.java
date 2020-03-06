@@ -60,7 +60,7 @@ public abstract class XdsRenderingUtils {
 
         /* --------- REQUESTS --------- */
 
-        // ITI-18, 38, 51, 63
+        // ITI-18, 38, 51, 63, PHARM-1
         TYPES_CORRESPONDENCE.put(QueryRegistry.class, AdhocQueryRequest.class);
 
         // ITI-41
@@ -83,7 +83,7 @@ public abstract class XdsRenderingUtils {
 
         /* --------- RESPONSES --------- */
 
-        // ITI-18, 38, 51, 63
+        // ITI-18, 38, 51, 63, PHARM-1
         TYPES_CORRESPONDENCE.put(QueryResponse.class, AdhocQueryResponse.class);
 
         // ITI-41, 42, 57, 61, 62, 86

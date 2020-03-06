@@ -58,6 +58,7 @@ public abstract class Query implements Serializable {
      * Visitor interface used for this class to implement the visitor pattern.
      */
     public interface Visitor {
+        // for ITI-18, ITI-38, ITI-51
         void visit(FindDocumentsQuery query);
         void visit(FindDocumentsForMultiplePatientsQuery query);
         void visit(FindFoldersQuery query);
@@ -73,8 +74,17 @@ public abstract class Query implements Serializable {
         void visit(GetAssociationsQuery query);
         void visit(GetAllQuery query);
         void visit(FindSubmissionSetsQuery query);
-        void visit(FetchQuery query);
         void visit(FindDocumentsByReferenceIdQuery query);
+        // for ITI-63
+        void visit(FetchQuery query);
+        // for PHARM-1
+        void visit(FindMedicationTreatmentPlansQuery query);
+        void visit(FindPrescriptionsQuery query);
+        void visit(FindDispensesQuery query);
+        void visit(FindMedicationAdministrationsQuery query);
+        void visit(FindPrescriptionsForValidationQuery query);
+        void visit(FindPrescriptionsForDispenseQuery query);
+        void visit(FindMedicationListQuery query);
     }
     
     /**

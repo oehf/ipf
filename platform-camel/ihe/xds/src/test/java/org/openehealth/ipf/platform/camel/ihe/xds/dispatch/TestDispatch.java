@@ -33,6 +33,7 @@ public class TestDispatch extends XdsStandardTestContainer {
 
     final String ITI_18_SERVICE_URI = "xds-iti18://localhost:8888/xdsRegistry";
     final String ITI_42_SERVICE_URI = "xds-iti42://localhost:8888/xdsRegistry";
+    final String PHARM_1_SERVICE_URL = "cmpd-pharm1://localhost:8888/xdsRegistry";
 
     public static void main(String... args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8889);
@@ -48,8 +49,9 @@ public class TestDispatch extends XdsStandardTestContainer {
     public void testXdsDispatch() {
         send(ITI_42_SERVICE_URI, SampleData.createRegisterDocumentSet());
         send(ITI_18_SERVICE_URI, SampleData.createFindDocumentsQuery());
+        send(PHARM_1_SERVICE_URL, SampleData.createFindDispensesQuery());
         AbstractMockedAuditMessageQueue queue = getAuditSender();
         List<AuditMessage> messages = queue.getMessages();
-        assertEquals(4, messages.size());
+        assertEquals(6, messages.size());
     }
 }

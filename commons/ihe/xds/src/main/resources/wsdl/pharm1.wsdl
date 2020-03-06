@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2020 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<definitions
+    targetNamespace="urn:ihe:iti:xds-b:2007"
+    name="CommunityPharmacyManager"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ihe="urn:ihe:iti:xds-b:2007"
+    xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+
+    <documentation>Community Pharmacy Manager = PHARM-1 adaptor = Query Pharmacy Documents</documentation>
+
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" schemaLocation="schema/ebRS30/query.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="QueryPharmacyDocuments_Message">
+        <documentation>Query Pharmacy Documents</documentation>
+        <part name="body" element="query:AdhocQueryRequest"/>
+    </message>
+
+    <message name="QueryPharmacyDocumentsResponse_Message">
+        <documentation>Query Pharmacy Documents Response</documentation>
+        <part name="body" element="query:AdhocQueryResponse"/>
+    </message>
+
+    <portType name="CommunityPharmacyManager_PortType">
+        <operation name="CommunityPharmacyManager_QueryPharmacyDocuments">
+            <input message="ihe:QueryPharmacyDocuments_Message"
+                   wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments"/>
+            <output message="ihe:QueryPharmacyDocumentsResponse_Message"
+                    wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocumentsResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="CommunityPharmacyManager_Binding_Soap12" type="ihe:CommunityPharmacyManager_PortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="CommunityPharmacyManager_QueryPharmacyDocuments">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="CommunityPharmacyManager_Service">
+        <port name="CommunityPharmacyManager_Port_Soap12" binding="ihe:CommunityPharmacyManager_Binding_Soap12">
+            <soap12:address location="http://servicelocation/CommunityPharmacyManager_Service12"/>
+        </port>
+    </service>
+</definitions>

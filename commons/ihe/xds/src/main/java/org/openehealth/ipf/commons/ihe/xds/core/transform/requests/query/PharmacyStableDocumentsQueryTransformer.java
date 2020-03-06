@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,22 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.PharmacyStableDocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
- * Transforms between an {@link DocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
- * @author Jens Riemschneider
+ * Base transformations for all stable-documents PHARM-1 queries.
+ * @author Quentin Ligier
+ * @since 3.7
  */
-abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends AbstractStoredQueryTransformer<T> {
+abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableDocumentsQuery> extends PharmacyDocumentsQueryTransformer<T> {
 
     /**
      * Transforms the query into its ebXML representation.
      * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * Does not perform any transformation if one of the parameters is <code>null</code>.
      * @param query
      *          the query. Can be <code>null</code>.
      * @param ebXML
@@ -42,33 +43,29 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
         }
 
         super.toEbXML(query, ebXML);
-
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
-
+        slots.fromStringList(DOC_ENTRY_UUID, query.getUuids());
+        slots.fromStringList(DOC_ENTRY_UNIQUE_ID, query.getUniqueIds());
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, toHL7(query.getCreationTime().getFrom()));
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_TO, toHL7(query.getCreationTime().getTo()));
-
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, toHL7(query.getServiceStartTime().getFrom()));
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, toHL7(query.getServiceStartTime().getTo()));
-        
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, toHL7(query.getServiceStopTime().getFrom()));
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, toHL7(query.getServiceStopTime().getTo()));
-
-        slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
-        slots.fromCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());
-        slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
         slots.fromCode(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, query.getHealthcareFacilityTypeCodes());
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
+
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, toHL7(query.getServiceStartTime().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, toHL7(query.getServiceStartTime().getTo()));
+
+        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, toHL7(query.getServiceStopTime().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, toHL7(query.getServiceStopTime().getTo()));
     }
-    
+
     /**
      * Transforms the ebXML representation of a query into a query object.
      * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * Does not perform any transformation if one of the parameters is <code>null</code>.
      * @param query
      *          the query. Can be <code>null</code>.
      * @param ebXML
@@ -80,23 +77,18 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
         }
 
         super.fromEbXML(query, ebXML);
-
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
 
-        query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
-        query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
-        query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
-        query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
-        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
-
-        query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
-        query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
-        
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
-        
+        query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.getCreationTime().setFrom(slots.toNumber(DOC_ENTRY_CREATION_TIME_FROM));
         query.getCreationTime().setTo(slots.toNumber(DOC_ENTRY_CREATION_TIME_TO));
-        
+        query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
+        query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
+        query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
+        query.setUniqueIds(slots.toStringList(DOC_ENTRY_UNIQUE_ID));
+        query.setUuids(slots.toStringList(DOC_ENTRY_UUID));
+
         query.getServiceStartTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_START_TIME_FROM));
         query.getServiceStartTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_START_TIME_TO));
 

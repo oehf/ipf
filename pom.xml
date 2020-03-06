@@ -786,6 +786,9 @@
                     <version>${surefire-report-plugin-version}</version>
                     <configuration>
                         <argLine>-Xms64m -Xmx512m</argLine>
+                        <systemPropertyVariables>
+                            <jdk.security.allowNonCaAnchor>true</jdk.security.allowNonCaAnchor>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
                 <plugin>

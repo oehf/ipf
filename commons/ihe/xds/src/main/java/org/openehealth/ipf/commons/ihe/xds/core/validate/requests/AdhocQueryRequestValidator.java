@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
@@ -93,6 +94,30 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         addAllowedMultipleSlots(FETCH,
                 DOC_ENTRY_EVENT_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_MEDICATION_TREATMENT_PLANS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_DISPENSES,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_MEDICATION_ADMINISTRATIONS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_VALIDATION,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_DISPENSE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
     }
 
 
@@ -113,13 +138,21 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 GET_SUBMISSION_SET_AND_CONTENTS,
                 GET_FOLDER_AND_CONTENTS,
                 GET_FOLDERS_FOR_DOCUMENT,
-                GET_RELATED_DOCUMENTS);
+                GET_RELATED_DOCUMENTS,
+                FIND_MEDICATION_TREATMENT_PLANS,
+                FIND_PRESCRIPTIONS,
+                FIND_DISPENSES,
+                FIND_MEDICATION_ADMINISTRATIONS,
+                FIND_PRESCRIPTIONS_FOR_VALIDATION,
+                FIND_PRESCRIPTIONS_FOR_DISPENSE,
+                FIND_MEDICATION_LIST);
 
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
         ALLOWED_QUERY_TYPES.put(ITI_18, storedQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_38, storedQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));
         ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
+        ALLOWED_QUERY_TYPES.put(PHARM_1, storedQueryTypes);
     }
 
 
@@ -299,6 +332,43 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                         new AssociationValidation(ASSOCIATION_TYPE),
+                        new DocumentEntryTypeValidation(),
+                };
+
+            case FIND_MEDICATION_TREATMENT_PLANS:
+            case FIND_PRESCRIPTIONS:
+            case FIND_DISPENSES:
+            case FIND_MEDICATION_ADMINISTRATIONS:
+            case FIND_PRESCRIPTIONS_FOR_VALIDATION:
+            case FIND_PRESCRIPTIONS_FOR_DISPENSE:
+                return new QueryParameterValidation[]{
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new StringListValidation(FOLDER_UUID, nopValidator),
+                        new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
+                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                        new StatusValidation(DOC_ENTRY_STATUS),
+                };
+
+            case FIND_MEDICATION_LIST:
+                return new QueryParameterValidation[]{
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_END_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_END_TO, timeValidator),
+                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                        new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
                 };
         }
