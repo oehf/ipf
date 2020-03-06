@@ -16,7 +16,7 @@
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>4.2.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
-        <ipf-gazelle-version>1.4.0</ipf-gazelle-version>
+        <ipf-gazelle-version>1.5.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <jaxb-version>2.3.0</jaxb-version>
