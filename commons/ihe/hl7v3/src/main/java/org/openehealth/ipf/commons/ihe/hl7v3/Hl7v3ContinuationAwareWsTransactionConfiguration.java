@@ -49,14 +49,14 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
             CombinedXmlValidationProfile requestValidationProfile,
             CombinedXmlValidationProfile responseValidationProfile,
             String mainRequestRootElementName,
-            String mainResponseRootElementName
-    )
+            String mainResponseRootElementName,
+            boolean includeQuantities)
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
                 serviceName, sei, bindingName, mtom, wsdlLocation,
                 nakRootElementName, controlActProcessCode,
                 auditRequestPayload, supportAsynchrony,
-                requestValidationProfile, responseValidationProfile, true);
+                requestValidationProfile, responseValidationProfile, includeQuantities);
 
         Validate.notEmpty(mainRequestRootElementName);
         Validate.notEmpty(mainResponseRootElementName);

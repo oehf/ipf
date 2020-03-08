@@ -67,8 +67,8 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
      * @param supportAsynchrony
      *      whether producers can request asynchronous responses via WSA.
      * @param includeQuantities
-     *      whether the attributes <tt>QueryAck.resultTotalQuantity</tt>, <tt>QueryAck.resultCurrentQuantity</tt>,
-     *      <tt>QueryAck.resultRemainingQuantity </tt> will be included in the NAK.
+     *      whether the elements <tt>resultTotalQuantity</tt>, <tt>resultCurrentQuantity</tt>,
+     *      <tt>resultRemainingQuantity</tt> will be included into the NAK.
      */
     public Hl7v3WsTransactionConfiguration(
             String name,
@@ -100,7 +100,4 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
         this.includeQuantities = includeQuantities;
     }
 
-    public boolean includeQuantities() {
-        return includeQuantities;
-    }
 }
