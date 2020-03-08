@@ -92,7 +92,8 @@ public class XCPD implements IntegrationProfile {
             false,
             true,
             ITI_55_REQUEST_VALIDATION_PROFILE,
-            ITI_55_RESPONSE_VALIDATION_PROFILE);
+            ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti55-async-response",
@@ -110,7 +111,8 @@ public class XCPD implements IntegrationProfile {
             false,
             false,
             ITI_55_REQUEST_VALIDATION_PROFILE,
-            ITI_55_RESPONSE_VALIDATION_PROFILE);
+            ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_DEFERRED_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti55-deferred-response",
@@ -128,7 +130,8 @@ public class XCPD implements IntegrationProfile {
             false,
             false,
             ITI_55_REQUEST_VALIDATION_PROFILE,
-            ITI_55_RESPONSE_VALIDATION_PROFILE);
+            ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false);
 
     private final static Hl7v3WsTransactionConfiguration ITI56_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti56",
@@ -146,7 +149,8 @@ public class XCPD implements IntegrationProfile {
             true,
             true,
             ITI_56_REQUEST_VALIDATION_PROFILE,
-            ITI_56_RESPONSE_VALIDATION_PROFILE);
+            ITI_56_RESPONSE_VALIDATION_PROFILE,
+            false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_56_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti56-async-response",
@@ -164,6 +168,7 @@ public class XCPD implements IntegrationProfile {
             false,
             false,
             ITI_56_REQUEST_VALIDATION_PROFILE,
-            ITI_56_RESPONSE_VALIDATION_PROFILE);
+            ITI_56_RESPONSE_VALIDATION_PROFILE,
+            false);
 
 }

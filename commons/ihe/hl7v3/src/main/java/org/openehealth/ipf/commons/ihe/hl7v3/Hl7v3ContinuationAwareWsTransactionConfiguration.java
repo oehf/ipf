@@ -56,7 +56,7 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
                 serviceName, sei, bindingName, mtom, wsdlLocation,
                 nakRootElementName, controlActProcessCode,
                 auditRequestPayload, supportAsynchrony,
-                requestValidationProfile, responseValidationProfile);
+                requestValidationProfile, responseValidationProfile, true);
 
         Validate.notEmpty(mainRequestRootElementName);
         Validate.notEmpty(mainResponseRootElementName);

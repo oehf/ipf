@@ -75,7 +75,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 throwable,
                 wsTransactionConfiguration.getNakRootElementName(),
                 wsTransactionConfiguration.getControlActProcessCode(),
-                false);
+                false,
+                wsTransactionConfiguration.includeQuantities());
     }
 
     /**
@@ -86,7 +87,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 request, throwable,
                 wsTransactionConfiguration.getNakRootElementName(),
                 wsTransactionConfiguration.getControlActProcessCode(),
-                false);
+                false,
+                wsTransactionConfiguration.includeQuantities());
     }
 
     public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
