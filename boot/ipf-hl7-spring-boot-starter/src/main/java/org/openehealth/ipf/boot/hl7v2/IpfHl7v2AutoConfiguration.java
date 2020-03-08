@@ -31,6 +31,8 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
@@ -164,7 +166,7 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.hl7v2.caching")
     public InteractiveContinuationStorage interactiveContinuationStorage(CacheManager cacheManager) {
-        return new CachingInteractiveHl7v2ContinuationStorage(cacheManager);
+        return new SpringCacheInteractiveContinuationStorage(cacheManager);
     }
 
     // Provide "unsolicitedFragmentationStorage" for HL7v2 fragmentation
@@ -173,7 +175,7 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.hl7v2.caching")
     public UnsolicitedFragmentationStorage unsolicitedFragmentationStorage(CacheManager cacheManager) {
-        return new CachingUnsolicitedFragmentionStorage(cacheManager);
+        return new SpringCacheUnsolicitedFragmentationStorage(cacheManager);
     }
 
 }

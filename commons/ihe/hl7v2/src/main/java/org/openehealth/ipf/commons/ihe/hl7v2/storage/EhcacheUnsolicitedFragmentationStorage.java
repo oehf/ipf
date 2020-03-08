@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 
 import static java.util.Objects.requireNonNull;
 

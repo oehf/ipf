@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.openehealth.ipf.boot.hl7v2;
+package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
 import ca.uhn.hl7v2.model.Message;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
@@ -34,13 +32,13 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.2
  */
-public class CachingInteractiveHl7v2ContinuationStorage implements InteractiveContinuationStorage {
+public class SpringCacheInteractiveContinuationStorage implements InteractiveContinuationStorage {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(CachingInteractiveHl7v2ContinuationStorage.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(SpringCacheInteractiveContinuationStorage.class);
     private static final String INTERACTIVE_CONTINUATION_CACHE = "interactiveHl7v2ContinuationCache";
     private final Cache cache;
 
-    public CachingInteractiveHl7v2ContinuationStorage(CacheManager cacheManager) {
+    public SpringCacheInteractiveContinuationStorage(CacheManager cacheManager) {
         this.cache = cacheManager.getCache(INTERACTIVE_CONTINUATION_CACHE);
     }
 
