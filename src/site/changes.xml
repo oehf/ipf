@@ -24,8 +24,44 @@
     </properties>
     <body>
         <release version="3.7.0" description="IPF 3.7.0" date="tbd">
+            <action dev="unixoid" issue="300" type="fix">
+                Move classes CachingUnsolicitedFragmentionStorage and CachingInteractiveHl7v2ContinuationStorage to commons-ihe-hl7v2 and rename
+            </action>
+            <action dev="stanojevic-boris" type="update">
+                Upgrade to IPF-Gazelle 1.5.0
+            </action>
+            <action dev="paidaki" issue="299" type="add">
+                Add new XDS error codes
+            </action>
+            <action dev="paidaki" issue="298" type="fix">
+                Fix generation of XCPD ACKs/NAKs
+            </action>
+            <action dev="qligier" issue="296" type="add">
+                Add support for the IHE transaction PHARM-1 "Query Pharmacy Documents"
+            </action>
+            <action dev="EugenFischer" issue="295" type="fix">
+                Fix ATNA audit for RAD-69 and RAD-75
+            </action>
+            <action dev="qligier" issue="292" type="update">
+                Upgrade MDHT library to version 1.6.0-201807
+            </action>
+            <action dev="rsteppac" issue="289" type="fix">
+                Fix XUA codes
+            </action>
+            <action dev="ohr" issue="282" type="add">
+                Add support for FHIR R4
+            </action>
+            <action dev="ohr" type="remove">
+                Drop support for FHIR DSTU 2
+            </action>
+            <action dev="qligier" issue="280" type="fix">
+                Fix CDA parser vulnerability to XXE injections
+            </action>
+            <action dev="rsteppac" issue="278" type="fix">
+                Fix ATNA audit for the PPQ-1 transaction
+            </action>
             <action dev="thopap" issue="268" type="fix">
-                IPF does not detect XDS limitedMetadata properly
+                Fix handling  of the XDS limitedMetadata attribute
             </action>
         </release>
         <release version="3.6.4" description="IPF 3.6.4" date="16 Jan 2020">

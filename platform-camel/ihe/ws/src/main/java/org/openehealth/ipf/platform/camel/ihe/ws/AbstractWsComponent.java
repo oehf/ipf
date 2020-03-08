@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import org.apache.camel.ResolveEndpointFailedException;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;

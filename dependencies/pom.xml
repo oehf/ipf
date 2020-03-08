@@ -18,13 +18,12 @@
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.5.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
+        <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
-
         <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
         <spring-version>5.1.12.RELEASE</spring-version>
