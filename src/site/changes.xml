@@ -25,7 +25,9 @@
     <body>
         <release version="3.7.0" description="IPF 3.7.0" date="tbd">
             <action dev="unixoid" issue="300" type="fix">
-                Move classes CachingUnsolicitedFragmentionStorage and CachingInteractiveHl7v2ContinuationStorage to commons-ihe-hl7v2 and rename
+                Move classes CachingUnsolicitedFragmentionStorage and CachingInteractiveHl7v2ContinuationStorage to commons-ihe-hl7v2 and rename.
+                Same with CachingAsynchronyCorrelator (moved to ipf-commons-ihe-xds), CachingHl7v3ContinuationStorage (moved to ipf-commons-ihe-ws)
+                and CachingPagingProvider (moved to ipf-commons-ihe-fhir-core).
             </action>
             <action dev="stanojevic-boris" type="update">
                 Upgrade to IPF-Gazelle 1.5.0

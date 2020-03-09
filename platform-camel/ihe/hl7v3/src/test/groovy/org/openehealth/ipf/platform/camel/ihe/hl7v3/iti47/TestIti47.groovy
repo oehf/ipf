@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
-import org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage
+
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer

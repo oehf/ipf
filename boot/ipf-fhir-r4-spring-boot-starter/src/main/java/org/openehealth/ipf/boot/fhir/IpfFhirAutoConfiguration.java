@@ -25,6 +25,7 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.r4.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
@@ -116,7 +117,7 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnProperty(value = "ipf.fhir.caching", havingValue = "true")
     public IPagingProvider pagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
-        CachingPagingProvider pagingProvider = new CachingPagingProvider(cacheManager, fhirContext);
+        SpringCachePagingProvider pagingProvider = new SpringCachePagingProvider(cacheManager, fhirContext);
         pagingProvider.setDefaultPageSize(servletProperties.getDefaultPageSize());
         pagingProvider.setMaximumPageSize(servletProperties.getMaxPageSize());
         pagingProvider.setDistributed(servletProperties.isDistributedPagingProvider());
