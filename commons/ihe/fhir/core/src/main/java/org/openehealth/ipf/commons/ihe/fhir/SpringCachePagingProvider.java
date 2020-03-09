@@ -98,6 +98,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
     }
 
     private IBundleProvider deserialize(List<String> list) {
+        if (list == null) return null;
         IParser parser = fhirContext.newJsonParser();
         return new SimpleBundleProvider(list.stream()
                 .map(parser::parseResource)

@@ -35,7 +35,7 @@ public class SpringCacheHl7v3ContinuationStorage implements Hl7v3ContinuationSto
     private static final String LAST_RESULT_NUMBER_SUFFIX = ".lastIndex";
     private static final String CONTINUATION_QUANTITY_SUFFIX = ".quantity";
 
-    SpringCacheHl7v3ContinuationStorage(CacheManager cacheManager) {
+    public SpringCacheHl7v3ContinuationStorage(CacheManager cacheManager) {
         this.cache = cacheManager.getCache(INTERACTIVE_CONTINUATION_CACHE);
     }
 
