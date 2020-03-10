@@ -16,8 +16,6 @@
 
 package org.openehealth.ipf.commons.audit.utils;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Map;
@@ -41,18 +39,10 @@ public class AuditUtils {
     private static final String USER = "USER";
 
     /**
-     * @return the process ID of the running process or "unknown"
+     * @return the process ID of the running process
      */
     public static String getProcessId() {
-        return systemData.computeIfAbsent(PID, s -> {
-            RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
-            String name = mx.getName();
-            int pointer;
-            if ((pointer = name.indexOf('@')) != -1) {
-                return name.substring(0, pointer);
-            }
-            return "unknown";
-        });
+        return systemData.computeIfAbsent(PID, s -> Long.toString(ProcessHandle.current().pid()));
     }
 
     /**
