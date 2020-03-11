@@ -51,16 +51,16 @@ public class UDPSyslogServer extends AbstractVerticle {
         final DatagramSocket socket = vertx.createDatagramSocket(dsOptions);
         socket.listen(udpPort, host, datagramSocketAsyncResult -> {
             if (datagramSocketAsyncResult.succeeded()){
-                log.info("Listening on UDP port " + udpPort);
+                log.info("Listening on UDP port {}", socket.localAddress());
                 async.countDown();
                 socket.handler(packet -> {
                     String decoded = packet.data().getString(0, packet.data().length());
-                    log.debug("=============== Received content on UDP " + udpPort +
-                             " ================= \n" + decoded);
+                    log.debug("=============== Received content on {} ================= \n{}",
+                            socket.localAddress(), decoded);
                     async.countDown();
                 });
             } else {
-                log.warn("Listen failed on port " + udpPort, datagramSocketAsyncResult.cause());
+                log.warn("Listen failed on port {}", udpPort, datagramSocketAsyncResult.cause());
             }
         });
     }

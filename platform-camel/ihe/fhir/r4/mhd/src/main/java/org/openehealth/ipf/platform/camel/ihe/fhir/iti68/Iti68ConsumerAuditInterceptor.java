@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Audit Interceptor for ITI-68. Note that the ParticipantObjectIdentificationType for the document
- * is not populated automatically, because the location of the parametzers depends upon the actual
+ * is not populated automatically, because the location of the parameters depends upon the actual
  * implementation. The AuditDataset is forwarded in the Camel message header "AuditDataset" so that
- * at least {@link Iti68AuditDataset#documentUniqueId} can be set.
+ * at least {@link Iti68AuditDataset#setDocumentUniqueId(String)} can be set.
  *
  * @author Christian Ohr
  * @since 3.6

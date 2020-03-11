@@ -31,7 +31,9 @@ public enum NameQualifier {
     PATIENT("urn:e-health-suisse:2015:epr-spid"),
     PROFESSIONAL("urn:gs1:gln"),
     REPRESENTATIVE("urn:e-health-suisse:representative-id"),
-    ;
+    TECHNICAL_USER("urn:e-health-suisse:technical-user-id"),
+    POLICY_ADMIN("urn:e-health-suisse:policy-administrator-id"),
+    DOCUMENT_ADMIN("urn:e-health-suisse:document-administrator-id");
 
     @Getter private final String qualifier;
 

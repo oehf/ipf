@@ -20,11 +20,13 @@ package org.openehealth.ipf.commons.ihe.fhir.support;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.NamingSystem;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -44,7 +46,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return a stream of {@link NamingSystem} instances that match the provided {@link Predicate}
      */
-    Stream<NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
+    Stream<? extends NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
 
     /**
      * Returns the first {@link NamingSystem} instances that match the provided {@link Predicate}
@@ -53,7 +55,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return {@link NamingSystem} instance that match the provided {@link Predicate}
      */
-    default Optional<NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
+    default Optional<? extends NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
         return findNamingSystems(id, predicate).findFirst();
     }
 
@@ -65,7 +67,7 @@ public interface NamingSystemService {
      * @param value value
      * @return {@link NamingSystem} instance that match the provided type and value
      */
-    default Optional<NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
+    default Optional<? extends NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
         return findFirstNamingSystem(id, allOf(
                 byTypeAndValue(type, value),
                 byStatus(Enumerations.PublicationStatus.ACTIVE)));
@@ -111,11 +113,18 @@ public interface NamingSystemService {
 
     // Functions
 
-    static Function<NamingSystem, String> getValueOfType(NamingSystem.NamingSystemIdentifierType type) {
+    static Function<? super NamingSystem, String> getValueOfType(NamingSystem.NamingSystemIdentifierType type) {
         return namingSystem -> namingSystem.getUniqueId().stream()
                 .filter(uniqueId -> type == uniqueId.getType())
                 .findFirst()
                 .map(NamingSystem.NamingSystemUniqueIdComponent::getValue)
                 .orElse(null);
+    }
+
+    static Function<? super NamingSystem, List<String>> getValuesOfType(NamingSystem.NamingSystemIdentifierType type) {
+        return namingSystem -> namingSystem.getUniqueId().stream()
+                .filter(uniqueId -> type == uniqueId.getType())
+                .map(NamingSystem.NamingSystemUniqueIdComponent::getValue)
+                .collect(Collectors.toList());
     }
 }

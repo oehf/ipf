@@ -50,6 +50,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     public static final String REPOSITORY_UNIQUE_ID = "Repository Unique Id";
     public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
     public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
+    public static final String DOCUMENT_UNIQUE_ID = "ihe:DocumentUniqueId";
 
     private final AuditContext auditContext;
 
@@ -168,6 +169,30 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         }
         return tvp;
     }
+
+
+    public List<TypeValuePairType> dicomDetails(String repositoryId,
+            String homeCommunityId,
+            String documentInstanceId,
+            String seriesInstanceId,
+            boolean xcaHomeCommunityId) {
+        List<TypeValuePairType> tvp = new ArrayList<>(0);
+        if (documentInstanceId != null) {
+            tvp.add(getTypeValuePair(DOCUMENT_UNIQUE_ID, documentInstanceId));
+        }
+        if (seriesInstanceId != null) {
+            tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
+        }
+        if (repositoryId != null) {
+            tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
+        }
+        if (homeCommunityId != null) {
+            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            tvp.add(getTypeValuePair(type, homeCommunityId));
+        }
+        return tvp;
+    }
+
 
     /**
      * Adds a Participant Object representing a Security Resource involved in the event

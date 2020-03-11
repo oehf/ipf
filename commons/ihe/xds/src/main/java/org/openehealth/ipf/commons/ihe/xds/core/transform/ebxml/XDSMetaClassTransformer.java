@@ -132,8 +132,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         }
         
         metaData.setLimitedMetadata(ebXML.getClassifications().stream()
-                .filter(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode()))
-                .findFirst().isPresent());
+                .anyMatch(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode())));
 
         return metaData;
     }

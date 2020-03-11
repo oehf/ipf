@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import java.util.concurrent.ExecutorService;
-
 import groovy.xml.slurpersupport.GPathResult;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -41,6 +39,8 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ExecutorService;
 
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND;
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND;
@@ -170,7 +170,8 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
             // return an immediate MCCI ACK
             configureWsaAction(Iti55PortType.DEFERRED_REQUEST_OUTPUT_ACTION);
-            return response(requestXml, null, "MCCI_IN000002UV01", null, false);
+            return response(requestXml, null, "MCCI_IN000002UV01", null, false,
+                            getWsTransactionConfiguration().isIncludeQuantities());
         }
 
         else {

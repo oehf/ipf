@@ -17,6 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.test;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.r4.model.CapabilityStatement;
@@ -67,8 +69,8 @@ public class FhirTestContainer extends StandardTestContainer {
     }
 
     protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
-        // Hmm, I wonder if this could not be done automatically...
-        OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
+        IParser parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
+        OperationOutcome oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
         Assert.assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
         Assert.assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 

@@ -37,6 +37,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 
@@ -83,6 +84,8 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
                 new Iti63AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_CrossGatewayDocumentProvide"),
                 new Iti80ServerAuditStrategy());
+        map.put(new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_QueryPharmacyDocuments"),
+                new Pharm1AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_RemoveDocuments"),
                 new Iti86AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_RestrictedUpdateDocumentSet"),

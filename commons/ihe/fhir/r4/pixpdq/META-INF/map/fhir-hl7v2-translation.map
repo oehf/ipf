@@ -184,7 +184,7 @@ mappings = {
         'Internet'  : 'email',
         'BP'        : 'pager',
         'CP'        : 'phone',
-        (ELSE)  : ''
+        (ELSE)  : 'other'
     )
 
     'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.5.1', 'http://hl7.org/fhir/administrative-gender'],
@@ -193,6 +193,6 @@ mappings = {
         'A' : 'other',
         'O' : 'other',
         'U' : 'unknown',
-        (ELSE): ''
+        (ELSE): 'unknown'
     )
 }

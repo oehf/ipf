@@ -35,7 +35,11 @@
             <artifactId>ehcache</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- Dependencies for test -->
         <dependency>
             <groupId>xmlunit</groupId>

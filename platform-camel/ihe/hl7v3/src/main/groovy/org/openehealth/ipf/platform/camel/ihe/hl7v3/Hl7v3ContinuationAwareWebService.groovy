@@ -278,8 +278,8 @@ abstract class Hl7v3ContinuationAwareWebService
         String responseString = storage.getMessage(key)
         if (responseString) {
             storage.remove(key)
-            GPathResult response = slurp(responseString)
-            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true)
+            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true,
+                                                     wsTransactionConfiguration.includeQuantities)
             if (LOG.debugEnabled) {
                 LOG.debug('cancel(): generated ACK\n' + result)
             }

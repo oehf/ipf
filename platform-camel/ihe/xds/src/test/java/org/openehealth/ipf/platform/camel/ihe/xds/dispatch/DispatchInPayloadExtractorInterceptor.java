@@ -34,6 +34,7 @@ public class DispatchInPayloadExtractorInterceptor extends InPayloadExtractorInt
         SET.add(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayQuery"));
         SET.add(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_MultiPatientStoredQuery"));
         SET.add(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayFetch"));
+        SET.add(new QName("urn:ihe:iti:xds-b:2007", "CommunityPharmacyManager_QueryPharmacyDocuments"));
     }
 
 

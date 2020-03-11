@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 import ca.uhn.hl7v2.model.Message;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

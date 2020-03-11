@@ -77,5 +77,6 @@ public class QED implements IntegrationProfile {
             PCC_1_REQUEST_VALIDATION_PROFILE,
             PCC_1_RESPONSE_VALIDATION_PROFILE,
             "QUPC_IN043100UV01",
-            "QUPC_IN043200UV01");
+            "QUPC_IN043200UV01",
+            true);
 }

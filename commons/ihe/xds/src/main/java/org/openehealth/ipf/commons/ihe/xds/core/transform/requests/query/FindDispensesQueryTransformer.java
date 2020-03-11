@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xacml20.model;
+package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDispensesQuery;
 
 /**
- * This class is used only to create the XML Schema.
- * @author Dmytro Rud
+ * Transforms between {@link FindDispensesQuery} and {@link EbXMLAdhocQueryRequest}.
+ * @author Quentin Ligier
+ * @since 3.7
  */
-@XmlType(name = "Dummy", namespace = "dummy", propOrder = {"cx", "nameQualifier", "purposeOfUse", "subjectRole"})
-public class Dummy {
-    @XmlElement
-    CX cx;
-
-    @XmlElement
-    NameQualifier nameQualifier;
-
-    @XmlElement
-    PurposeOfUse purposeOfUse;
-
-    @XmlElement
-    SubjectRole subjectRole;
+public class FindDispensesQueryTransformer extends PharmacyStableDocumentsQueryTransformer<FindDispensesQuery> {
 }

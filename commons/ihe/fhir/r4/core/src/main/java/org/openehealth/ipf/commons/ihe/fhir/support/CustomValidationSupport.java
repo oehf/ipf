@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.api.EncodingEnum;
 import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.model.StructureDefinition;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -59,7 +61,8 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
         InputStream is = getClass().getClassLoader().getResourceAsStream(path);
         if (is != null) {
             String profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), "UTF-8").useDelimiter("\\A").next();
-            T structureDefinition = (T) fhirContext.newXmlParser().parseResource(StructureDefinition.class, profileText);
+            IParser parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
+            T structureDefinition = (T) parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition);
         }
         return Optional.empty();

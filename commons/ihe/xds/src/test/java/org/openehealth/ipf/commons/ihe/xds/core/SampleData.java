@@ -745,5 +745,93 @@ public abstract class SampleData {
         return removeDocs;
     }
 
+    /**
+     * @return a sample stored query to find dispenses.
+     */
+    public static QueryRegistry createFindDispensesQuery() {
+        final FindDispensesQuery query = new FindDispensesQuery();
+
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setHomeCommunityId("12.21.41");
+        final QueryList<Code> confidentialityCodes = new QueryList<>();
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        confidentialityCodes.getOuterList().add(
+                Collections.singletonList(new Code("code12", null, "scheme12")));
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.getCreationTime().setFrom("1980");
+        query.getCreationTime().setTo("1981");
+        query.getServiceStartTime().setFrom("1982");
+        query.getServiceStartTime().setTo("1983");
+        query.getServiceStopTime().setFrom("1984");
+        query.getServiceStopTime().setTo("1985");
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setUuids(Arrays.asList("uuid1", "uuid2"));
+        query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
+        query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
+        final QueryList<Code> eventCodes = new QueryList<>();
+        eventCodes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        eventCodes.getOuterList().add(
+                Collections.singletonList(new Code("code9", null, "scheme9")));
+        query.setEventCodes(eventCodes);
+        query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
+
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query to find prescriptions.
+     */
+    public static QueryRegistry createFindPrescriptionsQuery() {
+        final FindPrescriptionsQuery query = new FindPrescriptionsQuery();
+
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setHomeCommunityId("urn:oid:1.2.3.14.15.926");
+        final QueryList<Code> confidentialityCodes = new QueryList<>();
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        confidentialityCodes.getOuterList().add(
+                Collections.singletonList(new Code("code12", null, "scheme12")));
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.getCreationTime().setFrom("1980");
+        query.getCreationTime().setTo("1981");
+        query.getServiceStartTime().setFrom("1982");
+        query.getServiceStartTime().setTo("1983");
+        query.getServiceStopTime().setFrom("1984");
+        query.getServiceStopTime().setTo("1985");
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
+        query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
+        query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
+        final QueryList<Code> eventCodes = new QueryList<>();
+        eventCodes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        eventCodes.getOuterList().add(
+                Collections.singletonList(new Code("code9", null, "scheme9")));
+        query.setEventCodes(eventCodes);
+        query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
+
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query to find medication lists.
+     */
+    public static QueryRegistry createFindMedicationListQuery() {
+        final FindMedicationListQuery query = new FindMedicationListQuery();
+
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setHomeCommunityId("12.21.41");
+        query.getServiceStart().setFrom("1982");
+        query.getServiceStart().setTo("1983");
+        query.getServiceEnd().setFrom("1984");
+        query.getServiceEnd().setTo("1985");
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+        query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
+
+        return new QueryRegistry(query);
+    }
 }
 

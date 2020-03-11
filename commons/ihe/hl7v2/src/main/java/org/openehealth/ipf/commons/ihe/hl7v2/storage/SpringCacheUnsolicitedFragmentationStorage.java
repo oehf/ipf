@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
-package org.openehealth.ipf.boot.hl7v2;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 /**
- * CachingUnsolicitedFragmentionStorage that uses a Spring cache abstraction
+ * CachingUnsolicitedFragmentationStorage that uses a Spring cache abstraction
  *
  * @author Christian Ohr
  * @since 3.2
  */
-public class CachingUnsolicitedFragmentionStorage implements UnsolicitedFragmentationStorage {
+public class SpringCacheUnsolicitedFragmentationStorage implements UnsolicitedFragmentationStorage {
 
-    private static final String UNSOLICITED_FRAGMENTATION_STORAGE = "unsolicitedFragmentionStorage";
+    private static final String UNSOLICITED_FRAGMENTATION_STORAGE = "unsolicitedFragmentationStorage";
     private final Cache cache;
 
-    public CachingUnsolicitedFragmentionStorage(CacheManager cacheManager) {
+    public SpringCacheUnsolicitedFragmentationStorage(CacheManager cacheManager) {
         this.cache = cacheManager.getCache(UNSOLICITED_FRAGMENTATION_STORAGE);
     }
 

@@ -23,6 +23,100 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="3.7.0" description="IPF 3.7.0" date="tbd">
+            <action dev="unixoid" issue="300" type="fix">
+                Move classes CachingUnsolicitedFragmentionStorage and CachingInteractiveHl7v2ContinuationStorage to commons-ihe-hl7v2 and rename.
+                Same with CachingAsynchronyCorrelator (moved to ipf-commons-ihe-xds), CachingHl7v3ContinuationStorage (moved to ipf-commons-ihe-ws)
+                and CachingPagingProvider (moved to ipf-commons-ihe-fhir-core).
+            </action>
+            <action dev="stanojevic-boris" type="update">
+                Upgrade to IPF-Gazelle 1.5.0
+            </action>
+            <action dev="paidaki" issue="299" type="add">
+                Add new XDS error codes
+            </action>
+            <action dev="paidaki" issue="298" type="fix">
+                Fix generation of XCPD ACKs/NAKs
+            </action>
+            <action dev="qligier" issue="296" type="add">
+                Add support for the IHE transaction PHARM-1 "Query Pharmacy Documents"
+            </action>
+            <action dev="EugenFischer" issue="295" type="fix">
+                Fix ATNA audit for RAD-69 and RAD-75
+            </action>
+            <action dev="qligier" issue="292" type="update">
+                Upgrade MDHT library to version 1.6.0-201807
+            </action>
+            <action dev="rsteppac" issue="289" type="fix">
+                Fix XUA codes
+            </action>
+            <action dev="ohr" issue="282" type="add">
+                Add support for FHIR R4
+            </action>
+            <action dev="ohr" type="remove">
+                Drop support for FHIR DSTU 2
+            </action>
+            <action dev="qligier" issue="280" type="fix">
+                Fix CDA parser vulnerability to XXE injections
+            </action>
+            <action dev="rsteppac" issue="278" type="fix">
+                Fix ATNA audit for the PPQ-1 transaction
+            </action>
+            <action dev="thopap" issue="268" type="fix">
+                Fix handling  of the XDS limitedMetadata attribute
+            </action>
+        </release>
+        <release version="3.6.4" description="IPF 3.6.4" date="16 Jan 2020">
+            <action dev="ohr" issue="288" type="fix">
+                Gender query parameter must be translated between PDQv3 and PDQv2
+            </action>
+            <action dev="ohr" issue="286" type="fix">
+                Re-resolve InetAddress of audit repository for every new connection.
+            </action>
+            <action dev="ohr" issue="284" type="change">
+                When translating v2 to v3 make codes for home phone and work phone use configurable
+            </action>
+            <action dev="ohr" issue="283" type="fix">
+                Fix some more NPE issues during auditing of very incomplete IHE requests
+            </action>
+            <action dev="ohr" issue="281" type="fix">
+                Fix audit record written for PIX Feed v3: only one patientID must be written and participating object
+            </action>
+            <action dev="ohr" issue="260" type="fix">
+                Fix Fe path for ITI-65 model validation. Thanks to rbastiaansen732 for reporting.
+            </action>
+        </release>
+        <release version="3.6.3" description="IPF 3.6.3" date="14 Nov 2019">
+            <action dev="ohr" issue="276" type="fix">
+                Outgoing PIX Feed v3 Messages created by PixFeedRequest2to3Translator do not pass Gazelle validation due to
+                missing attribute and placement of other IDs
+            </action>
+            <action dev="rsteppac" issue="275" type="fix">
+                Fix marshalling order MediaType vs RoleId code to comply with schema
+            </action>
+        </release>
+        <release version="3.6.2" description="IPF 3.6.2" date="01 Oct 2019">
+            <action dev="thopap" issue="270" type="fix">
+                XDS validations on Document Relationships should use the qualified error code UnresolvedReferenceException when applicable
+            </action>
+            <action dev="thopap" issue="267" type="change">
+                Validation of required mimetype attribute added for XDS document metadata
+            </action>
+            <action dev="ohr" issue="266" type="fix">
+                FHIR SSLContextParameter shoud not be looked up when secure=false
+            </action>
+            <action dev="ohr" issue="265" type="fix">
+                Avoid writing an ParticipantObjectName attribute to audit message when the transaction is a query
+            </action>
+        </release>
+        <release version="3.6.1" description="IPF 3.6.1" date="22 May 2019">
+            <action dev="thopap" issue="262" type="fix">
+                Add required ParticipantObjectDataLifeCycle attribute to ITI-62 audit message
+            </action>
+            <action dev="thopap" issue="261" type="fix">
+                Fixed wrong XDS ErrorCode for MetadataUpdate on missing LogicalId
+            </action>
+        </release>
         <release version="3.6" description="IPF 3.6" date="28 Feb 2019">
             <action dev="ohr" issue="259" type="change">
                 Updates of Spring (5.1.5), Spring Boot (2.1.3), CXF (3.3.0), Groovy (2.5.6), HAPI FHIR (3.7.0)

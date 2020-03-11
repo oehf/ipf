@@ -17,6 +17,7 @@
 package org.openehealth.ipf.boot.hl7v3;
 
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.SpringCacheHl7v3ContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,7 +43,7 @@ public class IpfHl7v3AutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.hl7v3.caching")
     public Hl7v3ContinuationStorage hl7v3ContinuationStorage(CacheManager cacheManager) {
-        return new CachingHl7v3ContinuationStorage(cacheManager);
+        return new SpringCacheHl7v3ContinuationStorage(cacheManager);
     }
 
 }

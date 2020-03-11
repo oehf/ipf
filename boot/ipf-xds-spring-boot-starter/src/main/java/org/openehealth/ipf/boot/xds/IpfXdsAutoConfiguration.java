@@ -18,6 +18,7 @@ package org.openehealth.ipf.boot.xds;
 
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.correlation.SpringCacheAsynchronyCorrelator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -45,7 +46,7 @@ public class IpfXdsAutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.xds.caching")
     public AsynchronyCorrelator cachingAsynchronyCorrelator(CacheManager cacheManager) {
-        return new CachingAsynchronyCorrelator(cacheManager);
+        return new SpringCacheAsynchronyCorrelator(cacheManager);
     }
 
 }

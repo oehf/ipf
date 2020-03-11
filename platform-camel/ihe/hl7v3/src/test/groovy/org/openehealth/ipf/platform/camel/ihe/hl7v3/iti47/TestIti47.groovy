@@ -36,33 +36,33 @@ import static org.junit.Assert.assertTrue
  * @author Dmytro Rud
  */
 class TestIti47 extends HL7v3StandardTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'iti-47.xml'
-    
+
     private final String SERVICE_CONTI =
-        "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceConti" +
-        '?supportContinuation=true' +
-        '&autoCancel=true' +
-        '&validationOnContinuation=true'
-    
+            "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceConti" +
+                    '?supportContinuation=true' +
+                    '&autoCancel=true' +
+                    '&validationOnContinuation=true'
+
     private final String SERVICE_INTERCEPT =
-        "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceIntercept" +
-        '?inInterceptors=#customInterceptorA, #customInterceptorB' +
-        '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
+            "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceIntercept" +
+                    '?inInterceptors=#customInterceptorA, #customInterceptorB' +
+                    '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
 
     private final String SERVICE_1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1"
     private final String SERVICE_NAK_1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak1"
     private final String SERVICE_NAK_2 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak2"
     private final String SERVICE_NAK_VALIDATE = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNakValidate"
-    
+
     private final String SERVICE_V2_CONTI = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceV2Conti"
-    
+
     private static final String REQUEST = readFile('iti47/01_PDQQuery1.xml')
-    
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
@@ -80,23 +80,23 @@ class TestIti47 extends HL7v3StandardTestContainer {
         }
     }
 
-    
+
     @Test
     void testContinuations() {
         String responseString = send(SERVICE_CONTI, REQUEST, String.class)
-        
+
         def response = Hl7v3Utils.slurp(responseString)
         assertEquals('7', response.controlActProcess.queryAck.resultTotalQuantity.@value.text())
         assertEquals('7', response.controlActProcess.queryAck.resultCurrentQuantity.@value.text())
         assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
-        
+
         int subjectCount = 0
         for (subject in response.controlActProcess.subject) {
             ++subjectCount
             assertEquals(subjectCount.toString(), subject.registrationEvent.subject1.patient.id.@extension.text())
         }
         assertEquals(7, subjectCount)
-        
+
         // check whether cancel message has had effect
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
         assertEquals(0, storage.ehcache.size)
@@ -108,20 +108,20 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assert it.participantObjectIdentifications.size() == 9
         }
     }
-    
-    
+
+
     @Test
     void testCustomInterceptors() {
         String responseString = send(SERVICE_INTERCEPT, '<PRPA_IN201305UV02 xmlns="urn:hl7-org:v3"/>', String.class)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.@from == 'PDSupplier'
-        
+
         assert CustomInterceptor['a'] == 2
         assert CustomInterceptor['b'] == 1
         assert CustomInterceptor['c'] == 1
     }
-    
-    
+
+
     @Test
     void testCustomNakGeneration() {
         String responseString = send(SERVICE_NAK_1, REQUEST, String.class)
@@ -142,8 +142,8 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
-    
-    
+
+
     @Test
     void testCustomNakGenerationWithoutIssueManagement() {
         String responseString = send(SERVICE_NAK_2, REQUEST, String.class)
@@ -164,8 +164,8 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
-    
-    
+
+
     @Test
     void testValidationNakGeneration() {
         String responseString = send(SERVICE_NAK_VALIDATE, REQUEST, String.class)
@@ -183,18 +183,18 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
         }
     }
-    
-    
+
+
     @Test
     void testV2Continuation() {
         String responseString = send(SERVICE_V2_CONTI, REQUEST, String.class)
-        
+
         // check whether the response is full
         def response = Hl7v3Utils.slurp(responseString)
         assertEquals('4', response.controlActProcess.queryAck.resultTotalQuantity.@value.text())
         assertEquals('4', response.controlActProcess.queryAck.resultCurrentQuantity.@value.text())
         assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
-        
+
         // check whether HL7 v2 continuation has really been used
         EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
         assertTrue(storage.ehcache.size > 0)

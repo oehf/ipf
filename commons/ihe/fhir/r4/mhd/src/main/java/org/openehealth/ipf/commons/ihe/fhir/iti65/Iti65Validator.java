@@ -17,89 +17,127 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ValidationResult;
+import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
+import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.hapi.ctx.IValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
-import org.hl7.fhir.r4.model.*;
-import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.hapi.validation.PrePopulatedValidationSupport;
+import org.hl7.fhir.r4.hapi.validation.SnapshotGeneratingValidationSupport;
+import org.hl7.fhir.r4.hapi.validation.ValidationSupportChain;
+import org.hl7.fhir.r4.model.Binary;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.DocumentManifest;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.ListResource;
+import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.hl7.fhir.r4.model.StructureDefinition;
+import org.hl7.fhir.r5.utils.IResourceValidator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.support.CustomValidationSupport;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
  * Validator for ITI-65 transactions.
+ *
+ * THIS does not work properly yet!
  *
  * @author Christian Ohr
  * @since 3.6
  */
 public class Iti65Validator extends FhirTransactionValidator.Support {
 
-    private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
+    private static final Logger LOG = LoggerFactory.getLogger(Iti65Validator.class);
+    private static final String IHE_PROFILE_PREFIX = "http://ihe.net/fhir/StructureDefinition/";
 
-    // Prepare the required validator instances so that the structure definitions are not reloaded each time
-    private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
+    private IValidationSupport validationSupport;
 
-
-    static {
-        VALIDATORS.put(DocumentManifest.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
-        VALIDATORS.put(DocumentReference.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
-        VALIDATORS.put(ListResource.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
+    @Override
+    public void initialize(FhirContext context) {
+        LOG.info("Initializing Validator for ITI-65 bundles");
+        validationSupport = loadStructureDefinitions(context, new DefaultProfileValidationSupport(), "Minimal");
+        validationSupport = loadStructureDefinitions(context, validationSupport, "Comprehensive");
+        LOG.info("Initialized Validator for ITI-65 bundles");
     }
-
 
     @Override
     public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
+
         Bundle transactionBundle = (Bundle) payload;
-        validateTransactionBundle(transactionBundle);
+
         validateBundleConsistency(transactionBundle);
 
-        for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
-            Class<? extends IBaseResource> clazz = entry.getResource().getClass();
-            if (VALIDATORS.containsKey(clazz)) {
-                FhirValidator validator = context.newValidator();
-                validator.registerValidatorModule(VALIDATORS.get(clazz));
-                ValidationResult validationResult = validator.validateWithResult(entry.getResource());
-                if (!validationResult.isSuccessful()) {
-                    IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
-                    throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
-                }
-            }
+        FhirValidator validator = context.newValidator();
+        validator.setValidateAgainstStandardSchema(false);
+        validator.setValidateAgainstStandardSchematron(false);
+        FhirInstanceValidator instanceValidator = new FhirInstanceValidator(validationSupport);
+        instanceValidator.setNoTerminologyChecks(true);
+        instanceValidator.setErrorForUnknownProfiles(true);
+        instanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
+        validator.registerValidatorModule(instanceValidator);
+        ValidationResult validationResult = validator.validateWithResult(transactionBundle);
+        if (!validationResult.isSuccessful()) {
+            IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
+            throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
         }
     }
 
-
-    /**
-     * Validates bundle type, meta data and consistency of contained resources
-     *
-     * @param bundle transaction bundle
-     */
-    protected void validateTransactionBundle(Bundle bundle) {
-        if (!Bundle.BundleType.TRANSACTION.equals(bundle.getType())) {
-            throw FhirUtils.unprocessableEntity(
-                    OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INVALID,
-                    null, null,
-                    "Bundle type must be %s, but was %s",
-                    Bundle.BundleType.TRANSACTION.toCode(), bundle.getType().toCode());
-        }
-        List<CanonicalType> profiles = bundle.getMeta().getProfile();
-        if (profiles.isEmpty() || !Iti65Constants.ITI65_PROFILE.equals(profiles.get(0).getValue())) {
-            throw FhirUtils.unprocessableEntity(
-                    OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INVALID,
-                    null, null,
-                    "Request bundle must have profile",
-                    Iti65Constants.ITI65_PROFILE);
-        }
-
+    public ValidationSupportChain loadStructureDefinitions(FhirContext context, IValidationSupport baseValidationSupport, String kind) {
+        PrePopulatedValidationSupport validationSupport = new PrePopulatedValidationSupport();
+        ValidationSupportChain supportChain = new ValidationSupportChain(validationSupport, baseValidationSupport);
+        findProfile(context, supportChain, String.format("IHE_MHD_%s_List", kind))
+                .ifPresent(validationSupport::addStructureDefinition);
+        findProfile(context, supportChain, String.format("IHE_MHD_Provide_%s_DocumentReference", kind))
+                .ifPresent(validationSupport::addStructureDefinition);
+        findProfile(context, supportChain, String.format("IHE_MHD_Query_%s_DocumentReference", kind))
+                .ifPresent(validationSupport::addStructureDefinition);
+        findProfile(context, supportChain, String.format("IHE_MHD_%s_DocumentManifest", kind))
+                .ifPresent(validationSupport::addStructureDefinition);
+        findProfile(context, supportChain, String.format("IHE_MHD_Provide_%s_DocumentBundle", kind))
+                .ifPresent(validationSupport::addStructureDefinition);
+        return supportChain;
     }
+
+    private static Optional<StructureDefinition> findProfile(
+            FhirContext fhirContext,
+            ValidationSupportChain snaphotGenerationSupport,
+            String name) {
+        String path = "META-INF/profiles/" + name + ".xml";
+        String url = IHE_PROFILE_PREFIX + name;
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        if (is != null) {
+            String profileText = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+            IParser parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
+            StructureDefinition structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
+            return Optional.of(structureDefinition.hasSnapshot() ?
+                    structureDefinition :
+                    new SnapshotGeneratingValidationSupport(fhirContext, snaphotGenerationSupport)
+                            .generateSnapshot(structureDefinition, url, url, name));
+        }
+        return Optional.empty();
+    }
+
 
     /**
      * Verifies that bundle has expected content and consistent patient references
@@ -111,6 +149,8 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         Map<ResourceType, List<Bundle.BundleEntryComponent>> entries = FhirUtils.getBundleEntries(bundle);
 
         // Verify that the bundle has all required resources
+        // This should be done by the StructureDefinition, but apparently HAPI has a problem with slices...
+
         if (entries.getOrDefault(ResourceType.DocumentManifest, Collections.emptyList()).size() != 1) {
             throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
@@ -127,6 +167,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                     "Request bundle must have at least one DocumentReference"
             );
         }
+
 
         Set<String> patientReferences = new HashSet<>();
         Set<String> expectedBinaryFullUrls = new HashSet<>();
