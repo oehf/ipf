@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 import static java.util.Objects.requireNonNull;
 
@@ -42,6 +44,12 @@ public class RFC5424Protocol {
      */
     private static final String TRANSPORT_MSGID = "IHE+RFC-3881";
 
+    /**
+     * Precision of the timestamp. Note that RFC5424 only allows 6 subsecond digits
+     * which corresponds to {@link ChronoUnit#MICROS}
+     */
+    public static ChronoUnit precision = ChronoUnit.MILLIS;
+
     private final String senderHostName;
     private final String senderProcessId;
 
@@ -59,7 +67,7 @@ public class RFC5424Protocol {
     protected byte[] getTransportPayload(String sendingApplication, String auditMessage) {
         String msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
                 TRANSPORT_PRI,
-                Instant.now(),
+                Instant.now().truncatedTo(precision),
                 senderHostName,
                 sendingApplication.replace(' ', '_'),
                 senderProcessId,
