@@ -17,20 +17,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
-import org.hl7.fhir.dstu3.model.Attachment;
-import org.hl7.fhir.dstu3.model.Binary;
-import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DocumentManifest;
-import org.hl7.fhir.dstu3.model.DocumentReference;
-import org.hl7.fhir.dstu3.model.Enumerations;
-import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.hl7.fhir.dstu3.model.*;
 import org.junit.Test;
 
 import java.security.MessageDigest;
+import java.time.*;
 import java.util.Collections;
 import java.util.Date;
 
@@ -76,10 +67,14 @@ public class Iti65ValidatorTest {
 
         byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Date timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
+        Instant instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        Date timestamp = Date.from(instant);
+
         DocumentReference reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 

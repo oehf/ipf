@@ -15,27 +15,27 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Optional;
 
-public class DateTimeAdapter extends XmlAdapter<Calendar, DateTime> {
-
+public class DateTimeAdapter extends XmlAdapter<Calendar, ZonedDateTime> {
     @Override
-    public Calendar marshal(DateTime dateTime) throws Exception {
-        if (dateTime == null) {
-            return null;
-        }
-        return dateTime.toGregorianCalendar();
+    public ZonedDateTime unmarshal(Calendar calendar) {
+        return Optional.ofNullable(calendar)
+                .map(Calendar::toInstant)
+                .map(i -> ZonedDateTime.ofInstant(i, ZoneId.of("UTC")))
+                .orElse(null);
     }
 
     @Override
-    public DateTime unmarshal(Calendar calendar) throws Exception {
-        if (calendar == null) {
-            return null;
-        }
-        return new DateTime(calendar).toDateTime(DateTimeZone.UTC);
+    public Calendar marshal(ZonedDateTime zonedDateTime) {
+        return Optional.ofNullable(zonedDateTime)
+                .map(GregorianCalendar::from)
+                .orElse(null);
     }
+
 }

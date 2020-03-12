@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link PatientInfoTransformer}.
@@ -141,7 +141,7 @@ public class PatientInfoTransformerTest {
         assertFalse(names.hasNext());
 
         assertEquals(
-                new Timestamp(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
+                new Timestamp(ZonedDateTime.of(1980,1,2,0,0,0,0, ZoneId.of("UTC")), Timestamp.Precision.DAY),
                 patientInfo.getDateOfBirth());
 
         assertEquals("A", patientInfo.getGender());

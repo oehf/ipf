@@ -17,12 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.utilities.xhtml.NodeType;
-import org.hl7.fhir.utilities.xhtml.XhtmlNode;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
@@ -30,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -77,10 +74,14 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Date timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
+        Instant instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        Date timestamp = Date.from(instant);
+
         DocumentReference reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 
