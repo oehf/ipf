@@ -579,15 +579,15 @@
                     <inherited>false</inherited>
                     <configuration>
                         <links>
-                            <link>http://docs.oracle.com/javase/8/docs/api/</link>
+                            <link>http://docs.oracle.com/en/java/javase/11/docs/api/</link>
                             <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
-                            <link>http://hapifhir.io/apidocs/</link>
+                            <link>http://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-base/</link>
                             <link>http://cxf.apache.org/javadoc/latest/</link>
                             <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                            <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                            <link>http://docs.spring.io/spring/docs/4.3.x/javadoc-api/</link>
+                            <link>http://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
+                            <link>http://docs.spring.io/spring/docs/5.2.x/javadoc-api/</link>
                         </links>
-                        <source>1.8</source>
+                        <source>${java.version}</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                         <additionalJOption>-J-Xmx1024m</additionalJOption>
