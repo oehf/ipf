@@ -54,7 +54,7 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     @Override
     public String getTransportName() {
-        return "UDP";
+        return AuditTransmissionChannel.UDP.getProtocolName();
     }
 
     @Override

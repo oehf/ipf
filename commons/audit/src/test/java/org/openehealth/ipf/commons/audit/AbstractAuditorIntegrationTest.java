@@ -65,11 +65,10 @@ abstract class AbstractAuditorIntegrationTest {
 
     Vertx vertx;
     int port;
-    Properties p;
-    String deploymentId;
-
     DefaultAuditContext auditContext;
 
+    private Properties p;
+    private String deploymentId;
 
     @Before
     public void setup(TestContext context) throws Exception {

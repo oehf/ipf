@@ -11,8 +11,8 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.9.2</brave-version>
         <camel-version>2.25.0</camel-version>
-        <cxf-version>3.3.4</cxf-version>
-        <groovy-version>2.5.9</groovy-version>
+        <cxf-version>3.3.5</cxf-version>
+        <groovy-version>2.5.10</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>4.2.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
@@ -21,14 +21,15 @@
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
+        <netty-version>4.1.45.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
         <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.1.12.RELEASE</spring-version>
-        <spring-boot-version>2.1.11.RELEASE</spring-boot-version>
-        <vertx-version>3.8.4</vertx-version>
+        <spring-version>5.1.14.RELEASE</spring-version>
+        <spring-boot-version>2.1.13.RELEASE</spring-boot-version>
+        <vertx-version>3.8.5</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.4</xmlsec-version>
 
@@ -682,6 +683,11 @@
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-unit</artifactId>
                 <version>${vertx-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty-version}</version>
             </dependency>
 
             <dependency>

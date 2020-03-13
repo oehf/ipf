@@ -144,7 +144,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     @Override
     public String getTransportName() {
-        return "TLS";
+        return AuditTransmissionChannel.TLS.getProtocolName();
     }
 
     private Socket getSocket(AuditContext auditContext) {

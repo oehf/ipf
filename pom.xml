@@ -57,8 +57,8 @@
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.5.8-02</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>3.4.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.5.10-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>3.6.0-03</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
@@ -71,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.10</activemq-version>
+        <activemq-version>5.15.11</activemq-version>
         <commons-beanutils-version>1.9.4</commons-beanutils-version>
         <commons-codec-version>1.13</commons-codec-version>
         <commons-dbcp2-version>2.7.0</commons-dbcp2-version>
@@ -82,7 +82,7 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>28.1-jre</guava-version>
+        <guava-version>28.2-jre</guava-version>
         <httpclient4-version>4.5.10</httpclient4-version>
         <jackson-version>2.10.0</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
@@ -91,7 +91,7 @@
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.12.1</log4j-version>
-        <lombok-version>1.18.10</lombok-version>
+        <lombok-version>1.18.12</lombok-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>

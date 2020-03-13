@@ -81,7 +81,7 @@ public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTr
 
     @Override
     public String getTransportName() {
-        return "NIO-UDP";
+        return AuditTransmissionChannel.VERTX_UDP.getProtocolName();
     }
 
     @Override
