@@ -74,16 +74,11 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
                     producer.send(message);
                 }
             } finally {
-                if (connection != null) connection.close();
+                connection.close();
             }
         } catch (Exception e) {
             auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
         }
-    }
-
-    @Override
-    public void flush() {
-        // nop
     }
 
 }

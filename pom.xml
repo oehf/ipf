@@ -71,7 +71,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.11</activemq-version>
+        <activemq-version>5.15.12</activemq-version>
         <commons-beanutils-version>1.9.4</commons-beanutils-version>
         <commons-codec-version>1.13</commons-codec-version>
         <commons-dbcp2-version>2.7.0</commons-dbcp2-version>
@@ -92,10 +92,11 @@
         <junit-version>4.12</junit-version>
         <log4j-version>2.12.1</log4j-version>
         <lombok-version>1.18.12</lombok-version>
+        <mockserver-version>5.10</mockserver-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.45</tomcat-version>
+        <servlet-api-version>4.0.1</servlet-api-version>
+        <tomcat-version>9.0.33</tomcat-version>
         <woodstox-version>5.1.0</woodstox-version>
         <xbean-spring-version>4.14</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -643,6 +644,16 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-joda</artifactId>
                 <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-client-java</artifactId>
+                <version>${mockserver-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
