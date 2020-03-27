@@ -3,10 +3,10 @@ package org.openehealth.ipf.commons.audit.queue;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.IsInstanceOf;
+import org.hamcrest.core.AnyOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +21,9 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import java.net.ServerSocket;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -104,7 +104,7 @@ public class HttpAuditMessageQueueTest {
         atnaQueue = new HttpClientAuditMessageQueue(httpClient, "http://localhost:" + freePort() + "/audit");
         auditContext.setAuditMessageQueue(atnaQueue);
         sendAudit();
-        assertThat(caught, instanceOf(ConnectTimeoutException.class));
+        assertThat(caught, anyOf(instanceOf(ConnectTimeoutException.class), instanceOf(HttpHostConnectException.class)));
     }
 
     private void sendAudit() {
