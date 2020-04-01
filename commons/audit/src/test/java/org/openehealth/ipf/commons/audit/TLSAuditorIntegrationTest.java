@@ -71,4 +71,20 @@ public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
         async.awaitSuccess(WAIT_TIME);
     }
 
+    @Test
+    public void testTwoWayTLSWithDomainVerification(TestContext testContext) throws Exception {
+        initTLSSystemProperties(null);
+        auditContext.setAuditTransmissionProtocol(new TLSSyslogSenderImpl(true));
+        int count = 10;
+        Async async = testContext.async(count);
+        deploy(testContext, createTCPServerTwoWayTLS(port,
+            TRUST_STORE,
+            TRUST_STORE_PASS,
+            SERVER_KEY_STORE,
+            SERVER_KEY_STORE_PASS,
+            async));
+        for (int i = 0; i < count; i++) sendAudit();
+        async.awaitSuccess(WAIT_TIME);
+    }
+
 }

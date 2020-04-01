@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.audit.protocol;
 
+import javax.net.ssl.SSLParameters;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -59,10 +60,12 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
     private static final int MIN_SO_TIMEOUT = 1;
     private static final Boolean DEFAULT_SOCKET_KEEPALIVE = Boolean.TRUE;
+    private static final String ENDPOINT_IDENTIFICATION_ALGORITHM_HTTPS = "HTTPS";
 
     private final AtomicReference<Socket> socket = new AtomicReference<>();
     private final SocketFactory socketFactory;
     private final SocketTestPolicy socketTestPolicy;
+    private final Boolean performDomainValidation;
 
     /**
      * Constructor which uses default values for all parameters.
@@ -73,6 +76,11 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     public TLSSyslogSenderImpl(SocketTestPolicy socketTestPolicy) {
         this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketTestPolicy);
+    }
+
+    public TLSSyslogSenderImpl(Boolean performDomainValidation) {
+        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), (SSLSocketFactory)SSLSocketFactory.getDefault(),
+            SocketTestPolicy.TEST_BEFORE_WRITE, performDomainValidation);
     }
 
     /**
@@ -96,6 +104,18 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     /**
+     *
+     * @param socketFactory           SSL socket factory to be used for creating the TCP
+     *                                socket.
+     * @param socketTestPolicy        Determining if and when to test the socket for a
+     *                                connection close/reset
+     * @param performDomainValidation Determining if domain validation should be performed
+     */
+    public TLSSyslogSenderImpl(SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy, Boolean performDomainValidation) {
+        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketFactory, socketTestPolicy, performDomainValidation);
+    }
+
+    /**
      * @param sendingHost    value of the SYSLOG header "HOSTNAME"
      * @param sendingProcess value of the SYSLOG header "APP-NAME"
      */
@@ -113,6 +133,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         super(sendingHost, sendingProcess);
         this.socketFactory = SSLSocketFactory.getDefault();
         this.socketTestPolicy = socketTestPolicy;
+        this.performDomainValidation = Boolean.FALSE;
     }
 
     /**
@@ -125,6 +146,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         super(sendingHost, sendingProcess);
         this.socketFactory = Objects.requireNonNull(socketFactory);
         this.socketTestPolicy = SocketTestPolicy.TEST_BEFORE_WRITE;
+        this.performDomainValidation = Boolean.FALSE;
     }
 
     /**
@@ -140,6 +162,24 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         super(sendingHost, sendingProcess);
         this.socketFactory = Objects.requireNonNull(socketFactory);
         this.socketTestPolicy = socketTestPolicy;
+        this.performDomainValidation = Boolean.FALSE;
+    }
+
+    /**
+     * @param sendingHost             value of the SYSLOG header "HOSTNAME"
+     * @param sendingProcess          value of the SYSLOG header "APP-NAME"
+     * @param socketFactory           SSL socket factory to be used for creating the TCP
+     *                                socket.
+     * @param socketTestPolicy        Determining if and when to test the socket for a
+     *                                connection close/reset
+     * @param performDomainValidation Determining if domain validation should be performed
+     */
+    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SSLSocketFactory socketFactory,
+        SocketTestPolicy socketTestPolicy, Boolean performDomainValidation) {
+        super(sendingHost, sendingProcess);
+        this.socketFactory = Objects.requireNonNull(socketFactory);
+        this.socketTestPolicy = socketTestPolicy;
+        this.performDomainValidation = performDomainValidation;
     }
 
     @Override
@@ -265,9 +305,15 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * @param socket Socket to configure
      * @throws SocketException
      */
-    protected void setSocketOptions(final Socket socket) throws SocketException {
+    protected void setSocketOptions(final SSLSocket socket) throws SocketException {
         Objects.requireNonNull(socket);
         socket.setKeepAlive(DEFAULT_SOCKET_KEEPALIVE);
+
+        if(performDomainValidation) {
+            SSLParameters sslParams = new SSLParameters();
+            sslParams.setEndpointIdentificationAlgorithm(ENDPOINT_IDENTIFICATION_ALGORITHM_HTTPS);
+            socket.setSSLParameters(sslParams);
+        }
     }
 
     /**
