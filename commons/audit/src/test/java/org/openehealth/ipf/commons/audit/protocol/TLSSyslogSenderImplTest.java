@@ -252,7 +252,7 @@ public class TLSSyslogSenderImplTest {
         }
 
         @Override
-        protected void setSocketOptions(final Socket socket) throws SocketException {
+        protected void setSocketOptions(final SSLSocket socket) throws SocketException {
             super.setSocketOptions(socket);
             socket.setReceiveBufferSize(5);
         }
