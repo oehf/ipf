@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 
 /**
- * NIO implemention of a UDP Syslog sender by using an embedded Vert.x instance.
+ * NIO implementation of a UDP Syslog sender by using an embedded Vert.x instance.
  * There is no obvious performance improvement compared to {@link UDPSyslogSenderImpl}.
  *
  * @author Christian Ohr

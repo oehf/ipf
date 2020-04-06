@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AuditUtils {
 
-    private static Map<String, String> systemData = new ConcurrentHashMap<>();
+    private static final Map<String, String> systemData = new ConcurrentHashMap<>();
 
     private static final String PID = "PID";
     private static final String IP = "IP";

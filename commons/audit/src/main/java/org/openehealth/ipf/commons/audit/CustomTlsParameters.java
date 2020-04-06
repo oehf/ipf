@@ -61,7 +61,7 @@ public class CustomTlsParameters implements VertxTlsParameters {
 
     private int sessionTimeout;
     private boolean performDomainValidation;
-    private List<String> sniHostnames = new ArrayList<>();
+    private final List<String> sniHostnames = new ArrayList<>();
 
 
     public void setProvider(String provider) {

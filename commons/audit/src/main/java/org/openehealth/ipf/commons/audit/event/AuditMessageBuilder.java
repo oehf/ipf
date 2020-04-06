@@ -89,7 +89,7 @@ public interface AuditMessageBuilder<T extends AuditMessageBuilder<T>> extends V
     default TypeValuePairType getTypeValuePair(String type, byte[] value, byte[] defaultValue) {
         return new TypeValuePairType(
                 type,
-                value != null ? value : null,
+                value,
                 defaultValue);
     }
 

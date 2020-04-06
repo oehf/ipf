@@ -243,7 +243,7 @@ public class TLSSyslogSenderImplTest {
         verify(is, never()).read();
     }
 
-    private class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
+    private static class SocketOptionOverrideTLSSyslogSenderImpl extends TLSSyslogSenderImpl {
 
         public SocketOptionOverrideTLSSyslogSenderImpl(SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy) {
             super(socketFactory, socketTestPolicy);

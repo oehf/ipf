@@ -38,10 +38,10 @@ import java.util.stream.Stream;
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
-    static String X_IPF_ATNA_TIMESTAMP = "X-IPF-ATNA-Timestamp";
-    static String X_IPF_ATNA_HOSTNAME = "X-IPF-ATNA-Hostname";
-    static String X_IPF_ATNA_PROCESSID = "X-IPF-ATNA-ProcessID";
-    static String X_IPF_ATNA_APPLICATION = "X-IPF-ATNA-Application";
+    static final String X_IPF_ATNA_TIMESTAMP = "X-IPF-ATNA-Timestamp";
+    static final String X_IPF_ATNA_HOSTNAME = "X-IPF-ATNA-Hostname";
+    static final String X_IPF_ATNA_PROCESSID = "X-IPF-ATNA-ProcessID";
+    static final String X_IPF_ATNA_APPLICATION = "X-IPF-ATNA-Application";
 
     @Setter
     private boolean pretty = false;

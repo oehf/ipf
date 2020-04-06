@@ -224,7 +224,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * set to 1 ms regardless of the value your implementation might set.
      *
      * @param socket Socket to configure
-     * @throws SocketException
+     * @throws SocketException if setting keep alive failed
      */
     protected void setSocketOptions(final Socket socket) throws SocketException {
         Objects.requireNonNull(socket);

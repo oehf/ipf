@@ -76,7 +76,8 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
     /**
      * Sets the connect timeout
-     * @param value time value
+     *
+     * @param value    time value
      * @param timeUnit time unit
      */
     public void setConnectTimeout(int value, TimeUnit timeUnit) {
@@ -85,7 +86,8 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
     /**
      * Sets the send timeout
-     * @param value time value
+     *
+     * @param value    time value
      * @param timeUnit time unit
      */
     public void setSendTimeout(int value, TimeUnit timeUnit) {
@@ -95,6 +97,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     /**
      * Set the number of working threads. This corresponds with the number of connections
      * being opened. Defaults to 1.
+     *
      * @param workerThreads number of worker threads.
      */
     public void setWorkerThreads(int workerThreads) {
@@ -104,11 +107,11 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     /**
      * Destination abstraction for Netty
      */
-    public static final class NettyDestination implements Destination<ChannelFuture> {
-        private long connectTimeout;
-        private long sendTimeout;
-        private Bootstrap bootstrap;
-        private EventLoopGroup workerGroup;
+    public static final class NettyDestination implements NioTLSSyslogSenderImpl.Destination<ChannelFuture> {
+        private final long connectTimeout;
+        private final long sendTimeout;
+        private final Bootstrap bootstrap;
+        private final EventLoopGroup workerGroup;
         private ChannelFuture channelFuture;
         private final String host;
         private final int port;

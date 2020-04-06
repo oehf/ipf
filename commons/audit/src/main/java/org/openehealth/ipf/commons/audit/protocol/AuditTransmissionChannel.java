@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 
@@ -38,8 +37,8 @@ public enum AuditTransmissionChannel {
     VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderImpl.class),
     NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderImpl.class);
 
-    private String protocolName;
-    private Class<? extends AuditTransmissionProtocol> protocol;
+    private final String protocolName;
+    private final Class<? extends AuditTransmissionProtocol> protocol;
 
     AuditTransmissionChannel(String protocolName, Class<? extends AuditTransmissionProtocol> protocol) {
         this.protocolName = protocolName;
@@ -50,9 +49,9 @@ public enum AuditTransmissionChannel {
         return protocolName;
     }
 
-    public AuditTransmissionProtocol makeInstance(AuditContext auditContext) {
+    public AuditTransmissionProtocol makeInstance(TlsParameters tlsParameters) {
         try {
-            return protocol.getConstructor(TlsParameters.class).newInstance(auditContext.getTlsParameters());
+            return protocol.getConstructor(TlsParameters.class).newInstance(tlsParameters);
         } catch (Exception e) {
             throw new AuditException(e);
         }

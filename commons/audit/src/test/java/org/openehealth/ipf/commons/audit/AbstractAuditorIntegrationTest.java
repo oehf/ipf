@@ -44,7 +44,7 @@ import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtoc
  */
 abstract class AbstractAuditorIntegrationTest {
 
-    private Logger LOG = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
 
     static final String CLIENT_KEY_STORE;
     static final String CLIENT_KEY_STORE_PASS = "initinit";
@@ -76,7 +76,7 @@ abstract class AbstractAuditorIntegrationTest {
     private String deploymentId;
 
     @Before
-    public void setup(TestContext context) throws Exception {
+    public void setup(TestContext context) {
         p = System.getProperties();
         port = freePort();
         this.auditContext = new DefaultAuditContext();

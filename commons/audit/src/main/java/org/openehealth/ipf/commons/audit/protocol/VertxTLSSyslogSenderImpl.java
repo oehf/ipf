@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Christian Ohr
  * @since 3.5
  */
-public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
+public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, VertxTLSSyslogSenderImpl.VertxDestination> {
 
     private static final Logger LOG = LoggerFactory.getLogger(VertxTLSSyslogSenderImpl.class);
 
@@ -62,7 +62,7 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
     }
 
     @Override
-    protected Destination<String> makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
+    protected VertxDestination makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
         return new VertxTLSSyslogSenderImpl.VertxDestination(vertx, (VertxTlsParameters) tlsParameters, host, port);
     }
 
@@ -71,14 +71,17 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
         return AuditTransmissionChannel.VERTX_TLS.getProtocolName();
     }
 
+    @Override
+    protected void customizeDestination(VertxDestination destination) {
+    }
 
-    private static class VertxDestination implements NioTLSSyslogSenderImpl.Destination<String> {
+    public static class VertxDestination implements NioTLSSyslogSenderImpl.Destination<String> {
 
         private final Vertx vertx;
         private final VertxTlsParameters tlsParameters;
         private final String host;
         private final int port;
-        private volatile AtomicReference<String> writeHandlerId = new AtomicReference<>();
+        private final AtomicReference<String> writeHandlerId = new AtomicReference<>();
 
         public VertxDestination(Vertx vertx, VertxTlsParameters tlsParameters, String host, int port) {
             this.vertx = vertx;

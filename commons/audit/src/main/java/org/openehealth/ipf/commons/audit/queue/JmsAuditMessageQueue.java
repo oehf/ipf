@@ -48,7 +48,6 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
      * @param queueName         JMS destination of ATNA messages
      * @param userName          user name for JMS authentication
      * @param password          user password for JMS authentication
-     * @throws JMSException if no connection could be established
      */
     public JmsAuditMessageQueue(ConnectionFactory connectionFactory, String queueName,
                                 String userName, String password) {

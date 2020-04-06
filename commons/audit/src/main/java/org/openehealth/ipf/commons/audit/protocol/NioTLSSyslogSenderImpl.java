@@ -36,9 +36,9 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
 
     private static final Logger LOG = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
     private boolean loggingEnabled = false;
-    private TlsParameters tlsParameters;
+    private final TlsParameters tlsParameters;
 
-    private Map<String, D> destinations = new ConcurrentHashMap<>();
+    private final Map<String, D> destinations = new ConcurrentHashMap<>();
 
     public NioTLSSyslogSenderImpl(TlsParameters tlsParameters) {
         super();
@@ -81,7 +81,7 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
         return destination;
     }
 
-    protected abstract D makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) throws Exception;
+    protected abstract D makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging);
 
     @Override
     public void shutdown() {

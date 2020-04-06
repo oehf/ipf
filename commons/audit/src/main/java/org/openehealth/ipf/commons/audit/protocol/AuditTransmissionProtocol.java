@@ -61,7 +61,7 @@ public interface AuditTransmissionProtocol {
     void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception;
 
     /**
-     * May be imüplemented to clean up instances on shut down
+     * May be implemented to clean up instances on shut down
      */
     void shutdown();
 

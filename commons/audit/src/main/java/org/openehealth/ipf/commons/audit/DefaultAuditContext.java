@@ -111,7 +111,7 @@ public class DefaultAuditContext implements AuditContext {
 
     public void setAuditRepositoryTransport(String transport) {
         setAuditTransmissionProtocol(
-                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(this)
+                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
         );
     }
 
@@ -119,6 +119,9 @@ public class DefaultAuditContext implements AuditContext {
         return getAuditMetadataProvider().getSendingApplication();
     }
 
+    /**
+     * @deprecated use {@link AuditMetadataProvider#setSendingApplication(String)}
+     */
     public void setSendingApplication(String sendingApplication) {
         this.getAuditMetadataProvider().setSendingApplication(sendingApplication);
     }

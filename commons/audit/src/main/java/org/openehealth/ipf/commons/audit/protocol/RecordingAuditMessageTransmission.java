@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class RecordingAuditMessageTransmission implements AuditTransmissionProtocol {
 
-    private List<String> messages = new ArrayList<>();
+    private final List<String> messages = new ArrayList<>();
 
     @Override
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) {
