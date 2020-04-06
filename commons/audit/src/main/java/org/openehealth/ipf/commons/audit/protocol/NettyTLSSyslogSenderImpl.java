@@ -18,32 +18,22 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.ApplicationProtocolConfig;
-import io.netty.handler.ssl.ClientAuth;
-import io.netty.handler.ssl.JdkSslContext;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SupportedCipherSuiteFilter;
+import io.netty.handler.ssl.*;
 import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLContext;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+
+import static org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImpl.NettyDestination;
 
 /**
  * Simple Netty client implementation of RFC 5425 TLS syslog transport
@@ -53,7 +43,7 @@ import java.util.stream.Stream;
  * @author Christian Ohr
  * @since 3.7
  */
-public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFuture> {
+public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFuture, NettyDestination> {
 
     private static final Logger LOG = LoggerFactory.getLogger(NettyTLSSyslogSenderImpl.class);
 
@@ -61,28 +51,60 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     private long connectTimeoutMillis = 5000;
     private long sendTimeoutMillis = 5000;
 
+    public NettyTLSSyslogSenderImpl(TlsParameters tlsParameters) {
+        super(tlsParameters);
+    }
+
     public String getTransportName() {
         return AuditTransmissionChannel.NETTY_TLS.getProtocolName();
     }
 
     @Override
-    protected NioTLSSyslogSenderImpl.Destination<ChannelFuture> makeDestination(String host, int port, boolean logging) {
-        return new NettyDestination(host, port, workerThreads, connectTimeoutMillis, sendTimeoutMillis, logging);
+    protected NettyDestination makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
+        return new NettyDestination(tlsParameters, host, port, workerThreads, connectTimeoutMillis, sendTimeoutMillis, logging);
     }
 
+    /**
+     * Overwrite this method to customize the NettyDestination. Use {@link NettyDestination#getBootstrap()}
+     * to access the {@link Bootstrap} instance.
+     *
+     * @param destination destination used for the connection
+     */
+    @Override
+    protected void customizeDestination(NettyDestination destination) {
+    }
+
+    /**
+     * Sets the connect timeout
+     * @param value time value
+     * @param timeUnit time unit
+     */
     public void setConnectTimeout(int value, TimeUnit timeUnit) {
         this.connectTimeoutMillis = timeUnit.toMillis(value);
     }
 
+    /**
+     * Sets the send timeout
+     * @param value time value
+     * @param timeUnit time unit
+     */
     public void setSendTimeout(int value, TimeUnit timeUnit) {
         this.sendTimeoutMillis = timeUnit.toMillis(value);
     }
 
+    /**
+     * Set the number of working threads. This corresponds with the number of connections
+     * being opened. Defaults to 1.
+     * @param workerThreads number of worker threads.
+     */
     public void setWorkerThreads(int workerThreads) {
         this.workerThreads = workerThreads;
     }
 
-    private static final class NettyDestination implements Destination<ChannelFuture> {
+    /**
+     * Destination abstraction for Netty
+     */
+    public static final class NettyDestination implements Destination<ChannelFuture> {
         private long connectTimeout;
         private long sendTimeout;
         private Bootstrap bootstrap;
@@ -91,7 +113,12 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         private final String host;
         private final int port;
 
-        NettyDestination(String host, int port, int workerThreads, long connectTimeout, long sendTimeout, boolean withLogging) {
+        public Bootstrap getBootstrap() {
+            return bootstrap;
+        }
+
+        NettyDestination(TlsParameters tlsParameters, String host, int port, int workerThreads,
+                         long connectTimeout, long sendTimeout, boolean withLogging) {
 
             this.workerGroup = new NioEventLoopGroup(workerThreads);
             this.connectTimeout = connectTimeout;
@@ -106,7 +133,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeout)
                     .option(ChannelOption.SO_KEEPALIVE, true)
                     .remoteAddress(host, port)
-                    .handler(new InitializerHandler(host, port, withLogging));
+                    .handler(new InitializerHandler(tlsParameters, host, port, withLogging));
         }
 
         @Override
@@ -178,18 +205,20 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
          * Handler called upon setup
          */
         private static class InitializerHandler extends ChannelInitializer<SocketChannel> {
+            private final TlsParameters tlsParameters;
             private final String host;
             private final int port;
             private final boolean withLogging;
 
-            public InitializerHandler(String host, int port, boolean withLogging) {
+            public InitializerHandler(TlsParameters tlsParameters, String host, int port, boolean withLogging) {
+                this.tlsParameters = tlsParameters;
                 this.host = host;
                 this.port = port;
                 this.withLogging = withLogging;
             }
 
             @Override
-            protected void initChannel(SocketChannel channel) throws Exception {
+            protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
                 SslContext sslContext = initSslContext();
                 pipeline.addLast(sslContext.newHandler(channel.alloc(), host, port));
@@ -199,12 +228,12 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
                 }
             }
 
-            private SslContext initSslContext() throws NoSuchAlgorithmException {
+            private SslContext initSslContext() {
                 String allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
                 String[] protocols = Stream.of(allowedProtocols.split("\\s*,\\s*"))
                         .toArray(String[]::new);
                 return new JdkSslContext(
-                        SSLContext.getDefault(),
+                        tlsParameters.getSSLContext(),
                         true,
                         null, // use default
                         SupportedCipherSuiteFilter.INSTANCE,

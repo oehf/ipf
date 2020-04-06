@@ -21,6 +21,7 @@ import io.vertx.core.Verticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
@@ -34,10 +35,23 @@ import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createTCPSer
 @RunWith(VertxUnitRunner.class)
 public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
+    private CustomTlsParameters tlsParameters;
+
+    @Before
+    public void setup() {
+        tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(CLIENT_KEY_STORE);
+        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
+        tlsParameters.setTrustStoreFile(TRUST_STORE);
+        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
+        tlsParameters.setEnabledProtocols("TLSv1.2");
+    }
+
     @Test
     public void testTwoWayTLS(TestContext testContext) throws Exception {
         initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(new TLSSyslogSenderImpl());
+        auditContext.setTlsParameters(TlsParameters.getDefault());
+        auditContext.setAuditRepositoryTransport("TLS");
         int count = 10;
         Async async = testContext.async(count);
         deploy(testContext, createTCPServerTwoWayTLS(port,
@@ -52,8 +66,8 @@ public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
     @Test
     public void testTwoWayTLSInterrupted(TestContext testContext) throws Exception {
-        initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(new TLSSyslogSenderImpl());
+        auditContext.setTlsParameters(tlsParameters);
+        auditContext.setAuditRepositoryTransport("TLS");
         int count = 5;
         Async async = testContext.async(count);
         Verticle tcpServer = createTCPServerTwoWayTLS(port,

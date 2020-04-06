@@ -38,21 +38,24 @@ import java.util.stream.Stream;
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
+    static String X_IPF_ATNA_TIMESTAMP = "X-IPF-ATNA-Timestamp";
+    static String X_IPF_ATNA_HOSTNAME = "X-IPF-ATNA-Hostname";
+    static String X_IPF_ATNA_PROCESSID = "X-IPF-ATNA-ProcessID";
+    static String X_IPF_ATNA_APPLICATION = "X-IPF-ATNA-Application";
+
     @Setter
     private boolean pretty = false;
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
         if (auditMessages != null) {
-            String[] auditRecords = Stream.of(auditMessages)
+            Stream.of(auditMessages)
                     .map(msg -> auditContext.getSerializationStrategy().marshal(msg, pretty))
-                    .toArray(value -> new String[auditMessages.length]);
-
-            handle(auditContext, auditRecords);
+                    .forEach(msg -> handle(auditContext, msg));
         }
     }
 
-    protected abstract void handle(AuditContext auditContext, String... auditRecords);
+    protected abstract void handle(AuditContext auditContext, String auditRecord);
 
 
 }

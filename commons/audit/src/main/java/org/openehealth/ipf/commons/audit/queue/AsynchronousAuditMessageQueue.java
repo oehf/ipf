@@ -64,23 +64,25 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     @Override
-    protected void handle(AuditContext auditContext, String... auditRecords) {
-        Runnable runnable = runnable(auditContext, auditRecords);
-        if (executorService != null && !executorService.isShutdown()) {
-            CompletableFuture.runAsync(runnable, executorService)
-                    .exceptionally(e -> {
-                        auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
-                        return null;
-                    });
-        } else {
-            runnable.run();
+    protected void handle(AuditContext auditContext, String auditRecord) {
+        if (auditRecord != null) {
+            Runnable runnable = runnable(auditContext, auditRecord);
+            if (executorService != null && !executorService.isShutdown()) {
+                CompletableFuture.runAsync(runnable, executorService)
+                        .exceptionally(e -> {
+                            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecord);
+                            return null;
+                        });
+            } else {
+                runnable.run();
+            }
         }
     }
 
-    private Runnable runnable(AuditContext auditContext, String... auditRecords) {
+    private Runnable runnable(AuditContext auditContext, String auditRecord) {
         return () -> {
             try {
-                auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+                auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecord);
             } catch (Exception e) {
                 throw new AuditException(e);
             }

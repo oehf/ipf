@@ -17,7 +17,8 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +46,12 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     private static final int MAX_DATAGRAM_PACKET_SIZE = 65479;
 
     public UDPSyslogSenderImpl() {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
+        super();
     }
 
-    public UDPSyslogSenderImpl(String sendingHost, String sendingProcess) {
-        super(sendingHost, sendingProcess);
+    @SuppressWarnings("unused")
+    public UDPSyslogSenderImpl(TlsParameters tlsParameters) {
+        super();
     }
 
     @Override
@@ -58,32 +60,29 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) throws Exception {
-        if (auditMessages != null) {
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
+        if (auditMessage != null) {
             try (DatagramSocket socket = new DatagramSocket()) {
-                for (String auditMessage : auditMessages) {
-                    byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                    InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
-                    LOG.debug("Auditing to {}:{} ({})",
-                            auditContext.getAuditRepositoryHostName(),
-                            auditContext.getAuditRepositoryPort(),
-                            inetAddress.getHostAddress());
-                    if (LOG.isTraceEnabled()) {
-                        LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
-                    }
-                    DatagramPacket packet = new DatagramPacket(
-                            msgBytes,
-                            Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
-                            inetAddress,
-                            auditContext.getAuditRepositoryPort());
-                    socket.send(packet);
+                byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+                InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
+                LOG.debug("Auditing to {}:{} ({})",
+                        auditContext.getAuditRepositoryHostName(),
+                        auditContext.getAuditRepositoryPort(),
+                        inetAddress.getHostAddress());
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
                 }
+                DatagramPacket packet = new DatagramPacket(
+                        msgBytes,
+                        Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
+                        inetAddress,
+                        auditContext.getAuditRepositoryPort());
+                socket.send(packet);
             }
         }
     }
 
     @Override
     public void shutdown() {
-
     }
 }

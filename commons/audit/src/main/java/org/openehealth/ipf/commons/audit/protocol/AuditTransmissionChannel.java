@@ -16,7 +16,12 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.TlsParameters;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Maps AuditTransmissionProtocol names to instances
@@ -25,11 +30,11 @@ import org.openehealth.ipf.commons.audit.AuditException;
  */
 public enum AuditTransmissionChannel {
 
-    UDP      ("UDP",       UDPSyslogSenderImpl.class),
-    NIO_UDP  ("NIO-UDP",   UDPSyslogSenderImpl.class),
+    UDP("UDP", UDPSyslogSenderImpl.class),
+    NIO_UDP("NIO-UDP", UDPSyslogSenderImpl.class),
     VERTX_UDP("VERTX-UDP", UDPSyslogSenderImpl.class),
-    TLS      ("TLS",       TLSSyslogSenderImpl.class),
-    NIO_TLS  ("NIO-TLS",   NettyTLSSyslogSenderImpl.class),
+    TLS("TLS", TLSSyslogSenderImpl.class),
+    NIO_TLS("NIO-TLS", NettyTLSSyslogSenderImpl.class),
     VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderImpl.class),
     NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderImpl.class);
 
@@ -45,11 +50,11 @@ public enum AuditTransmissionChannel {
         return protocolName;
     }
 
-    public AuditTransmissionProtocol makeInstance() {
+    public AuditTransmissionProtocol makeInstance(AuditContext auditContext) {
         try {
-            return protocol.getConstructor().newInstance();
+            return protocol.getConstructor(TlsParameters.class).newInstance(auditContext.getTlsParameters());
         } catch (Exception e) {
-            throw new AuditException("Could not create protocol instance", e);
+            throw new AuditException(e);
         }
     }
 
@@ -59,6 +64,10 @@ public enum AuditTransmissionChannel {
                 return channel;
             }
         }
-        throw new IllegalArgumentException("Unknown protocol name :" + protocolName);
+        throw new IllegalArgumentException("Unknown audit protocol name: " + protocolName +
+                ". Choose on of: " +
+                Arrays.stream(AuditTransmissionChannel.values())
+                        .map(AuditTransmissionChannel::getProtocolName)
+                        .collect(Collectors.joining(",")));
     }
 }

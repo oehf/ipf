@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.audit.handler;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ public class LoggingAuditExceptionHandler implements AuditExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(LoggingAuditExceptionHandler.class);
 
     @Override
-    public void handleException(AuditContext auditContext, Throwable throwable, String... auditMessages) {
+    public void handleException(AuditContext auditContext, Throwable throwable, String auditMessage) {
         LOG.warn("Failed to send ATNA audit event to destination {}:{} ({})",
                 auditContext.getAuditRepositoryHostName(),
                 auditContext.getAuditRepositoryPort(),

@@ -74,7 +74,6 @@ public interface AuditContext {
      */
     String getSendingApplication();
 
-
     /**
      * @return the wire protocol to be used
      */
@@ -84,6 +83,11 @@ public interface AuditContext {
      * @return the queue implementation to be used
      */
     AuditMessageQueue getAuditMessageQueue();
+
+    /**
+     * @return the SSL socket factory to be used for TLS-based connections
+     */
+    TlsParameters getTlsParameters();
 
     /**
      * @return a post-processor for audit messages (defaults to a NO-OP implementation
@@ -110,6 +114,10 @@ public interface AuditContext {
                     .map(getAuditMessagePostProcessor())
                     .toArray(AuditMessage[]::new));
         }
+    }
+
+    default AuditMetadataProvider getAuditMetadataProvider() {
+        return AuditMetadataProvider.getDefault();
     }
 
     /**

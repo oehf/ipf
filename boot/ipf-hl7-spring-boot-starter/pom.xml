@@ -40,6 +40,10 @@
             <artifactId>ipf-atna-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.boot</groupId>
+            <artifactId>ipf-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
         </dependency>

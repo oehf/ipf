@@ -17,7 +17,8 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,40 +32,47 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Christian Ohr
  * @since 3.7
  */
-public abstract class NioTLSSyslogSenderImpl<H> extends RFC5424Protocol implements AuditTransmissionProtocol {
+public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl.Destination<H>> extends RFC5424Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
     private boolean loggingEnabled = false;
+    private TlsParameters tlsParameters;
 
-    private Map<String, Destination<H>> destinations = new ConcurrentHashMap<>();
+    private Map<String, D> destinations = new ConcurrentHashMap<>();
 
-    public NioTLSSyslogSenderImpl() {
-        super(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
+    public NioTLSSyslogSenderImpl(TlsParameters tlsParameters) {
+        super();
+        this.tlsParameters = tlsParameters;
     }
 
     public void setLoggingEnabled(boolean loggingEnabled) {
         this.loggingEnabled = loggingEnabled;
     }
 
+    /**
+     * Allows to customize the destination, e.g. to set network-specific parameters
+     * @param destination destination used for the connection
+     */
+    protected abstract void customizeDestination(D destination);
+
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) throws Exception {
-        if (auditMessages != null) {
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
+        if (auditMessage != null) {
             Destination<H> destination = getDestination(auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
-            for (String auditMessage : auditMessages) {
-                byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                byte[] length = String.format("%d ", msgBytes.length).getBytes();
-                LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(),
-                        auditContext.getAuditRepositoryPort());
-                destination.write(length, msgBytes);
-            }
+            byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+            byte[] length = String.format("%d ", msgBytes.length).getBytes();
+            LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(),
+                    auditContext.getAuditRepositoryPort());
+            destination.write(length, msgBytes);
         }
     }
 
-    private Destination<H> getDestination(String host, int port) throws Exception {
-        Destination<H> destination = destinations.get(host + port);
+    private D getDestination(String host, int port) throws Exception {
+        D destination = destinations.get(host + port);
         if (destination == null) {
             synchronized (this) {
-                destination = makeDestination(host, port, loggingEnabled);
+                destination = makeDestination(tlsParameters, host, port, loggingEnabled);
+                customizeDestination(destination);
                 Destination<H> existing = destinations.put(host + port, destination);
                 // shutdown replaced connection
                 if (existing != null) existing.shutdown();
@@ -73,7 +81,7 @@ public abstract class NioTLSSyslogSenderImpl<H> extends RFC5424Protocol implemen
         return destination;
     }
 
-    protected abstract Destination<H> makeDestination(String host, int port, boolean logging) throws Exception;
+    protected abstract D makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) throws Exception;
 
     @Override
     public void shutdown() {
@@ -102,7 +110,6 @@ public abstract class NioTLSSyslogSenderImpl<H> extends RFC5424Protocol implemen
          * @throws RuntimeException (or a subclass thereof) if no handle could be obtained
          */
         H getHandle();
-
 
     }
 

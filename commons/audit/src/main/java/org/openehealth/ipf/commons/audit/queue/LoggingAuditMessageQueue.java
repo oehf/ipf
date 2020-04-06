@@ -44,9 +44,9 @@ public class LoggingAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     @Override
-    protected synchronized void handle(AuditContext auditContext, String... auditRecords) {
-        if (auditRecords != null) {
-            Stream.of(auditRecords).forEach(log::info);
+    protected synchronized void handle(AuditContext auditContext, String auditRecord) {
+        if (auditRecord != null) {
+            log.info(auditRecord);
         }
     }
 }

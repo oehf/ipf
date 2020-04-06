@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +28,16 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import static java.util.Objects.requireNonNull;
+import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.*;
 
 /**
  * JMS Message Listener that receives audit messages from a queue and sends them
  * to an audit repository. It is recommended to use infrastructure classes such
  * as Spring's JMS MessageListenerContainers to control transactional behavior,
  * message redelivery and other features.
+ * <p>
+ * This class supports JMS headers transferred by {@link JmsAuditMessageQueue} and
+ * reuses them for the actual auditing.
  *
  * @author Christian Ohr
  * @since 3.5
@@ -51,7 +57,19 @@ public class JmsAuditMessageListener implements MessageListener {
         TextMessage textMessage = (TextMessage) message;
         try {
             String text = textMessage.getText();
-            auditContext.getAuditTransmissionProtocol().send(auditContext, text);
+            String hostname = message.getStringProperty(X_IPF_ATNA_HOSTNAME);
+            String processID = message.getStringProperty(X_IPF_ATNA_PROCESSID);
+            String application = message.getStringProperty(X_IPF_ATNA_APPLICATION);
+            String timestamp = message.getStringProperty(X_IPF_ATNA_TIMESTAMP);
+
+            AuditMetadataProvider defaultProvider = auditContext.getAuditMetadataProvider();
+            DefaultAuditMetadataProvider auditMetadataProvider = new DefaultAuditMetadataProvider(
+                    hostname != null ? hostname : defaultProvider.getHostname(),
+                    processID != null ? processID : defaultProvider.getProcessID(),
+                    application != null ? application : defaultProvider.getSendingApplication(),
+                    timestamp != null ? application : defaultProvider.getTimestamp()
+            );
+            auditContext.getAuditTransmissionProtocol().send(auditContext, auditMetadataProvider, text);
         } catch (JMSException jmsException1) {
             LOG.error("Could not obtain text from JMS message", jmsException1);
         } catch (Exception e) {
@@ -59,4 +77,5 @@ public class JmsAuditMessageListener implements MessageListener {
             throw new RuntimeException(e);
         }
     }
+
 }

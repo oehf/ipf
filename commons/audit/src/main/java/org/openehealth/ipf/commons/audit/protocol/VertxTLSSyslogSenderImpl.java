@@ -19,23 +19,21 @@ package org.openehealth.ipf.commons.audit.protocol;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.buffer.impl.BufferImpl;
-import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetClientOptions;
 import io.vertx.core.net.NetSocket;
-import io.vertx.core.net.PfxOptions;
 import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.VertxTlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.KeyStore;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 /**
- * NIO implemention of a TLS Syslog sender by using an embedded Vert.x instance.
+ * NIO implementation of a TLS Syslog sender by using an embedded Vert.x instance.
  *
  * @author Christian Ohr
  * @since 3.5
@@ -47,16 +45,25 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
     private final Vertx vertx;
 
     public VertxTLSSyslogSenderImpl() {
-        this(Vertx.vertx());
+        this(VertxTlsParameters.getDefault());
+    }
+
+    public VertxTLSSyslogSenderImpl(TlsParameters tlsParameters) {
+        this(Vertx.vertx(), tlsParameters);
     }
 
     public VertxTLSSyslogSenderImpl(Vertx vertx) {
+        this(vertx, VertxTlsParameters.getDefault());
+    }
+
+    public VertxTLSSyslogSenderImpl(Vertx vertx, TlsParameters tlsParameters) {
+        super(tlsParameters);
         this.vertx = vertx;
     }
 
     @Override
-    protected Destination<String> makeDestination(String host, int port, boolean logging) {
-        return new VertxTLSSyslogSenderImpl.VertxDestination(vertx, host, port);
+    protected Destination<String> makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
+        return new VertxTLSSyslogSenderImpl.VertxDestination(vertx, (VertxTlsParameters) tlsParameters, host, port);
     }
 
     @Override
@@ -68,12 +75,14 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
     private static class VertxDestination implements NioTLSSyslogSenderImpl.Destination<String> {
 
         private final Vertx vertx;
+        private final VertxTlsParameters tlsParameters;
         private final String host;
         private final int port;
         private volatile AtomicReference<String> writeHandlerId = new AtomicReference<>();
 
-        public VertxDestination(Vertx vertx, String host, int port) {
+        public VertxDestination(Vertx vertx, VertxTlsParameters tlsParameters, String host, int port) {
             this.vertx = vertx;
+            this.tlsParameters = tlsParameters;
             this.host = host;
             this.port = port;
         }
@@ -100,7 +109,7 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
                         .setReconnectInterval(1000)
                         .setSsl(true);
 
-                initializeTLSParameters(options);
+                tlsParameters.initNetClientOptions(options);
 
                 NetClient client = vertx.createNetClient(options);
                 client.connect(
@@ -139,38 +148,6 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String> {
                 }
             }
             return writeHandlerId.get();
-        }
-
-        private void initializeTLSParameters(NetClientOptions options) {
-            String keyStoreType = System.getProperty(JAVAX_NET_SSL_KEYSTORE_TYPE, KeyStore.getDefaultType());
-            if ("JKS".equalsIgnoreCase(keyStoreType)) {
-                options.setKeyStoreOptions(new JksOptions()
-                        .setPath(System.getProperty(JAVAX_NET_SSL_KEYSTORE))
-                        .setPassword(System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD)));
-            } else {
-                options.setPfxKeyCertOptions(new PfxOptions()
-                        .setPath(System.getProperty(JAVAX_NET_SSL_KEYSTORE))
-                        .setPassword(System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD)));
-            }
-            String trustStoreType = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_TYPE, KeyStore.getDefaultType());
-            if ("JKS".equalsIgnoreCase(trustStoreType)) {
-                options.setTrustStoreOptions(new JksOptions()
-                        .setPath(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE))
-                        .setPassword(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD)));
-            } else {
-                options.setPfxTrustOptions(new PfxOptions()
-                        .setPath(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE))
-                        .setPassword(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD)));
-            }
-            String allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
-            Stream.of(allowedProtocols.split("\\s*,\\s*"))
-                    .forEach(options::addEnabledSecureTransportProtocol);
-
-            String allowedCiphers = System.getProperty(HTTPS_CIPHERSUITES);
-            if (allowedCiphers != null) {
-                Stream.of(allowedCiphers.split("\\s*,\\s*"))
-                        .forEach(options::addEnabledCipherSuite);
-            }
         }
 
     }

@@ -63,10 +63,6 @@ public class DefaultAuditContext implements AuditContext {
 
     @Getter
     @Setter
-    private String sendingApplication = "IPF";
-
-    @Getter
-    @Setter
     private String auditSourceId = "IPF";
 
     @Getter
@@ -91,6 +87,14 @@ public class DefaultAuditContext implements AuditContext {
 
     @Getter
     @Setter
+    private AuditMetadataProvider auditMetadataProvider = AuditMetadataProvider.getDefault();
+
+    @Getter
+    @Setter
+    private TlsParameters tlsParameters = TlsParameters.getDefault();
+
+    @Getter
+    @Setter
     private boolean includeParticipantsFromResponse = false;
 
     @Getter
@@ -107,8 +111,16 @@ public class DefaultAuditContext implements AuditContext {
 
     public void setAuditRepositoryTransport(String transport) {
         setAuditTransmissionProtocol(
-                AuditTransmissionChannel.fromProtocolName(transport).makeInstance()
+                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(this)
         );
+    }
+
+    public String getSendingApplication() {
+        return getAuditMetadataProvider().getSendingApplication();
+    }
+
+    public void setSendingApplication(String sendingApplication) {
+        this.getAuditMetadataProvider().setSendingApplication(sendingApplication);
     }
 
     @Override

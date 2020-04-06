@@ -21,39 +21,34 @@ import io.vertx.core.Verticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImpl;
 
 import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createTCPServerTwoWayTLS;
 
 
-/**
- *
- */
 @RunWith(VertxUnitRunner.class)
 public class NettyTLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
-    private NettyTLSSyslogSenderImpl sender;
+    private CustomTlsParameters tlsParameters;
 
     @Before
     public void setup() {
-        sender = new NettyTLSSyslogSenderImpl();
-        sender.setLoggingEnabled(true);
-    }
-
-    @After
-    public void tearDown() {
-        sender.shutdown();
+        tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(CLIENT_KEY_STORE);
+        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
+        tlsParameters.setTrustStoreFile(TRUST_STORE);
+        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
+        tlsParameters.setEnabledProtocols("TLSv1.2");
+        tlsParameters.setSessionTimeout(1);
     }
 
     @Test
     public void testTwoWayTLS(TestContext testContext) throws Exception {
-        initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(sender);
-        int count = 10;
+        auditContext.setTlsParameters(tlsParameters);
+        auditContext.setAuditRepositoryTransport("NIO-TLS");
+        int count = 1;
         Async async = testContext.async(count);
         deploy(testContext, createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
@@ -68,7 +63,8 @@ public class NettyTLSAuditorIntegrationTest extends AbstractAuditorIntegrationTe
     @Test
     public void testTwoWayTLSInterrupted(TestContext testContext) throws Exception {
         initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(sender);
+        auditContext.setTlsParameters(TlsParameters.getDefault());
+        auditContext.setAuditRepositoryTransport("NIO-TLS");
         int count = 5;
         Async async = testContext.async(count);
         Verticle tcpServer = createTCPServerTwoWayTLS(port,
