@@ -1,7 +1,7 @@
 package org.openehealth.ipf.platform.camel.core.reifier;
 
+import org.apache.camel.Route;
 import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
@@ -12,8 +12,8 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
  */
 public class RendererAdapterReifier extends ProcessorAdapterReifier<RendererAdapterDefinition> {
 
-    public RendererAdapterReifier(RouteContext routeContext, ProcessorDefinition<?> definition) {
-        super(routeContext, (RendererAdapterDefinition) definition);
+    public RendererAdapterReifier(Route route, ProcessorDefinition<?> definition) {
+        super(route, (RendererAdapterDefinition) definition);
     }
 
 
@@ -22,7 +22,7 @@ public class RendererAdapterReifier extends ProcessorAdapterReifier<RendererAdap
         Renderer<?> renderer = definition.getRenderer();
         String rendererBean = definition.getRendererBean();
         if (rendererBean != null) {
-            renderer = routeContext.lookup(rendererBean, Renderer.class);
+            renderer = camelContext.getRegistry().lookupByNameAndType(rendererBean, Renderer.class);
         }
         return new RendererAdapter(renderer);
     }

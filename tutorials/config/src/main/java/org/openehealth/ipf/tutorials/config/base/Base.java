@@ -1,6 +1,6 @@
 package org.openehealth.ipf.tutorials.config.base;
 
-import org.apache.camel.spring.Main;
+import org.apache.camel.main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

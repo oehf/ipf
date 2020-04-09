@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.11.2</brave-version>
-        <camel-version>3.1.0</camel-version>
+        <camel-version>3.2.0</camel-version>
         <cxf-version>3.3.6</cxf-version>
         <groovy-version>3.0.2</groovy-version>
         <hapi-version>2.3</hapi-version>

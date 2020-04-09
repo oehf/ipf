@@ -15,13 +15,10 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static org.openehealth.ipf.tutorials.xds.Comparators.*
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
-
 import org.apache.camel.model.OutputDefinition
-import org.apache.camel.spi.RouteContext
-import org.apache.camel.Processor
 
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.HAS_MEMBER
+import static org.openehealth.ipf.tutorials.xds.Comparators.*
 
 /**
  * Model class to add the Search processor to route implementations.
@@ -30,95 +27,95 @@ import org.apache.camel.Processor
  */
 class SearchDefinition extends OutputDefinition<SearchDefinition> {
     def filters = []
-	def resultTypes
-	def resultField
-	def indexEvals = [:]
-	
-	SearchDefinition(List<?> types) {
-	    resultTypes = types
-	    by({ entry, param -> types.any { it.isOfType(entry) } })
-	}
-	
+    def resultTypes
+    def resultField
+    def indexEvals = [:]
+
+    SearchDefinition(List<?> types) {
+        resultTypes = types
+        by({ entry, param -> types.any { it.isOfType(entry) } })
+    }
+
     SearchDefinition(SearchResult type) { this([type]) }
-    
-	def into(field) {
-		this.resultField = field
-		this
-	}
-	
-	def by(filter) {
-		filters.add(filter)
-		this
-	}
 
-	def byIndex(key, value) {
-		indexEvals.put(key, value)
-		this
-	}
-	
-	def by(Object[] filters) {
-	    filters.each { by(it) }
-	}
-	
-	def targets(field) {
+    def into(field) {
+        this.resultField = field
+        this
+    }
+
+    def by(filter) {
+        filters.add(filter)
+        this
+    }
+
+    def byIndex(key, value) {
+        indexEvals.put(key, value)
+        this
+    }
+
+    def by(Object[] filters) {
+        filters.each { by(it) }
+    }
+
+    def targets(field) {
         byIndex('targetUuid', { param -> get(param, field)*.entryUuid })
-	}
-	
-	def targetUuids(field) {
-	    byIndex('targetUuid', { param -> get(param, field)})
-	}
-	
-    def targetUuid(field) {
-        byIndex('targetUuid', { param -> get(param, field)})
-    }
-    
-	def sources(field) {
-        byIndex('sourceUuid', { param -> get(param, field)*.entryUuid})
-	}
-	
-	def sourceUuids(field) {
-        byIndex('sourceUuid', { param -> get(param, field)})
-	}
-	
-	def uniqueIds(field) {
-		byIndex('uniqueId', { param -> get(param, field)})
-	} 
-	
-    def uniqueId(field) {
-		byIndex('uniqueId', { param -> get(param, field)})
     }
 
-	def uuids(field) {
-		byIndex('entryUuid', { param -> get(param, field)})
-	}     
-	
+    def targetUuids(field) {
+        byIndex('targetUuid', { param -> get(param, field) })
+    }
+
+    def targetUuid(field) {
+        byIndex('targetUuid', { param -> get(param, field) })
+    }
+
+    def sources(field) {
+        byIndex('sourceUuid', { param -> get(param, field)*.entryUuid })
+    }
+
+    def sourceUuids(field) {
+        byIndex('sourceUuid', { param -> get(param, field) })
+    }
+
+    def uniqueIds(field) {
+        byIndex('uniqueId', { param -> get(param, field) })
+    }
+
+    def uniqueId(field) {
+        byIndex('uniqueId', { param -> get(param, field) })
+    }
+
+    def uuids(field) {
+        byIndex('entryUuid', { param -> get(param, field) })
+    }
+
     def uuid(field) {
-		byIndex('entryUuid', { param -> get(param, field)})
-    }     
-        
+        byIndex('entryUuid', { param -> get(param, field) })
+    }
+
     def referenced(field) {
         byIndex('entryUuid', { param ->
             def assocs = get(param, field)
-            assocs*.sourceUuid + assocs*.targetUuid 
+            assocs*.sourceUuid + assocs*.targetUuid
         })
     }
-    
-	def status(status) {
-	    by { entry, param -> equals(status, entry.availabilityStatus) }
-	}
-	
-	def hasMember() {
-	    by { entry, param -> entry.associationType == HAS_MEMBER }
-	}
-	
-	def isOfTypes(types) {
-	    by { entry, param -> contains(types, entry.associationType) }
-	}
-	
-	def types(field) {
-	    by { entry, param -> contains(get(param, field), entry.associationType) }
-	}
-	
+
+    def status(status) {
+        by { entry, param -> equals(status, entry.availabilityStatus) }
+    }
+
+    def hasMember() {
+        by { entry, param -> entry.associationType == HAS_MEMBER }
+    }
+
+    def isOfTypes(types) {
+        by { entry, param -> contains(types, entry.associationType) }
+    }
+
+    def types(field) {
+        by { entry, param -> contains(get(param, field), entry.associationType) }
+    }
+
     def confCodes(field) {
         by { entry, param -> evalQueryList(get(param, field), entry.confidentialityCodes) }
     }
@@ -126,26 +123,26 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
     def formatCodes(field) {
         by { entry, param -> any(get(param, field)) { matchesCode(it, entry.formatCode) } }
     }
-    
+
     def byQuery(field) {
         by { entry, param ->
             new QueryMatcher().matches(entry, get(param, field))
         }
     }
-    
+
     def patientId(field) {
-        byIndex('patientId', {param -> get(param, field)})
+        byIndex('patientId', { param -> get(param, field) })
     }
-    
-	def withoutPatientId(field) {
-	    by { entry, param -> !equals(get(param, field), entry.patientId) }
-	}
-	
-	def withoutHash(field) {
-	    by { entry, param -> !equals(get(param, field), entry.hash) }
-	}
+
+    def withoutPatientId(field) {
+        by { entry, param -> !equals(get(param, field), entry.patientId) }
+    }
+
+    def withoutHash(field) {
+        by { entry, param -> !equals(get(param, field), entry.hash) }
+    }
 
     private static def get(body, resultField) {
-        resultField.split('\\.').inject(body) { obj, field -> obj[field] } 
+        resultField.split('\\.').inject(body) { obj, field -> obj[field] }
     }
 }
