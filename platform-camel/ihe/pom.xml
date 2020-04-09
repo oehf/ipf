@@ -5,7 +5,7 @@
     <name>ipf-platform-camel-ihe</name>
     <packaging>pom</packaging>
     <description>Generic IHE extensions for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -37,12 +37,5 @@
         <module>hpd</module>
         <module>xacml20</module>
     </modules>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

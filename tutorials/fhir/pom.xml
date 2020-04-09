@@ -26,7 +26,7 @@
     <artifactId>ipf-tutorials-fhir</artifactId>
     <name>ipf-tutorials-fhir</name>
     <packaging>jar</packaging>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -103,12 +103,5 @@
         </dependency>
 
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

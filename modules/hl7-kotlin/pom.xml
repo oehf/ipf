@@ -20,7 +20,7 @@
     <artifactId>ipf-modules-hl7-kotlin</artifactId>
     <name>ipf-modules-hl7-kotlin</name>
     <description>HL7 extensions and HL7 DSL support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -156,13 +156,6 @@
             </build>
         </profile>
     </profiles>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 
 </project>

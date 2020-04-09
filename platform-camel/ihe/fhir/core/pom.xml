@@ -10,7 +10,7 @@
     <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
     <name>ipf-platform-camel-ihe-fhir-core</name>
     <description>Common functionality for RESTful FHIR transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <properties>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.fhir.extends.FhirExtensionModule</ipf.extension.classes>
@@ -67,12 +67,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

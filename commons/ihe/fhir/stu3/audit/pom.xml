@@ -10,7 +10,7 @@
     <artifactId>ipf-commons-ihe-fhir-stu3-audit</artifactId>
     <name>ipf-commons-ihe-fhir-stu3-audit</name>
     <description>FHIR-specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -53,13 +53,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

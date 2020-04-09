@@ -4,7 +4,7 @@
     <artifactId>ipf-modules-cda-mdht</artifactId>
     <name>ipf-modules-cda-mdht</name>
     <description>MDHT-specific CDA support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -53,12 +53,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

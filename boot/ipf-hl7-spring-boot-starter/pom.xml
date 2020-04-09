@@ -47,15 +47,6 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
         </dependency>
-
-
 	</dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

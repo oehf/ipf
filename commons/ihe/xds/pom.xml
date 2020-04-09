@@ -4,7 +4,7 @@
     <artifactId>ipf-commons-ihe-xds</artifactId>
     <name>ipf-commons-ihe-xds</name>
     <description>XDS-specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -178,12 +178,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

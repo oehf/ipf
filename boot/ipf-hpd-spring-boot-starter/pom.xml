@@ -55,14 +55,6 @@
             <artifactId>ipf-platform-camel-ihe-hpd</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

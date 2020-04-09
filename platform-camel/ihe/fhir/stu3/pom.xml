@@ -11,7 +11,7 @@
     <artifactId>ipf-platform-camel-ihe-fhir-stu3</artifactId>
     <name>ipf-platform-camel-ihe-fhir-stu3</name>
     <description>FHIR Restful IHE components for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <modules>
         <module>pixpdq</module>
@@ -31,12 +31,5 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

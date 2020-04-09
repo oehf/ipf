@@ -9,9 +9,9 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.9.2</brave-version>
+        <brave-version>5.11.2</brave-version>
         <camel-version>2.25.0</camel-version>
-        <cxf-version>3.3.5</cxf-version>
+        <cxf-version>3.3.6</cxf-version>
         <groovy-version>2.5.10</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>4.2.0</hapi-fhir-version>
@@ -21,24 +21,20 @@
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
-        <netty-version>4.1.45.Final</netty-version>
+        <netty-version>4.1.48.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
         <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.1.14.RELEASE</spring-version>
-        <spring-boot-version>2.1.13.RELEASE</spring-boot-version>
+        <spring-version>5.2.5.RELEASE</spring-version>
+        <spring-boot-version>2.2.6.RELEASE</spring-boot-version>
         <vertx-version>3.8.5</vertx-version>
         <vibur-version>22.2</vibur-version>
-        <xmlsec-version>2.1.4</xmlsec-version>
+        <xmlsec-version>2.1.5</xmlsec-version>
 
         <github.global.server>github</github.global.server>
 
-        <site.path>${project.version}</site.path>
-        <site.url>http://oehf.github.io/ipf</site.url>
-        <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url>scm:git:git@github.com:oehf/ipf.git</site.deploy.url>
     </properties>
 
     <url>${site.url}</url>
@@ -1189,11 +1185,6 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <site>
-            <id>${site.deploy.id}</id>
-            <name>Deployment through GitHub's site deployment plugin</name>
-            <url>${site.deploy.url}</url>
-        </site>
     </distributionManagement>
 
     <scm>

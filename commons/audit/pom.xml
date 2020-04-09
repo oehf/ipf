@@ -4,7 +4,7 @@
     <artifactId>ipf-commons-audit</artifactId>
     <name>ipf-commons-audit</name>
     <description>Generic DICOM Audit functionality</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -94,12 +94,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

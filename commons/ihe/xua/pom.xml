@@ -4,7 +4,7 @@
     <artifactId>ipf-commons-ihe-xua</artifactId>
     <name>ipf-commons-ihe-xua</name>
     <description>XUA support for IHE Web Services</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -28,12 +28,5 @@
             <artifactId>groovy-xml</artifactId>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

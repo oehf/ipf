@@ -4,7 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-atna</artifactId>
     <name>ipf-platform-camel-ihe-atna</name>
     <description>ATNA support for Apache Camel IHE components</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -37,12 +37,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>
