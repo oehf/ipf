@@ -28,11 +28,11 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 public class SynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
 
     @Override
-    protected void handle(AuditContext auditContext, String... auditRecords) {
+    protected void handle(AuditContext auditContext, String auditRecord) {
         try {
-            auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+            auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecord);
         } catch (Exception e) {
-            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
+            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecord);
         }
     }
 }

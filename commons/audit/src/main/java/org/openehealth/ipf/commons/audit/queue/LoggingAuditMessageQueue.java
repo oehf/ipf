@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.stream.Stream;
-
 /**
  * Message Queue that logs the serialized plain audit messages with (by default)
  * pretty formatting using a configurable logger. Log level is INFO.
@@ -44,9 +42,9 @@ public class LoggingAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     @Override
-    protected synchronized void handle(AuditContext auditContext, String... auditRecords) {
-        if (auditRecords != null) {
-            Stream.of(auditRecords).forEach(log::info);
+    protected synchronized void handle(AuditContext auditContext, String auditRecord) {
+        if (auditRecord != null) {
+            log.info(auditRecord);
         }
     }
 }

@@ -16,14 +16,17 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
+import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
+import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
+import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
+import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,48 +40,94 @@ public class IpfAtnaAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AuditContext atnaAuditorModuleConfig(IpfAtnaConfigurationProperties config,
-                                                @Value("${spring.application.name}") String appName) throws Exception {
+    public AuditContext auditContext(IpfAtnaConfigurationProperties config,
+                                     AuditTransmissionProtocol auditTransmissionProtocol,
+                                     AuditMessageQueue auditMessageQueue,
+                                     TlsParameters tlsParameters,
+                                     AuditMetadataProvider auditMetadataProvider,
+                                     AuditExceptionHandler auditExceptionHandler,
+                                     AuditMessagePostProcessor auditMessagePostProcessor,
+                                     @Value("${spring.application.name}") String appName) {
         DefaultAuditContext auditContext = new DefaultAuditContext();
         auditContext.setAuditEnabled(config.isAuditEnabled());
 
-        String auditSourceId = config.getAuditSourceId() != null ?
-                config.getAuditSourceId() :
-                appName;
-
-        auditContext.setAuditSourceId(auditSourceId);
+        // Simple properties
+        auditContext.setAuditSourceId(config.getAuditSourceId() != null ? config.getAuditSourceId() : appName);
         auditContext.setAuditEnterpriseSiteId(config.getAuditEnterpriseSiteId());
         auditContext.setAuditRepositoryHost(config.getAuditRepositoryHost());
         auditContext.setAuditRepositoryPort(config.getAuditRepositoryPort());
         auditContext.setAuditSource(config.getAuditSourceType());
-        auditContext.setSendingApplication(config.getAuditSendingApplication());
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
         auditContext.setAuditValueIfMissing(config.getAuditValueIfMissing());
-        auditContext.setAuditRepositoryTransport(config.getAuditRepositoryTransport());
 
-        if (config.getAuditQueueClass() != null) {
-            auditContext.setAuditMessageQueue(
-                    config.getAuditQueueClass().getDeclaredConstructor().newInstance());
-        }
-
-        if (config.getAuditExceptionHandlerClass() != null) {
-            auditContext.setAuditExceptionHandler(
-                    config.getAuditExceptionHandlerClass().getDeclaredConstructor().newInstance());
-        }
-
-        if (config.getAuditSenderClass() != null) {
-            auditContext.setAuditTransmissionProtocol(
-                    config.getAuditSenderClass().getDeclaredConstructor().newInstance());
-        }
-
-        if (config.getAuditMessagePostProcessorClass() != null) {
-            auditContext.setAuditMessagePostProcessor(
-                    config.getAuditMessagePostProcessorClass().getDeclaredConstructor().newInstance());
-        }
+        // Strategies and complex parameters; overrideable
+        auditContext.setTlsParameters(tlsParameters);
+        auditContext.setAuditMetadataProvider(auditMetadataProvider);
+        auditContext.setAuditTransmissionProtocol(auditTransmissionProtocol);
+        auditContext.setAuditMessageQueue(auditMessageQueue);
+        auditContext.setAuditExceptionHandler(auditExceptionHandler);
+        auditContext.setAuditMessagePostProcessor(auditMessagePostProcessor);
 
         return auditContext;
     }
 
+    // The following beans configure aud strategies (formats, queues, exception handlers) and
+    // can all be overwritten
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AuditMessageQueue auditMessageQueue(IpfAtnaConfigurationProperties config) throws Exception {
+        return config.getAuditQueueClass().getConstructor().newInstance();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AuditMessagePostProcessor auditMessagePostProcessor(IpfAtnaConfigurationProperties config) throws Exception {
+        if (config.getAuditMessagePostProcessorClass() != null) {
+            return config.getAuditMessagePostProcessorClass().getConstructor().newInstance();
+        }
+        return AuditMessagePostProcessor.noOp();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AuditTransmissionProtocol auditTransmissionProtocol(IpfAtnaConfigurationProperties config,
+                                                               TlsParameters tlsParameters) throws Exception {
+        if (config.getAuditSenderClass() != null) {
+            return config.getAuditSenderClass().getConstructor(TlsParameters.class)
+                    .newInstance(tlsParameters);
+        }
+        return AuditTransmissionChannel.fromProtocolName(config.getAuditRepositoryTransport())
+                .makeInstance(tlsParameters);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AuditMetadataProvider auditMetadataProvider(IpfAtnaConfigurationProperties config,
+                                                       @Value("${spring.application.name}") String appName) {
+        DefaultAuditMetadataProvider auditMetadataProvider = new DefaultAuditMetadataProvider();
+        auditMetadataProvider.setSendingApplication(config.getAuditSendingApplication() != null ?
+                config.getAuditSendingApplication() :
+                appName);
+        return auditMetadataProvider;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AuditExceptionHandler auditExceptionHandler(IpfAtnaConfigurationProperties config) throws Exception {
+        if (config.getAuditExceptionHandlerClass() != null) {
+            return config.getAuditExceptionHandlerClass().getConstructor().newInstance();
+        }
+        return new LoggingAuditExceptionHandler();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public TlsParameters tlsParameters() {
+        return TlsParameters.getDefault();
+    }
+
+    // Some audit event listeners
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.audit-enabled")

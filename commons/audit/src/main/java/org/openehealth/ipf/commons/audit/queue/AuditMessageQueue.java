@@ -29,9 +29,8 @@ public interface AuditMessageQueue {
 
     /**
      *
-     * @param auditContext
-     * @param auditMessages
-     * @throws Exception
+     * @param auditContext IPF audit context
+     * @param auditMessages one or more audit message instances
      */
     void audit(AuditContext auditContext, AuditMessage... auditMessages);
 

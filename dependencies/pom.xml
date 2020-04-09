@@ -9,7 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.9.2</brave-version>
+        <brave-version>5.11.2</brave-version>
         <camel-version>3.1.0</camel-version>
         <cxf-version>3.3.6</cxf-version>
         <groovy-version>3.0.2</groovy-version>
@@ -25,6 +25,7 @@
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
         <mina-version>2.0.21</mina-version>
+        <netty-version>4.1.48.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
@@ -37,11 +38,6 @@
         <xmlsec-version>2.1.5</xmlsec-version>
 
         <github.global.server>github</github.global.server>
-
-        <site.path>${project.version}</site.path>
-        <site.url>http://oehf.github.io/ipf</site.url>
-        <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url>scm:git:git@github.com:oehf/ipf.git</site.deploy.url>
 
     </properties>
 
@@ -624,6 +620,11 @@
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-unit</artifactId>
                 <version>${vertx-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty-version}</version>
             </dependency>
 
             <dependency>

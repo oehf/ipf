@@ -10,7 +10,7 @@
     <artifactId>ipf-tutorials-iheclient</artifactId>
     <name>ipf-tutorials-iheclient</name>
     <description>This project demonstrates how a client-side application can make use of IHE Producer Endpoints</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -82,12 +82,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
     
 </project>

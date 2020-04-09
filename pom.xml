@@ -13,8 +13,6 @@
         <relativePath>dependencies</relativePath>
     </parent>
 
-    <url>${site.url}</url>
-
     <description>IPF - eHealth Integration on steroids</description>
 
     <modules>
@@ -39,20 +37,13 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <github.global.server>github</github.global.server>
-        <site.path>${project.version}</site.path>
-        <site.url>http://oehf.github.io/ipf</site.url>
-        <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
-        <site.directory>${user.home}/sites/ipf</site.directory>
-        <site.scm.directory>${user.home}/sites/scm/ipf</site.scm.directory>
-
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.1.1</assembly-plugin-version>
         <build-helper-version>3.0.0</build-helper-version>
         <compiler-plugin-version>3.8.1</compiler-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
-        <gmavenplus-plugin-version>1.8.1</gmavenplus-plugin-version>
+        <github-site-version>0.12</github-site-version>
+        <gmavenplus-plugin-version>1.9.0</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.2.0</jar-plugin-version>
         <javadoc-plugin-version>3.1.1</javadoc-plugin-version>
@@ -72,7 +63,7 @@
         <commons-io-version>2.6</commons-io-version>
         <commons-lang3-version>3.9</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
-        <ehcache-version>2.10.1</ehcache-version>
+        <ehcache-version>2.10.6</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
@@ -87,6 +78,7 @@
         <log4j-version>2.12.1</log4j-version>
         <lombok-version>1.18.12</lombok-version>
         <mockito-version>3.2.4</mockito-version>
+        <mockserver-version>5.10</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
         <tomcat-version>9.0.33</tomcat-version>
@@ -426,12 +418,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
@@ -477,6 +463,16 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-joda</artifactId>
                 <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-client-java</artifactId>
+                <version>${mockserver-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -950,6 +946,26 @@
             </plugin>
             -->
             <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github-site-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site-deploy</phase>
+                        <configuration>
+                            <server>github</server>
+                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
+                            <path>${project.distributionManagement.site.url}</path>
+                            <merge>true</merge>
+                            <dryRun>true</dryRun>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>${nexus-staging-plugin-version}</version>
@@ -1123,11 +1139,5 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}</url>
-        </site>
-    </distributionManagement>
 
 </project>

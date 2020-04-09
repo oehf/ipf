@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.ServerSocket;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -43,36 +44,39 @@ import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtoc
  */
 abstract class AbstractAuditorIntegrationTest {
 
-    private Logger LOG = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
 
-    static final String CLIENT_KEY_STORE =
-            AbstractAuditorIntegrationTest.class.getResource("/security/client.keystore").getPath();
+    static final String CLIENT_KEY_STORE;
     static final String CLIENT_KEY_STORE_PASS = "initinit";
-
-    static final String EXPIRED_CLIENT_KEY_STORE =
-            AbstractAuditorIntegrationTest.class.getResource("/security/expired.keystore").getPath();
-
-    static final String SERVER_KEY_STORE =
-            AbstractAuditorIntegrationTest.class.getResource("/security/server.keystore").getPath();
+    static final String EXPIRED_CLIENT_KEY_STORE;
+    static final String SERVER_KEY_STORE;
     static final String SERVER_KEY_STORE_PASS = "initinit";
-
-    static final String TRUST_STORE =
-            AbstractAuditorIntegrationTest.class.getResource("/security/ca.keystore").getPath();
+    static final String TRUST_STORE;
     static final String TRUST_STORE_PASS = "initinit";
 
     static final String LOCALHOST = "localhost";
     static final long WAIT_TIME = 2000L;
 
+    static {
+        try {
+            CLIENT_KEY_STORE = Paths.get(AbstractAuditorIntegrationTest.class.getResource("/security/client.keystore").toURI()).toString();
+            SERVER_KEY_STORE = Paths.get(AbstractAuditorIntegrationTest.class.getResource("/security/server.keystore").toURI()).toString();
+            EXPIRED_CLIENT_KEY_STORE = Paths.get(AbstractAuditorIntegrationTest.class.getResource("/security/expired.keystore").toURI()).toString();
+            TRUST_STORE = Paths.get(AbstractAuditorIntegrationTest.class.getResource("/security/ca.keystore").toURI()).toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     Vertx vertx;
     int port;
-    Properties p;
-    String deploymentId;
-
     DefaultAuditContext auditContext;
 
+    private Properties p;
+    private String deploymentId;
 
     @Before
-    public void setup(TestContext context) throws Exception {
+    public void setup(TestContext context) {
         p = System.getProperties();
         port = freePort();
         this.auditContext = new DefaultAuditContext();

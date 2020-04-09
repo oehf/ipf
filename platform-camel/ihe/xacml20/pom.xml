@@ -4,7 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-xacml20</artifactId>
     <name>ipf-platform-camel-ihe-xacml20</name>
     <description>Apache Camel components for XACML 2.0-based transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -105,12 +105,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

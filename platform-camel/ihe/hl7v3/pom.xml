@@ -4,7 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
     <name>ipf-platform-camel-ihe-hl7v3</name>
     <description>HL7v3 web service IHE components for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -100,12 +100,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

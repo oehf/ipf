@@ -62,7 +62,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
 
     private static final Pattern IPV4 = Pattern.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
     private static final Pattern IPV6 = Pattern.compile("^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$", Pattern.CASE_INSENSITIVE);
-    private AuditMessage auditMessage;
+    private final AuditMessage auditMessage;
 
     public BaseAuditMessageBuilder() {
         this.auditMessage = new AuditMessage();

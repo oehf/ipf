@@ -10,7 +10,7 @@
     <artifactId>ipf-commons-ihe-fhir-r4-core</artifactId>
     <name>ipf-commons-ihe-fhir-r4-core</name>
     <description>FHIR IHE support for R4</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -54,13 +54,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>
