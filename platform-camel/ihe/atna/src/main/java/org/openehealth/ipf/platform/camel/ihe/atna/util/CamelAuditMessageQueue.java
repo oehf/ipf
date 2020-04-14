@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+
 /**
  * An audit message sender that sends audit messages to a configured Camel
  * endpoint. When configured in a Spring application context, it is attempted to
@@ -88,6 +89,10 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
             HashMap<String, Object> headers = new HashMap<>();
             headers.put(HEADER_NAMESPACE + ".destination.address", destinationAddress.getHostAddress());
             headers.put(HEADER_NAMESPACE + ".destination.port", destinationPort);
+            headers.put(X_IPF_ATNA_TIMESTAMP, auditContext.getAuditMetadataProvider().getTimestamp());
+            headers.put(X_IPF_ATNA_HOSTNAME, auditContext.getAuditMetadataProvider().getHostname());
+            headers.put(X_IPF_ATNA_PROCESSID, auditContext.getAuditMetadataProvider().getProcessID());
+            headers.put(X_IPF_ATNA_APPLICATION, auditContext.getSendingApplication());
             producerTemplate.sendBodyAndHeaders(endpointUriString, m, headers);
         }
     }
