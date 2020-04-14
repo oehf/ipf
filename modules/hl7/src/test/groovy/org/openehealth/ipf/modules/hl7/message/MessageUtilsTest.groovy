@@ -20,6 +20,7 @@ import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.GenericMessage
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
@@ -139,7 +140,19 @@ public class MessageUtilsTest {
         String encoded = parser.encode(nak)
         assert encoded.contains('|ACK^R01^ACK|')
     }
-    
+
+    /**
+     * {@link MessageUtils#defaultNak} shall explicitly create an ERR segment in the NAK, otherwise,
+     * when version-specific classes are not available (like in this test for HL7 v2.1), the exception
+     * like "ERR does not exist in the group ca.uhn.hl7v2.model.GenericMessage$V21" will occur.
+     */
+    @Test
+    void testNakUnknownHl7v2Version() {
+        def exception = new HL7Exception('blabla')
+        def nak = MessageUtils.defaultNak(exception, AcknowledgmentCode.AE, '2.1')
+        assert nak instanceof GenericMessage
+    }
+
     @Test
     void testMakeCECompositeVersion25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
