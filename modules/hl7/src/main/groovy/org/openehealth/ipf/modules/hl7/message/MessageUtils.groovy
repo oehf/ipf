@@ -139,7 +139,8 @@ class MessageUtils {
         def cause = encodeHL7String(e.message ?: e.class.simpleName, null)
         def now = hl7Now()
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
-                "MSA|AE|MsgIdUnknown|$cause|\r"
+                "MSA|AE|MsgIdUnknown|$cause|\r" +
+                "ERR|\r"
 
         def nak = PARSER.parse(cannedNak)
         e.populateResponse(nak, ackCode, 0)
