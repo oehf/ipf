@@ -30,7 +30,7 @@
 
         <surefire-report-plugin-version>2.20</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
-        <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>3.0.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
@@ -44,21 +44,20 @@
         <compiler-plugin-version>3.8.0</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
-        <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.9.0</gmavenplus-plugin-version>
 
         <groovy-eclipse-batch-version>2.5.10-02</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>3.6.0-03</groovy-eclipse-compiler-version>
 
         <jar-plugin-version>3.1.0</jar-plugin-version>
-        <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
+        <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
         <lombok-plugin-version>1.18.8.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
         <sources-plugin-version>3.0.1</sources-plugin-version>
-        <site-plugin-version>3.4</site-plugin-version>
+        <site-plugin-version>3.9.0</site-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.15.12</activemq-version>
@@ -729,54 +728,15 @@
                     </executions>
                 </plugin>
                 <!-- reporting plugins -->
-                <!-- Configure Maven site plugin for Reflow skin and Markdown support -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${site-plugin-version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.wagon</groupId>
-                            <artifactId>wagon-scm</artifactId>
-                            <version>3.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-manager-plexus</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-provider-gitexe</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-api</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-module-markdown</artifactId>
-                            <version>1.6</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>lt.velykis.maven.skins</groupId>
-                            <artifactId>reflow-velocity-tools</artifactId>
-                            <version>1.1.1</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.velocity</groupId>
-                            <artifactId>velocity</artifactId>
-                            <version>1.7</version>
-                        </dependency>
-                    </dependencies>
                     <configuration>
                         <generateReports>true</generateReports>
                         <inputEncoding>UTF-8</inputEncoding>
                         <outputEncoding>UTF-8</outputEncoding>
                         <relativizeDecorationLinks>false</relativizeDecorationLinks>
-                        <!-- Site deployment done using GitHub site plugin -->
                         <skip>false</skip>
                         <skipDeploy>true</skipDeploy>
                     </configuration>
@@ -1127,26 +1087,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>${nexus-staging-plugin-version}</version>
@@ -1185,29 +1125,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
-
         </plugins>
         <resources>
             <resource>
@@ -1280,11 +1197,11 @@
                         <reports>
                             <report>index</report>
                             <report>summary</report>
-                            <report>project-team</report>
+                            <report>team</report>
                             <report>modules</report>
                             <!-- <report>dependencies</report> -->
-                            <report>license</report>
-                            <report>mailing-list</report>
+                            <report>licenses</report>
+                            <report>mailing-lists</report>
                             <report>scm</report>
                         </reports>
                     </reportSet>

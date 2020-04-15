@@ -32,12 +32,7 @@
         <vertx-version>3.8.5</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.5</xmlsec-version>
-
-        <github.global.server>github</github.global.server>
-
     </properties>
-
-    <url>${site.url}</url>
 
     <description>IPF External Dependencies</description>
 
