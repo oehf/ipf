@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

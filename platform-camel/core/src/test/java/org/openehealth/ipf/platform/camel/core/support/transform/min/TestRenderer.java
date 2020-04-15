@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.support.transform.min;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 

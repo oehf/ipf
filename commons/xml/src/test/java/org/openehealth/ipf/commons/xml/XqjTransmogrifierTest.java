@@ -25,7 +25,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xquery.XQException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;

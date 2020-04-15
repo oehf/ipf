@@ -16,7 +16,12 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
@@ -41,13 +46,13 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AuditContext auditContext(IpfAtnaConfigurationProperties config,
-                                                AuditTransmissionProtocol auditTransmissionProtocol,
-                                                AuditMessageQueue auditMessageQueue,
-                                                TlsParameters tlsParameters,
-                                                AuditMetadataProvider auditMetadataProvider,
-                                                AuditExceptionHandler auditExceptionHandler,
-                                                AuditMessagePostProcessor auditMessagePostProcessor,
-                                                @Value("${spring.application.name}") String appName) {
+                                     AuditTransmissionProtocol auditTransmissionProtocol,
+                                     AuditMessageQueue auditMessageQueue,
+                                     TlsParameters tlsParameters,
+                                     AuditMetadataProvider auditMetadataProvider,
+                                     AuditExceptionHandler auditExceptionHandler,
+                                     AuditMessagePostProcessor auditMessagePostProcessor,
+                                     @Value("${spring.application.name}") String appName) {
         DefaultAuditContext auditContext = new DefaultAuditContext();
         auditContext.setAuditEnabled(config.isAuditEnabled());
 

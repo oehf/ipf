@@ -17,7 +17,11 @@
 package org.openehealth.ipf.commons.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 

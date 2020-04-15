@@ -21,8 +21,6 @@ import org.hl7.fhir.dstu3.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

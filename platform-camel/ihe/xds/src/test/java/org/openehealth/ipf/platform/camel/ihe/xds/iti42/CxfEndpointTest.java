@@ -46,9 +46,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsR
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;

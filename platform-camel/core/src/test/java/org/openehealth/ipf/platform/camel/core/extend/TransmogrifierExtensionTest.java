@@ -19,7 +19,6 @@ import org.apache.camel.Exchange;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.xml.sax.SAXException;
 
 import javax.xml.transform.dom.DOMResult;
 import java.io.IOException;

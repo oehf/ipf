@@ -21,8 +21,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 
-import javax.servlet.ServletException;
-
 import static org.junit.Assert.assertEquals;
 
 /**

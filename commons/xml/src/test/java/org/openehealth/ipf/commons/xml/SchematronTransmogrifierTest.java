@@ -20,7 +20,6 @@ import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.io.IOException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

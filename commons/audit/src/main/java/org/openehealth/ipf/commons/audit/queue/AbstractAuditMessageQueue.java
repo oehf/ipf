@@ -38,8 +38,6 @@ import java.util.stream.Stream;
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
-
-
     @Setter
     private boolean pretty = false;
 

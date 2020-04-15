@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.xml;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

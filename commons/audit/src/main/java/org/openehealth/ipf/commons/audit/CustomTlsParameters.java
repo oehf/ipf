@@ -19,14 +19,32 @@ import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.NetClientOptions;
 import io.vertx.core.net.PfxOptions;
 
-import javax.net.ssl.*;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SNIHostName;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLContextSpi;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSessionContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509ExtendedKeyManager;
+import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.Principal;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +52,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.*;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.HTTPS_CIPHERSUITES;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_TYPE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
 
 /**
  * {@link TlsParameters} that can be set independently of the javax.net.ssl system

@@ -21,6 +21,15 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+import static java.util.Objects.requireNonNull;
+
+/**
+ * Default implementation, using the current host name, process ID, timestamp and "IPF" and sending application.
+ * Using the setters you can assign custom values.
+ *
+ * @see {@link AuditUtils#getLocalHostName()}
+ * @see {@link AuditUtils#getProcessId()} ()}
+ */
 public class DefaultAuditMetadataProvider implements AuditMetadataProvider {
 
     private String hostName;
@@ -36,13 +45,13 @@ public class DefaultAuditMetadataProvider implements AuditMetadataProvider {
     public DefaultAuditMetadataProvider(String hostName, String processID, String sendingApplication, String timestamp) {
         this.hostName = hostName;
         this.processID = processID;
-        this.sendingApplication = sendingApplication;
+        this.sendingApplication = requireNonNull(sendingApplication);
         this.timestamp = timestamp;
     }
 
     @Override
     public void setSendingApplication(String sendingApplication) {
-        this.sendingApplication = sendingApplication;
+        this.sendingApplication = requireNonNull(sendingApplication);
     }
 
     public void setHostName(String hostName) {
@@ -53,22 +62,37 @@ public class DefaultAuditMetadataProvider implements AuditMetadataProvider {
         this.processID = processID;
     }
 
+    /**
+     * Sets the timestamp precision. Note that RFC 5424 Syslog Format does not allow more than 6 subsecond
+     * digits, so {@link ChronoUnit#NANOS} will be rejected.
+     *
+     * @param precision precision, as offered by {@link ChronoUnit}
+     */
     public void setPrecision(TemporalUnit precision) {
-        this.precision = precision;
+        if (ChronoUnit.NANOS == precision) {
+            throw new IllegalArgumentException("RFC 5424 only allows 6 subsecond digits");
+        }
+        this.precision = requireNonNull(precision);
     }
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
+    /**
+     * @return the timestamp or if null the current timestamp
+     */
     @Override
     public String getTimestamp() {
         return timestamp != null ? timestamp : Instant.now().truncatedTo(precision).toString();
     }
 
+    /**
+     * @return the hostName or if null the current hostName
+     */
     @Override
     public String getHostname() {
-        return hostName;
+        return hostName != null ? hostName : AuditUtils.getLocalHostName();
     }
 
     @Override
@@ -76,8 +100,11 @@ public class DefaultAuditMetadataProvider implements AuditMetadataProvider {
         return sendingApplication;
     }
 
+    /**
+     * @return the processID or if null the current processID
+     */
     @Override
     public String getProcessID() {
-        return processID;
+        return processID != null ? processID : AuditUtils.getProcessId();
     }
 }
