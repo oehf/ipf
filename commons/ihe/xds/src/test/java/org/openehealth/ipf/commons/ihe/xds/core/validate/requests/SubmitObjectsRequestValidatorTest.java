@@ -273,7 +273,7 @@ public class SubmitObjectsRequestValidatorTest {
     public void testProhibitedNodeRepresentationIsNotEmpty() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         EbXMLClassification classification = ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
-                .filter(x -> isAuthorClassification(x))
+                .filter(SubmitObjectsRequestValidatorTest::isAuthorClassification)
                 .findAny()
                 .get();
 

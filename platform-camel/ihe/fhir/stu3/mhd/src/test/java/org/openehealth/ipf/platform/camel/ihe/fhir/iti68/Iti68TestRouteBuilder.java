@@ -50,7 +50,7 @@ public class Iti68TestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))

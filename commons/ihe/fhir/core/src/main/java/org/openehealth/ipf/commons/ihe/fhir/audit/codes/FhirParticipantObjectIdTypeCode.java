@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 
 /**
@@ -37,7 +36,7 @@ public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private final ParticipantObjectIdType value;
 
     FhirParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

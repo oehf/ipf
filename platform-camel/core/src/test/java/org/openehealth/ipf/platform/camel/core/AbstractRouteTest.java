@@ -45,7 +45,7 @@ public abstract class AbstractRouteTest {
     protected MockEndpoint mock;
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mock.reset();
     }
 

@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public class AssigningAuthorityAdapter extends XmlAdapter<String, AssigningAuthority> {
     @Override
-    public String marshal(AssigningAuthority v) throws Exception {
+    public String marshal(AssigningAuthority v) {
         return (v != null) ? v.getUniversalId() : null;
     }
 
     @Override
-    public AssigningAuthority unmarshal(String v) throws Exception {
+    public AssigningAuthority unmarshal(String v) {
         return new AssigningAuthority(v);
     }
 }

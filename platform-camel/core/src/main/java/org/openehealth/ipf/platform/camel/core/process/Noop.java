@@ -29,7 +29,7 @@ public class Noop implements Processor {
      * Does nothing.
      */
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
     }
 
 }

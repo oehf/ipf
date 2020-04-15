@@ -67,7 +67,7 @@ public enum EventTypeCode implements EventType, EnumeratedCodedValue<EventType> 
     NodeID("110182", "Node ID");
 
     @Getter
-    private EventType value;
+    private final EventType value;
 
     EventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "DCM", displayName);

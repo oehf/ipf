@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Base {
 
-    private static Logger LOG = LoggerFactory.getLogger(Base.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Base.class);
 
     private static String descriptorList = "base-context.xml;extender-context.xml";
 

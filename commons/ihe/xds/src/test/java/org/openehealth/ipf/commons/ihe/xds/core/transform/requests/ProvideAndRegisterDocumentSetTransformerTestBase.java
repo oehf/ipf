@@ -42,7 +42,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     private DataHandler dataHandler;    
     
     @Before
-    public void setUp() throws Exception {        
+    public void setUp() {
         EbXMLFactory factory = createFactory();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 

@@ -109,13 +109,13 @@ public abstract class AbstractWsEndpoint<
 
     private AuditContext auditContext;
     private AsynchronyCorrelator<AuditDatasetType> correlator = null;
-    private InterceptorProvider customInterceptors;
+    private final InterceptorProvider customInterceptors;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
-    private List<AbstractFeature> features;
-    private List<String> schemaLocations;
-    private Class<? extends AbstractWebService> serviceClass;
-    private Map<String, Object> properties;
+    private final List<AbstractFeature> features;
+    private final List<String> schemaLocations;
+    private final Class<? extends AbstractWebService> serviceClass;
+    private final Map<String, Object> properties;
 
     private boolean secure;
     private SSLContextParameters sslContextParameters;

@@ -24,8 +24,7 @@ import java.io.IOException;
 
 public class CommonCallbackHandler implements CallbackHandler {
 
-    public void handle(Callback[] callbacks) throws IOException,
-            UnsupportedCallbackException {
+    public void handle(Callback[] callbacks) {
         for (Callback callback : callbacks) {
             if (callback instanceof WSPasswordCallback) { // CXF
                 WSPasswordCallback pc = (WSPasswordCallback) callback;

@@ -41,12 +41,12 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     protected MockEndpoint error;
 
     @After
-    public void tearDownError() throws Exception {
+    public void tearDownError() {
         error.reset();
     }
 
     @Test
-    public void testValidator1() throws InterruptedException {
+    public void testValidator1() {
         String result = (String) producerTemplate.sendBody(
                 "direct:validator-test", ExchangePattern.InOut, "correct");
         assertEquals("correct", result);
@@ -62,7 +62,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     }
 
     @Test
-    public void testValidator3() throws InterruptedException, IOException {
+    public void testValidator3() throws IOException {
         final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"), Charset.defaultCharset());
         String response = (String)producerTemplate.sendBody(
         		"direct:validator-xml-test", ExchangePattern.InOut, xml);
@@ -83,7 +83,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     }
 
     @Test
-    public void testValidator5() throws InterruptedException, IOException {
+    public void testValidator5() throws IOException {
         final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"), Charset.defaultCharset());
         String response = (String)producerTemplate.sendBody(
         		"direct:validator-schematron-test", ExchangePattern.InOut, xml);

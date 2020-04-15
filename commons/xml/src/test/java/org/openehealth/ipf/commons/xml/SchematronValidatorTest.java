@@ -33,18 +33,18 @@ public class SchematronValidatorTest {
     private SchematronValidator v;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         v = new SchematronValidator();
     }
 
     @Test
-    public void testValidate() throws IOException {
+    public void testValidate() {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
         v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
     }
 
     @Test
-    public void testValidateFail() throws IOException {
+    public void testValidateFail() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(
                 "/schematron/schematron-test-fail.xml"));
         try {

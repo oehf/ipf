@@ -30,19 +30,19 @@ public class SchematronTransmogrifierTest {
     private SchematronTransmogrifier<String> svi;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         svi = new SchematronTransmogrifier<>(String.class);
     }
 
     @Test
-    public void testConvert() throws IOException {
+    public void testConvert() {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
         String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertFalse(result.contains("svrl:failed-assert"));
     }
 
     @Test
-    public void testConvertFail() throws IOException {
+    public void testConvertFail() {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
         String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertTrue(result.contains("<svrl:failed-assert")); // 3 occurrences

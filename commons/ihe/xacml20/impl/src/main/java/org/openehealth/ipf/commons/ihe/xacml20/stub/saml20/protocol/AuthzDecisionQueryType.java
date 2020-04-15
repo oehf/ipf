@@ -90,7 +90,7 @@ public class AuthzDecisionQueryType
      */
     public List<ActionType> getAction() {
         if (action == null) {
-            action = new ArrayList<ActionType>();
+            action = new ArrayList<>();
         }
         return this.action;
     }

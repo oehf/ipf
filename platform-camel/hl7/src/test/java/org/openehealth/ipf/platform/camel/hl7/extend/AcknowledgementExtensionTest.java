@@ -33,18 +33,18 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = {"/config/context-ack.xml"})
 public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
-    private static String MSH_EXPECTED = "||ACK^A01";
-    private static String ERR1_EXPECTED = "ERR|^^^203&Unsupported version id&HL70357&&Don't like it";
-    private static String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
+    private static final String MSH_EXPECTED = "||ACK^A01";
+    private static final String ERR1_EXPECTED = "ERR|^^^203&Unsupported version id&HL70357&&Don't like it";
+    private static final String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
 
 
     @EndpointInject(uri = "mock:output")
     private MockEndpoint mockOutput;
 
-    private String resource = "/message/msg-01.hl7";
+    private final String resource = "/message/msg-01.hl7";
 
     @After
-    public void myTearDown() throws Exception {
+    public void myTearDown() {
         mockOutput.reset();
     }
 

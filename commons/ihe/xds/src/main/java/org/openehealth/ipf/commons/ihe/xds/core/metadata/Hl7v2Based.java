@@ -215,7 +215,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     static class Holder<T extends Type> extends AbstractType implements Composite {
         private static final long serialVersionUID = -9084300955263787034L;
 
-        private Type[] data = new Type[1];
+        private final Type[] data = new Type[1];
 
         public Holder(T t) {
             super(t.getMessage());
@@ -242,7 +242,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         @Override
-        public boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {
+        public boolean accept(MessageVisitor visitor, Location currentLocation) {
             return false;
         }
     }

@@ -25,7 +25,7 @@ import org.apache.camel.Processor;
  */
 public class CountingProcessor implements Processor {
 
-    private AtomicInteger counter = new AtomicInteger(0);
+    private final AtomicInteger counter = new AtomicInteger(0);
     
     public int getExchangeCount() {
         return counter.get();
@@ -35,7 +35,7 @@ public class CountingProcessor implements Processor {
         counter.set(0);
     }
     
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
         counter.incrementAndGet();
     }
     

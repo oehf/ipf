@@ -74,7 +74,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCase() throws Exception {
+    public void testHappyCase() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -82,7 +82,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCaseInboundValidation() throws Exception {
+    public void testHappyCaseInboundValidation() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -90,7 +90,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCaseInboundAndOutboundValidation() throws Exception {
+    public void testHappyCaseInboundAndOutboundValidation() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -98,7 +98,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test(expected = Hl7v2AcceptanceException.class)
-    public void testInacceptableRequestOnProducer() throws Exception {
+    public void testInacceptableRequestOnProducer() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
@@ -120,7 +120,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testApplicationError() throws Exception {
+    public void testApplicationError() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_throws_exception";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
@@ -130,7 +130,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundValidation() throws Exception {
+    public void testInboundValidation() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
@@ -139,7 +139,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundValidationError() throws Exception {
+    public void testInboundValidationError() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         //this must be a validation error
         String invalidMSG = PCD_01_SPEC_REQUEST.replace("|1.0.1|", "||");
@@ -151,7 +151,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundAndOutboundValidationError() throws Exception {
+    public void testInboundAndOutboundValidationError() {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         //this must be a validation error
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
@@ -161,7 +161,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testDefaultAcceptedResponse() throws Exception {
+    public void testDefaultAcceptedResponse() {
         String uri = "pcd-pcd01://localhost:" + getPort()
                 + "/route_unacceptable_response";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);

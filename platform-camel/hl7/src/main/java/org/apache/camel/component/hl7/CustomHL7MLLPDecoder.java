@@ -34,7 +34,7 @@ import java.nio.charset.CharsetDecoder;
  * are transferred in a different frame. It also covers the case that requests are coming
  * in faster than they can be processed.
  *
- * FIXME check if this decoder is part of Camel 2.20
+ * @deprecated use {@link HL7MLLPDecoder}
  */
 class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
@@ -42,9 +42,9 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     private static final String DECODER_STATE = CustomHL7MLLPDecoder.class.getName() + ".STATE";
     private static final String CHARSET_DECODER = CustomHL7MLLPDecoder.class.getName() + ".charsetdecoder";
 
-    private CustomHL7MLLPConfig config;
+    private final HL7MLLPConfig config;
 
-    CustomHL7MLLPDecoder(CustomHL7MLLPConfig config) {
+    CustomHL7MLLPDecoder(HL7MLLPConfig config) {
         this.config = config;
     }
 
@@ -157,7 +157,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     }
 
     @Override
-    public void dispose(IoSession session) throws Exception {
+    public void dispose(IoSession session) {
         session.removeAttribute(DECODER_STATE);
         session.removeAttribute(CHARSET_DECODER);
     }

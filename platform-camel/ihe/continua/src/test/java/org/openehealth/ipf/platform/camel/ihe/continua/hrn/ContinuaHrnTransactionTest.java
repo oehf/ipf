@@ -67,7 +67,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
     }
 
     @Test
-    public void happyCase() throws Exception {
+    public void happyCase() {
         String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
         Response response = (Response) send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());

@@ -40,7 +40,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
     private DataHandler dataHandler2;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         

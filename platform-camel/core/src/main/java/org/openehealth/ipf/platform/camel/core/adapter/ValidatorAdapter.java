@@ -107,11 +107,9 @@ public class ValidatorAdapter extends ProcessorAdapter {
      *            input data.
      * @param inputParams
      *            input parameters.
-     * @throws IOException
-     *             if a general processing error occurs.
      */
     @Override
-    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
+    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) {
         prepareResult(exchange);
         if (validationEnabled(exchange)) {
             validator.validate(inputData, getProfile(exchange));

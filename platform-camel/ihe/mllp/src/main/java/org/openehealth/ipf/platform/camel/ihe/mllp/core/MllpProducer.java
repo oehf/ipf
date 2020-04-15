@@ -39,7 +39,7 @@ public class MllpProducer extends DefaultProducer {
     // the stop method. Weird API, really.
     private interface DoStop {
         @SuppressWarnings("unused")
-        void stop() throws Exception;
+        void stop();
     }
 
     @Delegate(excludes = DoStop.class)

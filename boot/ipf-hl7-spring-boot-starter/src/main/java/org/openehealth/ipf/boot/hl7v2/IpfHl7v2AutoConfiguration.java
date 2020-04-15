@@ -142,7 +142,7 @@ public class IpfHl7v2AutoConfiguration {
         context.setValidationContext(validationContext);
         context.setProfileStore(profileStore);
         context.setParserConfiguration(parserConfiguration);
-        idGenerator.ifPresent(ig -> parserConfiguration.setIdGenerator(ig));
+        idGenerator.ifPresent(parserConfiguration::setIdGenerator);
         context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         return context;
     }

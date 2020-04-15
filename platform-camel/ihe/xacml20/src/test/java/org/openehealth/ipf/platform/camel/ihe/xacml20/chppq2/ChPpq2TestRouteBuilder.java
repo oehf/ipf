@@ -34,7 +34,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidat
 public class ChPpq2TestRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         // sends a correct response with status "success"
         from("ch-ppq2:ch-ppq-success")

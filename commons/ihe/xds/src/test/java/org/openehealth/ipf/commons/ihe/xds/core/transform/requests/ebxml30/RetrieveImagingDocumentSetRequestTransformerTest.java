@@ -71,8 +71,8 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
         assertEquals("repo2", doc.getRepositoryUniqueId());
 
         List<String> transferSyntaxUIds = ebXML.getTransferSyntaxUIDList();
-        assertEquals("1.2.840.10008.1.2.4.64", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"));
-        assertEquals("1.2.840.10008.1.2.4.70", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"));
+        assertTrue("1.2.840.10008.1.2.4.64", transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"));
+        assertTrue("1.2.840.10008.1.2.4.70", transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"));
      }
     
      @Test

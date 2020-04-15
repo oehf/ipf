@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTra
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests for {@link DocumentEntry}.
@@ -52,7 +53,7 @@ public class DocumentEntryTest {
 
     @Test
     public void testGetAuthorOnEmptyAuthorList() {
-        assertEquals(null, docEntry.getAuthor());
+        assertNull(docEntry.getAuthor());
     }
     
     @Test

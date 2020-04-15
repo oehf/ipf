@@ -33,7 +33,7 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-secure.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, true);
     }
 

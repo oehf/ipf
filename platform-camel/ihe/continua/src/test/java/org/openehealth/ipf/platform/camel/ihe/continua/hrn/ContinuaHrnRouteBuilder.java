@@ -57,7 +57,7 @@ public class ContinuaHrnRouteBuilder extends RouteBuilder {
 
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         
         from("xds-iti41:continuaHRNService")
             .onException(Exception.class)

@@ -40,7 +40,7 @@ public class IHEWebServiceClientTest {
     private ApplicationContext applicationContext;
 
     @Test
-    public void testSmoke() throws Exception {
+    public void testSmoke() {
         assertNotNull(iheClient.getCamelContext());
     }
 

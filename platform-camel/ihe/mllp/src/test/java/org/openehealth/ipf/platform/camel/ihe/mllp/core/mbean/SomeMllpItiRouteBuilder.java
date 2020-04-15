@@ -24,7 +24,7 @@ import org.apache.camel.builder.RouteBuilder;
 public class SomeMllpItiRouteBuilder extends RouteBuilder {
     
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("some-mllp-iti://0.0.0.0:18181?audit=true&" +
                 "secure=true&" +
                 "sslContext=#sslContext&" +

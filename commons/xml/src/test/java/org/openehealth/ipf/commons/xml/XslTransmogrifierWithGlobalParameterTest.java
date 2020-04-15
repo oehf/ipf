@@ -44,7 +44,7 @@ public class XslTransmogrifierWithGlobalParameterTest {
     Map<String, Object> parameters;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         parameters = new HashMap<>();
         parameters.put("service", new XsltTestService());
         transformer = new XsltTransmogrifier<>(String.class);
@@ -52,11 +52,10 @@ public class XslTransmogrifierWithGlobalParameterTest {
 
     /**
      * Demonstrates how to include a Groovy class to be used in an XSLT script
-     * 
-     * @throws IOException
+     *
      */
     @Test
-    public void testConvertString() throws IOException {
+    public void testConvertString() {
         Source content = new StreamSource(getClass().getResourceAsStream("/xslt/parameterExample.xml"));
         String s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
         assertTrue(s.contains("ein negeR mi tgaz ellezaG tim regeN niE"));

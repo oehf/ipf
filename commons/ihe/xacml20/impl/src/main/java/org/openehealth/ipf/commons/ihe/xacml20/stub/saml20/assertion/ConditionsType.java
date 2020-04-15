@@ -99,7 +99,7 @@ public class ConditionsType {
      */
     public List<ConditionAbstractType> getConditionOrAudienceRestrictionOrOneTimeUse() {
         if (conditionOrAudienceRestrictionOrOneTimeUse == null) {
-            conditionOrAudienceRestrictionOrOneTimeUse = new ArrayList<ConditionAbstractType>();
+            conditionOrAudienceRestrictionOrOneTimeUse = new ArrayList<>();
         }
         return this.conditionOrAudienceRestrictionOrOneTimeUse;
     }

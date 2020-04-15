@@ -49,7 +49,7 @@ public class HITSPC37ValidationTest {
 	private static final String sample_wrong = "/CDA_PHMR_WRONG.xml";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		validator = new XsdValidator();
 		schematron = new SchematronValidator();
 		params = new HashMap<>();
@@ -57,20 +57,20 @@ public class HITSPC37ValidationTest {
 	}
 
 	@Test
-	public void validateSchemaGoodSample() throws Exception {
+	public void validateSchemaGoodSample() {
 		Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
 		validator.validate(testXml, IHE_LAB_SCHEMA);
 	}
 
 	@Test
-	public void validateComplete() throws Exception {
+	public void validateComplete() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_37_SCHEMATRON_RULES, params));
 	}
 
 	@Test
-	public void validateCompleteWrong() throws Exception {
+	public void validateCompleteWrong() {
 		try {
             Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
 			schematron.validate(testXml, new SchematronProfile(
@@ -82,7 +82,7 @@ public class HITSPC37ValidationTest {
 	}
 
 	@Test
-	public void validateLab() throws Exception {
+	public void validateLab() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_lab));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_37_SCHEMATRON_RULES, params));

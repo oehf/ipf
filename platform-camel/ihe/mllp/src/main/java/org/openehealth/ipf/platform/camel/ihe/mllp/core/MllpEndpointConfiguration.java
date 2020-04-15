@@ -59,7 +59,7 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
     private final int segmentFragmentationThreshold;
 
     @Getter
-    private ConsumerDispatchingInterceptor dispatcher;
+    private final ConsumerDispatchingInterceptor dispatcher;
 
     /**
      * @deprecated

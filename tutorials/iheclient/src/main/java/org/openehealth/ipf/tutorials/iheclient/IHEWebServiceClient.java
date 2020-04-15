@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
 public class IHEWebServiceClient implements CamelContextAware {
 
     private CamelContext camelContext;
-    private CombinedXmlValidator validator = new CombinedXmlValidator();
+    private final CombinedXmlValidator validator = new CombinedXmlValidator();
 
     @Override
     public void setCamelContext(CamelContext camelContext) {

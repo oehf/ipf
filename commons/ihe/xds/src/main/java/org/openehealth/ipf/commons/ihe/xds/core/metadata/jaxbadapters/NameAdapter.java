@@ -42,12 +42,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public class NameAdapter extends XmlAdapter<XcnName, Name> {
     @Override
-    public Name unmarshal(XcnName v) throws Exception {
+    public Name unmarshal(XcnName v) {
         return v;
     }
 
     @Override
-    public XcnName marshal(Name v) throws Exception {
+    public XcnName marshal(Name v) {
         return new XcnName(v.getFamilyName(),
                            v.getGivenName(),
                            v.getSecondAndFurtherGivenNames(),

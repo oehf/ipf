@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.core.support.processor.ExceptionProces
 public class ExceptionHandlingRouteBuilder extends SpringRouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         
         from("direct:input")
         // Enable the following statement if error handling

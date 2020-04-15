@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
 public class CompositeAuditMessageQueue implements AuditMessageQueue {
 
     @Getter
-    private List<AuditMessageQueue> queues;
+    private final List<AuditMessageQueue> queues;
 
     public CompositeAuditMessageQueue(List<AuditMessageQueue> queues) {
         this.queues = requireNonNull(queues);

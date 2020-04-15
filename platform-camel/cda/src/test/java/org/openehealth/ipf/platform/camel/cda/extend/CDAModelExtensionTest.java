@@ -28,8 +28,8 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = { "/config/context-extend.xml" })
 public class CDAModelExtensionTest extends AbstractExtensionTest {
 
-    private String cdaExample = "/message/SampleCDADocument.xml";
-    private String ccdExample = "/message/SampleCCDDocument.xml";
+    private final String cdaExample = "/message/SampleCDADocument.xml";
+    private final String ccdExample = "/message/SampleCCDDocument.xml";
 
     @EndpointInject(uri="mock:error")
     protected MockEndpoint mockError;

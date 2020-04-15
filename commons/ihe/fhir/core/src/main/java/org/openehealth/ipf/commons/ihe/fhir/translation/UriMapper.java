@@ -80,6 +80,7 @@ public interface UriMapper {
     String namespaceToUri(String namespace);
 
 
+    @SafeVarargs
     static <T> Optional<T> findFirst(Supplier<Optional<T>>... suppliers) {
         return Stream.of(suppliers)
                 .map(Supplier::get)

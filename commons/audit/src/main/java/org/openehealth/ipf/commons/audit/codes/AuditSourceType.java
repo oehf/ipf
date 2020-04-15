@@ -41,7 +41,7 @@ public enum AuditSourceType implements EnumeratedCodedValue<AuditSource>, AuditS
     Other("9", "Other");
 
     @Getter
-    private AuditSource value;
+    private final AuditSource value;
 
     AuditSourceType(String code, String displayName) {
         this.value = AuditSource.of(code, "DCM", displayName);

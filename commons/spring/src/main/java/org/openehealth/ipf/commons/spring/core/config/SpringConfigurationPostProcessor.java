@@ -38,7 +38,7 @@ import java.util.List;
 public class SpringConfigurationPostProcessor implements
         ApplicationListener<ContextRefreshedEvent> {
 
-    private static Logger LOG = LoggerFactory.getLogger(SpringConfigurationPostProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpringConfigurationPostProcessor.class);
 
     private boolean refreshed;
     private boolean restartOnce = true;

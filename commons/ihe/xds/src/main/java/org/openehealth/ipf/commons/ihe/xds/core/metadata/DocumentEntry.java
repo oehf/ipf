@@ -75,7 +75,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private String uri;
     @Getter @Setter private String repositoryUniqueId;
     @Getter @Setter private DocumentEntryType type = DocumentEntryType.STABLE;
-    @Getter private List<ReferenceId> referenceIdList = new ArrayList<>();
+    @Getter private final List<ReferenceId> referenceIdList = new ArrayList<>();
     @Getter @Setter private DocumentAvailability documentAvailability;
 
     /**

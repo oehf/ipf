@@ -24,7 +24,7 @@ import java.util.Calendar;
 public class DateTimeAdapter extends XmlAdapter<Calendar, DateTime> {
 
     @Override
-    public Calendar marshal(DateTime dateTime) throws Exception {
+    public Calendar marshal(DateTime dateTime) {
         if (dateTime == null) {
             return null;
         }
@@ -32,7 +32,7 @@ public class DateTimeAdapter extends XmlAdapter<Calendar, DateTime> {
     }
 
     @Override
-    public DateTime unmarshal(Calendar calendar) throws Exception {
+    public DateTime unmarshal(Calendar calendar) {
         if (calendar == null) {
             return null;
         }

@@ -36,8 +36,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Dmytro Rud
@@ -76,7 +75,7 @@ public class ChPpq2Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test

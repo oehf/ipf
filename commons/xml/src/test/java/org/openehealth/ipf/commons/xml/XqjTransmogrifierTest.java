@@ -47,7 +47,7 @@ public class XqjTransmogrifierTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         transformer = new XqjTransmogrifier<>(String.class);
     }
 
@@ -70,7 +70,7 @@ public class XqjTransmogrifierTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void zapMissingParameter() throws IOException, SAXException {
+    public void zapMissingParameter() {
         transformer.zap(source("/xquery/string.xml"), "/xquery/string-q2.xq");
     }
 
@@ -97,7 +97,7 @@ public class XqjTransmogrifierTest {
     }
 
     @Test
-    public void zapParametrisedConstructor() throws IOException, SAXException, XQException {
+    public void zapParametrisedConstructor() throws IOException, SAXException {
         Map<String, Object> configParams = new HashMap<>();
         configParams.put(FeatureKeys.PRE_EVALUATE_DOC_FUNCTION, Boolean.TRUE);
         XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class, configParams);
@@ -106,7 +106,7 @@ public class XqjTransmogrifierTest {
     }
 
     @Test
-    public void zapParametrisedConstructorNoParams() throws IOException, SAXException, XQException {
+    public void zapParametrisedConstructorNoParams() throws IOException, SAXException {
         XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class);
         String zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/string.xml"), zapResult).similar());

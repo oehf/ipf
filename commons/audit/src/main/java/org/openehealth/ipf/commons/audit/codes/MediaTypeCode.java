@@ -44,7 +44,7 @@ public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> 
     PaperDocument("110038", "Paper Document");
 
     @Getter
-    private MediaType value;
+    private final MediaType value;
 
     MediaTypeCode(String code, String displayName) {
         this.value = MediaType.of(code, "DCM", displayName);

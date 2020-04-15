@@ -32,11 +32,11 @@ public class TestRenderer implements Renderer<String> {
         throw new UnsupportedOperationException("not implemented");
     }
 
-    public OutputStream render(String model, OutputStream result, Object... params) throws IOException {
+    public OutputStream render(String model, OutputStream result, Object... params) {
         throw new UnsupportedOperationException("not implemented");
     }
 
-    public Writer render(String model, Writer result, Object... params) throws IOException {
+    public Writer render(String model, Writer result, Object... params) {
         throw new UnsupportedOperationException("not implemented");
     }
 

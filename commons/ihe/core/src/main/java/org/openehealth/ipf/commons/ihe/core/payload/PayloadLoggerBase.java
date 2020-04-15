@@ -83,7 +83,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     private boolean enabled = true;
 
     private int errorCountLimit = -1;
-    private AtomicInteger errorCount = new AtomicInteger(0);
+    private final AtomicInteger errorCount = new AtomicInteger(0);
 
     private ExpressionResolver resolver;
 
@@ -104,7 +104,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                String output = Stream.of(payloadPieces).collect(Collectors.joining());
+                String output = String.join("", payloadPieces);
                 LOG.debug(output);
             }
         } else {

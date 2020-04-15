@@ -49,6 +49,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
@@ -65,7 +66,7 @@ public class CxfEndpointTest {
     private JettyServer server;
 
     @Before
-    public void setUp() throws IOException, URISyntaxException {
+    public void setUp() throws URISyntaxException {
         port = ServletServer.getFreePort();
         server = new JettyServer();
         server.setContextResource(getClass().getResource("/cxf-context.xml").toURI().toString());
@@ -83,7 +84,7 @@ public class CxfEndpointTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void test() {
         runRequestAndExpectFailure();
 
         JaxWsServiceFactory<? extends XdsAuditDataset> serviceFactory = new JaxWsRequestServiceFactory<>(
@@ -156,7 +157,7 @@ public class CxfEndpointTest {
             Response response = new Response(Status.SUCCESS);
             if (!request.getSubmissionSet().getEntryUuid().equals("submissionSet01")) {
                 response.setStatus(Status.FAILURE);
-                response.setErrors(Arrays.asList(new ErrorInfo(ErrorCode.REGISTRY_ERROR, "unexpected value", Severity.ERROR, null, null)));
+                response.setErrors(Collections.singletonList(new ErrorInfo(ErrorCode.REGISTRY_ERROR, "unexpected value", Severity.ERROR, null, null)));
             }
 
             EbXMLRegistryResponse ebXMLResp = respTransformer.toEbXML(response);

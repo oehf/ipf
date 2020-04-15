@@ -31,7 +31,7 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
     private static final String CONTEXT_DESCRIPTOR = "iti-83-no-patient.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

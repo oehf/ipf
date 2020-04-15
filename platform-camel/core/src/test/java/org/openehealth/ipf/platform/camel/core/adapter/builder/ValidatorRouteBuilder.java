@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class ValidatorRouteBuilder extends RouteBuilderSupport {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         onException(ValidationException.class).to("mock:error");
 
         from("direct:validator-test").process(

@@ -47,7 +47,7 @@ public class TransactionalMessagingTest extends TestSupport {
     private MockEndpoint errorMock;
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         txmMock.reset();
         txmError.reset();
         errorMock.reset();

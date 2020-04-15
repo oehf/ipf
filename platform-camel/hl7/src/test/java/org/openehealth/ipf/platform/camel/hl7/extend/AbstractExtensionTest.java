@@ -39,7 +39,7 @@ public abstract class AbstractExtensionTest {
     protected MockEndpoint mockOutput;
     
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mockOutput.reset();
     }
 

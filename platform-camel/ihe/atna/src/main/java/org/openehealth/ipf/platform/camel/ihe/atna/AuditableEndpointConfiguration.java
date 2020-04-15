@@ -32,7 +32,7 @@ import java.util.Map;
 public class AuditableEndpointConfiguration extends InterceptableEndpointConfiguration {
 
     @Getter
-    private AuditContext auditContext;
+    private final AuditContext auditContext;
 
     public AuditableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
         super(component, parameters);

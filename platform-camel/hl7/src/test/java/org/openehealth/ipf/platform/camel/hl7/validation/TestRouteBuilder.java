@@ -27,7 +27,7 @@ import static org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfi
 public class TestRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:iti8")
                 .process(validatingProcessor(PixPdqTransactions.ITI8));

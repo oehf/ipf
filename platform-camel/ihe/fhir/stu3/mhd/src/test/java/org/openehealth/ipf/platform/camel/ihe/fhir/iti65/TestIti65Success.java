@@ -43,7 +43,7 @@ public class TestIti65Success extends AbstractTestIti65 {
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

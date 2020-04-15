@@ -91,7 +91,7 @@ public class TestServers {
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
             IOUtils.copy(request.getInputStream(), response.getOutputStream());
         }
     }

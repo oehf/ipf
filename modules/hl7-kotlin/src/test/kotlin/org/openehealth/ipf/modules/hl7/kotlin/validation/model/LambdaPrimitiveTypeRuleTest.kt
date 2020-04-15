@@ -35,7 +35,7 @@ class LambdaPrimitiveTypeRuleTest {
 
     @Test
     fun testCorrect() {
-        val rule = LambdaPrimitiveTypeRule({ _ -> emptyArray() })
+        val rule = LambdaPrimitiveTypeRule({ emptyArray() })
         rule.omitLeadingWhitespace = true
         assertEquals("trimmed  ", rule.correct("   \ntrimmed  "))
         rule.omitTrailingWhitespace = true

@@ -65,7 +65,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testNonTransactedRoute () throws Exception {
+    public void testNonTransactedRoute () {
         final String response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
@@ -73,7 +73,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testTransactedRoute () throws Exception {
+    public void testTransactedRoute () {
         // setup the transaction mock        
         EasyMock.reset(txManager);
         txManager.getTransaction(EasyMock.anyObject());
@@ -100,14 +100,14 @@ public class TransactedRouteTest extends StandardTestContainer {
     
     private static class TestRoutes extends RouteBuilder {
         
-        private TransactedPolicy txPolicy;
+        private final TransactedPolicy txPolicy;
 
         private TestRoutes (final TransactedPolicy policy) {
             txPolicy = policy;
         }
 
         @Override
-        public void configure() throws Exception {
+        public void configure() {
             from("pcd-pcd01://communicateLabData/notransaction")
                 .throwException(new Hl7v2AcceptanceException("testexception"));
                 

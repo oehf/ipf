@@ -29,8 +29,8 @@ class CustomModelClassFactoryConfigurer<R : Registry> : OrderedConfigurer<Custom
 
     companion object: KLogging()
 
-    var customModelClassFactory: CustomModelClassFactory? = null
-    var configureRecursively = true
+    private var customModelClassFactory: CustomModelClassFactory? = null
+    private var configureRecursively = true
 
     override fun lookup(registry: R): Collection<CustomModelClasses> {
         return registry.beans(CustomModelClasses::class.java).values

@@ -30,7 +30,7 @@ public class SplitIndexTest {
     public void testValueOf() {
         SplitIndex index = SplitIndex.valueOf(14, true);
         assertEquals(14, index.getIndex());
-        assertEquals(true, index.isLast());
+        assertTrue(index.isLast());
     }
     
     @Test
@@ -39,15 +39,15 @@ public class SplitIndexTest {
         SplitIndex index1b = SplitIndex.valueOf(4, false);
         SplitIndex index2 = SplitIndex.valueOf(5, false);
         SplitIndex index3 = SplitIndex.valueOf(4, true);
-        
-        assertTrue("Should be equal", index1a.equals(index1b));
-        assertFalse("Should not be equal", index1a.equals(index2));
-        assertFalse("Should not be equal", index1a.equals(index3));
-        
-        assertFalse("Null is never equal", index1a.equals(null));
-        assertFalse("Unrelated class is never equal", index1a.equals(this));
-        
-        assertTrue("Same instances should be equal", index1a.equals(index1a));
+
+        assertEquals("Should be equal", index1a, index1b);
+        assertNotEquals("Should not be equal", index1a, index2);
+        assertNotEquals("Should not be equal", index1a, index3);
+
+        assertNotEquals("Null is never equal", null, index1a);
+        assertNotEquals("Unrelated class is never equal", index1a, this);
+
+        assertEquals("Same instances should be equal", index1a, index1a);
     }
     
     @Test

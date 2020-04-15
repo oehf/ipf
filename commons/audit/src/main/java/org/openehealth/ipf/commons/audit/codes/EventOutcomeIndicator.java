@@ -36,7 +36,7 @@ public enum EventOutcomeIndicator implements EnumeratedValueSet<Integer> {
     MajorFailure(12);
 
     @Getter
-    private Integer value;
+    private final Integer value;
 
     EventOutcomeIndicator(int value) {
         this.value = value;

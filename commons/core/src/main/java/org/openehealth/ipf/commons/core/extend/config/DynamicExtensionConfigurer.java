@@ -52,7 +52,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     }
 
     @Override
-    public void configure(DynamicExtension extension) throws Exception {
+    public void configure(DynamicExtension extension) {
         if (extension != null) {
             LOG.info("Registering new extension module {} defined in class {}",
                     extension.getModuleName(), extension.getClass());

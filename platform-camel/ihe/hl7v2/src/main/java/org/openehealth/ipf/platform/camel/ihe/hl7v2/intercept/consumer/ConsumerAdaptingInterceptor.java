@@ -131,7 +131,7 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
     @SuppressWarnings("rawtypes")
     private Message analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
         Object header = m.getHeader(ACK_TYPE_CODE_HEADER);
-        if ((header == null) || ! (header instanceof AcknowledgmentCode)) {
+        if (!(header instanceof AcknowledgmentCode)) {
             return null;
         }
 

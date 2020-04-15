@@ -32,8 +32,8 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = { "/config/context-sample.xml" })
 public class SampleExtensionTest extends AbstractExtensionTest {
 
-    private static String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
-    private static String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
+    private static final String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
+    private static final String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
     
     @EndpointInject(uri="mock:output1")
     private MockEndpoint mockOutput1;
@@ -41,10 +41,10 @@ public class SampleExtensionTest extends AbstractExtensionTest {
     @EndpointInject(uri="mock:output2")
     private MockEndpoint mockOutput2;
     
-    private String resource = "message/msg-01.hl7";
+    private final String resource = "message/msg-01.hl7";
     
     @After
-    public void myTearDown() throws Exception {
+    public void myTearDown() {
         mockOutput1.reset();
         mockOutput2.reset();
     }

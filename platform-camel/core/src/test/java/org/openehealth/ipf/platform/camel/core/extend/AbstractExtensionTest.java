@@ -51,7 +51,7 @@ public abstract class AbstractExtensionTest {
     protected MockEndpoint mockError;
     
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mockOutput.reset();
         mockError.reset();
     }

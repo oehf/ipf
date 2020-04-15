@@ -40,31 +40,31 @@ abstract class AbstractSystemUriMapperTest {
     protected abstract UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService);
 
     @Test
-    public void testTranslateOidUrn() throws Exception {
+    public void testTranslateOidUrn() {
         String oid = "1.2.3.4.5.6.7.8.9";
         assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).get());
     }
 
     @Test
-    public void testTranslateUriToOid() throws Exception {
+    public void testTranslateUriToOid() {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertEquals("1.2.3.4", uriMapper.uriToOid(uri).get());
     }
 
     @Test
-    public void testTranslateUriToOidFails() throws Exception {
+    public void testTranslateUriToOidFails() {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
         assertFalse(uriMapper.uriToOid(uri).isPresent());
     }
 
     @Test
-    public void testTranslatePinUrn() throws Exception {
+    public void testTranslatePinUrn() {
         String namespace = "namespace";
         assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).get());
     }
 
     @Test
-    public void testTranslateUriToNamespace() throws Exception {
+    public void testTranslateUriToNamespace() {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertEquals("fhir1", uriMapper.uriToNamespace(uri).get());
         uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
@@ -72,7 +72,7 @@ abstract class AbstractSystemUriMapperTest {
     }
 
     @Test
-    public void testTranslateNamespaceToUri() throws Exception {
+    public void testTranslateNamespaceToUri() {
         String namespace = "fhir1";
         assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri(namespace));
     }

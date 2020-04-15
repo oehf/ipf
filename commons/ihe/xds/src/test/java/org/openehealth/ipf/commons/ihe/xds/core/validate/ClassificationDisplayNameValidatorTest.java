@@ -52,7 +52,7 @@ public class ClassificationDisplayNameValidatorTest {
     private EbXMLExtrinsicObject extrinsicObject;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
     }

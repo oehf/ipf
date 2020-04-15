@@ -48,7 +48,7 @@ public class PIXV3 implements IntegrationProfile {
         ITI_45(ITI_45_WS_CONFIG),
         ITI_46(ITI_46_WS_CONFIG);
 
-        @Getter private Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-paging.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }

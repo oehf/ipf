@@ -45,7 +45,7 @@ public abstract class ServletServer {
     private String keystorePass;
     private String truststoreFile;
     private String truststorePass;
-    private Map<String, String> initParameters = new HashMap<>();
+    private final Map<String, String> initParameters = new HashMap<>();
     private ClientAuthType clientAuthType;
 
     /**

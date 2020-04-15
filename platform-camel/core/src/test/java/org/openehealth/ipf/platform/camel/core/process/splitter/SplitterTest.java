@@ -221,7 +221,7 @@ public class SplitterTest {
             return baseIterable.iterator();
         }        
 
-        private Iterable<T> baseIterable;
+        private final Iterable<T> baseIterable;
         private boolean iteratorCalled;
     }
     
@@ -267,7 +267,7 @@ public class SplitterTest {
     
     private static class TestProcessor implements Processor {
         @Override
-        public void process(Exchange exchange) throws Exception {
+        public void process(Exchange exchange) {
             received.add(exchange);
         }
         
@@ -275,6 +275,6 @@ public class SplitterTest {
             return Collections.unmodifiableList(received);
         }
         
-        private List<Exchange> received = new ArrayList<>();
+        private final List<Exchange> received = new ArrayList<>();
     }
 }

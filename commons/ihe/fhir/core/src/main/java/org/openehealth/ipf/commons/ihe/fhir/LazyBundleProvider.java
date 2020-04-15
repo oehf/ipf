@@ -54,8 +54,8 @@ public class LazyBundleProvider extends AbstractBundleProvider {
 
     private final boolean cacheResults;
     private int size = -1;
-    private transient List<IBaseResource> cachedResults = new ArrayList<>();
-    private transient ResultRanges resultRanges = new ResultRanges();
+    private final transient List<IBaseResource> cachedResults = new ArrayList<>();
+    private final transient ResultRanges resultRanges = new ResultRanges();
 
     /**
      * Initializes a lazy bundle provider
@@ -128,7 +128,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
 
     private static class ResultRanges {
 
-        private RangeSet<Integer> rangeSet = TreeRangeSet.create();
+        private final RangeSet<Integer> rangeSet = TreeRangeSet.create();
 
         /**
          * @param wantedRange the range of elements the caller wants to retrieve

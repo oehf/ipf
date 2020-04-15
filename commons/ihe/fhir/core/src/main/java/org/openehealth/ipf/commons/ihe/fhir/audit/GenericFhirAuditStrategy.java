@@ -50,7 +50,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  */
 public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
-    private Function<T, Optional<? extends IBaseReference>> patientIdExtractor;
+    private final Function<T, Optional<? extends IBaseReference>> patientIdExtractor;
 
     /**
      * @param serverSide         server side auditing

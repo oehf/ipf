@@ -37,7 +37,7 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 public class ConverterRouteTest extends AbstractRouteTest {
 
     @Test
-    public void testConverter1() throws InterruptedException {
+    public void testConverter1() {
         String result = (String) producerTemplate.sendBody("direct:converter-test",
                 ExchangePattern.InOut, "input");
         assertEquals("string: input", result);

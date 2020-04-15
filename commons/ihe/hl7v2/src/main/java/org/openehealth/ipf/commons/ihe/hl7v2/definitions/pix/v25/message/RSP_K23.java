@@ -86,7 +86,7 @@ public class RSP_K23 extends AbstractMessage {
      * throws HL7Exception if the repetition requested is more than one
      * greater than the number of existing repetitions.
      */
-    public SFT getSFT(int rep) throws HL7Exception {
+    public SFT getSFT(int rep) {
         return getTyped("SFT", rep, SFT.class);
     }
 

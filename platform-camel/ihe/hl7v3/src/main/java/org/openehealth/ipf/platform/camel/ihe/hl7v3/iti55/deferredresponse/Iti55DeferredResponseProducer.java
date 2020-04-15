@@ -64,7 +64,7 @@ public class Iti55DeferredResponseProducer extends AbstractWsProducer<Hl7v3Audit
 
 
     @Override
-    protected String callService(Object client, String responseString) throws Exception {
+    protected String callService(Object client, String responseString) {
         return ((Iti55DeferredResponsePortType) client).receiveDeferredResponse(responseString);
     }
 }

@@ -47,8 +47,8 @@ public class PIX implements IntegrationProfile {
         ITI_8_PIX( ITI_8_CONFIGURATION,  ITI_8_NAK_FACTORY),
         ITI_8_XDS( ITI_8_CONFIGURATION,  ITI_8_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration<FeedAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private NakFactory<FeedAuditDataset> nakFactory;
+        @Getter private final Hl7v2TransactionConfiguration<FeedAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private final NakFactory<FeedAuditDataset> nakFactory;
     }
 
     @AllArgsConstructor
@@ -56,8 +56,8 @@ public class PIX implements IntegrationProfile {
         ITI_9    ( ITI_9_CONFIGURATION,  ITI_9_NAK_FACTORY),
         ITI_10   (ITI_10_CONFIGURATION, ITI_10_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private NakFactory<QueryAuditDataset> nakFactory;
+        @Getter private final Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private final NakFactory<QueryAuditDataset> nakFactory;
     }
 
     @Override

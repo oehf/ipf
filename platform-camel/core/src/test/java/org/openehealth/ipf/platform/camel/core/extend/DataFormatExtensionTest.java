@@ -28,28 +28,28 @@ import org.springframework.test.context.ContextConfiguration;
 public class DataFormatExtensionTest extends AbstractExtensionTest {
 
     @Test
-    public void testUnmarshalObject() throws Exception {
+    public void testUnmarshalObject() {
         String result = (String) producerTemplate.sendBody("direct:external1",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
-    public void testMarshalObject() throws Exception {
+    public void testMarshalObject() {
         String result = (String) producerTemplate.sendBody("direct:internal1",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }
 
     @Test
-    public void testUnmarshalBean() throws Exception {
+    public void testUnmarshalBean() {
         String result = (String) producerTemplate.sendBody("direct:external2",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
-    public void testMarshalBean() throws Exception {
+    public void testMarshalBean() {
         String result = (String) producerTemplate.sendBody("direct:internal2",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);

@@ -31,7 +31,7 @@ public class TestIti66Error extends AbstractTestIti66 {
     private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

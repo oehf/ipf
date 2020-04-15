@@ -54,7 +54,7 @@ abstract class FhirDataFormat implements DataFormat {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         Reader reader = new InputStreamReader(stream, getCharset(exchange));
         return getParser(getFhirContext(exchange)).parseResource(reader);
     }

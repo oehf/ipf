@@ -250,7 +250,7 @@ public class AssertionType {
      */
     public List<StatementAbstractType> getStatementOrAuthnStatementOrAuthzDecisionStatement() {
         if (statementOrAuthnStatementOrAuthzDecisionStatement == null) {
-            statementOrAuthnStatementOrAuthzDecisionStatement = new ArrayList<StatementAbstractType>();
+            statementOrAuthnStatementOrAuthzDecisionStatement = new ArrayList<>();
         }
         return this.statementOrAuthnStatementOrAuthzDecisionStatement;
     }

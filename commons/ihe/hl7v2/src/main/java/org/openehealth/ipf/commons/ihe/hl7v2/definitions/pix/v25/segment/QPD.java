@@ -125,8 +125,9 @@ public class QPD extends AbstractSegment {
         switch (field) {
             case 0: return new CE(getMessage());
             case 1: return new ST(getMessage());
-            case 2: return new CX(getMessage());
-            case 3: return new CX(getMessage());
+            case 2:
+            case 3:
+                return new CX(getMessage());
             default: return null;
         }
     }

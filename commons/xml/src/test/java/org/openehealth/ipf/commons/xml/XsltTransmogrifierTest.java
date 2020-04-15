@@ -32,12 +32,12 @@ public class XsltTransmogrifierTest {
     private XsltTransmogrifier<String> transformer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         transformer = new XsltTransmogrifier<>(String.class);
     }
 
     @Test
-    public void testConvertString() throws IOException {
+    public void testConvertString() {
         Source source = new StreamSource(getClass().getResourceAsStream("/xslt/createPatient.xml"));
         String result = transformer.zap(source, "/xslt/createPatient.xslt");
         assertNotNull(result);

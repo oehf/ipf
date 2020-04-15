@@ -65,11 +65,11 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
             "org.apache.camel:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
         ObjectName on = (ObjectName) s.toArray()[0];
         assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
-            ((Boolean) mbeanServer.getAttribute(on, "Addressing")).booleanValue());
+                (Boolean) mbeanServer.getAttribute(on, "Addressing"));
         assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),
-            ((Boolean) mbeanServer.getAttribute(on, "Mtom")).booleanValue());
+                (Boolean) mbeanServer.getAttribute(on, "Mtom"));
         assertEquals(SomeItiComponent.WS_CONFIG.isSwaOutSupport(),
-            ((Boolean) mbeanServer.getAttribute(on, "SwaOutSupport")).booleanValue());
+                (Boolean) mbeanServer.getAttribute(on, "SwaOutSupport"));
     }
     
     @Override

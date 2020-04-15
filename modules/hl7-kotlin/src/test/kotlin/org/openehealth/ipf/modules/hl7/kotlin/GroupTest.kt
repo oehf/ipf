@@ -161,7 +161,7 @@ class GroupTest {
     @Test
     fun testEach() {
         var numberOfStructures = 0
-        message.asIterable().forEach { numberOfStructures++ }
+        repeat(message.asIterable().count()) { numberOfStructures++ }
         assertEquals(34, numberOfStructures)
     }
 

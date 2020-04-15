@@ -16,29 +16,11 @@
 
 package org.apache.camel.component.hl7;
 
-import java.nio.charset.CodingErrorAction;
-
 /**
  * Additional configuration properties
+ *
+ * @deprecated use HL7MLLPConfig
  */
 public class CustomHL7MLLPConfig extends HL7MLLPConfig {
 
-    private CodingErrorAction malformedInputErrorAction = CodingErrorAction.REPORT;
-    private CodingErrorAction unmappableCharacterErrorAction = CodingErrorAction.REPORT;
-
-    public CodingErrorAction getMalformedInputErrorAction() {
-        return malformedInputErrorAction;
-    }
-
-    public CodingErrorAction getUnmappableCharacterErrorAction() {
-        return unmappableCharacterErrorAction;
-    }
-
-    public void setMalformedInputErrorAction(CodingErrorAction malformedInputErrorAction) {
-        this.malformedInputErrorAction = malformedInputErrorAction;
-    }
-
-    public void setUnmappableCharacterErrorAction(CodingErrorAction unmappableCharacterErrorAction) {
-        this.unmappableCharacterErrorAction = unmappableCharacterErrorAction;
-    }
 }
