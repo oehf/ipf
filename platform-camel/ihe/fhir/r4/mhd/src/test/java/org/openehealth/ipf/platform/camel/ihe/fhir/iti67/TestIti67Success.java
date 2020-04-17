@@ -31,7 +31,6 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
-import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;

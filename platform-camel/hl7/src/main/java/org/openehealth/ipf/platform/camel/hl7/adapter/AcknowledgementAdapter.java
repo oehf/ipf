@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.util.ObjectHelper;
 
 /**
  *

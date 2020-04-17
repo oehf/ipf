@@ -21,8 +21,6 @@ import org.hl7.fhir.r4.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
-
 /**
  *
  */

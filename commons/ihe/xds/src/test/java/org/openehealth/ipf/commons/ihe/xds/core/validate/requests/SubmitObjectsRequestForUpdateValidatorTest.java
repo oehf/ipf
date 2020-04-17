@@ -32,8 +32,6 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_57;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_EQUALS_ENTRY_UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_MISSING;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_SAME;
 
 /**

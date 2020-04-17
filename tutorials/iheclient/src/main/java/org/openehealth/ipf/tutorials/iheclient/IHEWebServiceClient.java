@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
 import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;

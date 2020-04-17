@@ -33,7 +33,6 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdT
 
 import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.Assert.*;
 

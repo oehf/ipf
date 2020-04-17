@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.apache.camel.Converter;
-import org.apache.camel.TypeConverters;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;

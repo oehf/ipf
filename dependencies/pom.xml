@@ -36,12 +36,9 @@
         <vertx-version>3.9.0</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.5</xmlsec-version>
-
-        <github.global.server>github</github.global.server>
-
     </properties>
 
-    <url>${site.url}</url>
+    <url>https://github.com/oehf/ipf</url>
 
     <description>IPF External Dependencies</description>
 

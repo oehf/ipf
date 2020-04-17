@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import ca.uhn.hl7v2.Version;
-import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 
 /**

@@ -29,9 +29,9 @@
     </parent>
 
     <properties>
-        <kotlin.dokka.version>0.9.17</kotlin.dokka.version>
-        <kotlin.version>1.3.31</kotlin.version>
-        <kotlin.logging.version>1.6.26</kotlin.logging.version>
+        <kotlin.dokka.version>0.10.1</kotlin.dokka.version>
+        <kotlin.version>1.3.72</kotlin.version>
+        <kotlin.logging.version>1.7.9</kotlin.logging.version>
     </properties>
 
     <dependencies>

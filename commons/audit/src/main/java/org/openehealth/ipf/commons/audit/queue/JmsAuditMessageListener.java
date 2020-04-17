@@ -37,7 +37,7 @@ import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.
  * message redelivery and other features.
  * <p>
  * This class supports JMS headers transferred by {@link JmsAuditMessageQueue} and
- * reuses them for the actual auditing.
+ * reuses them for setting the RFC 5424 headers of the actual syslog audit.
  *
  * @author Christian Ohr
  * @since 3.5

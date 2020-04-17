@@ -22,10 +22,10 @@ import javax.jms.*;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Message Queue that sends off audit messages into a JMS queue. It is strongly recommended
+ * Message Queue that sends audit messages into a JMS queue. It is strongly recommended
  * that the connection factory implements a pool or caches connections for performance reasons.
  * Use an instance of {@link JmsAuditMessageListener} to asynchronously receive the audit
- * messages and send them off to a repository.
+ * messages and send them to a repository.
  * <p>
  * This is primarily meant to send audit messages to a JMS-based relay that eventually sends the
  * audit record to an audit repository. Therefore, RFC 5425 metadata is placed in X-IPF-ATNA-*
