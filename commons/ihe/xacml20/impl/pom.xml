@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe-xacml20</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>3.7.0</version>
     </parent>
 
     <dependencies>
