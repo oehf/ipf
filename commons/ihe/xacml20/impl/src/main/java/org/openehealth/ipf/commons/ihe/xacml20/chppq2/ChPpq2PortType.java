@@ -54,7 +54,7 @@ public interface ChPpq2PortType {
     @WebMethod(operationName = "PolicyRepository_PolicyQuery")
     @Action(input = "urn:e-health-suisse:2015:policy-administration:PolicyQuery", output = "urn:e-health-suisse:2015:policy-administration:PolicyQueryResponse")
     @WebResult(name = "Response", targetNamespace = "urn:oasis:names:tc:SAML:2.0:protocol", partName = "body")
-    ResponseType policyQuery(
+    public ResponseType policyQuery(
             @WebParam(partName = "body", name = "XACMLPolicyQuery", targetNamespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol")
                     XACMLPolicyQueryType body
     );

@@ -7,7 +7,7 @@ import javax.activation.DataHandler;
 import org.junit.Test;
 
 public class NonReadingAttachmentMarshallerTest {
-    private final NonReadingAttachmentMarshaller classUnderTest = new NonReadingAttachmentMarshaller();
+    private NonReadingAttachmentMarshaller classUnderTest = new NonReadingAttachmentMarshaller();
 
     @Test
     public void mtomAttachmentWithoutName() {

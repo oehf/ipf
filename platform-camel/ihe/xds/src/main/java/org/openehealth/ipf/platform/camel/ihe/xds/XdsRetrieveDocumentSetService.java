@@ -55,6 +55,6 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
             return EbXML30Converters.convert(errorResponse);
         }
 
-        return Exchanges.resultMessage(result).getBody(RetrieveDocumentSetResponseType.class);
+        return result.getMessage().getBody(RetrieveDocumentSetResponseType.class);
     }
 }

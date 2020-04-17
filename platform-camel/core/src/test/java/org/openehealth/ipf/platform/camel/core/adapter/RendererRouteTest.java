@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 public class RendererRouteTest extends AbstractRouteTest {
 
     @Test
-    public void testRenderer() {
+    public void testRenderer() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:renderer-test",
                 ExchangePattern.InOut, "input");
         assertEquals("rendered: input", result);

@@ -54,7 +54,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final List<String> routeIds = new ArrayList<>();
-    private final Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
+    private Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
 
 
     /**

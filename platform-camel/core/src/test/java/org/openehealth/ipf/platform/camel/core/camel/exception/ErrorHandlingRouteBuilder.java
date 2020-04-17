@@ -25,11 +25,11 @@ import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcesso
  */
 public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
 
-    private final FailureProcessor failure = new FailureProcessor("blah");
+    private FailureProcessor failure = new FailureProcessor("blah");
     
         
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         // global error handler
         errorHandler(noErrorHandler());

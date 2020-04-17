@@ -35,7 +35,7 @@ public enum XdsParticipantObjectIdTypeCode implements ParticipantObjectIdType, E
     QueryPharmacyDocuments("PHARM-1", "Query Pharmacy Documents");
 
     @Getter
-    private final ParticipantObjectIdType value;
+    private ParticipantObjectIdType value;
 
     XdsParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

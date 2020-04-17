@@ -26,13 +26,12 @@ public class ManagementNamingStrategyTestRouteBuilder extends
         SpringRouteBuilder {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         from("direct:input")
                 .routeId("namingStrategyRoute")
                 .process(exchange -> {})
-                .id("namingStrategyProcessor")
-                .end();
+                    .id("namingStrategyProcessor");
     }
 
 }

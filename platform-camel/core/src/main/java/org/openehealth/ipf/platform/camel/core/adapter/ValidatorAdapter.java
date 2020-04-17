@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
+import java.io.IOException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.slf4j.Logger;
@@ -68,19 +70,6 @@ public class ValidatorAdapter extends ProcessorAdapter {
     }
     
     /**
-     * Sets the profile to validate the input data against.
-     * 
-     * @param profile
-     *            validation profile.
-     * @return this object.
-     */
-    @Deprecated
-    public ValidatorAdapter profile(Object profile) {
-        this.profile = profile;
-        return this;
-    }
-    
-    /**
      * Sets the profile expression to validate the input data against.
      * Sets an {@link Expression} for obtaining profile data from an
      * {@link Exchange}. Profile data are passed to adapted
@@ -105,9 +94,11 @@ public class ValidatorAdapter extends ProcessorAdapter {
      *            input data.
      * @param inputParams
      *            input parameters.
+     * @throws IOException
+     *             if a general processing error occurs.
      */
     @Override
-    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) {
+    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
         prepareResult(exchange);
         if (validationEnabled(exchange)) {
             validator.validate(inputData, getProfile(exchange));

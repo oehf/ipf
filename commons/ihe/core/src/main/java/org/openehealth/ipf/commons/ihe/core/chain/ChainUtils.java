@@ -118,7 +118,7 @@ public class ChainUtils {
                             cid,
                             chainIds.get(maxAfterPosition),
                             chainIds.get(minBeforePosition),
-                            String.join(" ", chainIds)));
+                            chainIds.stream().collect(Collectors.joining(" "))));
                 }
 
                 chain.add(position, c);

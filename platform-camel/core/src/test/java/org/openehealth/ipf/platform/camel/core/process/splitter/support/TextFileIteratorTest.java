@@ -44,7 +44,7 @@ public class TextFileIteratorTest {
     }
     
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         assertTrue(file.delete());      // If this fails the last test did not
                                         // close the FileReader in the 
                                         // TextFileIterator

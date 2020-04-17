@@ -28,6 +28,7 @@ import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Narrative;
 import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Reference;
 import org.joda.time.DateTime;
@@ -37,6 +38,7 @@ import org.junit.Test;
 import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE;

@@ -40,7 +40,7 @@ public enum XspaPoUCode implements PurposeOfUse, EnumeratedCodedValue<PurposeOfU
 
 
     @Getter
-    private final PurposeOfUse value;
+    private PurposeOfUse value;
 
     XspaPoUCode(String code, String displayName) {
         this.value = PurposeOfUse.of(code, "XSPA", displayName);

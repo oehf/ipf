@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import groovy.util.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
@@ -63,7 +63,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
             log.info("HL7 v3 service failed", exception);
             return createNak(requestString, exception);
         }
-        return Exchanges.resultMessage(result).getBody(String.class);
+        return result.getMessage().getBody(String.class);
     }
 
     /**

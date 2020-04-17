@@ -20,11 +20,11 @@ import lombok.Getter;
 import org.apache.camel.*;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
-import org.apache.camel.component.mina2.Mina2Configuration;
-import org.apache.camel.component.mina2.Mina2Consumer;
-import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.apache.camel.component.mina2.Mina2Producer;
-import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.component.mina.MinaConfiguration;
+import org.apache.camel.component.mina.MinaConsumer;
+import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.mina.MinaProducer;
+import org.apache.camel.support.DefaultEndpoint;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
@@ -69,7 +69,7 @@ public abstract class MllpEndpoint<
     @Getter(AccessLevel.PROTECTED)
     private final ComponentType mllpComponent;
     @Getter(AccessLevel.PROTECTED)
-    private final Mina2Endpoint wrappedEndpoint;
+    private final MinaEndpoint wrappedEndpoint;
 
     /**
      * Constructor.
@@ -80,7 +80,7 @@ public abstract class MllpEndpoint<
      */
     public MllpEndpoint(
             ComponentType mllpComponent,
-            Mina2Endpoint wrappedEndpoint,
+            MinaEndpoint wrappedEndpoint,
             ConfigType config) {
         super(wrappedEndpoint.getEndpointUri(), mllpComponent);
         this.mllpComponent = requireNonNull(mllpComponent);
@@ -99,12 +99,12 @@ public abstract class MllpEndpoint<
     }
 
     /**
-     * Returns the original camel-mina2 producer which will be wrapped
+     * Returns the original camel-mina producer which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createProducer()}.
      */
     @Override
     public Producer doCreateProducer() throws Exception {
-        Mina2Producer producer = (Mina2Producer) wrappedEndpoint.createProducer();
+        MinaProducer producer = (MinaProducer) wrappedEndpoint.createProducer();
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -120,14 +120,14 @@ public abstract class MllpEndpoint<
     }
 
     /**
-     * Returns the original starting point of the camel-mina2 route which will be wrapped
+     * Returns the original starting point of the camel-mina route which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createConsumer(Processor)}.
      *
      * @param processor The original consumer processor.
      */
     @Override
     public Consumer doCreateConsumer(Processor processor) throws Exception {
-        Mina2Consumer consumer = (Mina2Consumer) wrappedEndpoint.createConsumer(processor);
+        MinaConsumer consumer = (MinaConsumer) wrappedEndpoint.createConsumer(processor);
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -310,11 +310,6 @@ public abstract class MllpEndpoint<
     }
 
     @Override
-    public Exchange createExchange(Exchange exchange) {
-        return wrappedEndpoint.createExchange(exchange);
-    }
-
-    @Override
     public Exchange createExchange(ExchangePattern pattern) {
         return wrappedEndpoint.createExchange(pattern);
     }
@@ -343,7 +338,7 @@ public abstract class MllpEndpoint<
         return wrappedEndpoint.getComponent();
     }
 
-    public Mina2Configuration getConfiguration() {
+    public MinaConfiguration getConfiguration() {
         return wrappedEndpoint.getConfiguration();
     }
 

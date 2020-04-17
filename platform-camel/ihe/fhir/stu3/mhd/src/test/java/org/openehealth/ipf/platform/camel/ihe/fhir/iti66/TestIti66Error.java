@@ -21,6 +21,8 @@ import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.servlet.ServletException;
+
 /**
  *
  */
@@ -29,7 +31,7 @@ public class TestIti66Error extends AbstractTestIti66 {
     private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

@@ -119,7 +119,7 @@ public class XACMLAuthzDecisionQueryType
      */
     public List<JAXBElement<?>> getRest() {
         if (rest == null) {
-            rest = new ArrayList<>();
+            rest = new ArrayList<JAXBElement<?>>();
         }
         return this.rest;
     }

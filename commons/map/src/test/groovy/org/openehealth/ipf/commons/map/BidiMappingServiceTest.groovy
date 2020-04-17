@@ -22,7 +22,7 @@ import org.junit.Test
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class BidiMappingServiceTest {
+class BidiMappingServiceTest {
 	
     BidiMappingService mappingService
 

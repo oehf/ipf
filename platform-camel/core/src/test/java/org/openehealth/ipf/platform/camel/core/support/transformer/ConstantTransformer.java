@@ -23,18 +23,14 @@ import org.apache.camel.Processor;
  */
 public class ConstantTransformer implements Processor {
 
-    private final Object constant;
+    private Object constant;
     
     public ConstantTransformer(Object constant) {
         this.constant = constant;
     }
     
     public void process(Exchange exchange) {
-        if (exchange.getPattern().isOutCapable()) {
-            exchange.getOut().setBody(constant);
-        } else {
-            exchange.getIn().setBody(constant);
-        }
+        exchange.getMessage().setBody(constant);
     }
 
 }

@@ -79,7 +79,7 @@ public class ModifyRequest
      */
     public List<DsmlModification> getModification() {
         if (modification == null) {
-            modification = new ArrayList<>();
+            modification = new ArrayList<DsmlModification>();
         }
         return this.modification;
     }

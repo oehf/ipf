@@ -21,7 +21,7 @@ import org.apache.camel.Consumer;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.support.DefaultEndpoint;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
@@ -71,8 +71,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
      *
      * @param consumer FhirConsumer
+     * @throws Exception if resource provider could not be registered
      */
-    public void connect(FhirConsumer<AuditDatasetType> consumer) {
+    public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         for (FhirProvider provider : getResourceProviders()) {
             // Make consumer known to provider
             provider.setConsumer(consumer);

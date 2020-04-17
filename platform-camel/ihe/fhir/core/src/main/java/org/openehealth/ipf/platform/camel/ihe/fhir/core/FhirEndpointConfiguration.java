@@ -23,8 +23,8 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.camel.util.EndpointHelper;
-import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.support.EndpointHelper;
+import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -63,25 +63,25 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
-    private String servletName;
+    private String servletName = IpfFhirServlet.DEFAULT_SERVLET_NAME;
 
     @Getter
     @UriParam
-    private final List<? extends FhirProvider> resourceProvider;
+    private List<? extends FhirProvider> resourceProvider;
 
     // Producer only
 
     @UriParam
-    private final ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+    private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
 
 
     @Getter
     @UriParam
-    private final List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
+    private List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
 
     @Getter
     @UriParam
-    private final List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
+    private List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
     /**
      * If this is true, all paging requests are routed into the route (see {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
@@ -89,13 +89,13 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private final boolean lazyLoadBundles;
+    private boolean lazyLoadBundles;
 
     @Getter
-    private final FhirSecurityInformation securityInformation;
+    private FhirSecurityInformation securityInformation;
 
     @Getter
-    private final Predicate<Object> consumerSelector;
+    private Predicate<Object> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
@@ -103,11 +103,12 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean cacheBundles;
+    private boolean cacheBundles = true;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         this.path = path;
+
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = getAndRemoveOrResolveReferenceParameters(component,

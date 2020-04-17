@@ -82,7 +82,7 @@ public class LimitedMetadataTest {
     }
 
     @Test
-    public void testXdmRequestValidation() {
+    public void testXdmRequestValidation() throws Exception {
         RegisterDocumentSet xdmRequest = createXdmRequest();
 
         RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(new EbXMLFactory30());

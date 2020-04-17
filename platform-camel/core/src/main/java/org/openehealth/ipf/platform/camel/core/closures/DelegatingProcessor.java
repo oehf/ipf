@@ -27,15 +27,15 @@ import org.apache.camel.Processor;
  *
  * @author Martin Krasser
  */
-public class DelegatingProcessor extends ClosureAdapter implements Processor {
+public class DelegatingProcessor extends ClosureAdapter<Object> implements Processor {
 
     public DelegatingProcessor(@ClosureParams(value = SimpleType.class, options = {"org.apache.camel.Exchange"})
-                                       Closure closure) {
+                                       Closure<Object> closure) {
         super(closure);
     }
 
     @Override
-    public void process(Exchange exchange) {
+    public void process(Exchange exchange) throws Exception {
         call(exchange);
     }
 

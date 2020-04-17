@@ -248,7 +248,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "BaseID")
     public JAXBElement<BaseIDAbstractType> createBaseID(BaseIDAbstractType value) {
-        return new JAXBElement<>(_BaseID_QNAME, BaseIDAbstractType.class, null, value);
+        return new JAXBElement<BaseIDAbstractType>(_BaseID_QNAME, BaseIDAbstractType.class, null, value);
     }
 
     /**
@@ -257,7 +257,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "NameID")
     public JAXBElement<NameIDType> createNameID(NameIDType value) {
-        return new JAXBElement<>(_NameID_QNAME, NameIDType.class, null, value);
+        return new JAXBElement<NameIDType>(_NameID_QNAME, NameIDType.class, null, value);
     }
 
     /**
@@ -266,7 +266,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "EncryptedID")
     public JAXBElement<EncryptedElementType> createEncryptedID(EncryptedElementType value) {
-        return new JAXBElement<>(_EncryptedID_QNAME, EncryptedElementType.class, null, value);
+        return new JAXBElement<EncryptedElementType>(_EncryptedID_QNAME, EncryptedElementType.class, null, value);
     }
 
     /**
@@ -275,7 +275,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Issuer")
     public JAXBElement<NameIDType> createIssuer(NameIDType value) {
-        return new JAXBElement<>(_Issuer_QNAME, NameIDType.class, null, value);
+        return new JAXBElement<NameIDType>(_Issuer_QNAME, NameIDType.class, null, value);
     }
 
     /**
@@ -285,7 +285,7 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AssertionIDRef")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     public JAXBElement<String> createAssertionIDRef(String value) {
-        return new JAXBElement<>(_AssertionIDRef_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_AssertionIDRef_QNAME, String.class, null, value);
     }
 
     /**
@@ -294,7 +294,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AssertionURIRef")
     public JAXBElement<String> createAssertionURIRef(String value) {
-        return new JAXBElement<>(_AssertionURIRef_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_AssertionURIRef_QNAME, String.class, null, value);
     }
 
     /**
@@ -303,7 +303,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Assertion")
     public JAXBElement<AssertionType> createAssertion(AssertionType value) {
-        return new JAXBElement<>(_Assertion_QNAME, AssertionType.class, null, value);
+        return new JAXBElement<AssertionType>(_Assertion_QNAME, AssertionType.class, null, value);
     }
 
     /**
@@ -312,7 +312,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Subject")
     public JAXBElement<SubjectType> createSubject(SubjectType value) {
-        return new JAXBElement<>(_Subject_QNAME, SubjectType.class, null, value);
+        return new JAXBElement<SubjectType>(_Subject_QNAME, SubjectType.class, null, value);
     }
 
     /**
@@ -321,7 +321,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "SubjectConfirmation")
     public JAXBElement<SubjectConfirmationType> createSubjectConfirmation(SubjectConfirmationType value) {
-        return new JAXBElement<>(_SubjectConfirmation_QNAME, SubjectConfirmationType.class, null, value);
+        return new JAXBElement<SubjectConfirmationType>(_SubjectConfirmation_QNAME, SubjectConfirmationType.class, null, value);
     }
 
     /**
@@ -330,7 +330,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "SubjectConfirmationData")
     public JAXBElement<SubjectConfirmationDataType> createSubjectConfirmationData(SubjectConfirmationDataType value) {
-        return new JAXBElement<>(_SubjectConfirmationData_QNAME, SubjectConfirmationDataType.class, null, value);
+        return new JAXBElement<SubjectConfirmationDataType>(_SubjectConfirmationData_QNAME, SubjectConfirmationDataType.class, null, value);
     }
 
     /**
@@ -339,7 +339,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Conditions")
     public JAXBElement<ConditionsType> createConditions(ConditionsType value) {
-        return new JAXBElement<>(_Conditions_QNAME, ConditionsType.class, null, value);
+        return new JAXBElement<ConditionsType>(_Conditions_QNAME, ConditionsType.class, null, value);
     }
 
     /**
@@ -348,7 +348,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Condition")
     public JAXBElement<ConditionAbstractType> createCondition(ConditionAbstractType value) {
-        return new JAXBElement<>(_Condition_QNAME, ConditionAbstractType.class, null, value);
+        return new JAXBElement<ConditionAbstractType>(_Condition_QNAME, ConditionAbstractType.class, null, value);
     }
 
     /**
@@ -357,7 +357,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AudienceRestriction")
     public JAXBElement<AudienceRestrictionType> createAudienceRestriction(AudienceRestrictionType value) {
-        return new JAXBElement<>(_AudienceRestriction_QNAME, AudienceRestrictionType.class, null, value);
+        return new JAXBElement<AudienceRestrictionType>(_AudienceRestriction_QNAME, AudienceRestrictionType.class, null, value);
     }
 
     /**
@@ -366,7 +366,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Audience")
     public JAXBElement<String> createAudience(String value) {
-        return new JAXBElement<>(_Audience_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_Audience_QNAME, String.class, null, value);
     }
 
     /**
@@ -375,7 +375,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "OneTimeUse")
     public JAXBElement<OneTimeUseType> createOneTimeUse(OneTimeUseType value) {
-        return new JAXBElement<>(_OneTimeUse_QNAME, OneTimeUseType.class, null, value);
+        return new JAXBElement<OneTimeUseType>(_OneTimeUse_QNAME, OneTimeUseType.class, null, value);
     }
 
     /**
@@ -384,7 +384,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "ProxyRestriction")
     public JAXBElement<ProxyRestrictionType> createProxyRestriction(ProxyRestrictionType value) {
-        return new JAXBElement<>(_ProxyRestriction_QNAME, ProxyRestrictionType.class, null, value);
+        return new JAXBElement<ProxyRestrictionType>(_ProxyRestriction_QNAME, ProxyRestrictionType.class, null, value);
     }
 
     /**
@@ -393,7 +393,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Advice")
     public JAXBElement<AdviceType> createAdvice(AdviceType value) {
-        return new JAXBElement<>(_Advice_QNAME, AdviceType.class, null, value);
+        return new JAXBElement<AdviceType>(_Advice_QNAME, AdviceType.class, null, value);
     }
 
     /**
@@ -402,7 +402,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "EncryptedAssertion")
     public JAXBElement<EncryptedElementType> createEncryptedAssertion(EncryptedElementType value) {
-        return new JAXBElement<>(_EncryptedAssertion_QNAME, EncryptedElementType.class, null, value);
+        return new JAXBElement<EncryptedElementType>(_EncryptedAssertion_QNAME, EncryptedElementType.class, null, value);
     }
 
     /**
@@ -411,7 +411,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Statement")
     public JAXBElement<StatementAbstractType> createStatement(StatementAbstractType value) {
-        return new JAXBElement<>(_Statement_QNAME, StatementAbstractType.class, null, value);
+        return new JAXBElement<StatementAbstractType>(_Statement_QNAME, StatementAbstractType.class, null, value);
     }
 
     /**
@@ -420,7 +420,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthnStatement")
     public JAXBElement<AuthnStatementType> createAuthnStatement(AuthnStatementType value) {
-        return new JAXBElement<>(_AuthnStatement_QNAME, AuthnStatementType.class, null, value);
+        return new JAXBElement<AuthnStatementType>(_AuthnStatement_QNAME, AuthnStatementType.class, null, value);
     }
 
     /**
@@ -429,7 +429,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "SubjectLocality")
     public JAXBElement<SubjectLocalityType> createSubjectLocality(SubjectLocalityType value) {
-        return new JAXBElement<>(_SubjectLocality_QNAME, SubjectLocalityType.class, null, value);
+        return new JAXBElement<SubjectLocalityType>(_SubjectLocality_QNAME, SubjectLocalityType.class, null, value);
     }
 
     /**
@@ -438,7 +438,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthnContext")
     public JAXBElement<AuthnContextType> createAuthnContext(AuthnContextType value) {
-        return new JAXBElement<>(_AuthnContext_QNAME, AuthnContextType.class, null, value);
+        return new JAXBElement<AuthnContextType>(_AuthnContext_QNAME, AuthnContextType.class, null, value);
     }
 
     /**
@@ -447,7 +447,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthnContextClassRef")
     public JAXBElement<String> createAuthnContextClassRef(String value) {
-        return new JAXBElement<>(_AuthnContextClassRef_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_AuthnContextClassRef_QNAME, String.class, null, value);
     }
 
     /**
@@ -456,7 +456,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthnContextDeclRef")
     public JAXBElement<String> createAuthnContextDeclRef(String value) {
-        return new JAXBElement<>(_AuthnContextDeclRef_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_AuthnContextDeclRef_QNAME, String.class, null, value);
     }
 
     /**
@@ -465,7 +465,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthnContextDecl")
     public JAXBElement<Object> createAuthnContextDecl(Object value) {
-        return new JAXBElement<>(_AuthnContextDecl_QNAME, Object.class, null, value);
+        return new JAXBElement<Object>(_AuthnContextDecl_QNAME, Object.class, null, value);
     }
 
     /**
@@ -474,7 +474,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthenticatingAuthority")
     public JAXBElement<String> createAuthenticatingAuthority(String value) {
-        return new JAXBElement<>(_AuthenticatingAuthority_QNAME, String.class, null, value);
+        return new JAXBElement<String>(_AuthenticatingAuthority_QNAME, String.class, null, value);
     }
 
     /**
@@ -483,7 +483,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AuthzDecisionStatement")
     public JAXBElement<AuthzDecisionStatementType> createAuthzDecisionStatement(AuthzDecisionStatementType value) {
-        return new JAXBElement<>(_AuthzDecisionStatement_QNAME, AuthzDecisionStatementType.class, null, value);
+        return new JAXBElement<AuthzDecisionStatementType>(_AuthzDecisionStatement_QNAME, AuthzDecisionStatementType.class, null, value);
     }
 
     /**
@@ -492,7 +492,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Action")
     public JAXBElement<ActionType> createAction(ActionType value) {
-        return new JAXBElement<>(_Action_QNAME, ActionType.class, null, value);
+        return new JAXBElement<ActionType>(_Action_QNAME, ActionType.class, null, value);
     }
 
     /**
@@ -501,7 +501,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Evidence")
     public JAXBElement<EvidenceType> createEvidence(EvidenceType value) {
-        return new JAXBElement<>(_Evidence_QNAME, EvidenceType.class, null, value);
+        return new JAXBElement<EvidenceType>(_Evidence_QNAME, EvidenceType.class, null, value);
     }
 
     /**
@@ -510,7 +510,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AttributeStatement")
     public JAXBElement<AttributeStatementType> createAttributeStatement(AttributeStatementType value) {
-        return new JAXBElement<>(_AttributeStatement_QNAME, AttributeStatementType.class, null, value);
+        return new JAXBElement<AttributeStatementType>(_AttributeStatement_QNAME, AttributeStatementType.class, null, value);
     }
 
     /**
@@ -519,7 +519,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "Attribute")
     public JAXBElement<AttributeType> createAttribute(AttributeType value) {
-        return new JAXBElement<>(_Attribute_QNAME, AttributeType.class, null, value);
+        return new JAXBElement<AttributeType>(_Attribute_QNAME, AttributeType.class, null, value);
     }
 
     /**
@@ -528,7 +528,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AttributeValue")
     public JAXBElement<Object> createAttributeValue(Object value) {
-        return new JAXBElement<>(_AttributeValue_QNAME, Object.class, null, value);
+        return new JAXBElement<Object>(_AttributeValue_QNAME, Object.class, null, value);
     }
 
     /**
@@ -537,7 +537,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "EncryptedAttribute")
     public JAXBElement<EncryptedElementType> createEncryptedAttribute(EncryptedElementType value) {
-        return new JAXBElement<>(_EncryptedAttribute_QNAME, EncryptedElementType.class, null, value);
+        return new JAXBElement<EncryptedElementType>(_EncryptedAttribute_QNAME, EncryptedElementType.class, null, value);
     }
 
 }

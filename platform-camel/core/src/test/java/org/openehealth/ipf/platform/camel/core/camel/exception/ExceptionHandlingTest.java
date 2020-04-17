@@ -33,20 +33,20 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = {"/context-camel-exception.xml"})
 public class ExceptionHandlingTest extends TestSupport {
 
-    @EndpointInject(uri="mock:success")
+    @EndpointInject(value="mock:success")
     private MockEndpoint success;
     
-    @EndpointInject(uri="mock:error1")
+    @EndpointInject(value="mock:error1")
     private MockEndpoint error1;
     
-    @EndpointInject(uri="mock:error2")
+    @EndpointInject(value="mock:error2")
     private MockEndpoint error2;
     
-    @EndpointInject(uri="mock:error3")
+    @EndpointInject(value="mock:error3")
     private MockEndpoint error3;
 
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         success.reset();
         error1.reset();
         error2.reset();

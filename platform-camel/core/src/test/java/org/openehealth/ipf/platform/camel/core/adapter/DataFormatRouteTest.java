@@ -27,14 +27,14 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 public class DataFormatRouteTest extends AbstractRouteTest {
 
 	@Test
-	public void testUnmarshal() {
+	public void testUnmarshal() throws Exception {
 		String result = (String) producerTemplate.sendBody("direct:external",
 				ExchangePattern.InOut, "message");
 		assertEquals("stream: message", result);
 	}
 
 	@Test
-	public void testMarshal() {
+	public void testMarshal() throws Exception {
 		String result = (String) producerTemplate.sendBody("direct:internal",
 				ExchangePattern.InOut, "message");
 		assertEquals("message", result);

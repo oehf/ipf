@@ -36,7 +36,7 @@ abstract public class HpdService extends AbstractWebService {
             log.debug(getClass().getSimpleName() + " service failed", exception);
             return errorMessage(request, exception);
         }
-        return Exchanges.resultMessage(result).getBody(BatchResponse.class);
+        return result.getMessage().getBody(BatchResponse.class);
     }
 
     private BatchResponse errorMessage(BatchRequest request, Exception exception) {

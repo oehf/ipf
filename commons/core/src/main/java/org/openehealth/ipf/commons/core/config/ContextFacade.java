@@ -35,7 +35,7 @@ import java.util.Collection;
 public class ContextFacade {
 
     private static Registry instance;
-    private static final Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
+    private static Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
 
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))

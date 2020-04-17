@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Exchange
-import org.apache.camel.processor.DelegateProcessor
+import org.apache.camel.support.processor.DelegateProcessor
 import org.openehealth.ipf.tutorials.xds.DataStore
 
 /**
@@ -41,7 +41,7 @@ class SearchProcessor extends DelegateProcessor {
          super.processNext(exchange)
      }
      
-     private def get(body, resultField) {
+     private static def get(body, resultField) {
          def fields = resultField.split('\\.')
          fields.inject(body) { obj, field -> 
              if (obj[field] == null) {

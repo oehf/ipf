@@ -28,7 +28,8 @@ class DispatchRouteBuilder2 extends RouteBuilder {
 
     @Override
     void configure() throws Exception {
-        from('mllp-dispatch://0.0.0.0:18503?dispatcher=#dispatcher').process {}
+        from('mllp-dispatch://0.0.0.0:18503?dispatcher=#dispatcher')
+                .process {}
 
         from('pix-iti8://0.0.0.0:18504?dispatcher=#dispatcher')
                 .routeId('pixfeed') // actually we don't need a dedicated route id

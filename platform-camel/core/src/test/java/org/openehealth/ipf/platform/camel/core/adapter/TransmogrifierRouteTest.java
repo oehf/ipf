@@ -32,34 +32,33 @@ import static org.junit.Assert.assertTrue;
 public class TransmogrifierRouteTest extends AbstractRouteTest {
 
     @Test
-    public void testTransmogrifier1() {
+    public void testTransmogrifier1() throws InterruptedException {
         Cat cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-1",
                 ExchangePattern.InOut, new Dog("Willi"));
         assertEquals(new Cat("Willi"), cat);
     }
 
     @Test
-    public void testTransmogrifier2() {
+    public void testTransmogrifier2() throws InterruptedException {
         Cat cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-2",
                 ExchangePattern.InOut, new Dog("Willi"));
         assertEquals(new Cat("Willi eats mice"), cat);
     }
 
     @Test
-    public void testTransmogrifier3() {
+    public void testTransmogrifier3() throws InterruptedException {
         Cat cat = (Cat) producerTemplate.requestBodyAndHeader("direct:transmogrifier-test-3", "wrong", "foo",
                 new Dog("Fritz"));
         assertEquals(new Cat("Fritz likes fish"), cat);
     }
 
     @Test
-    public void testTransmogrifier4() {
+    public void testTransmogrifier4() throws InterruptedException {
         Exchange exchange = producerTemplate.request("direct:transmogrifier-test-4", exchange1 -> {
             exchange1.getIn().setHeader("x", "y");
             exchange1.getIn().setBody(new Dog("Willi"));
         });
-        assertTrue(exchange.hasOut());
-        assertEquals("y", exchange.getOut().getHeader("x"));
+        assertEquals("y", exchange.getMessage().getHeader("x"));
     }
 
 }

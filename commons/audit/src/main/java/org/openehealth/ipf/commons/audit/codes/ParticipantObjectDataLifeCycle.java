@@ -47,7 +47,7 @@ public enum ParticipantObjectDataLifeCycle implements EnumeratedValueSet<Short> 
     PermanentErasure(15);
 
     @Getter
-    private final Short value;
+    private Short value;
 
     ParticipantObjectDataLifeCycle(int value) {
         this.value = (short) value;

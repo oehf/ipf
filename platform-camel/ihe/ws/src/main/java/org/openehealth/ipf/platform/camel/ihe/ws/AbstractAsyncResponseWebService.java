@@ -54,11 +54,13 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
      * Before calling the base method, determines correlation key  
      * and stores it into message headers. 
      */
+    @SuppressWarnings("unchecked")
     @Override
     protected Exchange process(
             Object body, 
             Map<String, Object> headers,
-            ExchangePattern exchangePattern) {
+            ExchangePattern exchangePattern) 
+    {
         final AsynchronyCorrelator correlator = getConsumer().getEndpoint().getCorrelator();
 
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();

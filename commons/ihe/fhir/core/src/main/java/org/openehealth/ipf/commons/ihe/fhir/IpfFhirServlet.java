@@ -24,6 +24,7 @@ import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import lombok.Getter;
@@ -256,9 +257,6 @@ public class IpfFhirServlet extends RestfulServer {
              */
             getFhirContext().setNarrativeGenerator(getDefaultNarrativeGenerator());
         }
-
-        // Provide some more details about the request for downstream processing
-        registerInterceptor(new RequestDetailProvider());
 
         if (logging) {
             registerInterceptor(getLoggingInterceptor());

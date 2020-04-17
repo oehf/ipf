@@ -40,7 +40,7 @@ public enum MllpParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
 
 
     @Getter
-    private final ParticipantObjectIdType value;
+    private ParticipantObjectIdType value;
 
     MllpParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

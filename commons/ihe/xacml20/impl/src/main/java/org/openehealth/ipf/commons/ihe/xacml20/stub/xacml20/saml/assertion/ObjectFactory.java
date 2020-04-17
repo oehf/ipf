@@ -78,7 +78,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion", name = "ReferencedPolicies")
     public JAXBElement<ReferencedPoliciesType> createReferencedPolicies(ReferencedPoliciesType value) {
-        return new JAXBElement<>(_ReferencedPolicies_QNAME, ReferencedPoliciesType.class, null, value);
+        return new JAXBElement<ReferencedPoliciesType>(_ReferencedPolicies_QNAME, ReferencedPoliciesType.class, null, value);
     }
 
 }

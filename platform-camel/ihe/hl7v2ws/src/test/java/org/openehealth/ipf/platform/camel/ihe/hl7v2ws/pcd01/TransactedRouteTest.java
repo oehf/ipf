@@ -22,7 +22,7 @@ import java.net.URL;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.spi.TransactedPolicy;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -65,7 +65,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testNonTransactedRoute () {
+    public void testNonTransactedRoute () throws Exception {
         final String response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
@@ -73,7 +73,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testTransactedRoute () {
+    public void testTransactedRoute () throws Exception {
         // setup the transaction mock        
         EasyMock.reset(txManager);
         txManager.getTransaction(EasyMock.anyObject());
@@ -95,19 +95,19 @@ public class TransactedRouteTest extends StandardTestContainer {
                 getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(body);
         final Exchange response = getProducerTemplate().send(url, exchange);
-        return response.getOut().getBody(String.class);
+        return response.getMessage().getBody(String.class);
     }
     
     private static class TestRoutes extends RouteBuilder {
         
-        private final TransactedPolicy txPolicy;
+        private TransactedPolicy txPolicy;
 
         private TestRoutes (final TransactedPolicy policy) {
             txPolicy = policy;
         }
 
         @Override
-        public void configure() {
+        public void configure() throws Exception {
             from("pcd-pcd01://communicateLabData/notransaction")
                 .throwException(new Hl7v2AcceptanceException("testexception"));
                 

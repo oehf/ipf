@@ -27,7 +27,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**

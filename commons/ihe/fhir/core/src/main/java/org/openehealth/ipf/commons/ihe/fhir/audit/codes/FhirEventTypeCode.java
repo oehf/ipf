@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
+import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
@@ -35,7 +36,7 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 
     @Getter
-    private final EventType value;
+    private EventType value;
 
     FhirEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

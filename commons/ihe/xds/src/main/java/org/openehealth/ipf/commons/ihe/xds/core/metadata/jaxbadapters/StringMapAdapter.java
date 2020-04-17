@@ -27,7 +27,7 @@ import java.util.Map;
 public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<String>>> {
 
     @Override
-    public StringMap marshal(Map<String, List<String>> v) {
+    public StringMap marshal(Map<String, List<String>> v) throws Exception {
         if (v == null) {
             return null;
         }
@@ -47,7 +47,7 @@ public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<Str
 
 
     @Override
-    public Map<String, List<String>> unmarshal(StringMap v) {
+    public Map<String, List<String>> unmarshal(StringMap v) throws Exception {
         if ((v == null) || (v.entries == null)) {
             return null;
         }

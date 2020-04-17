@@ -27,7 +27,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*;
 public class SampleRouteBuilder2 extends SpringRouteBuilder {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         from("direct:input1")
                 // create a message adapter from an HL7 string

@@ -20,8 +20,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class DefaultEscapingTest {
 
-    private final EncodingCharacters enc = new EncodingCharacters('|', null);
-    private final DefaultEscaping esc = DefaultEscaping.INSTANCE;
+    private EncodingCharacters enc = new EncodingCharacters('|', null);
+    private DefaultEscaping esc = DefaultEscaping.INSTANCE;
 
     @Test
     public void escapeLinebreakWithHapi() {

@@ -37,17 +37,17 @@ public class TransactionalMessagingTest extends TestSupport {
 
     private static final long TIMEOUT = 2000L;
     
-    @EndpointInject(uri="mock:txm-mock")
+    @EndpointInject(value="mock:txm-mock")
     private MockEndpoint txmMock;
     
-    @EndpointInject(uri="mock:txm-error")
+    @EndpointInject(value="mock:txm-error")
     private MockEndpoint txmError;
     
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     private MockEndpoint errorMock;
 
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         txmMock.reset();
         txmError.reset();
         errorMock.reset();

@@ -43,7 +43,7 @@ public class XCDR implements XdsIntegrationProfile {
 		ITI_80(ITI_80_WS_CONFIG);
 
 		@Getter
-		private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {

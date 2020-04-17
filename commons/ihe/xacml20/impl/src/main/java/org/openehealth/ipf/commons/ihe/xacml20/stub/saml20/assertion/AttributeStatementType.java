@@ -84,7 +84,7 @@ public class AttributeStatementType
      */
     public List<Object> getAttributeOrEncryptedAttribute() {
         if (attributeOrEncryptedAttribute == null) {
-            attributeOrEncryptedAttribute = new ArrayList<>();
+            attributeOrEncryptedAttribute = new ArrayList<Object>();
         }
         return this.attributeOrEncryptedAttribute;
     }

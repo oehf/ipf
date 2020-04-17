@@ -121,7 +121,7 @@ abstract public class ContinuaHrnCamelProcessors {
 
         @Override
         public Map<String, Object> getCustomSchematronParameters(String rootElementName) {
-            return Collections.singletonMap("phase", "errors");
+            return Collections.<String, Object>singletonMap("phase", "errors");
         }
     }
 }

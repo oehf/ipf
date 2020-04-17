@@ -86,7 +86,7 @@ public class ReferencedPoliciesType {
      */
     public List<Object> getPolicyOrPolicySet() {
         if (policyOrPolicySet == null) {
-            policyOrPolicySet = new ArrayList<>();
+            policyOrPolicySet = new ArrayList<Object>();
         }
         return this.policyOrPolicySet;
     }

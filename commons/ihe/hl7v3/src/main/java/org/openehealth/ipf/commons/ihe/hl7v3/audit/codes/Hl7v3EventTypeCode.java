@@ -37,7 +37,7 @@ public enum Hl7v3EventTypeCode implements EventType, EnumeratedCodedValue<EventT
     QueryExistingData("PCC-1", "Query Existing Data");
 
     @Getter
-    private final EventType value;
+    private EventType value;
 
     Hl7v3EventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

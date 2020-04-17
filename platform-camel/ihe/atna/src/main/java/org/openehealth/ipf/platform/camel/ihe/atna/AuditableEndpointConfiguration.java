@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.atna;
 
 import lombok.Getter;
-import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.support.DefaultComponent;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.AuditConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class AuditableEndpointConfiguration extends InterceptableEndpointConfiguration {
 
     @Getter
-    private final AuditContext auditContext;
+    private AuditContext auditContext;
 
     public AuditableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
         super(component, parameters);

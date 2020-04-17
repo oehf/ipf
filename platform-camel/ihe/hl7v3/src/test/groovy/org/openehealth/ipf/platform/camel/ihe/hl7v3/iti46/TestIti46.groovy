@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46
 
+import groovy.xml.XmlSlurper
 import org.apache.camel.Exchange
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
@@ -24,7 +25,6 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Tests for ITI-46.
@@ -73,7 +73,7 @@ class TestIti46 extends HL7v3StandardTestContainer {
             throw result.exception
         }
         assert result.properties[Exchange.CHARSET_NAME] == "windows-1251"
-        def slurper = new XmlSlurper().parseText(Exchanges.resultMessage(result).body)
+        def slurper = new XmlSlurper().parseText(result.getMessage().body)
         assert slurper.@from == 'PIX Consumer'
     }
 }

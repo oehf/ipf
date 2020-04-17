@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.apache.camel.Converter;
+import org.apache.camel.TypeConverters;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
@@ -41,7 +42,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocu
  * All of these can be converted into each other with the appropriate factories or constructors.
  * @author Jens Riemschneider
  */
-@Converter
+@Converter(generateLoader = true)
 public class EbXML30Converters {
     private final static EbXMLFactory30 factory = new EbXMLFactory30();
     

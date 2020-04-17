@@ -19,10 +19,7 @@ package org.openehealth.ipf.commons.audit.protocol;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * For testing only: an implementation that records the audit message strings in memory instead of sending them to

@@ -39,19 +39,19 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public abstract class AbstractExtensionTest {
 
     @Autowired
-    protected CamelContext cc;
+    protected CamelContext camelContext;
     
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     protected MockEndpoint mockOutput;
     
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         mockOutput.reset();
         mockError.reset();
     }

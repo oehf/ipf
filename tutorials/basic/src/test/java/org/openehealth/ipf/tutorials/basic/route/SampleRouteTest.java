@@ -38,12 +38,12 @@ public class SampleRouteTest {
     private ProducerTemplate producerTemplate;
 
     @Test
-    public void testMultiply() {
+    public void testMultiply() throws Exception {
         assertEquals("abcabc", producerTemplate.requestBody("direct:input1", "abc"));
     }
     
     @Test
-    public void testReverse() {
+    public void testReverse() throws Exception {
         assertEquals("cba", producerTemplate.requestBody("direct:input2", "abc"));
     }
     

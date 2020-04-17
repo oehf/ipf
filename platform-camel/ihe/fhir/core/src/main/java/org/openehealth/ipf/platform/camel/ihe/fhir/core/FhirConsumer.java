@@ -26,7 +26,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.support.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
@@ -50,7 +50,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_O
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
         implements SuspendableService, RequestConsumer {
 
-    private final FhirContext fhirContext;
+    private FhirContext fhirContext;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);

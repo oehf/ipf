@@ -33,19 +33,19 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = { "/config/context-sample2.xml" })
 public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
-    private static final String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
-    private static final String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
+    private static String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
+    private static String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
     
-    @EndpointInject(uri="mock:output1")
+    @EndpointInject(value="mock:output1")
     private MockEndpoint mockOutput1;
     
-    @EndpointInject(uri="mock:output2")
+    @EndpointInject(value="mock:output2")
     private MockEndpoint mockOutput2;
     
-    private final String resource = "message/msg-01.hl7";
+    private String resource = "message/msg-01.hl7";
     
     @After
-    public void myTearDown() {
+    public void myTearDown() throws Exception {
         mockOutput1.reset();
         mockOutput2.reset();
     }

@@ -86,7 +86,7 @@ public class RSP_K21 extends AbstractMessage {
      * necessary throws HL7Exception if the repetition requested is more than
      * one greater than the number of existing repetitions.
      */
-    public SFT getSFT(int rep) {
+    public SFT getSFT(int rep) throws HL7Exception {
         return getTyped("STF", rep, SFT.class);
     }
 
@@ -145,7 +145,8 @@ public class RSP_K21 extends AbstractMessage {
      * - creates it if necessary throws HL7Exception if the repetition requested
      * is more than one greater than the number of existing repetitions.
      */
-    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep) {
+    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep)
+            throws HL7Exception {
         return getTyped("QUERY_RESPONSE", rep, RSP_K21_QUERY_RESPONSE.class);
     }
 

@@ -99,10 +99,10 @@ public class PatientInfoTest {
         // check using other iterator type
         ListIterator<Name> xdsIterator = patientInfo.getNames();
         assertEquals(new XcnName("Krause", "Peter", null, null, null, "Dr."), xdsIterator.next());
-        assertNull(xdsIterator.next());
+        assertEquals(null, xdsIterator.next());
         assertEquals(new XpnName("Schmitt", "Jens", "Klaus Heinz", null, "Ritter", null), xdsIterator.next());
-        assertNull(xdsIterator.next());
-        assertNull(xdsIterator.next());
+        assertEquals(null, xdsIterator.next());
+        assertEquals(null, xdsIterator.next());
         assertFalse(xdsIterator.hasNext());
 
         // check rendering
@@ -159,7 +159,7 @@ public class PatientInfoTest {
         rawIterator.add("20010203040506");
 
         // check
-        assertNull(patientInfo.getDateOfBirth());
+        assertEquals(null, patientInfo.getDateOfBirth());
         List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~~20010203040506", renderedStrings.get(0));
 
@@ -167,7 +167,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         rawIterator.next();
         rawIterator.remove();
-        assertNull(patientInfo.getDateOfBirth());
+        assertEquals(null, patientInfo.getDateOfBirth());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~20010203040506", renderedStrings.get(0));
 
@@ -213,21 +213,21 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertNull(patientInfo.getDateOfBirth());
+        assertEquals(null, patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setDateOfBirth((String) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertNull(patientInfo.getDateOfBirth());
+        assertEquals(null, patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 4
         patientInfo.setDateOfBirth((Timestamp) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertNull(patientInfo.getDateOfBirth());
+        assertEquals(null, patientInfo.getDateOfBirth());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class PatientInfoTest {
         rawIterator.add("M");
 
         // check
-        assertNull(patientInfo.getGender());
+        assertEquals(null, patientInfo.getGender());
         List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~~M", renderedStrings.get(0));
 
@@ -258,7 +258,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         rawIterator.next();
         rawIterator.remove();
-        assertNull(patientInfo.getGender());
+        assertEquals(null, patientInfo.getGender());
         renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~M", renderedStrings.get(0));
 
@@ -304,14 +304,14 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
         renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertNull(patientInfo.getGender());
+        assertEquals(null, patientInfo.getGender());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setGender(null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
         renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertNull(patientInfo.getGender());
+        assertEquals(null, patientInfo.getGender());
     }
 
     @Test

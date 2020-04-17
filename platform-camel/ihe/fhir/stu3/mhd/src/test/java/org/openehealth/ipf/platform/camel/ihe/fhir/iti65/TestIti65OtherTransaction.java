@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

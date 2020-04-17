@@ -70,7 +70,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:conditions:delegation", name = "Delegate")
     public JAXBElement<DelegateType> createDelegate(DelegateType value) {
-        return new JAXBElement<>(_Delegate_QNAME, DelegateType.class, null, value);
+        return new JAXBElement<DelegateType>(_Delegate_QNAME, DelegateType.class, null, value);
     }
 
 }

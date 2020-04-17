@@ -85,7 +85,8 @@ public class PatientInfo implements Serializable {
      *         (note: there can be present fields without any content)
      */
     public Set<String> getAllFieldIds() {
-        return new HashSet<>(stringFields.keySet());
+        Set<String> result = new HashSet<>(stringFields.keySet());
+        return result;
     }
 
     /**
@@ -131,6 +132,7 @@ public class PatientInfo implements Serializable {
                         getOtherIterator().set(Hl7v2Based.parse(s, XpnName.class));
                         break;
                     case "PID-7":
+                        break;
                     case "PID-8":
                         break;
                     case "PID-11":
@@ -153,6 +155,7 @@ public class PatientInfo implements Serializable {
                         getOtherIterator().add(Hl7v2Based.parse(s, XpnName.class));
                         break;
                     case "PID-7":
+                        break;
                     case "PID-8":
                         break;
                     case "PID-11":

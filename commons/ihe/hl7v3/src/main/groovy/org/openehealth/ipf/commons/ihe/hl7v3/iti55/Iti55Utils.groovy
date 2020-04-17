@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.slf4j.Logger

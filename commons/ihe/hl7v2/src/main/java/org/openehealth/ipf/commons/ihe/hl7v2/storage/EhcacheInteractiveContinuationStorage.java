@@ -89,7 +89,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
      */
     private static class InteractiveContinuationChain implements Serializable {
         private final Map<String, Message> responseMessages =
-            Collections.synchronizedMap(new HashMap<>());
+            Collections.synchronizedMap(new HashMap<String, Message>());
 
         public void put(String continuationPointer, Message message) {
             responseMessages.put(continuationPointer, message);

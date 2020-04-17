@@ -60,17 +60,6 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
         authors.add(author);
     }
 
-    /**
-     * @return the author of the submission. If the submission has multiple authors
-     *          this method returns only the first in the list. If the submission
-     *          has no authors, this method returns {@code null}.
-     * @deprecated please iterate over {@link #getAuthors()}.
-     */
-    @Deprecated
-    public Author getAuthor() {
-        return authors.isEmpty() ? null : authors.get(0);
-    }
-
     @JsonProperty
     public void setSubmissionTime(Timestamp submissionTime) {
         this.submissionTime = submissionTime;

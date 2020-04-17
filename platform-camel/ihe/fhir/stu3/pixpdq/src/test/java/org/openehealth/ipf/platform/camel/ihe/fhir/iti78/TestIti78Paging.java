@@ -21,6 +21,8 @@ import org.hl7.fhir.dstu3.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.servlet.ServletException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +34,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-paging.xml";
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }

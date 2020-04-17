@@ -19,6 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.utilities.xhtml.NodeType;
+import org.hl7.fhir.utilities.xhtml.XhtmlNode;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;

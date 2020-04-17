@@ -31,7 +31,7 @@ public enum HpdParticipantObjectIdTypeCode implements ParticipantObjectIdType, E
     RelativeDistinguishedName("99SupHPD-ISO21091-RDN", "IHE", "ISO 21091 Relative Distinguished Name");
 
     @Getter
-    private final ParticipantObjectIdType value;
+    private ParticipantObjectIdType value;
 
     HpdParticipantObjectIdTypeCode(String code, String codeSystemName, String displayName) {
         this.value = ParticipantObjectIdType.of(code, codeSystemName, displayName);

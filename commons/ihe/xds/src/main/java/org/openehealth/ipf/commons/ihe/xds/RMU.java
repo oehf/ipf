@@ -44,7 +44,7 @@ public class RMU implements XdsIntegrationProfile {
 		ITI_92(ITI_92_WS_CONFIG);
 
 		@Getter
-		private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {

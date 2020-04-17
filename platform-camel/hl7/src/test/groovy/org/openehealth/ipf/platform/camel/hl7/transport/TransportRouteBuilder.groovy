@@ -24,7 +24,7 @@ class TransportRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
 
-        from('mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
+        from('mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
             .unmarshal().hl7()
             .transmogrify {it.OBXNTE.OBX[5][5]}
             .to('mock:output')

@@ -177,7 +177,7 @@ public class LogoutRequestType
      */
     public List<String> getSessionIndex() {
         if (sessionIndex == null) {
-            sessionIndex = new ArrayList<>();
+            sessionIndex = new ArrayList<String>();
         }
         return this.sessionIndex;
     }

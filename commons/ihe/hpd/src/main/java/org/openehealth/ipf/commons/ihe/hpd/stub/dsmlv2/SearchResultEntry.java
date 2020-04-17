@@ -79,7 +79,7 @@ public class SearchResultEntry
      */
     public List<DsmlAttr> getAttr() {
         if (attr == null) {
-            attr = new ArrayList<>();
+            attr = new ArrayList<DsmlAttr>();
         }
         return this.attr;
     }

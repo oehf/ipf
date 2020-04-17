@@ -22,7 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based
  * Comparators for datatypes used with XDS.
  * @author Jens Riemschneider
  */
-public class Comparators {
+class Comparators {
+
      static def equals(expected, actual) { expected == null || expected.equals(actual) }
      static def contains(expected, actual) { expected == null || expected.contains(actual) }
      static def any(expected, closure) { expected == null || expected.any(closure) } 

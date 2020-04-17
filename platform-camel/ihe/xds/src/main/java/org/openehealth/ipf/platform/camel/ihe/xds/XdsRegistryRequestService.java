@@ -47,6 +47,6 @@ public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
             return EbXML30Converters.convert(errorResponse);
         }
 
-        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);
+        return result.getMessage().getBody(RegistryResponseType.class);
     }
 }

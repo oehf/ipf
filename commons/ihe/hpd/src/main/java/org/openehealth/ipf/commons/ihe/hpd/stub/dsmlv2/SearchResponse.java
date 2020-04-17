@@ -85,7 +85,7 @@ public class SearchResponse {
      */
     public List<SearchResultEntry> getSearchResultEntry() {
         if (searchResultEntry == null) {
-            searchResultEntry = new ArrayList<>();
+            searchResultEntry = new ArrayList<SearchResultEntry>();
         }
         return this.searchResultEntry;
     }
@@ -114,7 +114,7 @@ public class SearchResponse {
      */
     public List<SearchResultReference> getSearchResultReference() {
         if (searchResultReference == null) {
-            searchResultReference = new ArrayList<>();
+            searchResultReference = new ArrayList<SearchResultReference>();
         }
         return this.searchResultReference;
     }

@@ -23,7 +23,7 @@ import org.apache.camel.Processor;
  */
 public class FailureProcessor implements Processor {
 
-    private final String selector;
+    private String selector;
     
     public FailureProcessor(String selector) {
         this.selector = selector;

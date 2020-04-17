@@ -44,7 +44,7 @@ public class CDAR2ValidatorTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         validator = new CDAR2Validator();
         Map<Object, Object> context = new HashMap<>();
         context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
@@ -54,7 +54,7 @@ public class CDAR2ValidatorTest {
     }
     
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
     }
     
     @Test

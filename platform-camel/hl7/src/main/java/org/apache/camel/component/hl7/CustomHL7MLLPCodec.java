@@ -17,8 +17,11 @@
 package org.apache.camel.component.hl7;
 
 import ca.uhn.hl7v2.HapiContext;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.ProtocolDecoder;
+import org.apache.mina.filter.codec.ProtocolEncoder;
 
-import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.charset.CodingErrorAction;
 import java.util.Locale;
 
@@ -30,53 +33,106 @@ import java.util.Locale;
  */
 public class CustomHL7MLLPCodec extends HL7MLLPCodec {
 
+    private CustomHL7MLLPConfig config = new CustomHL7MLLPConfig();
+
+    public ProtocolDecoder getDecoder(IoSession session) throws Exception {
+        return new CustomHL7MLLPDecoder(config);
+    }
+
+    public ProtocolEncoder getEncoder(IoSession session) throws Exception {
+        return new HL7MLLPEncoder(config);
+    }
+
     public void setHapiContext(HapiContext context) {
-        config().setHapiContext(context);
+        config.setHapiContext(context);
     }
 
     public HapiContext getHapiContext() {
-        return config().getHapiContext();
+        return config.getHapiContext();
+    }
+
+    public void setCharset(Charset charset) {
+        config.setCharset(charset);
+    }
+
+    public void setCharset(String charsetName) {
+        config.setCharset(Charset.forName(charsetName));
+    }
+
+    public Charset getCharset() {
+        return config.getCharset();
+    }
+
+    public boolean isConvertLFtoCR() {
+        return config.isConvertLFtoCR();
+    }
+
+    public void setConvertLFtoCR(boolean convertLFtoCR) {
+        config.setConvertLFtoCR(convertLFtoCR);
+    }
+
+    public char getStartByte() {
+        return config.getStartByte();
+    }
+
+    public void setStartByte(char startByte) {
+        config.setStartByte(startByte);
+    }
+
+    public char getEndByte1() {
+        return config.getEndByte1();
+    }
+
+    public void setEndByte1(char endByte1) {
+        config.setEndByte1(endByte1);
+    }
+
+    public char getEndByte2() {
+        return config.getEndByte2();
+    }
+
+    public void setEndByte2(char endByte2) {
+        config.setEndByte2(endByte2);
+    }
+
+    public boolean isValidate() {
+        return config.isValidate();
+    }
+
+    public void setValidate(boolean validate) {
+        config.setValidate(validate);
+    }
+
+    public boolean isProduceString() {
+        return config.isProduceString();
+    }
+
+    public void setProduceString(boolean apply) {
+        config.setProduceString(apply);
     }
 
     public void setUnmappableCharacterErrorAction(CodingErrorAction action) {
-        config().setUnmappableCharacterErrorAction(action);
+        config.setUnmappableCharacterErrorAction(action);
     }
 
     public void setMalformedInputErrorAction(CodingErrorAction action) {
-        config().setMalformedInputErrorAction(action);
+        config.setMalformedInputErrorAction(action);
     }
 
     public void setUnmappableCharacterErrorAction(String action) {
-        config().setUnmappableCharacterErrorAction(fromString(action));
+        config.setUnmappableCharacterErrorAction(fromString(action));
     }
 
     public void setMalformedInputErrorAction(String action) {
-        config().setMalformedInputErrorAction(fromString(action));
+        config.setMalformedInputErrorAction(fromString(action));
     }
 
     private CodingErrorAction fromString(String action) {
         switch (action.toUpperCase(Locale.ROOT)) {
-            case "IGNORE":
-                return CodingErrorAction.IGNORE;
-            case "REPLACE":
-                return CodingErrorAction.REPLACE;
-            case "REPORT":
-                return CodingErrorAction.REPORT;
-            default:
-                throw new IllegalArgumentException(action + " is not a valid CodingErrorAction (IGNORE, REPLACE, REPORT)");
+            case "IGNORE" : return CodingErrorAction.IGNORE;
+            case "REPLACE" : return CodingErrorAction.REPLACE;
+            case "REPORT" : return CodingErrorAction.REPORT;
+            default: throw new IllegalArgumentException(action + " is not a valid CodingErrorAction (IGNORE, REPLACE, REPORT)");
         }
-    }
-
-    private HL7MLLPConfig config() {
-        try {
-            Field field = HL7MLLPCodec.class.getDeclaredField("config");
-            field.setAccessible(true);
-            Object value = field.get(this);
-            field.setAccessible(false);
-            return (HL7MLLPConfig) value;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
     }
 }

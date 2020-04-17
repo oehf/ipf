@@ -45,7 +45,7 @@ public class CH_PPQ implements IntegrationProfile {
         CH_PPQ_1(CH_PPQ_1_WS_CONFIG),
         CH_PPQ_2(CH_PPQ_2_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override

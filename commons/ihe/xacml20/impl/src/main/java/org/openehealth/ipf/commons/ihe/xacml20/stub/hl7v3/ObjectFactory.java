@@ -70,7 +70,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "CodedValue")
     public JAXBElement<CV> createCodedValue(CV value) {
-        return new JAXBElement<>(_CodedValue_QNAME, CV.class, null, value);
+        return new JAXBElement<CV>(_CodedValue_QNAME, CV.class, null, value);
     }
 
     /**
@@ -79,7 +79,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "InstanceIdentifier")
     public JAXBElement<II> createInstanceIdentifier(II value) {
-        return new JAXBElement<>(_InstanceIdentifier_QNAME, II.class, null, value);
+        return new JAXBElement<II>(_InstanceIdentifier_QNAME, II.class, null, value);
     }
 
 }

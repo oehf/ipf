@@ -78,7 +78,8 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
 
     @Override
     public List<String> getTransferSyntaxUIDList() {
-        List<String> transferSyntaxUIDs = new ArrayList<>(request.getTransferSyntaxUIDList().getTransferSyntaxUID());
+        List<String> transferSyntaxUIDs = new ArrayList<>();
+        transferSyntaxUIDs.addAll(request.getTransferSyntaxUIDList().getTransferSyntaxUID());
         return transferSyntaxUIDs;
     }
 

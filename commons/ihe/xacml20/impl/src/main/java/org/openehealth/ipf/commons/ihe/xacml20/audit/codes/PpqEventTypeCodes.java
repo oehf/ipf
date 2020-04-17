@@ -31,7 +31,7 @@ public enum PpqEventTypeCodes implements EventType, EnumeratedCodedValue<EventTy
     ;
 
     @Getter
-    private final EventType value;
+    private EventType value;
 
     PpqEventTypeCodes(String code, String displayName) {
         this.value = EventType.of(code, "e-health-suisse", displayName);

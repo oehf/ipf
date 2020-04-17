@@ -49,7 +49,7 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         from("direct:input")
                 .toF("pixm-iti83:localhost:%d", FhirTestContainer.DEMO_APP_PORT);

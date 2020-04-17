@@ -144,7 +144,7 @@ public class Ebrs30MarshalingTest {
         DocumentEntry documentEntry = result.getDocumentEntries().get(0);
         assertEquals("Document01", documentEntry.getEntryUuid());
         assertEquals(DocumentEntryType.STABLE, documentEntry.getType());
-        assertEquals("Gerald Smitty", documentEntry.getAuthor().getAuthorPerson().getId().getId());
+        assertEquals("Gerald Smitty", documentEntry.getAuthors().get(0).getAuthorPerson().getId().getId());
 
         SubmissionSet submissionSet = result.getSubmissionSet();
         assertEquals("SubmissionSet01", submissionSet.getEntryUuid());

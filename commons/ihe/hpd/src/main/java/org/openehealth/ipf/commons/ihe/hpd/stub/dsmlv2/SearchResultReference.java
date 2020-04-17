@@ -79,7 +79,7 @@ public class SearchResultReference
      */
     public List<String> getRef() {
         if (ref == null) {
-            ref = new ArrayList<>();
+            ref = new ArrayList<String>();
         }
         return this.ref;
     }

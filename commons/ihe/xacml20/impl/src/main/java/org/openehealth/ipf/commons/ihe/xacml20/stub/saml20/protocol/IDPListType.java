@@ -82,7 +82,7 @@ public class IDPListType {
      */
     public List<IDPEntryType> getIDPEntry() {
         if (idpEntry == null) {
-            idpEntry = new ArrayList<>();
+            idpEntry = new ArrayList<IDPEntryType>();
         }
         return this.idpEntry;
     }

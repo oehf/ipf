@@ -36,11 +36,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.*;
 
 
 /**

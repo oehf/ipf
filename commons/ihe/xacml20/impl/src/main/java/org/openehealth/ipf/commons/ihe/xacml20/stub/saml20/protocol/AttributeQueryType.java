@@ -79,7 +79,7 @@ public class AttributeQueryType
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
-            attribute = new ArrayList<>();
+            attribute = new ArrayList<AttributeType>();
         }
         return this.attribute;
     }

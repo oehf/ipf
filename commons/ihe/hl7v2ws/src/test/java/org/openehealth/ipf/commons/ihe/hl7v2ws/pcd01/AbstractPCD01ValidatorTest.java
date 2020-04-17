@@ -31,7 +31,7 @@ import java.util.Scanner;
 
 public abstract class AbstractPCD01ValidatorTest {
 
-    private final HapiContext hapiContext = HapiContextFactory.createHapiContext(PcdTransactions.PCD1);
+    private HapiContext hapiContext = HapiContextFactory.createHapiContext(PcdTransactions.PCD1);
 
     protected ORU_R01 maximumMessage;
 

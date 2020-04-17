@@ -75,43 +75,6 @@ public abstract class AbstractPlainProvider extends FhirProvider {
     }
 
     /**
-     * Requests a single resource
-     *
-     * @param payload             FHIR request resource
-     * @param resultType          expected result type
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @param <R>                 Result type
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <R extends IBaseResource> R requestResource(
-            Object payload, Class<R> resultType,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestResource(payload, null, resultType, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Requests a single resource with parameters
-     *
-     * @param payload             FHIR request resource (often null)
-     * @param parameters          FHIR parameters
-     * @param resultType          expected result type
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @param <R>                 Result type
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestResource(Object, FhirSearchParameters, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <R extends IBaseResource> R requestResource(
-            Object payload, FhirSearchParameters parameters, Class<R> resultType,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestResource(payload, parameters, resultType, httpServletRequest, httpServletResponse, null);
-    }
-
-    /**
      * Requests a single resource with parameters
      *
      * @param payload             FHIR request resource (often null)
@@ -131,61 +94,6 @@ public abstract class AbstractPlainProvider extends FhirProvider {
                 new IllegalStateException("Consumer is not initialized"));
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleResourceRequest(payload, headers, resultType);
-    }
-
-    /**
-     * Requests a list of resources
-     *
-     * @param payload             FHIR request resource
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @param <R>                 Result type
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
-                                                                    HttpServletRequest httpServletRequest,
-                                                                    HttpServletResponse httpServletResponse) {
-        return requestBundle(payload, null, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Requests a list of resources with parameters
-     *
-     * @param payload             FHIR request resource (often null)
-     * @param parameters          FHIR search parameters
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @param <R>                 Result type
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <R extends IBaseResource> List<R> requestBundle(
-            Object payload, FhirSearchParameters parameters,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestBundle(payload, parameters, null, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Requests a list of resources with parameters
-     *
-     * @param payload             FHIR request resource (often null)
-     * @param parameters          FHIR search parameters
-     * @param resourceType        FHIR resource type being searched
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @param <R>                 Result type
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestBundle(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <R extends IBaseResource> List<R> requestBundle(
-            Object payload, FhirSearchParameters parameters,
-            String resourceType,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestBundle(payload, parameters, resourceType, httpServletRequest, httpServletResponse, null);
     }
 
     /**
@@ -221,46 +129,6 @@ public abstract class AbstractPlainProvider extends FhirProvider {
      *
      * @param payload             FHIR request resource (often null)
      * @param searchParameters    FHIR search parameters
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return IBundleProvider
-     *
-     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final IBundleProvider requestBundleProvider(
-            Object payload, FhirSearchParameters searchParameters,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestBundleProvider(payload, searchParameters, null, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
-     * bundles. The type of the returned {@link IBundleProvider} instance is determined
-     * by the {@link #consumer RequestConsumer} impelmentation.
-     *
-     * @param payload             FHIR request resource (often null)
-     * @param searchParameters    FHIR search parameters
-     * @param resourceType        FHIR resource type
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return IBundleProvider
-     *
-     * @deprecated use {@link #requestBundleProvider(Object, FhirSearchParameters, String, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final IBundleProvider requestBundleProvider(
-            Object payload, FhirSearchParameters searchParameters,
-            String resourceType,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return requestBundleProvider(payload, searchParameters, resourceType, httpServletRequest, httpServletResponse, null);
-    }
-
-    /**
-     * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
-     * bundles. The type of the returned {@link IBundleProvider} instance is determined
-     * by the {@link #consumer RequestConsumer} impelmentation.
-     *
-     * @param payload             FHIR request resource (often null)
-     * @param searchParameters    FHIR search parameters
      * @param resourceType        FHIR resource type
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
@@ -280,42 +148,6 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
         return consumer.handleBundleProviderRequest(payload, headers);
-    }
-
-    /**
-     * Submits a resource to be created or updated
-     *
-     * @param payload             resource payload
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final MethodOutcome requestAction(
-            Object payload,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        return requestAction(payload, null, httpServletRequest, httpServletResponse);
-    }
-
-    /**
-     * Submits a resource to be created or updated
-     *
-     * @param payload             resource payload
-     * @param parameters          parameters
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return result of processing
-     *
-     * @deprecated use #requestAction(Object, FhirSearchParameters, HttpServletRequest, HttpServletResponse, RequestDetails)
-     */
-    protected final MethodOutcome requestAction(
-            Object payload,
-            FhirSearchParameters parameters,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        return requestAction(payload, parameters, httpServletRequest, httpServletResponse, null);
     }
 
     /**

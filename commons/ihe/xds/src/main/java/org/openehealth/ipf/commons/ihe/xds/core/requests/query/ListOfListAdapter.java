@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
 @XmlTransient
 public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfListWrapper<T>, List<List<T>>> {
     @Override
-    public List<List<T>> unmarshal(ListOfListWrapper<T> v) {
+    public List<List<T>> unmarshal(ListOfListWrapper<T> v) throws Exception {
         return v.getInnerList().stream()
                 .map(ListWrapper::getValue)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ListOfListWrapper<T> marshal(List<List<T>> v) {
+    public ListOfListWrapper<T> marshal(List<List<T>> v) throws Exception {
         List<ListWrapper<T>> outerList = v.stream()
                 .map(ListWrapper::new)
                 .collect(Collectors.toList());

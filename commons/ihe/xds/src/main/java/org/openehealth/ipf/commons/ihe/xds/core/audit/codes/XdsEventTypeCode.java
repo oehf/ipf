@@ -49,7 +49,7 @@ public enum XdsEventTypeCode implements EventType, EnumeratedCodedValue<EventTyp
     CrossGatewayRetrieveImagingDocumentSet("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
 
     @Getter
-    private final EventType value;
+    private EventType value;
 
     XdsEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

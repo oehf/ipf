@@ -21,8 +21,8 @@ import org.apache.camel.Producer;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
-import org.apache.camel.impl.DefaultEndpoint;
-import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.support.DefaultEndpoint;
+import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
@@ -109,13 +109,13 @@ public abstract class AbstractWsEndpoint<
 
     private AuditContext auditContext;
     private AsynchronyCorrelator<AuditDatasetType> correlator = null;
-    private final InterceptorProvider customInterceptors;
+    private InterceptorProvider customInterceptors;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
-    private final List<AbstractFeature> features;
-    private final List<String> schemaLocations;
-    private final Class<? extends AbstractWebService> serviceClass;
-    private final Map<String, Object> properties;
+    private List<AbstractFeature> features;
+    private List<String> schemaLocations;
+    private Class<? extends AbstractWebService> serviceClass;
+    private Map<String, Object> properties;
 
     private boolean secure;
     private SSLContextParameters sslContextParameters;

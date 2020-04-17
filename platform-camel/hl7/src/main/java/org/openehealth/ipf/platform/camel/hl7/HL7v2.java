@@ -49,7 +49,7 @@ public final class HL7v2 {
      * @return Expression that extracts data from HL7 messages based on a HAPI Terser expression
      */
     public static ValueBuilder get(String terserSpec) {
-        return HL7.terser(terserSpec);
+        return HL7.hl7terser(terserSpec);
     }
 
     /**

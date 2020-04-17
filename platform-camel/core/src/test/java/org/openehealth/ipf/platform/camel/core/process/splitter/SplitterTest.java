@@ -15,8 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.apache.camel.AggregationStrategy;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.Expression;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.support.DefaultExchange;
+import org.apache.camel.util.ObjectHelper;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,19 +37,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Expression;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.apache.camel.util.ObjectHelper;
-import org.junit.*;
-import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
-import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -76,7 +77,7 @@ public class SplitterTest {
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("bla:blu", origExchange.getOut().getBody());
+        assertEquals("bla:blu", origExchange.getMessage().getBody());
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -98,7 +99,7 @@ public class SplitterTest {
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("blu", origExchange.getOut().getBody());
+        assertEquals("blu", origExchange.getMessage().getBody());
     }
     
     @Test
@@ -120,7 +121,7 @@ public class SplitterTest {
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("bla:blu", origExchange.getOut().getBody());
+        assertEquals("bla:blu", origExchange.getMessage().getBody());
     }
     
     @Test
@@ -175,7 +176,7 @@ public class SplitterTest {
         
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));        
-        assertEquals("blu", origExchange.getOut().getBody());
+        assertEquals("blu", origExchange.getMessage().getBody());
     }
 
     private Exchange createTestExchange() {
@@ -221,7 +222,7 @@ public class SplitterTest {
             return baseIterable.iterator();
         }        
 
-        private final Iterable<T> baseIterable;
+        private Iterable<T> baseIterable;
         private boolean iteratorCalled;
     }
     
@@ -267,7 +268,7 @@ public class SplitterTest {
     
     private static class TestProcessor implements Processor {
         @Override
-        public void process(Exchange exchange) {
+        public void process(Exchange exchange) throws Exception {
             received.add(exchange);
         }
         
@@ -275,6 +276,6 @@ public class SplitterTest {
             return Collections.unmodifiableList(received);
         }
         
-        private final List<Exchange> received = new ArrayList<>();
+        private List<Exchange> received = new ArrayList<>();
     }
 }

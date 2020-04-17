@@ -19,7 +19,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
 public class IHEWebServiceClient implements CamelContextAware {
 
     private CamelContext camelContext;
-    private final CombinedXmlValidator validator = new CombinedXmlValidator();
+    private CombinedXmlValidator validator = new CombinedXmlValidator();
 
     @Override
     public void setCamelContext(CamelContext camelContext) {
@@ -122,7 +122,7 @@ public class IHEWebServiceClient implements CamelContextAware {
 
     private <T> T send(String endpoint, Object input, Class<T> outType) throws Exception {
         Exchange result = send(endpoint, input);
-        return Exchanges.resultMessage(result).getBody(outType);
+        return result.getMessage().getBody(outType);
     }
 
     private Exchange send(String endpoint, Object body) throws Exception {

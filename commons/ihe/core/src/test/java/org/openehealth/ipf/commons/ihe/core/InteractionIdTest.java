@@ -81,9 +81,9 @@ public class InteractionIdTest {
             Interaction2("int2", "description2");
 
             @Getter
-            private final String name;
+            private String name;
             @Getter
-            private final String description;
+            private String description;
 
         }
 
@@ -105,9 +105,9 @@ public class InteractionIdTest {
             Interaction4("int4", "description4");
 
             @Getter
-            private final String name;
+            private String name;
             @Getter
-            private final String description;
+            private String description;
 
         }
 

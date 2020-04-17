@@ -35,12 +35,12 @@ public abstract class AbstractExtensionTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     protected MockEndpoint mockOutput;
 
     
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         mockOutput.reset();
     }
 

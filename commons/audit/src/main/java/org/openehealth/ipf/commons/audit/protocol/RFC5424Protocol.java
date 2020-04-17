@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
 import java.nio.charset.StandardCharsets;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Base client implementation of RFC 5424 syslog for sending audit messages to an Audit Record Repository
  * that implements RFC 5424 SYSLOG.
@@ -65,4 +67,5 @@ public class RFC5424Protocol {
                 auditMessage);
         return msg.trim().getBytes(StandardCharsets.UTF_8);
     }
+
 }

@@ -29,7 +29,7 @@ public enum HpdEventTypeCode implements EventType, EnumeratedCodedValue<EventTyp
     ProviderInformationFeed("ITI-59", "Provider Information Feed");
 
     @Getter
-    private final EventType value;
+    private EventType value;
 
     HpdEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

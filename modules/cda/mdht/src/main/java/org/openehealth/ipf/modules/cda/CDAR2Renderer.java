@@ -84,7 +84,7 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
     }
 
     public Result render(ClinicalDocument doc, Result result,
-            Object... options) {
+            Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

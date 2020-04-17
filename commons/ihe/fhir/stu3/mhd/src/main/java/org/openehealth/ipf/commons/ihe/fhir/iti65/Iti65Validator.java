@@ -44,7 +44,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("META-INF/profiles/MHD-");
 
     // Prepare the required validator instances so that the structure definitions are not reloaded each time
-    private static final Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
+    private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
 
 
     static {

@@ -23,6 +23,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,7 +91,7 @@ public class TestServers {
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             IOUtils.copy(request.getInputStream(), response.getOutputStream());
         }
     }

@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
+import javax.servlet.ServletException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -41,7 +43,7 @@ public class TestIti65Success extends AbstractTestIti65 {
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

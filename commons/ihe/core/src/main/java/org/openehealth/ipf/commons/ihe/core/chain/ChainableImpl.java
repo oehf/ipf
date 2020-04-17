@@ -27,8 +27,8 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class ChainableImpl implements Chainable {
     private String id = getClass().getName();
-    private final Set<String> before = new HashSet<>();
-    private final Set<String> after = new HashSet<>();
+    private Set<String> before = new HashSet<>();
+    private Set<String> after = new HashSet<>();
 
 
     /**

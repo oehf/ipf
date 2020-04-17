@@ -112,7 +112,7 @@ public class ScopingType {
      */
     public List<String> getRequesterID() {
         if (requesterID == null) {
-            requesterID = new ArrayList<>();
+            requesterID = new ArrayList<String>();
         }
         return this.requesterID;
     }

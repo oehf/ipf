@@ -47,7 +47,7 @@ public class LabCDA20ValidationTest {
     private static final String sample_errored = "/IHE_LabReport_20070816_Errored.xml";
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         validator = new XsdValidator();
         schematron = new SchematronValidator();
         params = new HashMap<>();
@@ -55,19 +55,19 @@ public class LabCDA20ValidationTest {
     }
 
     @Test
-    public void testSchemaValidate() {
+    public void testSchemaValidate() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample));
         validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
     }
 
     @Test
-    public void testValidateErrors() {
+    public void testValidateErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample));
         schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_20_SCHEMATRON_RULES, params));
     }
 
     @Test
-    public void validateBodyPositive() {
+    public void validateBodyPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample));
         validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
         testXml = new StreamSource(getClass().getResourceAsStream(sample));
@@ -76,7 +76,7 @@ public class LabCDA20ValidationTest {
     }
 
     @Test
-    public void validateBodyErrors() {
+    public void validateBodyErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_errored));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -88,7 +88,7 @@ public class LabCDA20ValidationTest {
     }
 
     @Test
-    public void validateHeaderPositive() {
+    public void validateHeaderPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample));
         validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
         testXml = new StreamSource(getClass().getResourceAsStream(sample));

@@ -5,7 +5,7 @@ import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder;
 public class MockInterceptor extends CustomRouteBuilder {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
         interceptSendToEndpoint("direct:file-save").to("mock:file").stop();        
     }
 

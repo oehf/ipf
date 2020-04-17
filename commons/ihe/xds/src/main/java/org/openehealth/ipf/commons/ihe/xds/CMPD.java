@@ -42,7 +42,7 @@ public class CMPD implements XdsIntegrationProfile {
     public enum Interactions implements XdsInteractionId {
         PHARM_1(ITI_PHARM_1_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {

@@ -19,7 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.mina2.Mina2Constants;
+import org.apache.camel.component.mina.MinaConstants;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.mina.core.session.IoSession;
@@ -97,7 +97,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
     }
 
     private void extractSslClientUser(Exchange exchange, AuditDatasetType auditDataset) {
-        IoSession ioSession = exchange.getIn().getHeader(Mina2Constants.MINA_IOSESSION, IoSession.class);
+        IoSession ioSession = exchange.getIn().getHeader(MinaConstants.MINA_IOSESSION, IoSession.class);
         if (ioSession != null) {
             SSLSession sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
             if (sslSession != null) {

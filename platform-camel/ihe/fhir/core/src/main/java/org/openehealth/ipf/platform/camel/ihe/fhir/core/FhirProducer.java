@@ -24,7 +24,7 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;

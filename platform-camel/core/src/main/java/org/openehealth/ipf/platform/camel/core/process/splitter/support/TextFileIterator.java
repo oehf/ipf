@@ -48,7 +48,7 @@ public class TextFileIterator implements Iterator<String> {
     private static final LineSplitterLogic DEFAULT_LINE_SPLITTER_LOGIC = 
         new NoopLineSplitterLogic();
     
-    private final BufferedReader reader;
+    private BufferedReader reader;
     private String[] nextSplitLine;
     private int curSplitLineIdx;
     private final LineSplitterLogic lineSplitterLogic;

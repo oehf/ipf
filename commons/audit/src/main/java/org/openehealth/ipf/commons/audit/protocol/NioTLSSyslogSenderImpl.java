@@ -67,7 +67,7 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
         }
     }
 
-    private D getDestination(String host, int port) {
+    private D getDestination(String host, int port) throws Exception {
         D destination = destinations.get(host + port);
         if (destination == null) {
             synchronized (this) {

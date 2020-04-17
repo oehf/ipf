@@ -50,8 +50,8 @@ public interface AuditContext {
 
     /**
      * @param auditEnabled enable or disable auditing
-     * @deprecated to be removed from the interface in order to prevent accidental change
      */
+    @Deprecated(forRemoval = true)
     void setAuditEnabled(boolean auditEnabled);
 
     /**

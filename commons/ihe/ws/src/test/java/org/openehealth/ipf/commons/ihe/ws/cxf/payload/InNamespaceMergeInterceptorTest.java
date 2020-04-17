@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -98,26 +99,26 @@ public class InNamespaceMergeInterceptorTest {
         
         // empty target element, short form  
         prefixes = merge("<element/>");
-        assertEquals(5, prefixes.size());
+        assertTrue(prefixes.size() == 5);
 
         // target element without NS declarations
         prefixes = merge("<element>garbage</element>");
-        assertEquals(5, prefixes.size());
+        assertTrue(prefixes.size() == 5);
         
         // target element with redeclared "soap" prefix
         prefixes = merge("<element xmlns:soap=\"12345\">garbage</element>");
-        assertEquals(5, prefixes.size());
+        assertTrue(prefixes.size() == 5);
         assertEquals("12345", prefixes.get("soap"));
 
         // target element with declared prefix that begins with "xmlns"
         prefixes = merge("<element xmlns:xmlns1=\"uri\" xmlns1:soap=\"12345\">garbage</element>");
-        assertEquals(6, prefixes.size());
+        assertTrue(prefixes.size() == 6);
         assertEquals("http://www.w3.org/2003/05/soap-envelope", prefixes.get("soap"));
 
         // target element with redeclared prefix "internal" which has been  
         // initially declared in the SOAP Body
         prefixes = merge("<element xmlns:internal=\"uri\">garbage</element>");
-        assertEquals(5, prefixes.size());
+        assertTrue(prefixes.size() == 5);
         assertEquals("uri", prefixes.get("internal"));
         
         // declaration from SOAP Body have higher priority than the ones from SOAP Envelope

@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.core.config.TypeConverter;
 import org.springframework.core.convert.ConversionService;
 
 /**
- * {@link TypeConverter} implementation baacked by a Spring {@link ConversionService}
+ * {@link TypeConverter} implementation backed by a Spring {@link ConversionService}
  *
  * @since 3.1
  */

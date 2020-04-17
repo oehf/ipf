@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  */
 public class AbstractNamingSystemServiceImpl implements NamingSystemService {
 
-    protected final transient Map<String, Set<NamingSystem>> namingSystems = new HashMap<>();
+    protected transient Map<String, Set<NamingSystem>> namingSystems = new HashMap<>();
 
     public void addNamingSystems(Bundle bundle) {
         this.namingSystems.merge(bundle.getId(), setOfNamingSystems(bundle), (set1, set2) -> {

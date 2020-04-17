@@ -41,7 +41,7 @@ public class ChPpq2Service extends AbstractWebService implements ChPpq2PortType 
             response.getStatus().setStatusMessage(exception.getMessage());
             return response;
         }
-        return Exchanges.resultMessage(result).getBody(ResponseType.class);
+        return result.getMessage().getBody(ResponseType.class);
     }
 
 }

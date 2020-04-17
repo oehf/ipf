@@ -28,10 +28,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.X_IPF_ATNA_APPLICATION;
-import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.X_IPF_ATNA_HOSTNAME;
-import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.X_IPF_ATNA_PROCESSID;
-import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.X_IPF_ATNA_TIMESTAMP;
+import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.*;
 
 /**
  * JMS Message Listener that receives audit messages from a queue and sends them
@@ -40,7 +37,7 @@ import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.
  * message redelivery and other features.
  * <p>
  * This class supports JMS headers transferred by {@link JmsAuditMessageQueue} and
- * reuses them for setting the RFC 5424 headers of the actual syslog audit.
+ * reuses them for the actual auditing.
  *
  * @author Christian Ohr
  * @since 3.5

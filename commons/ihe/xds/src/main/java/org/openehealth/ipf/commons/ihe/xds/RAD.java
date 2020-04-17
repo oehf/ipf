@@ -47,7 +47,7 @@ public class RAD implements XdsIntegrationProfile {
         RAD_75(RAD_75_WS_CONFIG),
         RAD_75_ASYNC_RESPONSE(RAD_75_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {

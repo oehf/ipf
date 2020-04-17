@@ -91,7 +91,7 @@ public class AuthzDecisionStatementType
      */
     public List<ActionType> getAction() {
         if (action == null) {
-            action = new ArrayList<>();
+            action = new ArrayList<ActionType>();
         }
         return this.action;
     }

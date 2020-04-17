@@ -106,7 +106,7 @@ public class EncryptedElementType {
      */
     public List<EncryptedKeyType> getEncryptedKey() {
         if (encryptedKey == null) {
-            encryptedKey = new ArrayList<>();
+            encryptedKey = new ArrayList<EncryptedKeyType>();
         }
         return this.encryptedKey;
     }

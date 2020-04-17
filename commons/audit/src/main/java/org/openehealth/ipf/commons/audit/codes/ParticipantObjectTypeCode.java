@@ -36,7 +36,7 @@ public enum ParticipantObjectTypeCode implements EnumeratedValueSet<Short> {
     Other(4);
 
     @Getter
-    private final Short value;
+    private Short value;
 
     ParticipantObjectTypeCode(int value) {
         this.value = (short) value;

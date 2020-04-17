@@ -23,7 +23,7 @@ import org.apache.camel.Processor;
  */
 public class FailureTransformer implements Processor {
 
-    private final boolean error;
+    private boolean error;
     
     public FailureTransformer() {
         this(false);
@@ -33,12 +33,11 @@ public class FailureTransformer implements Processor {
         this.error = error;
     }
     
-    public void process(Exchange exchange) {
+    public void process(Exchange exchange) throws Exception {
         if (error) {
             throw new RuntimeException("failed");
         } else {
-            exchange.getOut().setBody("failed");
-            exchange.getOut().setFault(true);
+            exchange.getMessage().setBody("failed");
         }
     }
 

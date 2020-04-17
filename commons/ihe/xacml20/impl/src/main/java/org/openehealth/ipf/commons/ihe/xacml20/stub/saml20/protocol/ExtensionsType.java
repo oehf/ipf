@@ -78,7 +78,7 @@ public class ExtensionsType {
      */
     public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<>();
+            any = new ArrayList<Object>();
         }
         return this.any;
     }

@@ -141,7 +141,7 @@ public class LDAPResult
      */
     public List<String> getReferral() {
         if (referral == null) {
-            referral = new ArrayList<>();
+            referral = new ArrayList<String>();
         }
         return this.referral;
     }

@@ -74,7 +74,7 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final ConformanceProfile conformanceProfile) {
         return new Processor() {
 
-            private final CachingGazelleProfileRule rule = new CachingGazelleProfileRule(conformanceProfile);
+            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(conformanceProfile);
 
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -95,7 +95,7 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final HL7v2Transactions iheTransaction) {
         return new Processor() {
 
-            private final CachingGazelleProfileRule rule = new CachingGazelleProfileRule(iheTransaction);
+            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(iheTransaction);
 
             @Override
             public void process(Exchange exchange) throws Exception {

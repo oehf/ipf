@@ -80,7 +80,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol", name = "XACMLAuthzDecisionQuery")
     public JAXBElement<XACMLAuthzDecisionQueryType> createXACMLAuthzDecisionQuery(XACMLAuthzDecisionQueryType value) {
-        return new JAXBElement<>(_XACMLAuthzDecisionQuery_QNAME, XACMLAuthzDecisionQueryType.class, null, value);
+        return new JAXBElement<XACMLAuthzDecisionQueryType>(_XACMLAuthzDecisionQuery_QNAME, XACMLAuthzDecisionQueryType.class, null, value);
     }
 
     /**
@@ -89,7 +89,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol", name = "Extensions")
     public JAXBElement<ExtensionsType> createExtensions(ExtensionsType value) {
-        return new JAXBElement<>(_Extensions_QNAME, ExtensionsType.class, null, value);
+        return new JAXBElement<ExtensionsType>(_Extensions_QNAME, ExtensionsType.class, null, value);
     }
 
     /**
@@ -98,7 +98,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol", name = "XACMLPolicyQuery")
     public JAXBElement<XACMLPolicyQueryType> createXACMLPolicyQuery(XACMLPolicyQueryType value) {
-        return new JAXBElement<>(_XACMLPolicyQuery_QNAME, XACMLPolicyQueryType.class, null, value);
+        return new JAXBElement<XACMLPolicyQueryType>(_XACMLPolicyQuery_QNAME, XACMLPolicyQueryType.class, null, value);
     }
 
 }

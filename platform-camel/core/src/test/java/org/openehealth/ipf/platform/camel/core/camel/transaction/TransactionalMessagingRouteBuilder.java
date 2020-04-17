@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcesso
 public class TransactionalMessagingRouteBuilder extends SpringRouteBuilder {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         /*
          * We use two JMS components here:

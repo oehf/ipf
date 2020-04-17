@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -31,12 +32,12 @@ public class XsltTransmogrifierTest {
     private XsltTransmogrifier<String> transformer;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         transformer = new XsltTransmogrifier<>(String.class);
     }
 
     @Test
-    public void testConvertString() {
+    public void testConvertString() throws IOException {
         Source source = new StreamSource(getClass().getResourceAsStream("/xslt/createPatient.xml"));
         String result = transformer.zap(source, "/xslt/createPatient.xslt");
         assertNotNull(result);

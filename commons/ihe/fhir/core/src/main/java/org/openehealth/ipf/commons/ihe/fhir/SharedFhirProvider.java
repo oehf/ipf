@@ -48,7 +48,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
     private static final Logger LOG = LoggerFactory.getLogger(SharedFhirProvider.class);
 
     private FhirContext fhirContext;
-    private final List<RequestConsumer> consumers = new ArrayList<>();
+    private List<RequestConsumer> consumers = new ArrayList<>();
 
     @Override
     protected FhirContext getFhirContext() {
@@ -76,24 +76,6 @@ public abstract class SharedFhirProvider extends FhirProvider {
     @Override
     public boolean requiresDeregistration() {
         return consumers.isEmpty();
-    }
-
-    /**
-     * Submits a transaction request bundle, expecting a corresponding response bundle
-     *
-     * @param payload             transaction bundle
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return result of processing
-     *
-     * @deprecated use {@link #requestTransaction(Object, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <T extends IBaseBundle> T requestTransaction(
-            Object payload,
-            Class<T> bundleClass,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        return requestTransaction(payload, bundleClass, httpServletRequest, httpServletResponse, null);
     }
 
     /**

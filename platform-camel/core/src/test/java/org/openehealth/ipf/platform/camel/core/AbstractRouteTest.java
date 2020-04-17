@@ -41,7 +41,7 @@ public abstract class AbstractRouteTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:mock")
+    @EndpointInject(value="mock:mock")
     protected MockEndpoint mock;
 
     @After

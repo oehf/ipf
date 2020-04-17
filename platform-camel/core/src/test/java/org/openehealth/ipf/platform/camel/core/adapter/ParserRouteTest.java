@@ -33,28 +33,28 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 public class ParserRouteTest extends AbstractRouteTest {
 
     @Test
-    public void testParser1() {
+    public void testParser1() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, "input");
         assertEquals("string: input", result);
     }
 
     @Test
-    public void testParser2() {
+    public void testParser2() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new ByteArrayInputStream("input".getBytes()));
         assertEquals("stream: input", result);
     }
 
     @Test
-    public void testParser3() {
+    public void testParser3() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new StringReader("input"));
         assertEquals("reader: input", result);
     }
 
     @Test
-    public void testParser4() {
+    public void testParser4() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new StreamSource(new StringReader("input")));
         assertEquals("source: input", result);

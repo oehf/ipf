@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import groovy.util.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.spi.ExecutorServiceManager;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
@@ -119,8 +119,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             // check whether deferred response URI is specified
             final String deferredResponseUri = Iti55Utils.normalizedDeferredResponseUri(requestXml);
             if (deferredResponseUri == null) {
-                Hl7v3Exception hl7v3Exception = new Hl7v3Exception();
-                hl7v3Exception.setMessage("Deferred response URI is missing or not HTTP(S)");
+                Hl7v3Exception hl7v3Exception = new Hl7v3Exception("Deferred response URI is missing or not HTTP(S)");
                 hl7v3Exception.setTypeCode("AE");
                 hl7v3Exception.setAcknowledgementDetailCode("SYN105");
                 hl7v3Exception.setQueryResponseCode("AE");
@@ -176,8 +175,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         }
 
         else {
-            Hl7v3Exception hl7v3Exception = new Hl7v3Exception();
-            hl7v3Exception.setMessage(String.format("Unsupported processing mode '%s'", processingMode));
+            Hl7v3Exception hl7v3Exception = new Hl7v3Exception(String.format("Unsupported processing mode '%s'", processingMode));
             hl7v3Exception.setTypeCode("AE");
             hl7v3Exception.setAcknowledgementDetailCode("NS250");
             hl7v3Exception.setQueryResponseCode("AE");
@@ -191,7 +189,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         Exception exception = Exchanges.extractException(result);
         return (exception != null) ?
             nak(exception, requestXml) :
-            Exchanges.resultMessage(result).getBody(String.class);
+            result.getMessage().getBody(String.class);
     }
 
 
@@ -209,9 +207,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         if (exception instanceof Hl7v3Exception) {
             hl7v3Exception = (Hl7v3Exception) exception;
         } else {
-            hl7v3Exception = new Hl7v3Exception();
-            hl7v3Exception.setCause(exception);
-            hl7v3Exception.setMessage(exception.getMessage());
+            hl7v3Exception = new Hl7v3Exception(exception.getMessage(), exception);
             hl7v3Exception.setDetectedIssueManagementCode("InternalError");
             hl7v3Exception.setDetectedIssueManagementCodeSystem("1.3.6.1.4.1.19376.1.2.27.3");
         }

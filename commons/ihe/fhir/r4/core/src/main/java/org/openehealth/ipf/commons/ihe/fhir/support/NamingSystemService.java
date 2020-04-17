@@ -73,17 +73,14 @@ public interface NamingSystemService {
 
     // Predicates
 
-    @SafeVarargs
     static Predicate<NamingSystem> allOf(Predicate<NamingSystem>... predicates) {
         return combine(Predicate::and, predicates);
     }
 
-    @SafeVarargs
     static Predicate<NamingSystem> anyOf(Predicate<NamingSystem>... predicates) {
         return combine(Predicate::or, predicates);
     }
 
-    @SafeVarargs
     static Predicate<NamingSystem> combine(BinaryOperator<Predicate<NamingSystem>> op, Predicate<NamingSystem>... predicates) {
         return predicates != null ?
                 Stream.of(predicates).reduce(op).orElse(namingSystem -> false) :

@@ -19,9 +19,6 @@ package org.openehealth.ipf.commons.audit;
  * Providing meta information about the audit record that is e.g. used for populating
  * the RFC 5424 header. A different provider may be configured for relays that have
  * to preserve the original header information that may come from a different host.
- *
- * @see DefaultAuditMetadataProvider
- * @see org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol#send(AuditContext, AuditMetadataProvider, String)
  */
 public interface AuditMetadataProvider {
 

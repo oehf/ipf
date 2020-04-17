@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -32,18 +33,18 @@ public class SchematronValidatorTest {
     private SchematronValidator v;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         v = new SchematronValidator();
     }
 
     @Test
-    public void testValidate() {
+    public void testValidate() throws IOException {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
         v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
     }
 
     @Test
-    public void testValidateFail() {
+    public void testValidateFail() throws IOException {
         Source testXml = new StreamSource(getClass().getResourceAsStream(
                 "/schematron/schematron-test-fail.xml"));
         try {

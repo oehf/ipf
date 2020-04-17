@@ -73,7 +73,7 @@ public class AttributeDescriptions {
      */
     public List<AttributeDescription> getAttribute() {
         if (attribute == null) {
-            attribute = new ArrayList<>();
+            attribute = new ArrayList<AttributeDescription>();
         }
         return this.attribute;
     }

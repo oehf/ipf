@@ -32,7 +32,7 @@ public class CDAR2ParserTest {
     private CDAR2Renderer renderer;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         parser = new CDAR2Parser();
         renderer = new CDAR2Renderer();
     }

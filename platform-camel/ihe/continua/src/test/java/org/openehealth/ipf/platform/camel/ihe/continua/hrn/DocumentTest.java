@@ -46,7 +46,7 @@ public class DocumentTest {
     private DataHandler someData;
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         Identifiable somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
         someData = SampleData.createDataHandler();
         docEntry = SampleData.createDocumentEntry(somePatientID);
@@ -62,13 +62,13 @@ public class DocumentTest {
     @Test
     public final void constructor() {
         Document doc = new Document(docEntry, someData);
-        assertEquals(someData, doc.getContent(DataHandler.class));
+        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
     public final void getContentsClassOfDataHandler() {
         Document doc = new Document(docEntry, someData);
-        assertEquals(someData, doc.getContent(DataHandler.class));
+        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
@@ -82,7 +82,7 @@ public class DocumentTest {
     public final void addContents() {
         Document doc = new Document(docEntry, null);
         assertNull(doc.setContent(DataHandler.class, someData));
-        assertEquals(someData, doc.getContent(DataHandler.class));
+        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
@@ -102,7 +102,7 @@ public class DocumentTest {
         doc.setContent(String.class, testContent);
         String modContent = testContent.replace('a', 'c');
         doc.setContent(String.class, modContent);
-        assertEquals("String content shoud be '" + modContent + "'", modContent,
+        assertEquals("String content shoud be \'" + modContent + "\'", modContent,
             doc.getContent(String.class));
     }
     
@@ -142,6 +142,6 @@ public class DocumentTest {
         Document doc1 = new Document(docEntry, someData);
         Document doc2 = new Document(docEntry, null);
         doc2.setContent(DataHandler.class, someData);
-        assertEquals(doc1, doc2);
+        assertTrue(doc1.equals(doc2));
     }
 }

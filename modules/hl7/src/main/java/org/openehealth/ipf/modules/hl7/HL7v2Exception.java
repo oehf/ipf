@@ -28,7 +28,7 @@ import ca.uhn.hl7v2.model.Message;
 @SuppressWarnings("serial")
 public class HL7v2Exception extends RuntimeException {
 
-	private final HL7Exception nested;
+	private HL7Exception nested;
 
 	public HL7v2Exception(HL7Exception nested) {
         super(nested);

@@ -27,11 +27,7 @@ import org.openehealth.ipf.commons.audit.protocol.RecordingAuditMessageTransmiss
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.net.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.core.AnyOf.anyOf;

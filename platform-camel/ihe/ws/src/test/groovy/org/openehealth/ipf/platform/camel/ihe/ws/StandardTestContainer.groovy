@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.commons.io.IOUtils
 import org.junit.After
 import org.junit.AfterClass
@@ -130,7 +130,7 @@ class StandardTestContainer {
      */
     def send(endpoint, input, outType, Map headers = null) {
         Exchange result = send(endpoint, input, headers)
-        Exchanges.resultMessage(result).getBody(outType)
+        result.getMessage().getBody(outType)
     }
 
     /**

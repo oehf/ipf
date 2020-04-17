@@ -70,7 +70,7 @@ public enum ParticipantObjectTypeCodeRole implements EnumeratedValueSet<Short> {
     ProcessingElement(26);
 
     @Getter
-    private final Short value;
+    private Short value;
 
     ParticipantObjectTypeCodeRole(int value) {
         this.value = (short) value;

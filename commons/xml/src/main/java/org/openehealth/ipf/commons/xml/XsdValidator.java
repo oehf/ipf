@@ -129,17 +129,17 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
         private final List<ValidationException> exceptions = new ArrayList<>();
 
         @Override
-        public void error(SAXParseException exception) {
+        public void error(SAXParseException exception) throws SAXException {
             add(exception);
         }
 
         @Override
-        public void fatalError(SAXParseException exception) {
+        public void fatalError(SAXParseException exception) throws SAXException {
             add(exception);
         }
 
         @Override
-        public void warning(SAXParseException exception) {
+        public void warning(SAXParseException exception) throws SAXException {
             // TODO LOG some message
         }
 

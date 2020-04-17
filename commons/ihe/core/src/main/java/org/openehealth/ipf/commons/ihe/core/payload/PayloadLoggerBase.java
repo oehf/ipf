@@ -20,13 +20,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -85,7 +83,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     private boolean enabled = true;
 
     private int errorCountLimit = -1;
-    private final AtomicInteger errorCount = new AtomicInteger(0);
+    private AtomicInteger errorCount = new AtomicInteger(0);
 
     private ExpressionResolver resolver;
 
@@ -106,7 +104,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                String output = String.join("", payloadPieces);
+                String output = Stream.of(payloadPieces).collect(Collectors.joining());
                 LOG.debug(output);
             }
         } else {
@@ -160,42 +158,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    /**
-     * @return <code>true</code> if this logging interceptor instance is enabled.
-     * @deprecated use {@link #isEnabled()}
-     */
-    @Deprecated
-    public boolean isLocallyEnabled() {
-        return isEnabled();
-    }
-
-    /**
-     * @param locallyEnabled <code>true</code> when this logging interceptor instance should be enabled.
-     * @deprecated use {@link #setEnabled(boolean)}
-     */
-    @Deprecated
-    public void setLocallyEnabled(boolean locallyEnabled) {
-        setEnabled(locallyEnabled);
-    }
-
-    /**
-     * @return <code>true</code> when logging interceptors are generally enabled.
-     * @see #isEnabled()
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static boolean isGloballyEnabled() {
-        return !Boolean.getBoolean(PROPERTY_DISABLED);
-    }
-
-    /**
-     * @param globallyEnabled <code>true</code> when logging interceptors shall be generally enabled.
-     * @see #setLocallyEnabled(boolean)
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static void setGloballyEnabled(boolean globallyEnabled) {
-        System.setProperty(PROPERTY_DISABLED, Boolean.toString(!globallyEnabled));
     }
 
     /**

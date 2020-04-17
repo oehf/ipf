@@ -45,14 +45,14 @@ public class CCDASchematronValidationTest {
                                                            "UD 1", "UD 2"};
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         params = new HashMap<>();
         params.put("phase", "errors");
         schematron = new SchematronValidator();
     }
 
     @Test
-    public void validateSchemaGoodSamples() {
+    public void validateSchemaGoodSamples() throws Exception {
         for (String ccdaFile: ccdaFiles){
             String ccdaFilePathFormat = "/ccda/%s.xml";
             String ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);

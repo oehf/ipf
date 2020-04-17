@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.io.InputStream;
 import java.util.List;
@@ -77,7 +76,7 @@ public class ChPpq1Test extends StandardTestContainer {
                 return;
             }
         }
-        assertNull(value);
+        assertEquals(null, value);
     }
 
     @Test

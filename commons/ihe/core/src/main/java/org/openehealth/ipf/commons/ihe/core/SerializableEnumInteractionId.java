@@ -44,7 +44,7 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
 
     private static <E extends Enum<E> & InteractionId> E getInteractionId(String interaction) {
         int lastIndex = interaction.lastIndexOf('$');
-        Class<E> enumType;
+        Class<E> enumType = null;
         try {
             enumType = (Class<E>) Class.forName(interaction.substring(0, lastIndex));
             String enumValue = interaction.substring(lastIndex + 1);

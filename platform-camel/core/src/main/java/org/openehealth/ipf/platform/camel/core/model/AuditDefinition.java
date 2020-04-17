@@ -18,9 +18,12 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Martin Krasser
@@ -45,26 +48,27 @@ public class AuditDefinition extends DelegateDefinition {
     public void setAuditProcessor(Processor auditProcessor) {
         this.auditProcessor = auditProcessor;
     }
-    
+
     /**
      * @param auditProcessorBeanName the auditProcessorBeanName to set
      */
     public void setAuditProcessorBeanName(String auditProcessorBeanName) {
         this.auditProcessorBeanName = auditProcessorBeanName;
     }
-    
-    @Override
-    protected Processor doCreateDelegate(RouteContext routeContext) {
-        if (auditProcessorBeanName != null) {
-            auditProcessor = routeContext.lookup(auditProcessorBeanName, Processor.class);
-        }
+
+
+    public Processor getAuditProcessor() {
         return auditProcessor;
+    }
+
+    public String getAuditProcessorBeanName() {
+        return auditProcessorBeanName;
     }
 
     private static class Noop implements Processor {
 
         @Override
-        public void process(Exchange exchange) {
+        public void process(Exchange exchange) throws Exception {
         }
         
     }

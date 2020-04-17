@@ -53,7 +53,7 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
      * configuration logic  
      */
     @Override
-    public void configure(MappingResourceHolder configuration) {
+    public void configure(MappingResourceHolder configuration) throws Exception {
         if (configuration.getMappingResources() != null) {
             mappingService.setMappingResources(configuration.getMappingResources());
             LOG.debug("Mapping scripts added {}", configuration);

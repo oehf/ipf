@@ -35,7 +35,7 @@ import java.net.URL;
  */
 public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceImpl {
 
-    private final FhirContext fhirContext;
+    private FhirContext fhirContext;
 
     public DefaultNamingSystemServiceImpl(FhirContext fhirContext) {
         super();

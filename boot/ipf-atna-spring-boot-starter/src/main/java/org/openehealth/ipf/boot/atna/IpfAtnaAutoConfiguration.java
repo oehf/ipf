@@ -16,12 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
-import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.DefaultAuditContext;
-import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.*;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
@@ -82,14 +77,14 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AuditMessageQueue auditMessageQueue(IpfAtnaConfigurationProperties config) throws Exception {
-        return config.getAuditQueueClass().newInstance();
+        return config.getAuditQueueClass().getConstructor().newInstance();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AuditMessagePostProcessor auditMessagePostProcessor(IpfAtnaConfigurationProperties config) throws Exception {
         if (config.getAuditMessagePostProcessorClass() != null) {
-            return config.getAuditMessagePostProcessorClass().newInstance();
+            return config.getAuditMessagePostProcessorClass().getConstructor().newInstance();
         }
         return AuditMessagePostProcessor.noOp();
     }
@@ -121,7 +116,7 @@ public class IpfAtnaAutoConfiguration {
     @ConditionalOnMissingBean
     public AuditExceptionHandler auditExceptionHandler(IpfAtnaConfigurationProperties config) throws Exception {
         if (config.getAuditExceptionHandlerClass() != null) {
-            return config.getAuditExceptionHandlerClass().newInstance();
+            return config.getAuditExceptionHandlerClass().getConstructor().newInstance();
         }
         return new LoggingAuditExceptionHandler();
     }

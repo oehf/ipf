@@ -32,7 +32,7 @@ public class InterceptorFactoryBean<E extends Endpoint, T extends Interceptor<E>
     }
 
     @Override
-    public T getObject() {
+    public T getObject() throws Exception {
         return getNewInstance();
     }
 

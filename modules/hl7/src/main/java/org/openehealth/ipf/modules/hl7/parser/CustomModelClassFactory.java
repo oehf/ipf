@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClassFactory {
 
-    private final ModelClassFactory defaultFactory;
+    private ModelClassFactory defaultFactory;
 
     public CustomModelClassFactory() {
         this(null);

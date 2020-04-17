@@ -42,6 +42,6 @@ internal class FindStructureVisitor(
         return !done()
     }
 
-    private fun done(): Boolean = findFirst && paths.isNotEmpty()
+    private fun done(): Boolean = findFirst && !paths.isEmpty()
 
 }

@@ -27,6 +27,8 @@ import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
+import javax.servlet.ServletException;
+
 import static org.junit.Assert.*;
 
 /**

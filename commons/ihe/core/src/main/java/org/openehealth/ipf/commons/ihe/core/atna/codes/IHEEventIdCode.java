@@ -67,7 +67,7 @@ public enum IHEEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
     PatientCareProtocol("IHE0005", "Patient Care Protocol");
 
     @Getter
-    private final EventId value;
+    private EventId value;
 
     IHEEventIdCode(String code, String displayName) {
         this.value = EventId.of(code, "IHE", displayName);

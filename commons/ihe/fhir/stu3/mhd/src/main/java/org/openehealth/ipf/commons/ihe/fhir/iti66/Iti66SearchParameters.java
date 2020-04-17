@@ -26,6 +26,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67SearchParameters;
 
 import java.util.Collections;
 import java.util.List;

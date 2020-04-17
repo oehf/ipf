@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class TransmogrifierRouteBuilder extends RouteBuilderSupport {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
         from("direct:transmogrifier-test-1")
         .process(transmogrifier1());
 

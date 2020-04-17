@@ -26,10 +26,10 @@ import org.apache.camel.Expression;
  * 
  * @author Martin Krasser
  */
-public class DelegatingExpression extends ClosureAdapter implements Expression {
+public class DelegatingExpression extends ClosureAdapter<Object> implements Expression {
 
-    public DelegatingExpression(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
-                                        Closure closure) {
+    public DelegatingExpression(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Exchange"})
+                                        Closure<Object> closure) {
         super(closure);
     }
 

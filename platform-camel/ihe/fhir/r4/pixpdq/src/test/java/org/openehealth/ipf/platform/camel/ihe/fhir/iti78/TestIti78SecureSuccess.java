@@ -21,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 
+import javax.servlet.ServletException;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -31,7 +33,7 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-secure.xml";
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR, true);
     }
 

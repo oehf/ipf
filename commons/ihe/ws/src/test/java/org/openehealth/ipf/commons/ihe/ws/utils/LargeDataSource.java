@@ -32,12 +32,12 @@ public class LargeDataSource implements DataSource {
     public static final int STREAM_SIZE = 70000;
 
     @Override
-    public InputStream getInputStream() {
+    public InputStream getInputStream() throws IOException {
         return new InputStream() {
             private int idx;
 
             @Override
-            public int read() {
+            public int read() throws IOException {
                 if (idx >= STREAM_SIZE) {
                     return -1;
                 }
@@ -54,7 +54,7 @@ public class LargeDataSource implements DataSource {
     }
 
     @Override
-    public OutputStream getOutputStream() {
+    public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
 

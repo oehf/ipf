@@ -38,7 +38,7 @@ public class IpfAtnaAutoConfigurationTest {
     private AuditContext auditContext;
 
     @Test
-    public void testAtnaSettings() {
+    public void testAtnaSettings() throws Exception {
         assertEquals("atna-test", auditContext.getAuditSourceId());
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());

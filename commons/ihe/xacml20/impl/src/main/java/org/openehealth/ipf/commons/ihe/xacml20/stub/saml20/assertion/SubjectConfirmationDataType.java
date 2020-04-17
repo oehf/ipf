@@ -89,7 +89,7 @@ public class SubjectConfirmationDataType {
     @XmlAttribute(name = "Address")
     protected String address;
     @XmlAnyAttribute
-    private final Map<QName, String> otherAttributes = new HashMap<>();
+    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the content property.
@@ -117,7 +117,7 @@ public class SubjectConfirmationDataType {
      */
     public List<Object> getContent() {
         if (content == null) {
-            content = new ArrayList<>();
+            content = new ArrayList<Object>();
         }
         return this.content;
     }

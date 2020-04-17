@@ -44,10 +44,10 @@ public class SampleRouteBuilderTest {
     @Autowired
     ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri = "mock:file")
+    @EndpointInject(value = "mock:file")
     MockEndpoint mockFile;
     
-    private final String JETTY_URI = "http4://0.0.0.0:8800";
+    private final String JETTY_URI = "http://0.0.0.0:8800";
     
     @Before
     public void setUp(){

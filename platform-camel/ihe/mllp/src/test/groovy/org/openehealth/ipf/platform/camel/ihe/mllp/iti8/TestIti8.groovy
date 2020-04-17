@@ -17,10 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
@@ -46,18 +45,6 @@ class TestIti8 extends MllpTestContainer {
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
-    
-    // -----------------------------------
-    // Test program:
-    //   1. Happy case
-    //   2. Inacceptance on Consumer
-    //   3. Inacceptance on Producer
-    //   4. Incomplete audit datasets
-    //   5. Exceptions in the route
-    //   6. Alternative HL7 codec factory
-    //   7. Secure Esnpoint
-    // -----------------------------------
-    
     
     /**
      * Happy case, audit either enabled or disabled.
@@ -230,35 +217,4 @@ class TestIti8 extends MllpTestContainer {
         assertEquals('ISO-8859-1', endpoint2.charsetName)
     }
 
-    @Test
-    void testSecureEndpoint() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}"
-        def msg = send(endpointUri, body)
-        assertACK(msg)
-    }
-    
-    @Test(expected=CamelExchangeException.class)
-    void testUnsecureProducer() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18087?timeout=${TIMEOUT}"
-        send(endpointUri, body)
-        fail()
-    }
-
-    @Test
-    void testSecureEndpointWithCamelJsseConfigOk() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters&timeout=${TIMEOUT}"
-        def msg = send(endpointUri, body)
-        assertACK(msg)
-    }
-
-    @Test(expected=CamelExchangeException.class)
-    void testSecureEndpointWithCamelJsseConfigClientFails() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18088?timeout=${TIMEOUT}"
-        send(endpointUri, body)
-        fail()
-    }
 }

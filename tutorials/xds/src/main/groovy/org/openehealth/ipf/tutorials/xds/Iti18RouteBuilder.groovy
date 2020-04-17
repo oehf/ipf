@@ -17,19 +17,18 @@ package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18ResponseValidator
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
-
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Route builder for ITI-18.
@@ -58,7 +57,7 @@ class Iti18RouteBuilder extends RouteBuilder {
         
         // Entry point for Stored Query
         from('xds-iti18:xds-iti18')
-            .log(log) { 'received iti18: ' + it.in.getBody(QueryRegistry.class) }
+            .logExchange(log) { 'received iti18: ' + it.in.getBody(QueryRegistry.class) }
             .process(iti18RequestValidator())
             .transform ({exchange, type ->
                 [ 'req': exchange.in.getBody(QueryRegistry.class), 'resp': new QueryResponse(SUCCESS) ]
@@ -77,16 +76,17 @@ class Iti18RouteBuilder extends RouteBuilder {
                 .when { queryType(it) == GET_DOCUMENTS_AND_ASSOCIATIONS }.to('direct:getDocsAndAssocs')
                 .when { queryType(it) == GET_FOLDERS_FOR_DOCUMENT }.to('direct:getFoldersForDoc')
                 .when { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')                
-                .otherwise().fail(ErrorCode.UNKNOWN_STORED_QUERY)
+                .otherwise().fail(ValidationMessage.UNKNOWN_QUERY_TYPE)
             .end()
             // Convert to object references if requested
             .choice()
-                .when { it.in.body.req.returnType == QueryReturnType.OBJECT_REF }.to('direct:convertToObjRefs')
+                .when { it.in.body.req.returnType == QueryReturnType.OBJECT_REF }
+                    .to('direct:convertToObjRefs')
                 .otherwise()
             .end()
             .transform ({exchange, type -> exchange.in.body.resp } as Expression)
             .process(iti18ResponseValidator())     // This includes the check for RESULT_NOT_SINGLE_PATIENT
-            .log(log) { 'response iti18: ' + it.in.body }
+            .logExchange(log) { 'response iti18: ' + it.in.body }
 
         // Converts all results into ObjectReferences
         from('direct:convertToObjRefs')
@@ -167,7 +167,7 @@ class Iti18RouteBuilder extends RouteBuilder {
             .search(ASSOC).hasMember().sources(FOLDERS).targets(DOCS).into(ASSOCS)
             .search(ASSOC).hasMember().sources(SETS).targets(ASSOCS).into(ASSOCS)
     }
-    
-    def queryType(exchange) { exchange.in.body.req.query.type }
+
+    static def queryType(exchange) { exchange.in.body.req.query.type }
 }
 

@@ -145,7 +145,7 @@ mappings = {
 
     'hl7v2fhir-patient-citizenship'(['1.0.3166', 'urn:iso:std:iso:3166'],
         (ELSE): { it },
-        { it }: (ELSE)
+        ({it}): (ELSE)
     )
 
     'hl7v2fhir-address-use'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/address-use'],

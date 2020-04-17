@@ -50,7 +50,7 @@ public class XCA implements XdsIntegrationProfile {
         ITI_39_ASYNC_RESPONSE(ITI_39_ASYNC_RESPONSE_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {

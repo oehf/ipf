@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
 import org.apache.camel.ExchangePattern
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass

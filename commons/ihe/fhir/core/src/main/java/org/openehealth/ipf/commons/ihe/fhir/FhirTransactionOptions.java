@@ -35,7 +35,7 @@ public interface FhirTransactionOptions extends TransactionOptions<Class<? exten
 
     static AbstractResourceProvider createResourceProvider(Class<? extends AbstractResourceProvider> c) {
         try {
-            return c.newInstance();
+            return c.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

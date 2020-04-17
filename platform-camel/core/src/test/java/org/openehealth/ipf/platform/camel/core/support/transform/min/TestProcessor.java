@@ -23,7 +23,7 @@ import org.apache.camel.Processor;
  */
 public class TestProcessor implements Processor {
 
-    public void process(Exchange exchange) {
+    public void process(Exchange exchange) throws Exception {
         exchange.getIn().setBody(exchange.getIn().getBody() + "xyz");
     }
 

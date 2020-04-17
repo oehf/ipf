@@ -20,7 +20,8 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
-import org.apache.camel.util.ExchangeHelper;
+import org.apache.camel.support.ExchangeHelper;
+import org.apache.camel.support.service.ServiceSupport;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
@@ -31,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 /**
  *
  */
-abstract class FhirDataFormat implements DataFormat {
+public abstract class FhirDataFormat extends ServiceSupport implements DataFormat  {
 
     private FhirContext defaultFhirContext = FhirContext.forDstu3();
     private Charset defaultCharset = StandardCharsets.UTF_8;
@@ -73,4 +74,12 @@ abstract class FhirDataFormat implements DataFormat {
     }
 
     protected abstract IParser getParser(FhirContext context);
+
+    @Override
+    protected void doStart() {
+    }
+
+    @Override
+    protected void doStop() {
+    }
 }

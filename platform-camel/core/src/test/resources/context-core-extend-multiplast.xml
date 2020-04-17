@@ -9,9 +9,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 ">
 
     <camel:camelContext id="camelContext">
-        <camel:properties>
-            <camel:property key="CamelLogDebugBodyMaxChars" value="100000" />
-        </camel:properties>
         <camel:jmxAgent id="agent" disabled="true"/>
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>

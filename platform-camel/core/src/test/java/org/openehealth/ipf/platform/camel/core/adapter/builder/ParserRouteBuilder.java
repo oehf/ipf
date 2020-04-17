@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class ParserRouteBuilder extends RouteBuilderSupport {
     
     @Override
-    public void configure() {
+    public void configure() throws Exception {
         from("direct:parser-test")
         .process(helper.parser("testConverter"));
     }

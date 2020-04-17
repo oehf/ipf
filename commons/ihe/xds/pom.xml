@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-commons-ihe-xds</artifactId>
     <name>ipf-commons-ihe-xds</name>
@@ -11,7 +12,7 @@
         <artifactId>ipf-commons-ihe</artifactId>
         <version>4.0-SNAPSHOT</version>
     </parent>
-    
+
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
@@ -114,6 +115,39 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>${jaxb-plugin-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-jxc</artifactId>
+                        <version>${jaxb-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-runtime</artifactId>
+                        <version>${jaxb-version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sources>
+                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/requests</source>
+                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/responses</source>
+                    </sources>
+                    <outputDirectory>${project.build.directory}/jaxb2</outputDirectory>
+                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>schemagen</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
@@ -135,26 +169,6 @@
                     <execution>
                         <id>add-test-source</id>
                         <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <configuration>
-                    <sources>
-                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/requests</source>
-                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/responses</source>
-                    </sources>
-                    <outputDirectory>${project.build.directory}/jaxb2</outputDirectory>
-                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>schemagen</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

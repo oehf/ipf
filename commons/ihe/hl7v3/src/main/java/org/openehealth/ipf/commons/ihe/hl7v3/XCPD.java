@@ -49,7 +49,7 @@ public class XCPD implements IntegrationProfile {
         ITI_56                  (ITI56_WS_CONFIG),
         ITI_56_ASYNC_RESPONSE   (ITI_56_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
     }
 

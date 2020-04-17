@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.experimental.Delegate;
-import org.apache.camel.component.mina2.Mina2Producer;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.component.mina.MinaProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * MllpProducer wraps a Mina2Producer for having a hook to shutdown some Mina
+ * MllpProducer wraps a MinaProducer for having a hook to shutdown some Mina
  * resources when the consumer is closing
  */
 public class MllpProducer extends DefaultProducer {
@@ -39,20 +39,20 @@ public class MllpProducer extends DefaultProducer {
     // the stop method. Weird API, really.
     private interface DoStop {
         @SuppressWarnings("unused")
-        void stop();
+        void stop() throws Exception;
     }
 
     @Delegate(excludes = DoStop.class)
-    private final Mina2Producer producer;
+    private final MinaProducer producer;
 
-    MllpProducer(Mina2Producer producer) {
+    MllpProducer(MinaProducer producer) {
         // Everything will be delegated
         super(producer.getEndpoint());
         this.producer = producer;
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         super.stop();
     }
 

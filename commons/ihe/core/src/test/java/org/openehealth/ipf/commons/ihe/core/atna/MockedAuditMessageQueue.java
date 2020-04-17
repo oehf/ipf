@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.source;
 public class MockedAuditMessageQueue implements AbstractMockedAuditMessageQueue {
 
     private static final String NEW_VALIDATION_SCHEMA = "/atna2.xsd";
-    private final XsdValidator validator = new XsdValidator();
+    private XsdValidator validator = new XsdValidator();
     private final boolean needValidation;
 
     @Getter

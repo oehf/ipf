@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
+
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import javax.xml.datatype.DatatypeFactory
 
 /**
  * @author Dmytro Rud
@@ -31,6 +33,7 @@ class TestChPidd extends StandardTestContainer {
     static final String CONTEXT_DESCRIPTOR = 'ch-pidd.xml'
 
     final String SERVICE1 = "ch-pidd://localhost:${port}/ch-pidd-service1"
+    static final DatatypeFactory DATATYPE_FACTORY = DatatypeFactory.newInstance()
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
@@ -45,8 +48,8 @@ class TestChPidd extends StandardTestContainer {
     void testChPidd() {
         DownloadRequest request = new DownloadRequest(
                 requestID: '123',
-                fromDate: new XMLGregorianCalendarImpl(new GregorianCalendar(2017, 1, 1, 2, 3, 4)),
-                toDate: new XMLGregorianCalendarImpl(new GregorianCalendar(2017, 12, 31, 5, 6, 7)),
+                fromDate: DATATYPE_FACTORY.newXMLGregorianCalendar(new GregorianCalendar(2017, 1, 1, 2, 3, 4)),
+                toDate: DATATYPE_FACTORY.newXMLGregorianCalendar(new GregorianCalendar(2017, 12, 31, 5, 6, 7)),
         )
 
         DownloadResponse response = sendIt(SERVICE1, request)
@@ -55,7 +58,7 @@ class TestChPidd extends StandardTestContainer {
     }
 
     DownloadResponse sendIt(String endpoint, DownloadRequest request) {
-        return send(endpoint, request, DownloadResponse.class)
+        send(endpoint, request, DownloadResponse.class)
     }
 
 }

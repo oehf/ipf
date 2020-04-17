@@ -29,41 +29,42 @@ import static org.junit.Assert.assertFalse;
  */
 public class DefaultUriMapperTest {
 
+    private BidiMappingService mappingService;
     private DefaultUriMapper uriMapper;
 
     @Before
     public void setup() {
-        BidiMappingService mappingService = new BidiMappingService();
+        mappingService = new BidiMappingService();
         mappingService.setMappingScript(getClass().getResource("/mapping.map"));
         uriMapper = new DefaultUriMapper(mappingService, "uriToOid", "uriToNamespace");
     }
 
     @Test
-    public void testTranslateOidUrn() {
+    public void testTranslateOidUrn() throws Exception {
         String oid = "1.2.3.4.5.6.7.8.9";
         assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).get());
     }
 
     @Test
-    public void testTranslateUriToOid() {
+    public void testTranslateUriToOid() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertEquals("1.2.3.4", uriMapper.uriToOid(uri).get());
     }
 
     @Test
-    public void testTranslateUriToOidFails() {
+    public void testTranslateUriToOidFails() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
         assertFalse(uriMapper.uriToOid(uri).isPresent());
     }
 
     @Test
-    public void testTranslatePinUrn() {
+    public void testTranslatePinUrn() throws Exception {
         String namespace = "namespace";
         assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).get());
     }
 
     @Test
-    public void testTranslateUriToNamespace() {
+    public void testTranslateUriToNamespace() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertEquals("fhir1", uriMapper.uriToNamespace(uri).get());
         uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
@@ -71,7 +72,7 @@ public class DefaultUriMapperTest {
     }
 
     @Test
-    public void testTranslateNamespaceToUri() {
+    public void testTranslateNamespaceToUri() throws Exception {
         String namespace = "fhir1";
         assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri(namespace));
     }

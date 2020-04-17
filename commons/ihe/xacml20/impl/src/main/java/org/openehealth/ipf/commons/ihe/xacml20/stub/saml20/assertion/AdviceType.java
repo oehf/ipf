@@ -95,7 +95,7 @@ public class AdviceType {
      */
     public List<Object> getAssertionIDRefOrAssertionURIRefOrAssertion() {
         if (assertionIDRefOrAssertionURIRefOrAssertion == null) {
-            assertionIDRefOrAssertionURIRefOrAssertion = new ArrayList<>();
+            assertionIDRefOrAssertionURIRefOrAssertion = new ArrayList<Object>();
         }
         return this.assertionIDRefOrAssertionURIRefOrAssertion;
     }

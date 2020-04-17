@@ -87,7 +87,7 @@ public class RequestedAuthnContextType {
      */
     public List<String> getAuthnContextClassRef() {
         if (authnContextClassRef == null) {
-            authnContextClassRef = new ArrayList<>();
+            authnContextClassRef = new ArrayList<String>();
         }
         return this.authnContextClassRef;
     }
@@ -116,7 +116,7 @@ public class RequestedAuthnContextType {
      */
     public List<String> getAuthnContextDeclRef() {
         if (authnContextDeclRef == null) {
-            authnContextDeclRef = new ArrayList<>();
+            authnContextDeclRef = new ArrayList<String>();
         }
         return this.authnContextDeclRef;
     }

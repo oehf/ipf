@@ -39,7 +39,7 @@ public class Iti66TestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
 
         from("direct:input")
                 .toF("mhd-iti66:localhost:%d", FhirTestContainer.DEMO_APP_PORT);

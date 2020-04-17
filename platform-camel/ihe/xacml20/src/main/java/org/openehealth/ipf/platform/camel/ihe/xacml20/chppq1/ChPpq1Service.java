@@ -66,7 +66,7 @@ public class ChPpq1Service extends AbstractWebService implements ChPpq1PortType 
             }
             return errorResponse();
         }
-        return Exchanges.resultMessage(result).getBody(EprPolicyRepositoryResponse.class);
+        return result.getMessage().getBody(EprPolicyRepositoryResponse.class);
     }
 
 }

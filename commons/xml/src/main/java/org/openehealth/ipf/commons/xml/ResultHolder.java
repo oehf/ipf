@@ -21,7 +21,7 @@ import javax.xml.transform.Result;
  * @author Christian Ohr
  */
 public interface ResultHolder<T> {
-    T getResult();
+    abstract T getResult();
 
-    Result createResult();
+    abstract Result createResult();
 }

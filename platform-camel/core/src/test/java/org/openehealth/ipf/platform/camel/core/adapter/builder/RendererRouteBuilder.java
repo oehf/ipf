@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class RendererRouteBuilder extends RouteBuilderSupport {
 
     @Override
-    public void configure() {
+    public void configure() throws Exception {
         from("direct:renderer-test")
         .process(helper.renderer("testRenderer"));
     }

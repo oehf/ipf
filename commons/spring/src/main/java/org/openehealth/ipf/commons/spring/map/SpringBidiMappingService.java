@@ -31,7 +31,7 @@ import java.util.Collection;
  */
 public class SpringBidiMappingService extends BidiMappingService {
 
-    private final Collection<Resource> resources = new ArrayList<>();
+    private Collection<Resource> resources = new ArrayList<>();
 
     public Collection<? extends Resource> getMappingResources() {
         return resources;

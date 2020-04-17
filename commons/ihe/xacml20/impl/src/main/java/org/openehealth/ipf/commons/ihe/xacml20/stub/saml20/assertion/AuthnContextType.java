@@ -109,7 +109,7 @@ public class AuthnContextType {
      */
     public List<JAXBElement<?>> getContent() {
         if (content == null) {
-            content = new ArrayList<>();
+            content = new ArrayList<JAXBElement<?>>();
         }
         return this.content;
     }

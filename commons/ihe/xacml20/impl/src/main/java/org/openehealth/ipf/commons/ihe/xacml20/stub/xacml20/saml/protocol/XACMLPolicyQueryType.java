@@ -89,7 +89,7 @@ public class XACMLPolicyQueryType
      */
     public List<JAXBElement<?>> getRequestOrPolicySetIdReferenceOrPolicyIdReference() {
         if (requestOrPolicySetIdReferenceOrPolicyIdReference == null) {
-            requestOrPolicySetIdReferenceOrPolicyIdReference = new ArrayList<>();
+            requestOrPolicySetIdReferenceOrPolicyIdReference = new ArrayList<JAXBElement<?>>();
         }
         return this.requestOrPolicySetIdReferenceOrPolicyIdReference;
     }

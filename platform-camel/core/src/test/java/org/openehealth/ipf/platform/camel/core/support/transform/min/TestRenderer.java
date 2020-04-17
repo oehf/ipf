@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.support.transform.min;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
@@ -31,11 +32,11 @@ public class TestRenderer implements Renderer<String> {
         throw new UnsupportedOperationException("not implemented");
     }
 
-    public OutputStream render(String model, OutputStream result, Object... params) {
+    public OutputStream render(String model, OutputStream result, Object... params) throws IOException {
         throw new UnsupportedOperationException("not implemented");
     }
 
-    public Writer render(String model, Writer result, Object... params) {
+    public Writer render(String model, Writer result, Object... params) throws IOException {
         throw new UnsupportedOperationException("not implemented");
     }
 

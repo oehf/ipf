@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1
 
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.pcc1RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.pcc1ResponseValidator
 
@@ -26,12 +26,10 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
  */
 class Pcc1TestRouteBuilder extends RouteBuilder {
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         from('qed-pcc1:qed-pcc1-service1')
             .process(pcc1RequestValidator())
-            .process { 
-                Exchanges.resultMessage(it).body = StandardTestContainer.readFile('pcc1/pcc1-sample-response.xml')
-            }
+            .transform().constant(StandardTestContainer.readFile('pcc1/pcc1-sample-response.xml'))
             .process(pcc1ResponseValidator())
 
     }

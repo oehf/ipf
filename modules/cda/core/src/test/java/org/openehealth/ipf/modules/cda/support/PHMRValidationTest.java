@@ -47,7 +47,7 @@ public class PHMRValidationTest {
     private static final String sample_wrong = "/CDA_PHMR_WRONG.xml";
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         validator = new XsdValidator();
         schematron = new SchematronValidator();
         params = new HashMap<>();
@@ -55,27 +55,27 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateSchemaGoodSample() {
+    public void validateSchemaGoodSample() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         validator.validate(testXml, CDAR2Constants.CDAR2_SCHEMA);
     }
 
     @Test
-    public void validateSchemaWrongSample() {
+    public void validateSchemaWrongSample() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         validator.validate(testXml, CDAR2Constants.CDAR2_SCHEMA);
     }
 
     /* validate header template */
     @Test
-    public void validateHeaderPositive() {
+    public void validateHeaderPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.sch", params));
     }
 
     @Test
-    public void validateHeaderErrors() {
+    public void validateHeaderErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -100,7 +100,7 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateHeaderAll() {
+    public void validateHeaderAll() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -112,14 +112,14 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateBodyPositive() {
+    public void validateBodyPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.sch", params));
     }
 
     @Test
-    public void validateBodyErrors() {
+    public void validateBodyErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -131,21 +131,21 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateProductInstancePositive() {
+    public void validateProductInstancePositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.9.sch", params));
     }
 
     @Test
-    public void validateDeviceDefinitionOrganizerPositive() {
+    public void validateDeviceDefinitionOrganizerPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.4.sch", params));
     }
 
     @Test
-    public void validateProductInstanceErrors() {
+    public void validateProductInstanceErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -157,14 +157,14 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateNumericObservationPositive() {
+    public void validateNumericObservationPositive() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.8.sch", params));
     }
 
     @Test
-    public void validateNumericObservationErrors() {
+    public void validateNumericObservationErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -176,14 +176,14 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateMedicalEquipmentErrors() {
+    public void validateMedicalEquipmentErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         schematron.validate(testXml, new SchematronProfile(
                 "/schematron/cda_phmr/templates/2.16.840.1.113883.10.20.9.1.sch"));
     }
 
     @Test
-    public void validateVitalSignsErrors() {
+    public void validateVitalSignsErrors() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -195,7 +195,7 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateResultsWarnings() {
+    public void validateResultsWarnings() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -207,14 +207,14 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateCompleteGood() {
+    public void validateCompleteGood() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         schematron.validate(testXml, new SchematronProfile(
                 CDAR2Constants.CDA_PHMR_SCHEMATRON_RULES, params));
     }
 
     @Test
-    public void validateCompleteGoodWithWarnings() {
+    public void validateCompleteGoodWithWarnings() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -225,7 +225,7 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateCompleteWrong() {
+    public void validateCompleteWrong() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(
@@ -237,7 +237,7 @@ public class PHMRValidationTest {
     }
 
     @Test
-    public void validateAllCompleteWrong() {
+    public void validateAllCompleteWrong() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         try {
             schematron.validate(testXml, new SchematronProfile(

@@ -15,7 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.*;
+import org.apache.camel.DelegateProcessor;
+import org.apache.camel.Endpoint;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
-public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor, ServicePoolAware {
+public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor {
     private final Processor interceptor;
     private final Producer originalProducer;
 
@@ -50,28 +54,12 @@ public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor,
     }
 
     @Override
-    public Exchange createExchange() {
-        return originalProducer.getEndpoint().createExchange();
-    }
-
-    @Override
-    public Exchange createExchange(ExchangePattern pattern) {
-        return originalProducer.getEndpoint().createExchange(pattern);
-    }
-
-    @Override
-    @Deprecated
-    public Exchange createExchange(Exchange exchange) {
-        return originalProducer.getEndpoint().createExchange(exchange);
-    }
-
-    @Override
-    public void start() throws Exception {
+    public void start() {
         originalProducer.start();
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         originalProducer.stop();
     }
 

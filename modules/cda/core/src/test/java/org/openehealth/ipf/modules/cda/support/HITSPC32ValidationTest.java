@@ -43,7 +43,7 @@ public class HITSPC32ValidationTest {
 	private static final String sample_c32 = "/MU_Rev3_HITSP_C32C83_4Sections_RobustEntries_NoErrors.xml";
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		validator = new XsdValidator();
 		params = new HashMap<>();
 		params.put("phase", "errors");
@@ -51,26 +51,26 @@ public class HITSPC32ValidationTest {
 	}
 
     @Test
-    public void validateSchemaGoodSample24() {
+    public void validateSchemaGoodSample24() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         validator.validate(testXml, HITSP_32_2_4_SCHEMA);
     }
 
     @Test
-    public void validateSchemaGoodSample25() {
+    public void validateSchemaGoodSample25() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         validator.validate(testXml, HITSP_32_2_5_SCHEMA);
     }
 
 	@Test
-	public void validateComplete24() {
+	public void validateComplete24() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_32_2_4_SCHEMATRON_RULES, params));
 	}
 
     @Test
-    public void validateComplete25() {
+    public void validateComplete25() throws Exception {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         schematron.validate(testXml, new SchematronProfile(
                 HITSP_32_2_5_SCHEMATRON_RULES, params));

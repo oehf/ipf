@@ -11,8 +11,12 @@
         <artifactId>ipf-commons</artifactId>
         <version>4.0-SNAPSHOT</version>
     </parent>
-    
+
     <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-core</artifactId>
@@ -40,6 +44,7 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-xml</artifactId>
         </dependency>
+
 
         <!-- Dependencies for test -->
         <dependency>

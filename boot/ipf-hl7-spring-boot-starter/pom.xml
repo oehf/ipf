@@ -30,7 +30,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.camel</groupId>
+            <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-hl7-starter</artifactId>
         </dependency>
 

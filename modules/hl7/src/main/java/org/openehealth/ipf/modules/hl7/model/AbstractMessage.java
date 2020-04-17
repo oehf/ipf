@@ -77,49 +77,6 @@ public abstract class AbstractMessage extends ca.uhn.hl7v2.model.AbstractMessage
         }
     }
 
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)}
-     */
-    protected <T extends Structure> T get(Class<T> structureClass) {
-        return super.getTyped(structureClass.getSimpleName(), structureClass);
-    }
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)}
-     */
-    protected <T extends Structure> T get(String structure, Class<T> structureClass) {
-        return super.getTyped(structure, structureClass);
-    }
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)}
-     */
-    protected <T extends Structure> T get(Class<T> structureClass, int rep) {
-        return super.getTyped(structureClass.getSimpleName(), rep, structureClass);
-    }
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)}
-     */
-    protected <T extends Structure> T get(String structure, Class<T> structureClass, int rep) {
-    	return super.getTyped(structure, rep, structureClass);
-    }
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractGroup#getReps(String)}
-     */
-    protected <T extends Structure> int getReps(Class<T> structureClass) {
-        return super.getReps(structureClass.getSimpleName());
-    }
-
-    /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractGroup#getReps(String)}
-     */
-    protected <T extends Structure> int getReps(String structure, Class<T> structureClass) {
-        return super.getReps(structure);
-    }
-
     abstract protected Map<Class<? extends Structure>, Cardinality> structures(
             Map<Class<? extends Structure>, Cardinality> structures);
 

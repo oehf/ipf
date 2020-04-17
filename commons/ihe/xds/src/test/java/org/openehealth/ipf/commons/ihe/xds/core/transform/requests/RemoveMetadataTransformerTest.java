@@ -33,7 +33,7 @@ public class RemoveMetadataTransformerTest {
 
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {        
         transformer = new RemoveMetadataRequestTransformer();
         request = SampleData.createRemoveMetadata();
     }

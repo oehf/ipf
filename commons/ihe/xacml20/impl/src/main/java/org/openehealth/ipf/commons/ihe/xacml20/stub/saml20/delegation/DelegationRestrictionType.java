@@ -79,7 +79,7 @@ public class DelegationRestrictionType
      */
     public List<DelegateType> getDelegate() {
         if (delegate == null) {
-            delegate = new ArrayList<>();
+            delegate = new ArrayList<DelegateType>();
         }
         return this.delegate;
     }

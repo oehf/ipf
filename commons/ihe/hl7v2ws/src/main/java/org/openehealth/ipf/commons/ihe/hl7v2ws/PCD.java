@@ -44,9 +44,9 @@ public class PCD implements IntegrationProfile {
     public enum Interactions implements Hl7v2WsInteractionId {
         PCD_01(PCD_01_HL7V2_CONFIG, PCD_01_NAK_FACTORY, PCD_01_WS_CONFIG);
 
-        @Getter private final Hl7v2TransactionConfiguration<MllpAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private final NakFactory<MllpAuditDataset> nakFactory;
-        @Getter private final WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
+        @Getter private Hl7v2TransactionConfiguration<MllpAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private NakFactory<MllpAuditDataset> nakFactory;
+        @Getter private WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
     }
 
     @Override

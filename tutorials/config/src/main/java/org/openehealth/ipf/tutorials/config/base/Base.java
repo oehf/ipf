@@ -1,6 +1,6 @@
 package org.openehealth.ipf.tutorials.config.base;
 
-import org.apache.camel.spring.Main;
+import org.apache.camel.main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Base {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Base.class);
+    private static Logger LOG = LoggerFactory.getLogger(Base.class);
 
     private static String descriptorList = "base-context.xml;extender-context.xml";
 

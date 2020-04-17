@@ -61,7 +61,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
     }
     
     @Test(expected=RuntimeCamelException.class)
-    public void testBooleanClosureOneParamInOnlyFailure() {
+    public void testBooleanClosureOneParamInOnlyFailure() throws InterruptedException {
         producerTemplate.sendBody("direct:input1", "blub");
     }
     

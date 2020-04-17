@@ -35,7 +35,7 @@ public enum NetworkAccessPointTypeCode implements EnumeratedValueSet<Short> {
     TelephoneNumber(3);
 
     @Getter
-    private final Short value;
+    private Short value;
 
     NetworkAccessPointTypeCode(int value) {
         this.value = (short) value;

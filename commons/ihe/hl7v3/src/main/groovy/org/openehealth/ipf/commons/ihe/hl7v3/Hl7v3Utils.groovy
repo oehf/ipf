@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter

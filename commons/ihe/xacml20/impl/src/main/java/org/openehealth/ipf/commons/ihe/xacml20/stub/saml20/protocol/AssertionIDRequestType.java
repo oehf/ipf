@@ -83,7 +83,7 @@ public class AssertionIDRequestType
      */
     public List<String> getAssertionIDRef() {
         if (assertionIDRef == null) {
-            assertionIDRef = new ArrayList<>();
+            assertionIDRef = new ArrayList<String>();
         }
         return this.assertionIDRef;
     }

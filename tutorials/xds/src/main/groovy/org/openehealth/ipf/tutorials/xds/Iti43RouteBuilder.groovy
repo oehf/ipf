@@ -36,12 +36,12 @@ class Iti43RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti43RouteBuilder.class)
     
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         errorHandler(noErrorHandler())
         
         // Entry point for Retrieve Document Set
         from('xds-iti43:xds-iti43')
-            .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
+            .logExchange(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
             // Validate and convert the request
     		.process(iti43RequestValidator())
     		.convertBodyTo(RetrieveDocumentSet.class)

@@ -57,7 +57,7 @@ public interface ChPpq1PortType {
     @WebMethod(operationName = "PolicyRepository_DeletePolicy")
     @Action(input = "urn:e-health-suisse:2015:policy-administration:DeletePolicy", output = "urn:e-health-suisse:2015:policy-administration:DeletePolicyResponse", fault = {@FaultAction(className = UnknownPolicySetIdFaultMessage.class, value = "urn:e-health-suisse:2015:policy-administration:DeletePolicyFault")})
     @WebResult(name = "EprPolicyRepositoryResponse", targetNamespace = "urn:e-health-suisse:2015:policy-administration", partName = "body")
-    EprPolicyRepositoryResponse deletePolicy(
+    public EprPolicyRepositoryResponse deletePolicy(
             @WebParam(partName = "body", name = "DeletePolicyRequest", targetNamespace = "urn:e-health-suisse:2015:policy-administration")
                     DeletePolicyRequest body
     ) throws UnknownPolicySetIdFaultMessage;
@@ -65,7 +65,7 @@ public interface ChPpq1PortType {
     @WebMethod(operationName = "PolicyRepository_UpdatePolicy")
     @Action(input = "urn:e-health-suisse:2015:policy-administration:UpdatePolicy", output = "urn:e-health-suisse:2015:policy-administration:UpdatePolicyResponse", fault = {@FaultAction(className = UnknownPolicySetIdFaultMessage.class, value = "urn:e-health-suisse:2015:policy-administration:UpdatePolicyFault")})
     @WebResult(name = "EprPolicyRepositoryResponse", targetNamespace = "urn:e-health-suisse:2015:policy-administration", partName = "body")
-    EprPolicyRepositoryResponse updatePolicy(
+    public EprPolicyRepositoryResponse updatePolicy(
             @WebParam(partName = "body", name = "UpdatePolicyRequest", targetNamespace = "urn:e-health-suisse:2015:policy-administration")
                     UpdatePolicyRequest body
     ) throws UnknownPolicySetIdFaultMessage;
@@ -73,7 +73,7 @@ public interface ChPpq1PortType {
     @WebMethod(operationName = "PolicyRepository_AddPolicy")
     @Action(input = "urn:e-health-suisse:2015:policy-administration:AddPolicy", output = "urn:e-health-suisse:2015:policy-administration:AddPolicyResponse")
     @WebResult(name = "EprPolicyRepositoryResponse", targetNamespace = "urn:e-health-suisse:2015:policy-administration", partName = "body")
-    EprPolicyRepositoryResponse addPolicy(
+    public EprPolicyRepositoryResponse addPolicy(
             @WebParam(partName = "body", name = "AddPolicyRequest", targetNamespace = "urn:e-health-suisse:2015:policy-administration")
                     AddPolicyRequest body
     );

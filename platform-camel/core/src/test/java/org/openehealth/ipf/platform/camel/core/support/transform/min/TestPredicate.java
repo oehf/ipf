@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.core.modules.api.Predicate;
  */
 public class TestPredicate implements Predicate<String> {
 
-    private final String selector;
+    private String selector;
     
     public TestPredicate(String selector) {
         this.selector = selector;

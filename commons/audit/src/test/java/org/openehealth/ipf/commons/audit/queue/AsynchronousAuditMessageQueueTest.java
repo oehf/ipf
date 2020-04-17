@@ -24,9 +24,7 @@ import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 
 import java.util.concurrent.Executors;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 /**
  *

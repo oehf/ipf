@@ -21,12 +21,12 @@ import org.apache.camel.spring.SpringRouteBuilder
  * @author Martin Krasser
  */
 class BuilderRouteBuilder extends SpringRouteBuilder {
-    
+
     void configure() {
-        
-        direct('input1')
-        .to('mock:output')         
+
+        from('direct:input1')
+                .to('mock:output')
 
     }
-    
+
 }

@@ -97,7 +97,7 @@ public class FilterSet {
      */
     public List<JAXBElement<?>> getFilterGroup() {
         if (filterGroup == null) {
-            filterGroup = new ArrayList<>();
+            filterGroup = new ArrayList<JAXBElement<?>>();
         }
         return this.filterGroup;
     }
