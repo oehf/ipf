@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-r4</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>3.7.0</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
