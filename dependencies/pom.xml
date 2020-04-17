@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.11.2</brave-version>
-        <camel-version>2.25.0</camel-version>
+        <camel-version>2.25.1</camel-version>
         <cxf-version>3.3.6</cxf-version>
         <groovy-version>2.5.10</groovy-version>
         <hapi-version>2.3</hapi-version>
@@ -33,6 +33,8 @@
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.5</xmlsec-version>
     </properties>
+
+    <url>https://github.com/oehf/ipf</url>
 
     <description>IPF External Dependencies</description>
 

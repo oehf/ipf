@@ -126,7 +126,7 @@
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                                    <stubsOutputDirectory>${output-folder}/generated-stubs</stubsOutputDirectory>
                                     <targetBytecode>${maven.compiler.target}</targetBytecode>
                                 </configuration>
                             </execution>
