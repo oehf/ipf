@@ -59,31 +59,30 @@
         <activemq-version>5.15.12</activemq-version>
         <commons-beanutils-version>1.9.4</commons-beanutils-version>
         <commons-codec-version>1.14</commons-codec-version>
-        <commons-dbcp2-version>2.7.0</commons-dbcp2-version>
         <commons-io-version>2.6</commons-io-version>
-        <commons-lang3-version>3.9</commons-lang3-version>
+        <commons-lang3-version>3.10</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.6</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>28.2-jre</guava-version>
-        <httpclient4-version>4.5.11</httpclient4-version>
+        <guava-version>29.0-jre</guava-version>
+        <httpclient4-version>4.5.12</httpclient4-version>
         <jackson-version>2.10.3</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jetty-version>9.4.26.v20200117</jetty-version>
         <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
-        <log4j-version>2.12.1</log4j-version>
+        <log4j-version>2.13.2</log4j-version>
         <lombok-version>1.18.12</lombok-version>
         <mockito-version>3.2.4</mockito-version>
         <mockserver-version>5.10</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
-        <tomcat-version>9.0.33</tomcat-version>
+        <tomcat-version>9.0.34</tomcat-version>
         <woodstox-version>6.0.3</woodstox-version>
-        <xbean-spring-version>4.14</xbean-spring-version>
+        <xbean-spring-version>4.17</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
 
@@ -208,11 +207,6 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-dbcp2</artifactId>
-                <version>${commons-dbcp2-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>

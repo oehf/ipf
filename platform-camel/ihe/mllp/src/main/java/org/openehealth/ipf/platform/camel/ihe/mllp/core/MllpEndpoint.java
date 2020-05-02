@@ -17,7 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Component;
+import org.apache.camel.Consumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.PollingConsumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina.MinaConfiguration;
@@ -39,10 +46,9 @@ import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
+
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +67,6 @@ public abstract class MllpEndpoint<
         ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
         extends DefaultEndpoint
         implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MllpEndpoint.class);
 
     @Getter(AccessLevel.PROTECTED)
     private final ConfigType config;

@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 
 /**
  * Transforms between a {@link RemoveMetadata} and its ebXML representation.
@@ -66,14 +65,6 @@ public class RemoveMetadataRequestTransformer {
         request.getReferences().addAll(ebXML.getReferences());
 
         return request;
-    }
-
-    private Query createQuery(QueryType queryType) {
-        try {
-            return queryType.getType().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalStateException("Invalid query class for type: " + queryType, e);
-        }
     }
 
 }

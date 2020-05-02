@@ -20,8 +20,6 @@ import org.apache.camel.component.mina.MinaProducer;
 import org.apache.camel.support.DefaultProducer;
 import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -32,8 +30,6 @@ import java.lang.reflect.Method;
  * resources when the consumer is closing
  */
 public class MllpProducer extends DefaultProducer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MllpProducer.class);
 
     // The reason for this interface is to convince the Delegate annotation to *not* delegate
     // the stop method. Weird API, really.

@@ -15,15 +15,19 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -35,7 +39,6 @@ import java.util.regex.Pattern;
  *
  * @author Dmytro Rud
  */
-@Slf4j
 abstract public class XmlUtils {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(

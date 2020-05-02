@@ -48,8 +48,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     public static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 
-    private final ClassLoader classLoader;
-
     protected static abstract class Loader<S> {
 
         private S loaded;
@@ -69,7 +67,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
      */
     protected AbstractCachingXmlProcessor(ClassLoader classLoader) {
         super();
-        this.classLoader = classLoader == null ? this.getClass().getClassLoader() : classLoader;
     }
 
     /**

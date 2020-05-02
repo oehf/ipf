@@ -17,14 +17,18 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -93,19 +97,14 @@ public class SerializationTest {
 
     private void checkJavaSerialization(Object original) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-        ObjectInputStream ois = null;
-        try {
+        try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
             oos.writeObject(original);
-            InputStream in = new ByteArrayInputStream(out.toByteArray());
-            ois = new ObjectInputStream(in);   
+        }
+        InputStream in = new ByteArrayInputStream(out.toByteArray());
+        try (ObjectInputStream ois = new ObjectInputStream(in)) {
             Object copy = ois.readObject();
             assertSame(original.getClass(), copy.getClass());
             assertEquals(original, copy);
-        }
-        finally {
-            IOUtils.closeQuietly(oos);
-            IOUtils.closeQuietly(ois);
         }
     }
 
