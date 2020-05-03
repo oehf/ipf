@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
@@ -30,7 +30,7 @@ import javax.activation.DataHandler
 /**
  * @author Clay Sebourn
  */
-public class Rad69TestRouteBuilder extends SpringRouteBuilder {
+public class Rad69TestRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xdsi-rad69:xdsi-rad69-service1')

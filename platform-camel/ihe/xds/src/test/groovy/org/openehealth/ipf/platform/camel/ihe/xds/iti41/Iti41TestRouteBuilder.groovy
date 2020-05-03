@@ -22,8 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
 
 import javax.xml.namespace.QName
 import javax.activation.DataHandler
-import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.io.IOUtils
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
@@ -38,7 +37,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
 /**
  * @author Jens Riemschneider
  */
-public class Iti41TestRouteBuilder extends SpringRouteBuilder {
+public class Iti41TestRouteBuilder extends RouteBuilder {
 
     String soapFaultUnhandledEndpoint
 
@@ -82,8 +81,7 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
         def dataHandler = doc.getContent(DataHandler)
         if (expected == value && dataHandler != null) {
             Collection attachments = dataHandler.dataSource.attachments
-            def inputStream = dataHandler.inputStream
-            try {
+            dataHandler.inputStream.withStream {inputStream ->
                 if (attachments.size() == 1 && attachments.iterator().next().xop) {
                     def length = 0
                     while (inputStream.read() != -1) {
@@ -93,9 +91,6 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
                         status = SUCCESS
                     }
                 }
-            }
-            finally {
-                IOUtils.closeQuietly(inputStream)
             }
         }
 

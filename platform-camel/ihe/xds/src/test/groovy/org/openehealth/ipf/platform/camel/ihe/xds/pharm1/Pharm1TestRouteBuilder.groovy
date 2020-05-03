@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.pharm1
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDispensesQuery
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
  * @author Jens Riemschneider
  * @author Quentin Ligier
  */
-class Pharm1TestRouteBuilder extends SpringRouteBuilder {
+class Pharm1TestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         from('cmpd-pharm1:cmpd-pharm1-service1')
             .id('service1route')
