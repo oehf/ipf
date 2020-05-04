@@ -37,11 +37,6 @@ public class IpfAtnaAutoConfigurationTest {
     @Autowired
     private AuditContext auditContext;
 
-
-    @Autowired
-    private IpfAtnaConfigurationProperties ipfAtnaConfigurationProperties;
-
-
     @Test
     public void testAtnaSettings() throws Exception {
         assertEquals("atna-test", auditContext.getAuditSourceId());

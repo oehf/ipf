@@ -17,15 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.activation.DataHandler;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
@@ -42,8 +38,8 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     private DataHandler dataHandler;    
     
     @Before
-    public void setUp() throws Exception {        
-        EbXMLFactory factory = createFactory();
+    public void setUp() throws Exception {
+        var factory = createFactory();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 
         request = SampleData.createProvideAndRegisterDocumentSet();
@@ -52,12 +48,12 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
 
     @Test
     public void testToEbXML() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
 
-        List<EbXMLAssociation> associations = ebXML.getAssociations();
+        var associations = ebXML.getAssociations();
         assertEquals(3, associations.size());
         assertEquals(AssociationType.HAS_MEMBER, associations.get(0).getAssociationType());
         assertEquals("submissionSet01", associations.get(0).getSource());
@@ -70,27 +66,27 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         assertEquals(AssociationType.HAS_MEMBER, associations.get(2).getAssociationType());
         assertEquals("folder01", associations.get(2).getSource());
         assertEquals("document01", associations.get(2).getTarget());
-        
-        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
+
+        var docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
         assertEquals(1, docEntries.size());
         assertEquals("document01", docEntries.get(0).getId());
         assertEquals("Document 01", docEntries.get(0).getName().getValue());
-        
-        List<EbXMLRegistryPackage> folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
+
+        var folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
         assertEquals(1, folders.size());
         assertEquals("Folder 01", folders.get(0).getName().getValue());
-        
-        List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+
+        var submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         assertEquals(1, submissionSets.size());
         assertEquals("Submission Set 01", submissionSets.get(0).getName().getValue());
 
-        List<EbXMLSlot> slots = ebXML.getSlots(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
+        var slots = ebXML.getSlots(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
         assertEquals(1, slots.size());
-        List<String> slotValues = ebXML.getSlotValues(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
+        var slotValues = ebXML.getSlotValues(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
         assertEquals(1, slotValues.size());
         assertEquals("urn:oid:1.2.3.4.5.6.2333.23", slotValues.get(0));
 
-        Map<String, DataHandler> documents = ebXML.getDocuments();
+        var documents = ebXML.getDocuments();
         assertEquals(1, documents.size());
         assertSame(dataHandler, documents.get("document01"));
     }
@@ -102,7 +98,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest result = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
+        var result = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
         assertNotNull(result);
         assertEquals(0, result.getAssociations().size());
         assertEquals(0, result.getExtrinsicObjects().size());
@@ -112,8 +108,8 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     
     @Test
     public void testFromEbXML() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ProvideAndRegisterDocumentSet result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(request);
+        var result = transformer.fromEbXML(ebXML);
         
         assertEquals(request.toString(), result.toString());
     }
@@ -125,7 +121,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
+        var ebXML = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
         assertEquals(new ProvideAndRegisterDocumentSet(), transformer.fromEbXML(ebXML));
     }
 }

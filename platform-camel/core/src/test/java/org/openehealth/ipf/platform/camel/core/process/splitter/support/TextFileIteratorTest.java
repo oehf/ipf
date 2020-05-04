@@ -36,8 +36,8 @@ public class TextFileIteratorTest {
     @Before
     public void setUp() throws Exception {
         file = File.createTempFile("TextFileIteratorTest", "txt");
-        
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+        var writer = new BufferedWriter(new FileWriter(file));
         writer.write("a,b,17,4\n");            
         writer.write("c,d,e,dotter");            
         writer.close();
@@ -52,7 +52,7 @@ public class TextFileIteratorTest {
     
     @Test
     public void testSimpleIteration() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         assertTrue(iterator.hasNext());
         assertEquals("a,b,17,4", iterator.next());
         assertTrue(iterator.hasNext());
@@ -62,7 +62,7 @@ public class TextFileIteratorTest {
 
     @Test
     public void testLineSplitLogic() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(
+        var iterator = new TextFileIterator(
                 file.getAbsolutePath(),
                 new SplitStringLineSplitterLogic(","));
         
@@ -87,22 +87,22 @@ public class TextFileIteratorTest {
 
     @Test
     public void testHugeFile() throws Exception {
-        final int NUMBER_OF_LINES = 10000;
-        
-        File hugeFile = File.createTempFile("testHugeFile", "txt");
+        final var NUMBER_OF_LINES = 10000;
+
+        var hugeFile = File.createTempFile("testHugeFile", "txt");
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(hugeFile));
-            for (int idx = 1; idx <= NUMBER_OF_LINES; ++idx) {
+            var writer = new BufferedWriter(new FileWriter(hugeFile));
+            for (var idx = 1; idx <= NUMBER_OF_LINES; ++idx) {
                 writer.write("Line " + idx + "\n");            
             }
             writer.close();
             
             System.out.println("Test file written");
-            
-            TextFileIterator iterator = new TextFileIterator(hugeFile.getAbsolutePath());
-            int idx = 1;
+
+            var iterator = new TextFileIterator(hugeFile.getAbsolutePath());
+            var idx = 1;
             while (iterator.hasNext()) {
-                String line = iterator.next();
+                var line = iterator.next();
                 assertEquals("Line " + idx, line);
                 ++idx;
             }
@@ -114,7 +114,7 @@ public class TextFileIteratorTest {
     
     @Test(expected=UnsupportedOperationException.class)
     public void testRemoveNotSupported() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         try {
             iterator.remove();
         }
@@ -130,7 +130,7 @@ public class TextFileIteratorTest {
     
     @Test(expected=IllegalStateException.class)
     public void testSafeAbortOfIteration() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         iterator.close();
         iterator.next();
     }

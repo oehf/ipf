@@ -31,9 +31,9 @@ public class Iti67SearchParametersTest {
 
     @Test
     public void setAuthor() {
-        Iti67SearchParameters searchParameters = Iti67SearchParameters.builder().build();
+        var searchParameters = Iti67SearchParameters.builder().build();
 
-        ReferenceAndListParam param = new ReferenceAndListParam()
+        var param = new ReferenceAndListParam()
                 .addAnd(new ReferenceOrListParam()
                         .addOr(new ReferenceParam(Practitioner.SP_FAMILY, "family")))
                 .addAnd(new ReferenceOrListParam()

@@ -35,7 +35,7 @@ public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery>
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
     }
 
@@ -46,8 +46,8 @@ public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery>
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
+        var slots = new QuerySlotHelper(ebXML);
+        var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
     }
 }

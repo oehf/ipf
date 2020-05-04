@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory
  * Test routes for ITI-38.
  * @author Dmytro Rud
  */
-class Iti38TestRouteBuilder extends SpringRouteBuilder {
+class Iti38TestRouteBuilder extends RouteBuilder {
     private static final transient LOG = LoggerFactory.getLogger(Iti38TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  

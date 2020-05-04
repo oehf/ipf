@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
-import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
@@ -131,7 +130,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * @return the initialized FhirContext
      */
     public FhirContext initializeFhirContext() {
-        FhirContext fhirContext = fhirContextProvider.get();
+        var fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
         fhirValidator.initialize(fhirContext);
         return fhirContext;

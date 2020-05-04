@@ -17,10 +17,9 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.core.Verticle;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.audit.protocol.VertxTLSSyslogSenderImpl;
@@ -36,50 +35,60 @@ import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createUDPSer
 @RunWith(VertxUnitRunner.class)
 public class VertxAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
+    private CustomTlsParameters tlsParameters;
+
+    @Before
+    public void setup() {
+        tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(CLIENT_KEY_STORE);
+        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
+        tlsParameters.setTrustStoreFile(TRUST_STORE);
+        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
+        tlsParameters.setEnabledProtocols("TLSv1.2");
+    }
+
     @Test
     public void testUDPVertx(TestContext testContext) throws Exception {
         auditContext.setAuditTransmissionProtocol(new VertxUDPSyslogSenderImpl(vertx));
-        int count = 10;
-        Async async = testContext.async(count);
+        var count = 10;
+        var async = testContext.async(count);
         deploy(testContext, createUDPServer(LOCALHOST, port, async));
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 
     @Test
     public void testTwoWayVertxTLS(TestContext testContext) throws Exception {
-        initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl(vertx));
-        int count = 10;
-        Async async = testContext.async(count);
+        auditContext.setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl(vertx, tlsParameters));
+        var count = 10;
+        var async = testContext.async(count);
         deploy(testContext, createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,
                 SERVER_KEY_STORE,
                 SERVER_KEY_STORE_PASS,
                 async));
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 
     @Test
     public void testTwoWayVertxTLSInterrupted(TestContext testContext) throws Exception {
-        initTLSSystemProperties(null);
-        auditContext.setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl(vertx));
-        int count = 5;
-        Async async = testContext.async(count);
-        Verticle tcpServer = createTCPServerTwoWayTLS(port,
+        auditContext.setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl(vertx, tlsParameters));
+        var count = 5;
+        var async = testContext.async(count);
+        var tcpServer = createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,
                 SERVER_KEY_STORE,
                 SERVER_KEY_STORE_PASS,
                 async);
         deploy(testContext, tcpServer);
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
         undeploy(testContext);
         deploy(testContext, tcpServer);
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 

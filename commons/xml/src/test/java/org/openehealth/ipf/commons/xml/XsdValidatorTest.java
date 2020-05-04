@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.lang.reflect.Field;
 import java.util.Map;
 
 public class XsdValidatorTest {
@@ -35,7 +34,7 @@ public class XsdValidatorTest {
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 
-		Field field = XsdValidator.class.getDeclaredField("XSD_CACHE");
+		var field = XsdValidator.class.getDeclaredField("XSD_CACHE");
 		field.setAccessible(true);
 		cache = (Map<String, ?>) field.get(null);
 	}
@@ -50,8 +49,8 @@ public class XsdValidatorTest {
 
 	@Test(expected = ValidationException.class)
 	public void testValidateFails() throws Exception {
-		boolean schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
-		int cacheSize = cache.size();
+		var schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
+		var cacheSize = cache.size();
 		Source testXml = new StreamSource(getClass().getResourceAsStream(
 				"/xsd/invalidtest.xml"));
 		validator.validate(testXml, SCHEMA_RESOURCE);

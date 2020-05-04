@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import java.net.URL;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
@@ -48,10 +46,10 @@ class ClasspathUriResolver implements URIResolver {
      */
     @Override
     public Source resolve(String href, String base) throws TransformerException {
-        ClassLoader cl = getClass().getClassLoader();
-        URL url = cl.getResource(href);
+        var cl = getClass().getClassLoader();
+        var url = cl.getResource(href);
         if (url != null) {
-            SAXSource saxSource = new SAXSource();
+            var saxSource = new SAXSource();
             saxSource.setInputSource(new InputSource(url.toString()));
             saxSource.setSystemId(url.toString());
             return saxSource;

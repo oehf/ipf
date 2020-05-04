@@ -83,7 +83,7 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SpringRegistry)) return false;
-        SpringRegistry that = (SpringRegistry) o;
+        var that = (SpringRegistry) o;
         return Objects.equals(beanFactory, that.beanFactory);
     }
 

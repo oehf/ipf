@@ -16,13 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
-import ca.uhn.fhir.rest.param.TokenParam;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -52,19 +50,19 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
      */
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        FhirQueryAuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+        var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
-        String url = (String) parameters.get(HTTP_URL);
-        String query = (String) parameters.get(HTTP_QUERY);
+        var url = (String) parameters.get(HTTP_URL);
+        var query = (String) parameters.get(HTTP_QUERY);
         try {
             dataset.setQueryString(URLDecoder.decode(String.format("%s?%s", url, query), "UTF-8"));
         } catch (UnsupportedEncodingException ignored) {
             // should never occur
         }
 
-        FhirSearchParameters searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+        var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
         if (searchParameter != null) {
-            List<TokenParam> tokenParams = searchParameter.getPatientIdParam();
+            var tokenParams = searchParameter.getPatientIdParam();
             if (tokenParams != null) {
                 dataset.getPatientIds().addAll(
                         tokenParams.stream()

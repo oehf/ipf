@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,17 +45,17 @@ public class ChainUtils {
         List<T> chain = new ArrayList<>(initial);
         List<T> unprocessed = new ArrayList<>(custom);
 
-        List<String> chainIds = chain.stream()
+        var chainIds = chain.stream()
                 .map(Chainable::getId)
                 .collect(Collectors.toList());
 
         while (!unprocessed.isEmpty()) {
-            boolean successful = false;
+            var successful = false;
 
-            Iterator<T> iter = unprocessed.iterator();
+            var iter = unprocessed.iterator();
             while (iter.hasNext()) {
-                final T c = iter.next();
-                final String cid = c.getId();
+                final var c = iter.next();
+                final var cid = c.getId();
 
                 // check whether element with this ID is already in the chain
                 if (chainIds.contains(cid)) {
@@ -69,7 +68,7 @@ public class ChainUtils {
                 List<T> unProcessedWithoutC = new ArrayList<>(unprocessed);
                 unProcessedWithoutC.remove(c);
                 // check whether this element depends on some other unprocessed ones
-                List<T> unprocessedDependencies = unProcessedWithoutC.stream()
+                var unprocessedDependencies = unProcessedWithoutC.stream()
                         .filter(other ->
                                 (c.getBefore().contains(other.getId()) && !(other.getAfter().contains(cid))) ||
                                 (c.getAfter().contains(other.getId()) && !(other.getBefore().contains(cid)))
@@ -87,20 +86,20 @@ public class ChainUtils {
                 // Look where to insert this element.  When neither "before" nor "after"
                 // are known -- insert at the end, i.e. directly before the standard Camel
                 // consumer -- this corresponds to the old behaviour.
-                int position = chain.size();
+                var position = chain.size();
 
-                List<Integer> beforeIndices = c.getBefore().stream()
+                var beforeIndices = c.getBefore().stream()
                         .map(chainIds::indexOf)
                         .filter(value -> value >= 0)
                         .collect(Collectors.toList());
 
-                List<Integer> afterIndices = c.getAfter().stream()
+                var afterIndices = c.getAfter().stream()
                         .map(chainIds::indexOf)
                         .filter(value -> value >= 0)
                         .collect(Collectors.toList());
 
-                int minBeforePosition = 0;
-                int maxAfterPosition = 0;
+                var minBeforePosition = 0;
+                var maxAfterPosition = 0;
 
                 if (!beforeIndices.isEmpty()) {
                     minBeforePosition = beforeIndices.stream().min(Integer::compare).get();

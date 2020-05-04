@@ -33,7 +33,7 @@ public class FindDocumentsByReferenceIdQueryTransformer extends FindDocumentsQue
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(DOC_ENTRY_REFERENCE_IDS, query.getReferenceIds());
     }
 
@@ -44,7 +44,7 @@ public class FindDocumentsByReferenceIdQueryTransformer extends FindDocumentsQue
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setReferenceIds(slots.toStringQueryList(DOC_ENTRY_REFERENCE_IDS));
     }
 }

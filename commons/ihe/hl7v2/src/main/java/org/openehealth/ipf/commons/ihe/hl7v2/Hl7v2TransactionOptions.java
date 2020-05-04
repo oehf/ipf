@@ -38,7 +38,7 @@ public interface Hl7v2TransactionOptions extends TransactionOptions<String> {
     }
 
     static List<String> concat(Hl7v2TransactionOptions option, Hl7v2TransactionOptions otherOption, List<String> suffix) {
-        List<String> events = concat(otherOption, suffix);
+        var events = concat(otherOption, suffix);
         return concat(option, events);
     }
 

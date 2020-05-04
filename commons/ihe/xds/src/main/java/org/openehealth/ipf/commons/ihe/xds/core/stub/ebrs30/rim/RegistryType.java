@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.Duration;
+import java.util.Objects;
 
 
 /**
@@ -170,11 +171,7 @@ public class RegistryType
      *     
      */
     public String getConformanceProfile() {
-        if (conformanceProfile == null) {
-            return "registryLite";
-        } else {
-            return conformanceProfile;
-        }
+        return Objects.requireNonNullElse(conformanceProfile, "registryLite");
     }
 
     /**

@@ -26,7 +26,7 @@ public final class CDAR2Utils {
 
     static {
         @SuppressWarnings("unused")
-        CDAPackage cdaPackageInstance = CDAPackage.eINSTANCE;
+        var cdaPackageInstance = CDAPackage.eINSTANCE;
     }
 
     private CDAR2Utils() {

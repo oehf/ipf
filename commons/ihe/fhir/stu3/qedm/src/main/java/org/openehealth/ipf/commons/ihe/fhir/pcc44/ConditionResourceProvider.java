@@ -61,7 +61,7 @@ public class ConditionResourceProvider extends AbstractPcc44ResourceProvider<Con
             HttpServletResponse httpServletResponse) {
 
 
-        ConditionSearchParameters parameters = ConditionSearchParameters.builder()
+        var parameters = ConditionSearchParameters.builder()
                 .patientReference(patient)
                 .category(category)
                 .clinicalStatus(clinicalStatus)

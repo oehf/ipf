@@ -49,7 +49,7 @@ public class Cxf3791WorkaroundInterceptor extends AbstractSoapInterceptor {
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
         if (message.getVersion() instanceof Soap12) {
-            String s = (String) message.get(Message.CONTENT_TYPE);
+            var s = (String) message.get(Message.CONTENT_TYPE);
             if (s != null) {
                 s = PATTERN.matcher(s).replaceFirst("");
                 message.put(Message.CONTENT_TYPE, s);

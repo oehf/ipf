@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
 
 /**
@@ -62,7 +61,7 @@ public class EbXMLSubmitObjectsRequest30 extends EbXMLObjectContainer30 implemen
 
     @Override
     List<JAXBElement<? extends IdentifiableType>> getContents() {
-        RegistryObjectListType list = submitObjectsRequest.getRegistryObjectList();
+        var list = submitObjectsRequest.getRegistryObjectList();
         if (list == null) {
             return Collections.emptyList();
         }

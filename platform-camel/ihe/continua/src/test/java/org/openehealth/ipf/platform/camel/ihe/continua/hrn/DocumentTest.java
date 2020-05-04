@@ -47,11 +47,11 @@ public class DocumentTest {
     
     @Before
     public void setUp() throws Exception {
-        Identifiable somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
+        var somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
         someData = SampleData.createDataHandler();
         docEntry = SampleData.createDocumentEntry(somePatientID);
 
-        GenericConversionService conversionService = new GenericConversionService();
+        var conversionService = new GenericConversionService();
         conversionService.addConverter(new DataHandlerToByteArrayConverter());
         conversionService.addConverter(new ByteArrayToStringConverter());
         conversionService.addConverter(new ByteArrayToClinicalDocumentConverter());
@@ -61,33 +61,33 @@ public class DocumentTest {
 
     @Test
     public final void constructor() {
-        Document doc = new Document(docEntry, someData);
+        var doc = new Document(docEntry, someData);
         assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
     public final void getContentsClassOfDataHandler() {
-        Document doc = new Document(docEntry, someData);
+        var doc = new Document(docEntry, someData);
         assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
     public final void getNullContents() {
-        Document doc = new Document(docEntry, null);
+        var doc = new Document(docEntry, null);
         assertNull(doc.getContent(DataHandler.class));
         assertNull(doc.getContent(String.class));
     }
     
     @Test
     public final void addContents() {
-        Document doc = new Document(docEntry, null);
+        var doc = new Document(docEntry, null);
         assertNull(doc.setContent(DataHandler.class, someData));
         assertTrue(someData.equals(doc.getContent(DataHandler.class)));
     }
     
     @Test
     public final void removeContents() {
-        Document doc = new Document(docEntry, null);
+        var doc = new Document(docEntry, null);
         doc.setContent(DataHandler.class, someData);
         doc.getContent(byte[].class);
         doc.getContent(String.class);
@@ -97,10 +97,10 @@ public class DocumentTest {
 
     @Test
     public final void getContentsClassOfT() {
-        String testContent = "data";
-        Document doc = new Document(docEntry, someData);
+        var testContent = "data";
+        var doc = new Document(docEntry, someData);
         doc.setContent(String.class, testContent);
-        String modContent = testContent.replace('a', 'c');
+        var modContent = testContent.replace('a', 'c');
         doc.setContent(String.class, modContent);
         assertEquals("String content shoud be \'" + modContent + "\'", modContent,
             doc.getContent(String.class));
@@ -108,7 +108,7 @@ public class DocumentTest {
     
     @Test
     public final void getContentsSize() {
-        Document doc = new Document(docEntry, someData);
+        var doc = new Document(docEntry, someData);
         doc.setContent(String.class, "data1");
         doc.setContent(Integer.class, 2);
         doc.setContent(Integer.class, 4);
@@ -117,12 +117,12 @@ public class DocumentTest {
 
     @Test
     public final void getContentsKeySet() {
-        Document doc = new Document(docEntry, someData);
+        var doc = new Document(docEntry, someData);
         doc.setContent(String.class, "data1");
         doc.setContent(Integer.class, 2);
         doc.setContent(Integer.class, 4);
-        Class<?>[] classArray = new Class<?>[] {String.class, Integer.class, DataHandler.class};
-        for (Class<?> clazz : classArray) {
+        var classArray = new Class<?>[] {String.class, Integer.class, DataHandler.class};
+        for (var clazz : classArray) {
             assertTrue(doc.hasContent(clazz));
         }
         assertEquals(classArray.length, doc.getContentsCount());
@@ -130,7 +130,7 @@ public class DocumentTest {
     
     @Test
     public final void getContentsMissing() {
-        Document doc = new Document(docEntry, someData);
+        var doc = new Document(docEntry, someData);
         doc.getContent(byte[].class);
         doc.getContent(String.class);
         assertTrue("DataHandler should be converted to String",
@@ -139,8 +139,8 @@ public class DocumentTest {
 
     @Test
     public final void equalsPositive() {
-        Document doc1 = new Document(docEntry, someData);
-        Document doc2 = new Document(docEntry, null);
+        var doc1 = new Document(docEntry, someData);
+        var doc2 = new Document(docEntry, null);
         doc2.setContent(DataHandler.class, someData);
         assertTrue(doc1.equals(doc2));
     }

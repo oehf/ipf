@@ -90,7 +90,7 @@ public enum Status {
             return null;
         }
         
-        for (Status status : values()) {
+        for (var status : values()) {
             if (opcode.equals(status.getOpcode21()) || opcode.equals(status.getOpcode30())) {
                 return status;
             }

@@ -99,8 +99,8 @@ public class Timestamp implements Serializable {
             return null;
         }
 
-        int pos = Math.max(s.indexOf('-'), s.indexOf('+'));
-        int len = (pos >= 0) ? pos : s.length();
+        var pos = Math.max(s.indexOf('-'), s.indexOf('+'));
+        var len = (pos >= 0) ? pos : s.length();
 
         // determine precision
         Precision precision;
@@ -125,8 +125,8 @@ public class Timestamp implements Serializable {
 
         // parse timestamp
         try {
-            CommonTS ts = new CommonTS(s);
-            ZonedDateTime zonedDateTime = ZonedDateTime.of(
+            var ts = new CommonTS(s);
+            var zonedDateTime = ZonedDateTime.of(
                     ts.getYear(),
                     (ts.getMonth() == 0) ? 1 : ts.getMonth(),
                     (ts.getDay() == 0) ? 1 : ts.getDay(),
@@ -179,7 +179,7 @@ public class Timestamp implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Timestamp timestamp = (Timestamp) o;
+        var timestamp = (Timestamp) o;
         return StringUtils.equals(toHL7(this), toHL7(timestamp));
     }
 

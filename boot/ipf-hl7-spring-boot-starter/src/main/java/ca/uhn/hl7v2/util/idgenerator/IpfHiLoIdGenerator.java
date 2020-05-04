@@ -25,7 +25,7 @@ public class IpfHiLoIdGenerator extends DelegatingHiLoGenerator {
 
     public IpfHiLoIdGenerator(IpfHl7v2ConfigurationProperties.FileIdGeneratorProperties properties) {
         super();
-        FileBasedGenerator generator = new FileBasedGenerator(properties.getLo());
+        var generator = new FileBasedGenerator(properties.getLo());
         generator.setDirectory(properties.getDirectory());
         generator.setFileName(properties.getFileMame());
         generator.setMinimizeReads(properties.isMinimizeReads());

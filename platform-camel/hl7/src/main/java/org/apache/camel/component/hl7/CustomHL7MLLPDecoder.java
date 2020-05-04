@@ -54,23 +54,23 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
         // Get the state of the current message and
         // Skip what we have already scanned before
-        DecoderState state = decoderState(session);
+        var state = decoderState(session);
         in.position(state.current());
 
         LOG.debug("Received data, checking from position {} to {}", in.position(), in.limit());
-        boolean messageDecoded = false;
+        var messageDecoded = false;
 
         while (in.hasRemaining()) {
 
-            int previousPosition = in.position();
-            byte current = in.get();
+            var previousPosition = in.position();
+            var current = in.get();
 
             // Check if we are at the end of an HL7 message
             if (current == config.getEndByte2() && state.previous() == config.getEndByte1()) {
                 if (state.isStarted()) {
                     // Save the current buffer pointers and reset them to surround the identifier message
-                    int currentPosition = in.position();
-                    int currentLimit = in.limit();
+                    var currentPosition = in.position();
+                    var currentLimit = in.limit();
                     LOG.debug("Message ends at position {} with length {}", previousPosition, previousPosition - state.start() + 1);
                     in.position(state.start());
                     in.limit(currentPosition);
@@ -119,9 +119,9 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     // and omit the start and the two end bytes of the MLLP message
     // returning a byte array
     private Object parseMessageToByteArray(IoBuffer buf) {
-        int len = buf.limit() - 3;
+        var len = buf.limit() - 3;
         LOG.debug("Making byte array of length {}", len);
-        byte[] dst = new byte[len];
+        var dst = new byte[len];
         buf.skip(1); // skip start byte
         buf.get(dst, 0, len);
         buf.skip(2); // skip end bytes
@@ -129,7 +129,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
         // Only do this if conversion is enabled
         if (config.isConvertLFtoCR()) {
             LOG.debug("Replacing LF by CR");
-            for (int i = 0; i < dst.length; i++) {
+            for (var i = 0; i < dst.length; i++) {
                 if (dst[i] == (byte) '\n') {
                     dst[i] = (byte) '\r';
                 }
@@ -142,10 +142,10 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     // and omit the start and the two end bytes of the MLLP message
     // returning a String
     private Object parseMessageToString(IoBuffer buf, CharsetDecoder decoder) throws CharacterCodingException {
-        int len = buf.limit() - 3;
+        var len = buf.limit() - 3;
         LOG.debug("Making string of length {} using charset {}", len, decoder.charset());
         buf.skip(1); // skip start byte
-        String message = buf.getString(len, decoder);
+        var message = buf.getString(len, decoder);
         buf.skip(2); // skip end bytes
 
         // Only do this if conversion is enabled
@@ -164,7 +164,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
     private CharsetDecoder charsetDecoder(IoSession session) {
         synchronized (session) {
-            CharsetDecoder decoder = (CharsetDecoder) session.getAttribute(CHARSET_DECODER);
+            var decoder = (CharsetDecoder) session.getAttribute(CHARSET_DECODER);
             if (decoder == null) {
                 decoder = config.getCharset().newDecoder()
                     .onMalformedInput(config.getMalformedInputErrorAction())
@@ -177,7 +177,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
     private DecoderState decoderState(IoSession session) {
         synchronized (session) {
-            DecoderState decoderState = (DecoderState) session.getAttribute(DECODER_STATE);
+            var decoderState = (DecoderState) session.getAttribute(DECODER_STATE);
             if (decoderState == null) {
                 decoderState = new DecoderState();
                 session.setAttribute(DECODER_STATE, decoderState);

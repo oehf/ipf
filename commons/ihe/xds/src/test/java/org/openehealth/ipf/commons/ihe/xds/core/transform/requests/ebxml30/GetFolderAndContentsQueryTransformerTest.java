@@ -19,12 +19,10 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
@@ -52,7 +50,7 @@ public class GetFolderAndContentsQueryTransformerTest {
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -79,8 +77,8 @@ public class GetFolderAndContentsQueryTransformerTest {
 
         assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
-        
-        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
+
+        var slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code12^^scheme12')"), slots.get(1).getValueList());
@@ -108,7 +106,7 @@ public class GetFolderAndContentsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetFolderAndContentsQuery result = new GetFolderAndContentsQuery();
+        var result = new GetFolderAndContentsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -116,14 +114,14 @@ public class GetFolderAndContentsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetFolderAndContentsQuery result = new GetFolderAndContentsQuery();
+        var result = new GetFolderAndContentsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetFolderAndContentsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetFolderAndContentsQuery result = new GetFolderAndContentsQuery();
+        var result = new GetFolderAndContentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetFolderAndContentsQuery(), result);
     }

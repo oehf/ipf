@@ -22,14 +22,13 @@ import org.w3c.dom.Node;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMResult;
 
 public class TimeRangeTest {
     @Test
     public void testXmlDateSerialization() throws Exception {
-        TimeRange timeRange = new TimeRange();
+        var timeRange = new TimeRange();
 
         timeRange.setFrom("2011030512");
         timeRange.setTo("20120301080642.190");
@@ -42,20 +41,20 @@ public class TimeRangeTest {
 
     @SuppressWarnings({"unchecked"})
     private <T> void checkSerialization(String name, T object) throws Exception {
-        QName qname = new QName("http://www.openehealth.org/ipf/xds", name);
-        JAXBElement<T> jaxbElement = new JAXBElement<>(qname, (Class<T>) object.getClass(), object);
-        JAXBContext jaxbContext = JAXBContext.newInstance(TimeRange.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
+        var qname = new QName("http://www.openehealth.org/ipf/xds", name);
+        var jaxbElement = new JAXBElement<T>(qname, (Class<T>) object.getClass(), object);
+        var jaxbContext = JAXBContext.newInstance(TimeRange.class);
+        var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         // marshaller.marshal(jaxbElement, System.out);
 
-        DOMResult domResult = new DOMResult();
+        var domResult = new DOMResult();
         marshaller.marshal(jaxbElement, domResult);
         Node marshalledNode = ((org.w3c.dom.Document) domResult.getNode()).getDocumentElement();
 
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        var unmarshaller = jaxbContext.createUnmarshaller();
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, TimeRange.class);
-        T objectToo = jaxbElement.getValue();
+        var objectToo = jaxbElement.getValue();
 
         Assert.assertEquals(object, objectToo);
     }

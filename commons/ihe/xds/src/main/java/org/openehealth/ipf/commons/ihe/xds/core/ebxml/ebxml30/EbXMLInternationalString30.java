@@ -47,7 +47,7 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
      */
     public EbXMLInternationalString30(LocalizedString localized) {
         if (localized != null) {
-            LocalizedStringType localizedEbRS30 = EbXMLFactory30.RIM_FACTORY.createLocalizedStringType();
+            var localizedEbRS30 = EbXMLFactory30.RIM_FACTORY.createLocalizedStringType();
             localizedEbRS30.setCharset(localized.getCharset());
             localizedEbRS30.setLang(localized.getLang());
             localizedEbRS30.setValue(localized.getValue());
@@ -65,13 +65,13 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         if (international == null) {
             return null;
         }
-        
-        List<LocalizedStringType> localizedList = international.getLocalizedString();
+
+        var localizedList = international.getLocalizedString();
         if (idx >= localizedList.size() || idx < 0) {
             return null;
         }
-        
-        LocalizedStringType localizedEbRS30 = localizedList.get(idx);
+
+        var localizedEbRS30 = localizedList.get(idx);
         if (localizedEbRS30 == null) {
             return null;
         }
@@ -84,8 +84,8 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         if (international == null) {
             return Collections.emptyList(); 
         }
-        
-        List<LocalizedStringType> list = international.getLocalizedString();
+
+        var list = international.getLocalizedString();
         return list.stream()
                 .map(this::createLocalizedString)
                 .collect(Collectors.toList());
@@ -96,8 +96,8 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         if (international == null) {
             return null;
         }
-        
-        List<LocalizedStringType> locals = international.getLocalizedString();
+
+        var locals = international.getLocalizedString();
         if (locals == null || locals.size() == 0) {
             return null;
         }
@@ -106,7 +106,7 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
     }
 
     private LocalizedString createLocalizedString(LocalizedStringType localizedEbRS30) {
-        LocalizedString localized = new LocalizedString();
+        var localized = new LocalizedString();
         localized.setCharset(localizedEbRS30.getCharset());
         localized.setLang(localizedEbRS30.getLang());
         localized.setValue(localizedEbRS30.getValue());

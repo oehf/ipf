@@ -18,7 +18,6 @@ package org.openehealth.ipf.tutorials.iheclient;
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.support.DefaultExchange;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
@@ -28,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
 import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
@@ -58,19 +56,19 @@ public class IHEWebServiceClient implements CamelContextAware {
     // ===================
 
     public QueryResponse iti18StoredQuery(StoredQuery query, String host, int port, String pathAndParameters) throws Exception {
-        QueryRegistry storedQuery = new QueryRegistry(query);
-        String endpoint = String.format("xds-iti18://%s:%d/%s", host, port, pathAndParameters);
+        var storedQuery = new QueryRegistry(query);
+        var endpoint = String.format("xds-iti18://%s:%d/%s", host, port, pathAndParameters);
         return send(endpoint, storedQuery, QueryResponse.class);
     }
 
     // Use this for RAD-68, too
     public Response iti41ProvideAndRegister(ProvideAndRegisterDocumentSet documentSet, String host, int port, String pathAndParameters) throws Exception {
-        String endpoint = String.format("xds-iti41://%s:%d/%s", host, port, pathAndParameters);
+        var endpoint = String.format("xds-iti41://%s:%d/%s", host, port, pathAndParameters);
         return send(endpoint, documentSet, Response.class);
     }
 
     public RetrievedDocumentSet iti43RetrieveDocumentSet(RetrieveDocumentSet retrieve, String host, int port, String pathAndParameters) throws Exception {
-        String endpoint = String.format("xds-iti43://%s:%d/%s", host, port, pathAndParameters);
+        var endpoint = String.format("xds-iti43://%s:%d/%s", host, port, pathAndParameters);
         return send(endpoint, retrieve, RetrievedDocumentSet.class);
     }
 
@@ -84,8 +82,8 @@ public class IHEWebServiceClient implements CamelContextAware {
         if (validate) {
             validator.validate(message, ITI_44_PIX.getRequestValidationProfile());
         }
-        String endpoint = String.format("pixv3-iti44://%s:%d/%s", host, port, pathAndParameters);
-        String response = send(endpoint, message, String.class);
+        var endpoint = String.format("pixv3-iti44://%s:%d/%s", host, port, pathAndParameters);
+        var response = send(endpoint, message, String.class);
         if (validate) {
             validator.validate(response, ITI_44_PIX.getResponseValidationProfile());
         }
@@ -96,8 +94,8 @@ public class IHEWebServiceClient implements CamelContextAware {
         if (validate) {
             validator.validate(message, ITI_45.getRequestValidationProfile());
         }
-        String endpoint = String.format("pixv3-iti45://%s:%d/%s", host, port, pathAndParameters);
-        String response = send(endpoint, message, String.class);
+        var endpoint = String.format("pixv3-iti45://%s:%d/%s", host, port, pathAndParameters);
+        var response = send(endpoint, message, String.class);
         if (validate) {
             validator.validate(response, ITI_45.getResponseValidationProfile());
         }
@@ -108,8 +106,8 @@ public class IHEWebServiceClient implements CamelContextAware {
         if (validate) {
             validator.validate(message, ITI_47.getRequestValidationProfile());
         }
-        String endpoint = String.format("pdqv3-iti47://%s:%d/%s", host, port, pathAndParameters);
-        String response = send(endpoint, message, String.class);
+        var endpoint = String.format("pdqv3-iti47://%s:%d/%s", host, port, pathAndParameters);
+        var response = send(endpoint, message, String.class);
         if (validate) {
             validator.validate(response, ITI_47.getResponseValidationProfile());
         }
@@ -121,7 +119,7 @@ public class IHEWebServiceClient implements CamelContextAware {
     // =======
 
     private <T> T send(String endpoint, Object input, Class<T> outType) throws Exception {
-        Exchange result = send(endpoint, input);
+        var result = send(endpoint, input);
         return result.getMessage().getBody(outType);
     }
 
@@ -133,8 +131,8 @@ public class IHEWebServiceClient implements CamelContextAware {
             exchange.getIn().getHeaders().putAll(headers);
         }
         */
-        ProducerTemplate template = camelContext.createProducerTemplate();
-        Exchange result = template.send(endpoint, exchange);
+        var template = camelContext.createProducerTemplate();
+        var result = template.send(endpoint, exchange);
         if (result.getException() != null) {
             throw result.getException();
         }

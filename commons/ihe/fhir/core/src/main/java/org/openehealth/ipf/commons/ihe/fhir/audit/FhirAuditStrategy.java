@@ -36,7 +36,7 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
         if (!operations.hasIssue(response)) {
             return EventOutcomeIndicator.Success;
         }
-        String severity = operations.getWorstIssueSeverity(response);
+        var severity = operations.getWorstIssueSeverity(response);
         switch (severity) {
             case "fatal":
             case "error":

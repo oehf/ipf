@@ -58,7 +58,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
 
-        Iti66SearchParameters searchParameters = Iti66SearchParameters.builder()
+        var searchParameters = Iti66SearchParameters.builder()
                 .created(created)
                 .type(type)
                 .source(source)
@@ -72,7 +72,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         searchParameters.setAuthor(author);
 
-        String chain = patient.getChain();
+        var chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
             searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
         } else if (chain == null || chain.isEmpty()) {

@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ValueListType;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,18 +48,18 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
             return;
         }
 
-        ValueListType valueList = EbXMLFactory30.RIM_FACTORY.createValueListType();
-        List<String> values = valueList.getValue();
-        for (String slotValue : slotValues) {
+        var valueList = EbXMLFactory30.RIM_FACTORY.createValueListType();
+        var values = valueList.getValue();
+        for (var slotValue : slotValues) {
             if (slotValue != null) {
                 values.add(slotValue);
             }
         }
-        
-        SlotType1 slotEbXML = EbXMLFactory30.RIM_FACTORY.createSlotType1();
+
+        var slotEbXML = EbXMLFactory30.RIM_FACTORY.createSlotType1();
         slotEbXML.setName(slotName);
-        slotEbXML.setValueList(valueList);        
-        EbXMLSlot30 slot = new EbXMLSlot30(slotEbXML);
+        slotEbXML.setValueList(valueList);
+        var slot = new EbXMLSlot30(slotEbXML);
         
         if (!slot.getValueList().isEmpty()) {
             slotListObj.add(slotEbXML);
@@ -70,7 +69,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
     @Override
     public List<String> getSlotValues(String slotName) {
         notNull(slotName, "slotName cannot be null");
-        for (SlotType1 slot30 : slotListObj) {
+        for (var slot30 : slotListObj) {
             if (slotName.equals(slot30.getName())) {
                 return slot30.getValueList().getValue();
             }
@@ -81,7 +80,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
 
     @Override
     public String getSingleSlotValue(String slotName) {
-        List<String> slotValues = getSlotValues(slotName);
+        var slotValues = getSlotValues(slotName);
         return slotValues.size() > 0 ? slotValues.get(0) : null;
     }
 

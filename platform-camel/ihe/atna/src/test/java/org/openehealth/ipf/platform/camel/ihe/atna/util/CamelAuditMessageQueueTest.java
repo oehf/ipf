@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.atna.util;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
 import org.junit.Test;
@@ -52,13 +51,13 @@ public class CamelAuditMessageQueueTest {
 
     @Test
     public void testCamelEndpointAudit() {
-        AuditMessage auditMessage = new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success, null).getMessage();
+        var auditMessage = new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success, null).getMessage();
         auditContext.audit(auditMessage);
 
-        Message message = mock.assertExchangeReceived(0).getIn();
-        AuditMessage body = message.getBody(AuditMessage.class);
-        Object header1 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.address");
-        Object header2 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.port");
+        var message = mock.assertExchangeReceived(0).getIn();
+        var body = message.getBody(AuditMessage.class);
+        var header1 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.address");
+        var header2 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.port");
 
         assertEquals(EventIdCode.ApplicationActivity, body.getEventIdentification().getEventID());
         assertEquals("0.0.0.0", header1);

@@ -32,11 +32,11 @@ public class Validator {
      *                When <code>null</code> then the message's own context will be used instead.
      */
     public static void validate(Message msg, HapiContext context) {
-        HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
+        var ctx = context == null ? msg.getParser().getHapiContext() : context;
 
         // We could also write an exception handler on top of SimpleValidationExceptionHandler that
         // encapsulates the behavior below, but that may restrict custom validation...
-        SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(ctx);
+        var handler = new SimpleValidationExceptionHandler(ctx);
         handler.setMinimumSeverityToCollect(Severity.ERROR);
         try {
             if (ctx.<Boolean>getMessageValidator().validate(msg, handler)) {

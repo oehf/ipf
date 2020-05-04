@@ -56,7 +56,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(uuidParam, query.getUuids());
 
         toEbXML(query, slots);
@@ -78,7 +78,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+       var slots = new QuerySlotHelper(ebXML);
         query.setUuids(slots.toStringList(uuidParam));
 
         fromEbXML(query, slots);

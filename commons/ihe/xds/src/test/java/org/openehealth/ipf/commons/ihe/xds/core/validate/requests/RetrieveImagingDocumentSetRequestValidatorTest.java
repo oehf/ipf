@@ -66,44 +66,44 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
     @Test
     public void testStudyInstanceIdMustBeSpecified() {
         List<DocumentReference> documentReferences = new ArrayList<>();
-        DocumentReference documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.5");
+        var documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.5");
         documentReferences.add(documentReference);
 
-        RetrieveSeries retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", documentReferences);
+        var retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", documentReferences);
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy(null, retrieveSerieses));
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(STUDY_INSTANCE_UID_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testSteriesInstanceIdMustBeSpecified() {
         List<DocumentReference> documentReferences = new ArrayList<>();
-        DocumentReference documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.6");
+        var documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.6");
         documentReferences.add(documentReference);
 
-        RetrieveSeries retrieveSeries = new RetrieveSeries(null, documentReferences);
+        var retrieveSeries = new RetrieveSeries(null, documentReferences);
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy("urn:oid:1.1.3", retrieveSerieses));
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(SERIES_INSTANCE_UID_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testRepoIdMustBeSpecified() {
         request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new DocumentReference(null, "doc3", "home3"));
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testDocIdMustBeSpecified() {
         request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new DocumentReference("repo3", "", "home3"));
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
         

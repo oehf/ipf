@@ -40,7 +40,7 @@ public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperatio
         if (requestData instanceof Parameters) {
             return getClientExecutable(client, (Parameters) requestData);
         } else {
-            Parameters p = new Parameters();
+            var p = new Parameters();
             parameters.entrySet().stream()
                     .filter(entry -> Iti83Constants.ITI83_PARAMETERS.contains(entry.getKey()))
                     .forEach(entry -> p.addParameter()

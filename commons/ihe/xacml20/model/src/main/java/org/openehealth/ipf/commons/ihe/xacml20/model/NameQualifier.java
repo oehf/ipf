@@ -38,7 +38,7 @@ public enum NameQualifier {
     @Getter private final String qualifier;
 
     public static NameQualifier fromCode(String code) {
-        for (NameQualifier nameQualifier : values()) {
+        for (var nameQualifier : values()) {
             if (nameQualifier.qualifier.equals(code)) {
                 return nameQualifier;
             }

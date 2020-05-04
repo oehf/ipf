@@ -23,10 +23,9 @@ import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
+import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
-import org.openehealth.ipf.commons.audit.protocol.TLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
-import org.openehealth.ipf.commons.audit.protocol.VertxTLSSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
@@ -42,46 +41,64 @@ public class DefaultAuditContext implements AuditContext {
 
     static final AuditContext NO_AUDIT = new DefaultAuditContext();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String auditRepositoryHostName = "localhost";
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int auditRepositoryPort = 514;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean auditEnabled = false;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditTransmissionProtocol auditTransmissionProtocol = new UDPSyslogSenderImpl();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditMessageQueue auditMessageQueue = new SynchronousAuditMessageQueue();
 
-    @Getter @Setter
-    private String sendingApplication = "IPF";
-
-    @Getter @Setter
+    @Getter
+    @Setter
     private String auditSourceId = "IPF";
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String auditEnterpriseSiteId = "IPF";
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditSource auditSource = AuditSourceType.Other;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private SerializationStrategy serializationStrategy = new Current();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditMessagePostProcessor auditMessagePostProcessor = AuditMessagePostProcessor.noOp();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditExceptionHandler auditExceptionHandler = new LoggingAuditExceptionHandler();
 
-    @Getter @Setter
+    @Getter
+    @Setter
+    private AuditMetadataProvider auditMetadataProvider = AuditMetadataProvider.getDefault();
+
+    @Getter
+    @Setter
+    private TlsParameters tlsParameters = TlsParameters.getDefault();
+
+    @Getter
+    @Setter
     private boolean includeParticipantsFromResponse = false;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String auditValueIfMissing = "UNKNOWN";
 
     public String getAuditRepositoryTransport() {
@@ -93,12 +110,20 @@ public class DefaultAuditContext implements AuditContext {
     }
 
     public void setAuditRepositoryTransport(String transport) {
-        switch (transport) {
-            case "UDP": setAuditTransmissionProtocol(new UDPSyslogSenderImpl()); break;
-            case "TLS": setAuditTransmissionProtocol(new TLSSyslogSenderImpl()); break;
-            case "NIO-TLS": setAuditTransmissionProtocol(new VertxTLSSyslogSenderImpl()); break;
-            default: throw new IllegalArgumentException("Unknown transport :" + transport);
-        }
+        setAuditTransmissionProtocol(
+                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
+        );
+    }
+
+    public String getSendingApplication() {
+        return getAuditMetadataProvider().getSendingApplication();
+    }
+
+    /**
+     * @deprecated use {@link AuditMetadataProvider#setSendingApplication(String)}
+     */
+    public void setSendingApplication(String sendingApplication) {
+        this.getAuditMetadataProvider().setSendingApplication(sendingApplication);
     }
 
     @Override

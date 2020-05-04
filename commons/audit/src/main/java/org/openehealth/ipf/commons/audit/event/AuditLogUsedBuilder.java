@@ -95,7 +95,7 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
         if (getMessage().getActiveParticipants().isEmpty() || getMessage().getActiveParticipants().size() > 2) {
             throw new AuditException("Must have one or two participants that started the Application");
         }
-        if (getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.URI.equals(poi.getParticipantObjectTypeCode())).size() != 1) {
+        if (getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.URI.equals(poi.getParticipantObjectIDTypeCode())).size() != 1) {
             throw new AuditException("Must have exactly Audit Log Identity Participating Object ");
         }
     }

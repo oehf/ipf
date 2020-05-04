@@ -41,7 +41,7 @@ public class ExceptionHandlingRouteBuilder extends SpringRouteBuilder {
     }
     
     private Processor exceptionProcessor() {
-        ExceptionProcessor result = new ExceptionProcessor();
+        var result = new ExceptionProcessor();
         result.getExceptions().put("blah", new Exception1());
         result.getExceptions().put("blub", new Exception2());
         result.getExceptions().put("oink", new Exception3());

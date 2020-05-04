@@ -85,7 +85,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Iti78SearchParameters searchParameters = Iti78SearchParameters.builder()
+        var searchParameters = Iti78SearchParameters.builder()
                 .identifiers(identifiers)
                 .active(active)
                 .family(family)

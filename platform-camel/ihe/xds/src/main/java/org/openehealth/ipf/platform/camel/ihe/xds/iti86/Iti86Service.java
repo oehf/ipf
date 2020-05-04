@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti86;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
@@ -38,13 +37,13 @@ public class Iti86Service extends AbstractWebService implements Iti86PortType {
 
     @Override
     public RegistryResponseType documentRepositoryRemoveDocuments(RemoveDocumentsRequestType body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(body);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("ITI-86 service failed", exception);
             Response errorResponse = new Response(
                     exception,
-                    ErrorCode.REPOSITORY_METADATA_ERROR,
+                    ErrorCode.REMOVE_DOCUMENTS_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     null);
             return EbXML30Converters.convert(errorResponse);

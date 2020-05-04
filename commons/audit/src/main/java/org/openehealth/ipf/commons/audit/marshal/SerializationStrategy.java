@@ -35,7 +35,7 @@ public interface SerializationStrategy {
 
     default String marshal(AuditMessage auditMessage, boolean pretty) {
         try {
-            StringWriter writer = new StringWriter();
+            var writer = new StringWriter();
             marshal(auditMessage, writer, pretty);
             return writer.toString();
         } catch (IOException e) {

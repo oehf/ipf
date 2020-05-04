@@ -36,8 +36,8 @@ public abstract class HapiAdapter extends ProcessorAdapter {
 
     @Override
     protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws Exception {
-        Message message = toMessage(inputData, exchange);
-        Message result = doProcessMessage(
+        var message = toMessage(inputData, exchange);
+        var result = doProcessMessage(
                 message,
                 exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class),
                 inputParams);
@@ -51,8 +51,8 @@ public abstract class HapiAdapter extends ProcessorAdapter {
         if (inputData instanceof Message) {
             message = (Message)inputData;
         } else if (inputData instanceof String) {
-            HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
-            Parser parser = context != null ? context.getGenericParser() : FALLBACK;
+            var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
+            var parser = context != null ? context.getGenericParser() : FALLBACK;
             message = parser.parse((String)inputData);
         } else {
             // try type conversion

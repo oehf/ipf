@@ -27,15 +27,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.ws.BindingProvider;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, InType, OutType> {
 
@@ -60,24 +57,24 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
     protected static void injectTargetHomeCommunityId(Object client, SubmitObjectsRequest request) {
         String targetHomeCommunityId = null;
         try {
-            EbXMLSlotList30 slotList = new EbXMLSlotList30(request.getRequestSlotList().getSlot());
+            var slotList = new EbXMLSlotList30(request.getRequestSlotList().getSlot());
             targetHomeCommunityId = slotList.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
         } catch (NullPointerException e) {
             // nop
         }
 
         if (targetHomeCommunityId != null) {
-            Document document = DomBuildersPool.use(DocumentBuilder::newDocument);
-            Element homeCommunityIdElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_LOCAL_PART);
+            var document = DomBuildersPool.use(DocumentBuilder::newDocument);
+            var homeCommunityIdElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_LOCAL_PART);
             homeCommunityIdElement.setTextContent(targetHomeCommunityId);
 
-            Element blockElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART);
+            var blockElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART);
             //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "role", "urn:ihe:iti:xd:id");
             //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "relay", "true");
             blockElement.appendChild(homeCommunityIdElement);
 
-            BindingProvider bindingProvider = (BindingProvider) client;
-            Map<String, Object> requestContext = bindingProvider.getRequestContext();
+            var bindingProvider = (BindingProvider) client;
+            var requestContext = bindingProvider.getRequestContext();
             List<Header> soapHeaders = HeaderUtils.getHeaders(requestContext, Header.HEADER_LIST, true, true, ArrayList::new);
             soapHeaders.add(new SoapHeader(TARGET_HCID_HEADER_NAME, blockElement));
         }

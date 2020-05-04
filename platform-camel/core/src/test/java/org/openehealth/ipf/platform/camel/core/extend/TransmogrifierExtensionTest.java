@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import org.apache.camel.Exchange;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,7 +39,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testReply() {
-        Exchange exchange = producerTemplate.request("direct:reply", exchange1 -> exchange1.getIn().setBody("abc"));
+        var exchange = producerTemplate.request("direct:reply", exchange1 -> exchange1.getIn().setBody("abc"));
         assertEquals("abcxyz", exchange.getMessage().getBody());
     }
 
@@ -180,7 +179,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input17", xsltInput());
         mockOutput.assertIsSatisfied();
-        InputStream result = (InputStream) mockOutput.getExchanges().get(0)
+        var result = (InputStream) mockOutput.getExchanges().get(0)
                 .getIn().getBody();
         assertNotNull(result);
     }
@@ -223,7 +222,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input23", content("/schematron/schematron-test.xml"));
         mockOutput.assertIsSatisfied();
-        String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
+        var result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertFalse(result.contains("svrl:failed-assert"));
     }
     
@@ -233,7 +232,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input23", content("/schematron/schematron-test-fail.xml"));
         mockOutput.assertIsSatisfied();
-        String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
+        var result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertTrue(result.contains("svrl:failed-assert"));
     }
     
@@ -260,7 +259,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input26", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
-        InputStream result = mockOutput.getExchanges().get(0).getIn()
+        var result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(InputStream.class);
         assertNotNull(result);
     }
@@ -271,7 +270,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input27", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
-        DOMResult result = mockOutput.getExchanges().get(0).getIn()
+        var result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(DOMResult.class);
         assertNotNull(result);
     }
@@ -307,7 +306,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     private void assertXqueryOutput(String resultXml) throws InterruptedException {
         mockOutput.assertIsSatisfied();
-        String result = mockOutput.getExchanges().get(0).getIn()
+        var result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(String.class);
         assertNotNull(result);
         assertTrue(result.contains("<item name=\"pid\">" + resultXml + "</item>"));
@@ -315,7 +314,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     private void assertXsltOutput(String processingCode, String processingMode) throws InterruptedException {
         mockOutput.assertIsSatisfied();
-        String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
+        var result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertNotNull(result);
         assertTrue(result.contains("<processingCode code=\"" + processingCode + "\""));
         assertTrue(result.contains("<processingModeCode code=\"" + processingMode + "\""));

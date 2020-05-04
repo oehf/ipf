@@ -135,7 +135,7 @@ public class PdqPatient extends Patient {
     }
 
     public Citizenship addCitizenship() {
-        Citizenship t = new Citizenship();
+        var t = new Citizenship();
         if (this.citizenship == null)
             this.citizenship = new ArrayList<>();
         this.citizenship.add(t);
@@ -154,7 +154,7 @@ public class PdqPatient extends Patient {
     public boolean hasCitizenship() {
         if (this.citizenship == null)
             return false;
-        for (Citizenship item : this.citizenship)
+        for (var item : this.citizenship)
             if (!item.isEmpty())
                 return true;
         return false;
@@ -174,14 +174,14 @@ public class PdqPatient extends Patient {
     public boolean hasReligion() {
         if (this.religion == null)
             return false;
-        for (CodeableConcept item : this.religion)
+        for (var item : this.religion)
             if (!item.isEmpty())
                 return true;
         return false;
     }
 
     public CodeableConcept addReligion() {
-        CodeableConcept t = new CodeableConcept();
+        var t = new CodeableConcept();
         if (this.religion == null)
             this.religion = new ArrayList<>();
         this.religion.add(t);
@@ -240,7 +240,7 @@ public class PdqPatient extends Patient {
 
         @Override
         public Citizenship copy() {
-            Citizenship copy = new Citizenship();
+            var copy = new Citizenship();
             copy.code = code;
             copy.period = period;
             return copy;
@@ -293,7 +293,7 @@ public class PdqPatient extends Patient {
 
         @Override
         public Race copy() {
-            Race copy = new Race();
+            var copy = new Race();
             copy.ombCategory = ombCategory;
             copy.detailed = detailed;
             copy.text = text;
@@ -358,7 +358,7 @@ public class PdqPatient extends Patient {
 
         @Override
         public Ethnicity copy() {
-            Ethnicity copy = new Ethnicity();
+            var copy = new Ethnicity();
             copy.ombCategory = ombCategory;
             copy.detailed = detailed;
             copy.text = text;

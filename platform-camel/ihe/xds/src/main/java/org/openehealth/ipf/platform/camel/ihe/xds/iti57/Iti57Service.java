@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti57;
 
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57PortType;
@@ -33,4 +34,11 @@ public class Iti57Service extends XdsRegistryRequestService<SubmitObjectsRequest
     public RegistryResponseType documentRegistryUpdateDocumentSet(SubmitObjectsRequest body) {
         return processRequest(body);
     }
+
+    @Override
+    protected ErrorCode getDefaultMetadataError() {
+        return ErrorCode.METADATA_UPDATE_ERROR;
+    }
+    
+    
 }

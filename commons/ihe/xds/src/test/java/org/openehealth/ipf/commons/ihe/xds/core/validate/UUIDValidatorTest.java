@@ -48,7 +48,7 @@ public class UUIDValidatorTest {
 
     @Test
     public void testGetAsUUID() throws URISyntaxException {
-        UUID random = UUID.randomUUID();
+        var random = UUID.randomUUID();
         assertEquals(random, validator.getAsUUID("urn:uuid:" + random.toString()).get());
         assertEquals(random, validator.getAsUUID(new URI("urn", "uuid", random.toString())).get());
         assertEquals(random, validator.getAsUUID(new URN(random)).get());

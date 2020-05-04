@@ -23,9 +23,7 @@ import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.support.DefaultEndpoint;
 import org.apache.camel.support.jsse.SSLContextParameters;
-import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
-import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -39,7 +37,6 @@ import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
 import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +179,7 @@ public abstract class AbstractWsEndpoint<
      * @return service class instance for the given endpoint.
      */
     public AbstractWebService getServiceInstance() {
-        AbstractWebService service = getCustomServiceInstance(this);
+        var service = getCustomServiceInstance(this);
         if (service == null) {
             if (serviceClass != null) {
                 try {
@@ -420,8 +417,8 @@ public abstract class AbstractWsEndpoint<
 
     @Override
     public Consumer createConsumer(Processor processor) {
-        AbstractWebService serviceInstance = getServiceInstance();
-        ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
+        var serviceInstance = getServiceInstance();
+        var serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         if (features != null) {
             serverFactory.getFeatures().addAll(features);
         }
@@ -440,8 +437,8 @@ public abstract class AbstractWsEndpoint<
             }
         }
 
-        Server server = serverFactory.create();
-        AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
+        var server = serverFactory.create();
+        var service = (AbstractWebService) serverFactory.getServiceBean();
         return new DefaultWsConsumer<>(this, processor, service, server);
     }
 
@@ -487,18 +484,18 @@ public abstract class AbstractWsEndpoint<
     }
 
     public WsSecurityInformation getSecurityInformation() {
-        SSLContextParameters sslContextParameters = getSslContextParameters();
+        var sslContextParameters = getSslContextParameters();
         if (sslContextParameters == null && secure) {
-            Map<String, SSLContextParameters> sslContextParameterMap = getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+            var sslContextParameterMap = getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
             if (sslContextParameterMap.size() == 1) {
-                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                var entry = sslContextParameterMap.entrySet().iterator().next();
                 sslContextParameters = entry.getValue();
             } else if (sslContextParameterMap.size() > 1) {
                 throw new AmbiguousBeanException(SSLContextParameters.class);
             }
         }
         try {
-            SSLContext sslContext = sslContextParameters != null ?
+            var sslContext = sslContextParameters != null ?
                     sslContextParameters.createSSLContext(getCamelContext()) :
                     null;
             return new WsSecurityInformation(secure, sslContext, hostnameVerifier, username, password);

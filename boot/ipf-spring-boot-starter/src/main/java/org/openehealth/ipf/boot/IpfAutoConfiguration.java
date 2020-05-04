@@ -50,7 +50,7 @@ public class IpfAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(SpringConfigurationPostProcessor.class)
     public SpringConfigurationPostProcessor postProcessor(CustomMappingsConfigurer customMappingsConfigurer) {
-        SpringConfigurationPostProcessor processor = new SpringConfigurationPostProcessor();
+        var processor = new SpringConfigurationPostProcessor();
         List<OrderedConfigurer> list = new ArrayList<>();
         if (customMappingsConfigurer != null) list.add(customMappingsConfigurer);
         processor.setSpringConfigurers(list);
@@ -60,7 +60,7 @@ public class IpfAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CustomMappingsConfigurer.class)
     protected CustomMappingsConfigurer customMappingsConfigurer(SpringBidiMappingService mappingService) {
-        CustomMappingsConfigurer configurer = new CustomMappingsConfigurer();
+        var configurer = new CustomMappingsConfigurer();
         configurer.setMappingService(mappingService);
         return configurer;
     }
@@ -78,47 +78,47 @@ public class IpfAutoConfiguration {
     @Bean(name = "bootSslContextParameters")
     @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config")
     public SSLContextParameters sslContextParameters(ServerProperties serverProperties) {
-        Ssl sslConfig = serverProperties.getSsl();
+        var sslConfig = serverProperties.getSsl();
 
         // Keystore
-        KeyStoreParameters ksp = new KeyStoreParameters();
+        var ksp = new KeyStoreParameters();
         ksp.setResource(resourceName(sslConfig.getKeyStore()));
         ksp.setPassword(sslConfig.getKeyStorePassword());
         ksp.setProvider(sslConfig.getKeyStoreProvider());
         ksp.setType(sslConfig.getKeyStoreType());
-        KeyManagersParameters kmp = new KeyManagersParameters();
+        var kmp = new KeyManagersParameters();
         kmp.setKeyStore(ksp);
         kmp.setKeyPassword(sslConfig.getKeyPassword());
 
         // Truststore
-        KeyStoreParameters tsp = new KeyStoreParameters();
+        var tsp = new KeyStoreParameters();
         tsp.setResource(resourceName(sslConfig.getTrustStore()));
         tsp.setPassword(sslConfig.getTrustStorePassword());
         tsp.setProvider(sslConfig.getTrustStoreProvider());
         tsp.setType(sslConfig.getTrustStoreType());
-        TrustManagersParameters tmp = new TrustManagersParameters();
+        var tmp = new TrustManagersParameters();
         tmp.setKeyStore(tsp);
 
         // Server-side TLS parameters
-        SSLContextServerParameters scsp = new SSLContextServerParameters();
+        var scsp = new SSLContextServerParameters();
         if (sslConfig.getClientAuth() == Ssl.ClientAuth.WANT) {
             scsp.setClientAuthentication(ClientAuthentication.WANT.name());
         } else if (sslConfig.getClientAuth() == Ssl.ClientAuth.NEED) {
             scsp.setClientAuthentication(ClientAuthentication.REQUIRE.name());
         }
-        SecureSocketProtocolsParameters sspp = new SecureSocketProtocolsParameters();
+        var sspp = new SecureSocketProtocolsParameters();
         sspp.setSecureSocketProtocol(Arrays.asList(sslConfig.getEnabledProtocols()));
         scsp.setSecureSocketProtocols(sspp);
-        CipherSuitesParameters csp = new CipherSuitesParameters();
+        var csp = new CipherSuitesParameters();
         csp.setCipherSuite(Arrays.asList(sslConfig.getCiphers()));
         scsp.setCipherSuites(csp);
 
         // Client-side TLS parameters - assume the same configuration as server-side
-        SSLContextClientParameters sccp = new SSLContextClientParameters();
+        var sccp = new SSLContextClientParameters();
         sccp.setSecureSocketProtocols(sspp);
         sccp.setCipherSuites(csp);
 
-        SSLContextParameters scp = new SSLContextParameters();
+        var scp = new SSLContextParameters();
         scp.setCertAlias(sslConfig.getKeyAlias());
         scp.setKeyManagers(kmp);
         scp.setTrustManagers(tmp);
@@ -131,7 +131,7 @@ public class IpfAutoConfiguration {
     // Spring Boot Keystore names are prepended with file: or classpath:, while
     // Camel takes the plain resource name and tries all possibilities
     private String resourceName(String resource) {
-        int i = resource.indexOf(":");
+        var i = resource.indexOf(":");
         return i >= 0 ? resource.substring(i + 1) : resource;
     }
 }

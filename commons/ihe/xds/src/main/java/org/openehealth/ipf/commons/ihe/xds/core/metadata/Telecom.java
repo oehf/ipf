@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.model.v25.datatype.XTN;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.util.Objects;
 
@@ -202,7 +201,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Telecom that = (Telecom) o;
+        var that = (Telecom) o;
         return Objects.equals(getUse(), that.getUse()) &&
                 Objects.equals(getType(), that.getType()) &&
                 Objects.equals(getEmail(), that.getEmail()) &&

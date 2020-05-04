@@ -25,7 +25,7 @@ import javax.activation.DataHandler
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory
  * Test routes for RAD-75.
  * @author Clay Sebourn
  */
-class Rad75TestRouteBuilder extends SpringRouteBuilder {
+class Rad75TestRouteBuilder extends RouteBuilder {
     private static final transient LOG = LoggerFactory.getLogger(Rad75TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  

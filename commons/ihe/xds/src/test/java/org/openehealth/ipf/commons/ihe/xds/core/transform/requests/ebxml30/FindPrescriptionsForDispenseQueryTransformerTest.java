@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -32,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindPre
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,7 +51,7 @@ public class FindPrescriptionsForDispenseQueryTransformerTest {
         query = new FindPrescriptionsForDispenseQuery();
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
         query.setHomeCommunityId("12.21.41");
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -70,7 +68,7 @@ public class FindPrescriptionsForDispenseQueryTransformerTest {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        QueryList<Code> eventCodes = new QueryList<>();
+        var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
@@ -89,7 +87,7 @@ public class FindPrescriptionsForDispenseQueryTransformerTest {
         assertEquals("12.21.41", ebXML.getHome());
         assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        List<EbXMLSlot> confidentialitySlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
+        var confidentialitySlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, confidentialitySlots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), confidentialitySlots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code12^^scheme12')"), confidentialitySlots.get(1).getValueList());
@@ -107,7 +105,7 @@ public class FindPrescriptionsForDispenseQueryTransformerTest {
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()));
-        List<EbXMLSlot> eventSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
+        var eventSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
         assertEquals(2, eventSlots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), eventSlots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code9^^scheme9')"), eventSlots.get(1).getValueList());
@@ -130,21 +128,21 @@ public class FindPrescriptionsForDispenseQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindPrescriptionsForDispenseQuery result = new FindPrescriptionsForDispenseQuery();
+        var result = new FindPrescriptionsForDispenseQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(query, result);
     }
 
     @Test
     public void testFromEbXMLNull() {
-        FindPrescriptionsForDispenseQuery result = new FindPrescriptionsForDispenseQuery();
+        var result = new FindPrescriptionsForDispenseQuery();
         transformer.fromEbXML(result, null);
         assertEquals(new FindPrescriptionsForDispenseQuery(), result);
     }
 
     @Test
     public void testFromEbXMLEmpty() {
-        FindPrescriptionsForDispenseQuery result = new FindPrescriptionsForDispenseQuery();
+        var result = new FindPrescriptionsForDispenseQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(new FindPrescriptionsForDispenseQuery(), result);
     }

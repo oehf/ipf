@@ -18,7 +18,18 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.Attachment;
+import org.hl7.fhir.r4.model.Binary;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DocumentManifest;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.Enumerations;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Narrative;
+import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.Reference;
 import org.junit.Test;
 
 import java.security.MessageDigest;
@@ -40,26 +51,26 @@ public class Iti65ValidatorTest {
 
     @Test
     public void testBundle() throws Exception {
-        FhirContext context = FhirContext.forR4();
-        Bundle bundle = provideAndRegister();
+        var context = FhirContext.forR4();
+        var bundle = provideAndRegister();
         try {
-            Iti65Validator iti65Validator = new Iti65Validator();
+            var iti65Validator = new Iti65Validator();
             iti65Validator.initialize(context);
             iti65Validator.validateRequest(context, bundle, Collections.emptyMap());
         } catch (UnprocessableEntityException e) {
-            OperationOutcome oo = (OperationOutcome) e.getOperationOutcome();
+            var oo = (OperationOutcome) e.getOperationOutcome();
             oo.getIssue()
                     .forEach(ooc -> System.out.println(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
         }
     }
 
     private Bundle provideAndRegister() throws Exception {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 
-        DocumentManifest manifest = new DocumentManifest();
+        var manifest = new DocumentManifest();
         manifest.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE);
         manifest.setMasterIdentifier(
                 new Identifier()
@@ -86,18 +97,18 @@ public class Iti65ValidatorTest {
 
         // Reference
 
-        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Instant instant = ZonedDateTime.of(
+        var instant = ZonedDateTime.of(
                 LocalDate.of(2013, 7, 1),
                 LocalTime.of(13, 11, 13),
                 ZoneId.of("UTC")
         ).toInstant();
 
-        Date timestamp = Date.from(instant);
+        var timestamp = Date.from(instant);
 
-        Practitioner practitioner = new Practitioner();
-        DocumentReference reference = new DocumentReference();
+        var practitioner = new Practitioner();
+        var reference = new DocumentReference();
         reference.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE);
         reference.getMeta().setLastUpdated(timestamp);
 
@@ -139,7 +150,7 @@ public class Iti65ValidatorTest {
 
         // Binary
 
-        Binary binary = new Binary().setContentType("text/plain");
+        var binary = new Binary().setContentType("text/plain");
         binary.setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);
         bundle.addEntry()

@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
 import java.util.*;
 
@@ -29,12 +30,12 @@ import java.util.*;
  */
 public class RecordingAuditMessageTransmission implements AuditTransmissionProtocol {
 
-    private List<String> messages = new ArrayList<>();
+    private final List<String> messages = new ArrayList<>();
 
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) {
-        if (auditMessages != null) {
-            messages.addAll(Arrays.asList(auditMessages));
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) {
+        if (auditMessage != null) {
+            messages.add(auditMessage);
         }
     }
 

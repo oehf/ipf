@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,10 +44,10 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
 
     @Override
     public Iti65AuditDataset enrichAuditDatasetFromRequest(Iti65AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        Iti65AuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        Bundle bundle = (Bundle) request;
+        var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+        var bundle = (Bundle) request;
         //
-        DocumentManifest documentManifest = bundle.getEntry().stream()
+        var documentManifest = bundle.getEntry().stream()
                 .map(Bundle.BundleEntryComponent::getResource)
                 .filter(DocumentManifest.class::isInstance)
                 .map(DocumentManifest.class::cast)
@@ -60,7 +59,7 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
 
     @Override
     public boolean enrichAuditDatasetFromResponse(Iti65AuditDataset auditDataset, Object response, AuditContext auditContext) {
-        Bundle bundle = (Bundle) response;
+        var bundle = (Bundle) response;
         // Extract DocumentManifest (UU)IDs from the response bundle for auditing
         bundle.getEntry().stream()
                 .map(Bundle.BundleEntryComponent::getResponse)
@@ -78,8 +77,8 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
      */
     @Override
     protected EventOutcomeIndicator getEventOutcomeCodeFromResource(IBaseResource resource) {
-        Bundle bundle = (Bundle) resource;
-        Set<String> responseStatus = bundle.getEntry().stream()
+        var bundle = (Bundle) resource;
+        var responseStatus = bundle.getEntry().stream()
                 .map(Bundle.BundleEntryComponent::getResponse)
                 .map(Bundle.BundleEntryResponseComponent::getStatus)
                 .collect(Collectors.toSet());

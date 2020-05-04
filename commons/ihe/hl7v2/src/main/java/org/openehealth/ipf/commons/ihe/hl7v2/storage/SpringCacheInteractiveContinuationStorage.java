@@ -44,7 +44,7 @@ public class SpringCacheInteractiveContinuationStorage implements InteractiveCon
 
     @Override
     public void put(String continuationPointer, String chainId, Message fragment) {
-        InteractiveContinuationChain chain = cache.get(chainId, InteractiveContinuationChain.class);
+        var chain = cache.get(chainId, InteractiveContinuationChain.class);
         if (chain == null) {
             LOG.debug("Create chain for storage key {}", chainId);
             chain = new InteractiveContinuationChain();
@@ -55,7 +55,7 @@ public class SpringCacheInteractiveContinuationStorage implements InteractiveCon
 
     @Override
     public Message get(String continuationPointer, String chainId) {
-        InteractiveContinuationChain chain = cache.get(chainId, InteractiveContinuationChain.class);
+        var chain = cache.get(chainId, InteractiveContinuationChain.class);
         if (chain != null) {
             return chain.get(continuationPointer);
         }

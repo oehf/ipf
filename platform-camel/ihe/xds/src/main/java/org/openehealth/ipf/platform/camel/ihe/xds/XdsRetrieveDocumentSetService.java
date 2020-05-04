@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
@@ -40,13 +39,13 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
     }
 
     protected RetrieveDocumentSetResponseType processRequest(T body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(body);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
+            var errorResponse = new RetrievedDocumentSet(
                     exception,
-                    ErrorCode.REPOSITORY_METADATA_ERROR,
+                    ErrorCode.REPOSITORY_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     homeCommunityId);
             if (homeCommunityId != null) {

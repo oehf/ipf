@@ -93,7 +93,7 @@ public class Code extends Hl7v2Based<CE> {
     @XmlAttribute
     @XmlJavaTypeAdapter(value = LocalizedStringAdapter.class)
     public LocalizedString getDisplayName() {
-        String value = getHapiObject().getCe2_Text().getValue();
+        var value = getHapiObject().getCe2_Text().getValue();
 
         if (StringUtils.isEmpty(value)) {
             localizedString = null;
@@ -141,7 +141,7 @@ public class Code extends Hl7v2Based<CE> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Code that = (Code) o;
+        var that = (Code) o;
         return Objects.equals(getCode(), that.getCode()) &&
                 Objects.equals(getDisplayName(), that.getDisplayName()) &&
                 Objects.equals(getSchemeName(), that.getSchemeName());

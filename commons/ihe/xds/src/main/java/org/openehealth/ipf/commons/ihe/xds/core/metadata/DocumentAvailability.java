@@ -65,7 +65,7 @@ public enum DocumentAvailability {
             return null;
         }
 
-        for (DocumentAvailability documentAvailability : DocumentAvailability.values()) {
+        for (var documentAvailability : DocumentAvailability.values()) {
             if (opcode.equals(documentAvailability.getOpcode()) || opcode.equals(documentAvailability.getFullQualified())) {
                 return documentAvailability;
             }

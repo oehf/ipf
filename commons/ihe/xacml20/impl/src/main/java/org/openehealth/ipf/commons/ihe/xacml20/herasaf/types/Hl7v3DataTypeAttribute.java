@@ -65,7 +65,7 @@ abstract public class Hl7v3DataTypeAttribute<T> extends AbstractDataTypeAttribut
                 if (o instanceof Node) {
                     o = JAXB_CONTEXT.createUnmarshaller().unmarshal((Node) o);
                 }
-                Object pojo = (o instanceof JAXBElement) ? ((JAXBElement) o).getValue() : o;
+                var pojo = (o instanceof JAXBElement) ? ((JAXBElement) o).getValue() : o;
                 if (typeClass.isAssignableFrom(pojo.getClass())) {
                     return (T) pojo;
                 }

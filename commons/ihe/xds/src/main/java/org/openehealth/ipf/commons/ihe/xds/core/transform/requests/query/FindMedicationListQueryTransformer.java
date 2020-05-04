@@ -44,7 +44,7 @@ public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTr
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
@@ -72,7 +72,7 @@ public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTr
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));

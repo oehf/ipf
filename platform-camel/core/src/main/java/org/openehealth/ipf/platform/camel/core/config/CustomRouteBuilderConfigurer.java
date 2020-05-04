@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
@@ -60,7 +59,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
     @Override
     public void configure(CustomRouteBuilder customRouteBuilder) throws Exception{
         if (customRouteBuilder.getIntercepted() != null) {
-            RouteBuilder intercepted = customRouteBuilder.getIntercepted();
+            var intercepted = customRouteBuilder.getIntercepted();
             customRouteBuilder.setContext(camelContext);
             customRouteBuilder.setRouteCollection(intercepted.getRouteCollection());
             customRouteBuilder.setRestCollection(intercepted.getRestCollection());

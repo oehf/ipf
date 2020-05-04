@@ -17,7 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Component;
+import org.apache.camel.Consumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.PollingConsumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina.MinaConfiguration;
@@ -25,10 +32,7 @@ import org.apache.camel.component.mina.MinaConsumer;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.component.mina.MinaProducer;
 import org.apache.camel.support.DefaultEndpoint;
-import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
-import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -39,10 +43,9 @@ import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
+
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +64,6 @@ public abstract class MllpEndpoint<
         ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
         extends DefaultEndpoint
         implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MllpEndpoint.class);
 
     @Getter(AccessLevel.PROTECTED)
     private final ConfigType config;
@@ -104,11 +105,11 @@ public abstract class MllpEndpoint<
      */
     @Override
     public Producer doCreateProducer() throws Exception {
-        MinaProducer producer = (MinaProducer) wrappedEndpoint.createProducer();
+        var producer = (MinaProducer) wrappedEndpoint.createProducer();
         if (config.getSslContext() != null) {
-            DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
+            var filterChain = producer.getFilterChain();
             if (!filterChain.contains("ssl")) {
-                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
+                var filter = new HandshakeCallbackSSLFilter(config.getSslContext());
                 filter.setUseClientMode(true);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
                 filter.setEnabledProtocols(config.getSslProtocols());
@@ -127,11 +128,11 @@ public abstract class MllpEndpoint<
      */
     @Override
     public Consumer doCreateConsumer(Processor processor) throws Exception {
-        MinaConsumer consumer = (MinaConsumer) wrappedEndpoint.createConsumer(processor);
+        var consumer = (MinaConsumer) wrappedEndpoint.createConsumer(processor);
         if (config.getSslContext() != null) {
-            DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
+            var filterChain = consumer.getAcceptor().getFilterChain();
             if (!filterChain.contains("ssl")) {
-                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
+                var filter = new HandshakeCallbackSSLFilter(config.getSslContext());
                 filter.setNeedClientAuth(config.getClientAuthType() == ClientAuthType.MUST);
                 filter.setWantClientAuth(config.getClientAuthType() == ClientAuthType.WANT);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
@@ -150,8 +151,8 @@ public abstract class MllpEndpoint<
         @Override
         public void run(IoSession session, String message) {
             if (config.isAudit()) {
-                String hostAddress = session.getRemoteAddress().toString();
-                AuditMessage auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
+                var hostAddress = session.getRemoteAddress().toString();
+                var auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
                         config.getAuditContext(), message, hostAddress);
                 config.getAuditContext().audit(auditMessage);
             }
@@ -247,7 +248,7 @@ public abstract class MllpEndpoint<
 
     @ManagedAttribute(description = "Mina Filters")
     public String[] getIoFilters() {
-        List<IoFilter> filters = getConfiguration().getFilters();
+        var filters = getConfiguration().getFilters();
         return toStringArray(filters);
     }
 
@@ -289,8 +290,8 @@ public abstract class MllpEndpoint<
     }
 
     private String[] toStringArray(List<?> list) {
-        final String[] result = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
+        final var result = new String[list.size()];
+        for (var i = 0; i < list.size(); i++) {
             result[i] = list.get(i).getClass().getCanonicalName();
         }
         return result;
@@ -322,7 +323,7 @@ public abstract class MllpEndpoint<
     @Override
     public boolean equals(Object object) {
         if (object instanceof MllpEndpoint) {
-            MllpEndpoint<?, ?, ?> that = (MllpEndpoint<?, ?, ?>) object;
+            var that = (MllpEndpoint<?, ?, ?>) object;
             return wrappedEndpoint.equals(that.getWrappedEndpoint());
         }
         return false;

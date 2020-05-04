@@ -40,9 +40,9 @@ public class QueryRegistryTransformer {
         if (request == null) {
             return null;
         }
-        
-        Query query = request.getQuery();
-        EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest();
+
+        var query = request.getQuery();
+        var ebXML = createAdhocQueryRequest();
         query.accept(new ToEbXMLVisitor(ebXML));        
 
         ebXML.setReturnType(request.getReturnType().getCode());
@@ -60,17 +60,17 @@ public class QueryRegistryTransformer {
         if (ebXML == null) {
             return null;
         }
-        
-        String id = ebXML.getId();
-        QueryType queryType = QueryType.valueOfId(id);
+
+        var id = ebXML.getId();
+        var queryType = QueryType.valueOfId(id);
         if (queryType == null) {
             return null;
         }
-        
-        Query query = createQuery(queryType);        
+
+        var query = createQuery(queryType);
         query.accept(new FromEbXMLVisitor(ebXML));
-        
-        QueryRegistry queryRegistry = new QueryRegistry(query);
+
+        var queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.valueOfCode(ebXML.getReturnType()));
 
         return queryRegistry;

@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -38,7 +39,7 @@ public class SerializationTest {
 
     @Test
     public void testProvideAndRegisterDocumentSet() throws Exception {
-        ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
+        var request = SampleData.createProvideAndRegisterDocumentSet();
         checkSerialization(request);
     }
 
@@ -92,39 +93,34 @@ public class SerializationTest {
     }
 
     private void checkJavaSerialization(Object original) throws IOException, ClassNotFoundException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-        ObjectInputStream ois = null;
-        try {
+        var out = new ByteArrayOutputStream();
+        try (var oos = new ObjectOutputStream(out)) {
             oos.writeObject(original);
-            InputStream in = new ByteArrayInputStream(out.toByteArray());
-            ois = new ObjectInputStream(in);   
+        }
+        var in = new ByteArrayInputStream(out.toByteArray());
+        try (var ois = new ObjectInputStream(in)) {
             Object copy = ois.readObject();
             assertSame(original.getClass(), copy.getClass());
             assertEquals(original, copy);
         }
-        finally {
-            IOUtils.closeQuietly(oos);
-            IOUtils.closeQuietly(ois);
-        }
     }
 
     private void checkJacksonSerialization(Object original) throws IOException {
-        ObjectMapper objectMapper = createObjectMapper();
+        var objectMapper = createObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String json = objectMapper.writeValueAsString(original);
+        var json = objectMapper.writeValueAsString(original);
 
-        Object unmarshalled = objectMapper.readValue(json, original.getClass());
+        var unmarshalled = objectMapper.readValue(json, original.getClass());
         assertEquals(original, unmarshalled);
     }
 
     @Test
     public void testNameHandling() throws Exception {
-        Person original = new Person();
+        var original = new Person();
         original.setName(new XpnName("Krause", "Wilhelm", "Klaus Peter", "Esq.", "Prince", "Dr.-Ing."));
-        ObjectMapper objectMapper = createObjectMapper();
-        String json = objectMapper.writeValueAsString(original);
+        var objectMapper = createObjectMapper();
+        var json = objectMapper.writeValueAsString(original);
         Object unmarshalled = objectMapper.readValue(json, original.getClass());
         assertEquals(original, unmarshalled);
     }

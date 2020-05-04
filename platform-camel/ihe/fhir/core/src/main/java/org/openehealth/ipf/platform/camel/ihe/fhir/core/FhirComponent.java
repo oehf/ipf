@@ -58,7 +58,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @param resourceProvider the resource provider
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) {
-        String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
+        var name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
         DefaultFhirRegistry.getFhirRegistry(name).register(resourceProvider);
     }
 
@@ -69,7 +69,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @throws Exception can be thrown
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) throws Exception {
-        String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
+        var name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
         DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
     }
 
@@ -93,7 +93,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        FhirEndpointConfiguration<AuditDatasetType> config = createConfig(remaining, parameters);
+        var config = createConfig(remaining, parameters);
         // Component configuration determines if lazy loading is allowed or not. Otherwise the endpoint has
         // the choice to do so.
         if (!fhirInteractionId.getFhirTransactionConfiguration().supportsLazyLoading() &&

@@ -17,7 +17,15 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
-import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.Attachment;
+import org.hl7.fhir.dstu3.model.Binary;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.DocumentManifest;
+import org.hl7.fhir.dstu3.model.DocumentReference;
+import org.hl7.fhir.dstu3.model.Enumerations;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.junit.Test;
 
 import java.security.MessageDigest;
@@ -36,17 +44,17 @@ public class Iti65ValidatorTest {
 
     @Test
     public void validate() throws Exception {
-        Iti65Validator iti65Validator = new Iti65Validator();
+        var iti65Validator = new Iti65Validator();
         iti65Validator.validateRequest(FhirContext.forDstu3(), provideAndRegister(), Collections.emptyMap());
     }
 
     protected Bundle provideAndRegister() throws Exception {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Iti65Constants.ITI65_PROFILE);
 
         // Manifest
 
-        DocumentManifest manifest = new DocumentManifest();
+        var manifest = new DocumentManifest();
         manifest.setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
                 .setCreated(new Date())
                 .setDescription("description")
@@ -65,17 +73,17 @@ public class Iti65ValidatorTest {
 
         // Reference
 
-        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Instant instant = ZonedDateTime.of(
+        var instant = ZonedDateTime.of(
                 LocalDate.of(2013, 7, 1),
                 LocalTime.of(13, 11, 13),
                 ZoneId.of("UTC")
         ).toInstant();
 
-        Date timestamp = Date.from(instant);
+        var timestamp = Date.from(instant);
 
-        DocumentReference reference = new DocumentReference();
+        var reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 
         reference.setMasterIdentifier(
@@ -112,7 +120,7 @@ public class Iti65ValidatorTest {
 
         // Binary
 
-        Binary binary = new Binary()
+        var binary = new Binary()
                 .setContentType("text/plain")
                 .setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);

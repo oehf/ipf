@@ -122,7 +122,7 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
         if (httpClient == null) {
 
             // @formatter:off
-            RequestConfig defaultRequestConfig = RequestConfig.custom()
+            var defaultRequestConfig = RequestConfig.custom()
                     .setConnectTimeout(getConnectTimeout())
                     .setSocketTimeout(getSocketTimeout())
                     .setConnectionRequestTimeout(getConnectionRequestTimeout())
@@ -130,7 +130,7 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                     .setStaleConnectionCheckEnabled(true)
                     .build();
 
-            HttpClientBuilder builder = newHttpClientBuilder()
+            var builder = newHttpClientBuilder()
                     .useSystemProperties()
                     .setDefaultRequestConfig(defaultRequestConfig)
                     .setMaxConnTotal(getPoolMaxTotal())

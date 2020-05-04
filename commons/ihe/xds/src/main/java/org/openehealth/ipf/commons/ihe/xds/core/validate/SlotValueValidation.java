@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 
@@ -78,11 +76,11 @@ public class SlotValueValidation implements RegistryObjectValidator {
      *          if the validation failed.
      */
     public void validate(EbXMLSlotList slotList) throws XDSMetaDataException {
-        List<String> slotValues = slotList.getSlotValues(slotName);
+        var slotValues = slotList.getSlotValues(slotName);
         metaDataAssert(slotValues.size() >= min && slotValues.size() <= max,
                 WRONG_NUMBER_OF_SLOT_VALUES, slotName, min, max, slotValues.size());
 
-        for (String value : slotValues) {
+        for (var value : slotValues) {
             metaDataAssert(value != null, EMPTY_SLOT_VALUE, slotName);            
             validator.validate(value);
         }

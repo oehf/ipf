@@ -26,7 +26,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.*;
+import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.*;
 
 /**
  * Validates the HITSP C37 schematron rule set.

@@ -59,7 +59,7 @@ public class ObservationResourceProvider extends AbstractPcc44ResourceProvider<O
             HttpServletResponse httpServletResponse) {
 
 
-        ObservationSearchParameters parameters = ObservationSearchParameters.builder()
+        var parameters = ObservationSearchParameters.builder()
                 .patientReference(patient)
                 .date(date)
                 .code(code)

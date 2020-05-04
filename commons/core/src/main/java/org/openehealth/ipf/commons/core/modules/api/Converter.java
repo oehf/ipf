@@ -46,8 +46,8 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * @throws RenderException
      */
     public final String convert(String message, Object... params) {
-        S parsed = parse(message, params);
-        T translated = zap(parsed, params);
+        var parsed = parse(message, params);
+        var translated = zap(parsed, params);
         return render(translated, params);
     }
 
@@ -56,8 +56,8 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * representation.
      */
     public final OutputStream convert(InputStream in, OutputStream out, Object... params) throws IOException {
-        S parsed = parse(in, params);
-        T translated = zap(parsed, params);
+        var parsed = parse(in, params);
+        var translated = zap(parsed, params);
         return render(translated, out, params);
     }
 
@@ -66,8 +66,8 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * representation.
      */
     public final Result convert(Source source, Result result, Object... params) throws IOException {
-        S parsed = parse(source, params);
-        T translated = zap(parsed, params);
+        var parsed = parse(source, params);
+        var translated = zap(parsed, params);
         return render(translated, result, params);
     }
 
@@ -76,8 +76,8 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * representation.
      */
     public final Writer convert(Reader reader, Writer writer, Object... params) throws IOException {
-        S parsed = parse(reader, params);
-        T translated = zap(parsed, params);
+        var parsed = parse(reader, params);
+        var translated = zap(parsed, params);
         return render(translated, writer, params);
     }
 

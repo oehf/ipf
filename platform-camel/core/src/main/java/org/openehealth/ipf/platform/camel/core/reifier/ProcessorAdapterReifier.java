@@ -1,9 +1,8 @@
 package org.openehealth.ipf.platform.camel.core.reifier;
 
 import org.apache.camel.Processor;
-import org.apache.camel.spi.RouteContext;
+import org.apache.camel.Route;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
-import org.openehealth.ipf.platform.camel.core.model.AuditDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
 
 /**
@@ -11,13 +10,13 @@ import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
  */
 public abstract class ProcessorAdapterReifier<T extends ProcessorAdapterDefinition> extends DelegateReifier<T> {
 
-    public ProcessorAdapterReifier(RouteContext routeContext, T definition) {
-        super(routeContext, definition);
+    public ProcessorAdapterReifier(Route route, T definition) {
+        super(route, definition);
     }
 
     @Override
     protected Processor doCreateDelegate() {
-        ProcessorAdapter adapter = doCreateProcessor();
+        var adapter = doCreateProcessor();
         if (definition.getInputExpression() != null) {
             adapter.input(definition.getInputExpression());
         }

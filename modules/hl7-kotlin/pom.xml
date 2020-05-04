@@ -20,7 +20,7 @@
     <artifactId>ipf-modules-hl7-kotlin</artifactId>
     <name>ipf-modules-hl7-kotlin</name>
     <description>HL7 extensions and HL7 DSL support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -29,9 +29,9 @@
     </parent>
 
     <properties>
-        <kotlin.dokka.version>0.9.17</kotlin.dokka.version>
-        <kotlin.version>1.3.31</kotlin.version>
-        <kotlin.logging.version>1.6.26</kotlin.logging.version>
+        <kotlin.dokka.version>0.10.1</kotlin.dokka.version>
+        <kotlin.version>1.3.72</kotlin.version>
+        <kotlin.logging.version>1.7.9</kotlin.logging.version>
     </properties>
 
     <dependencies>
@@ -167,13 +167,6 @@
             </build>
         </profile>
     </profiles>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 
 </project>

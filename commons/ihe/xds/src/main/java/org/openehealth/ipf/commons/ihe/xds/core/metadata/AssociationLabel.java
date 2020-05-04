@@ -72,7 +72,7 @@ public enum AssociationLabel {
             return null;
         }
 
-        for (AssociationLabel label : AssociationLabel.values()) {
+        for (var label : AssociationLabel.values()) {
             if (opcode.equals(label.getOpcode())) {
                 return label;
             }

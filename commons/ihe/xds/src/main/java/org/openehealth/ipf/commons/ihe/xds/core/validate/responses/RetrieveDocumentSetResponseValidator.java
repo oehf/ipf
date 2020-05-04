@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
@@ -45,19 +43,19 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
 
         regResponseValidator.validate(response, profile);
 
-        for (RetrievedDocument doc : response.getDocuments()) {
-            DocumentReference requestData = doc.getRequestData();
+        for (var doc : response.getDocuments()) {
+            var requestData = doc.getRequestData();
 
-            String repoId = requestData.getRepositoryUniqueId();
+            var repoId = requestData.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
 
-            String docId = requestData.getDocumentUniqueId();
+            var docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
 
-            String newDocId = doc.getNewDocumentUniqueId();
+            var newDocId = doc.getNewDocumentUniqueId();
             metaDataAssert(!docId.equals(newDocId), ON_DEMAND_DOC_ID_MUST_DIFFER);
 
-            String mimeType = doc.getMimeType();
+            var mimeType = doc.getMimeType();
             metaDataAssert(mimeType != null && !mimeType.isEmpty(), MIME_TYPE_MUST_BE_SPECIFIED);
 
             if (profile.getInteractionProfile().requiresHomeCommunityId()) {

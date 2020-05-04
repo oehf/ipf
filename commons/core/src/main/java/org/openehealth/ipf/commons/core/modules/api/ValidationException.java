@@ -62,15 +62,15 @@ public class ValidationException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        StringBuilder sb = new StringBuilder();
-        
-        String msg = super.getMessage();
+        var sb = new StringBuilder();
+
+        var msg = super.getMessage();
         if(msg != null) {
             sb.append(msg).append('\n');
         }
 
         if(causes != null) {
-            for(Throwable t : causes) {
+            for(var t : causes) {
                 if(t != null) {
                     msg = t.getMessage();
                     sb.append((msg == null) ? t.getClass().getName() : msg).append('\n');
@@ -78,7 +78,7 @@ public class ValidationException extends RuntimeException {
             }
         }
 
-        int len = sb.length(); 
+        var len = sb.length();
         return (len == 0) ? getClass().getName() : sb.deleteCharAt(len - 1).toString();
     }
 

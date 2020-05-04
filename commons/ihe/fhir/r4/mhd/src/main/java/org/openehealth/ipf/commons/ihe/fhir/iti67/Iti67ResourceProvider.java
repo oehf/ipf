@@ -99,11 +99,11 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
         // Be graceful and accept STU3 parameters as well
-        DateRangeParam dateParam = date != null ? date : indexed;
-        TokenOrListParam categoryParam = category != null ? category : class_;
-        TokenOrListParam securityLabelParam = securityLabel != null ? securityLabel : label;
+        var dateParam = date != null ? date : indexed;
+        var categoryParam = category != null ? category : class_;
+        var securityLabelParam = securityLabel != null ? securityLabel : label;
 
-        TokenOrListParam relatedTokenParam = related != null ?
+        var relatedTokenParam = related != null ?
                 new TokenOrListParam() :
                 relatedId;
         if (related != null) {
@@ -112,7 +112,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                     .forEach(relatedTokenParam::addOr);
         }
 
-        Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
+        var searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
                 .date(dateParam)
@@ -133,7 +133,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
 
         searchParameters.setAuthor(author);
 
-        String patientChain = patient.getChain();
+        var patientChain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(patientChain)) {
             searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
         } else if (patientChain == null || patientChain.isEmpty()) {

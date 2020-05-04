@@ -16,12 +16,9 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
-import static java.util.Objects.requireNonNull;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Base client implementation of RFC 5424 syslog for sending audit messages to an Audit Record Repository
@@ -44,33 +41,26 @@ public class RFC5424Protocol {
      */
     private static final String TRANSPORT_MSGID = "IHE+RFC-3881";
 
-    /**
-     * Precision of the timestamp. Note that RFC5424 only allows 6 subsecond digits
-     * which corresponds to {@link ChronoUnit#MICROS}
-     */
-    public static ChronoUnit precision = ChronoUnit.MILLIS;
 
-    private final String senderHostName;
-    private final String senderProcessId;
-
-    public RFC5424Protocol(String senderHostName, String senderProcessId) {
-        this.senderHostName = requireNonNull(senderHostName);
-        this.senderProcessId = requireNonNull(senderProcessId);
+    public RFC5424Protocol() {
     }
 
+
     /**
-     * Serialize the syslog message payload body for sending by this transport
+     * Serialize the syslog message payload body for sending by this transport. Must only be
+     * called if this object was initialized with {@link #RFC5424Protocol()}
      *
-     * @param auditMessage Message to prepare
+     * @param auditMetadataProvider audit meta data
+     * @param auditMessage          message to prepare
      * @return serialized message
      */
-    protected byte[] getTransportPayload(String sendingApplication, String auditMessage) {
-        String msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
+    protected byte[] getTransportPayload(AuditMetadataProvider auditMetadataProvider, String auditMessage) {
+        var msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
                 TRANSPORT_PRI,
-                Instant.now().truncatedTo(precision),
-                senderHostName,
-                sendingApplication.replace(' ', '_'),
-                senderProcessId,
+                auditMetadataProvider.getTimestamp(),
+                auditMetadataProvider.getHostname(),
+                auditMetadataProvider.getSendingApplication().replace(' ', '_'),
+                auditMetadataProvider.getProcessID(),
                 TRANSPORT_MSGID,
                 auditMessage);
         return msg.trim().getBytes(StandardCharsets.UTF_8);

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import groovy.xml.slurpersupport.GPathResult;
 import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
@@ -29,7 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.ws.BindingProvider;
-import java.util.Map;
 
 /**
  * Camel producer for the ITI-55 XCPD transaction
@@ -46,9 +44,9 @@ class Iti55Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransac
 
     @Override
     protected void enrichRequestContext(Exchange exchange, WrappedMessageContext requestContext) {
-        String requestString = exchange.getIn().getBody(String.class);
-        GPathResult requestXml = Hl7v3Utils.slurp(requestString);
-        String processingMode = Iti55Utils.processingMode(requestXml);
+        var requestString = exchange.getIn().getBody(String.class);
+        var requestXml = Hl7v3Utils.slurp(requestString);
+        var processingMode = Iti55Utils.processingMode(requestXml);
 
         if ("D".equals(processingMode)) {
             if (exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class) != null) {
@@ -65,8 +63,8 @@ class Iti55Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransac
 
     @Override
     protected String callService(Object client, String request) {
-        BindingProvider bindingProvider = (BindingProvider) client;
-        Map<String, Object> requestContext = bindingProvider.getRequestContext();
+        var bindingProvider = (BindingProvider) client;
+        var requestContext = bindingProvider.getRequestContext();
 
         return ("D".equals(requestContext.get(PROCESSING_MODE_PROPERTY))) ?
             ((Iti55PortType) client).discoverPatientsDeferred(request) :
@@ -76,8 +74,8 @@ class Iti55Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransac
 
     @Override
     protected String[] getAlternativeRequestKeys(Exchange exchange) {
-        String requestString = exchange.getIn().getBody(String.class);
-        GPathResult requestXml = Hl7v3Utils.slurp(requestString);
+        var requestString = exchange.getIn().getBody(String.class);
+        var requestXml = Hl7v3Utils.slurp(requestString);
         return new String[] { Iti55Utils.requestQueryId(requestXml) };
     }
 

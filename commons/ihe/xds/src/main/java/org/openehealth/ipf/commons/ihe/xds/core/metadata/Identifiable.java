@@ -91,7 +91,7 @@ public class Identifiable extends Hl7v2Based<CX> {
     @XmlAttribute(name = "root")
     @XmlJavaTypeAdapter(value = AssigningAuthorityAdapter.class)
     public AssigningAuthority getAssigningAuthority() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
+        var assigningAuthority = new AssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
         return assigningAuthority.isEmpty() ? null : assigningAuthority;
     }
 
@@ -107,7 +107,7 @@ public class Identifiable extends Hl7v2Based<CX> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Identifiable that = (Identifiable) o;
+        var that = (Identifiable) o;
         return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
                 Objects.equals(getId(), that.getId());
     }

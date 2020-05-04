@@ -21,8 +21,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ListIterator;
-
 import static org.junit.Assert.*;
 
 /**
@@ -32,26 +30,26 @@ import static org.junit.Assert.*;
 public class DateOfBirthPIDTransformerTest {
     @Test
     public void testToHL7() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.setDateOfBirth("19800102030405+0100");
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-7");
+        var iterator = patientInfo.getHl7FieldIterator("PID-7");
         assertEquals("19800102030405+0100", iterator.next());
         assertFalse(iterator.hasNext());
     }
     
     @Test
     public void testToHL7WithNoDate() {
-        PatientInfo patientInfo = new PatientInfo();
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-7");
+        var patientInfo = new PatientInfo();
+        var iterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(iterator.hasNext());
         assertNull(patientInfo.getDateOfBirth());
     }
 
     @Test
     public void testFromHL7() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-7").add("19800102030405-0100^sdf");
-        ZonedDateTime expected = ZonedDateTime.of(1980, 1, 2, 3, 4, 5, 0, ZoneId.of("-01:00"));
+        var expected = ZonedDateTime.of(1980, 1, 2, 3, 4, 5, 0, ZoneId.of("-01:00"));
         assertEquals(
                 new Timestamp(expected, Timestamp.Precision.SECOND),
                 patientInfo.getDateOfBirth());
@@ -59,14 +57,14 @@ public class DateOfBirthPIDTransformerTest {
 
     @Test
     public void testFromHL7Null() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-7").add(null);
         assertNull(patientInfo.getDateOfBirth());
     }
 
     @Test
     public void testFromHL7Empty() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-7").add("");
         assertNull(patientInfo.getDateOfBirth());
     }

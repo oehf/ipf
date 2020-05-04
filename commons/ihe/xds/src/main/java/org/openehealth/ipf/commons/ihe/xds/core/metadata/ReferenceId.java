@@ -100,7 +100,7 @@ public class ReferenceId extends Hl7v2Based<CX> {
      * @return the assigning authority (CX.4).
      */
     public CXiAssigningAuthority getAssigningAuthority() {
-        CXiAssigningAuthority assigningAuthority = new CXiAssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
+        var assigningAuthority = new CXiAssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
         return assigningAuthority.isEmpty() ? null : assigningAuthority;
     }
 
@@ -132,7 +132,7 @@ public class ReferenceId extends Hl7v2Based<CX> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReferenceId that = (ReferenceId) o;
+        var that = (ReferenceId) o;
         return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
                 Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getIdTypeCode(), that.getIdTypeCode());

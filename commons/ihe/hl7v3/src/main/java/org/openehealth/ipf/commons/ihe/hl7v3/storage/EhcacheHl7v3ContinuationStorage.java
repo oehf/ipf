@@ -43,7 +43,7 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     }
 
     public String getMessage(String key) {
-        Element element = ehcache.get(key + MESSAGE_SUFFIX);
+        var element = ehcache.get(key + MESSAGE_SUFFIX);
         return element != null ? (String) element.getObjectValue() : null;
     }
 
@@ -52,9 +52,9 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     }
 
     public int getLastResultNumber(String key) {
-        Element element = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
+        var element = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
         if (element != null) {
-            Integer i = (Integer) element.getObjectValue();
+            var i = (Integer) element.getObjectValue();
             return (i != null) ? i : -1;
         }
         return -1;
@@ -65,9 +65,9 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     }
 
     public int getContinuationQuantity(String key) {
-        Element element = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
+        var element = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
         if (element != null) {
-            Integer i = (Integer) element.getObjectValue();
+            var i = (Integer) element.getObjectValue();
             return (i != null) ? i : -1;
         }
         return -1;

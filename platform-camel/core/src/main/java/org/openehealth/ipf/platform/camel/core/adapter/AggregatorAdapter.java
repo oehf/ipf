@@ -95,9 +95,9 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      */
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-        Object newInput = adaptAggregationInput(newExchange);
-        Object oldInput = adaptInput(oldExchange);
-        Object params = adaptParams(oldExchange);
+        var newInput = adaptAggregationInput(newExchange);
+        var oldInput = adaptInput(oldExchange);
+        var params = adaptParams(oldExchange);
         if (params == null) {
             doAggregate(oldExchange, oldInput, newInput, (Object[])null);
         } else if (params.getClass().isArray()) {

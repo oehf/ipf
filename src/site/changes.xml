@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="3.7.0" description="IPF 3.7.0" date="tbd">
+            <action dev="ohr" issue="304" type="add">
+                Added separate tlsParameters to AuditContext. Several internal interfaces were modified as well.
+            </action>
+            <action dev="ohr" issue="302" type="add">
+                Added HTTP sender to forward audit records to a HTTP-based relay
+            </action>
             <action dev="unixoid" issue="300" type="fix">
                 Move classes CachingUnsolicitedFragmentionStorage and CachingInteractiveHl7v2ContinuationStorage to commons-ihe-hl7v2 and rename.
                 Same with CachingAsynchronyCorrelator (moved to ipf-commons-ihe-xds), CachingHl7v3ContinuationStorage (moved to ipf-commons-ihe-ws)

@@ -40,6 +40,10 @@
             <artifactId>ipf-atna-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.boot</groupId>
+            <artifactId>ipf-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-fhir-r4-core</artifactId>
         </dependency>
@@ -60,12 +64,5 @@
         </dependency>
 
 	</dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

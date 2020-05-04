@@ -103,7 +103,7 @@ public enum AssociationType {
             return null;
         }
 
-        for (AssociationType type : AssociationType.values()) {
+        for (var type : AssociationType.values()) {
             if (opcode.equals(type.getOpcode21())) {
                 return type;
             }
@@ -125,7 +125,7 @@ public enum AssociationType {
             return null;
         }
 
-        for (AssociationType type : AssociationType.values()) {
+        for (var type : AssociationType.values()) {
             if (opcode.equals(type.getOpcode30())) {
                 return type;
             }

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.openehealth.ipf.commons.xml.SchematronProfile
-import org.openehealth.ipf.modules.cda.CDAR2Constants
+import org.openehealth.ipf.modules.cda.constants.CDAR2Constants
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 
 /**

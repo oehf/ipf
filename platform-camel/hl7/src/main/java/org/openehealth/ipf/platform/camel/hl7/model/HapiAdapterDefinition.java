@@ -17,8 +17,6 @@
 package org.openehealth.ipf.platform.camel.hl7.model;
 
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
-import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.hl7.adapter.HapiAdapter;
 

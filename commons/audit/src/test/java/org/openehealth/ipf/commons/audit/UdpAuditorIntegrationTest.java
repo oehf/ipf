@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Test;
@@ -35,13 +34,13 @@ public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
     @Test
     public void testUDP(TestContext testContext) throws Exception {
         auditContext.setAuditRepositoryTransport("UDP");
-        int count = 10;
-        Async async = testContext.async(count + 1);
+        var count = 10;
+        var async = testContext.async(count + 1);
         deploy(testContext, createUDPServer(LOCALHOST, port, async));
         while (async.count() > count) {
             Thread.sleep(10);
         }
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 

@@ -10,7 +10,7 @@
     <artifactId>ipf-platform-camel-ihe-fhir-r4-pixpdq</artifactId>
     <name>ipf-platform-camel-ihe-fhir-r4-pixpdq</name>
     <description>Apache Camel components for PIXm and PDQm transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
 
@@ -103,12 +103,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

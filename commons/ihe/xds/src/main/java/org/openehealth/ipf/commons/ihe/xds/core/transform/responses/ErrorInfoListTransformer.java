@@ -64,7 +64,7 @@ public class ErrorInfoListTransformer {
     public EbXMLRegistryError toEbXML(ErrorInfo errorInfo) {
         notNull(errorInfo, "error info cannot be null");
 
-        EbXMLRegistryError regError = factory.createRegistryError();
+        var regError = factory.createRegistryError();
 
         regError.setErrorCode((errorInfo.getErrorCode() == ErrorCode._USER_DEFINED)
                 ? errorInfo.getCustomErrorCode()
@@ -78,9 +78,9 @@ public class ErrorInfoListTransformer {
 
 
     public ErrorInfo fromEbXML(EbXMLRegistryError ebXML) {
-        ErrorInfo errorInfo = new ErrorInfo();
+        var errorInfo = new ErrorInfo();
 
-        ErrorCode errorCode = ErrorCode.valueOfOpcode(ebXML.getErrorCode());
+        var errorCode = ErrorCode.valueOfOpcode(ebXML.getErrorCode());
         errorInfo.setErrorCode(errorCode);
         if (errorCode == ErrorCode._USER_DEFINED) {
             errorInfo.setCustomErrorCode(ebXML.getErrorCode());

@@ -20,7 +20,6 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.TypeConverter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.NonReadingAttachmentMarshaller;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
@@ -179,7 +178,7 @@ public abstract class XdsRenderingUtils {
      */
     public static String doRender(Exchange exchange, Object body) {
         if (TYPES_CORRESPONDENCE.containsKey(body.getClass())) {
-            TypeConverter converter = exchange.getContext().getTypeConverter();
+            var converter = exchange.getContext().getTypeConverter();
             body = converter.convertTo(TYPES_CORRESPONDENCE.get(body.getClass()), exchange, body);
         }
         return renderEbxml(body);
@@ -195,8 +194,8 @@ public abstract class XdsRenderingUtils {
      */
     public static String renderEbxml(Object ebXml) {
         try {
-            StringWriter writer = new StringWriter();
-            Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
+            var writer = new StringWriter();
+            var marshaller = JAXB_CONTEXT.createMarshaller();
             marshaller.setAttachmentMarshaller(new NonReadingAttachmentMarshaller());
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(ebXml, writer);

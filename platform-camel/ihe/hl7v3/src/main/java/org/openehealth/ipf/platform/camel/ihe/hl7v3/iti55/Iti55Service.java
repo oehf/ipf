@@ -20,10 +20,8 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.support.DefaultExchange;
-import org.apache.camel.spi.ExecutorServiceManager;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception;
@@ -78,10 +76,10 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
     }
 
     private ExecutorService getDeferredResponseExecutorService(){
-        ExecutorServiceManager manager = this.camelContext.getExecutorServiceManager();
+        var manager = this.camelContext.getExecutorServiceManager();
 
         //Try to get one from the registry
-        ExecutorService result = manager.newThreadPool(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
+        var result = manager.newThreadPool(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
         
         //Create a default one with non-daemon threads
         if (result == null){
@@ -104,22 +102,22 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
     @Override
     protected String doProcess(String request) {
-        final String requestString = request;
-        final GPathResult requestXml = Hl7v3Utils.slurp(requestString);
-        final String processingMode = Iti55Utils.processingMode(requestXml);
+        final var requestString = request;
+        final var requestXml = Hl7v3Utils.slurp(requestString);
+        final var processingMode = Iti55Utils.processingMode(requestXml);
 
         // process regular requests in a synchronous route
         if ("I".equals(processingMode)) {
-            String response = doProcess0(requestString, requestXml);
+            var response = doProcess0(requestString, requestXml);
             configureWsaAction(Iti55PortType.REGULAR_REQUEST_OUTPUT_ACTION);
             return response;
         }
 
         else if ("D".equals(processingMode)) {
             // check whether deferred response URI is specified
-            final String deferredResponseUri = Iti55Utils.normalizedDeferredResponseUri(requestXml);
+            final var deferredResponseUri = Iti55Utils.normalizedDeferredResponseUri(requestXml);
             if (deferredResponseUri == null) {
-                Hl7v3Exception hl7v3Exception = new Hl7v3Exception("Deferred response URI is missing or not HTTP(S)");
+                var hl7v3Exception = new Hl7v3Exception("Deferred response URI is missing or not HTTP(S)");
                 hl7v3Exception.setTypeCode("AE");
                 hl7v3Exception.setAcknowledgementDetailCode("SYN105");
                 hl7v3Exception.setQueryResponseCode("AE");
@@ -127,15 +125,15 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             }
 
             // determine original request message ID
-            final WrappedMessageContext messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
-            AddressingProperties apropos = (AddressingProperties) messageContext.get(ADDRESSING_PROPERTIES_INBOUND);
-            final String requestMessageId = ((apropos != null) && (apropos.getMessageID() != null)) ?
+            final var messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
+            var apropos = (AddressingProperties) messageContext.get(ADDRESSING_PROPERTIES_INBOUND);
+            final var requestMessageId = ((apropos != null) && (apropos.getMessageID() != null)) ?
                     apropos.getMessageID().getValue() : null;
             if (requestMessageId == null) {
                 LOG.warn("Cannot determine WS-Addressing ID of the request message");
             }
 
-            final WsAuditDataset auditDataset = (WsAuditDataset) messageContext.getWrappedMessage()
+            final var auditDataset = (WsAuditDataset) messageContext.getWrappedMessage()
                     .getContextualProperty(AbstractAuditInterceptor.DATASET_CONTEXT_KEY);
 
             // in a separate thread: run the route, send its result synchronously
@@ -156,11 +154,11 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
                 exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
                 exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
 
-                AbstractWsEndpoint<?, ?> responseEndpoint = (AbstractWsEndpoint<?, ?>) camelContext.getEndpoint(deferredResponseUri);
+                var responseEndpoint = (AbstractWsEndpoint<?, ?>) camelContext.getEndpoint(deferredResponseUri);
                 responseEndpoint.setAuditContext(endpoint.getAuditContext());
 
                 exchange = producerTemplate.send(responseEndpoint, exchange);
-                Exception exception = Exchanges.extractException(exchange);
+                var exception = Exchanges.extractException(exchange);
                 if (exception != null) {
                     LOG.error("Sending deferred response failed", exception);
                 }
@@ -175,7 +173,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         }
 
         else {
-            Hl7v3Exception hl7v3Exception = new Hl7v3Exception(String.format("Unsupported processing mode '%s'", processingMode));
+            var hl7v3Exception = new Hl7v3Exception(String.format("Unsupported processing mode '%s'", processingMode));
             hl7v3Exception.setTypeCode("AE");
             hl7v3Exception.setAcknowledgementDetailCode("NS250");
             hl7v3Exception.setQueryResponseCode("AE");
@@ -185,8 +183,8 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
 
     private String doProcess0(String requestString, GPathResult requestXml) {
-        Exchange result = process(requestString);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(requestString);
+        var exception = Exchanges.extractException(result);
         return (exception != null) ?
             nak(exception, requestXml) :
             result.getMessage().getBody(String.class);
@@ -221,8 +219,8 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
      *      WS-Addressing action.
      */
     private static void configureWsaAction(String action) {
-        WrappedMessageContext messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
-        Message outMessage = messageContext.getWrappedMessage().getExchange().getOutMessage();
+        var messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
+        var outMessage = messageContext.getWrappedMessage().getExchange().getOutMessage();
 
         // when WS-Addressing headers were missing from the beginning
         // TODO: is this check still necessary under CXF 2.5?
@@ -230,13 +228,13 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             return;
         }
 
-        AddressingProperties apropos = (AddressingProperties) outMessage.get(ADDRESSING_PROPERTIES_OUTBOUND);
+        var apropos = (AddressingProperties) outMessage.get(ADDRESSING_PROPERTIES_OUTBOUND);
         if (apropos == null) {
             apropos = new AddressingProperties();
             outMessage.put(ADDRESSING_PROPERTIES_OUTBOUND, apropos);
         }
 
-        AttributedURIType actionHolder = new AttributedURIType();
+        var actionHolder = new AttributedURIType();
         actionHolder.setValue(action);
         apropos.setAction(actionHolder);
     }

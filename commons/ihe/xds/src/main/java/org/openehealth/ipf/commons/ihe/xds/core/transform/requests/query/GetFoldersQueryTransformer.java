@@ -45,7 +45,7 @@ public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFolde
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(FOLDER_LOGICAL_ID, query.getLogicalUuid());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
@@ -63,7 +63,7 @@ public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFolde
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setLogicalUuid(slots.toStringList(FOLDER_LOGICAL_ID));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

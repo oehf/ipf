@@ -19,6 +19,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryRequestType;
 
+import java.util.Objects;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -115,11 +117,7 @@ public class RemoveObjectsRequest
      *     
      */
     public String getDeletionScope() {
-        if (deletionScope == null) {
-            return "urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll";
-        } else {
-            return deletionScope;
-        }
+        return Objects.requireNonNullElse(deletionScope, "urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll");
     }
 
     /**

@@ -6,7 +6,7 @@
     <name>ipf-platform-camel</name>
     <packaging>pom</packaging>
     <description>Container project for Apache Camel support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
@@ -62,13 +62,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <!-- Note that GitHub does not like having leading slash, so make it explicit -->
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

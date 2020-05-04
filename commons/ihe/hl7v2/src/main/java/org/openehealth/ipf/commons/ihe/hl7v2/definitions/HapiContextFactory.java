@@ -62,6 +62,7 @@ public class HapiContextFactory {
      */
     public static HapiContext createHapiContext() {
         HapiContext context = new DefaultHapiContext();
+        context.getParserConfiguration().setValidating(false);
         context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         return context;
     }

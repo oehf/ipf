@@ -51,7 +51,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLAdhocQueryRequest30 message =
+        var message =
             new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
         new AdhocQueryRequestValidator().validate(message, ITI_18);
     };
@@ -60,7 +60,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLQueryResponse30 message =
+        var message =
             new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
         new QueryResponseValidator().validate(message, ITI_18);
     };
@@ -69,7 +69,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLAdhocQueryRequest30 message =
+        var message =
             new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
         new AdhocQueryRequestValidator().validate(message, ITI_38);
     };
@@ -78,7 +78,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLQueryResponse30 message =
+        var message =
             new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
         new QueryResponseValidator().validate(message, ITI_38);
     };
@@ -87,8 +87,8 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType> message =
-            new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+        var message =
+            new EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_39);
     };
 
@@ -96,7 +96,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetResponse30 message =
+        var message =
             new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
         new RetrieveDocumentSetResponseValidator().validate(message, ITI_39);
     };
@@ -105,7 +105,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLProvideAndRegisterDocumentSetRequest30 message =
+        var message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
         new ProvideAndRegisterDocumentSetRequestValidator().validate(message, ITI_41);
     };
@@ -114,7 +114,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLProvideAndRegisterDocumentSetRequest30 message =
+        var message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
         new ProvideAndRegisterDocumentSetRequestValidator().validate(message, XDM.Interactions.ITI_41);
     };
@@ -123,7 +123,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLProvideAndRegisterDocumentSetRequest30 message =
+        var message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
         new ProvideAndRegisterDocumentSetRequestValidator().validate(message, XDR.Interactions.ITI_41);
     };
@@ -132,7 +132,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message =
+        var message =
             new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_41);
     };
@@ -141,7 +141,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLSubmitObjectsRequest30 message =
+        var message =
             new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
         new SubmitObjectsRequestValidator().validate(message, ITI_42);
     };
@@ -150,7 +150,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_42);
     };
     
@@ -158,8 +158,8 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType> message =
-            new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+        var message =
+            new EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_43);
     };
    
@@ -167,7 +167,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetResponse30 message =
+        var message =
             new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
         new RetrieveDocumentSetResponseValidator().validate(message, ITI_43);
     };
@@ -176,7 +176,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLAdhocQueryRequest30 message =
+        var message =
                 new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
         new AdhocQueryRequestValidator().validate(message, ITI_51);
     };
@@ -185,7 +185,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLQueryResponse30 message =
+        var message =
                 new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
         new QueryResponseValidator().validate(message, ITI_51);
     };
@@ -194,7 +194,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLSubmitObjectsRequest30 message =
+        var message =
                 new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
         new SubmitObjectsRequestValidator().validate(message, ITI_57);
     };
@@ -203,7 +203,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_57);
     };
 
@@ -211,7 +211,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLSubmitObjectsRequest30 message =
+        var message =
             new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
         new SubmitObjectsRequestValidator().validate(message, ITI_61);
     };
@@ -220,7 +220,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_61);
     };
 
@@ -228,7 +228,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRemoveMetadataRequest30 message =
+        var message =
                 new EbXMLRemoveMetadataRequest30(exchange.getIn().getBody(RemoveObjectsRequest.class));
         new RemoveMetadataRequestValidator().validate(message, ITI_62);
     };
@@ -237,7 +237,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_62);
     };
 
@@ -245,7 +245,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLAdhocQueryRequest30 message =
+        var message =
             new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
         new AdhocQueryRequestValidator().validate(message, ITI_63);
     };
@@ -254,7 +254,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLQueryResponse30 message =
+        var message =
             new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
         new QueryResponseValidator().validate(message, ITI_63);
     };
@@ -263,8 +263,8 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLNonconstructiveDocumentSetRequest30<RemoveDocumentsRequestType> message =
-                new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
+        var message =
+                new EbXMLNonconstructiveDocumentSetRequest30<RemoveDocumentsRequestType>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_86);
     };
 
@@ -272,7 +272,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message =
+        var message =
                 new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, ITI_86);
     };
@@ -281,7 +281,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLSubmitObjectsRequest30 message =
+        var message =
                 new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
         new SubmitObjectsRequestValidator().validate(message, RMU.Interactions.ITI_92);
     };
@@ -290,7 +290,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
         new RegistryResponseValidator().validate(message, RMU.Interactions.ITI_92);
     };
 
@@ -494,7 +494,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveImagingDocumentSetRequest30 message =
+        var message =
             new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
         new RetrieveImagingDocumentSetRequestValidator().validate(message, RAD_69);
     };
@@ -503,7 +503,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetResponse30 message =
+        var message =
             new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
         new RetrieveDocumentSetResponseValidator().validate(message, RAD_69);
     };
@@ -512,7 +512,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveImagingDocumentSetRequest30 message =
+        var message =
             new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
         new RetrieveImagingDocumentSetRequestValidator().validate(message, RAD_75);
     };
@@ -521,7 +521,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetResponse30 message =
+        var message =
             new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
         new RetrieveDocumentSetResponseValidator().validate(message, RAD_75);
     };
@@ -558,7 +558,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLAdhocQueryRequest30 message =
+        var message =
                 new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
         new AdhocQueryRequestValidator().validate(message, PHARM_1);
     };
@@ -567,7 +567,7 @@ public abstract class XdsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLQueryResponse30 message =
+        var message =
                 new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
         new QueryResponseValidator().validate(message, PHARM_1);
     };

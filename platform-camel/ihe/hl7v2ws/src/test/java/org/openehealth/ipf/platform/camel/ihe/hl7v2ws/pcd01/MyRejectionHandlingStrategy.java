@@ -45,7 +45,7 @@ public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlin
 
     @Override
     public void handleRejectedExchange(Exchange cxfExchange) {
-        StringBuilder sb = new StringBuilder()
+        var sb = new StringBuilder()
                 .append("Rejection strategy invocation # ")
                 .append(COUNTER.getAndIncrement())
                 .append(": request\n")
@@ -53,7 +53,7 @@ public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlin
                         .get(StringPayloadHolder.PayloadType.SOAP_BODY))
                 .append("\n lead to ");
 
-        Exception exception = extractOutgoingException(cxfExchange);
+        var exception = extractOutgoingException(cxfExchange);
 
         if (exception != null) {
             sb.append("SOAP Fault:");

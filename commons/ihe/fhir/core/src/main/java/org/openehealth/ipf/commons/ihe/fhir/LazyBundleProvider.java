@@ -76,12 +76,12 @@ public class LazyBundleProvider extends AbstractBundleProvider {
             return getPartialResult(fromIndex, toIndex);
         }
         LOG.debug("Cached results contain the following ranges: {}. Requesting resources from index {} to {}", resultRanges, fromIndex, toIndex);
-        Range<Integer> wanted = Range.closedOpen(fromIndex, toIndex);
-        RangeSet<Integer> needed = resultRanges.required(wanted);
+        var wanted = Range.closedOpen(fromIndex, toIndex);
+        var needed = resultRanges.required(wanted);
         LOG.debug("Requiring the following ranges {}", needed);
-        for (Range<Integer> requiredRange : needed.asDescendingSetOfRanges()) {
+        for (var requiredRange : needed.asDescendingSetOfRanges()) {
             LOG.debug("Now requesting the following range {}", requiredRange);
-            List<IBaseResource> results = getPartialResult(requiredRange.lowerEndpoint(), requiredRange.upperEndpoint());
+            var results = getPartialResult(requiredRange.lowerEndpoint(), requiredRange.upperEndpoint());
             LOG.debug("Got back a list of size {}", results.size());
             if (!results.isEmpty()) {
                 cacheAll(requiredRange.lowerEndpoint(), results);
@@ -96,7 +96,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     }
 
     private List<IBaseResource> getPartialResult(int fromIndex, int toIndex) {
-        Map<String, Object> headers = getHeaders();
+        var headers = getHeaders();
         headers.put(FHIR_FROM_INDEX, fromIndex);
         headers.put(FHIR_TO_INDEX, toIndex);
         return obtainResources(getPayload(), headers);
@@ -105,7 +105,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     @Override
     public Integer size() {
         if (!cacheResults || size < 0) {
-            Map<String, Object> headers = getHeaders();
+            var headers = getHeaders();
             headers.put(FHIR_REQUEST_SIZE_ONLY, null);
             size = getConsumer().handleSizeRequest(getPayload(), headers);
         }
@@ -114,13 +114,13 @@ public class LazyBundleProvider extends AbstractBundleProvider {
 
     private void cacheAll(int fromIndex, List<IBaseResource> resources) {
         if (cachedResults.size() <= fromIndex) {
-            for (int i = cachedResults.size(); i < fromIndex; i++) {
+            for (var i = cachedResults.size(); i < fromIndex; i++) {
                 LOG.debug("Adding null for index {}", i);
                 cachedResults.add(null);
             }
             cachedResults.addAll(resources);
         } else {
-            for (int i = 0; i < resources.size(); i++) {
+            for (var i = 0; i < resources.size(); i++) {
                 cachedResults.set(fromIndex + i, resources.get(i));
             }
         }
@@ -135,7 +135,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
          * @return the ranges that actually need to be retrieved
          */
         public RangeSet<Integer> required(Range<Integer> wantedRange) {
-            RangeSet<Integer> intersection = rangeSet.subRangeSet(wantedRange);
+            var intersection = rangeSet.subRangeSet(wantedRange);
             return TreeRangeSet.create(intersection.complement().subRangeSet(wantedRange));
         }
 

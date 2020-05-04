@@ -24,7 +24,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import java.util.Set;
 
@@ -57,7 +56,7 @@ public class ManagedWsItiEndpointTest extends ContextTestSupport {
 
     protected CamelContext createCamelContext() throws Exception {
 
-        CamelContext context = super.createCamelContext();
+        var context = super.createCamelContext();
         context.addComponent("some-ws-iti", new SomeItiComponent());
         return context;
     }
@@ -65,20 +64,20 @@ public class ManagedWsItiEndpointTest extends ContextTestSupport {
 
     @Test
     public void testInit() throws Exception {
-        MBeanServer mbeanServer = getMBeanServer();
-        ObjectName on = ObjectName
+        var mbeanServer = getMBeanServer();
+        var on = ObjectName
                 .getInstance("org.gablorg:context=camel-1,type=context,name=\"camel-1\"");
-        ObjectInstance oi = mbeanServer.getObjectInstance(on);
+        var oi = mbeanServer.getObjectInstance(on);
         assertNotNull(oi);
     }
 
     @Test
     public void testEndpointAttributes() throws Exception {
-        MBeanServer mbeanServer = getMBeanServer();
+        var mbeanServer = getMBeanServer();
 
         Set<ObjectName> s = CastUtils.cast(mbeanServer.queryNames(new ObjectName(
                 "org.gablorg:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
-        ObjectName on = (ObjectName) s.toArray()[0];
+        var on = (ObjectName) s.toArray()[0];
         assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
                 mbeanServer.getAttribute(on, "Addressing"));
         assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),

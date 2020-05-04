@@ -58,7 +58,7 @@ public enum DecisionType {
     }
 
     public static DecisionType fromValue(String v) {
-        for (DecisionType c: DecisionType.values()) {
+        for (var c: DecisionType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

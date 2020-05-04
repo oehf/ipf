@@ -10,7 +10,7 @@
     <artifactId>ipf-platform-camel-ihe-fhir-r4-qedm</artifactId>
     <name>ipf-platform-camel-ihe-fhir-r4-qedm</name>
     <description>Apache Camel components for QEDM transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -117,12 +117,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

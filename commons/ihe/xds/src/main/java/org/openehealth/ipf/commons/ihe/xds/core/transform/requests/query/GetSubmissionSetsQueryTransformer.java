@@ -46,7 +46,7 @@ public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
@@ -63,7 +63,7 @@ public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

@@ -25,8 +25,6 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
-import java.util.Map;
-
 /**
  * Camel processors for translation of messages between FHIR and something else
  *
@@ -49,9 +47,9 @@ public final class FhirCamelTranslators {
      */
     public static Processor translateFhir(final FhirTranslator<?> translator) {
         return exchange -> {
-            Object fhir = exchange.getIn().getBody();
-            Map<String, Object> parameters = exchange.getIn().getHeaders();
-            org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
+            var fhir = exchange.getIn().getBody();
+            var parameters = exchange.getIn().getHeaders();
+            var resultMessage = Exchanges.resultMessage(exchange);
             resultMessage.setBody(translator.translateFhir(fhir, parameters));
             resultMessage.getHeaders().putAll(parameters);
             if (fhir instanceof IIdType) {
@@ -64,8 +62,8 @@ public final class FhirCamelTranslators {
         return new ExpressionAdapter() {
             @Override
             public Object evaluate(Exchange exchange) {
-                Object fhir = exchange.getIn().getBody();
-                Map<String, Object> parameters = exchange.getIn().getHeaders();
+                var fhir = exchange.getIn().getBody();
+                var parameters = exchange.getIn().getHeaders();
                 return translator.translateFhir(fhir, parameters);
             }
         };
@@ -78,9 +76,9 @@ public final class FhirCamelTranslators {
      */
     public static <T> Processor translateToFhir(final ToFhirTranslator<T> translator, Class<T> clazz) {
         return exchange -> {
-            T msg = exchange.getIn().getMandatoryBody(clazz);
-            Map<String, Object> parameters = exchange.getIn().getHeaders();
-            org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
+            var msg = exchange.getIn().getMandatoryBody(clazz);
+            var parameters = exchange.getIn().getHeaders();
+            var resultMessage = Exchanges.resultMessage(exchange);
             resultMessage.setBody(translator.translateToFhir(msg, parameters));
             resultMessage.getHeaders().putAll(parameters);
         };

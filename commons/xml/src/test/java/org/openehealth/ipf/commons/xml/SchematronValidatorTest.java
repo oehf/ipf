@@ -51,7 +51,7 @@ public class SchematronValidatorTest {
             v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
             fail("This line shall be not reachable");
         } catch (SchematronValidationException e) {
-            Throwable[] cause = e.getCauses();
+            var cause = e.getCauses();
             assertEquals(3, cause.length);
             assertEquals(10, e.getSvrl().getActivePatternAndFiredRuleAndFailedAssert().size());
         }

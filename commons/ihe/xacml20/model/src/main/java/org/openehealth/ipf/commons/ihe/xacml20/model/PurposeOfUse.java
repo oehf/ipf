@@ -37,7 +37,7 @@ public enum PurposeOfUse {
     @Getter private final CE code;
 
     public static PurposeOfUse fromCode(CE code) {
-        for (PurposeOfUse purposeOfUse : values()) {
+        for (var purposeOfUse : values()) {
             if (purposeOfUse.code.equals(code)) {
                 return purposeOfUse;
             }

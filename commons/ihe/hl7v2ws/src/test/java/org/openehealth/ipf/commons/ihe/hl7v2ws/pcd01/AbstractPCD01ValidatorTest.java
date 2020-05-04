@@ -54,7 +54,7 @@ public abstract class AbstractPCD01ValidatorTest {
     }
 
     protected <T extends AbstractMessage> void validate(Message message) throws HL7Exception {
-        SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(hapiContext);
+        var handler = new SimpleValidationExceptionHandler(hapiContext);
         getValidator().validate(message, handler);
         if (handler.hasFailed()) throw new HL7Exception("Validation has failed", handler.getExceptions().get(0));
     }

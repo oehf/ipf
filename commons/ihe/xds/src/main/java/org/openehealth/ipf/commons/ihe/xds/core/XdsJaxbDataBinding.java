@@ -72,13 +72,13 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
         @Override
         public void afterUnmarshal(Object target, Object parent) {
             if (target instanceof ExtrinsicObjectType) {
-                ExtrinsicObjectType ebXml = (ExtrinsicObjectType) target;
+                var ebXml = (ExtrinsicObjectType) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
             } else if (target instanceof RegistryPackageType) {
-                RegistryPackageType ebXml = (RegistryPackageType) target;
+                var ebXml = (RegistryPackageType) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
             } else if (target instanceof AssociationType1) {
-                AssociationType1 ebXml = (AssociationType1) target;
+                var ebXml = (AssociationType1) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
             } else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
                 getCamelHeaders(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
@@ -88,10 +88,10 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         private static void findExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
             if (slots != null) {
-                for (SlotType1 slot : slots) {
-                    String name = slot.getName();
+                for (var slot : slots) {
+                    var name = slot.getName();
                     if (isExtraMetadataSlotName(name)) {
-                        Map<String, List<String>> extraMetadata = holder.getExtraMetadata();
+                        var extraMetadata = holder.getExtraMetadata();
                         if (extraMetadata == null) {
                             extraMetadata = new HashMap<>();
                             holder.setExtraMetadata(extraMetadata);
@@ -109,13 +109,13 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
         @Override
         public void beforeMarshal(Object source) {
             if (source instanceof ExtrinsicObjectType) {
-                ExtrinsicObjectType ebXml = (ExtrinsicObjectType) source;
+                var ebXml = (ExtrinsicObjectType) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
             } else if (source instanceof RegistryPackageType) {
-                RegistryPackageType ebXml = (RegistryPackageType) source;
+                var ebXml = (RegistryPackageType) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
             } else if (source instanceof AssociationType1) {
-                AssociationType1 ebXml = (AssociationType1) source;
+                var ebXml = (AssociationType1) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
             }
         }
@@ -125,9 +125,9 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
                 holder.getExtraMetadata().entrySet().stream()
                         .filter(entry -> isExtraMetadataSlotName(entry.getKey()))
                         .forEach(entry -> {
-                            SlotType1 slot = new SlotType1();
+                            var slot = new SlotType1();
                             slot.setName(entry.getKey());
-                            ValueListType valueList = new ValueListType();
+                            var valueList = new ValueListType();
                             valueList.getValue().addAll(entry.getValue());
                             slot.setValueList(valueList);
                             slots.add(slot);

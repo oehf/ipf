@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds.iti62;
 
-import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
@@ -29,11 +29,15 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
  *
  * @author Boris Stanojevic
  */
-@Slf4j
 public class Iti62Service extends XdsRegistryRequestService<RemoveObjectsRequest> implements Iti62PortType {
 
     @Override
     public RegistryResponseType documentRegistryDeleteDocumentSet(RemoveObjectsRequest body) {
         return processRequest(body);
+    }
+    
+    @Override
+    protected ErrorCode getDefaultMetadataError() {
+        return ErrorCode.REGISTRY_ERROR;
     }
 }

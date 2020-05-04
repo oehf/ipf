@@ -48,8 +48,8 @@ public class NumberValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        QuerySlotHelper slots = new QuerySlotHelper(request);
-        String value = slots.toNumber(param);
+        var slots = new QuerySlotHelper(request);
+        var value = slots.toNumber(param);
         if (value != null) {
             validator.validate(value);
         }

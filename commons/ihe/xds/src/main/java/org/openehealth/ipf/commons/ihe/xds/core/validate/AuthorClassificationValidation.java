@@ -15,13 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.AUTHOR_INCOMPLETE;
@@ -47,12 +44,12 @@ public class AuthorClassificationValidation extends ClassificationValidation {
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
         super.validate(obj);
 
-        List<EbXMLClassification> classifications = obj.getClassifications(classScheme);
-        for (EbXMLClassification classification : classifications) {
+        var classifications = obj.getClassifications(classScheme);
+        for (var classification : classifications) {
             // check whether at least an authorPerson, authorTelecommunication,
             // or authorInstitution sub-attribute is present
-            boolean authorComplete = false;
-            for (EbXMLSlot slot : classification.getSlots()) {
+            var authorComplete = false;
+            for (var slot : classification.getSlots()) {
                 if (SLOT_NAMES.contains(slot.getName())) {
                     authorComplete = true;
                     break;

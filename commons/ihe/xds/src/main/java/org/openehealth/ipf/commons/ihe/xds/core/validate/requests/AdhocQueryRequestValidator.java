@@ -51,7 +51,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
-        Set<String> slotNames = Arrays.stream(parameters)
+        var slotNames = Arrays.stream(parameters)
                 .map(QueryParameter::getSlotName)
                 .collect(Collectors.toSet());
         ALLOWED_MULTIPLE_SLOTS.put(queryType, slotNames);
@@ -157,7 +157,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        boolean requireHomeCommunityId = profile.getInteractionProfile().requiresHomeCommunityId();
+        var requireHomeCommunityId = profile.getInteractionProfile().requiresHomeCommunityId();
 
         switch (queryType) {
             case FETCH:
@@ -389,18 +389,18 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     UNKNOWN_RETURN_TYPE, request.getReturnType());
         }
 
-        QueryType queryType = QueryType.valueOfId(request.getId());
+        var queryType = QueryType.valueOfId(request.getId());
         metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());
 
-        Set<QueryType> allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
+        var allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
         metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
         new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
                 request.getSlots(),
                 ALLOWED_MULTIPLE_SLOTS.getOrDefault(queryType, Collections.emptySet()));
-        QueryParameterValidation[] validations = getValidators(queryType, profile);
+        var validations = getValidators(queryType, profile);
         if (validations != null) {
-            for (QueryParameterValidation validation : validations) {
+            for (var validation : validations) {
                 validation.validate(request);
             }
         }
@@ -419,7 +419,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
      * Checks that at least one of the given query parameters is provided in the message.
      */
     private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest request, QueryParameter... params) {
-        List<String> slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
+        var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
         slotNames.stream()
                 .map(request::getSlotValues)
                 .filter(slotList -> !slotList.isEmpty())

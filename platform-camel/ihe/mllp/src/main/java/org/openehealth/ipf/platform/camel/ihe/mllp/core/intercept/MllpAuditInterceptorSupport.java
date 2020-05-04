@@ -36,9 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import javax.net.ssl.SSLSession;
-import java.security.Principal;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
@@ -60,7 +58,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Message msg = exchange.getIn().getBody(Message.class);
+        var msg = exchange.getIn().getBody(Message.class);
 
         // skip auditing in case of non-auditable message types
         if (!isAuditable(msg)) {
@@ -68,14 +66,14 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             return;
         }
 
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(exchange, msg);
+        var auditDataset = createAndEnrichAuditDatasetFromRequest(exchange, msg);
         determineParticipantsAddresses(exchange, auditDataset);
         extractSslClientUser(exchange, auditDataset);
 
-        boolean failed = false;
+        var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            Message result = resultMessage(exchange).getBody(Message.class);
+            var result = resultMessage(exchange).getBody(Message.class);
             enrichAuditDatasetFromResponse(auditDataset, result);
             failed = !AuditUtils.isPositiveAck(result);
         } catch (Exception e) {
@@ -97,16 +95,16 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
     }
 
     private void extractSslClientUser(Exchange exchange, AuditDatasetType auditDataset) {
-        IoSession ioSession = exchange.getIn().getHeader(MinaConstants.MINA_IOSESSION, IoSession.class);
+        var ioSession = exchange.getIn().getHeader(MinaConstants.MINA_IOSESSION, IoSession.class);
         if (ioSession != null) {
-            SSLSession sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
+            var sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
             if (sslSession != null) {
                 try {
-                    Principal principal = sslSession.getPeerPrincipal();
+                    var principal = sslSession.getPeerPrincipal();
                     if (principal != null) {
-                        String dn = principal.getName();
-                        LdapName ldapDN = new LdapName(dn);
-                        for (Rdn rdn : ldapDN.getRdns()) {
+                        var dn = principal.getName();
+                        var ldapDN = new LdapName(dn);
+                        for (var rdn : ldapDN.getRdns()) {
                             if (rdn.getType().equalsIgnoreCase("CN")) {
                                 auditDataset.setSourceUserName((String) rdn.getValue());
                                 break;
@@ -128,7 +126,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(Exchange exchange, Message msg) {
-        AuditDatasetType auditDataset = getAuditStrategy().createAuditDataset();
+        var auditDataset = getAuditStrategy().createAuditDataset();
         try {
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             return getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
@@ -157,7 +155,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
     private boolean isAuditable(Message message) {
         try {
             // no audit for fragments 2..n
-            Terser terser = new Terser(message);
+            var terser = new Terser(message);
             return (!ArrayUtils.contains(message.getNames(), "DSC") ||
                     !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
                     getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));

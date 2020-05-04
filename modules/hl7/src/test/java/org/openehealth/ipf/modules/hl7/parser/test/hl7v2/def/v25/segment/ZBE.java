@@ -20,7 +20,6 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
-import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v25.datatype.EI;
 import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.model.v25.datatype.TS;
@@ -48,7 +47,7 @@ public class ZBE extends AbstractSegment {
      */
     public ZBE(Group parent, ModelClassFactory factory) {
         super(parent, factory);
-        Message message = getMessage();
+        var message = getMessage();
         try {
             add(EI.class, true, 0, 999, new Object[] { message }, null);
             add(TS.class, true, 1, 26, new Object[] { message }, null);

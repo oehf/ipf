@@ -84,10 +84,10 @@ public class SlotLengthAndNameUniquenessValidator {
             List<? extends EbXMLSlot> slots,
             boolean queryMode,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {
-        HashSet<String> names = new HashSet<>();
+        var names = new HashSet<String>();
         for (EbXMLSlot slot : slots) {
             // validate format and uniqueness of slot names
-            String name = slot.getName();
+            var name = slot.getName();
             metaDataAssert(StringUtils.isNotEmpty(name), MISSING_SLOT_NAME);
 
             if (queryMode) {

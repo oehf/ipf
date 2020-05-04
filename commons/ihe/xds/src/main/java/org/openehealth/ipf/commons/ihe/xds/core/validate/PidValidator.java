@@ -19,7 +19,6 @@ import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -33,11 +32,11 @@ public class PidValidator implements ValueValidator {
     @Override
     public void validate(String value) throws XDSMetaDataException {
         notNull(value, "value cannot be null");
-        
-        Matcher matcher = PID_PATTERN.matcher(value);
+
+        var matcher = PID_PATTERN.matcher(value);
         metaDataAssert(matcher.matches(), INVALID_PID, value);
-                
-        int number = Integer.parseInt(matcher.group(1));
+
+        var number = Integer.parseInt(matcher.group(1));
         metaDataAssert(number != 2 && number != 4 && number != 12 && number != 19 && number <= 39,
                 UNSUPPORTED_PID, value);
     }

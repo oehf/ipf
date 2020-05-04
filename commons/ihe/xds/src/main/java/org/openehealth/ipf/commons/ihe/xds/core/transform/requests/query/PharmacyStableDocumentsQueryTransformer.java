@@ -43,7 +43,7 @@ abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableD
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
         slots.fromStringList(DOC_ENTRY_UUID, query.getUuids());
@@ -77,7 +77,7 @@ abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableD
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));

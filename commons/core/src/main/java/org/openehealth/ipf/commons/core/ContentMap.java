@@ -26,6 +26,8 @@ import java.util.Map;
 /**
  * Content map based on Spring type conversion framework.
  * @author Dmytro Rud
+ *
+ * TODO this is only used in ipf-commons-ihe-xds
  */
 @XmlTransient
 public class ContentMap {
@@ -50,7 +52,7 @@ public class ContentMap {
      */
     @SuppressWarnings("unchecked")
     public <T> T getContent(Class<T> targetType) {
-        T result = (T) map.get(targetType);
+        var result = (T) map.get(targetType);
         if (result != null) {
             LOG.debug("Return existing content of type {}", targetType);
             return result;
@@ -63,7 +65,7 @@ public class ContentMap {
 
         synchronized (map) {
             // TODO: optimise conversion using some sophisticated iteration ordering ???
-            for (Class<?> sourceType : map.keySet()) {
+            for (var sourceType : map.keySet()) {
                 if (conversionService.canConvert(sourceType, targetType)) {
                     result = conversionService.convert(map.get(sourceType), targetType);
                     if (result != null) {

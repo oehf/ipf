@@ -120,7 +120,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AssigningAuthority that = (AssigningAuthority) o;
+        var that = (AssigningAuthority) o;
         return Objects.equals(getUniversalId(), that.getUniversalId()) &&
                 Objects.equals(getUniversalIdType(), that.getUniversalIdType());
     }

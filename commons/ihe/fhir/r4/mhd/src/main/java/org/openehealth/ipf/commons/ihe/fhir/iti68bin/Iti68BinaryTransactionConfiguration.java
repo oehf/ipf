@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti68bin;
 
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ServerAuditStrategy;
 
 /**
  * @author Christian Ohr

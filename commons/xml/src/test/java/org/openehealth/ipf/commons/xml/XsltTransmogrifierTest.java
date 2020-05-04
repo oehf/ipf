@@ -39,7 +39,7 @@ public class XsltTransmogrifierTest {
     @Test
     public void testConvertString() throws IOException {
         Source source = new StreamSource(getClass().getResourceAsStream("/xslt/createPatient.xml"));
-        String result = transformer.zap(source, "/xslt/createPatient.xslt");
+        var result = transformer.zap(source, "/xslt/createPatient.xslt");
         assertNotNull(result);
     }
 

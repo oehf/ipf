@@ -4,7 +4,7 @@
     <artifactId>ipf-commons-ihe-xacml20</artifactId>
     <name>ipf-commons-ihe-xacml20</name>
     <description>Support for XACML 2.0-based integration profiles</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     <packaging>pom</packaging>
 
     <parent>
@@ -17,12 +17,5 @@
        <module>model</module>
        <module>impl</module>
     </modules>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

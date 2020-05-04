@@ -62,7 +62,7 @@ public class DiagnosticReportResourceProvider extends AbstractPcc44ResourceProvi
             HttpServletResponse httpServletResponse) {
 
 
-        DiagnosticReportSearchParameters parameters = DiagnosticReportSearchParameters.builder()
+        var parameters = DiagnosticReportSearchParameters.builder()
                 .patientReference(patient)
                 .category(category)
                 .code(code)

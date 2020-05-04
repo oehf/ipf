@@ -51,10 +51,10 @@ public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
 
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
-        MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
+        var config = super.createConfig(uri, parameters);
         Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
-        String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+        var options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
         List<? extends Hl7v2TransactionOptions> iti30Options = TransactionOptionsUtils.split(options, Iti30Options.class);
         if (iti30Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");

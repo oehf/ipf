@@ -46,7 +46,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     }
 
     private <T extends Serializable> T get(String key, String suffix) {
-        Element element = ehcache.get(key + suffix);
+        var element = ehcache.get(key + suffix);
         return (element != null) ? (T) element.getObjectValue() : null;
     }
 
@@ -83,7 +83,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     @Override
     public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
         requireNonNull(alternativeKeys, "alternative keys should be not null");
-        for (String key : alternativeKeys) {
+        for (var key : alternativeKeys) {
             put(key, ALTERNATIVE_KEY_SUFFIX, messageId);
         }
         put(messageId, ALTERNATIVE_KEYS_SUFFIX, alternativeKeys);
@@ -98,7 +98,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     public boolean delete(String messageId) {
         String[] alternativeKeys = get(messageId, ALTERNATIVE_KEYS_SUFFIX);
         if (alternativeKeys != null) {
-            for (String key : alternativeKeys) {
+            for (var key : alternativeKeys) {
                 ehcache.remove(key + ALTERNATIVE_KEY_SUFFIX);
             }
         }

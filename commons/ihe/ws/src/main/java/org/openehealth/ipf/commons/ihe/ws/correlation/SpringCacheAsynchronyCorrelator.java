@@ -74,7 +74,7 @@ public class SpringCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDat
     @Override
     public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
         requireNonNull(alternativeKeys, "alternative keys should be not null");
-        for (String key : alternativeKeys) {
+        for (var key : alternativeKeys) {
             cache.put(key + ALTERNATIVE_KEY_SUFFIX, messageId);
         }
         cache.put(messageId + ALTERNATIVE_KEYS_SUFFIX, alternativeKeys);
@@ -87,9 +87,9 @@ public class SpringCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDat
 
     @Override
     public boolean delete(String messageId) {
-        String[] alternativeKeys = cache.get(messageId + ALTERNATIVE_KEYS_SUFFIX, String[].class);
+        var alternativeKeys = cache.get(messageId + ALTERNATIVE_KEYS_SUFFIX, String[].class);
         if (alternativeKeys != null) {
-            for (String key : alternativeKeys) {
+            for (var key : alternativeKeys) {
                 cache.evict(key + ALTERNATIVE_KEY_SUFFIX);
             }
         }

@@ -287,7 +287,7 @@ public class ErrorResponse {
         }
 
         public static ErrorType fromValue(String v) {
-            for (ErrorType c: ErrorType.values()) {
+            for (var c: ErrorType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }

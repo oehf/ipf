@@ -42,7 +42,7 @@ public enum ParticipantObjectDataLifeCycle implements EnumeratedValueSet<Short> 
     Export(10),
     Disclosure(11),
     ReceiptOfDisclosure(12),
-    Arcchiving(13),
+    Archiving(13),
     LogicalDeletion(14),
     PermanentErasure(15);
 

@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Message Queue that logs the serialized plain audit messages with (by default)
@@ -40,13 +40,13 @@ public class LoggingAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     public void setLoggerName(String loggerName) {
-        this.log = LoggerFactory.getLogger(loggerName);
+        this.log = LoggerFactory.getLogger(requireNonNull(loggerName));
     }
 
     @Override
-    protected synchronized void handle(AuditContext auditContext, String... auditRecords) {
-        if (auditRecords != null) {
-            Stream.of(auditRecords).forEach(log::info);
+    protected synchronized void handle(AuditContext auditContext, String auditRecord) {
+        if (auditRecord != null) {
+            log.info(auditRecord);
         }
     }
 }

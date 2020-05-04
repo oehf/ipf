@@ -24,8 +24,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
@@ -40,15 +38,15 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        int threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
+        var threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
         if (threshold < 3) {
             getWrappedProcessor().process(exchange);
             return;
         }
-        
-        String request = exchange.getIn().getBody(String.class);
-        char fieldSeparator = request.charAt(3);
-        List<String> segments = splitString(request, '\r');
+
+        var request = exchange.getIn().getBody(String.class);
+        var fieldSeparator = request.charAt(3);
+        var segments = splitString(request, '\r');
 
         // short message --> send unmodified and return
         if (segments.size() <= threshold) {
@@ -57,7 +55,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
         }
 
         // parse MSH segment
-        List<String> mshFields = splitString(segments.get(0), request.charAt(3));
+        var mshFields = splitString(segments.get(0), request.charAt(3));
         
         // when MSH-14 is already present -- send the message unmodified and return
         if ((mshFields.size() >= 14) && isNotEmpty(mshFields.get(13))) {
@@ -69,7 +67,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
         // when DSC is present and already filled -- send the message unmodified 
         // and return; otherwise -- delete the DSC segment, if present 
         if (segments.get(segments.size() - 1).startsWith("DSC")) {
-            List<String> dscFields = splitString(segments.get(segments.size() - 1), request.charAt(3));
+            var dscFields = splitString(segments.get(segments.size() - 1), request.charAt(3));
             if ((dscFields.size() >= 2) && isNotEmpty(dscFields.get(1))) {
                 LOG.warn("DSC-1 is not empty, cannot perform automatic message fragmentation");
                 getWrappedProcessor().process(exchange);
@@ -83,11 +81,11 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
         }
         
         // main loop
-        int currentSegmentIndex = 1;
-        String continuationPointer = "";
+        var currentSegmentIndex = 1;
+        var continuationPointer = "";
         while (currentSegmentIndex < segments.size()) {
-            int currentSegmentsCount = 1;
-            StringBuilder sb = new StringBuilder();
+            var currentSegmentsCount = 1;
+            var sb = new StringBuilder();
             
             // add MSH (position 1)
             appendSplitSegment(sb, mshFields, fieldSeparator);
@@ -121,12 +119,12 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
 
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
-                String responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                Terser responseTerser = new Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
-                
-                String messageType = responseTerser.get("MSH-9-1");
-                String acknowledgementCode = responseTerser.get("MSA-1");
-                String controlId = mshFields.get(9);
+                var responseString = Exchanges.resultMessage(exchange).getBody(String.class);
+                var responseTerser = new Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
+
+                var messageType = responseTerser.get("MSH-9-1");
+                var acknowledgementCode = responseTerser.get("MSA-1");
+                var controlId = mshFields.get(9);
                 
                 if (! "ACK".equals(messageType)) {
                     throw new RuntimeException("Server responded with " + messageType + " instead of ACK to the fragment with control ID " + mshFields.get(9));

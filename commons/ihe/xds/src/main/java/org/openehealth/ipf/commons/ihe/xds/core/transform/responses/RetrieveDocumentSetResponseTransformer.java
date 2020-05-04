@@ -50,8 +50,8 @@ public class RetrieveDocumentSetResponseTransformer {
         if (response == null) {
             return null;
         }
-        
-        EbXMLRetrieveDocumentSetResponse ebXML = factory.createRetrieveDocumentSetResponse();
+
+        var ebXML = factory.createRetrieveDocumentSetResponse();
         if (!response.getErrors().isEmpty()) {
             ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
@@ -70,8 +70,8 @@ public class RetrieveDocumentSetResponseTransformer {
         if (ebXML == null) {
             return null;
         }
-            
-        RetrievedDocumentSet response = new RetrievedDocumentSet();
+
+        var response = new RetrievedDocumentSet();
         response.getDocuments().addAll(ebXML.getDocuments());
         if (!ebXML.getErrors().isEmpty()) {
             response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));

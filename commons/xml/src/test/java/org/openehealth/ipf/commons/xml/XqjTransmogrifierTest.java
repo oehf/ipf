@@ -53,7 +53,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapSimple() throws IOException, SAXException {
-        String zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q1.xq");
+        var zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q1.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/string-q1.xml"), zapResult).similar());
     }
 
@@ -61,11 +61,11 @@ public class XqjTransmogrifierTest {
     public void zapStringParameter() throws IOException, SAXException {
         Map<String, Object> dynamicParams = new HashMap<>();
         dynamicParams.put("language", "English");
-        Object[] params = new Object[] { "/xquery/string-q2.xq", dynamicParams };
-        String zapResult1 = transformer.zap(source("/xquery/string.xml"), params);
+        var params = new Object[] { "/xquery/string-q2.xq", dynamicParams };
+        var zapResult1 = transformer.zap(source("/xquery/string.xml"), params);
         assertTrue(XMLUnit.compareXML(result("/xquery/string-q2.xml"), zapResult1).similar());
         dynamicParams.put("language", "German");
-        String zapResult2 = transformer.zap(source("/xquery/string.xml"), params);
+        var zapResult2 = transformer.zap(source("/xquery/string.xml"), params);
         assertTrue(XMLUnit.compareXML(result("/xquery/string-q2g.xml"), zapResult2).similar());
     }
 
@@ -79,20 +79,20 @@ public class XqjTransmogrifierTest {
         Map<String, Object> dynamicEvalParams = new HashMap<>();
         dynamicEvalParams.put("language", "Bulgarian");
         dynamicEvalParams.put("author_name", "John");
-        Object[] params = new Object[] { "/xquery/string-q3.xq", dynamicEvalParams };
-        String zapResult = transformer.zap(source("/xquery/string.xml"), params);
+        var params = new Object[] { "/xquery/string-q3.xq", dynamicEvalParams };
+        var zapResult = transformer.zap(source("/xquery/string.xml"), params);
         assertTrue(XMLUnit.compareXML(result("/xquery/string-q3.xml"), zapResult).similar());
     }
 
     @Test
     public void zapMainFunction() throws IOException, SAXException {
-        String zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q4.xq");
+        var zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q4.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/string.xml"), zapResult).similar());
     }
 
     @Test
     public void zapClasspathResolver() throws IOException, SAXException {
-        String zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");
+        var zapResult = transformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/string.xml"), zapResult).similar());
     }
 
@@ -100,27 +100,27 @@ public class XqjTransmogrifierTest {
     public void zapParametrisedConstructor() throws IOException, SAXException, XQException {
         Map<String, Object> configParams = new HashMap<>();
         configParams.put(FeatureKeys.PRE_EVALUATE_DOC_FUNCTION, Boolean.TRUE);
-        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class, configParams);
-        String zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq" );
+        var localTransformer = new XqjTransmogrifier<String>(String.class, configParams);
+        var zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq" );
         assertTrue(XMLUnit.compareXML(result("/xquery/string.xml"), zapResult).similar());
     }
 
     @Test
     public void zapParametrisedConstructorNoParams() throws IOException, SAXException, XQException {
-        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class);
-        String zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");
+        var localTransformer = new XqjTransmogrifier<String>(String.class);
+        var zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/string.xml"), zapResult).similar());
     }
 
     @Test
     public void zapWithNamespaces() throws IOException, SAXException {
-        String zapResult = transformer.zap(source("/xquery/ns.xml"), "/xquery/ns-q1.xq");
+        var zapResult = transformer.zap(source("/xquery/ns.xml"), "/xquery/ns-q1.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/ns-q1.xml"), zapResult).similar());
     }
 
     @Test
     public void zapRCase() throws IOException, SAXException {
-        String zapResult = transformer.zap(new StreamSource(new StringReader("<empty/>")), "/xquery/r-q1.xq");
+        var zapResult = transformer.zap(new StreamSource(new StringReader("<empty/>")), "/xquery/r-q1.xq");
         assertTrue(XMLUnit.compareXML(result("/xquery/r-q1.xml"), zapResult).similar());
     }
 

@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 
 import javax.servlet.ServletException;
 
@@ -39,21 +38,21 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
     @Test
     public void testSendEndpointPdqmString() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

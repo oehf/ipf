@@ -41,7 +41,7 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
 
     @Override
     public ListOfListWrapper<T> marshal(List<List<T>> v) throws Exception {
-        List<ListWrapper<T>> outerList = v.stream()
+        var outerList = v.stream()
                 .map(ListWrapper::new)
                 .collect(Collectors.toList());
         return new ListOfListWrapper<>(outerList);

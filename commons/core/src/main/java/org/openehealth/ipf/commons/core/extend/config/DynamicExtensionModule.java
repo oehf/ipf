@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.core.extend.config;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,16 +46,14 @@ class DynamicExtensionModule extends SimpleExtensionModule {
     }
 
     private static List<Class> classList(Object o) {
-        List<Class> l = new ArrayList<>(1);
-        l.add(o.getClass());
-        return Collections.unmodifiableList(l);
+        return List.of(o.getClass());
     }
 
     public static DynamicExtensionModule newModule(final DynamicExtension extension) {
-        String name = extension.getModuleName();
+        var name = extension.getModuleName();
         if (name == null)
             throw new RuntimeException("Module name is null");
-        String version = extension.getModuleVersion();
+        var version = extension.getModuleVersion();
         if (version == null)
             throw new RuntimeException("Module version is null");
 

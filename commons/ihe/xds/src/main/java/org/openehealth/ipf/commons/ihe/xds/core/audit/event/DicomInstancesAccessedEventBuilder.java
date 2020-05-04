@@ -68,11 +68,11 @@ public class DicomInstancesAccessedEventBuilder
     public DicomInstancesAccessedEventBuilder addDocumentIds(final XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
             final XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
             final boolean xcaHomeCommunityId) {
-        final String[] documentIds = auditDataset.getDocumentIds(status);
-        final String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
-        final String[] repositoryIds = auditDataset.getRepositoryIds(status);
-        final String[] seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
-        final String[] studyInstanceIds = auditDataset.getStudyInstanceIds(status);
+        final var documentIds = auditDataset.getDocumentIds(status);
+        final var homeCommunityIds = auditDataset.getHomeCommunityIds(status);
+        final var repositoryIds = auditDataset.getRepositoryIds(status);
+        final var seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
+        final var studyInstanceIds = auditDataset.getStudyInstanceIds(status);
         IntStream.range(0, documentIds.length).forEach(i ->
                 addExportedEntity(
                         documentIds[i],
@@ -88,11 +88,11 @@ public class DicomInstancesAccessedEventBuilder
             final XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
             final boolean xcaHomeCommunityId) {
 
-        final String[] documentIds = auditDataset.getDocumentIds(status);
-        final String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
-        final String[] repositoryIds = auditDataset.getRepositoryIds(status);
-        final String[] seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
-        final String[] studyInstanceIds = auditDataset.getStudyInstanceIds(status);
+        final var documentIds = auditDataset.getDocumentIds(status);
+        final var homeCommunityIds = auditDataset.getHomeCommunityIds(status);
+        final var repositoryIds = auditDataset.getRepositoryIds(status);
+        final var seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
+        final var studyInstanceIds = auditDataset.getStudyInstanceIds(status);
 
         IntStream.range(0, studyInstanceIds.length).forEach(i ->
             addTransferredStudyParticipantObject(studyInstanceIds[i],

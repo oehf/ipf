@@ -96,21 +96,21 @@ public class FindMedicationListQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindMedicationListQuery result = new FindMedicationListQuery();
+        var result = new FindMedicationListQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(query, result);
     }
 
     @Test
     public void testFromEbXMLNull() {
-        FindMedicationListQuery result = new FindMedicationListQuery();
+        var result = new FindMedicationListQuery();
         transformer.fromEbXML(result, null);
         assertEquals(new FindMedicationListQuery(), result);
     }
 
     @Test
     public void testFromEbXMLEmpty() {
-        FindMedicationListQuery result = new FindMedicationListQuery();
+        var result = new FindMedicationListQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(new FindMedicationListQuery(), result);
     }

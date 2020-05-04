@@ -47,7 +47,7 @@ public enum QueryReturnType {
     }
 
     public static QueryReturnType valueOfCode(String code) {
-        for (QueryReturnType type : values()) {
+        for (var type : values()) {
             if (type.getCode().equals(code)) {
                 return type;
             }

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti62
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti6
 /**
  * @author Boris Stanojevic
  */
-public class Iti62TestRouteBuilder extends SpringRouteBuilder {
+public class Iti62TestRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti62:xds-iti62-service1')
