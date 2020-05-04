@@ -43,10 +43,10 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
         Exchange result = process(body);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(
                     exception,
-                    ErrorCode.REPOSITORY_METADATA_ERROR,
+                    ErrorCode.REPOSITORY_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     homeCommunityId);
             if (homeCommunityId != null) {

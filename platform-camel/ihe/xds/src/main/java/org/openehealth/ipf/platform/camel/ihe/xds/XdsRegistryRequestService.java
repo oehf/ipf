@@ -39,14 +39,26 @@ public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
         Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             Response errorResponse = new Response(
                     exception,
-                    ErrorCode.REGISTRY_METADATA_ERROR,
+                    getDefaultMetadataError(),
                     ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
 
         return result.getMessage().getBody(RegistryResponseType.class);
+    }
+    
+    /**
+     * Define the ErrorCode used to indicate a error in the metadata (typically a client fault).
+     * IHE profiles do not have one common error code to indicate the error.
+     * 
+     * If the default {@link ErrorCode} can not be used, override this method to use a different code.
+     * 
+     * @return {@link ErrorCode#REGISTRY_METADATA_ERROR}.
+     */
+    protected ErrorCode getDefaultMetadataError() {
+        return ErrorCode.REGISTRY_METADATA_ERROR;
     }
 }

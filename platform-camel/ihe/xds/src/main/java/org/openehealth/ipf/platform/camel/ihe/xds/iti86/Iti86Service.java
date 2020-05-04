@@ -41,10 +41,10 @@ public class Iti86Service extends AbstractWebService implements Iti86PortType {
         Exchange result = process(body);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("ITI-86 service failed", exception);
             Response errorResponse = new Response(
                     exception,
-                    ErrorCode.REPOSITORY_METADATA_ERROR,
+                    ErrorCode.REMOVE_DOCUMENTS_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     null);
             return EbXML30Converters.convert(errorResponse);

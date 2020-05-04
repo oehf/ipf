@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti61;
 
-import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
@@ -24,7 +23,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 /**
  * Service implementation for the IHE ITI-61 transaction (Register On-Demand Document Entry).
  */
-@Slf4j
 public class Iti61Service extends XdsRegistryRequestService<SubmitObjectsRequest> implements Iti61PortType {
 
     @Override

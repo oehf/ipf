@@ -48,10 +48,10 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
         Exchange result = process(body);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             QueryResponse errorResponse = new QueryResponse(
                     exception,
-                    ErrorCode.REGISTRY_METADATA_ERROR,
+                    ErrorCode.REGISTRY_ERROR,
                     ErrorCode.REGISTRY_ERROR,
                     homeCommunityId);
             errorResponse.getErrors().get(0).setLocation(homeCommunityId);
