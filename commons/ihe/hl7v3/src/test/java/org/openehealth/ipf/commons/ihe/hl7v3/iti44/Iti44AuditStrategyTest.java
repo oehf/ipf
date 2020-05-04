@@ -20,9 +20,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
-import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,14 +52,14 @@ public class Iti44AuditStrategyTest extends HL7v3AuditorTestBase<Iti44AuditStrat
 
 
     private void testRequest(boolean serverSide, EventActionCode eventActionCode) {
-        Iti44AuditStrategy strategy = new Iti44AuditStrategy(serverSide);
-        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
+        var strategy = new Iti44AuditStrategy(serverSide);
+        var auditDataset = getHl7v3AuditDataset(strategy);
         switch (eventActionCode) {
             case Create: auditDataset.setRequestType("PRPA_IN201301UV02"); break;
             case Update: auditDataset.setRequestType("PRPA_IN201302UV02"); break;
             case Delete: auditDataset.setRequestType("PRPA_IN201302UV03"); break;
         }
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();

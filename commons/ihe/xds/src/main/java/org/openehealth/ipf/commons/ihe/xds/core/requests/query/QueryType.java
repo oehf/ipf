@@ -113,7 +113,7 @@ public enum QueryType {
             return null;
         }
 
-        for (QueryType type : values()) {
+        for (var type : values()) {
             if (id.equals(type.getId())) {
                 return type;
             }

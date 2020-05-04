@@ -56,7 +56,7 @@ public class SpringCacheHl7v3ContinuationStorage implements Hl7v3ContinuationSto
 
     @Override
     public int getLastResultNumber(String key) {
-        Integer i = cache.get(key + LAST_RESULT_NUMBER_SUFFIX, Integer.class);
+        var i = cache.get(key + LAST_RESULT_NUMBER_SUFFIX, Integer.class);
         return (i != null) ? i : -1;
     }
 
@@ -67,7 +67,7 @@ public class SpringCacheHl7v3ContinuationStorage implements Hl7v3ContinuationSto
 
     @Override
     public int getContinuationQuantity(String key) {
-        Integer i = cache.get(key + CONTINUATION_QUANTITY_SUFFIX, Integer.class);
+        var i = cache.get(key + CONTINUATION_QUANTITY_SUFFIX, Integer.class);
         return (i != null) ? i : -1;
     }
 

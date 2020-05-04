@@ -17,14 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -62,18 +60,18 @@ public class CodeValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> slotValues = request.getSlotValues(param.getSlotName());
-        for (String slotValue : slotValues) {
+        var slotValues = request.getSlotValues(param.getSlotName());
+        for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
-        QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<Code> codes = slots.toCodeList(param);
+        var slots = new QuerySlotHelper(request);
+        var codes = slots.toCodeList(param);
 
         if (codes != null) {
-            for (Code code : codes) {
+            for (var code : codes) {
                 metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getSchemeName() != null, INVALID_QUERY_PARAMETER_VALUE, param);

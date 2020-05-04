@@ -67,8 +67,8 @@ public final class SplitIndex {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
+        final var prime = 31;
+        var result = 1;
         result = prime * result + index;
         result = prime * result + (last ? 1231 : 1237);
         return result;
@@ -85,7 +85,7 @@ public final class SplitIndex {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SplitIndex other = (SplitIndex) obj;
+        var other = (SplitIndex) obj;
         if (index != other.index)
             return false;
         return last == other.last;

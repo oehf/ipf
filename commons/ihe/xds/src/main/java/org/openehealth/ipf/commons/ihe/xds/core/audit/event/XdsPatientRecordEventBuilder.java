@@ -92,8 +92,8 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                                                        XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
                                                        ParticipantObjectIdType participantObjectIdType,
                                                        ParticipantObjectDataLifeCycle lifeCycle) {
-        String[] documentIds = auditDataset.getDocumentIds(status);
-        String[] repositoryIds = auditDataset.getRepositoryIds(status);
+        var documentIds = auditDataset.getDocumentIds(status);
+        var repositoryIds = auditDataset.getRepositoryIds(status);
         IntStream.range(0, documentIds.length).forEach(i ->
                 delegate.addParticipantObjectIdentification(
                         participantObjectIdType,

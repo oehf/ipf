@@ -26,7 +26,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
@@ -43,13 +42,13 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
 
     @Test
     public void testOKFromRealEbXML() throws Exception {
-        EbXMLSubmitObjectsRequest30 request = getRequest("SubmitObjectsRequest_ebrs30_update.xml");
+        var request = getRequest("SubmitObjectsRequest_ebrs30_update.xml");
         validator.validate(request, ITI_57);
     }
 
     @Test
     public void testLid() throws Exception {
-        EbXMLSubmitObjectsRequest30 request = getRequest("SubmitObjectsRequest_ebrs30_update_sameLid.xml");
+        var request = getRequest("SubmitObjectsRequest_ebrs30_update_sameLid.xml");
 
         expectXdsMetadataException(LOGICAL_ID_SAME, request, ITI_57);
 
@@ -81,13 +80,13 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
     }
 
     private EbXMLSubmitObjectsRequest30 getRequest(String resourcePath) throws Exception {
-        File file = new File(getClass().getClassLoader().getResource(resourcePath).toURI());
+        var file = new File(getClass().getClassLoader().getResource(resourcePath).toURI());
 
-        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
-        Unmarshaller unmarshaller = context.createUnmarshaller();
+        var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+        var unmarshaller = context.createUnmarshaller();
 
-        Object unmarshalled = unmarshaller.unmarshal(file);
-        SubmitObjectsRequest original = (SubmitObjectsRequest) unmarshalled;
+        var unmarshalled = unmarshaller.unmarshal(file);
+        var original = (SubmitObjectsRequest) unmarshalled;
         return  new EbXMLSubmitObjectsRequest30(original);
     }
 }

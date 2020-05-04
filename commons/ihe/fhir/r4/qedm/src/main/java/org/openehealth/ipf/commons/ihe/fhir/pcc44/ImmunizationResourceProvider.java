@@ -57,7 +57,7 @@ public class ImmunizationResourceProvider extends AbstractPcc44ResourceProvider<
             HttpServletResponse httpServletResponse) {
 
 
-        ImmunizationSearchParameters parameters = ImmunizationSearchParameters.builder()
+        var parameters = ImmunizationSearchParameters.builder()
                 .patientReference(patient)
                 ._id(resourceId)
                 .sortSpec(sortSpec)

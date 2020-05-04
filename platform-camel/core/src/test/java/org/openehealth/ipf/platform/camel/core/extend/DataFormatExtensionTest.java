@@ -29,28 +29,28 @@ public class DataFormatExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testUnmarshalObject() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:external1",
+        var result = (String) producerTemplate.sendBody("direct:external1",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
     public void testMarshalObject() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:internal1",
+        var result = (String) producerTemplate.sendBody("direct:internal1",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }
 
     @Test
     public void testUnmarshalBean() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:external2",
+        var result = (String) producerTemplate.sendBody("direct:external2",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
     public void testMarshalBean() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:internal2",
+        var result = (String) producerTemplate.sendBody("direct:internal2",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }

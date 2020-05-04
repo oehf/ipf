@@ -56,7 +56,7 @@ public class AllergyIntoleranceResourceProvider extends AbstractPcc44ResourcePro
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        AllergyIntoleranceSearchParameters parameters = AllergyIntoleranceSearchParameters.builder()
+        var parameters = AllergyIntoleranceSearchParameters.builder()
                 .patientReference(patient)
                 ._id(resourceId)
                 .sortSpec(sortSpec)

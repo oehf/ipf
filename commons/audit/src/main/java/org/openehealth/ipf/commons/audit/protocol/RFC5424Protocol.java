@@ -55,7 +55,7 @@ public class RFC5424Protocol {
      * @return serialized message
      */
     protected byte[] getTransportPayload(AuditMetadataProvider auditMetadataProvider, String auditMessage) {
-        String msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
+        var msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
                 TRANSPORT_PRI,
                 auditMetadataProvider.getTimestamp(),
                 auditMetadataProvider.getHostname(),

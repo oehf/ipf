@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
@@ -42,9 +41,9 @@ public class Iti45AuditStrategyTest extends HL7v3AuditorTestBase<Iti45AuditStrat
     }
 
     private void testRequest(boolean serverSide) {
-        Iti45AuditStrategy strategy = new Iti45AuditStrategy(serverSide);
-        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti45AuditStrategy(serverSide);
+        var auditDataset = getHl7v3AuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -58,7 +57,7 @@ public class Iti45AuditStrategyTest extends HL7v3AuditorTestBase<Iti45AuditStrat
 
     @Override
     protected Hl7v3AuditDataset getHl7v3AuditDataset(Iti45AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = super.getHl7v3AuditDataset(strategy);
+        var auditDataset = super.getHl7v3AuditDataset(strategy);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
         return auditDataset;
     }

@@ -21,8 +21,6 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
@@ -48,9 +46,9 @@ public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase<Iti55AuditStrat
     }
 
     private void testRequest(boolean serverSide) {
-        Iti55AuditStrategy strategy = new Iti55AuditStrategy(serverSide);
-        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti55AuditStrategy(serverSide);
+        var auditDataset = getHl7v3AuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -61,7 +59,7 @@ public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase<Iti55AuditStrat
                 serverSide,
                 serverSide);
 
-        TypeValuePairType detail = auditMessage.findParticipantObjectIdentifications(poi -> ParticipantObjectTypeCode.System.equals(poi.getParticipantObjectTypeCode()))
+        var detail = auditMessage.findParticipantObjectIdentifications(poi -> ParticipantObjectTypeCode.System.equals(poi.getParticipantObjectTypeCode()))
                 .get(0).getParticipantObjectDetails().get(0);
         assertNotNull(detail);
         assertEquals(IHE_HOME_COMMUNITY_ID, detail.getType());
@@ -70,7 +68,7 @@ public class Iti55AuditStrategyTest extends HL7v3AuditorTestBase<Iti55AuditStrat
 
     @Override
     protected Hl7v3AuditDataset getHl7v3AuditDataset(Iti55AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = super.getHl7v3AuditDataset(strategy);
+        var auditDataset = super.getHl7v3AuditDataset(strategy);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
         auditDataset.setHomeCommunityId(HOME_COMMUNITY_ID);
         return auditDataset;

@@ -20,7 +20,6 @@ import static org.apache.commons.lang3.Validate.notNull;
 import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ResponseOptionType;
 
 /**
  * Encapsulation of {@link AdhocQueryRequest}.
@@ -51,7 +50,7 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
     
     @Override
     public String getReturnType() {
-        ResponseOptionType responseOption = request.getResponseOption();
+        var responseOption = request.getResponseOption();
         return responseOption != null ? responseOption.getReturnType() : null;
     }
     

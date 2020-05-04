@@ -17,10 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import static org.junit.Assert.*;
@@ -47,11 +44,11 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     
     @Before
     public final void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new SubmissionSetTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
-        
-        Author author1 = new Author();
+
+        var author1 = new Author();
         author1.setAuthorPerson(createPerson(1));
         author1.getAuthorInstitution().add(new Organization("inst1"));
         author1.getAuthorInstitution().add(new Organization("inst2"));
@@ -62,7 +59,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 0L));
         author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 1L));
 
-        Author author2 = new Author();
+        var author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
         author2.getAuthorInstitution().add(new Organization("inst3"));
         author2.getAuthorInstitution().add(new Organization("inst4"));
@@ -73,7 +70,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 2L));
         author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 3L));
 
-        Address address = new Address();
+        var address = new Address();
         address.setCity("city");
         address.setCountry("country");
         address.setCountyParishCode("countyParishCode");
@@ -81,8 +78,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         address.setStateOrProvince("stateOrProvince");
         address.setStreetAddress("streetAddress");
         address.setZipOrPostalCode("zipOrPostalCode");
-        
-        PatientInfo sourcePatientInfo = new PatientInfo();
+
+        var sourcePatientInfo = new PatientInfo();
         sourcePatientInfo.getAddresses().add(address);
         sourcePatientInfo.setDateOfBirth("1980");
         sourcePatientInfo.setGender("F");
@@ -114,7 +111,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
 
     @Test
     public void testToEbXML() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);        
+        var ebXML = transformer.toEbXML(set, objectLibrary);
         assertNotNull(ebXML);
         
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
@@ -135,7 +132,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
                 "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^degree 23^^&uni 23&uniType 23");
 
 
-        EbXMLClassification classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        var classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1^^^&2.3.1&ISO", "role2");
@@ -175,7 +172,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
    
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);        
+        var ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -193,8 +190,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXML() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);
-        SubmissionSet result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(set, objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
         assertEquals(set, result);
@@ -207,8 +204,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
-        SubmissionSet result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(new SubmissionSet(), result);
     }
 }

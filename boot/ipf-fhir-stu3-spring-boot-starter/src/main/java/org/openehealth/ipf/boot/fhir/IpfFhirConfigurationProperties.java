@@ -71,7 +71,7 @@ public class IpfFhirConfigurationProperties {
 
 
     String getFhirMapping() {
-        String path = getPath();
+        var path = getPath();
         return path.endsWith("/") ? path + "*" : path + "/*";
     }
 

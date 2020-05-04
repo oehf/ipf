@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.core.junit;
 
-import java.lang.reflect.Method;
-
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestExecutionListener;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -79,7 +76,7 @@ public class DirtySpringContextJUnit4ClassRunner extends SpringJUnit4ClassRunner
         // runner on a dummy test method that defines the @DirtiesContext 
         // annotation. This ensures that the DirtiesContextTestExecutionListener
         // will be triggered and dirties the application context.
-        for (Method method : getClass().getMethods()) {
+        for (var method : getClass().getMethods()) {
             if (method.isAnnotationPresent(DirtiesContext.class)) {
                 try {
                     getTestContextManager().afterTestMethod(this, method, null);
@@ -91,7 +88,7 @@ public class DirtySpringContextJUnit4ClassRunner extends SpringJUnit4ClassRunner
     }
     
     private void ensureDirtyContextListenerIsUsed() {
-        for (TestExecutionListener listener : getTestContextManager().getTestExecutionListeners()) {
+        for (var listener : getTestContextManager().getTestExecutionListeners()) {
             if (listener instanceof DirtiesContextTestExecutionListener) {
                 return;
             }

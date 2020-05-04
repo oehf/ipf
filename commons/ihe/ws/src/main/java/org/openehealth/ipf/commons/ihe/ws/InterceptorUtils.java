@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 
 /**
@@ -73,8 +72,8 @@ abstract public class InterceptorUtils {
      *      property value, or <code>null</code> when not found.
      */
     public static <T> T findContextualProperty(Message message, String propertyName) {
-        Exchange exchange = message.getExchange();
-        Message[] messages = new Message[] {
+        var exchange = message.getExchange();
+        var messages = new Message[] {
                 message,
                 exchange.getInMessage(),
                 exchange.getOutMessage(),
@@ -82,9 +81,9 @@ abstract public class InterceptorUtils {
                 exchange.getOutFaultMessage()
         };
 
-        for (Message m : messages) {
+        for (var m : messages) {
             if (m != null) {
-                T t  = (T) m.getContextualProperty(propertyName);
+                var t  = (T) m.getContextualProperty(propertyName);
                 if (t != null) {
                     return t;
                 }

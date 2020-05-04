@@ -46,16 +46,16 @@ public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2E
     @Override
     public void process(Exchange exchange) throws Exception {
         // determine segment boundaries in the request message
-        String request = exchange.getIn().getBody(String.class);
-        int[] requestQpdBoundaries = getQpdBoundaries(request);
+        var request = exchange.getIn().getBody(String.class);
+        var requestQpdBoundaries = getQpdBoundaries(request);
 
         // run the route
         getWrappedProcessor().process(exchange);
 
         // replace the segment in the response message by the one from the request
         if (requestQpdBoundaries != null) {
-            String response = Exchanges.resultMessage(exchange).getBody(String.class);
-            int[] responseQpdBoundaries = getQpdBoundaries(response);
+            var response = Exchanges.resultMessage(exchange).getBody(String.class);
+            var responseQpdBoundaries = getQpdBoundaries(response);
             if (responseQpdBoundaries != null) {
                 Exchanges.resultMessage(exchange).setBody(new StringBuilder()
                         .append(response, 0, responseQpdBoundaries[0])
@@ -68,8 +68,8 @@ public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2E
 
 
     private int[] getQpdBoundaries(String s) {
-        int pos1 = s.indexOf("\r" + segmentName + s.charAt(3));
-        int pos2 = (pos1 > 0) ? s.indexOf("\r", pos1 + 4) : -1;
+        var pos1 = s.indexOf("\r" + segmentName + s.charAt(3));
+        var pos2 = (pos1 > 0) ? s.indexOf("\r", pos1 + 4) : -1;
         return (pos2 > 0) ? new int[] {pos1, pos2} : null;
     }
 }

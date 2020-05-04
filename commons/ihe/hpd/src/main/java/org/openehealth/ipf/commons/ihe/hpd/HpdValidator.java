@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.xml.XsdValidator;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
@@ -76,7 +75,7 @@ public class HpdValidator {
     {
         check(batch.getBatchRequests() != null, "Batch is null");
         check(!batch.getBatchRequests().isEmpty(), "Batch is empty");
-        for(DsmlMessage dsml : batch.getBatchRequests()) {
+        for(var dsml : batch.getBatchRequests()) {
             check(dsml != null, "Batch element is null");
             check(ArrayUtils.contains(allowedElementTypes, dsml.getClass()), "Bad batch element type " + ClassUtils.getSimpleName(dsml));
             requestValidator.accept(dsml);
@@ -85,9 +84,9 @@ public class HpdValidator {
 
     private static void validateSearchRequest(SearchRequest request, String dc, String o, String c) {
         try {
-            LdapName ldapName = new LdapName(request.getDn());
-            for (Rdn rdn : ldapName.getRdns()) {
-                String value = (String) rdn.getValue();
+            var ldapName = new LdapName(request.getDn());
+            for (var rdn : ldapName.getRdns()) {
+                var value = (String) rdn.getValue();
                 switch (rdn.getType().toLowerCase()) {
                     case "dc":
                         check(dc.equalsIgnoreCase(value), "DN.DC must be equal to " + dc);
@@ -142,7 +141,7 @@ public class HpdValidator {
     public static void validateChPiddResponse(DownloadResponse downloadResponse) {
         validateWithXsd(downloadResponse, "/schema/PIDD.xsd");
         if (downloadResponse.getBatchRequest() != null) {
-            for (BatchRequest batchRequest : downloadResponse.getBatchRequest()) {
+            for (var batchRequest : downloadResponse.getBatchRequest()) {
                 validateBatchRequest(batchRequest,
                         new Class[] {AddRequest.class, ModifyRequest.class, ModifyDNRequest.class, DelRequest.class},
                         element -> { /* TODO */ });
@@ -168,7 +167,7 @@ public class HpdValidator {
     public static void validateChCiddResponse(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse downloadResponse) {
         validateWithXsd(downloadResponse, "/schema/CIDD.xsd");
         if (downloadResponse.getBatchRequest() != null) {
-            for (BatchRequest batchRequest : downloadResponse.getBatchRequest()) {
+            for (var batchRequest : downloadResponse.getBatchRequest()) {
                 validateBatchRequest(batchRequest,
                         new Class[] {AddRequest.class, ModifyRequest.class, ModifyDNRequest.class, DelRequest.class},
                         element -> { /* TODO */ });

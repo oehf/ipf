@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -62,9 +61,9 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     @Override
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
         if (auditMessage != null) {
-            try (DatagramSocket socket = new DatagramSocket()) {
-                byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
-                InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
+            try (var socket = new DatagramSocket()) {
+                var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+                var inetAddress = auditContext.getAuditRepositoryAddress();
                 LOG.debug("Auditing to {}:{} ({})",
                         auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort(),
@@ -72,7 +71,7 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                 if (LOG.isTraceEnabled()) {
                     LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
                 }
-                DatagramPacket packet = new DatagramPacket(
+                var packet = new DatagramPacket(
                         msgBytes,
                         Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
                         inetAddress,

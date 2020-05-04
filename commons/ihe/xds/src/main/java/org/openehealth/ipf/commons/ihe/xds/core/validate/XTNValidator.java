@@ -31,7 +31,7 @@ public class XTNValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7XTN) throws XDSMetaDataException {
-        Telecom telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
+        var telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
         metaDataAssert(telecom != null, MISSING_TELECOM_PARAM, hl7XTN);
 
         if ("Internet".equals(telecom.getType())) {
@@ -47,8 +47,8 @@ public class XTNValidator implements ValueValidator {
             metaDataAssert(!"NET".equals(telecom.getUse()), WRONG_TELECOM_USE, hl7XTN);
             metaDataAssert(isBlank(telecom.getEmail()), INCONSISTENT_TELECOM_PARAM, hl7XTN);
 
-            boolean localPresent = (telecom.getLocalNumber() != null);
-            boolean unformattedPresent = isNotBlank(telecom.getUnformattedPhoneNumber());
+            var localPresent = (telecom.getLocalNumber() != null);
+            var unformattedPresent = isNotBlank(telecom.getUnformattedPhoneNumber());
             metaDataAssert(localPresent || unformattedPresent, MISSING_TELECOM_PARAM, hl7XTN);
             metaDataAssert(!(localPresent && unformattedPresent), INCONSISTENT_TELECOM_PARAM, hl7XTN);
 

@@ -22,11 +22,6 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
@@ -55,20 +50,20 @@ public class TestPcc44Success extends AbstractTestPcc44 {
     @Test
     public void testSendManualPcc44() {
 
-        Bundle result = sendManually(observationPatientReferenceParameter());
+        var result = sendManually(observationPatientReferenceParameter());
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());
 
-        Observation p = (Observation) result.getEntry().get(0).getResource();
+        var p = (Observation) result.getEntry().get(0).getResource();
         assertEquals("heart-rate", p.getIdElement().getIdPart());
 
         // Check ATNA Audit
 
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         // Event
         assertEquals(
@@ -82,30 +77,30 @@ public class TestPcc44Success extends AbstractTestPcc44 {
 
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipants().get(0);
+        var source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipants().get(1);
+        var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Observation", destination.getUserID());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Audit Source
-        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();
+        var sourceIdentificationType = event.getAuditSourceIdentification();
         assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
         assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
         // Patient
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(0);
+        var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.Person, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patient.getParticipantObjectTypeCodeRole());
         assertEquals("Patient/1", patient.getParticipantObjectID());
 
         // Query Parameters
-        ParticipantObjectIdentificationType query = event.getParticipantObjectIdentifications().get(1);
+        var query = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Observation?patient=http://fhirserver.org/Patient/1&_format=xml",
@@ -117,18 +112,18 @@ public class TestPcc44Success extends AbstractTestPcc44 {
 
     @Test
     public void testSendPcc44WithPatientReference() {
-        Bundle result = sendManually(observationPatientReferenceParameter());
+        var result = sendManually(observationPatientReferenceParameter());
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());
 
-        Observation p = (Observation) result.getEntry().get(0).getResource();
+        var p = (Observation) result.getEntry().get(0).getResource();
         assertEquals("heart-rate", p.getIdElement().getIdPart());
     }
 
     @Test
     public void testGetResource() {
-        Observation p = client.read()
+        var p = client.read()
                 .resource(Observation.class)
                 .withId("heart-rate")
                 .execute();

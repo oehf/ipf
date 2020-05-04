@@ -61,7 +61,7 @@ public class XdsRuntimeException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        StringBuilder sb = new StringBuilder()
+        var sb = new StringBuilder()
                 .append((severity == Severity.ERROR) ? "Error " : "Warning ")
                 .append(errorCode.getOpcode())
                 .append(": ")

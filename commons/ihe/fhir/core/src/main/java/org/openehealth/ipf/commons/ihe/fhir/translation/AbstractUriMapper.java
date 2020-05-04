@@ -104,7 +104,7 @@ public abstract class AbstractUriMapper implements UriMapper {
      */
     private Optional<String> translateURN(String uri, String nid) {
         if (URN.isURN(uri)) {
-            URN urn = urn(uri);
+            var urn = urn(uri);
             if (Objects.equals(urn.getNamespaceId(), nid)) {
                 return Optional.of(urn.getNamespaceSpecificString());
             }

@@ -170,7 +170,7 @@ public enum QueryParameter {
             return null;
         }
 
-        for (QueryParameter queryParameter : QueryParameter.values()) {
+        for (var queryParameter : QueryParameter.values()) {
             if (slotName.equals(queryParameter.getSlotName())) {
                 return queryParameter;
             }

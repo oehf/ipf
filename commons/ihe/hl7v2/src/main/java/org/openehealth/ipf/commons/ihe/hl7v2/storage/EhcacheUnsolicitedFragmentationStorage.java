@@ -34,12 +34,12 @@ public class EhcacheUnsolicitedFragmentationStorage implements UnsolicitedFragme
     }
 
     public void put(String key, StringBuilder accumulator) {
-        Element element = new Element(key, accumulator);
+        var element = new Element(key, accumulator);
         ehcache.put(element);
     }
 
     public StringBuilder getAndRemove(String key) {
-        Element element = ehcache.get(key);
+        var element = ehcache.get(key);
         if (element != null) {
             ehcache.remove(key);
             return (StringBuilder) element.getObjectValue();

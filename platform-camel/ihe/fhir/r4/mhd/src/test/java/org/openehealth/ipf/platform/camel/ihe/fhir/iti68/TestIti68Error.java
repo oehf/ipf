@@ -21,8 +21,6 @@ import org.apache.camel.http.common.HttpOperationFailedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,9 +47,9 @@ public class TestIti68Error extends AbstractTestIti68 {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
 
             // Check ATNA Audit
-            AbstractMockedAuditMessageQueue sender = getAuditSender();
+            var sender = getAuditSender();
             assertEquals(1, sender.getMessages().size());
-            AuditMessage event = sender.getMessages().get(0);
+            var event = sender.getMessages().get(0);
             assertEquals(
                     EventOutcomeIndicator.MajorFailure,
                     event.getEventIdentification().getEventOutcomeIndicator());

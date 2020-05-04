@@ -165,7 +165,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         @Override
         public void write(byte[]... bytes) {
             // The write operation is asynchronous.
-            Channel channel = getHandle().channel();
+            var channel = getHandle().channel();
             LOG.trace("Writing {} bytes using session: {}", bytes.length, channel);
             try {
                 if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeout)) {
@@ -222,8 +222,8 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
             @Override
             protected void initChannel(SocketChannel channel) {
-                ChannelPipeline pipeline = channel.pipeline();
-                SslContext sslContext = initSslContext();
+                var pipeline = channel.pipeline();
+                var sslContext = initSslContext();
                 pipeline.addLast(sslContext.newHandler(channel.alloc(), host, port));
                 pipeline.addLast(new InboundHandler(host, port));
                 if (withLogging) {
@@ -232,8 +232,8 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
             }
 
             private SslContext initSslContext() {
-                String allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
-                String[] protocols = Stream.of(allowedProtocols.split("\\s*,\\s*"))
+                var allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
+                var protocols = Stream.of(allowedProtocols.split("\\s*,\\s*"))
                         .toArray(String[]::new);
                 return new JdkSslContext(
                         tlsParameters.getSSLContext(),

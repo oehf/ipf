@@ -32,10 +32,10 @@ public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<Str
             return null;
         }
 
-        StringMap result = new StringMap();
+        var result = new StringMap();
         result.entries = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : v.entrySet()) {
-            StringMapEntry extra = new StringMapEntry();
+        for (var entry : v.entrySet()) {
+            var extra = new StringMapEntry();
             extra.setKey(entry.getKey());
             extra.setValues(new ArrayList<>());
             extra.getValues().addAll(entry.getValue());
@@ -52,8 +52,8 @@ public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<Str
             return null;
         }
 
-        HashMap<String, List<String>> result = new HashMap<>();
-        for (StringMapEntry extra : v.entries) {
+        var result = new HashMap<String, List<String>>();
+        for (var extra : v.entries) {
             result.put(extra.getKey(), extra.getValues());
         }
         return result;

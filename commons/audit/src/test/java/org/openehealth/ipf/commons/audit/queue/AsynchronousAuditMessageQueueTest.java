@@ -33,14 +33,14 @@ public class AsynchronousAuditMessageQueueTest {
 
     @Test
     public void sendMessageWithoutExecutor() throws Exception {
-        final AuditTransmissionProtocol messageSender = mock(AuditTransmissionProtocol.class);
-        final DefaultAuditContext context = new DefaultAuditContext();
+        final var messageSender = mock(AuditTransmissionProtocol.class);
+        final var context = new DefaultAuditContext();
         context.setAuditEnabled(true);
-        AsynchronousAuditMessageQueue queue = new AsynchronousAuditMessageQueue();
+        var queue = new AsynchronousAuditMessageQueue();
         context.setAuditMessageQueue(queue);
         context.setAuditTransmissionProtocol(messageSender);
 
-        AuditMessage auditMessage = someAuditEventMessage();
+        var auditMessage = someAuditEventMessage();
         context.audit(auditMessage);
 
         verify(messageSender).send(context, Current.toString(auditMessage, false));
@@ -49,15 +49,15 @@ public class AsynchronousAuditMessageQueueTest {
 
     @Test
     public void sendMessageWithExecutor() throws Exception {
-        final AuditTransmissionProtocol messageSender = mock(AuditTransmissionProtocol.class);
-        final DefaultAuditContext context = new DefaultAuditContext();
+        final var messageSender = mock(AuditTransmissionProtocol.class);
+        final var context = new DefaultAuditContext();
         context.setAuditEnabled(true);
-        AsynchronousAuditMessageQueue queue = new AsynchronousAuditMessageQueue();
+        var queue = new AsynchronousAuditMessageQueue();
         context.setAuditMessageQueue(queue);
         context.setAuditTransmissionProtocol(messageSender);
         try {
             queue.setExecutorService(Executors.newSingleThreadExecutor());
-            AuditMessage auditMessage = someAuditEventMessage();
+            var auditMessage = someAuditEventMessage();
             context.audit(auditMessage);
 
             Thread.sleep(500);

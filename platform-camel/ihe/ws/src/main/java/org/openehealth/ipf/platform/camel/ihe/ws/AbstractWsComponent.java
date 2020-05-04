@@ -56,7 +56,7 @@ abstract public class AbstractWsComponent<
     }
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
-        AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {
+        var provider = new AbstractBasicInterceptorProvider() {
         };
         provider.setInInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "inInterceptors", Interceptor.class)));
@@ -88,7 +88,7 @@ abstract public class AbstractWsComponent<
     }
 
     protected Map<String, Object> getProperties(Map<String, Object> parameters) {
-        List<Map> mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
+        var mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
         return (mapList != null && mapList.size() == 1) ? mapList.get(0) : null;
     }
 

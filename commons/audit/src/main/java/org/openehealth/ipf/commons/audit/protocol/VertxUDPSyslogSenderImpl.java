@@ -17,9 +17,7 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.buffer.impl.BufferImpl;
-import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
@@ -57,17 +55,17 @@ public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTr
 
     @Override
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) {
-        DatagramSocketOptions options = new DatagramSocketOptions()
+        var options = new DatagramSocketOptions()
                 .setSendBufferSize(16384);
-        DatagramSocket socket = vertx.createDatagramSocket(options);
+        var socket = vertx.createDatagramSocket(options);
         if (auditMessage != null) {
             // Could use a Vertx codec for this
-            byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+            var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
             LOG.debug("Auditing to {}:{}",
                     auditContext.getAuditRepositoryHostName(),
                     auditContext.getAuditRepositoryPort());
             LOG.trace("{}", new String(msgBytes, StandardCharsets.UTF_8));
-            Buffer buffer = new BufferImpl().appendBytes(msgBytes);
+            var buffer = new BufferImpl().appendBytes(msgBytes);
 
             // The net socket has registered itself on the Vertx EventBus
             socket.send(buffer,

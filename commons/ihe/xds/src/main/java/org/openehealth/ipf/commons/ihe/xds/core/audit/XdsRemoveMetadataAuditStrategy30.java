@@ -16,9 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,14 +35,14 @@ public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
     @Override
     public XdsRemoveMetadataAuditDataset enrichAuditDatasetFromRequest(XdsRemoveMetadataAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof RemoveObjectsRequest) {
-            RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
+            var request = (RemoveObjectsRequest) pojo;
 
-            List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
+            var references = request.getObjectRefList().getObjectRef();
             if (references != null) {
-                int size = references.size();
+                var size = references.size();
                 auditDataset.setObjectIds(new String[size]);
-                for (int i = 0; i < size; ++i) {
-                    ObjectRefType reference = references.get(i);
+                for (var i = 0; i < size; ++i) {
+                    var reference = references.get(i);
                     auditDataset.getObjectIds()[i] = reference.getId();
                 }
             }

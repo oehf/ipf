@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.Hl7v2AuditorTestBase;
 
 import static org.junit.Assert.assertEquals;
@@ -40,9 +39,9 @@ public class Iti64AuditStrategyTest extends Hl7v2AuditorTestBase {
     }
 
     private void testRequest(boolean serverSide) {
-        Iti64AuditStrategy strategy = new Iti64AuditStrategy(serverSide);
-        Iti64AuditDataset auditDataset = getHl7v2AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti64AuditStrategy(serverSide);
+        var auditDataset = getHl7v2AuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -64,7 +63,7 @@ public class Iti64AuditStrategyTest extends Hl7v2AuditorTestBase {
     }
 
     private Iti64AuditDataset getHl7v2AuditDataset(Iti64AuditStrategy strategy) {
-        Iti64AuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

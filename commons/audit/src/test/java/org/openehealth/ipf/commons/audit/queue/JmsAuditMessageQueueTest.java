@@ -54,7 +54,7 @@ public class JmsAuditMessageQueueTest {
     public static void beforeClass() throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
-        BrokerService jmsBroker = new BrokerService();
+        var jmsBroker = new BrokerService();
         jmsBroker.addConnector(JMS_BROKER_URL);
         jmsBroker.setUseJmx(false);
         jmsBroker.setPersistent(false);
@@ -80,11 +80,11 @@ public class JmsAuditMessageQueueTest {
 
     @Test
     public void testActiveMQ() throws Exception {
-        PooledConnectionFactory jmsConnectionFactory = new PooledConnectionFactory(JMS_BROKER_URL);
+        var jmsConnectionFactory = new PooledConnectionFactory(JMS_BROKER_URL);
         MessageListener messageListener = new JmsAuditMessageListener(auditContext);
 
         // Setup Consumer
-        SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer();
+        var messageListenerContainer = new SimpleMessageListenerContainer();
         messageListenerContainer.setupMessageListener(messageListener);
         messageListenerContainer.setConnectionFactory(jmsConnectionFactory);
         messageListenerContainer.setDestinationName(JMS_QUEUE_NAME);

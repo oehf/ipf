@@ -21,9 +21,7 @@ import org.apache.camel.support.DefaultProducer;
 import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * MllpProducer wraps a MinaProducer for having a hook to shutdown some Mina
@@ -59,24 +57,24 @@ public class MllpProducer extends DefaultProducer {
      */
     @Override
     protected void doStop() throws Exception {
-        IoSession session = getField(producer, IoSession.class, "session");
+        var session = getField(producer, IoSession.class, "session");
         if (session != null) {
             invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
         }
-        IoConnector connector = getField(producer, IoConnector.class, "connector");
+        var connector = getField(producer, IoConnector.class, "connector");
         // Do NOT wait indefinitely
         connector.dispose(false);
         super.doStop();
     }
 
     private static <T> T getField(Object target, Class<T> clazz, String name) throws NoSuchFieldException, IllegalAccessException {
-        Field field = target.getClass().getDeclaredField(name);
+        var field = target.getClass().getDeclaredField(name);
         field.setAccessible(true);
         return (T) field.get(target);
     }
 
     private static <T> void invoke(Object target, String name, Class<T> clazz, T arg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Method method = target.getClass().getDeclaredMethod(name, clazz);
+        var method = target.getClass().getDeclaredMethod(name, clazz);
         method.setAccessible(true);
         method.invoke(target, arg);
     }

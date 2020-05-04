@@ -21,7 +21,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -52,20 +51,20 @@ public class StatusValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> slotValues = request.getSlotValues(param.getSlotName());
+        var slotValues = request.getSlotValues(param.getSlotName());
         metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
-        for (String slotValue : slotValues) {
+        for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
-        QuerySlotHelper slots = new QuerySlotHelper(request);
+        var slots = new QuerySlotHelper(request);
 
-        List<AvailabilityStatus> list = slots.toStatus(param);
+        var list = slots.toStatus(param);
 
         if (list.isEmpty()) {
-            for (String value : slots.toStringList(param)) {
+            for (var value : slots.toStringList(param)) {
                 metaDataAssert(AvailabilityStatus.valueOfOpcode(value) != null, INVALID_QUERY_PARAMETER_VALUE, value);
             }
         }

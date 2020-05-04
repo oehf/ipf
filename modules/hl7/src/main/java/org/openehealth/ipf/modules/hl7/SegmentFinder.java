@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
-import ca.uhn.hl7v2.model.Structure;
 
 import java.util.Objects;
 
@@ -47,13 +46,13 @@ public class SegmentFinder {
      */
     public static Segment find(Message message, String segmentName, int repetition) throws HL7Exception {
         Objects.requireNonNull(message);
-        SegmentFinder segmentFinder = new SegmentFinder(segmentName, repetition);
+        var segmentFinder = new SegmentFinder(segmentName, repetition);
         return segmentFinder.find(message);
     }
 
     private Segment find(Group group) throws HL7Exception {
-        for (String name : group.getNames()) {
-            Structure[] structures = group.getAll(name);
+        for (var name : group.getNames()) {
+            var structures = group.getAll(name);
             if (structures.length > 0) {
                 if ((structures[0] instanceof Segment) && segmentName.equals(structures[0].getName())) {
                     if (structures.length > repetition) {
@@ -62,8 +61,8 @@ public class SegmentFinder {
                         repetition -= structures.length;
                     }
                 } else if (structures[0] instanceof Group) {
-                    for (Structure structure : structures) {
-                        Segment segment = find((Group) structure);
+                    for (var structure : structures) {
+                        var segment = find((Group) structure);
                         if (segment != null) {
                             return segment;
                         }

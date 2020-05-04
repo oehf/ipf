@@ -44,7 +44,7 @@ public class CorsAutoConfiguration {
     @ConditionalOnMissingBean(CorsConfiguration.class)
     @ConfigurationProperties(prefix = "ipf.fhir.cors")
     public CorsConfiguration corsConfiguration() {
-        CorsConfiguration config = new CorsConfiguration();
+        var config = new CorsConfiguration();
 
         // A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.
         config.addAllowedOrigin("*");
@@ -59,7 +59,7 @@ public class CorsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "corsFilterRegistration")
     public FilterRegistrationBean corsFilterRegistration(CorsConfiguration corsConfiguration) {
-        FilterRegistrationBean frb = new FilterRegistrationBean();
+        var frb = new FilterRegistrationBean();
         frb.addUrlPatterns(config.getFhirMapping());
         frb.setFilter(new CorsFilter(request -> corsConfiguration));
         return frb;

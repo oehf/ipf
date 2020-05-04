@@ -22,7 +22,6 @@ import java.util.Iterator;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.apache.camel.support.ExchangeHelper;
@@ -87,8 +86,8 @@ public class Splitter extends DelegateProcessor {
     @Override
     protected void processNext(Exchange origExchange) throws Exception {
         notNull(origExchange, "origExchange");
-        Iterable<?> splitResult = evaluateSplitRule(origExchange);
-        Exchange aggregate = processAllResults(origExchange, splitResult);
+        var splitResult = evaluateSplitRule(origExchange);
+        var aggregate = processAllResults(origExchange, splitResult);
         finalizeAggregate(origExchange, aggregate);
     }
 
@@ -138,13 +137,13 @@ public class Splitter extends DelegateProcessor {
                                        Iterable<?> splitResult) throws Exception {
 
         Exchange aggregate = null;
-        Iterator<?> iterator = splitResult.iterator();
-        int counter = 0;
+        var iterator = splitResult.iterator();
+        var counter = 0;
         while (iterator.hasNext()) {
-            Object splitPart = iterator.next();
+            var splitPart = iterator.next();
 
-            SplitIndex idx = SplitIndex.valueOf(counter, !iterator.hasNext());
-            Exchange subExchange = processResult(origExchange, idx, splitPart);
+            var idx = SplitIndex.valueOf(counter, !iterator.hasNext());
+            var subExchange = processResult(origExchange, idx, splitPart);
             aggregate = doAggregate(aggregate, subExchange);
 
             ++counter;
@@ -156,9 +155,9 @@ public class Splitter extends DelegateProcessor {
                                    final SplitIndex index,
                                    final Object splitPart) throws Exception {
 
-        final Exchange subExchange = origExchange.copy();
+        final var subExchange = origExchange.copy();
 
-        Message message = subExchange.getIn();
+        var message = subExchange.getIn();
         message.setBody(splitPart);
         finalizeSubExchange(origExchange, subExchange, index);
 
@@ -179,7 +178,7 @@ public class Splitter extends DelegateProcessor {
     }
 
     private Iterable<?> evaluateSplitRule(Exchange origExchange) {
-        final Object splitResult = splitRule.evaluate(origExchange, Object.class);
+        final var splitResult = splitRule.evaluate(origExchange, Object.class);
 
         if (null == splitResult) {
             return Collections.emptySet();

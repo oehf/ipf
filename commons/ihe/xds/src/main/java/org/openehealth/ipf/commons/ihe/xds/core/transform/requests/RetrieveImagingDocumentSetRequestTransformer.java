@@ -49,8 +49,8 @@ public class RetrieveImagingDocumentSetRequestTransformer
         if (request == null) {
             return null;
         }
-        
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = factory.createRetrieveImagingDocumentSetRequest();
+
+        var ebXML = factory.createRetrieveImagingDocumentSetRequest();
         ebXML.setRetrieveStudies(request.getRetrieveStudies());
         ebXML.setTransferSyntaxUIDList(request.getTransferSyntaxIds());
         return ebXML;
@@ -65,8 +65,8 @@ public class RetrieveImagingDocumentSetRequestTransformer
         if (ebXML == null) {
             return null;
         }
-            
-        RetrieveImagingDocumentSet request = new RetrieveImagingDocumentSet();
+
+        var request = new RetrieveImagingDocumentSet();
         request.getRetrieveStudies().addAll(ebXML.getRetrieveStudies());
         request.getTransferSyntaxIds().addAll(ebXML.getTransferSyntaxUIDList());
         return request;

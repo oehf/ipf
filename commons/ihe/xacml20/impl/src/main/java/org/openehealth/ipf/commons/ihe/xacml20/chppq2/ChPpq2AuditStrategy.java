@@ -53,7 +53,7 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        QueryInformationBuilder builder = new QueryInformationBuilder(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
+        var builder = new QueryInformationBuilder(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
         return builder
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(
@@ -68,7 +68,7 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public ChPpqAuditDataset enrichAuditDatasetFromRequest(ChPpqAuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
-        XACMLPolicyQueryType request = (XACMLPolicyQueryType) requestObject;
+        var request = (XACMLPolicyQueryType) requestObject;
         auditDataset.setAction(EventActionCode.Execute);
         auditDataset.setQueryId(request.getID());
         Xacml20Utils.extractPatientId(request).ifPresent(auditDataset::setPatientId);
@@ -84,7 +84,7 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object responseObject) {
-        ResponseType response = (ResponseType) responseObject;
+        var response = (ResponseType) responseObject;
         try {
             if (!Xacml20Utils.SAML20_STATUS_SUCCESS.equals(response.getStatus().getStatusCode().getValue())) {
                 return EventOutcomeIndicator.SeriousFailure;

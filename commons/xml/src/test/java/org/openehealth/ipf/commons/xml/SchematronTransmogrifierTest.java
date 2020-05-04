@@ -37,14 +37,14 @@ public class SchematronTransmogrifierTest {
     @Test
     public void testConvert() throws IOException {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
-        String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
+        var result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertFalse(result.contains("svrl:failed-assert"));
     }
 
     @Test
     public void testConvertFail() throws IOException {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
-        String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
+        var result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertTrue(result.contains("<svrl:failed-assert")); // 3 occurrences
     }
 }

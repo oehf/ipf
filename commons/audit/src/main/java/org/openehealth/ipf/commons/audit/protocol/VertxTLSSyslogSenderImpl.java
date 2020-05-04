@@ -19,9 +19,7 @@ package org.openehealth.ipf.commons.audit.protocol;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.buffer.impl.BufferImpl;
-import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetClientOptions;
-import io.vertx.core.net.NetSocket;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.VertxTlsParameters;
@@ -93,7 +91,7 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
         @Override
         public void write(byte[]... bytes) {
             Buffer buffer = new BufferImpl();
-            for (byte[] b : bytes) buffer.appendBytes(b);
+            for (var b : bytes) buffer.appendBytes(b);
             vertx.eventBus().send(getHandle(), buffer);
         }
 
@@ -105,8 +103,8 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
         @Override
         public String getHandle() {
             if (writeHandlerId.get() == null) {
-                CountDownLatch latch = new CountDownLatch(1);
-                NetClientOptions options = new NetClientOptions()
+                var latch = new CountDownLatch(1);
+                var options = new NetClientOptions()
                         .setConnectTimeout(1000)
                         .setReconnectAttempts(5)
                         .setReconnectInterval(1000)
@@ -114,7 +112,7 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
 
                 tlsParameters.initNetClientOptions(options);
 
-                NetClient client = vertx.createNetClient(options);
+                var client = vertx.createNetClient(options);
                 client.connect(
                         port,
                         host,
@@ -124,7 +122,7 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
                                     port,
                                     event.succeeded());
                             if (event.succeeded()) {
-                                NetSocket socket = event.result();
+                                var socket = event.result();
                                 socket
                                         .exceptionHandler(exceptionEvent -> {
                                             LOG.info("Audit Connection caught exception", exceptionEvent);

@@ -32,9 +32,9 @@ public class CustomValidationSupportTest {
     private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
     @Test
     public void testFindStructureDefinition() {
-        CustomValidationSupport customValidationSupport = new CustomValidationSupport();
+        var customValidationSupport = new CustomValidationSupport();
         customValidationSupport.setPrefix("profiles/MHD-");
-        StructureDefinition definition = customValidationSupport.fetchResource(FHIR_CONTEXT, StructureDefinition.class,
+        var definition = customValidationSupport.fetchResource(FHIR_CONTEXT, StructureDefinition.class,
                 CustomValidationSupport.HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION + "DocumentReference");
         assertNotNull(definition);
         assertEquals(DocumentReference.class.getSimpleName(), definition.getType());

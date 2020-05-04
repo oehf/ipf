@@ -43,7 +43,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
     @Test
     public void testSendManualPdqmWithCount() {
 
-        Bundle page1 = sendManuallyWithCount(familyParameters(), 2);
+        var page1 = sendManuallyWithCount(familyParameters(), 2);
 
         assertEquals(Bundle.BundleType.SEARCHSET, page1.getType());
         assertEquals(ResourceType.Bundle, page1.getResourceType());
@@ -51,7 +51,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
         assertEquals(3, page1.getTotal());
         assertEquals(2, page1.getEntry().size());
 
-        Bundle page2 = nextPage(page1);
+        var page2 = nextPage(page1);
         assertEquals(Bundle.BundleType.SEARCHSET, page2.getType());
         assertEquals(ResourceType.Bundle, page2.getResourceType());
         assertTrue(page2.hasEntry());

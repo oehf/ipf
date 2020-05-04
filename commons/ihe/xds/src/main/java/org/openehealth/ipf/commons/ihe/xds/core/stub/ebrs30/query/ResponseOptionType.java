@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Objects;
 
 
 /**
@@ -62,11 +63,7 @@ public class ResponseOptionType {
      *     
      */
     public String getReturnType() {
-        if (returnType == null) {
-            return "RegistryObject";
-        } else {
-            return returnType;
-        }
+        return Objects.requireNonNullElse(returnType, "RegistryObject");
     }
 
     /**
@@ -90,11 +87,7 @@ public class ResponseOptionType {
      *     
      */
     public boolean isReturnComposedObjects() {
-        if (returnComposedObjects == null) {
-            return false;
-        } else {
-            return returnComposedObjects;
-        }
+        return Objects.requireNonNullElse(returnComposedObjects, false);
     }
 
     /**

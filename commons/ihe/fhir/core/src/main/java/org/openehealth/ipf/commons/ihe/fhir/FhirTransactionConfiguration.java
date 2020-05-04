@@ -130,7 +130,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * @return the initialized FhirContext
      */
     public FhirContext initializeFhirContext() {
-        FhirContext fhirContext = fhirContextProvider.get();
+        var fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
         fhirValidator.initialize(fhirContext);
         return fhirContext;

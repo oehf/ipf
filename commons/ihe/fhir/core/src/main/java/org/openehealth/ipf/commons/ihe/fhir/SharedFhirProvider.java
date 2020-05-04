@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -92,9 +91,9 @@ public abstract class SharedFhirProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
-        Map<String, Object> headers = enrichParameters(null, httpServletRequest, requestDetails);
+        var headers = enrichParameters(null, httpServletRequest, requestDetails);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }
 

@@ -57,7 +57,7 @@ public class MedicationStatementResourceProvider extends AbstractPcc44ResourcePr
             HttpServletResponse httpServletResponse) {
 
 
-        MedicationStatementSearchParameters parameters = MedicationStatementSearchParameters.builder()
+        var parameters = MedicationStatementSearchParameters.builder()
                 .patientReference(patient)
                 ._id(resourceId)
                 .sortSpec(sortSpec)

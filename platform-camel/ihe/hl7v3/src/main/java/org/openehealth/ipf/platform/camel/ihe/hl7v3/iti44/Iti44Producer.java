@@ -41,8 +41,8 @@ public class Iti44Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3Ws
 
     @Override
     protected String callService(Object clientObject, String request) {
-        GenericIti44PortType client = (GenericIti44PortType) clientObject;
-        String rootElementName = rootElementName(request);
+        var client = (GenericIti44PortType) clientObject;
+        var rootElementName = rootElementName(request);
         if ("PRPA_IN201301UV02".equals(rootElementName)) {
             return client.recordAdded(request);
         }

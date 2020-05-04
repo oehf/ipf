@@ -163,7 +163,7 @@ public class Address extends Hl7v2Based<XAD> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address that = (Address) o;
+        var that = (Address) o;
         return Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getCountyParishCode(), that.getCountyParishCode()) &&

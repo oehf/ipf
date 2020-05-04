@@ -23,9 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -67,7 +64,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
 
     @Override
     List<JAXBElement<? extends IdentifiableType>> getContents() {
-        RegistryObjectListType list = response.getRegistryObjectList();
+        var list = response.getRegistryObjectList();
         if (list == null) {
             return Collections.emptyList();
         }
@@ -86,7 +83,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
 
     @Override
     public List<EbXMLRegistryError> getErrors() {
-        RegistryErrorList list = response.getRegistryErrorList();
+        var list = response.getRegistryErrorList();
         if (list == null) {
             return Collections.emptyList();
         }
@@ -98,11 +95,11 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
 
     @Override
     public void setErrors(List<EbXMLRegistryError> errors) {
-        RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
+        var value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         response.setRegistryErrorList(value);
-        List<RegistryError> list = value.getRegistryError();
-        for (EbXMLRegistryError error : errors) {
-            RegistryError regError = ((EbXMLRegistryError30) error).getInternal();
+        var list = value.getRegistryError();
+        for (var error : errors) {
+            var regError = ((EbXMLRegistryError30) error).getInternal();
             list.add(regError);
         }
     }
@@ -110,7 +107,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
     @Override
     public void addReference(ObjectReference ref) {
         if (ref != null) {
-            ObjectRefType objectRef = EbXMLFactory30.RIM_FACTORY.createObjectRefType();
+            var objectRef = EbXMLFactory30.RIM_FACTORY.createObjectRefType();
             objectRef.setId(ref.getId());
             objectRef.setHome(ref.getHome());
             getContents().add(EbXMLFactory30.RIM_FACTORY.createObjectRef(objectRef));
@@ -120,10 +117,10 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
     @Override
     public List<ObjectReference> getReferences() {
         List<ObjectReference> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            ObjectRefType objRefEbXML = cast(identifiable, ObjectRefType.class);            
+        for (var identifiable : getContents()) {
+            var objRefEbXML = cast(identifiable, ObjectRefType.class);
             if (objRefEbXML != null) {
-                ObjectReference objRef = new ObjectReference();
+                var objRef = new ObjectReference();
                 objRef.setId(objRefEbXML.getId());
                 objRef.setHome(objRefEbXML.getHome());
                 results.add(objRef);

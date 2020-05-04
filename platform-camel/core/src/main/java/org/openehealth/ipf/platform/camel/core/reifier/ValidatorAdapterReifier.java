@@ -18,11 +18,11 @@ public class ValidatorAdapterReifier extends ProcessorAdapterReifier<ValidatorAd
 
     @Override
     protected ProcessorAdapter doCreateProcessor() {
-        Validator<?, ?> validator = definition.getValidator();
+        var validator = definition.getValidator();
         if (definition.getValidatorBean() != null) {
             validator = camelContext.getRegistry().lookupByNameAndType(definition.getValidatorBean(), Validator.class);
         }
-        ValidatorAdapter adapter = new ValidatorAdapter(validator);
+        var adapter = new ValidatorAdapter(validator);
         if (definition.getProfile() != null) {
             return adapter.staticProfile(definition.getProfile());
         }

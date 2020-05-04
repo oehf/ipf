@@ -44,7 +44,7 @@ public final class FhirUtils {
     public static Map<ResourceType, List<Bundle.BundleEntryComponent>> getBundleEntries(Bundle bundle) {
         return bundle.getEntry().stream()
                 .collect(Collectors.groupingBy(entry -> {
-                            Bundle.BundleEntryRequestComponent request = entry.getRequest();
+                            var request = entry.getRequest();
                             if (request == null || request.getUrl() == null) {
                                 throw unprocessableEntity(
                                         OperationOutcome.IssueSeverity.ERROR,
@@ -118,7 +118,7 @@ public final class FhirUtils {
                                                                       String diagnostics,
                                                                       String msg,
                                                                       Object... args) {
-        OperationOutcome operationOutcome = new OperationOutcome();
+        var operationOutcome = new OperationOutcome();
         CodeableConcept errorCode = null;
         if (code != null) {
             errorCode = new CodeableConcept();
@@ -136,7 +136,7 @@ public final class FhirUtils {
                                                                       IBaseOperationOutcome operationOutcome,
                                                                       String msg,
                                                                       Object... args) {
-        T exception = func.apply(String.format(msg, args));
+        var exception = func.apply(String.format(msg, args));
         exception.setOperationOutcome(operationOutcome);
         return exception;
     }

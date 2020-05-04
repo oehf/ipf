@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -36,11 +35,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
 
     protected RegistryResponseType processRequest(T body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("{} service failed", getClass().getSimpleName(), exception);
-            Response errorResponse = new Response(
+            var errorResponse = new Response(
                     exception,
                     getDefaultMetadataError(),
                     ErrorCode.REGISTRY_ERROR, null);
@@ -49,13 +48,13 @@ public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
 
         return result.getMessage().getBody(RegistryResponseType.class);
     }
-    
+
     /**
      * Define the ErrorCode used to indicate a error in the metadata (typically a client fault).
      * IHE profiles do not have one common error code to indicate the error.
-     * 
+     *
      * If the default {@link ErrorCode} can not be used, override this method to use a different code.
-     * 
+     *
      * @return {@link ErrorCode#REGISTRY_METADATA_ERROR}.
      */
     protected ErrorCode getDefaultMetadataError() {

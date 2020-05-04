@@ -16,7 +16,7 @@ public class SearchReifier extends ProcessorReifier<SearchDefinition> {
 
     @Override
     public Processor createProcessor() throws Exception {
-        SearchProcessor searchProcessor = new SearchProcessor();
+        var searchProcessor = new SearchProcessor();
         searchProcessor.setIndexEvals(definition.getIndexEvals());
         searchProcessor.setFilters(definition.getFilters());
         searchProcessor.setResultTypes(definition.getResultTypes());

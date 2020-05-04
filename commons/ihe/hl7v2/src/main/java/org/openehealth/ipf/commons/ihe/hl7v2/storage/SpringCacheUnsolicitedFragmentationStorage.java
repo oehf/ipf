@@ -40,7 +40,7 @@ public class SpringCacheUnsolicitedFragmentationStorage implements UnsolicitedFr
 
     @Override
     public StringBuilder getAndRemove(String key) {
-        String element = cache.get(key, String.class);
+        var element = cache.get(key, String.class);
         if (element != null) {
             cache.evict(key);
             return new StringBuilder(element);

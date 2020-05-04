@@ -97,7 +97,7 @@ public class Person extends Hl7v2Based<XCN> {
      * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public Name getName() {
-        XcnName name = new XcnName(getHapiObject());
+        var name = new XcnName(getHapiObject());
         return name.isEmpty() ? null : name;
     }
 
@@ -115,7 +115,7 @@ public class Person extends Hl7v2Based<XCN> {
             }
         }
         else {
-            XCN xcn = getHapiObject();
+            var xcn = getHapiObject();
             xcn.getXcn2_FamilyName().clear();
             xcn.getXcn3_GivenName().clear();
             xcn.getXcn4_SecondAndFurtherGivenNamesOrInitialsThereof().clear();
@@ -129,7 +129,7 @@ public class Person extends Hl7v2Based<XCN> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person that = (Person) o;
+        var that = (Person) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getName(), that.getName());
     }

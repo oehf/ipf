@@ -60,7 +60,7 @@ class Iti68BinaryConsumerAuditInterceptor
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        FhirAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
+        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
         determineParticipantsAddresses(exchange, auditDataset);
 
         // Add audit dataset to the exchange headers so that a processing route could add things like
@@ -68,7 +68,7 @@ class Iti68BinaryConsumerAuditInterceptor
         // FHIR/XDS bridges) in the request URI, but there is no definition HOW.
         exchange.getIn().setHeader(AUDIT_DATASET_HEADER, auditDataset);
 
-        boolean failed = false;
+        var failed = false;
         try {
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
@@ -96,9 +96,9 @@ class Iti68BinaryConsumerAuditInterceptor
      */
     private FhirAuditDataset createAndEnrichAuditDatasetFromRequest(AuditStrategy<FhirAuditDataset> strategy, Exchange exchange, Object msg) {
         try {
-            FhirAuditDataset auditDataset = strategy.createAuditDataset();
+            var auditDataset = strategy.createAuditDataset();
 
-            HttpServletRequest request = exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
+            var request = exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(request.getRequestURL().toString());
             auditDataset.setRemoteAddress(request.getRemoteAddr());

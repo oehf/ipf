@@ -17,10 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
 import org.junit.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Validator;
-import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
-
-import java.io.InputStream;
 
 /**
  * Test whether sample Continua HRN documents can be successfully
@@ -37,8 +34,8 @@ public class DocumentsValidationTest {
     }
 
     private void doTest(String fileName) throws Exception {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/" + fileName);
-        ClinicalDocument document = CDAUtil.load(stream);
+        var stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/" + fileName);
+        var document = CDAUtil.load(stream);
         new CDAR2Validator().validate(document, null);
     }
 }

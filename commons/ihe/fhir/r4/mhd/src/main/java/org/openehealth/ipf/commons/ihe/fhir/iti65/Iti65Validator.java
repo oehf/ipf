@@ -17,12 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import ca.uhn.fhir.validation.FhirValidator;
-import ca.uhn.fhir.validation.ValidationResult;
-import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.hapi.ctx.IValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
@@ -47,11 +43,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -84,28 +78,28 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     @Override
     public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
 
-        Bundle transactionBundle = (Bundle) payload;
+        var transactionBundle = (Bundle) payload;
 
         validateBundleConsistency(transactionBundle);
 
-        FhirValidator validator = context.newValidator();
+        var validator = context.newValidator();
         validator.setValidateAgainstStandardSchema(false);
         validator.setValidateAgainstStandardSchematron(false);
-        FhirInstanceValidator instanceValidator = new FhirInstanceValidator(validationSupport);
+        var instanceValidator = new FhirInstanceValidator(validationSupport);
         instanceValidator.setNoTerminologyChecks(true);
         instanceValidator.setErrorForUnknownProfiles(true);
         instanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
         validator.registerValidatorModule(instanceValidator);
-        ValidationResult validationResult = validator.validateWithResult(transactionBundle);
+        var validationResult = validator.validateWithResult(transactionBundle);
         if (!validationResult.isSuccessful()) {
-            IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
+            var operationOutcome = validationResult.toOperationOutcome();
             throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
         }
     }
 
     public ValidationSupportChain loadStructureDefinitions(FhirContext context, IValidationSupport baseValidationSupport, String kind) {
-        PrePopulatedValidationSupport validationSupport = new PrePopulatedValidationSupport();
-        ValidationSupportChain supportChain = new ValidationSupportChain(validationSupport, baseValidationSupport);
+        var validationSupport = new PrePopulatedValidationSupport();
+        var supportChain = new ValidationSupportChain(validationSupport, baseValidationSupport);
         findProfile(context, supportChain, String.format("IHE_MHD_%s_List", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
         findProfile(context, supportChain, String.format("IHE_MHD_Provide_%s_DocumentReference", kind))
@@ -123,13 +117,13 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             FhirContext fhirContext,
             ValidationSupportChain snaphotGenerationSupport,
             String name) {
-        String path = "META-INF/profiles/" + name + ".xml";
-        String url = IHE_PROFILE_PREFIX + name;
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        var path = "META-INF/profiles/" + name + ".xml";
+        var url = IHE_PROFILE_PREFIX + name;
+        var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
         if (is != null) {
-            String profileText = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
-            IParser parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
-            StructureDefinition structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
+            var profileText = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
+            var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition.hasSnapshot() ?
                     structureDefinition :
                     new SnapshotGeneratingValidationSupport(fhirContext, snaphotGenerationSupport)
@@ -146,7 +140,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
      */
     protected void validateBundleConsistency(Bundle bundle) {
 
-        Map<ResourceType, List<Bundle.BundleEntryComponent>> entries = FhirUtils.getBundleEntries(bundle);
+        var entries = FhirUtils.getBundleEntries(bundle);
 
         // Verify that the bundle has all required resources
         // This should be done by the StructureDefinition, but apparently HAPI has a problem with slices...
@@ -177,8 +171,8 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 .map(Bundle.BundleEntryComponent::getResource)
                 .forEach(resource -> {
                     if (resource instanceof DocumentManifest) {
-                        DocumentManifest dm = (DocumentManifest) resource;
-                        for (Reference content : dm.getContent()) {
+                        var dm = (DocumentManifest) resource;
+                        for (var content : dm.getContent()) {
                             try {
                                 expectedReferenceFullUrls.add(content.getReference());
                             } catch (Exception ignored) {
@@ -186,9 +180,9 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                         }
                         patientReferences.add(getSubjectReference(resource, r -> dm.getSubject()));
                     } else if (resource instanceof DocumentReference) {
-                        DocumentReference dr = (DocumentReference) resource;
-                        for (DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
-                            String url = content.getAttachment().getUrl();
+                        var dr = (DocumentReference) resource;
+                        for (var content : dr.getContent()) {
+                            var url = content.getAttachment().getUrl();
                             if (!url.startsWith("http")) {
                                 expectedBinaryFullUrls.add(url);
                             }
@@ -268,7 +262,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
 
 
     private String getSubjectReference(Resource resource, Function<Resource, Reference> f) {
-        Reference reference = f.apply(resource);
+        var reference = f.apply(resource);
         if (reference == null) {
             throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
@@ -281,7 +275,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         }
         // Could be contained resources
         if (reference.getResource() != null) {
-            Patient patient = (Patient) reference.getResource();
+            var patient = (Patient) reference.getResource();
             return patient.getIdentifier().get(0).getValue();
         }
         return reference.getReference();

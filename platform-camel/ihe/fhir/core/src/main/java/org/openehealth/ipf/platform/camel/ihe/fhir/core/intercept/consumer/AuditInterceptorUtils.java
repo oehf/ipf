@@ -23,9 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import javax.security.cert.X509Certificate;
-import java.security.Principal;
 
 /**
  * @author Christian Ohr
@@ -35,14 +33,14 @@ public abstract class AuditInterceptorUtils {
     private static final Logger LOG = LoggerFactory.getLogger(AuditInterceptorUtils.class);
 
     public static void extractClientCertificateCommonName(Exchange exchange, AuditDataset auditDataset) {
-        X509Certificate[] certificates = (X509Certificate[]) exchange.getIn().getHeader(Constants.HTTP_X509_CERTIFICATES);
+        var certificates = (X509Certificate[]) exchange.getIn().getHeader(Constants.HTTP_X509_CERTIFICATES);
         if (certificates != null && certificates.length > 0) {
             try {
-                X509Certificate certificate = certificates[0];
-                Principal principal = certificate.getSubjectDN();
-                String dn = principal.getName();
-                LdapName ldapDN = new LdapName(dn);
-                for (Rdn rdn : ldapDN.getRdns()) {
+                var certificate = certificates[0];
+                var principal = certificate.getSubjectDN();
+                var dn = principal.getName();
+                var ldapDN = new LdapName(dn);
+                for (var rdn : ldapDN.getRdns()) {
                     if (rdn.getType().equalsIgnoreCase("CN")) {
                         auditDataset.setSourceUserName((String) rdn.getValue());
                         break;

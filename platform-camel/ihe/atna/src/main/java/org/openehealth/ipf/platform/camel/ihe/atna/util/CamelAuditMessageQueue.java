@@ -68,7 +68,7 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
     public void setEndpointUri(String endpointUri) throws URISyntaxException, UnknownHostException {
         endpointUriString = endpointUri;
         endpointUriObject = new URI(endpointUri);
-        String host = endpointUriObject.getHost();
+        var host = endpointUriObject.getHost();
         destinationAddress = InetAddress.getByName(host == null ? "0.0.0.0" : host);
         destinationPort = endpointUriObject.getPort();
     }
@@ -85,8 +85,8 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
-        for (AuditMessage m : auditMessages) {
-            HashMap<String, Object> headers = new HashMap<>();
+        for (var m : auditMessages) {
+            var headers = new HashMap<String, Object>();
             headers.put(HEADER_NAMESPACE + ".destination.address", destinationAddress.getHostAddress());
             headers.put(HEADER_NAMESPACE + ".destination.port", destinationPort);
             headers.put(X_IPF_ATNA_TIMESTAMP, auditContext.getAuditMetadataProvider().getTimestamp());
@@ -98,7 +98,7 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
     }
 
     private InetAddress getDestinationAddress() throws UnknownHostException {
-        String host = endpointUriObject.getHost();
+        var host = endpointUriObject.getHost();
         return InetAddress.getByName(host == null ? "0.0.0.0" : host);
     }
 

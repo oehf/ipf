@@ -76,7 +76,7 @@ public class GetAssociationsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -84,14 +84,14 @@ public class GetAssociationsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetAssociationsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetAssociationsQuery(), result);
     }

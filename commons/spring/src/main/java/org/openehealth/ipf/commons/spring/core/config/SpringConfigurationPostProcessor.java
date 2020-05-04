@@ -24,7 +24,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,10 +45,10 @@ public class SpringConfigurationPostProcessor implements
     private List<OrderedConfigurer> springConfigurers;
 
     protected void configure(Registry registry) {
-        for (OrderedConfigurer sc : springConfigurers) {
-            Collection configurations = sc.lookup(registry);
+        for (var sc : springConfigurers) {
+            var configurations = sc.lookup(registry);
             if (configurations != null && configurations.size() > 0) {
-                for (Object configuration : configurations) {
+                for (var configuration : configurations) {
                     LOG.debug("Configuring extension {}", configuration);
                     try {
                         sc.configure(configuration);
@@ -80,7 +79,7 @@ public class SpringConfigurationPostProcessor implements
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (!refreshed || !restartOnce) {
-            SpringRegistry registry = new SpringRegistry();
+            var registry = new SpringRegistry();
             registry.setBeanFactory(event.getApplicationContext());
             // If there are no configurers set, we look them up
             if (getSpringConfigurers() == null) {

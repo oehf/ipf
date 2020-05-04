@@ -123,7 +123,7 @@ public class IpfFhirServlet extends RestfulServer {
     public void init(ServletConfig config) throws ServletException {
         this.servletName = config.getServletName();
 
-        FhirRegistry fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
+        var fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
         if (fhirRegistry.hasServlet(servletName)) {
             throw new ServletException(String.format("Duplicate FHIR Servlet name %s. Use unique names per Camel application", servletName));
         }
@@ -151,15 +151,15 @@ public class IpfFhirServlet extends RestfulServer {
         if (config.getInitParameter(SERVLET_STRICT_PARSER_ERROR_HANDLER_PARAMETER_NAME) != null) {
             strictErrorHandler = Boolean.parseBoolean(config.getInitParameter(SERVLET_STRICT_PARSER_ERROR_HANDLER_PARAMETER_NAME));
         }
-        String pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
+        var pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
         if (pagingProviderSizeParameter != null && !pagingProviderSizeParameter.isEmpty()) {
             pagingProviderSize = Integer.parseInt(pagingProviderSizeParameter);
         }
-        String defaultPageSizeParameter = config.getInitParameter(SERVLET_DEFAULT_PAGE_SIZE_PARAMETER_NAME);
+        var defaultPageSizeParameter = config.getInitParameter(SERVLET_DEFAULT_PAGE_SIZE_PARAMETER_NAME);
         if (defaultPageSizeParameter != null && !defaultPageSizeParameter.isEmpty()) {
             defaultPageSize = Integer.parseInt(defaultPageSizeParameter);
         }
-        String maximumPageSizeParameter = config.getInitParameter(SERVLET_MAX_PAGE_SIZE_PARAMETER_NAME);
+        var maximumPageSizeParameter = config.getInitParameter(SERVLET_MAX_PAGE_SIZE_PARAMETER_NAME);
         if (maximumPageSizeParameter != null && !maximumPageSizeParameter.isEmpty()) {
             maximumPageSize = Integer.parseInt(maximumPageSizeParameter);
         }
@@ -172,7 +172,7 @@ public class IpfFhirServlet extends RestfulServer {
 
     @Override
     public void destroy() {
-        FhirRegistry registry = DefaultFhirRegistry.removeFhirRegistry(getServletName());
+        var registry = DefaultFhirRegistry.removeFhirRegistry(getServletName());
         if (registry != null) {
             try {
                 registry.unregister(this);
@@ -204,7 +204,7 @@ public class IpfFhirServlet extends RestfulServer {
      * @see #getDefaultPageSize()
      */
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(pagingProviderSize);
+        var pagingProvider = new FifoMemoryPagingProvider(pagingProviderSize);
         pagingProvider.setDefaultPageSize(getDefaultPageSize());
         pagingProvider.setMaximumPageSize(getMaximumPageSize());
         return pagingProvider;
@@ -221,7 +221,7 @@ public class IpfFhirServlet extends RestfulServer {
      * @return the logging interceptor if {@link #logging} is true
      */
     protected Object getLoggingInterceptor() {
-        LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
+        var loggingInterceptor = new LoggingInterceptor();
         loggingInterceptor.setLoggerName(IpfFhirServlet.class.getName());
 
         // This is the format for each line. A number of substitution variables may

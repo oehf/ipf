@@ -18,8 +18,8 @@ public class TransmogrifierAdapterReifier extends ProcessorAdapterReifier<Transm
 
     @Override
     protected ProcessorAdapter doCreateProcessor() {
-        Transmogrifier<?, ?> transmogrifier = definition.getTransmogrifier();
-        String transmogrifierBean = definition.getTransmogrifierBean();
+        var transmogrifier = definition.getTransmogrifier();
+        var transmogrifierBean = definition.getTransmogrifierBean();
         if (transmogrifierBean != null) {
             transmogrifier = camelContext.getRegistry().lookupByNameAndType(transmogrifierBean, Transmogrifier.class);
         }

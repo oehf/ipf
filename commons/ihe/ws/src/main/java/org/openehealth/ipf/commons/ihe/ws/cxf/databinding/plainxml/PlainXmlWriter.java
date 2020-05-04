@@ -37,7 +37,7 @@ public class PlainXmlWriter implements DataWriter<XMLStreamWriter> {
     @Override
     public void write(Object obj, MessagePartInfo part, XMLStreamWriter writer) {
         try {
-            String s = (String) obj;
+            var s = (String) obj;
             Reader reader = new StringReader(s);
             StaxUtils.copy(StaxUtils.createXMLStreamReader(reader), writer);
         } catch (Exception e) {

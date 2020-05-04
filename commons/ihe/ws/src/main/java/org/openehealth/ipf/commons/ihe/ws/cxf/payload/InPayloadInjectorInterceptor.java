@@ -54,8 +54,8 @@ public class InPayloadInjectorInterceptor extends AbstractPhaseInterceptor<Messa
             return;
         }
 
-        List list = message.getContent(List.class);
-        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        var list = message.getContent(List.class);
+        var payloadHolder = message.getContent(StringPayloadHolder.class);
         if ((list != null) && (payloadHolder != null)) {
             list.set(position, payloadHolder.get(SOAP_BODY));
         }

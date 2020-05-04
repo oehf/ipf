@@ -87,8 +87,8 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     protected String resourceCacheKey(Object... params) {
         String phase = null;
         if (params[0] instanceof SchematronProfile) {
-            SchematronProfile schematronProfile = (SchematronProfile) params[0];
-            Map<String, Object> parameters = schematronProfile.getParameters();
+            var schematronProfile = (SchematronProfile) params[0];
+            var parameters = schematronProfile.getParameters();
             if (parameters != null) {
                 phase = (String) parameters.get("phase");
             }
@@ -103,9 +103,9 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
         try {
             LOG.debug("Creating new Schematron stylesheet");
             Source rules = resourceContent(params);
-            Map<String, Object> parameters = resourceParameters(params);
+            var parameters = resourceParameters(params);
             LOG.debug("step 1 of 3");
-            Source source = step(xsltTransmogrifier, rules,
+            var source = step(xsltTransmogrifier, rules,
                     "/schematron/iso_dsdl_include.xsl", parameters);
             LOG.debug("step 2 of 3");
             source = step(xsltTransmogrifier, source,
@@ -113,7 +113,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
             LOG.debug("step 3 of 3");
             source = step(xsltTransmogrifier, source,
                     "/schematron/iso_svrl_for_xslt2.xsl", parameters);
-            Templates template = getFactory().newTemplates(source);
+            var template = getFactory().newTemplates(source);
             LOG.debug("done!");
             return template;
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
     private static Source step(XsltTransmogrifier<String> t, Source input,
             String stylesheet, Map<String, Object> params) {
-        String s = t.zap(input, stylesheet, params);
+        var s = t.zap(input, stylesheet, params);
         return new StreamSource(new StringReader(s));
     }
 

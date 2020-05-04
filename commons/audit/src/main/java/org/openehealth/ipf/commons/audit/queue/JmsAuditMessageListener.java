@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,16 +53,16 @@ public class JmsAuditMessageListener implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        TextMessage textMessage = (TextMessage) message;
+        var textMessage = (TextMessage) message;
         try {
-            String text = textMessage.getText();
-            String hostname = message.getStringProperty(X_IPF_ATNA_HOSTNAME);
-            String processID = message.getStringProperty(X_IPF_ATNA_PROCESSID);
-            String application = message.getStringProperty(X_IPF_ATNA_APPLICATION);
-            String timestamp = message.getStringProperty(X_IPF_ATNA_TIMESTAMP);
+            var text = textMessage.getText();
+            var hostname = message.getStringProperty(X_IPF_ATNA_HOSTNAME);
+            var processID = message.getStringProperty(X_IPF_ATNA_PROCESSID);
+            var application = message.getStringProperty(X_IPF_ATNA_APPLICATION);
+            var timestamp = message.getStringProperty(X_IPF_ATNA_TIMESTAMP);
 
-            AuditMetadataProvider defaultProvider = auditContext.getAuditMetadataProvider();
-            DefaultAuditMetadataProvider auditMetadataProvider = new DefaultAuditMetadataProvider(
+            var defaultProvider = auditContext.getAuditMetadataProvider();
+            var auditMetadataProvider = new DefaultAuditMetadataProvider(
                     hostname != null ? hostname : defaultProvider.getHostname(),
                     processID != null ? processID : defaultProvider.getProcessID(),
                     application != null ? application : defaultProvider.getSendingApplication(),

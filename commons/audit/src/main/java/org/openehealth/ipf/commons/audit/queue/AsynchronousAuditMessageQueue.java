@@ -66,7 +66,7 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     @Override
     protected void handle(AuditContext auditContext, String auditRecord) {
         if (auditRecord != null) {
-            Runnable runnable = runnable(auditContext, auditRecord);
+            var runnable = runnable(auditContext, auditRecord);
             if (executorService != null && !executorService.isShutdown()) {
                 CompletableFuture.runAsync(runnable, executorService)
                         .exceptionally(e -> {

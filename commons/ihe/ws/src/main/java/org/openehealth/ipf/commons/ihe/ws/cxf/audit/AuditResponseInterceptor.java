@@ -21,9 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.VersionTransformer;
@@ -101,8 +99,8 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         }
 
         // check whether the response is relevant for ATNA audit finalization
-        Object response = extractPojo(message);
-        AuditStrategy<T> auditStrategy = getAuditStrategy();
+        var response = extractPojo(message);
+        var auditStrategy = getAuditStrategy();
         if (! auditStrategy.isAuditableResponse(response)) {
             return;
         }
@@ -115,7 +113,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         // has not been purged from the asynchrony correlator yet.
         if (asyncReceiver) {
             String messageId = null;
-            for (Header header : message.getHeaders()) {
+            for (var header : message.getHeaders()) {
                 if ("RelatesTo".equals(header.getName().getLocalPart())
                         && VersionTransformer.isSupported(header.getName().getNamespaceURI()))
                 {
@@ -143,7 +141,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
 
         // check whether the response POJO is available and
         // perform transaction-specific enrichment of the audit dataset
-        Exchange exchange = message.getExchange();
+        var exchange = message.getExchange();
         if ((message == exchange.getInFaultMessage())
                 || (message == exchange.getOutFaultMessage())
                 || (response == null))

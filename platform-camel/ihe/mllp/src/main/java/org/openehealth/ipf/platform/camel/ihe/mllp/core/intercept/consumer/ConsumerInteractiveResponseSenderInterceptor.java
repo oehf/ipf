@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
-import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
@@ -57,24 +56,24 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
-        Message requestMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
-        Terser requestTerser = new Terser(requestMessage);
-        String requestMessageType = requestTerser.get("MSH-9-1");
+        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var requestMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
+        var requestTerser = new Terser(requestMessage);
+        var requestMessageType = requestTerser.get("MSH-9-1");
 
         // get pieces of fragments' keys
-        final String msh31 = requestTerser.get("MSH-3-1");
-        final String msh32 = requestTerser.get("MSH-3-2");
-        final String msh33 = requestTerser.get("MSH-3-3");
+        final var msh31 = requestTerser.get("MSH-3-1");
+        final var msh32 = requestTerser.get("MSH-3-2");
+        final var msh33 = requestTerser.get("MSH-3-3");
 
         // handle cancel messages; if there is nothing to cancel -- pass to the route
         if ("QCN".equals(requestMessageType) || "CNQ".equals(requestTerser.get("MSH-9-2"))) {
-            String queryTag = "QCN".equals(requestMessageType) ? 
+            var queryTag = "QCN".equals(requestMessageType) ?
                     requestTerser.get("QID-1") :
                     requestTerser.get("QPD-2");
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
                 LOG.debug("Dropped response chain for query tag {}", queryTag);
-                Message ack = requestMessage.generateACK();
+                var ack = requestMessage.generateACK();
 
                 // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
                 Terser.set((Segment)ack.get("MSH"), 9, 0, 3, 1, "ACK");
@@ -92,7 +91,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
 
         // check whether requested unit type is supported
-        String rcp22 = requestTerser.get("RCP-2-2");
+        var rcp22 = requestTerser.get("RCP-2-2");
         if (! "RD".equals(rcp22)) {
             if (rcp22 != null) {
                 LOG.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
@@ -102,7 +101,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
 
         // determine the threshold (maximal records count per message)
-        int threshold = -1;
+        var threshold = -1;
         try {
             threshold = Integer.parseInt(requestTerser.get("RCP-2-1"));
         } catch (NumberFormatException nfe) {
@@ -118,7 +117,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
         
         // check whether the request is acceptable; if not -- pass it to the route, let the user decide 
-        String continuationPointer = requestTerser.get("DSC-1");
+        var continuationPointer = requestTerser.get("DSC-1");
         if (isEmpty(continuationPointer)) {
             continuationPointer = null;
         }
@@ -129,7 +128,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             return;
         }
         
-        final String queryTag = requestTerser.get("QPD-2");
+        final var queryTag = requestTerser.get("QPD-2");
         if (isEmpty(queryTag)) {
             LOG.warn("Cannot perform interactive continuation: empty query tag in QPD-2");
             getWrappedProcessor().process(exchange);
@@ -137,13 +136,13 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
 
         // handle query
-        final String chainId = keyString(queryTag, msh31, msh32, msh33);
-        Message responseMessage = storage.get(continuationPointer, chainId);
+        final var chainId = keyString(queryTag, msh31, msh32, msh33);
+        var responseMessage = storage.get(continuationPointer, chainId);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
             LOG.debug("Use prepared fragment for {}", continuationPointer);
             synchronized (responseMessage) {
-                Terser responseTerser = new Terser(responseMessage);
+                var responseTerser = new Terser(responseMessage);
                 responseTerser.set("MSH-7", MessageUtils.hl7Now());
                 responseTerser.set("MSH-10", uniqueId());
                 responseTerser.set("MSA-2", requestTerser.get("MSH-10"));
@@ -151,7 +150,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         } else {
             // no fragment found --> run the route and create fragments if necessary
             getWrappedProcessor().process(exchange);
-            Message response = Exchanges.resultMessage(exchange).getBody(Message.class);
+            var response = Exchanges.resultMessage(exchange).getBody(Message.class);
             responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
         Exchanges.resultMessage(exchange).setBody(parser.encode(responseMessage));
@@ -172,7 +171,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             String queryTag,
             String chainId) throws Exception
     {
-        Terser responseTerser = new Terser(responseMessage);  
+        var responseTerser = new Terser(responseMessage);
         if (isNotEmpty(responseTerser.get("DSC-1"))) {
             LOG.warn("Cannot perform interactive continuation: DSC-1 already " +
             		 "present in the response message returned from the route");
@@ -180,38 +179,38 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
         
         // determine data record boundaries in the response
-        List<String> segments = splitString(responseMessage.toString(), '\r');
-        List<Integer> recordBoundaries = getRecordBoundaries(segments);
+        var segments = splitString(responseMessage.toString(), '\r');
+        var recordBoundaries = getRecordBoundaries(segments);
         if (recordBoundaries.size() - 1 <= threshold) {
             return responseMessage;
         }
         
         // prepare header and footer segment groups
-        CharSequence headerSegments = joinSegments(segments, 0, recordBoundaries.get(0));
-        CharSequence footerSegments = joinSegments(
+        var headerSegments = joinSegments(segments, 0, recordBoundaries.get(0));
+        var footerSegments = joinSegments(
                 segments, recordBoundaries.get(recordBoundaries.size() - 1), segments.size());
 
         // determine count of resulting fragments
-        final int fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold; 
+        final var fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold;
         
         // create a new chain of fragments
-        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
         String continuationPointer = null;
-        for (int currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
+        for (var currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 
-            int startRecordIndex = currentFragmentIndex * threshold;
-            int endRecordIndex = Math.min(startRecordIndex + threshold, recordBoundaries.size() - 1);
+            var startRecordIndex = currentFragmentIndex * threshold;
+            var endRecordIndex = Math.min(startRecordIndex + threshold, recordBoundaries.size() - 1);
             int startSegmentIndex = recordBoundaries.get(startRecordIndex);
             int endSegmentIndex = recordBoundaries.get(endRecordIndex);
 
-            StringBuilder sb = new StringBuilder(headerSegments);
+            var sb = new StringBuilder(headerSegments);
             appendSegments(sb, segments, startSegmentIndex, endSegmentIndex);
             sb.append(footerSegments);
 
             // parse, post-process and register the current fragment
-            Message fragment = parser.parse(sb.toString());
-            Terser fragmentTerser = new Terser(fragment);
-            String nextContinuationPointer = uniqueId();
+            var fragment = parser.parse(sb.toString());
+            var fragmentTerser = new Terser(fragment);
+            var nextContinuationPointer = uniqueId();
             if (currentFragmentIndex != fragmentsCount - 1) {
                 fragmentTerser.set("DSC-1", nextContinuationPointer);
                 fragmentTerser.set("DSC-2", "I");
@@ -240,8 +239,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
     private List<Integer> getRecordBoundaries(List<String> segments) {
         Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
         List<Integer> recordBoundaries = new ArrayList<>();
-        boolean foundFooter = false;
-        for (int i = 1; i < segments.size(); ++i) {
+        var foundFooter = false;
+        for (var i = 1; i < segments.size(); ++i) {
             if (config.isDataStartSegment(segments, i)) {
                 recordBoundaries.add(i);
             } else if ((recordBoundaries.size() > 0) && config.isFooterStartSegment(segments, i)) {

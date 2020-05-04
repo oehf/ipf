@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 
 import static org.junit.Assert.*;
@@ -40,7 +39,7 @@ public class RemoveMetadataTransformerTest {
 
     @Test
     public void testToEbXML() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(2, ebXML.getReferences().size());
         assertEquals("1.2.3", ebXML.getReferences().get(0).getHome());
@@ -56,7 +55,7 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLRemoveMetadataRequest result = transformer.toEbXML(new RemoveMetadata());
+        var result = transformer.toEbXML(new RemoveMetadata());
         assertNotNull(result);
         assertNotNull(result.getReferences());
         assertEquals(0, result.getReferences().size());
@@ -64,8 +63,8 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testFromEbXML() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
-        RemoveMetadata result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(request);
+        var result = transformer.fromEbXML(ebXML);
         
         assertEquals(request.toString(), result.toString());
     }
@@ -77,7 +76,7 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(new RemoveMetadata());
+        var ebXML = transformer.toEbXML(new RemoveMetadata());
         assertEquals(new RemoveMetadata(), transformer.fromEbXML(ebXML));
     }
 }

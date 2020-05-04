@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -56,11 +57,7 @@ public class NotifyActionType
      *     
      */
     public String getNotificationOption() {
-        if (notificationOption == null) {
-            return "urn:oasis:names:tc:ebxml-regrep:NotificationOptionType:ObjectRefs";
-        } else {
-            return notificationOption;
-        }
+        return Objects.requireNonNullElse(notificationOption, "urn:oasis:names:tc:ebxml-regrep:NotificationOptionType:ObjectRefs");
     }
 
     /**

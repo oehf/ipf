@@ -44,7 +44,7 @@ public class RemoveMetadataRequestTransformer {
             return null;
         }
 
-        EbXMLRemoveMetadataRequest ebXML = factory.createRemoveMetadataRequest();
+        var ebXML = factory.createRemoveMetadataRequest();
         ebXML.setReferences(request.getReferences());
 
         return ebXML;
@@ -61,7 +61,7 @@ public class RemoveMetadataRequestTransformer {
             return null;
         }
 
-        RemoveMetadata request = new RemoveMetadata();
+        var request = new RemoveMetadata();
         request.getReferences().addAll(ebXML.getReferences());
 
         return request;

@@ -88,7 +88,7 @@ public class IpfHl7v2AutoConfiguration {
                 IPF_HL7_DEFINITIONS_PREFIX + "pdq.v25",
                 IPF_HL7_DEFINITIONS_PREFIX + "pix.v25"
         });
-        CustomModelClassFactory modelClassFactory = new CustomModelClassFactory(eventMap);
+        var modelClassFactory = new CustomModelClassFactory(eventMap);
         modelClassFactory.setEventMapDirectory("org/openehealth/ipf/commons/ihe/hl7v2/");
         return modelClassFactory;
     }

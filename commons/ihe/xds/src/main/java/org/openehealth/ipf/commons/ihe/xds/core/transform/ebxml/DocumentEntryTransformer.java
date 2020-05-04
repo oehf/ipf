@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
@@ -26,7 +25,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -97,20 +95,20 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setUri(extrinsic.getSingleSlotValue(SLOT_NAME_URI));
         docEntry.setDocumentAvailability(DocumentAvailability.valueOfOpcode(
                 extrinsic.getSingleSlotValue(SLOT_NAME_DOCUMENT_AVAILABILITY)));
-        
-        String size = extrinsic.getSingleSlotValue(SLOT_NAME_SIZE);
+
+        var size = extrinsic.getSingleSlotValue(SLOT_NAME_SIZE);
         docEntry.setSize(size != null ? Long.parseLong(size) : null);
-        
-        String hl7LegalAuthenticator = extrinsic.getSingleSlotValue(SLOT_NAME_LEGAL_AUTHENTICATOR);
+
+        var hl7LegalAuthenticator = extrinsic.getSingleSlotValue(SLOT_NAME_LEGAL_AUTHENTICATOR);
         docEntry.setLegalAuthenticator(Hl7v2Based.parse(hl7LegalAuthenticator, Person.class));
-        
-        String sourcePatient = extrinsic.getSingleSlotValue(SLOT_NAME_SOURCE_PATIENT_ID);
+
+        var sourcePatient = extrinsic.getSingleSlotValue(SLOT_NAME_SOURCE_PATIENT_ID);
         docEntry.setSourcePatientId(Hl7v2Based.parse(sourcePatient, Identifiable.class));
-        
-        List<String> slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);        
+
+        var slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);
         docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
 
-        for (String referenceIdValue : extrinsic.getSlotValues(SLOT_NAME_REFERENCE_ID_LIST)) {
+        for (var referenceIdValue : extrinsic.getSlotValues(SLOT_NAME_REFERENCE_ID_LIST)) {
             docEntry.getReferenceIdList().add(Hl7v2Based.parse(referenceIdValue, ReferenceId.class));
         }
     }
@@ -128,22 +126,22 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_URI, docEntry.getUri());
         extrinsic.addSlot(SLOT_NAME_DOCUMENT_AVAILABILITY,
                 DocumentAvailability.toFullQualifiedOpcode(docEntry.getDocumentAvailability()));
-        
-        Long size = docEntry.getSize();
+
+        var size = docEntry.getSize();
         extrinsic.addSlot(SLOT_NAME_SIZE, size != null ? size.toString() : null);
-        
-        String hl7LegalAuthenticator = Hl7v2Based.render(docEntry.getLegalAuthenticator());
+
+        var hl7LegalAuthenticator = Hl7v2Based.render(docEntry.getLegalAuthenticator());
         extrinsic.addSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, hl7LegalAuthenticator);
-        
-        String sourcePatient = Hl7v2Based.render(docEntry.getSourcePatientId());
+
+        var sourcePatient = Hl7v2Based.render(docEntry.getSourcePatientId());
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
-        
-        List<String> slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());
+
+        var slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[slotValues.size()]));
 
         if (! docEntry.getReferenceIdList().isEmpty()) {
-            String[] referenceIdValues = new String[docEntry.getReferenceIdList().size()];
-            for (int i = 0; i < docEntry.getReferenceIdList().size(); ++i) {
+            var referenceIdValues = new String[docEntry.getReferenceIdList().size()];
+            for (var i = 0; i < docEntry.getReferenceIdList().size(); ++i) {
                 referenceIdValues[i] = Hl7v2Based.render(docEntry.getReferenceIdList().get(i));
             }
             extrinsic.addSlot(SLOT_NAME_REFERENCE_ID_LIST, referenceIdValues);
@@ -154,31 +152,31 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     protected void addClassificationsFromEbXML(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic) {
         super.addClassificationsFromEbXML(docEntry, extrinsic);
 
-        for (EbXMLClassification author : extrinsic.getClassifications(DOC_ENTRY_AUTHOR_CLASS_SCHEME)) {
+        for (var author : extrinsic.getClassifications(DOC_ENTRY_AUTHOR_CLASS_SCHEME)) {
             docEntry.getAuthors().add(authorTransformer.fromEbXML(author));
         }
-        
-        EbXMLClassification classCode = extrinsic.getSingleClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
+
+        var classCode = extrinsic.getSingleClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
         docEntry.setClassCode(codeTransformer.fromEbXML(classCode));
 
-        EbXMLClassification formatCode = extrinsic.getSingleClassification(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
+        var formatCode = extrinsic.getSingleClassification(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
         docEntry.setFormatCode(codeTransformer.fromEbXML(formatCode));
 
-        EbXMLClassification healthcareFacility = extrinsic.getSingleClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
+        var healthcareFacility = extrinsic.getSingleClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
         docEntry.setHealthcareFacilityTypeCode(codeTransformer.fromEbXML(healthcareFacility));
-        
-        EbXMLClassification practiceSetting = extrinsic.getSingleClassification(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
+
+        var practiceSetting = extrinsic.getSingleClassification(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
         docEntry.setPracticeSettingCode(codeTransformer.fromEbXML(practiceSetting));
-        
-        EbXMLClassification typeCode = extrinsic.getSingleClassification(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
+
+        var typeCode = extrinsic.getSingleClassification(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
         docEntry.setTypeCode(codeTransformer.fromEbXML(typeCode));
-        
-        List<Code> confidentialityCodes = docEntry.getConfidentialityCodes();
+
+        var confidentialityCodes = docEntry.getConfidentialityCodes();
         confidentialityCodes.addAll(extrinsic.getClassifications(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
                 .collect(Collectors.toList()));
 
-        List<Code> eventCodeList = docEntry.getEventCodeList();
+        var eventCodeList = docEntry.getEventCodeList();
         eventCodeList.addAll(extrinsic.getClassifications(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
                 .collect(Collectors.toList()));
@@ -189,33 +187,33 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     protected void addClassifications(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(docEntry, extrinsic, objectLibrary);
         
-        for (Author author : docEntry.getAuthors()) {
-            EbXMLClassification authorClasification = authorTransformer.toEbXML(author, objectLibrary);
+        for (var author : docEntry.getAuthors()) {
+            var authorClasification = authorTransformer.toEbXML(author, objectLibrary);
             extrinsic.addClassification(authorClasification, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         }
-        
-        EbXMLClassification classCode = codeTransformer.toEbXML(docEntry.getClassCode(), objectLibrary);
+
+        var classCode = codeTransformer.toEbXML(docEntry.getClassCode(), objectLibrary);
         extrinsic.addClassification(classCode, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
-        
-        EbXMLClassification formatCode = codeTransformer.toEbXML(docEntry.getFormatCode(), objectLibrary);
+
+        var formatCode = codeTransformer.toEbXML(docEntry.getFormatCode(), objectLibrary);
         extrinsic.addClassification(formatCode, DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
 
-        EbXMLClassification healthcareFacility = codeTransformer.toEbXML(docEntry.getHealthcareFacilityTypeCode(), objectLibrary);
+        var healthcareFacility = codeTransformer.toEbXML(docEntry.getHealthcareFacilityTypeCode(), objectLibrary);
         extrinsic.addClassification(healthcareFacility, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
-        
-        EbXMLClassification practiceSetting = codeTransformer.toEbXML(docEntry.getPracticeSettingCode(), objectLibrary);
+
+        var practiceSetting = codeTransformer.toEbXML(docEntry.getPracticeSettingCode(), objectLibrary);
         extrinsic.addClassification(practiceSetting, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
-        
-        EbXMLClassification typeCode = codeTransformer.toEbXML(docEntry.getTypeCode(), objectLibrary);
+
+        var typeCode = codeTransformer.toEbXML(docEntry.getTypeCode(), objectLibrary);
         extrinsic.addClassification(typeCode, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
         
-        for (Code confCode : docEntry.getConfidentialityCodes()) {
-            EbXMLClassification conf = codeTransformer.toEbXML(confCode, objectLibrary);
+        for (var confCode : docEntry.getConfidentialityCodes()) {
+            var conf = codeTransformer.toEbXML(confCode, objectLibrary);
             extrinsic.addClassification(conf, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME);
         }
         
-        for (Code eventCode : docEntry.getEventCodeList()) {
-            EbXMLClassification event = codeTransformer.toEbXML(eventCode, objectLibrary);
+        for (var eventCode : docEntry.getEventCodeList()) {
+            var event = codeTransformer.toEbXML(eventCode, objectLibrary);
             extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
         }
     }

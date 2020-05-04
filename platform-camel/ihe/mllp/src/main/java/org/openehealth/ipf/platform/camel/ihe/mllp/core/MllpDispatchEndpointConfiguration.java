@@ -34,7 +34,7 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
 
     protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);
-        String routesString = stripToNull(component.getAndRemoveParameter(parameters, "routes", String.class));
+        var routesString = stripToNull(component.getAndRemoveParameter(parameters, "routes", String.class));
         routes = routesString != null ? routesString.split("\\s*,\\s*") : new String[0];
     }
 

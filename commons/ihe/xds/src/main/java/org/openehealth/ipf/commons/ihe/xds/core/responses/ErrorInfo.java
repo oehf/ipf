@@ -89,10 +89,10 @@ public class ErrorInfo implements Serializable {
             String defaultLocation)
     {
         this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation, null);
-        Throwable t = throwable;
+        var t = throwable;
         while (t != null) {
             if (t instanceof XDSMetaDataException) {
-                XDSMetaDataException metaDataException = (XDSMetaDataException) t;
+                var metaDataException = (XDSMetaDataException) t;
                 this.errorCode = metaDataException.getValidationMessage().getErrorCode();
                 if (this.errorCode == null) {
                     this.errorCode = defaultMetaDataError;
@@ -101,7 +101,7 @@ public class ErrorInfo implements Serializable {
                 return;
             }
             if (t instanceof XdsRuntimeException) {
-                XdsRuntimeException exception = (XdsRuntimeException) t;
+                var exception = (XdsRuntimeException) t;
                 this.errorCode = exception.getErrorCode();
                 this.codeContext = exception.getCodeContext();
                 this.severity = exception.getSeverity();
@@ -186,8 +186,8 @@ public class ErrorInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
+        final var prime = 31;
+        var result = 1;
         result = prime * result + ((codeContext == null) ? 0 : codeContext.hashCode());
         result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
@@ -204,7 +204,7 @@ public class ErrorInfo implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ErrorInfo other = (ErrorInfo) obj;
+        var other = (ErrorInfo) obj;
         if (codeContext == null) {
             if (other.codeContext != null)
                 return false;

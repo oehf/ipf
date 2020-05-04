@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.hl7;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
@@ -36,8 +35,8 @@ class StaticResponseExpression implements Expression {
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
         try {
-            Message msg = HL7v2.bodyMessage(exchange);
-            Message result = msg.getParser().parse(message);
+            var msg = HL7v2.bodyMessage(exchange);
+            var result = msg.getParser().parse(message);
             return type.cast(result);
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);

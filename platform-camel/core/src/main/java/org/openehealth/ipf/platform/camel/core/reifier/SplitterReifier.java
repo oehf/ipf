@@ -19,18 +19,18 @@ public class SplitterReifier extends ProcessorReifier<SplitterDefinition> {
 
     @Override
     public Processor createProcessor() throws Exception {
-        Processor childProcessor = createChildProcessor(false);
-        AggregationStrategy aggregationStrategy = definition.getAggregationStrategy();
+        var childProcessor = createChildProcessor(false);
+        var aggregationStrategy = definition.getAggregationStrategy();
         if (aggregationStrategy == null) {
             aggregationStrategy = new UseLatestAggregationStrategy();
         }
-        ExpressionDefinition expressionDefinition = definition.getExpressionDefinition();
-        String expressionBean = definition.getExpressionBean();
+        var expressionDefinition = definition.getExpressionDefinition();
+        var expressionBean = definition.getExpressionBean();
         if (expressionBean != null) {
             expressionDefinition = new ExpressionDefinition(camelContext.getRegistry().lookupByNameAndType(expressionBean, Expression.class));
         }
-        Expression expression = expressionDefinition.createExpression(camelContext);
-        Splitter splitter = createSplitterInstance(expression, childProcessor);
+        var expression = expressionDefinition.createExpression(camelContext);
+        var splitter = createSplitterInstance(expression, childProcessor);
 
         splitter.aggregate(aggregationStrategy);
 

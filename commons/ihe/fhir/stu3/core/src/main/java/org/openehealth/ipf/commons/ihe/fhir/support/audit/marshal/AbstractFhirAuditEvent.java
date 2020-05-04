@@ -60,8 +60,8 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
     protected abstract IParser getParser(FhirContext fhirContext);
 
     protected AuditEvent translate(AuditMessage auditMessage) {
-        EventIdentificationType eit = auditMessage.getEventIdentification();
-        AuditEvent auditEvent = new AuditEvent()
+        var eit = auditMessage.getEventIdentification();
+        var auditEvent = new AuditEvent()
                 .setType(codedValueTypeToCoding(eit.getEventID()))
                 .setAction(getAuditEventAction(eit.getEventActionCode()))
                 .setRecorded(Date.from(eit.getEventDateTime()))
@@ -83,7 +83,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
     }
 
     protected AuditEvent.AuditEventEntityComponent participantObjectIdentificationToEntity(ParticipantObjectIdentificationType poit) {
-        AuditEvent.AuditEventEntityComponent entity = new AuditEvent.AuditEventEntityComponent()
+        var entity = new AuditEvent.AuditEventEntityComponent()
                 .setIdentifier(new Identifier()
                         .setValue(poit.getParticipantObjectID()))
                 // poit.getParticipantObjectIDTypeCode())) not used here
@@ -112,7 +112,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
     }
 
     protected AuditEvent.AuditEventSourceComponent auditSourceIdentificationToEventSource(AuditSourceIdentificationType asit) {
-        AuditEvent.AuditEventSourceComponent source = new AuditEvent.AuditEventSourceComponent()
+        var source = new AuditEvent.AuditEventSourceComponent()
                 .setSite(asit.getAuditEnterpriseSiteID())
                 .setIdentifier(new Identifier().setValue(asit.getAuditSourceID()));
         asit.getAuditSourceType().forEach(ast ->
@@ -121,7 +121,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
     }
 
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
-        AuditEvent.AuditEventAgentComponent agent = new AuditEvent.AuditEventAgentComponent()
+        var agent = new AuditEvent.AuditEventAgentComponent()
                 .setUserId(new Identifier().setValue(ap.getUserID()))
                 .setAltId(ap.getAlternativeUserID())
                 .setName(ap.getUserName())

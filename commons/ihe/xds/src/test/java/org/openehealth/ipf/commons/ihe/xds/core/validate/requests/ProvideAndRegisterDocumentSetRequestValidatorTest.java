@@ -70,14 +70,14 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
 
     @Test
     public void testValidateMissingDocEntryForDocument() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.addDocument("lol", SampleData.createDataHandler());
         expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML, ITI_41);
     }
 
     @Test
     public void testValidateMissingDocumentForDocEntry() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.removeDocument("document01");
         expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML, ITI_41);
     }

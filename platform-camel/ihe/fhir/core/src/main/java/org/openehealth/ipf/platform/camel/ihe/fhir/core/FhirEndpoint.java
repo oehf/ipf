@@ -162,7 +162,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     // Private stuff
 
     private List<? extends FhirProvider> getResourceProviders() {
-        List<? extends FhirProvider> providers = config.getResourceProvider();
+        var providers = config.getResourceProvider();
         if (providers == null || providers.isEmpty()) {
             providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
@@ -178,7 +178,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     public Predicate<Object> getConsumerSelector() {
-        Predicate<Object> consumerSelector = config.getConsumerSelector();
+        var consumerSelector = config.getConsumerSelector();
         if (consumerSelector == null) {
             consumerSelector = fhirComponent.getFhirTransactionConfiguration().getStaticConsumerSelector();
         }

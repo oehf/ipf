@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -52,11 +51,11 @@ public class ChoiceValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> paramSlotNames = Arrays.stream(params)
+        var paramSlotNames = Arrays.stream(params)
                 .map(QueryParameter::getSlotName)
                 .collect(Collectors.toList());
 
-        long count = paramSlotNames.stream()
+        var count = paramSlotNames.stream()
                 .map(request::getSingleSlotValue)
                 .filter(Objects::nonNull)
                 .count();

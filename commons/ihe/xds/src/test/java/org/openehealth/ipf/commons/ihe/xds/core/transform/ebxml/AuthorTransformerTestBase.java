@@ -18,15 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 import ca.uhn.hl7v2.model.v25.datatype.XCN;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
@@ -40,22 +36,22 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     
     @Before
     public final void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new AuthorTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         
         Name<XCN> name = new XcnName();
         name.setFamilyName("Adams");
 
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("1.2.840.113619.6.197");
         assigningAuthority.setUniversalIdType(Vocabulary.UNIVERSAL_ID_TYPE_OID);
 
-        Identifiable id = new Identifiable();
+        var id = new Identifiable();
         id.setId("123");
-        id.setAssigningAuthority(assigningAuthority);        
+        id.setAssigningAuthority(assigningAuthority);
 
-        Person authorPerson = new Person();
+        var authorPerson = new Person();
         authorPerson.setName(name);
         authorPerson.setId(id);
 
@@ -77,12 +73,12 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXML() {
-        EbXMLClassification ebXML = transformer.toEbXML(author, objectLibrary);        
+        var ebXML = transformer.toEbXML(author, objectLibrary);
         assertNotNull(ebXML);
         assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
-        
-        List<EbXMLSlot> slots = ebXML.getSlots();
+
+        var slots = ebXML.getSlots();
         assertEquals(5, slots.size());
         
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_PERSON, slots.get(0).getName());
@@ -108,7 +104,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXMLWithEmptyAuthor() {
-        EbXMLClassification ebXML = transformer.toEbXML(new Author(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Author(), objectLibrary);
         assertNotNull(ebXML);
         assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
@@ -120,7 +116,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        EbXMLClassification classification = transformer.toEbXML(author, objectLibrary);
+        var classification = transformer.toEbXML(author, objectLibrary);
         assertEquals(author, transformer.fromEbXML(classification));
     }
     
@@ -131,7 +127,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLClassification ebXML = transformer.toEbXML(new Author(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Author(), objectLibrary);
         assertEquals(new Author(), transformer.fromEbXML(ebXML));
     }
 }

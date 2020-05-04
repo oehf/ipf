@@ -37,8 +37,8 @@ public class ServiceTimeChronologyValidation implements RegistryObjectValidator 
 
     @Override
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
-        String serviceStartTime = obj.getSingleSlotValue(SLOT_NAME_SERVICE_START_TIME);
-        String serviceStopTime = obj.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME);
+        var serviceStartTime = obj.getSingleSlotValue(SLOT_NAME_SERVICE_START_TIME);
+        var serviceStopTime = obj.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME);
 
         if (serviceStartTime != null && serviceStopTime != null && !serviceStartTime.equals(serviceStopTime)) {
             metaDataAssert(fillToMaxLength(serviceStartTime, '0').compareTo(fillToMaxLength(serviceStopTime, '9')) <= 0,

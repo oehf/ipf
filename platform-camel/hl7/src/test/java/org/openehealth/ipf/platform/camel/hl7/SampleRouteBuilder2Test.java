@@ -52,7 +52,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute1() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput1.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blah");
         mockOutput1.assertIsSatisfied();
@@ -61,7 +61,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute2() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput2.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blub");
         mockOutput2.assertIsSatisfied();

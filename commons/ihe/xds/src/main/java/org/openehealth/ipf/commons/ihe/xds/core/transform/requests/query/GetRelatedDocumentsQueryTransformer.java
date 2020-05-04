@@ -33,8 +33,8 @@ public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTra
         }
         
         super.toEbXML(query, ebXML);
-        
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromAssociationType(ASSOCIATION_TYPE, query.getAssociationTypes());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
@@ -48,8 +48,8 @@ public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTra
         }
         
         super.fromEbXML(query, ebXML);
-        
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);        
+
+        var slots = new QuerySlotHelper(ebXML);
         query.setAssociationTypes(slots.toAssociationType(ASSOCIATION_TYPE));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));

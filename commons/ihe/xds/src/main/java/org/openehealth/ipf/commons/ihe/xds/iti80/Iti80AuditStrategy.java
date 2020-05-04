@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 
 import java.util.Map;
 
@@ -42,8 +41,8 @@ abstract class Iti80AuditStrategy extends XdsSubmitAuditStrategy30 {
 
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        var request = (ProvideAndRegisterDocumentSetRequestType)pojo;
+        var submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);

@@ -81,7 +81,7 @@ public class GetFoldersForDocumentQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetFoldersForDocumentQuery result = new GetFoldersForDocumentQuery();
+        var result = new GetFoldersForDocumentQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -89,14 +89,14 @@ public class GetFoldersForDocumentQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetFoldersForDocumentQuery result = new GetFoldersForDocumentQuery();
+        var result = new GetFoldersForDocumentQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetFoldersForDocumentQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetFoldersForDocumentQuery result = new GetFoldersForDocumentQuery();
+        var result = new GetFoldersForDocumentQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetFoldersForDocumentQuery(), result);
     }

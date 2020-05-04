@@ -25,7 +25,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * @author Christian Ohr
@@ -44,7 +43,7 @@ public abstract class AbstractXmlDataFormat extends ServiceSupport implements Da
     }
 
     protected SAXParser newSaxParser() throws Exception {
-        SAXParserFactory factory = FactorySupport.createSaxParserFactory();
+        var factory = FactorySupport.createSaxParserFactory();
         factory.setNamespaceAware(namespaceAware);
         factory.setValidating(false);
         return factory.newSAXParser();

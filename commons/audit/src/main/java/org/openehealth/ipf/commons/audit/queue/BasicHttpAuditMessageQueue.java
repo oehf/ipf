@@ -66,18 +66,18 @@ public class BasicHttpAuditMessageQueue extends AbstractAuditMessageQueue {
     @Override
     protected void handle(AuditContext auditContext, String auditMessage) {
         try {
-            HttpURLConnection connection = openConnection();
-            byte[] buffer = auditMessage.getBytes(StandardCharsets.UTF_8);
+            var connection = openConnection();
+            var buffer = auditMessage.getBytes(StandardCharsets.UTF_8);
             initializeConnection(connection, auditContext, buffer.length);
 
             // Send request
-            try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+            try (var wr = new DataOutputStream(connection.getOutputStream())) {
                 wr.write(buffer);
                 wr.flush();
             }
 
-            int response = connection.getResponseCode();
-            String responseMessage = connection.getResponseMessage();
+            var response = connection.getResponseCode();
+            var responseMessage = connection.getResponseMessage();
             if (response >= 400) {
                 throw new IOException("Encountered Status " + response + " with message " + responseMessage);
             }
@@ -109,10 +109,10 @@ public class BasicHttpAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     private HttpURLConnection openConnection() throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        var connection = (HttpURLConnection) url.openConnection();
         if (user != null) {
-            String auth = user + ":" + password;
-            String authHeaderValue = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+            var auth = user + ":" + password;
+            var authHeaderValue = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
             connection.setRequestProperty("Authorization", authHeaderValue);
         }
         if (connectTimeout >= 0) {

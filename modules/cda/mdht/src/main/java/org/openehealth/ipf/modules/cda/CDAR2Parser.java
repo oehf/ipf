@@ -15,21 +15,18 @@
  */
 package org.openehealth.ipf.modules.cda;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-
 import org.openehealth.ipf.commons.core.modules.api.ParseException;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * @author Stefan Ivanov
@@ -41,11 +38,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.lang.String, java.lang.Object[])
      */
     public ClinicalDocument parse(String s, Object... options) {
-        try {
-            return parse(new ByteArrayInputStream(s.getBytes()), options);
-        } catch (IOException e) {
-            throw new ParseException(e);
-        }
+        return parse(new ByteArrayInputStream(s.getBytes()), options);
     }
 
     /**
@@ -58,14 +51,13 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      *
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.InputStream, java.lang.Object[])
      */
-    public ClinicalDocument parse(InputStream is, Object... options)
-            throws IOException {
+    public ClinicalDocument parse(InputStream is, Object... options) {
         try {
-            final DocumentBuilder documentBuilder = this.newSafeDocumentBuilder();
-            final Document document = documentBuilder.parse(is);
+            final var documentBuilder = this.newSafeDocumentBuilder();
+            final var document = documentBuilder.parse(is);
 
-            NodeList nodeList = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
-            for (int i = nodeList.getLength() - 1; i >= 0; --i) {
+            var nodeList = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+            for (var i = nodeList.getLength() - 1; i >= 0; --i) {
                 if (nodeList.item(i) != null && nodeList.item(i).getParentNode() != null) {
                     nodeList.item(i).getParentNode().removeChild(nodeList.item(i));
                 }
@@ -82,7 +74,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(javax.xml.transform.Source, java.lang.Object[])
      */
-    public ClinicalDocument parse(Source source, Object... options) throws IOException {
+    public ClinicalDocument parse(Source source, Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -90,7 +82,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.Reader, java.lang.Object[])
      */
-    public ClinicalDocument parse(Reader reader, Object... options) throws IOException {
+    public ClinicalDocument parse(Reader reader, Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -102,7 +94,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * @throws ParserConfigurationException If the parser is not Xerces2 compatible.
      */
     private DocumentBuilder newSafeDocumentBuilder() throws ParserConfigurationException {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        final var factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
 
         factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);

@@ -37,10 +37,10 @@ public class RecipientListValidator implements ValueListValidator {
 //        This check is disabled for compatibility with older versions.
 //        metaDataAssert(!values.isEmpty(), RECIPIENT_LIST_EMPTY);
         
-        for (String value : values) {
+        for (var value : values) {
             metaDataAssert(!value.isEmpty(), RECIPIENT_EMPTY);
 
-            String[] parts = value.split("\\|", 4);
+            var parts = value.split("\\|", 4);
             metaDataAssert((parts.length > 0) && (parts.length <= 3), INVALID_RECIPIENT, value);
 
             if (! parts[0].isEmpty()) {

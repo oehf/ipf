@@ -47,7 +47,7 @@ public abstract class FhirDataFormat extends ServiceSupport implements DataForma
 
     @Override
     public void marshal(Exchange exchange, Object body, OutputStream stream) throws Exception {
-        IBaseResource resource = ExchangeHelper.convertToMandatoryType(exchange, IBaseResource.class, body);
+        var resource = ExchangeHelper.convertToMandatoryType(exchange, IBaseResource.class, body);
         Writer writer = new OutputStreamWriter(stream, getCharset(exchange));
         getParser(getFhirContext(exchange))
                 .setPrettyPrint(true)
@@ -61,14 +61,14 @@ public abstract class FhirDataFormat extends ServiceSupport implements DataForma
     }
 
     protected FhirContext getFhirContext(Exchange exchange) {
-        FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
+        var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
         if (context == null) context = defaultFhirContext;
         return context;
     }
 
     protected Charset getCharset(Exchange exchange) {
-        Charset charset = defaultCharset;
-        String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        var charset = defaultCharset;
+        var charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
         if (charsetName != null) charset = Charset.forName(charsetName);
         return charset;
     }

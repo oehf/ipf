@@ -45,7 +45,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
 
     @Override
     public void determineParticipantsAddresses(Exchange exchange, MllpAuditDataset auditDataset) {
-        Message message = exchange.getIn();
+        var message = exchange.getIn();
         auditDataset.setLocalAddress(addressFromHeader(message, MinaConstants.MINA_LOCAL_ADDRESS));
         auditDataset.setRemoteAddress(addressFromHeader(message, MinaConstants.MINA_REMOTE_ADDRESS));
     }
@@ -55,7 +55,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
      * stored in the given header of the given Camel message.
      */
     private static String addressFromHeader(Message message, String headerName) {
-        InetSocketAddress address = (InetSocketAddress) message.getHeader(headerName);
+        var address = (InetSocketAddress) message.getHeader(headerName);
         return address != null ? address.getAddress().getHostAddress() : "unknown";
     }
 

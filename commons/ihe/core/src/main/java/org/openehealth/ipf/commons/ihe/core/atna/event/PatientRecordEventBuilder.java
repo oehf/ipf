@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
@@ -101,7 +100,7 @@ public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> e
     @Override
     public void validate() {
         super.validate();
-        ParticipantObjectIdentificationType patient = getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.PatientNumber.equals(poi.getParticipantObjectIDTypeCode())).get(0);
+        var patient = getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.PatientNumber.equals(poi.getParticipantObjectIDTypeCode())).get(0);
         if (!PATIENT_ID_PATTERN.matcher(patient.getParticipantObjectID()).matches()) {
             throw new AuditException("Patient ID should be in CX format " + PATIENT_ID_PATTERN.pattern());
         }

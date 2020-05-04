@@ -49,8 +49,8 @@ public class EbXMLNonconstructiveDocumentSetRequest30<T extends RetrieveDocument
     @Override
     public List<DocumentReference> getDocuments() {
         List<DocumentReference> docs = new ArrayList<>();
-        for (DocumentRequest documentRequest : request.getDocumentRequest()) {
-            DocumentReference doc = new DocumentReference();
+        for (var documentRequest : request.getDocumentRequest()) {
+            var doc = new DocumentReference();
             doc.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
             doc.setHomeCommunityId(documentRequest.getHomeCommunityId());
             doc.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
@@ -63,8 +63,8 @@ public class EbXMLNonconstructiveDocumentSetRequest30<T extends RetrieveDocument
     public void setDocuments(List<DocumentReference> documents) {
         request.getDocumentRequest().clear();
         if (documents != null) {
-            for (DocumentReference doc : documents) {
-                DocumentRequest documentRequest = new DocumentRequest();
+            for (var doc : documents) {
+                var documentRequest = new DocumentRequest();
                 documentRequest.setDocumentUniqueId(doc.getDocumentUniqueId());
                 documentRequest.setHomeCommunityId(doc.getHomeCommunityId());
                 documentRequest.setRepositoryUniqueId(doc.getRepositoryUniqueId());

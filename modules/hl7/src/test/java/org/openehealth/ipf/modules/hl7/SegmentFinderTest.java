@@ -16,13 +16,11 @@
 package org.openehealth.ipf.modules.hl7;
 
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.PipeParser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
@@ -33,17 +31,17 @@ import static org.junit.Assert.*;
 public class SegmentFinderTest {
 
     public static Message loadFile(String fn) throws Exception {
-        URL url =  SegmentFinderTest.class.getClassLoader().getResource(fn);
-        String s = IOUtils.toString(url, StandardCharsets.UTF_8);
+        var url =  SegmentFinderTest.class.getClassLoader().getResource(fn);
+        var s = IOUtils.toString(url, StandardCharsets.UTF_8);
         return new PipeParser().parse(s);
     }
 
     @Test
     public void testSegmentFinder() throws Exception {
-        Message iti21Response = loadFile("msg-11.hl7");
+        var iti21Response = loadFile("msg-11.hl7");
 
         // valid index
-        Segment pid = SegmentFinder.find(iti21Response, "PID", 2);
+        var pid = SegmentFinder.find(iti21Response, "PID", 2);
         assertNotNull(pid);
         assertEquals("3", Terser.get(pid, 1, 0, 1, 1));
 

@@ -47,16 +47,16 @@ public abstract class SampleData {
      * @return a sample query response using leaf class return type.
      */
     public static QueryResponse createQueryResponseWithLeafClass(Status status, Identifiable... patientIDs) {
-        QueryResponse response = new QueryResponse();
+        var response = new QueryResponse();
 
-        for (Identifiable patientID : patientIDs) {
-            SubmissionSet submissionSet = createSubmissionSet(patientID);
-            DocumentEntry docEntry = createDocumentEntry(patientID);
-            Folder folder = createFolder(patientID);
+        for (var patientID : patientIDs) {
+            var submissionSet = createSubmissionSet(patientID);
+            var docEntry = createDocumentEntry(patientID);
+            var folder = createFolder(patientID);
 
-            Association docAssociation = createAssociationDocEntryToSubmissionSet();
-            Association folderAssociation = createAssociationFolderToSubmissionSet();
-            Association docFolderAssociation = createAssociationDocEntryToFolder();
+            var docAssociation = createAssociationDocEntryToSubmissionSet();
+            var folderAssociation = createAssociationFolderToSubmissionSet();
+            var docFolderAssociation = createAssociationDocEntryToFolder();
 
             response.getSubmissionSets().add(submissionSet);
             response.getDocumentEntries().add(docEntry);
@@ -75,10 +75,10 @@ public abstract class SampleData {
      * @return a sample query response using object reference return type.
      */
     public static QueryResponse createQueryResponseWithObjRef() {
-        ObjectReference ref1 = new ObjectReference("ref1");
-        ObjectReference ref2 = new ObjectReference("ref2");
+        var ref1 = new ObjectReference("ref1");
+        var ref2 = new ObjectReference("ref2");
 
-        QueryResponse response = new QueryResponse();
+        var response = new QueryResponse();
         response.setStatus(Status.SUCCESS);
         response.getReferences().add(ref1);
         response.getReferences().add(ref2);
@@ -90,7 +90,7 @@ public abstract class SampleData {
      * @return a sample response.
      */
     public static Response createResponse() {
-        Response response = new Response();
+        var response = new Response();
         response.setStatus(Status.FAILURE);
         response.getErrors().addAll(Arrays.asList(
                 new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1", null),
@@ -103,32 +103,32 @@ public abstract class SampleData {
      * @return a sample response for retrieved documents.
      */
     public static RetrievedDocumentSet createRetrievedDocumentSet() {
-        DocumentReference requestData1 = new DocumentReference();
+        var requestData1 = new DocumentReference();
         requestData1.setDocumentUniqueId("doc1");
         requestData1.setHomeCommunityId("urn:oid:1.2.3");
         requestData1.setRepositoryUniqueId("repo1");
-        
-        DataHandler dataHandler1 = createDataHandler();
-        
-        RetrievedDocument doc1 = new RetrievedDocument();
+
+        var dataHandler1 = createDataHandler();
+
+        var doc1 = new RetrievedDocument();
         doc1.setRequestData(requestData1);
         doc1.setDataHandler(dataHandler1);
         doc1.setMimeType("application/test1");
 
-        DocumentReference requestData2 = new DocumentReference();
+        var requestData2 = new DocumentReference();
         requestData2.setDocumentUniqueId("doc2");
         requestData2.setHomeCommunityId("urn:oid:1.2.4");
         requestData2.setRepositoryUniqueId("repo2");
 
-        DataHandler dataHandler2 = createDataHandler();        
-        RetrievedDocument doc2 = new RetrievedDocument();
+        var dataHandler2 = createDataHandler();
+        var doc2 = new RetrievedDocument();
         doc2.setRequestData(requestData2);
         doc2.setDataHandler(dataHandler2);
         doc2.setMimeType("application/test2");
         doc2.setNewRepositoryUniqueId("repo2-new");
         doc2.setNewDocumentUniqueId("doc2-new");
 
-        RetrievedDocumentSet response = new RetrievedDocumentSet();
+        var response = new RetrievedDocumentSet();
         response.getDocuments().add(doc1);
         response.getDocuments().add(doc2);
         response.setStatus(Status.SUCCESS);
@@ -148,20 +148,20 @@ public abstract class SampleData {
      * @return a sample request to provide and register documents.
      */
     public static ProvideAndRegisterDocumentSet createProvideAndRegisterDocumentSet() {
-        Identifiable patientID = new Identifiable("id3", new AssigningAuthority("1.3"));
-        
-        SubmissionSet submissionSet = createSubmissionSet(patientID);        
-        DocumentEntry docEntry = createDocumentEntry(patientID);        
-        Folder folder = createFolder(patientID);
-        
-        Association docAssociation = createAssociationDocEntryToSubmissionSet();
-        Association folderAssociation = createAssociationFolderToSubmissionSet();
-        Association docFolderAssociation = createAssociationDocEntryToFolder();
-        
-        DataHandler dataHandler = createDataHandler();
-        Document doc = new Document(docEntry, dataHandler);
-        
-        ProvideAndRegisterDocumentSet request = new ProvideAndRegisterDocumentSet();
+        var patientID = new Identifiable("id3", new AssigningAuthority("1.3"));
+
+        var submissionSet = createSubmissionSet(patientID);
+        var docEntry = createDocumentEntry(patientID);
+        var folder = createFolder(patientID);
+
+        var docAssociation = createAssociationDocEntryToSubmissionSet();
+        var folderAssociation = createAssociationFolderToSubmissionSet();
+        var docFolderAssociation = createAssociationDocEntryToFolder();
+
+        var dataHandler = createDataHandler();
+        var doc = new Document(docEntry, dataHandler);
+
+        var request = new ProvideAndRegisterDocumentSet();
         request.setSubmissionSet(submissionSet);
         request.getDocuments().add(doc);
         request.getFolders().add(folder);
@@ -175,7 +175,7 @@ public abstract class SampleData {
     }
 
     private static Association createAssociationDocEntryToFolder() {
-        Association docFolderAssociation = new Association();
+        var docFolderAssociation = new Association();
         docFolderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         docFolderAssociation.setSourceUuid("folder01");
         docFolderAssociation.setTargetUuid("document01");
@@ -184,7 +184,7 @@ public abstract class SampleData {
     }
 
     private static Association createAssociationFolderToSubmissionSet() {
-        Association folderAssociation = new Association();
+        var folderAssociation = new Association();
         folderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         folderAssociation.setSourceUuid("submissionSet01");
         folderAssociation.setTargetUuid("folder01");
@@ -194,7 +194,7 @@ public abstract class SampleData {
     }
 
     private static Association createAssociationDocEntryToSubmissionSet() {
-        Association docAssociation = new Association();
+        var docAssociation = new Association();
         docAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         docAssociation.setSourceUuid("submissionSet01");
         docAssociation.setTargetUuid("document01");
@@ -211,7 +211,7 @@ public abstract class SampleData {
      * @return the folder.                         
      */
     public static Folder createFolder(Identifiable patientID) {
-        Folder folder = new Folder();
+        var folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.getCodeList().add(new Code("code7", new LocalizedString("code7"), "scheme7"));
         folder.setComments(new LocalizedString("comments3"));
@@ -230,14 +230,14 @@ public abstract class SampleData {
      * @return the submission set.
      */
     public static SubmissionSet createSubmissionSet(Identifiable patientID) {
-        Recipient recipient = new Recipient();
+        var recipient = new Recipient();
         recipient.setOrganization(new Organization("org", null, null));
-        
-        Author author = new Author();
+
+        var author = new Author();
         author.setAuthorPerson(new Person(new Identifiable("id1", new AssigningAuthority("1.1")),
                 new XpnName("Otto", null, null, null, null, null)));
 
-        SubmissionSet submissionSet = new SubmissionSet();
+        var submissionSet = new SubmissionSet();
         submissionSet.getAuthors().add(author);
         submissionSet.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         submissionSet.setComments(new LocalizedString("comments1"));
@@ -261,7 +261,7 @@ public abstract class SampleData {
      * @return the new entry.
      */
     public static DocumentEntry createDocumentEntry(Identifiable patientID) {
-        Author author = new Author();
+        var author = new Author();
         Name name = new XpnName();
         name.setFamilyName("Norbi");
         author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), name));
@@ -273,16 +273,16 @@ public abstract class SampleData {
         author.getAuthorTelecom().add(new Telecom("author1@acme.org"));
         author.getAuthorTelecom().add(new Telecom("author2@acme.org"));
 
-        Address address = new Address();
+        var address = new Address();
         address.setStreetAddress("hier");
-        
-        PatientInfo patientInfo = new PatientInfo();
+
+        var patientInfo = new PatientInfo();
         patientInfo.getAddresses().add(address);
         patientInfo.setDateOfBirth("1980");
         patientInfo.setGender("M");
         patientInfo.getNames().add(new XpnName("Susi", null, null, null, null, null));
-        
-        DocumentEntry docEntry = new DocumentEntry();
+
+        var docEntry = new DocumentEntry();
         docEntry.getAuthors().add(author);
         docEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         docEntry.setClassCode(new Code("code2", new LocalizedString("code2"), "scheme2"));
@@ -323,17 +323,17 @@ public abstract class SampleData {
      * @return a sample request to register a document set.
      */
     public static RegisterDocumentSet createRegisterDocumentSet() {
-        Identifiable patientID = new Identifiable("id3", new AssigningAuthority("1.3"));
-        
-        SubmissionSet submissionSet = createSubmissionSet(patientID);        
-        DocumentEntry docEntry = createDocumentEntry(patientID);        
-        Folder folder = createFolder(patientID);
-        
-        Association docAssociation = createAssociationDocEntryToSubmissionSet();
-        Association folderAssociation = createAssociationFolderToSubmissionSet();
-        Association docFolderAssociation = createAssociationDocEntryToFolder();
-        
-        RegisterDocumentSet request = new RegisterDocumentSet();
+        var patientID = new Identifiable("id3", new AssigningAuthority("1.3"));
+
+        var submissionSet = createSubmissionSet(patientID);
+        var docEntry = createDocumentEntry(patientID);
+        var folder = createFolder(patientID);
+
+        var docAssociation = createAssociationDocEntryToSubmissionSet();
+        var folderAssociation = createAssociationFolderToSubmissionSet();
+        var docFolderAssociation = createAssociationDocEntryToFolder();
+
+        var request = new RegisterDocumentSet();
         request.setSubmissionSet(submissionSet);
         request.getDocumentEntries().add(docEntry);
         request.getFolders().add(folder);
@@ -348,7 +348,7 @@ public abstract class SampleData {
      * @return a sample request to retrieve a document set.
      */
     public static RetrieveDocumentSet createRetrieveDocumentSet() {
-        RetrieveDocumentSet request = new RetrieveDocumentSet();
+        var request = new RetrieveDocumentSet();
         request.getDocuments().add(new DocumentReference("repo1", "doc1", "urn:oid:1.2.3"));
         request.getDocuments().add(new DocumentReference("repo2", "doc2", "urn:oid:1.2.4"));
         return request;
@@ -358,7 +358,7 @@ public abstract class SampleData {
      * @return a sample request to remove documents.
      */
     public static RemoveDocuments createRemoveDocuments() {
-        RemoveDocuments request = new RemoveDocuments();
+        var request = new RemoveDocuments();
         request.getDocuments().add(new DocumentReference("1.1.1", "2.1.1", "urn:oid:1.2.3"));
         request.getDocuments().add(new DocumentReference("1.1.2", "2.1.2", "urn:oid:1.2.4"));
         request.getDocuments().add(new DocumentReference("1.1.3", "2.1.3", "urn:oid:1.2.5"));
@@ -369,24 +369,24 @@ public abstract class SampleData {
      * @return a sample request to retrieve an imaging document set.
      */
     public static RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
-        RetrieveImagingDocumentSet request = new RetrieveImagingDocumentSet();
+        var request = new RetrieveImagingDocumentSet();
 
         List<DocumentReference> documentReferences = new ArrayList<>();
-        DocumentReference documentReference1 = new DocumentReference("repo1", "doc1", "urn:oid:1.2.3");
+        var documentReference1 = new DocumentReference("repo1", "doc1", "urn:oid:1.2.3");
         documentReferences.add(documentReference1);
-        DocumentReference documentReference2 = new DocumentReference("repo2", "doc2", "urn:oid:1.2.4");
+        var documentReference2 = new DocumentReference("repo2", "doc2", "urn:oid:1.2.4");
         documentReferences.add(documentReference2);
 
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
-        RetrieveSeries retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", documentReferences);
+        var retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", documentReferences);
         retrieveSerieses.add(retrieveSeries1);
-        RetrieveSeries retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", documentReferences);
+        var retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", documentReferences);
         retrieveSerieses.add(retrieveSeries2);
 
-        List<RetrieveStudy> retrieveStudies = request.getRetrieveStudies();
-        RetrieveStudy retrieveStudy1 = new RetrieveStudy("urn:oid:1.1.1", retrieveSerieses);
+        var retrieveStudies = request.getRetrieveStudies();
+        var retrieveStudy1 = new RetrieveStudy("urn:oid:1.1.1", retrieveSerieses);
         retrieveStudies.add(retrieveStudy1);
-        RetrieveStudy retrieveStudy2 = new RetrieveStudy("urn:oid:1.1.2", retrieveSerieses);
+        var retrieveStudy2 = new RetrieveStudy("urn:oid:1.1.2", retrieveSerieses);
         retrieveStudies.add(retrieveStudy2);
 
         request.getTransferSyntaxIds().add("1.2.840.10008.1.2.4.64");
@@ -399,7 +399,7 @@ public abstract class SampleData {
      * @return a sample stored query for get documents.
      */
     public static QueryRegistry createGetDocumentsQuery() {
-        GetDocumentsQuery query = new GetDocumentsQuery();
+        var query = new GetDocumentsQuery();
         query.setHomeCommunityId("urn:oid:1.2.3.14.15.926");
         query.setUuids(Collections.singletonList("document01"));
         
@@ -410,7 +410,7 @@ public abstract class SampleData {
      * @return a sample stored query for find documents.
      */
     public static QueryRegistry createFindDocumentsQuery() {
-        FindDocumentsQuery query = new FindDocumentsQuery();
+        var query = new FindDocumentsQuery();
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
@@ -424,13 +424,13 @@ public abstract class SampleData {
      * @return a sample stored query for find documents by reference ID.
      */
     public static QueryRegistry createFindDocumentsByReferenceIdQuery() {
-        FindDocumentsByReferenceIdQuery query = new FindDocumentsByReferenceIdQuery();
+        var query = new FindDocumentsByReferenceIdQuery();
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
-        QueryList<ReferenceId> referenceIds = new QueryList<>();
+        var referenceIds = new QueryList<ReferenceId>();
         referenceIds.getOuterList().add(Arrays.asList(
                 new ReferenceId("ref-id-11", new CXiAssigningAuthority("", "1.1.1.1", "ISO"),
                         ReferenceId.ID_TYPE_CODE_UNIQUE_ID),
@@ -459,13 +459,13 @@ public abstract class SampleData {
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        QueryList<Code> eventCodes = new QueryList<>();
+        var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -479,7 +479,7 @@ public abstract class SampleData {
      * @return a sample stored query for find documents (Multi Patient).
      */
     public static QueryRegistry createFindDocumentsForMultiplePatientsQuery() {
-        FindDocumentsForMultiplePatientsQuery query = new FindDocumentsForMultiplePatientsQuery();
+        var query = new FindDocumentsForMultiplePatientsQuery();
         populateDocumentsQuery(query);
         query.setPatientIds(Arrays.asList(
                 new Identifiable("id3", new AssigningAuthority("1.3")),
@@ -494,13 +494,13 @@ public abstract class SampleData {
      * @return a sample stored query for find folders.
      */
     public static QueryRegistry createFindFoldersQuery() {
-        FindFoldersQuery query = new FindFoldersQuery();
+        var query = new FindFoldersQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
-        QueryList<Code> codes = new QueryList<>();
+        var codes = new QueryList<Code>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -516,13 +516,13 @@ public abstract class SampleData {
      * @return a sample stored query for find folders.
      */
     public static QueryRegistry createFindFoldersForMultiplePatientsQuery() {
-        FindFoldersForMultiplePatientsQuery query = new FindFoldersForMultiplePatientsQuery();
+        var query = new FindFoldersForMultiplePatientsQuery();
 
         query.setHomeCommunityId("12.21.41");
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("1.2")), new Identifiable("id2", new AssigningAuthority("1.2"))));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
-        QueryList<Code> codes = new QueryList<>();
+        var codes = new QueryList<Code>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -537,7 +537,7 @@ public abstract class SampleData {
      * @return a sample stored query for find submission sets.
      */
     public static QueryRegistry createFindSubmissionSetsQuery() {
-        FindSubmissionSetsQuery query = new FindSubmissionSetsQuery();
+        var query = new FindSubmissionSetsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
@@ -555,11 +555,11 @@ public abstract class SampleData {
      * @return a sample stored query for getting data from all types.
      */
     public static QueryRegistry createGetAllQuery() {
-        GetAllQuery query = new GetAllQuery();
+        var query = new GetAllQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
-        QueryList<Code> codes = new QueryList<>();
+        var codes = new QueryList<Code>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -578,7 +578,7 @@ public abstract class SampleData {
      * @return a sample stored query for getting associations.
      */
     public static QueryRegistry createGetAssociationsQuery() {
-        GetAssociationsQuery query = new GetAssociationsQuery();
+        var query = new GetAssociationsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
@@ -590,7 +590,7 @@ public abstract class SampleData {
      * @return a sample stored query for getting associations and documents.
      */
     public static QueryRegistry createGetDocumentsAndAssociationsQuery() {
-        GetDocumentsAndAssociationsQuery query = new GetDocumentsAndAssociationsQuery();
+        var query = new GetDocumentsAndAssociationsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
@@ -603,12 +603,12 @@ public abstract class SampleData {
      * @return a sample stored query for getting folders and their content.
      */
     public static QueryRegistry createGetFolderAndContentsQuery() {
-        GetFolderAndContentsQuery query = new GetFolderAndContentsQuery();
+        var query = new GetFolderAndContentsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -624,12 +624,12 @@ public abstract class SampleData {
      * @return a sample stored query for getting folders based on their documents.
      */
     public static QueryRegistry createGetFoldersForDocumentQuery() {
-        GetFoldersForDocumentQuery query = new GetFoldersForDocumentQuery();
+        var query = new GetFoldersForDocumentQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -642,7 +642,7 @@ public abstract class SampleData {
      * @return a sample stored query for getting folders.
      */
     public static QueryRegistry createGetFoldersQuery() {
-        GetFoldersQuery query = new GetFoldersQuery();
+        var query = new GetFoldersQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
@@ -655,7 +655,7 @@ public abstract class SampleData {
      * @return a sample stored query for getting documents related to some other object.
      */
     public static QueryRegistry createGetRelatedDocumentsQuery() {
-        GetRelatedDocumentsQuery query = new GetRelatedDocumentsQuery();
+        var query = new GetRelatedDocumentsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
@@ -670,12 +670,12 @@ public abstract class SampleData {
      * @return a sample stored query for getting submission sets and their contents.
      */
     public static QueryRegistry createGetSubmissionSetAndContentsQuery() {
-        GetSubmissionSetAndContentsQuery query = new GetSubmissionSetAndContentsQuery();
+        var query = new GetSubmissionSetAndContentsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -689,7 +689,7 @@ public abstract class SampleData {
      * @return a sample stored query for getting submission sets.
      */
     public static QueryRegistry createGetSubmissionSetsQuery() {
-        GetSubmissionSetsQuery query = new GetSubmissionSetsQuery();
+        var query = new GetSubmissionSetsQuery();
         
         query.setHomeCommunityId("12.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
@@ -701,7 +701,7 @@ public abstract class SampleData {
      * @return a sample stored query for find documents.
      */
     public static QueryRegistry createFetchQuery() {
-        FetchQuery query = new FetchQuery();
+        var query = new FetchQuery();
 
         query.setHomeCommunityId("urn:oid:1.2.21.41");
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
@@ -715,13 +715,13 @@ public abstract class SampleData {
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        QueryList<Code> eventCodes = new QueryList<>();
+        var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -731,14 +731,14 @@ public abstract class SampleData {
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         //query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
-        QueryRegistry queryRegistry = new QueryRegistry(query);
+        var queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM);
         return queryRegistry;
     }
 
 
     public static RemoveMetadata createRemoveMetadata(){
-        RemoveMetadata removeDocs = new RemoveMetadata();
+        var removeDocs = new RemoveMetadata();
         removeDocs.getReferences().add(new ObjectReference("urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871", "1.2.3"));
         removeDocs.getReferences().add(new ObjectReference("urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd", "5.6.7"));
 
@@ -749,11 +749,11 @@ public abstract class SampleData {
      * @return a sample stored query to find dispenses.
      */
     public static QueryRegistry createFindDispensesQuery() {
-        final FindDispensesQuery query = new FindDispensesQuery();
+        final var query = new FindDispensesQuery();
 
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setHomeCommunityId("12.21.41");
-        final QueryList<Code> confidentialityCodes = new QueryList<>();
+        final var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -769,7 +769,7 @@ public abstract class SampleData {
         query.setUuids(Arrays.asList("uuid1", "uuid2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        final QueryList<Code> eventCodes = new QueryList<>();
+        final var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
@@ -784,11 +784,11 @@ public abstract class SampleData {
      * @return a sample stored query to find prescriptions.
      */
     public static QueryRegistry createFindPrescriptionsQuery() {
-        final FindPrescriptionsQuery query = new FindPrescriptionsQuery();
+        final var query = new FindPrescriptionsQuery();
 
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setHomeCommunityId("urn:oid:1.2.3.14.15.926");
-        final QueryList<Code> confidentialityCodes = new QueryList<>();
+        final var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -804,7 +804,7 @@ public abstract class SampleData {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        final QueryList<Code> eventCodes = new QueryList<>();
+        final var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
@@ -819,7 +819,7 @@ public abstract class SampleData {
      * @return a sample stored query to find medication lists.
      */
     public static QueryRegistry createFindMedicationListQuery() {
-        final FindMedicationListQuery query = new FindMedicationListQuery();
+        final var query = new FindMedicationListQuery();
 
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setHomeCommunityId("12.21.41");

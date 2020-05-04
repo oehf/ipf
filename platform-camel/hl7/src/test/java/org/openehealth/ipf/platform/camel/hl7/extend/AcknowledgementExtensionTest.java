@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend;
 
-import java.io.InputStream;
 import java.util.Scanner;
 
 import org.apache.camel.EndpointInject;
@@ -50,7 +49,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testRoute2() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input2", message);
         mockOutput.assertIsSatisfied();
@@ -59,7 +58,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testRoute3() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input3", message);
         mockOutput.assertIsSatisfied();
@@ -68,11 +67,11 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testRoute4() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input4", message);
         mockOutput.assertIsSatisfied();
-        String result = resultString(mockOutput);
+        var result = resultString(mockOutput);
         assertTrue(result.contains(ERR2_EXPECTED));
     }
 
@@ -85,7 +84,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
     }
 
     private String inputMessage(String resource) {
-        InputStream is = getClass().getResourceAsStream(resource);
+        var is = getClass().getResourceAsStream(resource);
         return new Scanner(is, "UTF-8").useDelimiter("\\A").next();
     }
 

@@ -53,7 +53,7 @@ public class TestConverter extends Converter<String, String> {
     }
 
     public Result render(String model, Result result, Object... params) throws IOException {
-        StreamResult r = (StreamResult)result;
+        var r = (StreamResult)result;
         IOUtils.write(model, r.getWriter());
         return r;
     }
@@ -77,7 +77,7 @@ public class TestConverter extends Converter<String, String> {
     }
 
     private static String toString(Source source) throws IOException {
-        StreamSource s = (StreamSource)source;
+        var s = (StreamSource)source;
         return IOUtils.toString(s.getReader());
     }
     

@@ -21,9 +21,7 @@ import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.support.DefaultConsumer;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.camel.spi.UnitOfWork;
-import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,10 +150,10 @@ public class MllpConsumer extends DefaultConsumer {
     @Override
     protected void doStop() throws Exception {
         super.doStop();
-        IoAcceptor ioAcceptor = getAcceptor();
+        var ioAcceptor = getAcceptor();
         if (ioAcceptor != null) {
-            for (IoSession ss : ioAcceptor.getManagedSessions().values()) {
-                CloseFuture future = ss.closeNow();
+            for (var ss : ioAcceptor.getManagedSessions().values()) {
+                var future = ss.closeNow();
                 if (!future.awaitUninterruptibly(1000)) {
                     LOG.warn("Could not close IoSession, consumer may hang");
                 }

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.core.config;
 
 import java.util.Properties;
 
-import groovy.lang.MetaMethod;
 import org.codehaus.groovy.runtime.m12n.ExtensionModule;
 import org.codehaus.groovy.runtime.m12n.MetaInfExtensionModule;
 import org.codehaus.groovy.runtime.m12n.PropertiesModuleFactory;
@@ -47,16 +46,16 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
         LOG.info("Registering new extension module {} defined in class {}",
                 properties.getProperty(MODULE_NAME_KEY),
                 properties.getProperty(MetaInfExtensionModule.MODULE_INSTANCE_CLASSES_KEY));
-        ExtensionModule module = createExtensionModule(properties, classLoader);
+        var module = createExtensionModule(properties, classLoader);
         if (LOG.isDebugEnabled()) {
-            for(MetaMethod method : module.getMetaMethods()) {
+            for(var method : module.getMetaMethods()) {
                 LOG.debug("registered method: {}", method);
             }
         }
         if (properties.containsKey(MODULE_NAME_INITIALIZER_CLASS)) {
-            String initializerClassName = properties.getProperty(MODULE_NAME_INITIALIZER_CLASS);
+            var initializerClassName = properties.getProperty(MODULE_NAME_INITIALIZER_CLASS);
             try {
-                Class<?> initializerClass = Class.forName(initializerClassName);
+                var initializerClass = Class.forName(initializerClassName);
                 initializerClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 LOG.warn("Unable to initialize extension using {}.", initializerClassName, e);

@@ -43,7 +43,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
         List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
-        ConsumerDispatchingInterceptor dispatcher = getConfig().getDispatcher();
+        var dispatcher = getConfig().getDispatcher();
         if (dispatcher != null) {
             dispatcher.addTransactionRoutes(getConfig().getRoutes());
         } else {

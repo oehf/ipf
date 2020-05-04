@@ -47,8 +47,8 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
 
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
-        MllpTransactionEndpointConfiguration transactionConfig = super.createConfig(uri, parameters);
-        Hl7v2TransactionConfiguration configuration = resolveAndRemoveReferenceParameter(parameters, "hl7TransactionConfig", Hl7v2TransactionConfiguration.class);
+        var transactionConfig = super.createConfig(uri, parameters);
+        var configuration = resolveAndRemoveReferenceParameter(parameters, "hl7TransactionConfig", Hl7v2TransactionConfiguration.class);
         if (this.transactionConfiguration == null) {
             if (configuration == null) {
                 throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");

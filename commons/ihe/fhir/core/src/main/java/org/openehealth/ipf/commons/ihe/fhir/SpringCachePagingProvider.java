@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.IPagingProvider;
@@ -75,7 +74,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
 
     @Override
     public String storeResultList(RequestDetails requestDetails, IBundleProvider bundleProvider) {
-        String key = UUID.randomUUID().toString();
+        var key = UUID.randomUUID().toString();
         cache.put(key, distributed ?
                 serialize(bundleProvider) :
                 bundleProvider);
@@ -91,7 +90,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
 
 
     private List<String> serialize(IBundleProvider bundleProvider) {
-        IParser parser = fhirContext.newJsonParser();
+        var parser = fhirContext.newJsonParser();
         return bundleProvider.getResources(0, Integer.MAX_VALUE).stream()
                 .map(parser::encodeResourceToString)
                 .collect(Collectors.toList());
@@ -99,7 +98,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
 
     private IBundleProvider deserialize(List<String> list) {
         if (list == null) return null;
-        IParser parser = fhirContext.newJsonParser();
+        var parser = fhirContext.newJsonParser();
         return new SimpleBundleProvider(list.stream()
                 .map(parser::parseResource)
                 .collect(Collectors.toList()));

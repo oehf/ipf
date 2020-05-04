@@ -17,10 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.InputStream;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
+
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -30,8 +29,6 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
@@ -61,9 +58,9 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     private static <T> T loadFile(String fn) throws Exception {
-        InputStream stream = ChPpq1Test.class.getClassLoader().getResourceAsStream("messages/chppq1/" + fn);
-        Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
-        Object object = unmarshaller.unmarshal(stream);
+        var stream = ChPpq1Test.class.getClassLoader().getResourceAsStream("messages/chppq1/" + fn);
+        var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
+        var object = unmarshaller.unmarshal(stream);
         if (object instanceof JAXBElement) {
             object = ((JAXBElement) object).getValue();
         }
@@ -71,7 +68,7 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     private static void checkCodeValueType(CodedValueType value, String[]... allowedCodes) {
-        for (String[] allowed : allowedCodes) {
+        for (var allowed : allowedCodes) {
             if (allowed[0].equals(value.getCode()) && allowed[1].equals(value.getCodeSystemName()) && allowed[2].equals(value.getOriginalText())) {
                 return;
             }
@@ -95,17 +92,17 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
-        EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request-ppq.xml"),
+        var response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request-ppq.xml"),
             EprPolicyRepositoryResponse.class);
         assertEquals(statusCode, response.getStatus());
 
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (Object object : messages) {
-            AuditMessage message = (AuditMessage) object;
+        for (var object : messages) {
+            var message = (AuditMessage) object;
 
-            EventIdentificationType event = message.getEventIdentification();
+            var event = message.getEventIdentification();
             assertEquals(EventActionCode.Create, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
             checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
@@ -122,7 +119,7 @@ public class ChPpq1Test extends StandardTestContainer {
 
             assertEquals(2, message.getParticipantObjectIdentifications().size());
 
-            ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
+            var participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
             assertEquals("COLA-fd27a474-c9cf-4272-9dee-55f2721d2f8d", participant.getParticipantObjectID());
@@ -151,7 +148,7 @@ public class ChPpq1Test extends StandardTestContainer {
 
     private void testUpdatePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectSoapFault) throws Exception {
         try {
-            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("update-request-ppq.xml"),
+            var response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("update-request-ppq.xml"),
                 EprPolicyRepositoryResponse.class);
             assertEquals(statusCode, response.getStatus());
         } catch (UnknownPolicySetIdFaultMessage exception) {
@@ -163,10 +160,10 @@ public class ChPpq1Test extends StandardTestContainer {
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (Object object : messages) {
-            AuditMessage message = (AuditMessage) object;
+        for (var object : messages) {
+            var message = (AuditMessage) object;
 
-            EventIdentificationType event = message.getEventIdentification();
+            var event = message.getEventIdentification();
             assertEquals(EventActionCode.Update, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
             checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
@@ -183,7 +180,7 @@ public class ChPpq1Test extends StandardTestContainer {
 
             assertEquals(2, message.getParticipantObjectIdentifications().size());
 
-            ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(0);
+            var participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
             assertEquals("COLA-0219ed1a-3b5d-4fb3-a5be-08bba51757b1", participant.getParticipantObjectID());
@@ -212,7 +209,7 @@ public class ChPpq1Test extends StandardTestContainer {
 
     private void testDeletePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectException) throws Exception {
         try {
-            EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("delete-request.xml"), EprPolicyRepositoryResponse.class);
+            var response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("delete-request.xml"), EprPolicyRepositoryResponse.class);
             assertEquals(statusCode, response.getStatus());
         } catch (UnknownPolicySetIdFaultMessage exception) {
             if (!expectException) {
@@ -223,10 +220,10 @@ public class ChPpq1Test extends StandardTestContainer {
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (Object object : messages) {
-            AuditMessage message = (AuditMessage) object;
+        for (var object : messages) {
+            var message = (AuditMessage) object;
 
-            EventIdentificationType event = message.getEventIdentification();
+            var event = message.getEventIdentification();
             assertEquals(EventActionCode.Delete, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
             checkCodeValueType(event.getEventID(), new String[]{"110106", "DCM", "Export"}, new String[]{"110107", "DCM", "Import"});
@@ -242,8 +239,8 @@ public class ChPpq1Test extends StandardTestContainer {
             checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
 
             assertEquals(5, message.getParticipantObjectIdentifications().size());
-            for (int i = 0; i < 5; ++i) {
-                ParticipantObjectIdentificationType participant = message.getParticipantObjectIdentifications().get(i);
+            for (var i = 0; i < 5; ++i) {
+                var participant = message.getParticipantObjectIdentifications().get(i);
                 assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
                 assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
                 assertEquals("10a3f268-d9d6-4772-b908-9d852116" + i, participant.getParticipantObjectID());

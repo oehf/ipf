@@ -17,13 +17,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.EncodingEnum;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.model.StructureDefinition;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -57,12 +55,12 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
     }
 
     private <T extends IBaseResource> Optional<T> findProfile(FhirContext fhirContext, String resourceName) {
-        String path = prefix + resourceName + ".xml";
-        InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+        var path = prefix + resourceName + ".xml";
+        var is = getClass().getClassLoader().getResourceAsStream(path);
         if (is != null) {
-            String profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), "UTF-8").useDelimiter("\\A").next();
-            IParser parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
-            T structureDefinition = (T) parser.parseResource(StructureDefinition.class, profileText);
+            var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), "UTF-8").useDelimiter("\\A").next();
+            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
+            var structureDefinition = (T) parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition);
         }
         return Optional.empty();

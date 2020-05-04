@@ -43,8 +43,8 @@ public abstract class DelegateReifier<T extends DelegateDefinition> extends Proc
 
     @Override
     public Processor createProcessor() throws Exception {
-        Processor delegate = doCreateDelegate();
-        Processor next = createChildProcessor(false);
+        var delegate = doCreateDelegate();
+        var next = createChildProcessor(false);
 
         List<Processor> processors = new ArrayList<>();
         processors.add(delegate);

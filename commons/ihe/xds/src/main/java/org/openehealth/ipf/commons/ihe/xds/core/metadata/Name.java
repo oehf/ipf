@@ -98,7 +98,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || !(o instanceof Name)) return false;
-        Name<?> that = (Name<?>) o;
+        var that = (Name<?>) o;
         return Objects.equals(getFamilyName(), that.getFamilyName()) &&
                 Objects.equals(getGivenName(), that.getGivenName()) &&
                 Objects.equals(getSecondAndFurtherGivenNames(), that.getSecondAndFurtherGivenNames()) &&

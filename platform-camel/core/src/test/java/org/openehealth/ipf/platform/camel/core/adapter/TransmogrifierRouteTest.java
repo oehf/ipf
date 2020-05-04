@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
@@ -32,28 +31,28 @@ public class TransmogrifierRouteTest extends AbstractRouteTest {
 
     @Test
     public void testTransmogrifier1() throws InterruptedException {
-        Cat cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-1",
+        var cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-1",
                 ExchangePattern.InOut, new Dog("Willi"));
         assertEquals(new Cat("Willi"), cat);
     }
 
     @Test
     public void testTransmogrifier2() throws InterruptedException {
-        Cat cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-2",
+        var cat = (Cat) producerTemplate.sendBody("direct:transmogrifier-test-2",
                 ExchangePattern.InOut, new Dog("Willi"));
         assertEquals(new Cat("Willi eats mice"), cat);
     }
 
     @Test
     public void testTransmogrifier3() throws InterruptedException {
-        Cat cat = (Cat) producerTemplate.requestBodyAndHeader("direct:transmogrifier-test-3", "wrong", "foo",
+        var cat = (Cat) producerTemplate.requestBodyAndHeader("direct:transmogrifier-test-3", "wrong", "foo",
                 new Dog("Fritz"));
         assertEquals(new Cat("Fritz likes fish"), cat);
     }
 
     @Test
     public void testTransmogrifier4() throws InterruptedException {
-        Exchange exchange = producerTemplate.request("direct:transmogrifier-test-4", exchange1 -> {
+        var exchange = producerTemplate.request("direct:transmogrifier-test-4", exchange1 -> {
             exchange1.getIn().setHeader("x", "y");
             exchange1.getIn().setBody(new Dog("Willi"));
         });

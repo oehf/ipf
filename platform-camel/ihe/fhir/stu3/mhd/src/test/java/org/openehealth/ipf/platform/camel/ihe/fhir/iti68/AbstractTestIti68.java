@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 abstract class AbstractTestIti68 extends StandardTestContainer {
 
     public static void startServer(String contextDescriptor) {
-        CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();
+        var servlet = new CamelHttpTransportServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "CamelServlet");
     }
 

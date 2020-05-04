@@ -17,11 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,15 +43,15 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
     @Override
     public XdsQueryAuditDataset enrichAuditDatasetFromRequest(XdsQueryAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof AdhocQueryRequest) {
-            AdhocQueryRequest request = (AdhocQueryRequest) pojo;
-            AdhocQueryType adHocQuery = request.getAdhocQuery();
+            var request = (AdhocQueryRequest) pojo;
+            var adHocQuery = request.getAdhocQuery();
             if (adHocQuery != null) {
                 auditDataset.setQueryUuid(adHocQuery.getId());
                 auditDataset.setHomeCommunityId(adHocQuery.getHome());
             }
 
-            QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
-            List<String> patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
+            var slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
+            var patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
             if (patientIdList != null) {
                 auditDataset.getPatientIds().addAll(patientIdList);
             }

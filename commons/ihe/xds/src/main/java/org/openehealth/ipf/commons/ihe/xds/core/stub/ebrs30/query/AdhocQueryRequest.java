@@ -9,6 +9,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query;
 
 import java.math.BigInteger;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -126,11 +127,7 @@ public class AdhocQueryRequest
      *     
      */
     public boolean isFederated() {
-        if (federated == null) {
-            return false;
-        } else {
-            return federated;
-        }
+        return Objects.requireNonNullElse(federated, false);
     }
 
     /**
@@ -178,11 +175,7 @@ public class AdhocQueryRequest
      *     
      */
     public BigInteger getStartIndex() {
-        if (startIndex == null) {
-            return new BigInteger("0");
-        } else {
-            return startIndex;
-        }
+        return Objects.requireNonNullElseGet(startIndex, () -> new BigInteger("0"));
     }
 
     /**
@@ -206,11 +199,7 @@ public class AdhocQueryRequest
      *     
      */
     public BigInteger getMaxResults() {
-        if (maxResults == null) {
-            return new BigInteger("-1");
-        } else {
-            return maxResults;
-        }
+        return Objects.requireNonNullElseGet(maxResults, () -> new BigInteger("-1"));
     }
 
     /**

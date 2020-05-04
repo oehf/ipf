@@ -49,7 +49,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     private void testValidateCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         mockError.expectedMessageCount(0);
         producerTemplate.sendBody(endpoint, stream);

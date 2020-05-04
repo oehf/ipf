@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
@@ -79,11 +77,11 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     @Override
     public Consumer createConsumer(Processor processor) {
-        AbstractHl7v2WebService serviceInstance = (AbstractHl7v2WebService) getServiceInstance();
+        var serviceInstance = (AbstractHl7v2WebService) getServiceInstance();
         serviceInstance.setHl7v2Configuration(this);
-        ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
-        Server server = serverFactory.create();
-        AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
+        var serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
+        var server = serverFactory.create();
+        var service = (AbstractWebService) serverFactory.getServiceBean();
         return new DefaultWsConsumer<>(this, processor, service, server);
     }
 

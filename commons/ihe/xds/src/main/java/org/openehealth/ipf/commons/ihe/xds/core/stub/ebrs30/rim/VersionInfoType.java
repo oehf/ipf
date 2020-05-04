@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -50,11 +51,7 @@ public class VersionInfoType {
      *     
      */
     public String getVersionName() {
-        if (versionName == null) {
-            return "1.1";
-        } else {
-            return versionName;
-        }
+        return Objects.requireNonNullElse(versionName, "1.1");
     }
 
     /**

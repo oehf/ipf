@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.NodeRepresentationUsage;
 
-import java.util.List;
-
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -91,10 +89,10 @@ public class ClassificationValidation implements RegistryObjectValidator {
 
     @Override
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
-        List<EbXMLClassification> classifications = obj.getClassifications(classScheme);
+        var classifications = obj.getClassifications(classScheme);
         metaDataAssert(classifications.size() >= min && classifications.size() <= max,
                 WRONG_NUMBER_OF_CLASSIFICATIONS, classScheme, min, max, classifications.size());
-        for (EbXMLClassification classification : classifications) {
+        for (var classification : classifications) {
             metaDataAssert(classification.getClassifiedObject() != null, 
                     NO_CLASSIFIED_OBJ, classScheme);
 
@@ -123,7 +121,7 @@ public class ClassificationValidation implements RegistryObjectValidator {
             }
 
             if (slotValidations != null) {
-                for (SlotValueValidation slotValidation : slotValidations) {
+                for (var slotValidation : slotValidations) {
                     slotValidation.validate(classification);
                 }
             }

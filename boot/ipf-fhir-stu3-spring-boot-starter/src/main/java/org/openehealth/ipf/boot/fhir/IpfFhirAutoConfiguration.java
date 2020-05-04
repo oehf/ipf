@@ -39,12 +39,10 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -58,7 +56,7 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
-        FhirContext fhirContext = new FhirContext(config.getFhirVersion());
+        var fhirContext = new FhirContext(config.getFhirVersion());
         fhirContextCustomizer.customizeFhirContext(fhirContext);
         return fhirContext;
     }
@@ -72,8 +70,8 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(NamingSystemService.class)
     public NamingSystemService namingSystemService(FhirContext fhirContext) throws IOException {
-        DefaultNamingSystemServiceImpl namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
-        for (Resource resource : config.getNamingSystems()) {
+        var namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
+        for (var resource : config.getNamingSystems()) {
             namingSystemService.addNamingSystemsFromXml(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
         }
         return namingSystemService;
@@ -83,12 +81,12 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(name = "fhirServletRegistration")
     @ConditionalOnWebApplication
     public ServletRegistrationBean fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
-        String urlMapping = config.getFhirMapping();
-        ServletRegistrationBean registration = new ServletRegistrationBean(camelFhirServlet, urlMapping);
-        IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
+        var urlMapping = config.getFhirMapping();
+        var registration = new ServletRegistrationBean(camelFhirServlet, urlMapping);
+        var servletProperties = config.getServlet();
         registration.setLoadOnStartup(servletProperties.getLoadOnStartup());
         registration.setName(servletProperties.getName());
-        for (Map.Entry<String, String> entry : servletProperties.getInit().entrySet()) {
+        for (var entry : servletProperties.getInit().entrySet()) {
             registration.addInitParameter(entry.getKey(), entry.getValue());
         }
         return registration;
@@ -116,8 +114,8 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(IPagingProvider.class)
     @ConditionalOnProperty(value = "ipf.fhir.caching", havingValue = "true")
     public IPagingProvider pagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
-        IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
-        SpringCachePagingProvider pagingProvider = new SpringCachePagingProvider(cacheManager, fhirContext);
+        var servletProperties = config.getServlet();
+        var pagingProvider = new SpringCachePagingProvider(cacheManager, fhirContext);
         pagingProvider.setDefaultPageSize(servletProperties.getDefaultPageSize());
         pagingProvider.setMaximumPageSize(servletProperties.getMaxPageSize());
         pagingProvider.setDistributed(servletProperties.isDistributedPagingProvider());
@@ -134,7 +132,7 @@ public class IpfFhirAutoConfiguration {
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);
-        IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
+        var servletProperties = config.getServlet();
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());

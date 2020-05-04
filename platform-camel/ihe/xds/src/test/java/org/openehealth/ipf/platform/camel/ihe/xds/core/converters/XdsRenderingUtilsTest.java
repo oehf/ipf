@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
@@ -26,10 +25,10 @@ public class XdsRenderingUtilsTest {
 
     @Test
     public void testRenderProvideAndRegisterDocumentSet30() {
-        ProvideAndRegisterDocumentSet pnr = SampleData.createProvideAndRegisterDocumentSet();
-        org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType converted =
+        var pnr = SampleData.createProvideAndRegisterDocumentSet();
+        var converted =
                 EbXML30Converters.convert(pnr);
-        String renderedPnr = XdsRenderingUtils.renderEbxml(converted);
+        var renderedPnr = XdsRenderingUtils.renderEbxml(converted);
         assertNotNull(renderedPnr);
         assertTrue(renderedPnr.contains("ProvideAndRegisterDocumentSetRequest"));
     }

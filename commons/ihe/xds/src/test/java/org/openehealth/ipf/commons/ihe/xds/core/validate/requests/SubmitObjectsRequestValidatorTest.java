@@ -72,7 +72,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testValidateTooManyAuthorPersons() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).getSlots().get(0).getValueList().add("bla");
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, ebXML);
     }
@@ -91,10 +91,10 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testValidateExactlyOneSubmissionSetMustExist() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        EbXMLRegistryPackage regPackage = factory.createRegistryPackage("lol", ebXML.getObjectLibrary());
+        var ebXML = transformer.toEbXML(request);
+        var regPackage = factory.createRegistryPackage("lol", ebXML.getObjectLibrary());
         ebXML.addRegistryPackage(regPackage);
-        EbXMLClassification classification = factory.createClassification(ebXML.getObjectLibrary());
+        var classification = factory.createClassification(ebXML.getObjectLibrary());
         classification.setClassifiedObject("lol");
         classification.setClassificationNode(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         ebXML.addClassification(classification);
@@ -159,14 +159,14 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testTooManySubmissionSetStates() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getAssociations().get(0).getSlots(SLOT_NAME_SUBMISSION_SET_STATUS).get(0).getValueList().add("lol");
         expectFailure(TOO_MANY_SUBMISSION_SET_STATES, ebXML);
     }
 
     @Test
     public void testInvalidSubmissionSetStatus() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getAssociations().get(0).getSlots(SLOT_NAME_SUBMISSION_SET_STATUS).get(0).getValueList().set(0, "lol");
         expectFailure(INVALID_SUBMISSION_SET_STATUS, ebXML);
     }
@@ -185,7 +185,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testSourceUUIDNotFound() {
-        Association association = new Association();
+        var association = new Association();
         association.setTargetUuid("blabla");
         association.setSourceUuid("lol");
         association.setAssociationType(AssociationType.TRANSFORM);
@@ -195,7 +195,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testSourceIsSnapshotAssociation() {
-        Association association = new Association();
+        var association = new Association();
         association.setTargetUuid("urn:uuid:e0985823-dc50-45a5-a6c8-a11a829893bd");
         association.setSourceUuid("blah");
         association.setAssociationType(AssociationType.IS_SNAPSHOT_OF);
@@ -206,14 +206,14 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testSubmitAssociation() {
-        Association association = new Association();
+        var association = new Association();
         association.setTargetUuid("urn:uuid:aa0da13b-51b0-4c2e-868c-cef8d7e1bc3d");
         association.setSourceUuid("document01");
         association.setAssociationType(AssociationType.APPEND);
         association.setEntryUuid("apnd_assoc");
         request.getAssociations().add(association);
 
-        Association submitAssociation = new Association();
+        var submitAssociation = new Association();
         submitAssociation.setTargetUuid("apnd_assoc1");
         submitAssociation.setSourceUuid("submissionSet01");
         submitAssociation.setAssociationType(AssociationType.SUBMIT_ASSOCIATION);
@@ -230,14 +230,14 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testNoClassifiedObject() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject(null);
         expectFailure(NO_CLASSIFIED_OBJ, ebXML);
     }
 
     @Test
     public void testWrongClassifiedObject() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications().get(0).setClassifiedObject("folder01");
         expectFailure(WRONG_CLASSIFIED_OBJ, ebXML);
     }
@@ -249,7 +249,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testRequiredNodeRepresentationIsNull() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
                 .filter(x -> !isAuthorClassification(x))
                 .findAny()
@@ -260,7 +260,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testRequiredNodeRepresentationIsEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
                 .filter(x -> !isAuthorClassification(x))
                 .findAny()
@@ -271,8 +271,8 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testProhibitedNodeRepresentationIsNotEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        EbXMLClassification classification = ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
+        var ebXML = transformer.toEbXML(request);
+        var classification = ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
                 .filter(x -> isAuthorClassification(x))
                 .findAny()
                 .get();
@@ -289,42 +289,42 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testCXTooManyComponents() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("rotfl^^^^^^^^^lol");
         expectFailure(CX_TOO_MANY_COMPONENTS, ebXML);
     }
 
     @Test
     public void testCXNeedsId() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("");
         expectFailure(CX_NEEDS_ID, ebXML);
     }
 
     @Test
     public void testHDMUstNotHaveNamespaceId() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12^^^lol&12.3&ISO");
         expectFailure(HD_MUST_NOT_HAVE_NAMESPACE_ID, ebXML);
     }
 
     @Test
     public void testUniversalIDMustBeISO() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12^^^&12.3&LOL");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML);
     }
 
     @Test
     public void testUniversalIDToo() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML);
     }
 
     @Test
     public void testHDNeedsUniversalID() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12^^^&&ISO");
         expectFailure(HD_NEEDS_UNIVERSAL_ID, ebXML);
     }
@@ -361,21 +361,21 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testInvalidPID() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_SOURCE_PATIENT_INFO).get(0).getValueList().add("PID-lol|lol");
         expectFailure(INVALID_PID, ebXML);
     }
 
     @Test
     public void testUnsupportedPID() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_SOURCE_PATIENT_INFO).get(0).getValueList().add("PID-2|lol");
         expectFailure(UNSUPPORTED_PID, ebXML);
     }
 
     @Test
     public void testInvalidNumberFormat() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_SIZE).get(0).getValueList().set(0, "lol");
         expectFailure(INVALID_NUMBER_FORMAT, ebXML);
     }
@@ -390,21 +390,21 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testRecipientEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().add("");
         expectFailure(RECIPIENT_EMPTY, ebXML);
     }
 
     @Test
     public void testInvalidRecipient() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().add("|||");
         expectFailure(INVALID_RECIPIENT, ebXML);
     }
 
     @Test
     public void testSlotValueTooLong() {
-        char[] chars = new char[EbXMLSlot30.MAX_SLOT_LENGTH + 1];
+        var chars = new char[EbXMLSlot30.MAX_SLOT_LENGTH + 1];
         Arrays.fill(chars, 'x');
         docEntry.setHash(String.valueOf(chars));
         expectFailure(SLOT_VALUE_TOO_LONG);
@@ -412,7 +412,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testWrongNumberOfSlotValues() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_CREATION_TIME).get(0).getValueList().add("lol");
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, ebXML);
     }
@@ -420,13 +420,13 @@ public class SubmitObjectsRequestValidatorTest {
     @Test
     public void testMissingMimeType() {
         docEntry.setMimeType("");
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(MIME_TYPE_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testEmptySlotValue() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_CREATION_TIME).get(0).getValueList().set(0, null);
         expectFailure(EMPTY_SLOT_VALUE, ebXML);
     }
@@ -438,7 +438,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testMultipleUriValues() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add("second value");
         assertEquals(2, ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().size());
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, ebXML);
@@ -446,28 +446,28 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testEmptyUri() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, "");
         expectFailure(EMPTY_URI, ebXML);
     }
 
     @Test
     public void testInvalidUri() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, ":lol:");
         expectFailure(INVALID_URI, ebXML);
     }
 
     @Test
     public void testPersonMissingNameAndID() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(0).getValueList().set(0, "^^^^^^^^&1.2.840.113619.6.197&ISO");
         expectFailure(PERSON_MISSING_NAME_AND_ID, ebXML);
     }
 
     @Test
     public void testPersonHDMissing() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(0).getValueList().set(0, "lol");
         // The spec allows this case: "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
         validator.validate(transformer.toEbXML(request), ITI_42);
@@ -475,14 +475,14 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testOrganizationNameMissing() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(1).getValueList().set(0, "^lol");
         expectFailure(ORGANIZATION_NAME_MISSING, ebXML);
     }
 
     @Test
     public void testOrganizationTooManyComponents() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(1).getValueList().set(0, "Otto^lol");
         expectFailure(ORGANIZATION_TOO_MANY_COMPONENTS, ebXML);
     }
@@ -502,15 +502,15 @@ public class SubmitObjectsRequestValidatorTest {
     @Test
     public void testAuthorValidation() {
         request.getSubmissionSet().getAuthors().clear();
-        EbXMLProvideAndRegisterDocumentSetRequest ebXml = transformer.toEbXML(request);
+        var ebXml = transformer.toEbXML(request);
         new ObjectContainerValidator().validate(ebXml, ITI_42);
 
-        Author author = new Author();
+        var author = new Author();
         author.getAuthorRole().add(new Identifiable("clown", new AssigningAuthority("1.3.14.15", "ISO")));
         request.getSubmissionSet().getAuthors().add(author);
         ebXml = transformer.toEbXML(request);
 
-        boolean failed = false;
+        var failed = false;
         try {
             new ObjectContainerValidator().validate(ebXml, ITI_42);
         } catch (XDSMetaDataException e) {

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import groovy.xml.slurpersupport.GPathResult;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
@@ -31,7 +30,6 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.handler.MessageContext;
 
 import static java.util.Objects.requireNonNull;
 
@@ -57,8 +55,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
      *      XML payload of the HL7 v3 response message or an automatically generated NAK.
      */
     protected String doProcess(String requestString) {
-        Exchange result = process(requestString);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(requestString);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.info("HL7 v3 service failed", exception);
             return createNak(requestString, exception);
@@ -101,8 +99,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
         if (auditStrategy != null) {
             try {
                 auditDataset = auditStrategy.createAuditDataset();
-                MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-                HttpServletRequest servletRequest =
+                var messageContext = new WebServiceContextImpl().getMessageContext();
+                var servletRequest =
                         (HttpServletRequest) messageContext.get(AbstractHTTPDestination.HTTP_REQUEST);
                 if (servletRequest != null) {
                     auditDataset.setRemoteAddress(servletRequest.getRemoteAddr());
@@ -111,7 +109,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 // The SOAP endpoint URL
                 auditDataset.setDestinationUserId((String) messageContext.get(Message.REQUEST_URL));
 
-                AddressingProperties apropos = (AddressingProperties) messageContext.get(
+                var apropos = (AddressingProperties) messageContext.get(
                                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
                 if ((apropos != null) && (apropos.getReplyTo() != null) && (apropos.getReplyTo().getAddress() != null)) {
                     auditDataset.setSourceUserId(apropos.getReplyTo().getAddress().getValue());

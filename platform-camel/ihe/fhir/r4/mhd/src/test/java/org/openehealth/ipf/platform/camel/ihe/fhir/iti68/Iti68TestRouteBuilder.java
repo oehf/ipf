@@ -66,7 +66,7 @@ public class Iti68TestRouteBuilder extends RouteBuilder {
 
         @Override
         public Object evaluate(Exchange exchange) {
-            Iti68AuditDataset auditDataset = exchange.getIn().getHeader(AuditInterceptor.AUDIT_DATASET_HEADER, Iti68AuditDataset.class);
+            var auditDataset = exchange.getIn().getHeader(AuditInterceptor.AUDIT_DATASET_HEADER, Iti68AuditDataset.class);
             auditDataset.setDocumentUniqueId(DOCUMENT_UNIQUE_ID);
             auditDataset.setHomeCommunityId(HOME_COMMUNITY_ID);
             auditDataset.setRepositoryUniqueId(REPOSITORY_ID);

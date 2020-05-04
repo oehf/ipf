@@ -36,7 +36,6 @@ import org.junit.Test;
 
 import java.security.MessageDigest;
 import java.util.Collections;
-import java.util.Date;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE;
@@ -52,26 +51,26 @@ public class Iti65ValidatorTest {
 
     @Test
     public void testBundle() throws Exception {
-        FhirContext context = FhirContext.forR4();
-        Bundle bundle = provideAndRegister();
+        var context = FhirContext.forR4();
+        var bundle = provideAndRegister();
         try {
-            Iti65Validator iti65Validator = new Iti65Validator();
+            var iti65Validator = new Iti65Validator();
             iti65Validator.initialize(context);
             iti65Validator.validateRequest(context, bundle, Collections.emptyMap());
         } catch (UnprocessableEntityException e) {
-            OperationOutcome oo = (OperationOutcome) e.getOperationOutcome();
+            var oo = (OperationOutcome) e.getOperationOutcome();
             oo.getIssue()
                     .forEach(ooc -> System.out.println(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
         }
     }
 
     private Bundle provideAndRegister() throws Exception {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 
-        DocumentManifest manifest = new DocumentManifest();
+        var manifest = new DocumentManifest();
         manifest.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE);
         manifest.setMasterIdentifier(
                 new Identifier()
@@ -98,15 +97,15 @@ public class Iti65ValidatorTest {
 
         // Reference
 
-        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Date timestamp = new DateTime()
+        var timestamp = new DateTime()
                 .withDate(2013, 7, 1)
                 .withTime(13, 11, 33, 0)
                 .withZone(DateTimeZone.UTC).toDate();
 
-        Practitioner practitioner = new Practitioner();
-        DocumentReference reference = new DocumentReference();
+        var practitioner = new Practitioner();
+        var reference = new DocumentReference();
         reference.getMeta().addProfile(ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE);
         reference.getMeta().setLastUpdated(timestamp);
 
@@ -148,7 +147,7 @@ public class Iti65ValidatorTest {
 
         // Binary
 
-        Binary binary = new Binary().setContentType("text/plain");
+        var binary = new Binary().setContentType("text/plain");
         binary.setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);
         bundle.addEntry()

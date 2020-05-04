@@ -44,10 +44,10 @@ public class EagerBundleProviderTest {
     public void setup() {
         requestConsumer = EasyMock.createMock(RequestConsumer.class);
         response = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (var i = 0; i < MAX_SIZE; i++) {
             response.add(new Patient().setId(Integer.toString(i)));
         }
-        Object payload = new Object();
+        var payload = new Object();
         Map<String, Object> headers = new HashMap<>();
         bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers);
     }
@@ -64,7 +64,7 @@ public class EagerBundleProviderTest {
     public void testGetResources() {
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
         EasyMock.replay(requestConsumer);
-        List<IBaseResource> result = bundleProvider.getResources(10, 30);
+        var result = bundleProvider.getResources(10, 30);
         Assert.assertEquals(response.subList(10, 30), result);
         EasyMock.verify(requestConsumer);
     }

@@ -48,7 +48,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     private void serialize(AuditMessage auditMessage, Writer writer, XMLOutputter outputter) throws IOException {
-        Element element = new Element("AuditMessage");
+        var element = new Element("AuditMessage");
         element.addContent(eventIdentification(auditMessage.getEventIdentification()));
 
         auditMessage.getActiveParticipants().stream()
@@ -65,7 +65,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Content activeParticipant(ActiveParticipantType activeParticipant) {
-        Element element = new Element("ActiveParticipant");
+        var element = new Element("ActiveParticipant");
         element.setAttribute("UserID", activeParticipant.getUserID());
         conditionallyAddAttribute(element, "AlternativeUserID", activeParticipant.getAlternativeUserID());
         conditionallyAddAttribute(element, "UserName", activeParticipant.getUserName());
@@ -86,7 +86,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element eventIdentification(EventIdentificationType eventIdentification) {
-        Element element = new Element("EventIdentification");
+        var element = new Element("EventIdentification");
         if (eventIdentification != null) {
             element.setAttribute("EventActionCode", eventIdentification.getEventActionCode().getValue());
             element.setAttribute("EventDateTime", eventIdentification.getEventDateTime().toString());
@@ -110,7 +110,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element participantObjectIdentification(ParticipantObjectIdentificationType poi) {
-        Element element = new Element("ParticipantObjectIdentification");
+        var element = new Element("ParticipantObjectIdentification");
         if (poi != null) {
             conditionallyAddAttribute(element, "ParticipantObjectID", poi.getParticipantObjectID());
             if (poi.getParticipantObjectTypeCode() != null) {
@@ -142,7 +142,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element auditSourceIdentification(AuditSourceIdentificationType auditSourceIdentification) {
-        Element element = new Element("AuditSourceIdentification");
+        var element = new Element("AuditSourceIdentification");
         if (auditSourceIdentification != null) {
             conditionallyAddAttribute(element, "AuditEnterpriseSiteID", auditSourceIdentification.getAuditEnterpriseSiteID());
             conditionallyAddAttribute(element, "AuditSourceID", auditSourceIdentification.getAuditSourceID());
@@ -159,7 +159,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element codedValueType(String tagName, CodedValueType codedValue) {
-        Element element = new Element(tagName);
+        var element = new Element(tagName);
         element.setAttribute("csd-code", codedValue.getCode());
         conditionallyAddAttribute(element, "codeSystemName", codedValue.getCodeSystemName());
         conditionallyAddAttribute(element, "displayName", codedValue.getDisplayName());
@@ -168,7 +168,7 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element typeValuePairType(String tagName, TypeValuePairType typeValuePair) {
-        Element element = new Element(tagName);
+        var element = new Element(tagName);
         element.setAttribute("type", typeValuePair.getType());
         element.setAttribute("value", new String(
                 Base64.getEncoder().encode(typeValuePair.getValue()),
@@ -177,13 +177,13 @@ public class DICOM2016a implements SerializationStrategy {
     }
 
     protected Element dicomObjectDescription(DicomObjectDescriptionType dicomObjectDescription) {
-        Element pod = new Element("ParticipantObjectDescription");
+        var pod = new Element("ParticipantObjectDescription");
         dicomObjectDescription.getMPPS().forEach(mpps ->
                 pod.addContent(new Element("MPPS").setAttribute("UID", mpps)));
         dicomObjectDescription.getAccession().forEach(accession ->
                 pod.addContent(new Element("Accession").setAttribute("Number", accession)));
         dicomObjectDescription.getSOPClasses().forEach(sop -> {
-            Element sopClass = new Element("SOPClass")
+            var sopClass = new Element("SOPClass")
                     .setAttribute("NumberOfInstances", String.valueOf(sop.getNumberOfInstances()));
             conditionallyAddAttribute(sopClass, "UID", sop.getUid());
             sop.getInstanceUids().forEach(uid ->
@@ -191,7 +191,7 @@ public class DICOM2016a implements SerializationStrategy {
             pod.addContent(sopClass);
         });
         if (!dicomObjectDescription.getStudyIDs().isEmpty()) {
-            Element participantObjectContainsStudy = new Element("ParticipantObjectContainsStudy");
+            var participantObjectContainsStudy = new Element("ParticipantObjectContainsStudy");
             dicomObjectDescription.getStudyIDs().forEach(studyID ->
                     participantObjectContainsStudy.addContent(
                             new Element("StudyIDs")

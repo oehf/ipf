@@ -71,7 +71,7 @@ public class ServiceTimeChronologyValidationTest {
     }
 
     private static EbXMLRegistryObject anyRegistryObjectWith(String serviceStartTime, String serviceStopTime) {
-        EbXMLRegistryObject mock = mock(EbXMLRegistryObject.class);
+        var mock = mock(EbXMLRegistryObject.class);
         when(mock.getSingleSlotValue(SLOT_NAME_SERVICE_START_TIME)).thenReturn(serviceStartTime);
         when(mock.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME)).thenReturn(serviceStopTime);
         return mock;

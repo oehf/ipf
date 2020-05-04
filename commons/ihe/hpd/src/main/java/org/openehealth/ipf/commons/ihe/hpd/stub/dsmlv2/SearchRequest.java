@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -221,11 +222,7 @@ public class SearchRequest
      *     
      */
     public long getSizeLimit() {
-        if (sizeLimit == null) {
-            return  0L;
-        } else {
-            return sizeLimit;
-        }
+        return Objects.requireNonNullElse(sizeLimit, 0L);
     }
 
     /**
@@ -249,11 +246,7 @@ public class SearchRequest
      *     
      */
     public long getTimeLimit() {
-        if (timeLimit == null) {
-            return  0L;
-        } else {
-            return timeLimit;
-        }
+        return Objects.requireNonNullElse(timeLimit, 0L);
     }
 
     /**
@@ -277,11 +270,7 @@ public class SearchRequest
      *     
      */
     public boolean isTypesOnly() {
-        if (typesOnly == null) {
-            return false;
-        } else {
-            return typesOnly;
-        }
+        return Objects.requireNonNullElse(typesOnly, false);
     }
 
     /**
@@ -337,7 +326,7 @@ public class SearchRequest
         }
 
         public static DerefAliasesType fromValue(String v) {
-            for (DerefAliasesType c: DerefAliasesType.values()) {
+            for (var c: DerefAliasesType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }
@@ -385,7 +374,7 @@ public class SearchRequest
         }
 
         public static SearchScope fromValue(String v) {
-            for (SearchScope c: SearchScope.values()) {
+            for (var c: SearchScope.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }

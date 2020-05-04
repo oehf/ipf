@@ -19,8 +19,8 @@ public class RendererAdapterReifier extends ProcessorAdapterReifier<RendererAdap
 
     @Override
     protected ProcessorAdapter doCreateProcessor() {
-        Renderer<?> renderer = definition.getRenderer();
-        String rendererBean = definition.getRendererBean();
+        var renderer = definition.getRenderer();
+        var rendererBean = definition.getRendererBean();
         if (rendererBean != null) {
             renderer = camelContext.getRegistry().lookupByNameAndType(rendererBean, Renderer.class);
         }

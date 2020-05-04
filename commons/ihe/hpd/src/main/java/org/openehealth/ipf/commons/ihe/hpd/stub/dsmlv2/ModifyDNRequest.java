@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -113,11 +114,7 @@ public class ModifyDNRequest
      *     
      */
     public boolean isDeleteoldrdn() {
-        if (deleteoldrdn == null) {
-            return true;
-        } else {
-            return deleteoldrdn;
-        }
+        return Objects.requireNonNullElse(deleteoldrdn, true);
     }
 
     /**

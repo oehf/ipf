@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import java.util.Collections;
@@ -62,7 +60,7 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
 
     @Override
     public List<EbXMLRegistryError> getErrors() {
-        RegistryErrorList list = getInternal().getRegistryErrorList();
+        var list = getInternal().getRegistryErrorList();
         if (list == null) {
             return Collections.emptyList();
         }
@@ -74,9 +72,9 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
 
     @Override
     public void setErrors(List<EbXMLRegistryError> errors) {
-        RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
+        var value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         getInternal().setRegistryErrorList(value);
-        List<RegistryError> list = value.getRegistryError();
+        var list = value.getRegistryError();
         list.addAll(errors.stream()
                 .map(error -> ((EbXMLRegistryError30) error).getInternal())
                 .collect(Collectors.toList()));

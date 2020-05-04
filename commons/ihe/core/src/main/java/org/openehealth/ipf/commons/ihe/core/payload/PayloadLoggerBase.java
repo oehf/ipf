@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -107,14 +106,14 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                String output = Stream.of(payloadPieces).collect(Collectors.joining());
+                var output = Stream.of(payloadPieces).collect(Collectors.joining());
                 LOG.debug(output);
             }
         } else {
             // compute the file path and write payload pieces into this file
-            String path = resolver.resolveExpression(context);
+            var path = resolver.resolveExpression(context);
             try (FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-                 Writer writer = (charsetName != null) ?
+                var writer = (charsetName != null) ?
                          new OutputStreamWriter(outputStream, charsetName) :
                              new OutputStreamWriter(outputStream);){
                 for (String payloadPiece : payloadPieces) {

@@ -52,7 +52,7 @@ public enum DocumentEntryType {
     }
 
     public static DocumentEntryType valueOfUuid(String uuid) {
-        for (DocumentEntryType type : DocumentEntryType.values()) {
+        for (var type : DocumentEntryType.values()) {
             if (type.uuid.equals(uuid)) {
                 return type;
             }
