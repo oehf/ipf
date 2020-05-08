@@ -18,7 +18,6 @@ package org.openehealth.ipf.tutorials.xds
 import org.apache.camel.Exchange
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.support.ExpressionAdapter
-import org.joda.time.DateTime
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
@@ -29,6 +28,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
 import org.slf4j.Logger
 
 import javax.activation.DataHandler
+
+import java.time.ZonedDateTime
 
 /**
  * The DSL for the registry and repository route implementations.
@@ -121,7 +122,7 @@ class RegRepModelExtension {
     // Updates the last update time and ensures that the time is actually changed
     static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
         self.process {
-            it.in.body.entry.lastUpdateTime = new Timestamp(DateTime.now(), Timestamp.Precision.SECOND)
+            it.in.body.entry.lastUpdateTime = new Timestamp(ZonedDateTime.now(), Timestamp.Precision.SECOND)
         }
     }
     
