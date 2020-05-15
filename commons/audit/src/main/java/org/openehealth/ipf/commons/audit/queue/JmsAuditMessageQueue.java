@@ -65,7 +65,10 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
     @Override
     protected void handle(AuditContext auditContext, String auditMessage) {
         try {
-            Connection connection = connectionFactory.createConnection(userName, password);
+            // Spring SingleConnectionFactory#createConnection(String,String) throws Exception
+            Connection connection = userName == null ?
+                    connectionFactory.createConnection() :
+                    connectionFactory.createConnection(userName, password);
             connection.start();
             try {
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
