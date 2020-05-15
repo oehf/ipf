@@ -296,17 +296,14 @@ public class QPD extends AbstractSegment {
             case 0:
                 return new CE(getMessage());
             case 1:
+            case 4:
+            case 5:
+            case 6:
                 return new ST(getMessage());
             case 2:
                 return new QIP(getMessage());
             case 3:
                 return new NM(getMessage());
-            case 4:
-                return new ST(getMessage());
-            case 5:
-                return new ST(getMessage());
-            case 6:
-                return new ST(getMessage());
             case 7:
                 return new CX(getMessage());
             default:

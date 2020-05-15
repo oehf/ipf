@@ -39,8 +39,8 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 public class ZBE extends AbstractSegment {
 
     /**
-     * @param parent
-     * @param factory
+     * @param parent parent group
+     * @param factory model class factory
      */
     public ZBE(Group parent, ModelClassFactory factory) {
         super(parent, factory);

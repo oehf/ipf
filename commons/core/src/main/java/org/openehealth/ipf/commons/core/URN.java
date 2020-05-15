@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -117,11 +118,7 @@ public final class URN implements Comparable<URN>, Serializable {
      * @return namespace-specific string, i.e. an OID or UUID value
      */
     public String getNamespaceSpecificString() {
-        try {
-            return URLDecoder.decode(this.part(2), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
+        return URLDecoder.decode(this.part(2), StandardCharsets.UTF_8);
     }
 
     @Override

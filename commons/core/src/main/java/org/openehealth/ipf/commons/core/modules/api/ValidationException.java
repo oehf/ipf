@@ -41,7 +41,7 @@ public class ValidationException extends RuntimeException {
     }
 
     public ValidationException(String message, List<? extends Throwable> causes) {
-        this(message, causes.toArray(new Throwable[causes.size()]));
+        this(message, causes.toArray(new Throwable[0]));
     }
 
     public ValidationException(String message) {

@@ -47,7 +47,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
     private static final Logger LOG = LoggerFactory.getLogger(SharedFhirProvider.class);
 
     private FhirContext fhirContext;
-    private List<RequestConsumer> consumers = new ArrayList<>();
+    private final List<RequestConsumer> consumers = new ArrayList<>();
 
     @Override
     protected FhirContext getFhirContext() {

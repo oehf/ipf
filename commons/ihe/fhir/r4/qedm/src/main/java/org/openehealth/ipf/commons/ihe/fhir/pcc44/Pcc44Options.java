@@ -48,8 +48,9 @@ public enum Pcc44Options implements FhirTransactionOptions {
             ProcedureResourceProvider.class,
             EncounterResourceProvider.class);
 
-    private List<Class<? extends AbstractResourceProvider>> resourceProviders;
+    private final List<Class<? extends AbstractResourceProvider>> resourceProviders;
 
+    @SafeVarargs
     Pcc44Options(Class<? extends AbstractResourceProvider>... resourceProviders) {
         this.resourceProviders = Arrays.asList(resourceProviders);
     }

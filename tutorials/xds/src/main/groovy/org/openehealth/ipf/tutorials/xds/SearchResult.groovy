@@ -38,6 +38,6 @@ enum SearchResult {
      }
      
      def isOfType(Object entry) {
-         return entry.getClass().equals(type)
+         return entry.getClass() == type
      }
 }

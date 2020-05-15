@@ -28,7 +28,7 @@ import java.util.ListIterator;
 public class PatientInfoAdapter extends XmlAdapter<PatientInfoXml, PatientInfo> {
 
     @Override
-    public PatientInfoXml marshal(PatientInfo patientInfo) throws Exception {
+    public PatientInfoXml marshal(PatientInfo patientInfo) {
         if (patientInfo == null) {
             return null;
         }
@@ -47,7 +47,7 @@ public class PatientInfoAdapter extends XmlAdapter<PatientInfoXml, PatientInfo> 
     }
 
     @Override
-    public PatientInfo unmarshal(PatientInfoXml xml) throws Exception {
+    public PatientInfo unmarshal(PatientInfoXml xml) {
         if (xml == null) {
             return null;
         }

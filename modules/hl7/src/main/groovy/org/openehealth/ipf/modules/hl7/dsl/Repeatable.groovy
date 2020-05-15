@@ -142,7 +142,7 @@ class Repeatable extends Closure implements Iterable<Visitable> {
         elementAt(index).path
     }
 
-    private String getSeparator(Structure s) {
+    private static String getSeparator(Structure s) {
         return s instanceof Segment ? s.message.encodingCharactersValue[1] : "\r"
     }
 }

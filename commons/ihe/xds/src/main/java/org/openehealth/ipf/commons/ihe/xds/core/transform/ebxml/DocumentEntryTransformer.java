@@ -137,7 +137,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
 
         var slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());
-        extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[slotValues.size()]));
+        extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[0]));
 
         if (! docEntry.getReferenceIdList().isEmpty()) {
             var referenceIdValues = new String[docEntry.getReferenceIdList().size()];

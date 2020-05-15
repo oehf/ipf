@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class SimpleRegistry implements Registry {
 
-    private Map<String, Object> beans = new HashMap<>();
+    private final Map<String, Object> beans = new HashMap<>();
 
     @Override
     public Object bean(String name) {
@@ -49,10 +49,9 @@ public class SimpleRegistry implements Registry {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
-        var result = beans.entrySet().stream()
+        return beans.entrySet().stream()
                 .filter(entry -> requiredType.isAssignableFrom(entry.getValue().getClass()))
                 .collect(Collectors.toMap(Map.Entry::getKey, p -> (T) p.getValue()));
-        return result;
     }
 
     public Object register(String name, Object object) {

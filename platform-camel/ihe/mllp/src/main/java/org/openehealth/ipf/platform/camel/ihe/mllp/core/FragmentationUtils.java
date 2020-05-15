@@ -42,7 +42,7 @@ public class FragmentationUtils {
             startPos = pos + 1;
         }
         if (startPos != s.length()) {
-            result.add(s.substring(startPos, s.length()));
+            result.add(s.substring(startPos));
         }
         return result;
     }
@@ -96,12 +96,12 @@ public class FragmentationUtils {
             }
 
             // first part of the long segment
-            sb.append(segment.substring(0, maxLength)).append('\r');
+            sb.append(segment, 0, maxLength).append('\r');
             // parts 2..n-1 of the long segment
             int startPos;
             for (startPos = maxLength; startPos + restLength <= segment.length(); startPos += restLength) {
                 sb.append(prefix)
-                  .append(segment.substring(startPos, startPos + restLength))
+                  .append(segment, startPos, startPos + restLength)
                   .append('\r');
             }
             // part n of the long segment

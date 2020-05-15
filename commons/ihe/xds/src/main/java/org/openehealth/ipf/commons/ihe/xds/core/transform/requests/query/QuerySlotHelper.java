@@ -98,7 +98,7 @@ public class QuerySlotHelper {
             var hl7CE = Hl7v2Based.render(code);
             slotValues.add(encodeAsStringList(hl7CE));
         }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
     }
 
     /**

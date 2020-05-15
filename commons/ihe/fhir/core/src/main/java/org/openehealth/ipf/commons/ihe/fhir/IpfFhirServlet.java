@@ -240,8 +240,6 @@ public class IpfFhirServlet extends RestfulServer {
     /**
      * Called upon initialization of the servlet, which is too early to know about the existing FHIR consumers
      * initialization of Camel routes and endpoints.
-     *
-     * @throws ServletException
      */
     @Override
     protected void initialize() {

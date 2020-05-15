@@ -49,7 +49,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_O
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
         implements SuspendableService, RequestConsumer {
 
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);

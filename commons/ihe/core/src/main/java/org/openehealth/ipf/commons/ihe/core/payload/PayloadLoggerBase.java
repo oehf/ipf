@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -85,7 +83,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     private boolean enabled = true;
 
     private int errorCountLimit = -1;
-    private AtomicInteger errorCount = new AtomicInteger(0);
+    private final AtomicInteger errorCount = new AtomicInteger(0);
 
     private ExpressionResolver resolver;
 
@@ -106,7 +104,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                var output = Stream.of(payloadPieces).collect(Collectors.joining());
+                var output = String.join("", payloadPieces);
                 LOG.debug(output);
             }
         } else {
@@ -115,7 +113,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
             try (FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
                 var writer = (charsetName != null) ?
                          new OutputStreamWriter(outputStream, charsetName) :
-                             new OutputStreamWriter(outputStream);){
+                             new OutputStreamWriter(outputStream)){
                 for (String payloadPiece : payloadPieces) {
                     writer.write(payloadPiece);
                 }

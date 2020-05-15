@@ -154,7 +154,6 @@ public enum ValidationMessage {
     UNKNOWN_COMMUNITY("A value for the homeCommunityId '%1s' is not recognized", ErrorCode.UNKNOWN_COMMUNITY),
     UNAVAILABLE_COMMUNITY("A community with homeCommunityId '%1s' which would have been contacted was not available", ErrorCode.UNAVAILABLE_COMMUNITY),
     MISSING_HOME_COMMUNITY_ID_FOR_ELEMENT("A community with homeCommunityId '%1s' did not include the homeCommunityId for the element '%2s' with id '%3s'", ErrorCode.MISSING_HOME_COMMUNITY_ID);   // 1st param=home community id; 2nd param=xds entry type, e.g. 'folders'; 3rd param=entry UUID
-    ;
 
 
     private final String text;

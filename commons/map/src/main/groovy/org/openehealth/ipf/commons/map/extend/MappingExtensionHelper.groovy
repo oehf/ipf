@@ -25,7 +25,7 @@ class MappingExtensionHelper {
 
 
     static def methodMissingLogic = { MappingService mappingService, def normalizer, String name, args ->
-        MappingExtensionHelper.simpleMethodMissingLogic(mappingService, normalizer(delegate), name, args)
+        simpleMethodMissingLogic(mappingService, normalizer(delegate), name, args)
     }
 
     static def simpleMethodMissingLogic = { MappingService mappingService, Object src, String name, args ->

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "Status")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum Status {
     /** The request execution failed. */
     @XmlEnumValue("Failure") FAILURE("Failure", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure"),

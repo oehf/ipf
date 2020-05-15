@@ -36,7 +36,7 @@ public class XDR implements XdsIntegrationProfile {
     public enum Interactions implements XdsInteractionId {
         ITI_41(XDS.Interactions.ITI_41.getWsTransactionConfiguration());
 
-        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {

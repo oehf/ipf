@@ -35,7 +35,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFhirRegistry.class);
 
-    private static Map<String, FhirRegistry> registries = new ConcurrentHashMap<>();
+    private static final Map<String, FhirRegistry> registries = new ConcurrentHashMap<>();
 
     private final Set<Object> resourceProviders;
     private final Set<RestfulServer> servlets;
@@ -94,7 +94,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public void unregister(RestfulServer servlet) throws Exception {
+    public void unregister(RestfulServer servlet) {
         LOG.debug("Unregistering FHIR Servlet with name {} and {} connected providers",
                 servlet.getServletName(), resourceProviders.size());
         servlets.remove(servlet);

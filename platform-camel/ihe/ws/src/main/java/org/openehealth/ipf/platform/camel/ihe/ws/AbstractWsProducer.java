@@ -69,7 +69,6 @@ public abstract class AbstractWsProducer<
      * @param clientFactory the factory for clients to produce messages for the service.
      * @param requestClass  type of request messages.
      */
-    @SuppressWarnings("unchecked")
     public AbstractWsProducer(
             AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
             JaxWsClientFactory<AuditDatasetType> clientFactory,

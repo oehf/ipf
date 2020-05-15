@@ -28,7 +28,7 @@ import org.codehaus.groovy.runtime.m12n.SimpleExtensionModule;
  */
 class DynamicExtensionModule extends SimpleExtensionModule {
 
-    private DynamicExtension extension;
+    private final DynamicExtension extension;
 
     private DynamicExtensionModule(DynamicExtension extension) {
         super(extension.getModuleName(), extension.getModuleVersion());
@@ -37,12 +37,12 @@ class DynamicExtensionModule extends SimpleExtensionModule {
 
     @Override
     public List<Class> getInstanceMethodsExtensionClasses() {
-        return extension.isStatic() ? Collections.<Class>emptyList() : classList(extension);
+        return extension.isStatic() ? Collections.emptyList() : classList(extension);
     }
 
     @Override
     public List<Class> getStaticMethodsExtensionClasses() {
-        return extension.isStatic() ? classList(extension) : Collections.<Class>emptyList();
+        return extension.isStatic() ? classList(extension) : Collections.emptyList();
     }
 
     private static List<Class> classList(Object o) {

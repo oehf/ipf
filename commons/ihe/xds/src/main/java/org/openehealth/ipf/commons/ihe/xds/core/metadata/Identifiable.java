@@ -35,7 +35,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Identifiable", propOrder = {"id", "assigningAuthority"})
 public class Identifiable extends Hl7v2Based<CX> {
     private static final long serialVersionUID = -3392755556068006520L;

@@ -36,7 +36,7 @@ public enum Iti31Options implements Hl7v2TransactionOptions {
     HISTORIC_MOVEMENT_MANAGEMENT(INPATIENT_OUTPATIENT_ENCOUNTER_MANAGEMENT, ADVANCED_ENCOUNTER_MANAGEMENT, "Z99"),
     MAINTAIN_DEMOGRAPHICS(BASIC, "A08", "A40");
 
-    private List<String> supportedEvents;
+    private final List<String> supportedEvents;
 
     Iti31Options(String... supportedEvents) {
         this.supportedEvents = Arrays.asList(supportedEvents);

@@ -218,7 +218,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         }
     }
 
-    void createLanguageCommunicationElement(MarkupBuilder builder, Segment pid) {
+    static void createLanguageCommunicationElement(MarkupBuilder builder, Segment pid) {
         if (pid[15].value) {
             builder.languageCommunication {
                 languageCode(code: pid[15].value)

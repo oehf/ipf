@@ -40,11 +40,11 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlJavaTypeAdapter(value = NameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "type")
 public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
@@ -97,7 +97,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Name)) return false;
+        if (!(o instanceof Name)) return false;
         var that = (Name<?>) o;
         return Objects.equals(getFamilyName(), that.getFamilyName()) &&
                 Objects.equals(getGivenName(), that.getGivenName()) &&

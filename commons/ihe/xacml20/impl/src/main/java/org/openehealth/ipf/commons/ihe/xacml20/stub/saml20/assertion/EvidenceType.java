@@ -89,7 +89,7 @@ public class EvidenceType {
      */
     public List<JAXBElement<?>> getAssertionIDRefOrAssertionURIRefOrAssertion() {
         if (assertionIDRefOrAssertionURIRefOrAssertion == null) {
-            assertionIDRefOrAssertionURIRefOrAssertion = new ArrayList<JAXBElement<?>>();
+            assertionIDRefOrAssertionURIRefOrAssertion = new ArrayList<>();
         }
         return this.assertionIDRefOrAssertionURIRefOrAssertion;
     }

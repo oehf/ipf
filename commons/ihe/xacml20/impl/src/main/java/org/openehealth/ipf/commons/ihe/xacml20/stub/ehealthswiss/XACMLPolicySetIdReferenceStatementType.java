@@ -79,7 +79,7 @@ public class XACMLPolicySetIdReferenceStatementType
      */
     public List<IdReferenceType> getPolicySetIdReference() {
         if (policySetIdReference == null) {
-            policySetIdReference = new ArrayList<IdReferenceType>();
+            policySetIdReference = new ArrayList<>();
         }
         return this.policySetIdReference;
     }

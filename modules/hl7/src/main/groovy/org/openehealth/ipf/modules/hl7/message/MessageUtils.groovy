@@ -225,7 +225,7 @@ class MessageUtils {
     }
 
     private static Group newInstance(Group group) {
-        group.class.newInstance()
+        group.class.getConstructor().newInstance()
     }
 
     /**

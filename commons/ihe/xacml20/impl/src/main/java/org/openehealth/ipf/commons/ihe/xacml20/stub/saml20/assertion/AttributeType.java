@@ -69,7 +69,7 @@ public class AttributeType {
     @XmlAttribute(name = "FriendlyName")
     protected String friendlyName;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private final Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the attributeValue property.
@@ -95,7 +95,7 @@ public class AttributeType {
      */
     public List<Object> getAttributeValue() {
         if (attributeValue == null) {
-            attributeValue = new ArrayList<Object>();
+            attributeValue = new ArrayList<>();
         }
         return this.attributeValue;
     }

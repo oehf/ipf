@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
  */
 public class Base {
 
-    private static Logger LOG = LoggerFactory.getLogger(Base.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Base.class);
 
     private static String descriptorList = "base-context.xml;extender-context.xml";
 
     public static void main(String... args) {
-        var customContextFiles = "";
+        StringBuilder customContextFiles = new StringBuilder();
         for (var customContext : args) {
             if (Base.class.getClassLoader().getResource(customContext) != null) {
-                customContextFiles += customContext + ";";
+                customContextFiles.append(customContext).append(";");
             } else {
                 LOG.warn("Did not find {} on the classpath.", customContext);
             }

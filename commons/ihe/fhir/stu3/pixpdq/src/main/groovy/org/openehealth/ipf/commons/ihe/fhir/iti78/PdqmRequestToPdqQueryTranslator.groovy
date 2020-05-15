@@ -204,25 +204,25 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 
-    protected Date searchDate(DateParam param) {
+    protected static Date searchDate(DateParam param) {
         if (param == null || param.empty) return null
         param.value
     }
 
-    protected String searchString(StringParam param, boolean forceExactSearch) {
+    protected static String searchString(StringParam param, boolean forceExactSearch) {
         if (param == null || param.empty) return null
         forceExactSearch || param.exact ? param.value : param.value + "*"
     }
 
     protected List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
-        param?.valuesAsQueryTokens.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
+        param?.valuesAsQueryTokens?.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
     protected List<String> searchDateList(DateAndListParam param) {
-        param?.valuesAsQueryTokens.collect { searchDate(it.valuesAsQueryTokens.find()) }
+        param?.valuesAsQueryTokens?.collect { searchDate(it.valuesAsQueryTokens.find()) }
     }
 
-    protected String searchNumber(NumberParam param) {
+    protected static String searchNumber(NumberParam param) {
         if (param == null) return null
         param?.value?.toString()
     }
@@ -244,10 +244,10 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected List<Optional<CompositeIdentifier>> searchTokenList(TokenAndListParam param) {
-        param?.valuesAsQueryTokens.collect { searchToken(it?.valuesAsQueryTokens.find()) }
+        param?.valuesAsQueryTokens?.collect { searchToken(it?.valuesAsQueryTokens?.find()) }
     }
 
-    protected def firstOrNull(List<?> list) {
+    protected static def firstOrNull(List<?> list) {
         list?.empty ? null : list[0]
     }
 

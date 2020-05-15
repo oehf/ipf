@@ -1123,11 +1123,6 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <site>
-            <id>${site.deploy.id}</id>
-            <name>Deployment through GitHub's site deployment plugin</name>
-            <url>${site.deploy.url}</url>
-        </site>
     </distributionManagement>
 
     <scm>

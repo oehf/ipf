@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @AllArgsConstructor
 @XmlType(name = "NameQualifier", namespace = "http://www.openehealth.org/ipf/ppq")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum NameQualifier {
     PATIENT("urn:e-health-suisse:2015:epr-spid"),
     PROFESSIONAL("urn:gs1:gln"),

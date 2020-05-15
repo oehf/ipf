@@ -62,7 +62,7 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
                     builder.setAuthenticatedParticipant(
                             userDetails.getUsername(),
                             webAuthenticationDetails.getRemoteAddress());
-                };
+                }
                 if (webAuthenticationDetails.getRemoteAddress() != null) {
                     builder.setAuthenticatingSystemParticipant(
                             auditContext.getSendingApplication(),

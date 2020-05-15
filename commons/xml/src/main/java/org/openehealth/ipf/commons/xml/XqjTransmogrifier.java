@@ -130,7 +130,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
     @Override
     public T zap(Source source, Object... params) {
         var accessor = ResultHolderFactory.create(outputFormat);
-        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat.getClass() + " is not supported");
+        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat + " is not supported");
         var result = accessor.createResult();
         doZap(source, result, params);
         return accessor.getResult();
@@ -202,7 +202,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
         }
     }
 
-    synchronized private SaxonXQConnection getConnection() throws XQException {
+    synchronized private SaxonXQConnection getConnection() {
         if (connection == null) {
             connection = (SaxonXQConnection) DATA_SOURCE.getConnection();
         }

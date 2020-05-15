@@ -37,7 +37,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
             XdsJaxbDataBinding.class.getName() + ".submission.set.has.extra.metadata";
 
     private static final Map<Object, Map<String, Object>> DATA =
-            Collections.synchronizedMap(new WeakHashMap<Object, Map<String, Object>>());
+            Collections.synchronizedMap(new WeakHashMap<>());
 
 
     /**

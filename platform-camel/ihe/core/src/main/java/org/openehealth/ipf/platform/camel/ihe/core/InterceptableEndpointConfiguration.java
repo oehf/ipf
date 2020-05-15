@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public abstract class InterceptableEndpointConfiguration {
 
-    private List<InterceptorFactory> customInterceptorFactories;
+    private final List<InterceptorFactory> customInterceptorFactories;
 
     protected InterceptableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(

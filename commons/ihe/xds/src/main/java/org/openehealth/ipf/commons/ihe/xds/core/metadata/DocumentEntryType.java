@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dmytro Rud
  */
 @XmlType(name = "DocumentEntryType")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum DocumentEntryType {
     @XmlEnumValue("stable") STABLE("urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"),
     @XmlEnumValue("on-demand") ON_DEMAND("urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");

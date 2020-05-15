@@ -62,8 +62,8 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
     protected void handle(AuditContext auditContext, String auditMessage) {
         try {
             var connection = connectionFactory.createConnection(userName, password);
-            connection.start();
-            try {
+            try (connection) {
+                connection.start();
                 var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                 var queue = session.createQueue(queueName);
                 var producer = session.createProducer(queue);
@@ -73,8 +73,6 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
                 message.setStringProperty(X_IPF_ATNA_PROCESSID, auditContext.getAuditMetadataProvider().getProcessID());
                 message.setStringProperty(X_IPF_ATNA_APPLICATION, auditContext.getSendingApplication());
                 producer.send(message);
-            } finally {
-                connection.close();
             }
         } catch (Exception e) {
             auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditMessage);

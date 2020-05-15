@@ -121,7 +121,7 @@ class DataStore {
          key != null ? evalIndex([key], index) : null
      }
      
-     private def getFromIndex(index, key) {
+     private static def getFromIndex(index, key) {
           index.putIfAbsent(key, new CopyOnWriteArrayList())
           index[key]
      }

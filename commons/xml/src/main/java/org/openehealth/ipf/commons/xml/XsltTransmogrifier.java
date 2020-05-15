@@ -106,7 +106,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
     @Override
     public T zap(Source source, Object... params) {
         var accessor = ResultHolderFactory.create(outputFormat);
-        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat.getClass() + " is not supported");
+        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat + " is not supported");
         var result = accessor.createResult();
         doZap(source, result, params);
         return accessor.getResult();

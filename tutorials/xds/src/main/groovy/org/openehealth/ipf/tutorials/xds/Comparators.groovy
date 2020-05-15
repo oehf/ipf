@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based
  */
 class Comparators {
 
-     static def equals(expected, actual) { expected == null || expected.equals(actual) }
+     static def equals(expected, actual) { expected == null || expected == actual }
      static def contains(expected, actual) { expected == null || expected.contains(actual) }
      static def any(expected, closure) { expected == null || expected.any(closure) } 
 

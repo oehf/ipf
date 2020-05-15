@@ -38,7 +38,7 @@ class Iti78RouteBuilder extends RouteBuilder {
     private Boolean validateIti21Request = false
     private Boolean validateIti21Response = false
 
-    public Iti78RouteBuilder(UriMapper uriMapper, String host, int iti21Port) {
+    Iti78RouteBuilder(UriMapper uriMapper, String host, int iti21Port) {
         super()
         this.requestTranslator = new PdqmRequestToPdqQueryTranslator(uriMapper)
         this.responseTranslator = new PdqResponseToPdqmResponseTranslator(uriMapper)

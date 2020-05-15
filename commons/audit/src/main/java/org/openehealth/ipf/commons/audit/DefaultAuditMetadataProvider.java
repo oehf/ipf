@@ -27,8 +27,8 @@ import static java.util.Objects.requireNonNull;
  * Default implementation, using the current host name, process ID, timestamp and "IPF" and sending application.
  * Using the setters you can assign custom values.
  *
- * @see {@link AuditUtils#getLocalHostName()}
- * @see {@link AuditUtils#getProcessId()} ()}
+ * @see AuditUtils#getLocalHostName()
+ * @see AuditUtils#getProcessId()
  */
 public class DefaultAuditMetadataProvider implements AuditMetadataProvider {
 

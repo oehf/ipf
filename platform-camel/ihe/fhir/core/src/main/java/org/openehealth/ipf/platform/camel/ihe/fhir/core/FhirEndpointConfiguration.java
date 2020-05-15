@@ -63,25 +63,25 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
-    private String servletName = IpfFhirServlet.DEFAULT_SERVLET_NAME;
+    private String servletName;
 
     @Getter
     @UriParam
-    private List<? extends FhirProvider> resourceProvider;
+    private final List<? extends FhirProvider> resourceProvider;
 
     // Producer only
 
     @UriParam
-    private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+    private final ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
 
 
     @Getter
     @UriParam
-    private List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
+    private final List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
 
     @Getter
     @UriParam
-    private List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
+    private final List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
     /**
      * If this is true, all paging requests are routed into the route (see {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
@@ -89,13 +89,13 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean lazyLoadBundles;
+    private final boolean lazyLoadBundles;
 
     @Getter
-    private FhirSecurityInformation securityInformation;
+    private final FhirSecurityInformation securityInformation;
 
     @Getter
-    private Predicate<Object> consumerSelector;
+    private final Predicate<Object> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
@@ -103,7 +103,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean cacheBundles = true;
+    private boolean cacheBundles;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);

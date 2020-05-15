@@ -25,11 +25,10 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.r4.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,7 +42,6 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 
 @Configuration
@@ -51,8 +49,11 @@ import java.util.Optional;
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirAutoConfiguration {
 
-    @Autowired
-    private IpfFhirConfigurationProperties config;
+    private final IpfFhirConfigurationProperties config;
+
+    public IpfFhirAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
 
     @Bean
     public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
@@ -82,7 +83,7 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnWebApplication
     public ServletRegistrationBean<IpfFhirServlet> fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
         var urlMapping = config.getFhirMapping();
-        var registration = new ServletRegistrationBean<IpfFhirServlet>(camelFhirServlet, urlMapping);
+        var registration = new ServletRegistrationBean<>(camelFhirServlet, urlMapping);
         var servletProperties = config.getServlet();
         registration.setLoadOnStartup(servletProperties.getLoadOnStartup());
         registration.setName(servletProperties.getName());
@@ -128,7 +129,7 @@ public class IpfFhirAutoConfiguration {
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            Optional<IPagingProvider> pagingProvider,
+            ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);

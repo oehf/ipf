@@ -71,9 +71,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
      *
      * @param consumer FhirConsumer
-     * @throws Exception if resource provider could not be registered
      */
-    public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
+    public void connect(FhirConsumer<AuditDatasetType> consumer) {
         for (FhirProvider provider : getResourceProviders()) {
             // Make consumer known to provider
             provider.setConsumer(consumer);

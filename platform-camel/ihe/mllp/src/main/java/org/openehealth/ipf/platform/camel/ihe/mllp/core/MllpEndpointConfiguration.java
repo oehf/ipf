@@ -59,7 +59,7 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
     private final int segmentFragmentationThreshold;
 
     @Getter
-    private ConsumerDispatchingInterceptor dispatcher;
+    private final ConsumerDispatchingInterceptor dispatcher;
 
     protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, parameters);

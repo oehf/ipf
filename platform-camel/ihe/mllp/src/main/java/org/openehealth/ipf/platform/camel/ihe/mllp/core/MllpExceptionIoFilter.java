@@ -51,7 +51,7 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
     }
 
     @Override
-    public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) throws Exception {
+    public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) {
         if (!session.isClosing()) {
             if (sendResponse(cause)) {
                 Exception exception = new CamelException(cause.getMessage());

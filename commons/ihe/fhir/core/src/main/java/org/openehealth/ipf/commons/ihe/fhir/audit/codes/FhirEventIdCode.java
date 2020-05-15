@@ -28,7 +28,7 @@ public enum FhirEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
     RestfulOperation("rest", "RESTful Operation");
 
     @Getter
-    private EventId value;
+    private final EventId value;
 
     FhirEventIdCode(String code, String displayName) {
         this.value = EventId.of(code, "http://hl7.org/fhir/audit-event-type", displayName);

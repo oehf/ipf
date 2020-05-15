@@ -38,7 +38,7 @@ public enum MllpEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     XadPidLinkChange("ITI-64", "Notify XAD-PID Link Change");
 
     @Getter
-    private EventType value;
+    private final EventType value;
 
     MllpEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

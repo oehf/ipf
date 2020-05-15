@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
 public class SpringCachePagingProvider implements IPagingProvider {
 
     private static final String PAGING_CACHE = "fhirPagingCache";
-    private Cache cache;
+    private final Cache cache;
 
     @Getter
     @Setter
@@ -65,7 +65,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
     private boolean distributed;
 
 
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     public SpringCachePagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
         this.cache = cacheManager.getCache(PAGING_CACHE);

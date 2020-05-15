@@ -84,7 +84,7 @@ public class ResponseType
      */
     public List<Object> getAssertionOrEncryptedAssertion() {
         if (assertionOrEncryptedAssertion == null) {
-            assertionOrEncryptedAssertion = new ArrayList<Object>();
+            assertionOrEncryptedAssertion = new ArrayList<>();
         }
         return this.assertionOrEncryptedAssertion;
     }

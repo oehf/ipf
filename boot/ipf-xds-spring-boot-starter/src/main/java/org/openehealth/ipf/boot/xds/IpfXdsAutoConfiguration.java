@@ -19,7 +19,6 @@ package org.openehealth.ipf.boot.xds;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.correlation.SpringCacheAsynchronyCorrelator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,8 +36,11 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(IpfXdsConfigurationProperties.class)
 public class IpfXdsAutoConfiguration {
 
-    @Autowired
-    private IpfXdsConfigurationProperties xdsConfig;
+    private final IpfXdsConfigurationProperties xdsConfig;
+
+    public IpfXdsAutoConfiguration(IpfXdsConfigurationProperties xdsConfig) {
+        this.xdsConfig = xdsConfig;
+    }
 
 
     @Bean

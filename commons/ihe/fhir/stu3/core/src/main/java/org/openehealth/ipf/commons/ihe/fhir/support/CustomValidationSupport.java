@@ -22,6 +22,7 @@ import org.hl7.fhir.dstu3.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.dstu3.model.StructureDefinition;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -58,7 +59,7 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
         var path = prefix + resourceName + ".xml";
         var is = getClass().getClassLoader().getResourceAsStream(path);
         if (is != null) {
-            var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), "UTF-8").useDelimiter("\\A").next();
+            var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), StandardCharsets.UTF_8).useDelimiter("\\A").next();
             var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
             var structureDefinition = (T) parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition);

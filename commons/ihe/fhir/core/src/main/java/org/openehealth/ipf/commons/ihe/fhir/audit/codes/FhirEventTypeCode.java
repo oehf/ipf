@@ -35,7 +35,7 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 
     @Getter
-    private EventType value;
+    private final EventType value;
 
     FhirEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

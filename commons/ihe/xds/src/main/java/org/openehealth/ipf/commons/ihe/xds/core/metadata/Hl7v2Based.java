@@ -90,7 +90,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         try {
-            var xdsModelObject = xdsModelClass.newInstance();
+            var xdsModelObject = xdsModelClass.getConstructor().newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
         } catch (InstantiationException | IllegalAccessException | HL7Exception e) {
@@ -182,12 +182,12 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
 
     protected static Integer getIntegerValue(Primitive p) {
         var value = p.getValue();
-        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Integer(value);
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : Integer.parseInt(value);
     }
 
     protected static Long getLongValue(Primitive p) {
         var value = p.getValue();
-        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Long(value);
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : Long.parseLong(value);
     }
 
     /**
@@ -215,7 +215,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     static class Holder<T extends Type> extends AbstractType implements Composite {
         private static final long serialVersionUID = -9084300955263787034L;
 
-        private Type[] data = new Type[1];
+        private final Type[] data = new Type[1];
 
         public Holder(T t) {
             super(t.getMessage());
@@ -242,7 +242,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         @Override
-        public boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {
+        public boolean accept(MessageVisitor visitor, Location currentLocation) {
             return false;
         }
     }

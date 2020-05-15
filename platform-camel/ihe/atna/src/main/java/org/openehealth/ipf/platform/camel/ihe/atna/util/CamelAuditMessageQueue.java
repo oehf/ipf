@@ -73,12 +73,12 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
         destinationPort = endpointUriObject.getPort();
     }
 
-    public void init() throws Exception {
+    public void init() {
         producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.start();
     }
 
-    public void destroy() throws Exception {
+    public void destroy() {
         producerTemplate.stop();
     }
 

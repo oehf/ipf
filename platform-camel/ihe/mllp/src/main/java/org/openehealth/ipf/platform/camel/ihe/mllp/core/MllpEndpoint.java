@@ -299,7 +299,7 @@ public abstract class MllpEndpoint<
 
 
     /* ----- dumb delegation, nothing interesting below ----- */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     @Override
     public void configureProperties(Map options) {
         wrappedEndpoint.configureProperties(options);

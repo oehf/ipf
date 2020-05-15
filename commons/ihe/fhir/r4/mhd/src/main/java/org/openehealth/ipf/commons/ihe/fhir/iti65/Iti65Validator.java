@@ -43,6 +43,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -121,7 +122,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         var url = IHE_PROFILE_PREFIX + name;
         var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
         if (is != null) {
-            var profileText = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+            var profileText = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
             var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
             var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition.hasSnapshot() ?

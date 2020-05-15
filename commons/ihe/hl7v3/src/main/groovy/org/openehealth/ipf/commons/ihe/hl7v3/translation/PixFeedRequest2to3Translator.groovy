@@ -127,7 +127,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
     }
 
 
-    void createReplacementOf(MarkupBuilder builder, Message adt){
+    static void createReplacementOf(MarkupBuilder builder, Message adt){
         builder.replacementOf(typeCode: 'RPLC'){
             priorRegistration(classCode: 'REG', moodCode: 'EVN'){
                 statusCode(code: 'obsolete')

@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @XmlTransient
 public class ContentMap {
-    private static transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
 
     // synchronized manually
     private transient final Map<Class<?>, Object> map = new HashMap<>();

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "Severity")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum Severity {
     /** An error. */
     @XmlEnumValue("Error") ERROR("urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),

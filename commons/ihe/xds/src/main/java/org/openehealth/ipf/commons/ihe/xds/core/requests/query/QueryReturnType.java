@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dmytro Rud
  */
 @XmlType(name = "QueryReturnType")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum QueryReturnType {
     // for ITI-18, ITI-38, ITI-51 and PHARM-1
     @XmlEnumValue("LeafClass") LEAF_CLASS("LeafClass"),

@@ -148,7 +148,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
     }
 
-    protected void addNameParameters(nameValues, queryParams) {
+    protected static void addNameParameters(nameValues, queryParams) {
         nameValues.each {
             boolean needWildcard = (it.@use == 'SRCH')
             def usableGivenNames = it.given.findAll { it.@qualifier.text() in ['', 'CL', 'IN'] }
@@ -160,14 +160,14 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
     }
 
-    protected void addOtherParameters(parameterList, queryParams) {
+    protected static void addOtherParameters(parameterList, queryParams) {
         queryParams.add([
                 '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text(),
                 '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
         ])
     }
 
-    protected void addAddressParameters(addressValues, queryParams) {
+    protected static void addAddressParameters(addressValues, queryParams) {
         addressValues.each {
             queryParams.add([
                     '@PID.11.1': it.streetAddressLine.text(),

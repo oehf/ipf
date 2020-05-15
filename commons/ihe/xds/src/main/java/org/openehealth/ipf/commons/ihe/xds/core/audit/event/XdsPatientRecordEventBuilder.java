@@ -65,7 +65,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
 
     public XdsPatientRecordEventBuilder addPatients(List<String> patientIds) {
         return addPatients(null, null,
-                patientIds.toArray(new String[patientIds.size()]));
+                patientIds.toArray(new String[0]));
     }
 
     public XdsPatientRecordEventBuilder addObjectIds(List<String> objectIds, ParticipantObjectDataLifeCycle lifeCycle) {

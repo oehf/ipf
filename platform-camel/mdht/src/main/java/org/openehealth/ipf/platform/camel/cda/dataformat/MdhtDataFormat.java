@@ -30,8 +30,8 @@ import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 @Dataformat("mdht")
 public class MdhtDataFormat extends ServiceSupport implements DataFormat, DataFormatName {
 
-    private CDAR2Renderer renderer = new CDAR2Renderer();
-    private CDAR2Parser parser = new CDAR2Parser();
+    private final CDAR2Renderer renderer = new CDAR2Renderer();
+    private final CDAR2Parser parser = new CDAR2Parser();
 
     public MdhtDataFormat() {
     }
@@ -48,8 +48,7 @@ public class MdhtDataFormat extends ServiceSupport implements DataFormat, DataFo
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream)
-            throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         return parser.parse(stream, (Object[]) null);
     }
 

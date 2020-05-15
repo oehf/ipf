@@ -36,7 +36,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Person", propOrder = {"id", "name"})
 public class Person extends Hl7v2Based<XCN> {
     private static final long serialVersionUID = 1775227207521668959L;

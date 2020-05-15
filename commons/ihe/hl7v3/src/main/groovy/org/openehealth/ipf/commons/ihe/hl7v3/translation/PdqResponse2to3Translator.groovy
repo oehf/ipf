@@ -206,7 +206,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
     /**
      * Constructs an v3 error location string from the given v2 ERR-2 field. 
      */
-    String getV3ErrorLocation(Composite err2, GPathResult xml) {
+    static String getV3ErrorLocation(Composite err2, GPathResult xml) {
         if (err2[1].value == 'QPD') {
             String errorLocation = "/${xml.interactionId.@extension.text()}/controlActProcess/queryByParameter"
             if (err2[3].value == '8') {

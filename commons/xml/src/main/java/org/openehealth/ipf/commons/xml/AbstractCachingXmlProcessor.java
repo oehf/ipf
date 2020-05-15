@@ -139,7 +139,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
      */
     protected T resource(final Object... params) throws Exception {
         var key = resourceCacheKey(params);
-        getCache().putIfAbsent(key, new Loader<T>() {
+        getCache().putIfAbsent(key, new Loader<>() {
             @Override
             protected T load() throws RuntimeException {
                 return createResource(params);

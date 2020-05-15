@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.boot.fhir;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -37,8 +36,11 @@ import java.util.Arrays;
 @ConditionalOnProperty(prefix = "ipf.fhir.cors", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class CorsAutoConfiguration {
 
-    @Autowired
-    private IpfFhirConfigurationProperties config;
+    private final IpfFhirConfigurationProperties config;
+
+    public CorsAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
 
     @Bean
     @ConditionalOnMissingBean(CorsConfiguration.class)

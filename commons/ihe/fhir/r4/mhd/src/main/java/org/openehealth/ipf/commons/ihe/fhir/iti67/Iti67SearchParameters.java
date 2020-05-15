@@ -68,7 +68,7 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 
-    @Getter private FhirContext fhirContext;
+    @Getter private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {

@@ -80,7 +80,6 @@ public abstract class AbstractUriMapper implements UriMapper {
      *
      * @param oid OID
      * @return valid URI or null if no URI was found
-     * @throws Exception if no URI was found
      */
     protected abstract Optional<String> mapOidToUri(String oid);
 
@@ -90,7 +89,6 @@ public abstract class AbstractUriMapper implements UriMapper {
      *
      * @param namespace namespace
      * @return valid URI or null if no URI was found
-     * @throws Exception if no URI was found
      */
     protected abstract Optional<String> mapNamespaceToUri(String namespace);
 

@@ -16,7 +16,6 @@ import org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostPro
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -36,8 +35,11 @@ import java.util.List;
 @EnableConfigurationProperties(IpfConfigurationProperties.class)
 public class IpfAutoConfiguration {
 
-    @Autowired
-    private IpfConfigurationProperties ipfConfigurationProperties;
+    private final IpfConfigurationProperties ipfConfigurationProperties;
+
+    public IpfAutoConfiguration(IpfConfigurationProperties ipfConfigurationProperties) {
+        this.ipfConfigurationProperties = ipfConfigurationProperties;
+    }
 
     @Bean
     @ConditionalOnMissingBean(Registry.class)

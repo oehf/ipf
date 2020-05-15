@@ -88,7 +88,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message =
-            new EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+                new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_39);
     };
 
@@ -159,7 +159,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message =
-            new EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+                new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_43);
     };
    
@@ -264,7 +264,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message =
-                new EbXMLNonconstructiveDocumentSetRequest30<RemoveDocumentsRequestType>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
+                new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
         new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_86);
     };
 

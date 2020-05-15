@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "AssociationLabel")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum AssociationLabel {
     /** Label for associations to documents that are contained in the request. */
     @XmlEnumValue("Original") ORIGINAL("Original"),

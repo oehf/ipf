@@ -56,7 +56,6 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
      * @param os the stream to write the XML to
      * @param options may contains a map with options for rendering.
      */
-    @SuppressWarnings("unchecked")
     public OutputStream render(ClinicalDocument doc,
             OutputStream os, Object... options) throws IOException {
         XMLResource resources = new CDAResourceFactoryImpl()

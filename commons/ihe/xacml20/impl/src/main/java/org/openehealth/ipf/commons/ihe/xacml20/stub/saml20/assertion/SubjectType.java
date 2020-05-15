@@ -104,7 +104,7 @@ public class SubjectType {
      */
     public List<JAXBElement<?>> getContent() {
         if (content == null) {
-            content = new ArrayList<JAXBElement<?>>();
+            content = new ArrayList<>();
         }
         return this.content;
     }

@@ -47,7 +47,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
     }
 
     @Override
-    public void configure(CustomModelClasses configuration) throws Exception {
+    public void configure(CustomModelClasses configuration) {
         // update the top ModelClassFactory
         var delegateFactory = configureAndDelegate(customModelClassFactory, configuration);
         // delegate if required

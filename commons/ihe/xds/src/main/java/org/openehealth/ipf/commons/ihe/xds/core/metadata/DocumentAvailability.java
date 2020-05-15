@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlType(name = "DocumentAvailability")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum DocumentAvailability {
 
     /** Online indicates the Document in the Document Repository is available to be retrieved. */

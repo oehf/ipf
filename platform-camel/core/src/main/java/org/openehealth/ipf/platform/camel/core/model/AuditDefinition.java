@@ -68,7 +68,7 @@ public class AuditDefinition extends DelegateDefinition {
     private static class Noop implements Processor {
 
         @Override
-        public void process(Exchange exchange) throws Exception {
+        public void process(Exchange exchange) {
         }
         
     }

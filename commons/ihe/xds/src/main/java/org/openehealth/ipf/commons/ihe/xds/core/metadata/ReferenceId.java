@@ -35,7 +35,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "ReferenceId", propOrder = {"id", "assigningAuthority", "idTypeCode"})
 public class ReferenceId extends Hl7v2Based<CX> {
     private static final long serialVersionUID = 6615092850652668283L;

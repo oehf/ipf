@@ -23,7 +23,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PpqConstants {
 
-    public static class AttributeIds {
+    public class AttributeIds {
         public static final String EHEALTH_SUISSSE_2015_EPR_SPID                = "urn:e-health-suisse:2015:epr-spid";
         public static final String EHEALTH_SUISSSE_2015_REFERENCED_POLICY_SET   = "urn:e-health-suisse:2015:policy-attributes:referenced-policy-set";
         public static final String EHEALTH_SUISSSE_PRINCIPAL_ID                 = "urn:e-health-suisse:principal-id";
@@ -47,26 +47,26 @@ public class PpqConstants {
         public static final String XSPA_1_0_SUBJECT_ORGANIZATION_NAME           = "urn:oasis:names:tc:xspa:1.0:subject:organization";
     }
 
-    public static class ActionIds {
+    public class ActionIds {
         public static final String PPQ_ADD_POLICY   = "urn:e-health-suisse:2015:policy-administration:AddPolicy";
         public static final String XDS_STORED_QUERY = "urn:ihe:iti:2007:RegistryStoredQuery";
     }
 
-    public static class CodingSystemIds {
+    public class CodingSystemIds {
         public static final String SWISS_PATIENT_ID       = "2.16.756.5.30.1.127.3.10.3";
         public static final String SWISS_PURPOSE_OF_USE   = "2.16.756.5.30.1.127.3.10.5";
         public static final String SWISS_SUBJECT_ROLE     = "2.16.756.5.30.1.127.3.10.6";
         public static final String SNOMED_CT              = "2.16.840.1.113883.6.96";
     }
 
-    public static class StatusCode {
+    public class StatusCode {
         public static final String SUCCESS = "urn:e-health-suisse:2015:response-status:success";
         public static final String FAILURE = "urn:e-health-suisse:2015:response-status:failure";
     }
 
-    public static final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
+    public final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
 
-    public static final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";
+    public final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";
 
 
 }

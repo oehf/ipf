@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.HTTP;
@@ -100,8 +101,8 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
      */
     public ServerFactoryBean createServerFactory(Class<?> serviceImplClass) {
         try {
-            return createServerFactory(serviceImplClass.newInstance());
-        } catch (InstantiationException | IllegalAccessException e) {
+            return createServerFactory(serviceImplClass.getConstructor().newInstance());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }
     }

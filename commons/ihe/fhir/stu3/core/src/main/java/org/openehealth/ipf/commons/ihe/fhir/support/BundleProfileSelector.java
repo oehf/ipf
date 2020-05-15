@@ -51,9 +51,8 @@ public class BundleProfileSelector implements Predicate<Object> {
     @Override
     public boolean test(Object object) {
         var bundle = (Bundle) object;
-        var result = bundle.getMeta().getProfile().stream()
+        return bundle.getMeta().getProfile().stream()
                 .map(UriType::getValueAsString)
                 .anyMatch(profileUris::contains);
-        return result;
     }
 }

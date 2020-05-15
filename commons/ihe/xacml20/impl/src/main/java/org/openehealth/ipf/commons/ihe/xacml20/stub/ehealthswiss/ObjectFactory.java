@@ -112,7 +112,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:e-health-suisse:2015:policy-administration", name = "AddPolicyRequest")
     public JAXBElement<AddPolicyRequest> createAddPolicyRequest(AddPolicyRequest value) {
-        return new JAXBElement<AddPolicyRequest>(_AddPolicyRequest_QNAME, AddPolicyRequest.class, null, value);
+        return new JAXBElement<>(_AddPolicyRequest_QNAME, AddPolicyRequest.class, null, value);
     }
 
     /**
@@ -121,7 +121,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:e-health-suisse:2015:policy-administration", name = "UpdatePolicyRequest")
     public JAXBElement<UpdatePolicyRequest> createUpdatePolicyRequest(UpdatePolicyRequest value) {
-        return new JAXBElement<UpdatePolicyRequest>(_UpdatePolicyRequest_QNAME, UpdatePolicyRequest.class, null, value);
+        return new JAXBElement<>(_UpdatePolicyRequest_QNAME, UpdatePolicyRequest.class, null, value);
     }
 
     /**
@@ -130,7 +130,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:e-health-suisse:2015:policy-administration", name = "DeletePolicyRequest")
     public JAXBElement<DeletePolicyRequest> createDeletePolicyRequest(DeletePolicyRequest value) {
-        return new JAXBElement<DeletePolicyRequest>(_DeletePolicyRequest_QNAME, DeletePolicyRequest.class, null, value);
+        return new JAXBElement<>(_DeletePolicyRequest_QNAME, DeletePolicyRequest.class, null, value);
     }
 
     /**
@@ -139,7 +139,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:e-health-suisse:2015:policy-administration", name = "UnknownPolicySetId")
     public JAXBElement<UnknownPolicySetId> createUnknownPolicySetId(UnknownPolicySetId value) {
-        return new JAXBElement<UnknownPolicySetId>(_UnknownPolicySetId_QNAME, UnknownPolicySetId.class, null, value);
+        return new JAXBElement<>(_UnknownPolicySetId_QNAME, UnknownPolicySetId.class, null, value);
     }
 
 }

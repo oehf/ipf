@@ -52,7 +52,7 @@ class Iti18RouteBuilder extends RouteBuilder {
     static final def PATIENT_ID = 'req.query.patientId'
     
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         errorHandler(noErrorHandler())
         
         // Entry point for Stored Query

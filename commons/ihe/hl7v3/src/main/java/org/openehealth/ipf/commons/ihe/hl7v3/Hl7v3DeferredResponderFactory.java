@@ -58,7 +58,7 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3Audit
 
         if (auditStrategy != null) {
             var auditInterceptor =
-                new AuditResponseInterceptor<Hl7v3AuditDataset>(auditStrategy, auditContext, true, null, false);
+                    new AuditResponseInterceptor<>(auditStrategy, auditContext, true, null, false);
             client.getOutInterceptors().add(auditInterceptor);
             client.getOutFaultInterceptors().add(auditInterceptor);
         }

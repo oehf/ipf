@@ -42,7 +42,7 @@ public class ChCiqComponent extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this, parameters, ChCiqService.class) {
+        return new HpdEndpoint<>(uri, remaining, this, parameters, ChCiqService.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);

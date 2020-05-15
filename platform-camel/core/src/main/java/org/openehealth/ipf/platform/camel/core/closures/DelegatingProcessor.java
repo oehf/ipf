@@ -35,7 +35,7 @@ public class DelegatingProcessor extends ClosureAdapter<Object> implements Proce
     }
 
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
         call(exchange);
     }
 

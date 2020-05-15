@@ -34,7 +34,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "CXiAssigningAuthority", propOrder = {"namespaceId"})
 public class CXiAssigningAuthority extends AssigningAuthority {
 

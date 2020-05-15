@@ -150,7 +150,7 @@ class BidiMappingService implements MappingService {
         m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
     }
 
-    protected Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
+    protected static Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
         def elseClause = m[mappingKey][ELSE]
         if (elseClause instanceof Closure) {
             return elseClause.call(key)
@@ -181,7 +181,7 @@ class BidiMappingService implements MappingService {
         }
     }
 
-    protected void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
+    protected static void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
         if (!map[mappingKey])
             throw new IllegalArgumentException("Unknown key $mappingKey")
     }
@@ -211,7 +211,7 @@ class BidiMappingService implements MappingService {
             try {
                 // Try to parse the location as a URL...
                 url = new URL(location)
-            } catch (MalformedURLException ex) {
+            } catch (MalformedURLException ignored) {
                 // No URL -> resolve as resource path.
                 url = getClass().getClassLoader().getResource(location)
             }

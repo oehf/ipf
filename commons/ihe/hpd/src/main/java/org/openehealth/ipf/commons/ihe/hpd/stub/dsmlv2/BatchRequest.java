@@ -150,7 +150,7 @@ public class BatchRequest {
      */
     public List<DsmlMessage> getBatchRequests() {
         if (batchRequests == null) {
-            batchRequests = new ArrayList<DsmlMessage>();
+            batchRequests = new ArrayList<>();
         }
         return this.batchRequests;
     }

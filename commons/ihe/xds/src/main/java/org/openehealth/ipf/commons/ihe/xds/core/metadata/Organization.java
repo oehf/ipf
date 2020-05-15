@@ -34,7 +34,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Organization", propOrder = {"idNumber", "assigningAuthority", "organizationName"})
 public class Organization extends Hl7v2Based<XON> {
     private static final long serialVersionUID = 8283797476558181158L;

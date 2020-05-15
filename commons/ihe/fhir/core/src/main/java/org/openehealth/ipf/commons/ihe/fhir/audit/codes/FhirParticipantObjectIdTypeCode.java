@@ -36,7 +36,7 @@ public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private final ParticipantObjectIdType value;
 
     FhirParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

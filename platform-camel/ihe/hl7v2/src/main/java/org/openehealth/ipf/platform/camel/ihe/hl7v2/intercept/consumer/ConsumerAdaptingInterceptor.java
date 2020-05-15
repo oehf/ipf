@@ -128,10 +128,9 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
      * Considers a specific header to determine whether the route author want us to generate
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
-    @SuppressWarnings("rawtypes")
     private Message analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
         var header = m.getHeader(ACK_TYPE_CODE_HEADER);
-        if ((header == null) || ! (header instanceof AcknowledgmentCode)) {
+        if (!(header instanceof AcknowledgmentCode)) {
             return null;
         }
 

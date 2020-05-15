@@ -36,7 +36,7 @@ public abstract class AbstractXmlDataFormat extends ServiceSupport implements Da
 
     private boolean namespaceAware;
     private boolean keepWhitespace;
-    private ErrorHandler errorHandler = DEFAULT_HANDLER;
+    private final ErrorHandler errorHandler = DEFAULT_HANDLER;
 
     public AbstractXmlDataFormat(boolean namespaceAware) {
         this.namespaceAware = namespaceAware;

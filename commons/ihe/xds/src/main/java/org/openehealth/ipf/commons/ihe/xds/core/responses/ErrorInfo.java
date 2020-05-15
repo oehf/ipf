@@ -226,11 +226,8 @@ public class ErrorInfo implements Serializable {
         } else if (!severity.equals(other.severity))
             return false;
         if (customErrorCode == null) {
-            if (other.customErrorCode != null)
-                return false;
-        } else if (!customErrorCode.equals(other.customErrorCode))
-            return false;
-        return true;
+            return other.customErrorCode == null;
+        } else return customErrorCode.equals(other.customErrorCode);
     }    
 
     @Override
