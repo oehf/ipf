@@ -248,7 +248,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected static def firstOrNull(List<?> list) {
-        list?.empty ? null : list[0]
+        list == null || list.empty ? null : list[0]
     }
 
     /**

@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.springframework.beans.factory.ObjectProvider;
 
 /**
  * @author Christian Ohr

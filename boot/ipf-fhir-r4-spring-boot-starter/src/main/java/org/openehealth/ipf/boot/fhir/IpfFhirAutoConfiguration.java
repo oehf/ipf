@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

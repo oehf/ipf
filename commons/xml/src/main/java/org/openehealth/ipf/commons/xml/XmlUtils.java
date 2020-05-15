@@ -42,7 +42,7 @@ abstract public class XmlUtils {
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
             "(?:<\\?xml.+?\\?>)?" +                              // optional prolog
                     "(?:\\s*<!--.*?-->)*" +                              // optional comments
-                    "\\s*<(?:[\\w\\.+?:)?([\\w\\.-.(?:\\s|(?:/?>))",   // open tag of the root element
+                    "\\s*<(?:[\\w.-]+?:)?([\\w.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
             Pattern.DOTALL
     );
 

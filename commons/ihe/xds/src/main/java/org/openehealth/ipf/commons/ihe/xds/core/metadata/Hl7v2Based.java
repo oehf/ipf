@@ -27,6 +27,7 @@ import org.apache.commons.lang3.Validate;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * An XDS model object backed up by an HL7 v2 element.
@@ -93,7 +94,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
             var xdsModelObject = xdsModelClass.getConstructor().newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
-        } catch (InstantiationException | IllegalAccessException | HL7Exception e) {
+        } catch (InstantiationException | IllegalAccessException | HL7Exception | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
