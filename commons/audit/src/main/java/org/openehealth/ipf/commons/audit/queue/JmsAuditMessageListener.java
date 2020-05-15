@@ -66,7 +66,7 @@ public class JmsAuditMessageListener implements MessageListener {
                     hostname != null ? hostname : defaultProvider.getHostname(),
                     processID != null ? processID : defaultProvider.getProcessID(),
                     application != null ? application : defaultProvider.getSendingApplication(),
-                    timestamp != null ? application : defaultProvider.getTimestamp()
+                    timestamp != null ? timestamp : defaultProvider.getTimestamp()
             );
             auditContext.getAuditTransmissionProtocol().send(auditContext, auditMetadataProvider, text);
         } catch (JMSException jmsException1) {
