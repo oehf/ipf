@@ -16,7 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq
 
-
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException
 import org.hl7.fhir.r4.model.OperationOutcome
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable

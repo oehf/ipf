@@ -23,7 +23,12 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.7.0" description="IPF 3.7.0" date="tbd">
+        <release version="4.0.0" description="IPF 3.7.0" date="17 Apr 2020">
+            <action dev="JurrianFahner" issue="307" type="update">
+                Replace joda time in favor for java.time.
+            </action>
+        </release>
+        <release version="3.7.0" description="IPF 3.7.0" date="17 Apr 2020">
             <action dev="ohr" issue="304" type="add">
                 Added separate tlsParameters to AuditContext. Several internal interfaces were modified as well.
             </action>
