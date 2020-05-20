@@ -18,8 +18,8 @@ public class ParserAdapterReifier extends ProcessorAdapterReifier<ParserAdapterD
 
     @Override
     protected ProcessorAdapter doCreateProcessor() {
-        Parser<?> parser = definition.getParser();
-        String parserBean = definition.getParserBean();
+        var parser = definition.getParser();
+        var parserBean = definition.getParserBean();
         if (parserBean != null) {
             parser = camelContext.getRegistry().lookupByNameAndType(parserBean, Parser.class);
         }

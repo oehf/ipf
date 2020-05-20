@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti63
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -37,7 +37,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti6
  * Test routes for ITI-63.
  * @author Dmytro Rud
  */
-class Iti63TestRouteBuilder extends SpringRouteBuilder {
+class Iti63TestRouteBuilder extends RouteBuilder {
     private static final transient LOG = LoggerFactory.getLogger(Iti63TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  

@@ -57,14 +57,14 @@ public class Pcd01ValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
     public void testSyntheticMessage() throws HL7Exception{
-        ORU_R01 msg3 = (ORU_R01)getParser().parse(VALID);
+        var msg3 = (ORU_R01)getParser().parse(VALID);
         validate(msg3);
         assertObservationCount(4, msg3);
     }
     
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
-        ORU_R01 msg4 = (ORU_R01)getParser().parse(VALID.trim());
+        var msg4 = (ORU_R01)getParser().parse(VALID.trim());
         validate(msg4);
         assertObservationCount(4, msg4);
     }
@@ -140,7 +140,7 @@ public class Pcd01ValidatorTest extends AbstractPCD01ValidatorTest {
     }
     
     private void assertObservationCount(int expected, ORU_R01 msg){
-        int observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
+        var observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
         assertEquals(expected, observationsInMsg);
     }
 

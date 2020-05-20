@@ -55,7 +55,7 @@ public class Iti67TestRouteBuilder extends RouteBuilder {
         @Override
         public Object evaluate(Exchange exchange) {
             if (!returnError) {
-                Bundle resource = FhirContext.forDstu3().newXmlParser()
+                var resource = FhirContext.forDstu3().newXmlParser()
                         .parseResource(Bundle.class, new InputStreamReader(getClass().getResourceAsStream("/FindDocumentReferencesResponse.xml")));
                 // The endpoint expects a list of resources rather than a bundle
                 return resource.getEntry().stream()

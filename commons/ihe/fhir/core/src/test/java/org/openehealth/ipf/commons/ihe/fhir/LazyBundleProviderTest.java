@@ -46,10 +46,10 @@ public class LazyBundleProviderTest {
     public void setup() {
         requestConsumer = EasyMock.createMock(RequestConsumer.class);
         response = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (var i = 0; i < MAX_SIZE; i++) {
             response.add(new Patient().setId(Integer.toString(i)));
         }
-        Object payload = new Object();
+        var payload = new Object();
         Map<String, Object> headers = new HashMap<>();
         bundleProvider = new LazyBundleProvider(requestConsumer, true, payload, headers);
     }
@@ -67,7 +67,7 @@ public class LazyBundleProviderTest {
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
-        List<IBaseResource> result = bundleProvider.getResources(10, 30);
+        var result = bundleProvider.getResources(10, 30);
         Assert.assertEquals(20, result.size());
         Assert.assertEquals(response.subList(10, 30), result);
         EasyMock.verify(requestConsumer);
@@ -81,7 +81,7 @@ public class LazyBundleProviderTest {
 
         // Now get a subset of what was already retrieved. No further calls to handleBundleRequest
         bundleProvider.getResources(10, 30);
-        List<IBaseResource> result = bundleProvider.getResources(15, 20);
+        var result = bundleProvider.getResources(15, 20);
 
         Assert.assertEquals(5, result.size());
         Assert.assertEquals(response.subList(15, 20), result);
@@ -99,7 +99,7 @@ public class LazyBundleProviderTest {
         // First get elements 10 to 30, afterwards 20 to 40. The expectation is that with the second call only
         // elements 30 to 40 are returned.
         bundleProvider.getResources(10, 30);
-        List<IBaseResource> result = bundleProvider.getResources(20, 40);
+        var result = bundleProvider.getResources(20, 40);
 
         Assert.assertEquals(20, result.size());
         Assert.assertEquals(response.subList(20, 40), result);
@@ -119,7 +119,7 @@ public class LazyBundleProviderTest {
         // First get elements 10 to 30, afterwards 5 to 35. The expectation is that with the second call si split into
         // getting elements 5 to 10 and 30 to 35.
         bundleProvider.getResources(10, 30);
-        List<IBaseResource> result = bundleProvider.getResources(5, 35);
+        var result = bundleProvider.getResources(5, 35);
 
         Assert.assertEquals(30, result.size());
         Assert.assertEquals(response.subList(5, 35), result);
@@ -140,7 +140,7 @@ public class LazyBundleProviderTest {
         // only elements 20 to 30 are fetched
         bundleProvider.getResources(10, 20);
         bundleProvider.getResources(30, 40);
-        List<IBaseResource> result = bundleProvider.getResources(15, 35);
+        var result = bundleProvider.getResources(15, 35);
 
         Assert.assertEquals(20, result.size());
         Assert.assertEquals(response.subList(15, 35), result);
@@ -162,7 +162,7 @@ public class LazyBundleProviderTest {
 
         @Override
         public boolean matches(Object argument) {
-            Map<String, Object> headers = (Map<String, Object>)argument;
+            var headers = (Map<String, Object>)argument;
             return headers.containsKey(Constants.FHIR_REQUEST_SIZE_ONLY);
         }
     }
@@ -189,7 +189,7 @@ public class LazyBundleProviderTest {
 
         @Override
         public boolean matches(Object argument) {
-            Map<String, Object> headers = (Map<String, Object>)argument;
+            var headers = (Map<String, Object>)argument;
             return headers.get(Constants.FHIR_FROM_INDEX).equals(expectedFromIndex) &&
                     headers.get(Constants.FHIR_TO_INDEX).equals(expectedToIndex);
         }

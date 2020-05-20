@@ -94,7 +94,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -102,14 +102,14 @@ public class GetRelatedDocumentsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetRelatedDocumentsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetRelatedDocumentsQuery(), result);
     }

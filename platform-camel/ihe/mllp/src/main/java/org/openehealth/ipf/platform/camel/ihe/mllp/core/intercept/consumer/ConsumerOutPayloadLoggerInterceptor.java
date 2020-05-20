@@ -80,7 +80,7 @@ public class ConsumerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
 
         @Override
         public ConsumerOutPayloadLoggerInterceptor getNewInstance() {
-            ConsumerOutPayloadLoggerInterceptor interceptor = new ConsumerOutPayloadLoggerInterceptor(resolver);
+            var interceptor = new ConsumerOutPayloadLoggerInterceptor(resolver);
             interceptor.setEnabled(enabled);
             return interceptor;
         }

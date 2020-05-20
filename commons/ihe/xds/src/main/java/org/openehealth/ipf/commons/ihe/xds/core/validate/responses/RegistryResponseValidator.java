@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
@@ -41,7 +40,7 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
         notNull(response, "response cannot be null");
 
         metaDataAssert(response.getStatus() != null, INVALID_STATUS_IN_RESPONSE);
-        for (EbXMLRegistryError registryError : response.getErrors()) {
+        for (var registryError : response.getErrors()) {
             metaDataAssert(registryError != null, INVALID_ERROR_INFO_IN_RESPONSE);
             metaDataAssert(registryError.getErrorCode() != null, INVALID_ERROR_CODE_IN_RESPONSE);
             metaDataAssert(registryError.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);

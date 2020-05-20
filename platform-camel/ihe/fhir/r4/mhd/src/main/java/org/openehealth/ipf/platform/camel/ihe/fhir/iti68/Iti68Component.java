@@ -47,7 +47,7 @@ public class Iti68Component extends ServletComponent implements InterceptableCom
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        Iti68Endpoint endpoint = (Iti68Endpoint)super.createEndpoint(uri, remaining, parameters);
+        var endpoint = (Iti68Endpoint)super.createEndpoint(uri, remaining, parameters);
         // Ensure that the audit/auditContext parameter is evaluated
         endpoint.setConfig(new AuditableEndpointConfiguration(this, parameters));
         return endpoint;
@@ -55,7 +55,7 @@ public class Iti68Component extends ServletComponent implements InterceptableCom
 
     @Override
     protected Iti68Endpoint createServletEndpoint(String endpointUri, ServletComponent component, URI httpUri) throws Exception {
-        Iti68Endpoint endpoint = new Iti68Endpoint(endpointUri, component, httpUri);
+        var endpoint = new Iti68Endpoint(endpointUri, component, httpUri);
         endpoint.setHttpMethodRestrict(HttpMethods.GET.name());
         return endpoint;
     }

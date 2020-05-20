@@ -124,7 +124,7 @@ public class BasicHttpAuditMessageQueueTest {
     }
 
     private static int freePort() {
-        try (ServerSocket serverSocket = new ServerSocket(0)) {
+        try (var serverSocket = new ServerSocket(0)) {
             return serverSocket.getLocalPort();
         } catch (Exception e) {
             return -1;

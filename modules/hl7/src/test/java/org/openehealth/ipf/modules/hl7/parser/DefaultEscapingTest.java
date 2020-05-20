@@ -25,8 +25,8 @@ public class DefaultEscapingTest {
 
     @Test
     public void escapeLinebreakWithHapi() {
-        String s = "bl\ro~rg";
-        String escaped = esc.escape(s, enc);
+        var s = "bl\ro~rg";
+        var escaped = esc.escape(s, enc);
         assertEquals("bl\\X000d\\o\\R\\rg", escaped);
         assertEquals(s, esc.unescape(escaped, enc));
     }
@@ -35,14 +35,14 @@ public class DefaultEscapingTest {
 
     @Test
     public void escapeOnlyLinebreakWithHapi() {
-        String escape = esc.escape("\r", enc);
+        var escape = esc.escape("\r", enc);
         assertEquals("\\X000d\\", escape);
     }
 
     @Test
     public void testSimpleEscape() {
-        String actual = esc.escape("GLUCOSE^1H POST 75 G GLUCOSE PO:SCNC:PT:SER/PLAS:QN", enc);
-        String expected = "GLUCOSE\\S\\1H POST 75 G GLUCOSE PO:SCNC:PT:SER/PLAS:QN";
+        var actual = esc.escape("GLUCOSE^1H POST 75 G GLUCOSE PO:SCNC:PT:SER/PLAS:QN", enc);
+        var expected = "GLUCOSE\\S\\1H POST 75 G GLUCOSE PO:SCNC:PT:SER/PLAS:QN";
         assertEquals(expected, actual);
     }
 
@@ -51,8 +51,8 @@ public class DefaultEscapingTest {
     // available yet.
     @Test
     public void testTruncationEscape() {
-        String actual = esc.escape("Truncation#escape", enc);
-        String expected = "Truncation#escape";
+        var actual = esc.escape("Truncation#escape", enc);
+        var expected = "Truncation#escape";
         assertEquals(expected, actual);
     }
 
@@ -60,7 +60,7 @@ public class DefaultEscapingTest {
     @Test
     public void testFormattingCharacters() throws HL7Exception {
 
-        String msg = "MSH|^~\\&|ULTRA|TML|OLIS|OLIS|200911231509||ORU|5951|T|2.3\r" +
+        var msg = "MSH|^~\\&|ULTRA|TML|OLIS|OLIS|200911231509||ORU|5951|T|2.3\r" +
                 "PID|||7005728^^^TML^MR||LEIGHTON^RACHEL^DIAMOND||19310313|F|||200 ANYWHERE ST^^TORONTO^ON^M6H 2T9||(416)888-8888||||||1014071185^KR\r" +
                 "PV1|1||OLIS||||OLIST^BLAKE^DONALD^THOR^^^^^921379^^^^OLIST|||||||||^N\r" +
                 "ORC|RE||T09-106575-CHO-0^^OLIS_Site_ID^ISO|||||||||OLIST^BLAKE^DONALD^THOR^^^^L^921379\r" +
@@ -70,11 +70,11 @@ public class DefaultEscapingTest {
                 "OBX|2|FT|Z101068^Tech Comment^L||Lab STP||||||F|||200911231508|STP";
 
         HapiContext context = new DefaultHapiContext(new ValidationContextImpl());
-        ORU_R01 message = context.newMessage(ORU_R01.class);
+        var message = context.newMessage(ORU_R01.class);
 
         message.parse(msg);
 
-        String encoded = message.encode();
+        var encoded = message.encode();
         // System.out.println("Encoded message: \r\n" + encoded);
 
         assertEquals(msg.trim(), encoded.trim());
@@ -85,7 +85,7 @@ public class DefaultEscapingTest {
     @Test
     public void testFormattingCharacters2() throws HL7Exception {
 
-        String msg = "MSH|^~\\&|PHCN_ULTRA|2220|HSIE|2220|201106161233||ORU^R01|72313573|T|2.4|||AL|AL|AU\r" +
+        var msg = "MSH|^~\\&|PHCN_ULTRA|2220|HSIE|2220|201106161233||ORU^R01|72313573|T|2.4|||AL|AL|AU\r" +
                 "PV1||I|^DIS^DIS^2220|||||0129296H^BRAUN^GARY|7MPH^MPH-HL7-RESULT FEED|||||||||I|^^^2220\r" +
                 "ORC|RE|^HNAM_ORDERID|11-6879530-GAS-0^PHCN_ULTRA||RE\r" +
                 "OBR|1|^HNAM_ORDERID|11-6879530-GAS-0^PHCN_ULTRA|GAS^GASES (BLOOD)|||201106161000|||||||||0129296H^BRAUN^GARY^^^DR^^^2220^^^^Provider Num||||1295102|7MPH|201106161233||GRP|F||^^^201106161203\r" +
@@ -94,14 +94,14 @@ public class DefaultEscapingTest {
         // ca.uhn.hl7v2.model.v24.message.ORU_R01 message = new ca.uhn.hl7v2.model.v24.message.ORU_R01();
         Parser p = PipeParser.getInstanceWithNoValidation();
 
-        ca.uhn.hl7v2.model.v24.message.ORU_R01 message = (ca.uhn.hl7v2.model.v24.message.ORU_R01)p.parse(msg);
+        var message = (ca.uhn.hl7v2.model.v24.message.ORU_R01)p.parse(msg);
 
-        int intCountOBR = message.getPATIENT_RESULT().getORDER_OBSERVATIONReps();
-        for (int i = 0; i < intCountOBR; i++) {
+        var intCountOBR = message.getPATIENT_RESULT().getORDER_OBSERVATIONReps();
+        for (var i = 0; i < intCountOBR; i++) {
             message.getPATIENT_RESULT().getORDER_OBSERVATION(i).getOBR().removeObr16_OrderingProvider(0);
         }
 
-        String encoded = message.encode();
+        var encoded = message.encode();
         // System.out.println("Encoded message: \r\n" + encoded);
         assertEquals(msg.trim(), encoded.trim());
     }
@@ -109,10 +109,10 @@ public class DefaultEscapingTest {
     @Test
     public void testPreserveFormattingChars() throws HL7Exception, IOException {
 
-        ORU_R01 msg = new ORU_R01();
+        var msg = new ORU_R01();
         msg.initQuickstart("ORU", "R01", "T");
 
-        FT ft = new FT(msg);
+        var ft = new FT(msg);
         msg.getRESPONSE().getORDER_OBSERVATION().getOBSERVATION().getOBX().getObx2_ValueType().setValue("FT");
         msg.getRESPONSE().getORDER_OBSERVATION().getOBSERVATION().getOBX().getObx5_ObservationValue(0).setData(ft);
 

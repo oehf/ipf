@@ -41,7 +41,7 @@ public class NonReadingAttachmentMarshaller extends AttachmentMarshaller {
     public String addMtomAttachment(byte[] data, int offset, int length, String mimeType,
                                     String elementNamespace, String elementLocalName)
     {
-        String size = Integer.toString(Math.min(length, data.length - offset));
+        var size = Integer.toString(Math.min(length, data.length - offset));
         return attachmentDescription(null, size, mimeType);
     }
 

@@ -81,7 +81,7 @@ public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
 
         @Override
         public ConsumerInPayloadLoggerInterceptor getNewInstance() {
-            ConsumerInPayloadLoggerInterceptor interceptor = new ConsumerInPayloadLoggerInterceptor(resolver);
+            var interceptor = new ConsumerInPayloadLoggerInterceptor(resolver);
             interceptor.setEnabled(enabled);
             return interceptor;
         }

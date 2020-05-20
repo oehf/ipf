@@ -17,15 +17,16 @@ package org.openehealth.ipf.commons.audit.queue;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 
-import javax.jms.*;
+import javax.jms.ConnectionFactory;
+import javax.jms.Session;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Message Queue that sends off audit messages into a JMS queue. It is strongly recommended
+ * Message Queue that sends audit messages into a JMS queue. It is strongly recommended
  * that the connection factory implements a pool or caches connections for performance reasons.
  * Use an instance of {@link JmsAuditMessageListener} to asynchronously receive the audit
- * messages and send them off to a repository.
+ * messages and send them to a repository.
  * <p>
  * This is primarily meant to send audit messages to a JMS-based relay that eventually sends the
  * audit record to an audit repository. Therefore, RFC 5425 metadata is placed in X-IPF-ATNA-*
@@ -60,13 +61,13 @@ public class JmsAuditMessageQueue extends AbstractAuditMessageQueue {
     @Override
     protected void handle(AuditContext auditContext, String auditMessage) {
         try {
-            Connection connection = connectionFactory.createConnection(userName, password);
+            var connection = connectionFactory.createConnection(userName, password);
             connection.start();
             try {
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                Queue queue = session.createQueue(queueName);
-                MessageProducer producer = session.createProducer(queue);
-                TextMessage message = session.createTextMessage(auditMessage);
+                var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                var queue = session.createQueue(queueName);
+                var producer = session.createProducer(queue);
+                var message = session.createTextMessage(auditMessage);
                 message.setStringProperty(X_IPF_ATNA_TIMESTAMP, auditContext.getAuditMetadataProvider().getTimestamp());
                 message.setStringProperty(X_IPF_ATNA_HOSTNAME, auditContext.getAuditMetadataProvider().getHostname());
                 message.setStringProperty(X_IPF_ATNA_PROCESSID, auditContext.getAuditMetadataProvider().getProcessID());

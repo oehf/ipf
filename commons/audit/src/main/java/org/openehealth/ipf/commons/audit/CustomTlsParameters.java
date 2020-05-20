@@ -21,7 +21,6 @@ import io.vertx.core.net.PfxOptions;
 
 import javax.net.ssl.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -148,14 +147,14 @@ public class CustomTlsParameters implements VertxTlsParameters {
                 sslSocket.setEnabledProtocols(split(enabledProtocols));
             }
             if (sniHostnames.isEmpty()) {
-                SSLParameters sslParameters = sslSocket.getSSLParameters();
+                var sslParameters = sslSocket.getSSLParameters();
                 sslParameters.setServerNames(sniHostnames.stream()
                         .map(SNIHostName::new)
                         .collect(Collectors.toList()));
                 sslSocket.setSSLParameters(sslParameters);
             }
             if (performDomainValidation) {
-                SSLParameters sslParameters = sslSocket.getSSLParameters();
+                var sslParameters = sslSocket.getSSLParameters();
                 sslParameters.setEndpointIdentificationAlgorithm("HTTPS");
                 sslSocket.setSSLParameters(sslParameters);
             }
@@ -182,26 +181,26 @@ public class CustomTlsParameters implements VertxTlsParameters {
     @Override
     public SSLContext getSSLContext() {
         try {
-            KeyStore keyStore = getKeyStore(keyStoreType, keyStoreFile, keyStorePassword);
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(certificateType, provider);
+            var keyStore = getKeyStore(keyStoreType, keyStoreFile, keyStorePassword);
+            var keyManagerFactory = KeyManagerFactory.getInstance(certificateType, provider);
             keyManagerFactory.init(keyStore, keyStorePassword.toCharArray());
-            KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+            var keyManagers = keyManagerFactory.getKeyManagers();
 
             if (keyManagers != null && certAlias != null) {
-                for (int i = 0; i < keyManagers.length; i++) {
+                for (var i = 0; i < keyManagers.length; i++) {
                     if (keyManagers[i] instanceof X509KeyManager) {
                         keyManagers[i] = new AliasX509ExtendedKeyManager((X509KeyManager) keyManagers[i], certAlias);
                     }
                 }
             }
 
-            KeyStore trustStore = getKeyStore(trustStoreType, trustStoreFile, trustStorePassword);
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(certificateType, provider);
+            var trustStore = getKeyStore(trustStoreType, trustStoreFile, trustStorePassword);
+            var trustManagerFactory = TrustManagerFactory.getInstance(certificateType, provider);
             trustManagerFactory.init(trustStore);
-            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            var trustManagers = trustManagerFactory.getTrustManagers();
 
-            SecureRandom secureRandom = new SecureRandom();
-            SSLContext sslContext = SSLContext.getInstance(tlsProtocol, provider);
+            var secureRandom = new SecureRandom();
+            var sslContext = SSLContext.getInstance(tlsProtocol, provider);
             sslContext.init(keyManagers, trustManagers, secureRandom);
 
             if (sessionTimeout > 0) {
@@ -247,8 +246,8 @@ public class CustomTlsParameters implements VertxTlsParameters {
     }
 
     private KeyStore getKeyStore(String type, String storePath, String password) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(type);
-        try (InputStream in = Files.newInputStream(Paths.get(storePath))) {
+        var keyStore = KeyStore.getInstance(type);
+        try (var in = Files.newInputStream(Paths.get(storePath))) {
             keyStore.load(in, password.toCharArray());
             return keyStore;
         }
@@ -292,7 +291,7 @@ public class CustomTlsParameters implements VertxTlsParameters {
 
         @Override
         protected SSLSocketFactory engineGetSocketFactory() {
-            SSLSocketFactory factory = sslContext.getSocketFactory();
+            var factory = sslContext.getSocketFactory();
             return sslSocketFactoryConfigurer.apply(factory);
         }
 
@@ -303,13 +302,13 @@ public class CustomTlsParameters implements VertxTlsParameters {
 
         @Override
         protected SSLEngine engineCreateSSLEngine() {
-            SSLEngine engine = sslContext.createSSLEngine();
+            var engine = sslContext.createSSLEngine();
             return sslEngineConfigurer.apply(engine);
         }
 
         @Override
         protected SSLEngine engineCreateSSLEngine(String host, int port) {
-            SSLEngine engine = sslContext.createSSLEngine(host, port);
+            var engine = sslContext.createSSLEngine(host, port);
             return sslEngineConfigurer.apply(engine);
         }
 
@@ -380,7 +379,7 @@ public class CustomTlsParameters implements VertxTlsParameters {
         }
 
         private Socket configureSocket(Socket s) {
-            SSLSocket socket = (SSLSocket) s;
+            var socket = (SSLSocket) s;
             return sslSocketConfigurer.apply(socket);
         }
     }

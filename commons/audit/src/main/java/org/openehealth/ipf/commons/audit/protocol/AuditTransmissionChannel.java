@@ -58,7 +58,7 @@ public enum AuditTransmissionChannel {
     }
 
     public static AuditTransmissionChannel fromProtocolName(String protocolName) {
-        for (AuditTransmissionChannel channel : AuditTransmissionChannel.values()) {
+        for (var channel : AuditTransmissionChannel.values()) {
             if (channel.protocolName.equalsIgnoreCase(protocolName)) {
                 return channel;
             }

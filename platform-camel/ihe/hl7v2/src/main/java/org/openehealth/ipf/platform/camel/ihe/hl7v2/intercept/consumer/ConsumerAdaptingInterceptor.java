@@ -77,12 +77,12 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Message originalMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
+        var originalMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
 
         // run the route
         try {
             getWrappedProcessor().process(exchange);
-            Exception exception = Exchanges.extractException(exchange);
+            var exception = Exchanges.extractException(exchange);
             if (exception != null) {
                 throw exception;
             }
@@ -91,14 +91,14 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
             resultMessage(exchange).setBody(getEndpoint().getNakFactory().createNak(originalMessage, e));
         }
 
-        org.apache.camel.Message m = Exchanges.resultMessage(exchange);
-        Object body = m.getBody();
+        var m = Exchanges.resultMessage(exchange);
+        var body = m.getBody();
 
         // try to convert route response from a known type
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
+        var msg = Hl7v2MarshalUtils.extractHapiMessage(
                 m,
                 characterSet(exchange),
                 getEndpoint().getHl7v2TransactionConfiguration().getParser());
@@ -130,7 +130,7 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
      */
     @SuppressWarnings("rawtypes")
     private Message analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
-        Object header = m.getHeader(ACK_TYPE_CODE_HEADER);
+        var header = m.getHeader(ACK_TYPE_CODE_HEADER);
         if ((header == null) || ! (header instanceof AcknowledgmentCode)) {
             return null;
         }
@@ -140,7 +140,7 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
             ack = getEndpoint().getNakFactory().createAck(
                     originalMessage);
         } else {
-            HL7Exception exception = new HL7Exception(
+            var exception = new HL7Exception(
                     "HL7v2 processing failed",
                     getEndpoint().getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
             ack = getEndpoint().getNakFactory().createNak(

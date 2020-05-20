@@ -66,23 +66,23 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
         codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);
 
         // Will only be effective if sslContext is set and overrides
-        String sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
-        String sslCiphersString = component.getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
+        var sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
+        var sslCiphersString = component.getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         this.sslProtocols = sslProtocolsString != null ? sslProtocolsString.split("\\s*,\\s*") : null;
         this.sslCiphers = sslCiphersString != null ? sslCiphersString.split("\\s*,\\s*") : null;
 
-        ClientAuthType configuredClientAuthType = component.getAndRemoveParameter(parameters, "clientAuth", ClientAuthType.class, ClientAuthType.NONE);
+        var configuredClientAuthType = component.getAndRemoveParameter(parameters, "clientAuth", ClientAuthType.class, ClientAuthType.NONE);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        SSLContextParameters configuredSslContextParameters = component.resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
-        SSLContext configuredSslContext = component.resolveAndRemoveReferenceParameter(parameters, "sslContext", SSLContext.class);
+        var configuredSslContextParameters = component.resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
+        var configuredSslContext = component.resolveAndRemoveReferenceParameter(parameters, "sslContext", SSLContext.class);
 
         if (secure || configuredSslContextParameters != null || configuredSslContext != null) {
             LOG.debug("Setting up TLS security for MLLP endpoint {}", uri);
             if (configuredSslContext == null) {
                 if (configuredSslContextParameters == null) {
-                    Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+                    var sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
                     if (sslContextParameterMap.size() == 1) {
-                        Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                        var entry = sslContextParameterMap.entrySet().iterator().next();
                         configuredSslContextParameters = entry.getValue();
                         LOG.debug("Setting up SSLContext from SSLContextParameters bean with name {}", entry.getKey());
                     } else if (sslContextParameterMap.size() > 1) {
@@ -98,9 +98,9 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
                     configuredSslContext = configuredSslContextParameters.createSSLContext(component.getCamelContext());
                     // If not already specified, extract client authentication
                     if (configuredClientAuthType == null) {
-                        String clientAuthenticationString = configuredSslContextParameters.getServerParameters().getClientAuthentication();
+                        var clientAuthenticationString = configuredSslContextParameters.getServerParameters().getClientAuthentication();
                         if (clientAuthenticationString != null) {
-                            ClientAuthentication clientAuthentication = ClientAuthentication.valueOf(clientAuthenticationString.toUpperCase());
+                            var clientAuthentication = ClientAuthentication.valueOf(clientAuthenticationString.toUpperCase());
                             switch (clientAuthentication) {
                                 case WANT: configuredClientAuthType = ClientAuthType.WANT; break;
                                 case REQUIRE: configuredClientAuthType = ClientAuthType.MUST; break;

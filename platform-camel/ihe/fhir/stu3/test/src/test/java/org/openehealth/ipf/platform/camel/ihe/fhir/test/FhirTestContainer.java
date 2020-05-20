@@ -17,18 +17,14 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.test;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.hl7.fhir.dstu3.model.StructureDefinition;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import static org.junit.Assert.assertEquals;
@@ -50,9 +46,9 @@ public class FhirTestContainer extends StandardTestContainer {
     }
 
     public void assertConformance(String type) {
-        CapabilityStatement conf = client.capabilities().ofType(CapabilityStatement.class).execute();
+        var conf = client.capabilities().ofType(CapabilityStatement.class).execute();
         assertEquals(1, conf.getRest().size());
-        CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
+        var component = conf.getRest().iterator().next();
         assertTrue(component.getResource().stream()
                 .map(CapabilityStatement.CapabilityStatementRestResourceComponent::getType)
                 .anyMatch(type::equals));
@@ -60,9 +56,9 @@ public class FhirTestContainer extends StandardTestContainer {
 
     protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
         assertEquals(
                 EventOutcomeIndicator.MajorFailure,
                 event.getEventIdentification().getEventOutcomeIndicator());
@@ -71,15 +67,15 @@ public class FhirTestContainer extends StandardTestContainer {
 
     protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
         // Hmm, I wonder if this could not be done automatically...
-        IParser parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
-        OperationOutcome oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
+        var parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
+        var oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
         Assert.assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
         Assert.assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         Assert.assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
         Assert.assertEquals(EventOutcomeIndicator.MajorFailure,
                 event.getEventIdentification().getEventOutcomeIndicator());
 

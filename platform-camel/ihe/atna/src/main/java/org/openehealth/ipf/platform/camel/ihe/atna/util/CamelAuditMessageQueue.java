@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+
 /**
  * An audit message sender that sends audit messages to a configured Camel
  * endpoint. When configured in a Spring application context, it is attempted to
@@ -67,7 +68,7 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
     public void setEndpointUri(String endpointUri) throws URISyntaxException, UnknownHostException {
         endpointUriString = endpointUri;
         endpointUriObject = new URI(endpointUri);
-        String host = endpointUriObject.getHost();
+        var host = endpointUriObject.getHost();
         destinationAddress = InetAddress.getByName(host == null ? "0.0.0.0" : host);
         destinationPort = endpointUriObject.getPort();
     }
@@ -84,16 +85,20 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
-        for (AuditMessage m : auditMessages) {
-            HashMap<String, Object> headers = new HashMap<>();
+        for (var m : auditMessages) {
+            var headers = new HashMap<String, Object>();
             headers.put(HEADER_NAMESPACE + ".destination.address", destinationAddress.getHostAddress());
             headers.put(HEADER_NAMESPACE + ".destination.port", destinationPort);
+            headers.put(X_IPF_ATNA_TIMESTAMP, auditContext.getAuditMetadataProvider().getTimestamp());
+            headers.put(X_IPF_ATNA_HOSTNAME, auditContext.getAuditMetadataProvider().getHostname());
+            headers.put(X_IPF_ATNA_PROCESSID, auditContext.getAuditMetadataProvider().getProcessID());
+            headers.put(X_IPF_ATNA_APPLICATION, auditContext.getSendingApplication());
             producerTemplate.sendBodyAndHeaders(endpointUriString, m, headers);
         }
     }
 
     private InetAddress getDestinationAddress() throws UnknownHostException {
-        String host = endpointUriObject.getHost();
+        var host = endpointUriObject.getHost();
         return InetAddress.getByName(host == null ? "0.0.0.0" : host);
     }
 

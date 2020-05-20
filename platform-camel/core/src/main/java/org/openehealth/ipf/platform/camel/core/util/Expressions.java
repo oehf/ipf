@@ -66,7 +66,7 @@ public class Expressions {
         return new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
-                Object[] result = new Object[2];
+                var result = new Object[2];
                 result [0] = exchange.getIn().getHeaders();
                 result [1] = MarkupBuilder.newInstance();
                 return type.cast(result);
@@ -92,7 +92,7 @@ public class Expressions {
         return new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
-                Throwable throwable = exception(exchange);
+                var throwable = exception(exchange);
                 return type.cast(throwable == null ? null : throwable.getMessage());
             }
         };
@@ -103,7 +103,7 @@ public class Expressions {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 try {
-                    S body = exchange.getIn().getBody(clazz);
+                    var body = exchange.getIn().getBody(clazz);
                     validator.validate(body, profile);
                     return type.cast(true);
                 } catch (ValidationException e) {

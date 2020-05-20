@@ -44,8 +44,8 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
         }
 
         super.toEbXML(query, ebXML);
-        
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromString(FOLDER_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
@@ -74,8 +74,8 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        String patientId = slots.toString(FOLDER_PATIENT_ID);
+        var slots = new QuerySlotHelper(ebXML);
+        var patientId = slots.toString(FOLDER_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));

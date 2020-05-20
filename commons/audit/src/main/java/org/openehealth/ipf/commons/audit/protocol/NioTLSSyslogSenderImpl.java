@@ -59,8 +59,8 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
         if (auditMessage != null) {
             Destination<H> destination = getDestination(auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
-            byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
-            byte[] length = String.format("%d ", msgBytes.length).getBytes();
+            var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+            var length = String.format("%d ", msgBytes.length).getBytes();
             LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(),
                     auditContext.getAuditRepositoryPort());
             destination.write(length, msgBytes);
@@ -68,7 +68,7 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
     }
 
     private D getDestination(String host, int port) throws Exception {
-        D destination = destinations.get(host + port);
+        var destination = destinations.get(host + port);
         if (destination == null) {
             synchronized (this) {
                 destination = makeDestination(tlsParameters, host, port, loggingEnabled);

@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.URL;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
@@ -59,14 +57,14 @@ public class TransactedRouteTest extends StandardTestContainer {
         txManager = EasyMock.createMock(PlatformTransactionManager.class);
         transactionPolicy.setPropagationBehaviorName("PROPAGATION_REQUIRES_NEW");
         transactionPolicy.setTransactionManager(txManager);
-        final URL resource = ClassLoader.getSystemResource("transacted-test-context.xml");
+        final var resource = ClassLoader.getSystemResource("transacted-test-context.xml");
         startServer(new CXFServlet(), "transacted-test-context.xml");
         getCamelContext().addRoutes(new TestRoutes(transactionPolicy));
     }
     
     @Test
     public void testNonTransactedRoute () throws Exception {
-        final String response = sendRequest(
+        final var response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
         assertTrue(response.contains("MSA|AR"));        
@@ -83,7 +81,7 @@ public class TransactedRouteTest extends StandardTestContainer {
                 
         EasyMock.replay(txManager);
 
-        final String response = sendRequest(
+        final var response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/transacted", WAN_REQUEST);
         EasyMock.verify(txManager);
         assertTrue(response.contains("testexception"));        
@@ -94,7 +92,7 @@ public class TransactedRouteTest extends StandardTestContainer {
         final Exchange exchange = new DefaultExchange(
                 getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(body);
-        final Exchange response = getProducerTemplate().send(url, exchange);
+        final var response = getProducerTemplate().send(url, exchange);
         return response.getMessage().getBody(String.class);
     }
     

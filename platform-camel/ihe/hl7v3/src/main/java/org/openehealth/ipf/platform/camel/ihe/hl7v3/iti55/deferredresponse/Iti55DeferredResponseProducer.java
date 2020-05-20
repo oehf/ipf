@@ -46,17 +46,17 @@ public class Iti55DeferredResponseProducer extends AbstractWsProducer<Hl7v3Audit
         // NB: Camel message headers used here are set in Iti55Service's intern Callable.
 
         // propagate WS-Addressing request message ID
-        String requestMessageId = exchange.getIn().getHeader("iti55.deferred.requestMessageId", String.class);
+        var requestMessageId = exchange.getIn().getHeader("iti55.deferred.requestMessageId", String.class);
         if (requestMessageId != null) {
-            RelatesToType relatesToHolder = new RelatesToType();
+            var relatesToHolder = new RelatesToType();
             relatesToHolder.setValue(requestMessageId);
-            AddressingProperties apropos = new AddressingProperties();
+            var apropos = new AddressingProperties();
             apropos.setRelatesTo(relatesToHolder);
             requestContext.put(CLIENT_ADDRESSING_PROPERTIES, apropos);
         }
 
         // inject audit dataset
-        WsAuditDataset auditDataset = exchange.getIn().getHeader("iti55.deferred.auditDataset", WsAuditDataset.class);
+        var auditDataset = exchange.getIn().getHeader("iti55.deferred.auditDataset", WsAuditDataset.class);
         if (auditDataset != null) {
             requestContext.put(AbstractAuditInterceptor.DATASET_CONTEXT_KEY, auditDataset);
         }

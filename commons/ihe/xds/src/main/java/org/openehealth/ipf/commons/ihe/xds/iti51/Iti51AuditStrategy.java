@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsQueryInformationBuilder;
 
-import java.util.Objects;
-
 /**
  * Base audit strategy for ITI-51.
  *

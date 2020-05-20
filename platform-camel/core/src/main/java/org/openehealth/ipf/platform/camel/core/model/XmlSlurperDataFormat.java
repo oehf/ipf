@@ -41,7 +41,7 @@ public class XmlSlurperDataFormat extends AbstractXmlDataFormat {
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
-        XmlSlurper slurper = new XmlSlurper(newSaxParser());
+        var slurper = new XmlSlurper(newSaxParser());
         slurper.setErrorHandler(getErrorHandler());
         slurper.setKeepIgnorableWhitespace(isKeepWhitespace());
         return slurper.parse(stream);

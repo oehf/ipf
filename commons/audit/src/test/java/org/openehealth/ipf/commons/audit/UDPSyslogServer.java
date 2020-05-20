@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.audit;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import io.vertx.ext.unit.Async;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class UDPSyslogServer extends AbstractVerticle {
+class UDPSyslogServer extends AbstractVerticle {
 
     private final int udpPort;
 
@@ -48,13 +47,13 @@ public class UDPSyslogServer extends AbstractVerticle {
 
     @Override
     public void start() {
-        final DatagramSocket socket = vertx.createDatagramSocket(dsOptions);
+        final var socket = vertx.createDatagramSocket(dsOptions);
         socket.listen(udpPort, host, datagramSocketAsyncResult -> {
             if (datagramSocketAsyncResult.succeeded()){
                 log.info("Listening on UDP port {}", socket.localAddress());
                 async.countDown();
                 socket.handler(packet -> {
-                    String decoded = packet.data().getString(0, packet.data().length());
+                    var decoded = packet.data().getString(0, packet.data().length());
                     log.debug("=============== Received content on {} ================= \n{}",
                             socket.localAddress(), decoded);
                     async.countDown();

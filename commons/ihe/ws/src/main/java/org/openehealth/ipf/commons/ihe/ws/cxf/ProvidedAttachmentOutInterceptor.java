@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import javax.activation.DataHandler;
@@ -28,7 +27,6 @@ import org.apache.cxf.interceptor.AttachmentOutInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.jaxws.interceptors.HolderOutInterceptor;
 import org.apache.cxf.jaxws.interceptors.WrapperClassOutInterceptor;
-import org.apache.cxf.message.Attachment;
 import org.apache.cxf.phase.Phase;
 
 /**
@@ -54,12 +52,12 @@ public class ProvidedAttachmentOutInterceptor extends AbstractSoapInterceptor {
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
-        Map<?, ?> providedAttachments = (Map<?, ?>) message.getContextualProperty(ATTACHMENTS);
+        var providedAttachments = (Map<?, ?>) message.getContextualProperty(ATTACHMENTS);
         if (providedAttachments.isEmpty()) {
             return;
         }
 
-        Collection<Attachment> attachments = message.getAttachments();
+        var attachments = message.getAttachments();
         if (attachments == null) {
             attachments = new ArrayList<>();
             message.setAttachments(attachments);

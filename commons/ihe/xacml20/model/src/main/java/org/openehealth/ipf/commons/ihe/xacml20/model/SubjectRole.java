@@ -42,7 +42,7 @@ public enum SubjectRole {
     @Getter private final CE code;
 
     public static SubjectRole fromCode(CE code) {
-        for (SubjectRole subjectRole : values()) {
+        for (var subjectRole : values()) {
             if (subjectRole.code.equals(code)) {
                 return subjectRole;
             }

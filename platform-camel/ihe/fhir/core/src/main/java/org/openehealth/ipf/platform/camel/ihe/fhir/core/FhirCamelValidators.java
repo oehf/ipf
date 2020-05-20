@@ -19,14 +19,11 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.validation.FhirValidator;
-import ca.uhn.fhir.validation.ValidationResult;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,19 +99,19 @@ public final class FhirCamelValidators {
      */
     public static Processor itiRequestValidator() {
         return exchange -> {
-            FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
+            var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
             if (context != null) {
              if (exchange.getIn().getBody() instanceof IBaseResource) {
                  if (ValidatorAdapter.validationEnabled(exchange)) {
-                     Integer mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
+                     var mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
                      if (mode == null) mode = SCHEMA;
                      if (isValidateSchema(mode) || isValidateSchematron(mode)) {
                          validate(exchange, context, isValidateSchema(mode), isValidateSchematron(mode));
                      }
                      if (isValidateModel(mode)) {
-                         FhirInteractionId fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
+                         var fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
                          if (fhirInteractionId != null) {
-                             FhirTransactionValidator validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
+                             var validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
                              validator.validateRequest(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
                          } else {
                              LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
@@ -134,16 +131,16 @@ public final class FhirCamelValidators {
      */
     public static Processor itiResponseValidator() {
         return exchange -> {
-            FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
+            var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
             if (context != null && exchange.getIn().getBody() instanceof IBaseResource) {
                 int mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
                 if (isValidateSchema(mode) || isValidateSchematron(mode)) {
                     validate(exchange, context, isValidateSchema(mode), isValidateSchematron(mode));
                 }
                 if (isValidateModel(mode)) {
-                    FhirInteractionId fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
+                    var fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
                     if (fhirInteractionId != null) {
-                        FhirTransactionValidator validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
+                        var validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
                         validator.validateResponse(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
                     } else {
                         LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
@@ -156,10 +153,10 @@ public final class FhirCamelValidators {
     }
 
     private static void validate(Exchange exchange, FhirContext context, boolean checkSchema, boolean checkSchematron) {
-        ValidationResult result = getValidator(context, checkSchema, checkSchematron)
+        var result = getValidator(context, checkSchema, checkSchematron)
                 .validateWithResult(exchange.getIn().getBody(IBaseResource.class));
         if (!result.isSuccessful()) {
-            IBaseOperationOutcome outcome = result.toOperationOutcome();
+            var outcome = result.toOperationOutcome();
             LOG.debug("FHIR Validation failed with outcome {}", outcome);
             throw new UnprocessableEntityException("FHIR Validation Error", outcome);
         } else {
@@ -168,7 +165,7 @@ public final class FhirCamelValidators {
     }
 
     private static FhirValidator getValidator(FhirContext context, boolean checkSchema, boolean checkSchematron) {
-        FhirValidator validator = context.newValidator();
+        var validator = context.newValidator();
         validator.setValidateAgainstStandardSchema(checkSchema);
         // Bug in HAPI: setting to false already looks up classpath for schematron lib
         if (checkSchematron) validator.setValidateAgainstStandardSchematron(true);

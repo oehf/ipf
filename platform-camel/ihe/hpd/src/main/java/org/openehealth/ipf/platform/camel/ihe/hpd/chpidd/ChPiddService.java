@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hpd.chpidd.ChPiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
@@ -28,8 +27,8 @@ public class ChPiddService extends AbstractWebService implements ChPiddPortType 
 
     @Override
     public DownloadResponse providerInformationDownloadRequest(DownloadRequest request) {
-        Exchange result = process(request);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(request);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
             throw new RuntimeException(exception);

@@ -32,7 +32,7 @@ public class IdentifiableTransformerTest {
     
     @Before
     public void setUp() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("uni");
         assigningAuthority.setUniversalIdType("uniType");
         
@@ -43,7 +43,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testToEbXML21SourcePatient() {
-        String result = Hl7v2Based.render(identifiable);
+        var result = Hl7v2Based.render(identifiable);
         assertNotNull(result);
         
         assertEquals("21\\T\\3^^^&uni&uniType", result);
@@ -56,19 +56,19 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatientEmpty() {
-        String result = Hl7v2Based.render(new Identifiable());
+        var result = Hl7v2Based.render(new Identifiable());
         assertNull(result);
     }
 
     @Test
     public void testFromEbXML21SourcePatient() {
-        String ebXML = Hl7v2Based.render(identifiable);
-        Identifiable result = Hl7v2Based.parse(ebXML, Identifiable.class);
+        var ebXML = Hl7v2Based.render(identifiable);
+        var result = Hl7v2Based.parse(ebXML, Identifiable.class);
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
-        
-        AssigningAuthority assigningAuthority = result.getAssigningAuthority();
+
+        var assigningAuthority = result.getAssigningAuthority();
         assertEquals("uni", assigningAuthority.getUniversalId());
         assertEquals("uniType", assigningAuthority.getUniversalIdType());
     }
@@ -80,7 +80,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        Identifiable result = Hl7v2Based.parse("", Identifiable.class);
+        var result = Hl7v2Based.parse("", Identifiable.class);
         assertNull(result);
     }
 }

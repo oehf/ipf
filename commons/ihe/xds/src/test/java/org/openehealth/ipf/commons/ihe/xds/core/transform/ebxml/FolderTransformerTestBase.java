@@ -20,10 +20,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestU
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
@@ -48,7 +45,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     
     @Before
     public final void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new FolderTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         
@@ -71,7 +68,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXML() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);        
+        var ebXML = transformer.toEbXML(folder, objectLibrary);
         assertNotNull(ebXML);
         
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
@@ -86,7 +83,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         
         assertSlot(Vocabulary.SLOT_NAME_LAST_UPDATE_TIME, ebXML.getSlots(), "20150102030405");
 
-        EbXMLClassification classification = 
+        var classification =
             assertClassification(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
 
@@ -113,7 +110,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
    
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);        
+        var ebXML = transformer.toEbXML(new Folder(), objectLibrary);
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -129,8 +126,8 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);
-        Folder result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(folder, objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
         assertEquals(folder, result);
@@ -143,8 +140,8 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);
-        Folder result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(new Folder(), objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(new Folder(), result);
     }
 }

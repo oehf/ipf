@@ -130,7 +130,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
     }
 
     private void configureBinding(ServerFactoryBean svrFactory) {
-        SoapBindingConfiguration bindingConfig = new SoapBindingConfiguration();
+        var bindingConfig = new SoapBindingConfiguration();
         bindingConfig.setBindingName(wsTransactionConfiguration.getBindingName());
         svrFactory.setBindingConfig(bindingConfig);
     }
@@ -147,7 +147,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
         if (rejectionHandlingStrategy != null) {
             svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(HTTP));
 
-            RejectionHandlerInterceptor rejectionHandlerInterceptor =
+            var rejectionHandlerInterceptor =
                     new RejectionHandlerInterceptor(rejectionHandlingStrategy);
 
             svrFactory.getOutInterceptors().add(rejectionHandlerInterceptor);

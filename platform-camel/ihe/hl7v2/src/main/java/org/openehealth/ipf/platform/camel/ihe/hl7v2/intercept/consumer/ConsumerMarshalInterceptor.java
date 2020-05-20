@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
@@ -50,19 +49,19 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
     @Override
     public void process(Exchange exchange) throws Exception {
         Message originalMessage = null;
-        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
-        
-        org.apache.camel.Message inMessage = exchange.getIn();
-        String originalString = inMessage.getBody(String.class);
+        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+
+        var inMessage = exchange.getIn();
+        var originalString = inMessage.getBody(String.class);
 
         // unmarshal
-        boolean unmarshallingFailed = false;
+        var unmarshallingFailed = false;
         try {
             originalMessage = parser.parse(originalString);
         } catch (HL7Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
-            Message nak = getEndpoint().getNakFactory().createDefaultNak(e);
+            var nak = getEndpoint().getNakFactory().createDefaultNak(e);
             resultMessage(exchange).setBody(nak);
         }
 
@@ -94,7 +93,7 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
         }
         
         // marshal if necessary
-        String s = Hl7v2MarshalUtils.marshalStandardTypes(
+        var s = Hl7v2MarshalUtils.marshalStandardTypes(
                 resultMessage(exchange),
                 characterSet(exchange),
                 parser);

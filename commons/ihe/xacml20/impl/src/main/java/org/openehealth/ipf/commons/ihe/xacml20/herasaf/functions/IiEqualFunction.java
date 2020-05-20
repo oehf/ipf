@@ -38,8 +38,8 @@ public class IiEqualFunction extends AbstractFunction {
             throw new FunctionProcessingException("Invalid number of parameters.");
         }
         try {
-            II arg0 = (II) args[0];
-            II arg1 = (II) args[1];
+            var arg0 = (II) args[0];
+            var arg1 = (II) args[1];
             return arg0.getRoot().equals(arg1.getRoot()) && arg0.getExtension().equals(arg1.getExtension());
 
         } catch (ClassCastException e) {

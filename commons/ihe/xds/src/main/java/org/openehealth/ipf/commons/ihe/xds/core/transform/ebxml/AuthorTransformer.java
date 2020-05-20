@@ -59,11 +59,11 @@ public class AuthorTransformer {
         if (author == null) {
             return null;
         }
-        
-        EbXMLClassification classification = factory.createClassification(objectLibrary);
+
+        var classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation("");
 
-        String hl7XCN = Hl7v2Based.render(author.getAuthorPerson());
+        var hl7XCN = Hl7v2Based.render(author.getAuthorPerson());
         if (hl7XCN != null) {
             classification.addSlot(SLOT_NAME_AUTHOR_PERSON, hl7XCN);
         }
@@ -86,12 +86,12 @@ public class AuthorTransformer {
         if (classification == null) {
             return null;        
         }
-        
-        Author author = new Author();
 
-        List<String> persons = classification.getSlotValues(SLOT_NAME_AUTHOR_PERSON);
+        var author = new Author();
+
+        var persons = classification.getSlotValues(SLOT_NAME_AUTHOR_PERSON);
         if (persons.size() > 0) {
-            Person person = Hl7v2Based.parse(persons.get(0), Person.class);
+            var person = Hl7v2Based.parse(persons.get(0), Person.class);
             author.setAuthorPerson(person);
         }
 
@@ -128,8 +128,8 @@ public class AuthorTransformer {
             List<T> targetCollection,
             Class<T> targetClass)
     {
-        for (String source : sourceClassification.getSlotValues(sourceSlotName)) {
-            T target = Hl7v2Based.parse(source, targetClass);
+        for (var source : sourceClassification.getSlotValues(sourceSlotName)) {
+            var target = Hl7v2Based.parse(source, targetClass);
             if (target != null) {
                 targetCollection.add(target);
             }
@@ -157,14 +157,14 @@ public class AuthorTransformer {
             String targetSlotName)
     {
         List<String> targetCollection = new ArrayList<>();
-        for (T source : sourceCollection) {
-            String target = Hl7v2Based.render(source);
+        for (var source : sourceCollection) {
+            var target = Hl7v2Based.render(source);
             if (source != null) {
                 targetCollection.add(target);
             }
         }
 
-        String[] array = new String[targetCollection.size()];
+        var array = new String[targetCollection.size()];
         targetClassification.addSlot(targetSlotName, targetCollection.toArray(array));
     }
 

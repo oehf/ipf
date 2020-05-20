@@ -15,19 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
@@ -79,17 +71,17 @@ public class QueryResponseTransformer {
             return null;
         }
 
-        EbXMLObjectLibrary library = factory.createObjectLibrary();
-        EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
+        var library = factory.createObjectLibrary();
+        var ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
         ebXML.setStatus(response.getStatus());
 
         if (!response.getErrors().isEmpty()) {
             ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
 
-        for (DocumentEntry docEntry : response.getDocumentEntries()) {
-            EbXMLExtrinsicObject extrinsic = documentEntryTransformer.toEbXML(docEntry, library);
-            for (Document document : response.getDocuments()) {
+        for (var docEntry : response.getDocumentEntries()) {
+            var extrinsic = documentEntryTransformer.toEbXML(docEntry, library);
+            for (var document : response.getDocuments()) {
                 if ((document != null) && (document.getDocumentEntry() == docEntry)) {
                     extrinsic.setDataHandler(document.getContent(DataHandler.class));
                     break;
@@ -98,17 +90,17 @@ public class QueryResponseTransformer {
             ebXML.addExtrinsicObject(extrinsic);
         }
 
-        for (Folder folder : response.getFolders()) {
+        for (var folder : response.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
             addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
 
-        for (SubmissionSet set : response.getSubmissionSets()) {
+        for (var set : response.getSubmissionSets()) {
             ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
             addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         }
 
-        for (Association association : response.getAssociations()) {
+        for (var association : response.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
 
@@ -128,17 +120,17 @@ public class QueryResponseTransformer {
             return null;
         }
 
-        QueryResponse response = new QueryResponse();
+        var response = new QueryResponse();
         response.setStatus(ebXML.getStatus());
 
         if (!ebXML.getErrors().isEmpty()) {
             response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));
         }
 
-        boolean foundNonObjRefs = false;
+        var foundNonObjRefs = false;
 
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            DocumentEntry documentEntry = documentEntryTransformer.fromEbXML(extrinsic);
+        for (var extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            var documentEntry = documentEntryTransformer.fromEbXML(extrinsic);
             response.getDocumentEntries().add(documentEntry);
             if (extrinsic.getDataHandler() != null) {
                 response.getDocuments().add(new Document(documentEntry, extrinsic.getDataHandler()));
@@ -146,23 +138,23 @@ public class QueryResponseTransformer {
             foundNonObjRefs = true;
         }
 
-        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (var regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             response.getFolders().add(folderTransformer.fromEbXML(regPackage));
             foundNonObjRefs = true;
         }
 
-        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
+        for (var regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
             response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
             foundNonObjRefs = true;
         }
 
-        for (EbXMLAssociation association : ebXML.getAssociations()) {
+        for (var association : ebXML.getAssociations()) {
             response.getAssociations().add(associationTransformer.fromEbXML(association));
             foundNonObjRefs = true;
         }
 
         if (!foundNonObjRefs) {
-            EbXMLObjectLibrary standardLibrary = factory.createObjectLibrary();
+            var standardLibrary = factory.createObjectLibrary();
             ebXML.getReferences().stream()
                     .filter(ref -> standardLibrary.getById(ref.getId()) == null)
                     .forEach(ref -> response.getReferences().add(ref));
@@ -172,7 +164,7 @@ public class QueryResponseTransformer {
     }
 
     private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        EbXMLClassification classification = factory.createClassification(library);
+        var classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         classification.assignUniqueId();

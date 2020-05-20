@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import java.util.Objects;
 
 
 /**
@@ -135,11 +136,7 @@ public class RegistryError {
      *     
      */
     public String getSeverity() {
-        if (severity == null) {
-            return "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error";
-        } else {
-            return severity;
-        }
+        return Objects.requireNonNullElse(severity, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error");
     }
 
     /**

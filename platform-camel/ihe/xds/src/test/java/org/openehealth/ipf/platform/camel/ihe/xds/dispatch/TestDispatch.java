@@ -18,12 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,8 +46,8 @@ public class TestDispatch extends XdsStandardTestContainer {
         send(ITI_42_SERVICE_URI, SampleData.createRegisterDocumentSet());
         send(ITI_18_SERVICE_URI, SampleData.createFindDocumentsQuery());
         send(PHARM_1_SERVICE_URL, SampleData.createFindDispensesQuery());
-        AbstractMockedAuditMessageQueue queue = getAuditSender();
-        List<AuditMessage> messages = queue.getMessages();
+        var queue = getAuditSender();
+        var messages = queue.getMessages();
         assertEquals(6, messages.size());
     }
 }

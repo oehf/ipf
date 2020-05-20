@@ -144,7 +144,7 @@ public class SecurityAlertBuilder extends BaseAuditMessageBuilder<SecurityAlertB
     @Override
     public void validate() {
         super.validate();
-        int aps = getMessage().getActiveParticipants().size();
+        var aps = getMessage().getActiveParticipants().size();
         if (aps < 1 || aps > 2) {
             throw new AuditException("Must have one or two ActiveParticipants reporting this event");
         }

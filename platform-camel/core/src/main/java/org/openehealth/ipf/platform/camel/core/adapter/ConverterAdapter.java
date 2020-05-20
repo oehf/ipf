@@ -77,15 +77,15 @@ public class ConverterAdapter extends ProcessorAdapter {
             Object... inputParams) throws Exception {
         
         if (inputData instanceof InputStream) {
-            ReadableByteArrayOutputStream outputData = new ReadableByteArrayOutputStream();
+            var outputData = new ReadableByteArrayOutputStream();
             doProcess((InputStream)inputData, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.inputStream());
         } else if (inputData instanceof Reader) {
-            ReadableStringWriter outputData = new ReadableStringWriter();
+            var outputData = new ReadableStringWriter();
             doProcess((Reader)inputData, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.reader());
         } else if (inputData instanceof Source) {
-            ReadableStreamResult outputData = new ReadableStreamResult();
+            var outputData = new ReadableStreamResult();
             doProcess((Source)inputData, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.source());
         } else if (inputData instanceof String) {

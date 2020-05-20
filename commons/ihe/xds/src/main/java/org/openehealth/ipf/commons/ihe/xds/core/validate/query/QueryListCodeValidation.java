@@ -17,15 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -56,34 +53,34 @@ public class QueryListCodeValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> slotValues = request.getSlotValues(param.getSlotName());
-        for (String slotValue : slotValues) {
+        var slotValues = request.getSlotValues(param.getSlotName());
+        for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
-        QuerySlotHelper slots = new QuerySlotHelper(request);
-        QueryList<Code> codes = slots.toCodeQueryList(param, schemeParam);
+        var slots = new QuerySlotHelper(request);
+        var codes = slots.toCodeQueryList(param, schemeParam);
         
         if (codes != null) {
-            QueryList<String> schemes = slots.toStringQueryList(schemeParam);
+            var schemes = slots.toStringQueryList(schemeParam);
             if (schemes != null) {
                 metaDataAssert(codes.getOuterList().size() == schemes.getOuterList().size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
-                for (int idx = 0; idx < codes.getOuterList().size(); ++idx) {
+                for (var idx = 0; idx < codes.getOuterList().size(); ++idx) {
                     metaDataAssert(codes.getOuterList().get(idx).size() == schemes.getOuterList().get(idx).size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
                 }
             }
 
-            for (List<Code> innerList : codes.getOuterList()) {
-                for (Code code : innerList) {
+            for (var innerList : codes.getOuterList()) {
+                for (var code : innerList) {
                     metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
                     metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 }
             }
         }
         else {
-            QueryList<String> schemes = slots.toStringQueryList(schemeParam);
+            var schemes = slots.toStringQueryList(schemeParam);
             metaDataAssert(schemes == null, INVALID_QUERY_PARAMETER_VALUE, schemeParam);
         }
     }

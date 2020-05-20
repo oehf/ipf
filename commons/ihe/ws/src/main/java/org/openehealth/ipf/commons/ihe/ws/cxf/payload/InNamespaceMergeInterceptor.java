@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
@@ -29,7 +28,6 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
@@ -55,11 +53,11 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
             return;
         }
 
-        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        var payloadHolder = message.getContent(StringPayloadHolder.class);
         if (payloadHolder != null) {
-            String payload = payloadHolder.get(SOAP_BODY);
+            var payload = payloadHolder.get(SOAP_BODY);
             if (isXmlContent(payload)) {
-                Document document = (Document) message.getContent(Node.class);
+                var document = (Document) message.getContent(Node.class);
                 if (document != null) {
                     // The Node representation of the message is usually produced
                     // by CXF's ReadHeadersInterceptor, but this does not happen when the message
@@ -79,8 +77,8 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
      */
     private static boolean isXmlContent(String payload) {
         if (payload != null) {
-            for (int i = 0; i < payload.length(); ++i) {
-                char c = payload.charAt(i);
+            for (var i = 0; i < payload.length(); ++i) {
+                var c = payload.charAt(i);
                 if (!Character.isWhitespace(c)) {
                     return (c == '<');
                 }
@@ -110,21 +108,21 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
         Map<String, String> namespaces = new HashMap<>();
 
         // collect namespace definitions from <soap:Envelope>
-        Element envelope = source.getDocumentElement();
+        var envelope = source.getDocumentElement();
         addNamespacesFromElement(envelope, namespaces);
 
         // collect namespace definitions from <soap:Body>
-        Node node = envelope.getFirstChild();
+        var node = envelope.getFirstChild();
         while ((node != null) && !((node instanceof Element) && "Body".equals(node.getLocalName()))) {
             node = node.getNextSibling();
         }
-        Element body = (Element) node;
+        var body = (Element) node;
         addNamespacesFromElement(body, namespaces);
 
         if (!namespaces.isEmpty()) {
             // determine boundaries of the body's root element, ignore leading comments
-            int startPos = 0;
-            int endPos = target.indexOf('>');
+            var startPos = 0;
+            var endPos = target.indexOf('>');
             while ((endPos != -1) && "--".equals(target.substring(endPos - 2, endPos))) {
                 startPos = endPos + 1;
                 endPos = target.indexOf('>', startPos);
@@ -137,16 +135,16 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
             }
 
             // ignore namespaces which are (re)defined in the payload
-            String startTag = target.substring(startPos, endPos);
-            Matcher matcher = XMLNS_PATTERN.matcher(startTag);
+            var startTag = target.substring(startPos, endPos);
+            var matcher = XMLNS_PATTERN.matcher(startTag);
             while (matcher.find()) {
                 namespaces.remove(matcher.group(1));
             }
 
             // insert remained definitions (if any)
             if (!namespaces.isEmpty()) {
-                StringBuilder sb = new StringBuilder(startTag);
-                for (Map.Entry<String, String> ns : namespaces.entrySet()) {
+                var sb = new StringBuilder(startTag);
+                for (var ns : namespaces.entrySet()) {
                     sb.append(" xmlns:").append(ns.getKey()).append("=\"")
                       .append(ns.getValue()).append('"');
                 }
@@ -166,9 +164,9 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
      * in the tree-descending order.
      */
     protected static void addNamespacesFromElement(Element elem, Map<String, String> map) {
-        NamedNodeMap attributes = elem.getAttributes();
-        for (int i = 0; i < attributes.getLength(); ++i) {
-            Node attribute = attributes.item(i);
+        var attributes = elem.getAttributes();
+        for (var i = 0; i < attributes.getLength(); ++i) {
+            var attribute = attributes.item(i);
             if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(attribute.getNamespaceURI())) {
                 map.put(attribute.getLocalName(), attribute.getTextContent());
             }

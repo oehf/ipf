@@ -30,10 +30,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
@@ -113,7 +109,6 @@
         <dependency>
             <groupId>com.sun.xml.messaging.saaj</groupId>
             <artifactId>saaj-impl</artifactId>
-            <version>1.4.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

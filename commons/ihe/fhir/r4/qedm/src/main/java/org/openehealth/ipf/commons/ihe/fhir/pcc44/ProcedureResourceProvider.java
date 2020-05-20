@@ -59,7 +59,7 @@ public class ProcedureResourceProvider extends AbstractPcc44ResourceProvider<Pro
             HttpServletResponse httpServletResponse) {
 
 
-        ProcedureSearchParameters parameters = ProcedureSearchParameters.builder()
+        var parameters = ProcedureSearchParameters.builder()
                 .patientReference(patient)
                 .date(date)
                 ._id(resourceId)

@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.audit;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.ClientAuth;
 import io.vertx.core.net.JksOptions;
-import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.ext.unit.Async;
 import org.slf4j.Logger;
@@ -28,14 +27,12 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class TCPSyslogServer extends AbstractVerticle {
+class TCPSyslogServer extends AbstractVerticle {
 
     private static final Logger LOG = LoggerFactory.getLogger(TCPSyslogServer.class);
 
     private final int port;
-
     private final NetServerOptions nsOptions;
-
     private final Async async;
 
     public TCPSyslogServer(int port, Async async){
@@ -69,7 +66,7 @@ public class TCPSyslogServer extends AbstractVerticle {
     @Override
     public void start() {
         LOG.info("Starting syslog server");
-        NetServer netServer = vertx.createNetServer(nsOptions);
+        var netServer = vertx.createNetServer(nsOptions);
         netServer.connectHandler(netSocket -> netSocket.handler(buffer -> {
             LOG.debug("Received content on port {} ({} bytes)", port, buffer.length());
             async.countDown();

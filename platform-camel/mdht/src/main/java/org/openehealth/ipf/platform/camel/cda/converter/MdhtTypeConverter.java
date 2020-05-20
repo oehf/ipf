@@ -31,9 +31,9 @@ public class MdhtTypeConverter {
 
     @Converter
     public static InputStream toInputStream(ClinicalDocument document, Exchange exchange) {
-        Charset charset = Charset.defaultCharset();
+        var charset = Charset.defaultCharset();
         if (exchange != null) {
-            String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            var charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
             if (charsetName != null) {
                 charset = Charset.forName(charsetName);
             }

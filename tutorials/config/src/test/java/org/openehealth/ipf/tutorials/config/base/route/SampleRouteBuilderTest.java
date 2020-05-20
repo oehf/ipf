@@ -57,8 +57,8 @@ public class SampleRouteBuilderTest {
     @Test
     public void testReverse() throws Exception {
         mockFile.expectedMessageCount(1);
-        String request = "BLAH";
-        String response = producerTemplate.requestBody(JETTY_URI + "/reverse", request, String.class);
+        var request = "BLAH";
+        var response = producerTemplate.requestBody(JETTY_URI + "/reverse", request, String.class);
         assertEquals("reversed response: HALB", response);
         mockFile.assertIsSatisfied();
         assertEquals(request, mockFile.getExchanges().get(0).getIn().getBody(String.class));
@@ -66,9 +66,9 @@ public class SampleRouteBuilderTest {
 
     @Test
     public void testMap() throws Exception {
-        mockFile.expectedMessageCount(1);        
-        String hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
-        String response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
+        mockFile.expectedMessageCount(1);
+        var hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
+        var response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
         assertTrue(response.contains("Nachname||W|||Blahplatz"));
         mockFile.assertIsSatisfied();
     }
@@ -79,7 +79,7 @@ public class SampleRouteBuilderTest {
             producerTemplate.requestBody(JETTY_URI + "/map", "BLAH");
         } catch (Exception e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
-            String response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
+            var response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
             assertTrue(response.startsWith("Message encoding is not recognized"));
             assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());            
         }

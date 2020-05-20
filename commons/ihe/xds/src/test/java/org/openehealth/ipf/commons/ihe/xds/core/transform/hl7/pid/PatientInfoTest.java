@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -29,8 +27,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -45,7 +44,7 @@ public class PatientInfoTest {
     private static final PatientInfoTransformer PATIENT_INFO_TRANSFORMER = new PatientInfoTransformer();
 
     private static void assertValidationFailure(RegisterDocumentSet request, ValidationMessage expectedValidationMessage) {
-        boolean failed = false;
+        var failed = false;
         try {
             SUBMIT_OBJECTS_REQUEST_VALIDATOR.validate(REGISTER_DOCUMENT_SET_TRANSFORMER.toEbXML(request), XDS.Interactions.ITI_42);
         } catch (XDSMetaDataException e) {
@@ -56,7 +55,7 @@ public class PatientInfoTest {
     }
 
     private static List<String> getRenderedStrings(List<String> strings, String fieldName, int expectedCount) {
-        List<String> result = strings.stream()
+        var result = strings.stream()
                 .filter(s -> s.startsWith(fieldName + '|'))
                 .collect(Collectors.toList());
         assertEquals("Expected " + expectedCount + " lines for " + fieldName, expectedCount, result.size());
@@ -69,17 +68,17 @@ public class PatientInfoTest {
 
     @Test
     public void testNonPidFields() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
         patientInfo.getHl7FieldIterator("OBX-5").add("abc");
         assertValidationFailure(request, ValidationMessage.INVALID_PID);
     }
 
     @Test
     public void testRawNamesHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-5");
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-5");
         assertTrue(rawIterator.hasNext());
 
         // clear the list
@@ -97,24 +96,24 @@ public class PatientInfoTest {
         rawIterator.add("^^^^^");
 
         // check using other iterator type
-        ListIterator<Name> xdsIterator = patientInfo.getNames();
+        var xdsIterator = patientInfo.getNames();
         assertEquals(new XcnName("Krause", "Peter", null, null, null, "Dr."), xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
+        assertNull(xdsIterator.next());
         assertEquals(new XpnName("Schmitt", "Jens", "Klaus Heinz", null, "Ritter", null), xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
+        assertNull(xdsIterator.next());
+        assertNull(xdsIterator.next());
         assertFalse(xdsIterator.hasNext());
 
         // check rendering
-        List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-5", 1);
+        var renderedStrings = getRenderedStrings(patientInfo, "PID-5", 1);
         assertEquals("PID-5|Krause^Peter^^^^Dr.^^^^^^~~Schmitt^Jens^Klaus Heinz^^Ritter^^^^^^~~^^^^^", renderedStrings.get(0));
     }
 
     @Test
     public void testXdsNamesHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<Name> xdsIterator = patientInfo.getNames();
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var xdsIterator = patientInfo.getNames();
         assertTrue(xdsIterator.hasNext());
 
         // clear the list
@@ -131,7 +130,7 @@ public class PatientInfoTest {
         xdsIterator.add(null);
 
         // check using other iterator type
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-5");
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-5");
         assertEquals("Krause^Peter^^^^Dr.", rawIterator.next());
         assertEquals("", rawIterator.next());
         assertEquals("Schmitt^Jens^Klaus Heinz^^Ritter", rawIterator.next());
@@ -141,9 +140,9 @@ public class PatientInfoTest {
 
     @Test
     public void testRawBirthDateHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-7");
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertTrue(rawIterator.hasNext());
 
         // clear the list
@@ -159,15 +158,15 @@ public class PatientInfoTest {
         rawIterator.add("20010203040506");
 
         // check
-        assertEquals(null, patientInfo.getDateOfBirth());
-        List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
+        assertNull(patientInfo.getDateOfBirth());
+        var renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~~20010203040506", renderedStrings.get(0));
 
         // delete the first value and check again
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~20010203040506", renderedStrings.get(0));
 
@@ -175,16 +174,16 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(new Timestamp(new DateTime(2001, 2, 3, 4, 5, 6, DateTimeZone.UTC), Timestamp.Precision.SECOND), patientInfo.getDateOfBirth());
+        assertEquals(new Timestamp(ZonedDateTime.of(2001, 2, 3, 4, 5, 6,0, ZoneId.of("UTC")), Timestamp.Precision.SECOND), patientInfo.getDateOfBirth());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|20010203040506", renderedStrings.get(0));
     }
 
     @Test
     public void testXdsBirthDateHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-7");
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertTrue(rawIterator.hasNext());
 
         // clear the list
@@ -204,37 +203,34 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertEquals("20010203", rawIterator.next());
         assertFalse(rawIterator.hasNext());
-        List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
+        var renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|20010203", renderedStrings.get(0));
-        assertEquals(new Timestamp(new DateTime(2001, 2, 3, 4, 5, 6, DateTimeZone.UTC), Timestamp.Precision.DAY), patientInfo.getDateOfBirth());
+        assertEquals(new Timestamp(ZonedDateTime.of(2001, 2, 3, 4, 5, 6,0, ZoneId.of("UTC")), Timestamp.Precision.DAY), patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 2
         patientInfo.setDateOfBirth("");
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setDateOfBirth((String) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 4
         patientInfo.setDateOfBirth((Timestamp) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
     }
 
     @Test
     public void testRawGenderHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-8");
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertTrue(rawIterator.hasNext());
 
         // clear the list
@@ -250,15 +246,15 @@ public class PatientInfoTest {
         rawIterator.add("M");
 
         // check
-        assertEquals(null, patientInfo.getGender());
-        List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
+        assertNull(patientInfo.getGender());
+        var renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~~M", renderedStrings.get(0));
 
         // delete the first value and check again
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
         renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~M", renderedStrings.get(0));
 
@@ -273,9 +269,9 @@ public class PatientInfoTest {
 
     @Test
     public void testXdsGenderHandling() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-8");
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertTrue(rawIterator.hasNext());
 
         // clear the list
@@ -295,7 +291,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertEquals("F", rawIterator.next());
         assertFalse(rawIterator.hasNext());
-        List<String> renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
+        var renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|F", renderedStrings.get(0));
         assertEquals("F", patientInfo.getGender());
 
@@ -303,22 +299,20 @@ public class PatientInfoTest {
         patientInfo.setGender("");
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setGender(null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
     }
 
     @Test
     public void testInPlaceModification() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
-        ListIterator<Name> xdsIterator = patientInfo.getNames();
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var xdsIterator = patientInfo.getNames();
         assertTrue(xdsIterator.hasNext());
 
         // clear the list
@@ -335,7 +329,7 @@ public class PatientInfoTest {
         xdsIterator.add(null);
 
         // check using other iterator type
-        ListIterator<String> rawIterator = patientInfo.getHl7FieldIterator("PID-5");
+        var rawIterator = patientInfo.getHl7FieldIterator("PID-5");
         assertEquals("Krause^Peter^^^^Dr.", rawIterator.next());
         assertEquals("", rawIterator.next());
         assertEquals("Schmitt^Jens^Klaus Heinz^^Ritter", rawIterator.next());
@@ -344,7 +338,7 @@ public class PatientInfoTest {
 
         // modify values in place -- shall be NOT propagated to HL7 strings
         xdsIterator = patientInfo.getNames();
-        Name name = xdsIterator.next();
+        var name = xdsIterator.next();
         assertEquals(new XcnName("Krause", "Peter", null, null, null, "Dr."), name);
         name.setFamilyName("Mueller");
         assertEquals(new XcnName("Mueller", "Peter", null, null, null, "Dr."), name);
@@ -366,8 +360,8 @@ public class PatientInfoTest {
 
     @Test
     public void testToString() {
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        PatientInfo patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
+        var request = SampleData.createRegisterDocumentSet();
+        var patientInfo = request.getDocumentEntries().get(0).getSourcePatientInfo();
 
         // standard fields
         patientInfo.getIds().add(new Identifiable("123", new AssigningAuthority("1.2.3")));
@@ -378,31 +372,31 @@ public class PatientInfoTest {
         patientInfo.setGender("M");
 
         // custom fields
-        ListIterator<String> citizenships = patientInfo.getHl7FieldIterator("PID-26");
+        var citizenships = patientInfo.getHl7FieldIterator("PID-26");
         citizenships.add("Greenland");
         citizenships.add("New Guinea");
 
-        ListIterator<String> religions = patientInfo.getHl7FieldIterator("PID-17");
+        var religions = patientInfo.getHl7FieldIterator("PID-17");
         religions.add("Buddhism");
 
-        ListIterator<String> maritalStatuses = patientInfo.getHl7FieldIterator("PID-16");
+        var maritalStatuses = patientInfo.getHl7FieldIterator("PID-16");
         maritalStatuses.add(null);
         maritalStatuses.add("");
         maritalStatuses.add(null);
         maritalStatuses.add("");
 
-        ListIterator<String> ethnicGroups = patientInfo.getHl7FieldIterator("PID-22");
+        var ethnicGroups = patientInfo.getHl7FieldIterator("PID-22");
         // do not add any ethnic group, the call was just to create an empty entry
 
-        ListIterator<String> motherIdentifiers = patientInfo.getHl7FieldIterator("PID-21");
+        var motherIdentifiers = patientInfo.getHl7FieldIterator("PID-21");
         motherIdentifiers.add("motherId^^^&1.2.3.4.5&ISO");
 
         // check toString() -- the fields must be in proper order, and without PID-22
-        String s = patientInfo.toString();
+        var s = patientInfo.toString();
         assertTrue(s.contains("PID-16=[null, , null, ], PID-17=[Buddhism], PID-21=[motherId^^^&1.2.3.4.5&ISO], PID-26=[Greenland, New Guinea]"));
 
         // check HL7 rendering -- the fields must be in proper order, and without PID-22
-        List<String> rendered = PATIENT_INFO_TRANSFORMER.toHL7(patientInfo);
+        var rendered = PATIENT_INFO_TRANSFORMER.toHL7(patientInfo);
         assertEquals("PID-3|124^^^&1.2.3&ISO~123^^^&1.2.3&ISO", rendered.get(0));
         assertEquals("PID-5|Schmitt^Jens^Klaus Heinz^^Ritter~Krause^Peter^^^^Dr.~Susi", rendered.get(1));
         assertEquals("PID-7|19761230", rendered.get(2));

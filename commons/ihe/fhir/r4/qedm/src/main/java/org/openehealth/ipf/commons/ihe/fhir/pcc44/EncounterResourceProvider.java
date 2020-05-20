@@ -59,7 +59,7 @@ public class EncounterResourceProvider extends AbstractPcc44ResourceProvider<Enc
             HttpServletResponse httpServletResponse) {
 
 
-        EncounterSearchParameters parameters = EncounterSearchParameters.builder()
+        var parameters = EncounterSearchParameters.builder()
                 .patientReference(patient)
                 .date(date)
                 ._id(resourceId)

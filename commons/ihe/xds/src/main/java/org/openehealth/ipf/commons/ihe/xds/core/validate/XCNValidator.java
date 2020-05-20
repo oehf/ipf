@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import ca.uhn.hl7v2.model.v25.datatype.HD;
-import ca.uhn.hl7v2.model.v25.datatype.XCN;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 
@@ -35,16 +33,16 @@ public class XCNValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7xcn) throws XDSMetaDataException {
-        Person person = Hl7v2Based.parse(hl7xcn, Person.class);
+        var person = Hl7v2Based.parse(hl7xcn, Person.class);
         metaDataAssert(person != null, PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
-        XCN xcn = person.getHapiObject();
+        var xcn = person.getHapiObject();
         metaDataAssert(
                 isNotEmpty(xcn.getXcn1_IDNumber().getValue()) ||
                 isNotEmpty(xcn.getXcn2_FamilyName().getFn1_Surname().getValue()),
                 PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
-        HD hd = xcn.getXcn9_AssigningAuthority();
+        var hd = xcn.getXcn9_AssigningAuthority();
         if (isNotEmptyField(hd)) {
             metaDataAssert(isNotEmpty(xcn.getXcn1_IDNumber().getValue()), PERSON_HD_INOPPORTUNE, hl7xcn);
             HD_VALIDATOR.validate(hd, hl7xcn);

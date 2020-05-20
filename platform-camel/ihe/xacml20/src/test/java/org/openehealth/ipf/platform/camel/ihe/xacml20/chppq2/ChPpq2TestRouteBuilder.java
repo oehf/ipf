@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
 import java.io.StringWriter;
 
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq2RequestValidator;
@@ -40,13 +38,13 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
         from("ch-ppq2:ch-ppq-success")
                 .process(chPpq2RequestValidator())
                 .process(exchange -> {
-                    InputStream stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq2/ppq-query-backend-response.xml");
-                    Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
+                    var stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq2/ppq-query-backend-response.xml");
+                    var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
                     JAXBElement<?> jaxbElement = (JAXBElement) unmarshaller.unmarshal(stream);
                     exchange.getOut().setBody(jaxbElement.getValue());
-                    Marshaller marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
+                    var marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    StringWriter writer = new StringWriter();
+                    var writer = new StringWriter();
                     marshaller.marshal(exchange.getOut().getBody(), writer);
                     log.debug("PPQ output message:\n{}", writer.toString());
                 })

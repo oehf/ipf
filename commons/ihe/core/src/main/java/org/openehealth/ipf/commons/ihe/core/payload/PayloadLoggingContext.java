@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.core.payload;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,7 +29,7 @@ public class PayloadLoggingContext {
     private static final String PROCESS_ID;
 
     static {
-        RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
+        var mx = ManagementFactory.getRuntimeMXBean();
         PROCESS_ID = mx.getName().replace("@", "-");
     }
 

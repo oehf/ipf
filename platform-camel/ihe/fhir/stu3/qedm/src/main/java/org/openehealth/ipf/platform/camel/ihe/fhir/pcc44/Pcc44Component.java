@@ -57,7 +57,7 @@ public class Pcc44Component extends FhirComponent<FhirQueryAuditDataset> {
     protected FhirEndpointConfiguration<FhirQueryAuditDataset> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
         FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", FhirTransactionOptionsProvider.class, new Pcc44OptionsProvider());
-        String options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+        var options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
         List<? extends FhirTransactionOptions> iti44Options = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());
         if (iti44Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for qedm-pcc44 is invalid");

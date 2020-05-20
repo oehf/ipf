@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.phase.Phase;
 
 import static java.util.Objects.requireNonNull;
@@ -44,7 +43,7 @@ public class RejectionHandlerInterceptor extends AbstractSoapInterceptor {
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
-        Exchange exchange = message.getExchange();
+        var exchange = message.getExchange();
         if (strategy.isRejected(exchange)) {
             strategy.handleRejectedExchange(exchange);
         }

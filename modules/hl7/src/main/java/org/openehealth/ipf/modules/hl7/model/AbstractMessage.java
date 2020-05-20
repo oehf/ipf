@@ -50,7 +50,7 @@ public abstract class AbstractMessage extends ca.uhn.hl7v2.model.AbstractMessage
 
     private void init() {
         try {
-            for (Map.Entry<Class<? extends Structure>, Cardinality> structure : structures(
+            for (var structure : structures(
                     new LinkedHashMap<>())
                     .entrySet()) {
                 switch (structure.getValue()) {

@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 public class AddressTransformerTest {
     @Test
     public void testToHL7() {
-        Address address = new Address();
+        var address = new Address();
         address.setStreetAddress("Laliluna Str. 2&3");
         address.setCity("Sonn^hofen");
         address.setCountry("ECU");
@@ -55,7 +55,7 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7() {
-        Address address = Hl7v2Based.parse(
+        var address = Hl7v2Based.parse(
                 "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
                 Address.class);
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());
@@ -69,7 +69,7 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7UsingSAD() {
-        Address address = Hl7v2Based.parse(
+        var address = Hl7v2Based.parse(
                 "Laliluna Str. 2\\T\\3&whatever^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
                 Address.class);
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());

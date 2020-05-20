@@ -58,7 +58,7 @@ public class XslTransmogrifierWithGlobalParameterTest {
     @Test
     public void testConvertString() throws IOException {
         Source content = new StreamSource(getClass().getResourceAsStream("/xslt/parameterExample.xml"));
-        String s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
+        var s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
         assertTrue(s.contains("ein negeR mi tgaz ellezaG tim regeN niE"));
     }
 

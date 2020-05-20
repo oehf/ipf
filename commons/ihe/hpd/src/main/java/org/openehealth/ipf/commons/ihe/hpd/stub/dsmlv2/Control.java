@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -111,11 +112,7 @@ public class Control {
      *     
      */
     public boolean isCriticality() {
-        if (criticality == null) {
-            return false;
-        } else {
-            return criticality;
-        }
+        return Objects.requireNonNullElse(criticality, false);
     }
 
     /**

@@ -30,9 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 /**
  * @author Dmytro Rud
@@ -58,7 +55,7 @@ public class InNamespaceMergeInterceptorTest {
     
     @BeforeClass
     public static void setUpClass() throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        var factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
         builder = factory.newDocumentBuilder();
@@ -79,12 +76,12 @@ public class InNamespaceMergeInterceptorTest {
      * Returns the prefix-to-uri map. 
      */
     private static Map<String, String> merge(String payload) throws Exception {
-        String target = InNamespaceMergeInterceptor.enrichNamespaces(SOURCE, payload);
-        Element element = parse(target).getDocumentElement();
+        var target = InNamespaceMergeInterceptor.enrichNamespaces(SOURCE, payload);
+        var element = parse(target).getDocumentElement();
         Map<String, String> result = new HashMap<>();
-        NamedNodeMap attributes = element.getAttributes();
-        for (int i = 0; i < attributes.getLength(); ++i) {
-            Node attribute = attributes.item(i);
+        var attributes = element.getAttributes();
+        for (var i = 0; i < attributes.getLength(); ++i) {
+            var attribute = attributes.item(i);
             if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(attribute.getNamespaceURI())) {
                 result.put(attribute.getLocalName(), attribute.getTextContent());
             }

@@ -74,14 +74,14 @@ public final class URN implements Comparable<URN>, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        URN urn = (URN) o;
+        var urn = (URN) o;
         return getNamespaceId().equalsIgnoreCase(urn.getNamespaceId()) &&
                 getNamespaceSpecificString().equals(urn.getNamespaceSpecificString());
     }
 
     @Override
     public int hashCode() {
-        int result = getNamespaceId().toLowerCase(Locale.ROOT).hashCode();
+        var result = getNamespaceId().toLowerCase(Locale.ROOT).hashCode();
         result = 31 * result + getNamespaceSpecificString().hashCode();
         return result;
     }

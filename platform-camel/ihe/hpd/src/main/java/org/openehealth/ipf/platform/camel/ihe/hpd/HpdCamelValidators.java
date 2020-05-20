@@ -31,63 +31,63 @@ public class HpdCamelValidators {
 
     private static final Processor ITI_58_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            var request = exchange.getIn().getMandatoryBody(BatchRequest.class);
             HpdValidator.validateIti58Request(request);
         }
     };
 
     private static final Processor ITI_58_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            var response = exchange.getIn().getMandatoryBody(BatchResponse.class);
             HpdValidator.validateIti58Response(response);
         }
     };
 
     private static final Processor ITI_59_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            var request = exchange.getIn().getMandatoryBody(BatchRequest.class);
             HpdValidator.validateIti59Request(request);
         }
     };
 
     private static final Processor ITI_59_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            var response = exchange.getIn().getMandatoryBody(BatchResponse.class);
             HpdValidator.validateIti59Response(response);
         }
     };
 
     private static final Processor CH_PIDD_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            DownloadRequest request = exchange.getIn().getMandatoryBody(DownloadRequest.class);
+            var request = exchange.getIn().getMandatoryBody(DownloadRequest.class);
             HpdValidator.validateChPiddRequest(request);
         }
     };
 
     private static final Processor CH_PIDD_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            DownloadResponse response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
+            var response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
             HpdValidator.validateChPiddResponse(response);
         }
     };
 
     private static final Processor CH_CIQ_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
+            var request = exchange.getIn().getMandatoryBody(BatchRequest.class);
             HpdValidator.validateChCiqRequest(request);
         }
     };
 
     private static final Processor CH_CIQ_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+            var response = exchange.getIn().getMandatoryBody(BatchResponse.class);
             HpdValidator.validateChCiqResponse(response);
         }
     };
 
     private static final Processor CH_CIDD_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest request =
+            var request =
                     exchange.getIn().getMandatoryBody(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest.class);
             HpdValidator.validateChCiddRequest(request);
         }
@@ -95,7 +95,7 @@ public class HpdCamelValidators {
 
     private static final Processor CH_CIDD_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse response =
+            var response =
                     exchange.getIn().getMandatoryBody(org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse.class);
             HpdValidator.validateChCiddResponse(response);
         }

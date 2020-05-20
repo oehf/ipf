@@ -71,56 +71,56 @@ public class RetrieveDocumentResponseValidatorTest {
     @Test
     public void testDelegatesToRegistryResponseValidatorEmptyInternalRegistryResponse() {
         // Test a failure that is detected by the RegistryResponseValidator
-        RetrieveDocumentSetResponseType responseType = new RetrieveDocumentSetResponseType();
+        var responseType = new RetrieveDocumentSetResponseType();
         responseType.setRegistryResponse(null);
         expectFailure(INVALID_STATUS_IN_RESPONSE, new EbXMLRetrieveDocumentSetResponse30(responseType));
     }
     
     @Test
     public void testRepoIdMustBeSpecified() {
-        DocumentReference requestData = new DocumentReference(null, "doc3", "home3");
-        RetrievedDocument doc = new RetrievedDocument();
+        var requestData = new DocumentReference(null, "doc3", "home3");
+        var doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
         doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
-        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
     public void testDocIdMustBeSpecified() {
-        DocumentReference requestData = new DocumentReference("repo3", "", "home3");
-        RetrievedDocument doc = new RetrievedDocument();
+        var requestData = new DocumentReference("repo3", "", "home3");
+        var doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
         doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
-        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
     public void testMimeTypeMustBeSpecified() {
-        DocumentReference requestData = new DocumentReference("repo3", "doc3", "home3");
-        RetrievedDocument doc = new RetrievedDocument();
+        var requestData = new DocumentReference("repo3", "doc3", "home3");
+        var doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
         doc.setMimeType("");
         response.getDocuments().add(doc);
-        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         expectFailure(MIME_TYPE_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testDocumentMustBeSpecified() {
-        DocumentReference requestData = new DocumentReference("repo3", "doc3", "urn:oid:1.2.5");
-        RetrievedDocument doc = new RetrievedDocument();
+        var requestData = new DocumentReference("repo3", "doc3", "urn:oid:1.2.5");
+        var doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(null);
         doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
-        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML);
     }
         

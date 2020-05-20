@@ -224,7 +224,7 @@ public enum ErrorCode {
             return null;
         }
         
-        for (ErrorCode code : values()) {
+        for (var code : values()) {
             if (opcode.equals(code.getOpcode())) {
                 return code;
             }

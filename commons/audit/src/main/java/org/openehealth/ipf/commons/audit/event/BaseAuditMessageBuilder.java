@@ -165,7 +165,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                     EventId id,
                                     EventType type,
                                     Collection<PurposeOfUse> purposesOfUse) {
-        EventIdentificationType eventIdentification = new EventIdentificationType(id, Instant.now(), outcome);
+        var eventIdentification = new EventIdentificationType(id, Instant.now(), outcome);
         eventIdentification.setEventActionCode(action);
         eventIdentification.setEventOutcomeDescription(eventOutcomeDescription);
         if (type != null) {
@@ -206,7 +206,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     public T setAuditSourceIdentification(String sourceID,
                                           String enterpriseSiteID,
                                           Collection<AuditSource> typeCodes) {
-        AuditSourceIdentificationType asi = new AuditSourceIdentificationType(sourceID);
+        var asi = new AuditSourceIdentificationType(sourceID);
         if (typeCodes != null) {
             typeCodes.stream()
                     .filter(Objects::nonNull)
@@ -322,7 +322,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                   NetworkAccessPointTypeCode networkAccessPointTypeCode,
                                   String mediaIdentifier,
                                   MediaType mediaType) {
-        ActiveParticipantType ap = new ActiveParticipantType(userID, userIsRequestor);
+        var ap = new ActiveParticipantType(userID, userIsRequestor);
         ap.setAlternativeUserID(altUserID);
         ap.setUserName(userName);
         if (roleIdCodes != null) {
@@ -372,7 +372,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
      * @return this
      */
     public T addStudyParticipantObject(final String studyId, final List<TypeValuePairType> objectDetails) {
-        final DicomObjectDescriptionType dicomObjectDescriptionType = new DicomObjectDescriptionType();
+        final var dicomObjectDescriptionType = new DicomObjectDescriptionType();
         dicomObjectDescriptionType.getStudyIDs().add(studyId);
         return addParticipantObjectIdentification(
                 ParticipantObjectIdTypeCode.StudyInstanceUID,
@@ -442,7 +442,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                                 final ParticipantObjectDataLifeCycle objectDataLifeCycle,
                                                 final String objectSensitivity,
                                                 final List<DicomObjectDescriptionType> dicomDescriptions) {
-        final ParticipantObjectIdentificationType poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
+        final var poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
         poit.setParticipantObjectName(objectName);
         poit.setParticipantObjectQuery(objectQuery);

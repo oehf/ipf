@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
@@ -63,9 +62,9 @@ public class QueryRegistryTransformerTest {
     }
 
     private void checkForQuery(Query query) {
-        QueryRegistry request = new QueryRegistry(query);
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        QueryRegistry result = transformer.fromEbXML(ebXML);
+        var request = new QueryRegistry(query);
+        var ebXML = transformer.toEbXML(request);
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(request, result);
     }
 }

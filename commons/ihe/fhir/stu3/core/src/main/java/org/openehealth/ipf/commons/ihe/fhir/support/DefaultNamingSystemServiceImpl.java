@@ -48,7 +48,7 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
     }
 
     public void setNamingSystemsFromXml(URL... urls) throws IOException {
-        for (URL url : urls) {
+        for (var url : urls) {
             addNamingSystemsFromXml(new BufferedReader(new InputStreamReader(url.openStream())));
         }
     }
@@ -59,7 +59,7 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
     }
 
     public void setNamingSystemsFromJson(URL... urls) throws IOException {
-        for (URL url : urls) {
+        for (var url : urls) {
             addNamingSystemsFromJson(new BufferedReader(new InputStreamReader(url.openStream())));
         }
     }

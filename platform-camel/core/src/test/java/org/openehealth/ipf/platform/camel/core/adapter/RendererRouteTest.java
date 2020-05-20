@@ -29,7 +29,7 @@ public class RendererRouteTest extends AbstractRouteTest {
 
     @Test
     public void testRenderer() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:renderer-test",
+        var result = (String) producerTemplate.sendBody("direct:renderer-test",
                 ExchangePattern.InOut, "input");
         assertEquals("rendered: input", result);
     }

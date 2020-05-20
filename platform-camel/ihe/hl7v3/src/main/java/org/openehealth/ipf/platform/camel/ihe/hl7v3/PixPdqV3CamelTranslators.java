@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV3toV2;
@@ -41,10 +40,10 @@ abstract public class PixPdqV3CamelTranslators {
      */
     public static Processor translatorHL7v3toHL7v2(final Hl7TranslatorV3toV2 translator) {
         return exchange -> {
-            ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
-            String xmlText = exchange.getIn().getMandatoryBody(String.class);
+            var initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
+            var xmlText = exchange.getIn().getMandatoryBody(String.class);
             exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
-            Message resultMessage = Exchanges.resultMessage(exchange);
+            var resultMessage = Exchanges.resultMessage(exchange);
             resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
         };
@@ -57,11 +56,11 @@ abstract public class PixPdqV3CamelTranslators {
      */
     public static Processor translatorHL7v2toHL7v3(final Hl7TranslatorV2toV3 translator) {
         return exchange -> {
-            String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-            ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+            var initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
+            var msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
             exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
-            Message resultMessage = Exchanges.resultMessage(exchange);
-            String charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);
+            var resultMessage = Exchanges.resultMessage(exchange);
+            var charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);
             resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
         };

@@ -62,7 +62,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
 
     @Override
     public void validate(Source message, String schema) {
-        List<ValidationException> exceptions = doValidate(message, schema);
+        var exceptions = doValidate(message, schema);
         if (! exceptions.isEmpty()) {
             throw new ValidationException(exceptions);
         }
@@ -78,12 +78,12 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
     protected List<ValidationException> doValidate(Source message, String schemaResource) {
         try {
             LOG.debug("Validating XML message");
-            Schema schema = resource(schemaResource);
-            javax.xml.validation.Validator validator = schema.newValidator();
-            CollectingErrorHandler errorHandler = new CollectingErrorHandler();
+            var schema = resource(schemaResource);
+            var validator = schema.newValidator();
+            var errorHandler = new CollectingErrorHandler();
             validator.setErrorHandler(errorHandler);
             validator.validate(message);
-            List<ValidationException> exceptions = errorHandler.getExceptions();
+            var exceptions = errorHandler.getExceptions();
             if (! exceptions.isEmpty()) {
                 LOG.debug("Message validation found {} problems", exceptions.size());
             } else {
@@ -99,7 +99,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
     @Override
     protected Schema createResource(Object... params) {
         // SchemaFactory is neither thread-safe nor reentrant
-        SchemaFactory factory = SchemaFactory.newInstance(getSchemaLanguage());
+        var factory = SchemaFactory.newInstance(getSchemaLanguage());
 
         // Register resource resolver to resolve external XML schemas
         factory.setResourceResolver(RESOURCE_RESOLVER);

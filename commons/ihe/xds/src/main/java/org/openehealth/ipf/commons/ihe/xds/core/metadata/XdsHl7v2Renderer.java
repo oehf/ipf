@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.model.Primitive;
-import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.DefaultEscaping;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
@@ -65,10 +64,10 @@ public abstract class XdsHl7v2Renderer {
             int... fieldNumbers)
     {
         Collection<Integer> collection = new HashSet<>(fieldNumbers.length);
-        for (int number : fieldNumbers) {
+        for (var number : fieldNumbers) {
             collection.add(number - 1);
         }
-        StringBuilder key = new StringBuilder(hl7Class.getSimpleName());
+        var key = new StringBuilder(hl7Class.getSimpleName());
         if (xdsClass != null) {
             key.append('\n').append(xdsClass.getSimpleName());
         }
@@ -101,15 +100,15 @@ public abstract class XdsHl7v2Renderer {
     }
 
     private static boolean isEmpty(Composite composite, String keyModifier) throws HL7Exception {
-        Type[] fields = composite.getComponents();
+        var fields = composite.getComponents();
 
-        String key = composite.getClass().getSimpleName();
-        Collection<Integer> inclusions = INCLUSIONS.get(key);
+        var key = composite.getClass().getSimpleName();
+        var inclusions = INCLUSIONS.get(key);
         if (inclusions == null) {
             inclusions = INCLUSIONS.get(key + keyModifier);
         }
 
-        for (int i = 0; i < fields.length; ++i) {
+        for (var i = 0; i < fields.length; ++i) {
             if ((inclusions == null) || inclusions.contains(i)) {
                 if (fields[i] instanceof Composite) {
                     if (!isEmpty((Composite) fields[i], keyModifier)) {
@@ -146,16 +145,16 @@ public abstract class XdsHl7v2Renderer {
 
 
     private static String encodeComposite(Composite composite, String keyModifier, char delimiter) {
-        StringBuilder sb = new StringBuilder();
-        Type[] fields = composite.getComponents();
+        var sb = new StringBuilder();
+        var fields = composite.getComponents();
 
-        String key = composite.getClass().getSimpleName();
-        Collection<Integer> inclusions = INCLUSIONS.get(key);
+        var key = composite.getClass().getSimpleName();
+        var inclusions = INCLUSIONS.get(key);
         if (inclusions == null) {
             inclusions = INCLUSIONS.get(key + keyModifier);
         }
 
-        for (int i = 0; i < fields.length; ++i) {
+        for (var i = 0; i < fields.length; ++i) {
             if ((inclusions == null) || inclusions.contains(i)) {
                 if (fields[i] instanceof Composite) {
                     sb.append(encodeComposite((Composite) fields[i], keyModifier, ENCODING_CHARACTERS.getSubcomponentSeparator()));
@@ -174,7 +173,7 @@ public abstract class XdsHl7v2Renderer {
 
 
     private static String encodePrimitive(Primitive p) {
-        String value = p.getValue();
+        var value = p.getValue();
         return (value == null) ? "" : ESCAPING.escape(value, ENCODING_CHARACTERS);
     }
 

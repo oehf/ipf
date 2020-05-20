@@ -15,10 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl;
-import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.slf4j.Logger;
@@ -26,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
 
 import javax.security.auth.message.config.AuthConfigFactory;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -47,7 +44,7 @@ public class TomcatServer extends ServletServer {
         embedded = new Tomcat();
         AuthConfigFactory.setFactory(new AuthConfigFactoryImpl());
 
-        Context context = embedded.addContext(getContextPath(), "/");
+        var context = embedded.addContext(getContextPath(), "/");
         context.addParameter("contextConfigLocation", getContextResource());
         context.addApplicationListener(ContextLoaderListener.class.getName());
 
@@ -56,7 +53,7 @@ public class TomcatServer extends ServletServer {
         // Each servlet should get an unique name, otherwise all servers will reuse
         // one and the same servlet instance.  Note that name clashes with servlets
         // created somewhere else are still possible.
-        String servletName = getServletName() == null ?
+        var servletName = getServletName() == null ?
                 "ipf-servlet-" + SERVLET_COUNTER.getAndIncrement() :
                 getServletName();
 
@@ -64,7 +61,7 @@ public class TomcatServer extends ServletServer {
         wrapper.setName(servletName);
         wrapper.setServletClass(getServlet().getClass().getName());
 
-        for (Map.Entry<String, String> parameters : getInitParameters().entrySet()) {
+        for (var parameters : getInitParameters().entrySet()) {
             wrapper.addInitParameter(parameters.getKey(), parameters.getValue());
         }
 
@@ -76,7 +73,7 @@ public class TomcatServer extends ServletServer {
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
         */
-        Connector connector = embedded.getConnector();
+        var connector = embedded.getConnector();
         connector.setPort(getPort());
         if (isSecure()) {
             connector.setSecure(true);

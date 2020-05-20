@@ -30,7 +30,6 @@ import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 /**
@@ -55,11 +54,11 @@ public class TtlHeaderUtils {
                 AbstractWsEndpoint.INCOMING_SOAP_HEADERS,
                 Map.class));
         if ((soapHeaders != null) && soapHeaders.containsKey(TTL_HEADER_QNAME)) {
-            Object o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
+            var o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
             if (o instanceof Element) {
-                Node child = ((Element) o).getFirstChild();
+                var child = ((Element) o).getFirstChild();
                 if (child instanceof Text) {
-                    String value = child.getNodeValue();
+                    var value = child.getNodeValue();
                     try {
                         return DatatypeFactory.newInstance().newDuration(value);
                     } catch (Exception e) {
@@ -77,13 +76,13 @@ public class TtlHeaderUtils {
      * associated with the given message.
      */
     public static void setTtl(Duration dura, Message message) {
-        Object soapHeaders = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
+        var soapHeaders = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
         if (soapHeaders == null) {
             soapHeaders = new ArrayList<>();
             message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
         }
-        
-        Header ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
+
+        var ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
         if (soapHeaders instanceof Collection) {
             ((Collection) soapHeaders).add(ttlHeader);
         } else if (soapHeaders instanceof Map) {

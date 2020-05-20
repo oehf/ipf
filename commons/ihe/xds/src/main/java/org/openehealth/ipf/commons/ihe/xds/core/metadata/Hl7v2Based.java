@@ -90,7 +90,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         try {
-            T xdsModelObject = xdsModelClass.newInstance();
+            var xdsModelObject = xdsModelClass.newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
         } catch (InstantiationException | IllegalAccessException | HL7Exception e) {
@@ -181,12 +181,12 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     }
 
     protected static Integer getIntegerValue(Primitive p) {
-        String value = p.getValue();
+        var value = p.getValue();
         return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Integer(value);
     }
 
     protected static Long getLongValue(Primitive p) {
-        String value = p.getValue();
+        var value = p.getValue();
         return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Long(value);
     }
 
@@ -199,7 +199,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      */
     protected static void setAssigningAuthority(AssigningAuthority assigningAuthority, HD target) {
         if (assigningAuthority != null) {
-            HD source = assigningAuthority.getHapiObject().getInternal();
+            var source = assigningAuthority.getHapiObject().getInternal();
             setValue(target.getHd1_NamespaceID(), source.getHd1_NamespaceID().getValue());
             setValue(target.getHd2_UniversalID(), source.getHd2_UniversalID().getValue());
             setValue(target.getHd3_UniversalIDType(), source.getHd3_UniversalIDType().getValue());

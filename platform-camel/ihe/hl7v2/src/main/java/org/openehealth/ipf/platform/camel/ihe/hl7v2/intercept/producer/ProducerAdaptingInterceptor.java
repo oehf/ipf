@@ -69,7 +69,7 @@ public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
+        var msg = Hl7v2MarshalUtils.extractHapiMessage(
                 exchange.getIn(),
                 characterSet(exchange),
                 getEndpoint().getHl7v2TransactionConfiguration().getParser());

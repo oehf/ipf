@@ -40,7 +40,7 @@ public class SimpleRegistry implements Registry {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T bean(Class<T> requiredType) {
-        for (Object value : beans.values()) {
+        for (var value : beans.values()) {
             if (requiredType.isAssignableFrom(value.getClass())) return (T) value;
         }
         return null;
@@ -49,7 +49,7 @@ public class SimpleRegistry implements Registry {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
-        Map<String, T> result = beans.entrySet().stream()
+        var result = beans.entrySet().stream()
                 .filter(entry -> requiredType.isAssignableFrom(entry.getValue().getClass()))
                 .collect(Collectors.toMap(Map.Entry::getKey, p -> (T) p.getValue()));
         return result;

@@ -74,8 +74,8 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     public Iti67SearchParameters setAuthor(ReferenceAndListParam author) {
         if (author != null) {
             author.getValuesAsQueryTokens().forEach(param -> {
-                ReferenceParam ref = param.getValuesAsQueryTokens().get(0);
-                String authorChain = ref.getChain();
+                var ref = param.getValuesAsQueryTokens().get(0);
+                var authorChain = ref.getChain();
                 if (Practitioner.SP_FAMILY.equals(authorChain)) {
                     setAuthorFamilyName(ref.toStringParam(getFhirContext()));
                 } else if (Practitioner.SP_GIVEN.equals(authorChain)) {

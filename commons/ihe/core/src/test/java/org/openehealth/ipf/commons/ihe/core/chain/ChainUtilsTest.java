@@ -33,16 +33,16 @@ public class ChainUtilsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        for (int i = 1; i <= 7; ++i) {
+        for (var i = 1; i <= 7; ++i) {
             INITIAL.add(new MyChainable("i" + i, "", ""));
         }
     }
 
 
     private static void doTest(List<Chainable> custom, String expected) {
-        List<Chainable> chain = ChainUtils.createChain(INITIAL, custom);
-        StringBuilder sb = new StringBuilder();
-        for (Chainable c : chain) {
+        var chain = ChainUtils.createChain(INITIAL, custom);
+        var sb = new StringBuilder();
+        for (var c : chain) {
             sb.append(c.getId()).append(" ");
         }
         assertEquals(expected, sb.toString().trim());

@@ -15,15 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
@@ -92,8 +88,8 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     @Override
     protected void addSlots(SubmissionSet metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(metaData, ebXML, objectLibrary);
-        
-        String[] slotValues = metaData.getIntendedRecipients().stream()
+
+        var slotValues = metaData.getIntendedRecipients().stream()
                 .map(recipientTransformer::toEbXML)
                 .toArray(String[]::new);
         ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues);
@@ -103,8 +99,8 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     @Override
     protected void addSlotsFromEbXML(SubmissionSet metaData, EbXMLRegistryPackage ebXML) {
         super.addSlotsFromEbXML(metaData, ebXML);
-        
-        List<Recipient> recipients = metaData.getIntendedRecipients();
+
+        var recipients = metaData.getIntendedRecipients();
         recipients.addAll(ebXML.getSlotValues(SLOT_NAME_INTENDED_RECIPIENT).stream()
                 .map(recipientTransformer::fromEbXML)
                 .collect(Collectors.toList()));
@@ -116,11 +112,11 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addClassificationsFromEbXML(SubmissionSet set, EbXMLRegistryPackage regPackage) {
         super.addClassificationsFromEbXML(set, regPackage);
         
-        for (EbXMLClassification author : regPackage.getClassifications(SUBMISSION_SET_AUTHOR_CLASS_SCHEME)) {
+        for (var author : regPackage.getClassifications(SUBMISSION_SET_AUTHOR_CLASS_SCHEME)) {
             set.getAuthors().add(authorTransformer.fromEbXML(author));
         }
 
-        EbXMLClassification contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
+        var contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
         set.setContentTypeCode(codeTransformer.fromEbXML(contentType));
     }
     
@@ -128,12 +124,12 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addClassifications(SubmissionSet set, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(set, regPackage, objectLibrary);
         
-        for (Author author : set.getAuthors()) {
-            EbXMLClassification authorClasification = authorTransformer.toEbXML(author, objectLibrary);
+        for (var author : set.getAuthors()) {
+            var authorClasification = authorTransformer.toEbXML(author, objectLibrary);
             regPackage.addClassification(authorClasification, SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
         }
 
-        EbXMLClassification contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
+        var contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
     }
     
@@ -150,7 +146,7 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addExternalIdentifiersFromEbXML(SubmissionSet metaData, EbXMLRegistryPackage ebXML) {
         super.addExternalIdentifiersFromEbXML(metaData, ebXML);
 
-        String sourceID = ebXML.getExternalIdentifierValue(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID);
+        var sourceID = ebXML.getExternalIdentifierValue(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID);
         metaData.setSourceId(sourceID);
     }
 }

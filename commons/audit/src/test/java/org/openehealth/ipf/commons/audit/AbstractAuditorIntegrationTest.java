@@ -94,7 +94,7 @@ abstract class AbstractAuditorIntegrationTest {
     }
 
     void deploy(TestContext testContext, Verticle verticle) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
+        var latch = new CountDownLatch(1);
         vertx.deployVerticle(verticle, deployHandler(testContext, latch));
         latch.await(2000, TimeUnit.MILLISECONDS);
     }
@@ -108,7 +108,7 @@ abstract class AbstractAuditorIntegrationTest {
     }
 
     void undeploy(TestContext testContext) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
+        var latch = new CountDownLatch(1);
         vertx.undeploy(deploymentId, undeployHandler(testContext, latch));
         latch.await(2000, TimeUnit.MILLISECONDS);
     }
@@ -148,7 +148,7 @@ abstract class AbstractAuditorIntegrationTest {
     }
 
     int freePort() {
-        try (ServerSocket serverSocket = new ServerSocket(0)) {
+        try (var serverSocket = new ServerSocket(0)) {
             return serverSocket.getLocalPort();
         } catch (Exception e) {
             LOG.error(e.getMessage());

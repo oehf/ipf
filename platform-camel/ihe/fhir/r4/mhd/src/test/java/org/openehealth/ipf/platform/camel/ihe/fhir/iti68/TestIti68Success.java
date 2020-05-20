@@ -19,15 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
-
-import javax.servlet.ServletException;
 
 import static org.junit.Assert.*;
 
@@ -47,14 +40,14 @@ public class TestIti68Success extends AbstractTestIti68 {
     @Test
     public void testRetrieveDocument() {
 
-        byte[] response = getProducerTemplate().requestBody("direct:input", null, byte[].class);
+        var response = getProducerTemplate().requestBody("direct:input", null, byte[].class);
         assertArrayEquals(Iti68TestRouteBuilder.DATA, response);
 
         // Check ATNA Audit
 
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         // Event
         assertEquals(
@@ -68,23 +61,23 @@ public class TestIti68Success extends AbstractTestIti68 {
 
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipants().get(0);
+        var source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipants().get(1);
+        var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/", destination.getUserID());
 
         // Audit Source
-        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();
+        var sourceIdentificationType = event.getAuditSourceIdentification();
         assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
         assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
-        ParticipantObjectIdentificationType poit = event.findParticipantObjectIdentifications(p ->
+        var poit = event.findParticipantObjectIdentifications(p ->
                 p.getParticipantObjectTypeCode() == ParticipantObjectTypeCode.System).get(0);
         assertEquals(Iti68TestRouteBuilder.DOCUMENT_UNIQUE_ID, poit.getParticipantObjectID());
         assertEquals(2, poit.getParticipantObjectDetails().size());

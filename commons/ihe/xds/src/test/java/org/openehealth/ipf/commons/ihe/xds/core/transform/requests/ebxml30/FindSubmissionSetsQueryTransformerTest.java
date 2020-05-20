@@ -101,7 +101,7 @@ public class FindSubmissionSetsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindSubmissionSetsQuery result = new FindSubmissionSetsQuery();
+        var result = new FindSubmissionSetsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -109,14 +109,14 @@ public class FindSubmissionSetsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        FindSubmissionSetsQuery result = new FindSubmissionSetsQuery();
+        var result = new FindSubmissionSetsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new FindSubmissionSetsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        FindSubmissionSetsQuery result = new FindSubmissionSetsQuery();
+        var result = new FindSubmissionSetsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new FindSubmissionSetsQuery(), result);
     }

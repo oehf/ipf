@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -95,7 +94,7 @@ public class PatientInfo implements Serializable {
      *         (note: there can be present fields without any content)
      */
     public Set<String> getCustomFieldIds() {
-        Set<String> set = getAllFieldIds();
+        var set = getAllFieldIds();
         set.removeAll(pojoFields.keySet());
         return set;
     }
@@ -105,12 +104,12 @@ public class PatientInfo implements Serializable {
      * @return iterator over a list of raw HL7 strings representing repetitions of the given HL7 field
      */
     public ListIterator<String> getHl7FieldIterator(String fieldId) {
-        ListIterator<String> stringsIterator = getStrings(fieldId).listIterator();
+        var stringsIterator = getStrings(fieldId).listIterator();
         if (!pojoFields.containsKey(fieldId)) {
             return stringsIterator;
         }
 
-        List<? extends Hl7v2Based> xdsFields = pojoFields.get(fieldId);
+        var xdsFields = pojoFields.get(fieldId);
         ListIterator xdsIterator = (xdsFields != null) ? xdsFields.listIterator() : null;
 
         return new SynchronizingListIterator<String, Hl7v2Based>(stringsIterator, xdsIterator) {
@@ -173,8 +172,8 @@ public class PatientInfo implements Serializable {
             throw new IllegalArgumentException(fieldId + " is not a known repeatable SourcePatientInfo element");
         }
 
-        ListIterator<T> xdsIterator = (ListIterator<T>) pojoFields.get(fieldId).listIterator();
-        ListIterator<String> stringsIterator = getStrings(fieldId).listIterator();
+        var xdsIterator = (ListIterator<T>) pojoFields.get(fieldId).listIterator();
+        var stringsIterator = getStrings(fieldId).listIterator();
 
         return new SynchronizingListIterator<T, String>(xdsIterator, stringsIterator) {
             private T prepareValue(T xdsObject) {
@@ -223,7 +222,7 @@ public class PatientInfo implements Serializable {
     }
 
     private String getFirstStringValue(String fieldName) {
-        List<String> list = stringFields.get(fieldName);
+        var list = stringFields.get(fieldName);
         return ((list != null) && !list.isEmpty()) ? list.get(0) : null;
     }
 
@@ -231,9 +230,9 @@ public class PatientInfo implements Serializable {
      * @return the date of birth of the patient (PID-7).
      */
     public Timestamp getDateOfBirth() {
-        String s = getFirstStringValue("PID-7");
+        var s = getFirstStringValue("PID-7");
         if (s != null) {
-            int pos = s.indexOf('^');
+            var pos = s.indexOf('^');
             return Timestamp.fromHL7((pos > 0) ? s.substring(0, pos) : s);
         }
         return null;
@@ -254,7 +253,7 @@ public class PatientInfo implements Serializable {
     }
 
     private void setDateOfBirthString(String date) {
-        List<String> strings = getStrings("PID-7");
+        var strings = getStrings("PID-7");
         strings.clear();
         if (date != null) {
             strings.add(date);
@@ -272,9 +271,9 @@ public class PatientInfo implements Serializable {
      * @param gender the gender of the patient (PID-8).
      */
     public void setGender(String gender) {
-        List<String> strings = getStrings("PID-8");
+        var strings = getStrings("PID-8");
         strings.clear();
-        String s = StringUtils.stripToNull(gender);
+        var s = StringUtils.stripToNull(gender);
         if (s != null) {
             strings.add(s);
         }
@@ -347,8 +346,8 @@ public class PatientInfo implements Serializable {
 
         @Override
         public int compare(String o1, String o2) {
-            Matcher matcher1 = FIELD_ID_PATTERN.matcher(o1);
-            Matcher matcher2 = FIELD_ID_PATTERN.matcher(o2);
+            var matcher1 = FIELD_ID_PATTERN.matcher(o1);
+            var matcher2 = FIELD_ID_PATTERN.matcher(o2);
             if (matcher1.matches() && matcher2.matches() && matcher1.group(1).equals(matcher2.group(1))) {
                 return Integer.parseInt(matcher1.group(2)) - Integer.parseInt(matcher2.group(2));
             }
@@ -358,7 +357,7 @@ public class PatientInfo implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
+        var sb = new StringBuilder()
                 .append("PatientInfo(")
                 .append("ids=")
                 .append(pojoFields.get("PID-3"))
@@ -372,7 +371,7 @@ public class PatientInfo implements Serializable {
                 .append(pojoFields.get("PID-11"));
 
         getCustomFieldIds().stream().sorted(new Hl7FieldIdComparator()).forEach(fieldId -> {
-            List<String> values = stringFields.get(fieldId);
+            var values = stringFields.get(fieldId);
             if (!values.isEmpty()) {
                 sb.append(", ").append(fieldId).append('=').append(values);
             }

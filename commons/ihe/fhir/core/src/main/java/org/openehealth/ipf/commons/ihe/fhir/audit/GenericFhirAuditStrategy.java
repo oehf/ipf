@@ -20,8 +20,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.param.TokenParam;
-import org.hl7.fhir.instance.model.api.IBaseCoding;
 import org.hl7.fhir.instance.model.api.IBaseReference;
 import org.hl7.fhir.instance.model.api.IDomainResource;
 import org.hl7.fhir.instance.model.api.IIdType;
@@ -32,7 +30,6 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -73,15 +70,15 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     @Override
     public GenericFhirAuditDataset enrichAuditDatasetFromRequest(GenericFhirAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        RequestDetails requestDetails = (RequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
+        var requestDetails = (RequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
 
-        String resourceType = (String) parameters.get(FHIR_RESOURCE_TYPE_HEADER);
+        var resourceType = (String) parameters.get(FHIR_RESOURCE_TYPE_HEADER);
         if (resourceType == null && requestDetails != null) {
             resourceType = requestDetails.getResourceName();
         }
         auditDataset.setAffectedResourceType(resourceType);
 
-        RestOperationTypeEnum operation = (RestOperationTypeEnum) parameters.get(FHIR_OPERATION_HEADER);
+        var operation = (RestOperationTypeEnum) parameters.get(FHIR_OPERATION_HEADER);
         if (operation == null && requestDetails != null) {
             operation = requestDetails.getRestOperationType();
         }
@@ -96,12 +93,12 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         }
 
         if (parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            String query = (String) parameters.get(HTTP_QUERY);
+            var query = (String) parameters.get(HTTP_QUERY);
             auditDataset.setQueryString(query);
 
-            FhirSearchParameters searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+            var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
             if (searchParameter != null) {
-                List<TokenParam> tokenParams = searchParameter.getPatientIdParam();
+                var tokenParams = searchParameter.getPatientIdParam();
                 if (tokenParams != null) {
                     auditDataset.getPatientIds().addAll(
                             tokenParams.stream()
@@ -120,7 +117,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
             addResourceData(auditDataset, (T) response);
         }
         if (response instanceof MethodOutcome) {
-            MethodOutcome methodOutcome = (MethodOutcome) response;
+            var methodOutcome = (MethodOutcome) response;
             if (methodOutcome.getCreated() != null && methodOutcome.getCreated()) {
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
             }
@@ -143,7 +140,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, GenericFhirAuditDataset auditDataset) {
-        GenericFhirAuditMessageBuilder builder = new GenericFhirAuditMessageBuilder(auditContext, auditDataset)
+        var builder = new GenericFhirAuditMessageBuilder(auditContext, auditDataset)
                 .addPatients(auditDataset);
         if (auditDataset.getQueryString() != null) {
             builder.addQueryParticipantObject(auditDataset);
@@ -165,7 +162,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                         patient.getResource().getIdElement().toUnqualifiedVersionless().getValue() :
                         patient.getReferenceElement().getValue()));
 
-        List<? extends IBaseCoding> securityLabels = resource.getMeta().getSecurity();
+        var securityLabels = resource.getMeta().getSecurity();
         if (!securityLabels.isEmpty()) {
             auditDataset.setSecurityLabel(securityLabels.get(0).getCode());
         }

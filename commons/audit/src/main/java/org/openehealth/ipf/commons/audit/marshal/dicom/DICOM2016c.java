@@ -31,7 +31,7 @@ public class DICOM2016c extends DICOM2016a {
 
     @Override
     protected Element auditSourceType(AuditSource auditSourceType) {
-        Element element = new Element("AuditSourceTypeCode");
+        var element = new Element("AuditSourceTypeCode");
         element.setAttribute("code", auditSourceType.getCode());
         conditionallyAddAttribute(element, "codeSystemName", auditSourceType.getCodeSystemName());
         conditionallyAddAttribute(element, "displayName", auditSourceType.getDisplayName());

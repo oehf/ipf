@@ -17,8 +17,6 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.core.Verticle;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Before;
@@ -51,15 +49,15 @@ public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
         initTLSSystemProperties(null);
         auditContext.setTlsParameters(TlsParameters.getDefault());
         auditContext.setAuditRepositoryTransport("TLS");
-        int count = 10;
-        Async async = testContext.async(count);
+        var count = 10;
+        var async = testContext.async(count);
         deploy(testContext, createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,
                 SERVER_KEY_STORE,
                 SERVER_KEY_STORE_PASS,
                 async));
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 
@@ -67,20 +65,20 @@ public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
     public void testTwoWayTLSInterrupted(TestContext testContext) throws Exception {
         auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
-        int count = 5;
-        Async async = testContext.async(count);
-        Verticle tcpServer = createTCPServerTwoWayTLS(port,
+        var count = 5;
+        var async = testContext.async(count);
+        var tcpServer = createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,
                 SERVER_KEY_STORE,
                 SERVER_KEY_STORE_PASS,
                 async);
         deploy(testContext, tcpServer);
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
         undeploy(testContext);
         deploy(testContext, tcpServer);
-        for (int i = 0; i < count; i++) sendAudit();
+        for (var i = 0; i < count; i++) sendAudit();
         async.awaitSuccess(WAIT_TIME);
     }
 

@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
 import java.nio.charset.StandardCharsets;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * Base client implementation of RFC 5424 syslog for sending audit messages to an Audit Record Repository
  * that implements RFC 5424 SYSLOG.
@@ -57,7 +55,7 @@ public class RFC5424Protocol {
      * @return serialized message
      */
     protected byte[] getTransportPayload(AuditMetadataProvider auditMetadataProvider, String auditMessage) {
-        String msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
+        var msg = String.format("<%s>1 %s %s %s %s %s - \uFEFF<?xml version=\"1.0\" encoding=\"UTF-8\"?>%s",
                 TRANSPORT_PRI,
                 auditMetadataProvider.getTimestamp(),
                 auditMetadataProvider.getHostname(),

@@ -16,13 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq
 
+
 import ca.uhn.fhir.rest.server.exceptions.*
 import org.hl7.fhir.dstu3.model.OperationOutcome
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
+
+
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  *
@@ -33,7 +35,7 @@ import org.openehealth.ipf.modules.hl7.dsl.Repeatable
  */
 class Utils {
 
-    private static final DateTimeFormatter TIME_FORMAT = ISODateTimeFormat.basicDateTimeNoMillis()
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
 
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
@@ -46,7 +48,7 @@ class Utils {
      * Returns current timestamp in the format prescribed by HL7.
      */
     static String hl7Timestamp() {
-        return TIME_FORMAT.print(new DateTime())[0..7, 9..14]
+        return ZonedDateTime.now().format(TIME_FORMAT)
     }
 
     static boolean populateIdentifier(def cx, UriMapper uriMapper, String uri, String identifier = null) {

@@ -30,11 +30,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 public class OrganizationTransformerTest {
     @Test
     public void testToHL7() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("1.2&.3.4");
         assigningAuthority.setUniversalIdType("he&llo_WU&RZ");
 
-        Organization organization = new Organization();
+        var organization = new Organization();
         organization.setOrganizationName("Untere&Klinik");
         organization.setIdNumber("a|number");
         organization.setAssigningAuthority(assigningAuthority);
@@ -51,7 +51,7 @@ public class OrganizationTransformerTest {
 
     @Test
     public void testFromHL7() {
-        Organization organization = Hl7v2Based.parse(
+        var organization = Hl7v2Based.parse(
                 "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number",
                 Organization.class);
 

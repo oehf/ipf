@@ -86,7 +86,7 @@ public class CXiAssigningAuthority extends AssigningAuthority {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        CXiAssigningAuthority that = (CXiAssigningAuthority) o;
+        var that = (CXiAssigningAuthority) o;
 
         return Objects.equals(getNamespaceId(), that.getNamespaceId());
     }

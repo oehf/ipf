@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -55,11 +56,7 @@ public class LocalizedStringType {
      *     
      */
     public String getLang() {
-        if (lang == null) {
-            return "en-US";
-        } else {
-            return lang;
-        }
+        return Objects.requireNonNullElse(lang, "en-US");
     }
 
     /**
@@ -83,11 +80,7 @@ public class LocalizedStringType {
      *     
      */
     public String getCharset() {
-        if (charset == null) {
-            return "UTF-8";
-        } else {
-            return charset;
-        }
+        return Objects.requireNonNullElse(charset, "UTF-8");
     }
 
     /**

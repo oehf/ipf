@@ -104,11 +104,11 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             parameters.put("codec", DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME);
         }
 
-        ConfigType config = createConfig(uri, parameters);
+        var config = createConfig(uri, parameters);
 
         Charset charset = null;
         try {
-            HL7MLLPCodec codecFactory = (HL7MLLPCodec) config.getCodecFactory();
+            var codecFactory = (HL7MLLPCodec) config.getCodecFactory();
             if (codecFactory == null) {
                 codecFactory = new HL7MLLPCodec();
                 LOG.warn("No HL7 codec factory found, creating new default instance {}", codecFactory);
@@ -123,8 +123,8 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         parameters.put("encoding", charset.name());
 
         // construct the endpoint
-        Endpoint endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
-        MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
+        var endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
+        var minaEndpoint = (MinaEndpoint) endpoint;
 
         // wrap and return
         return createEndpoint(minaEndpoint, config);

@@ -43,7 +43,7 @@ public class HDValidator {
         metaDataAssert("ISO".equals(hd.getHd3_UniversalIDType().getValue()),
                 UNIVERSAL_ID_TYPE_MUST_BE_ISO, original);
 
-        String oid = hd.getHd2_UniversalID().getValue();
+        var oid = hd.getHd2_UniversalID().getValue();
         metaDataAssert(StringUtils.isNotEmpty(oid), HD_NEEDS_UNIVERSAL_ID, original);
 
         OID_VALIDATOR.validate(oid);

@@ -20,7 +20,6 @@ import org.apache.camel.CamelException;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.mina.MinaConsumer;
 import org.apache.mina.core.filterchain.IoFilterAdapter;
-import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +55,7 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
         if (!session.isClosing()) {
             if (sendResponse(cause)) {
                 Exception exception = new CamelException(cause.getMessage());
-                Exchange exchange = createExchange(exception);
+                var exchange = createExchange(exception);
                 minaConsumer.getExceptionHandler().handleException("", exchange, exception);
                 sendResponse(session, exchange);
             } else {
@@ -67,11 +66,11 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
     }
 
     private void sendResponse(IoSession session, Exchange exchange) {
-        boolean disconnect = minaConsumer.getEndpoint().getConfiguration().isDisconnect();
-        Object response = exchange.hasOut()? getOut(minaConsumer.getEndpoint(), exchange):
+        var disconnect = minaConsumer.getEndpoint().getConfiguration().isDisconnect();
+        var response = exchange.hasOut()? getOut(minaConsumer.getEndpoint(), exchange):
                                              getIn(minaConsumer.getEndpoint(), exchange);
         if (response != null) {
-            WriteFuture future = session.write(response);
+            var future = session.write(response);
             LOG.trace("Waiting for write to complete for body: {} using session: {}", response, session);
             if (!future.awaitUninterruptibly(10, SECONDS)) {
                 LOG.warn("Cannot write body: " + response + " using session: " + session);
@@ -82,7 +81,7 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
         }
 
         // should session be closed after complete?
-        Boolean close = (Boolean)session.getAttribute(MINA_CLOSE_SESSION_WHEN_COMPLETE);
+        var close = (Boolean)session.getAttribute(MINA_CLOSE_SESSION_WHEN_COMPLETE);
         if (close != null) {
             disconnect = close;
         }
@@ -93,7 +92,7 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
     }
 
     private Exchange createExchange(Throwable cause){
-        Exchange exchange = minaConsumer.getEndpoint().createExchange();
+        var exchange = minaConsumer.getEndpoint().createExchange();
         exchange.setException(cause);
         return exchange;
     }

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
@@ -34,8 +33,8 @@ public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
     @Override
     public void process(Exchange exchange) throws Exception {
         // marshal
-        Message message = exchange.getIn();
-        ca.uhn.hl7v2.model.Message request = message.getBody(ca.uhn.hl7v2.model.Message.class);
+        var message = exchange.getIn();
+        var request = message.getBody(ca.uhn.hl7v2.model.Message.class);
         message.setBody(request.toString());
 
         // run the route
@@ -43,7 +42,7 @@ public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
 
         // unmarshal
         message = Exchanges.resultMessage(exchange);
-        String responseString = message.getBody(String.class);
+        var responseString = message.getBody(String.class);
         message.setBody(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
     }
 }

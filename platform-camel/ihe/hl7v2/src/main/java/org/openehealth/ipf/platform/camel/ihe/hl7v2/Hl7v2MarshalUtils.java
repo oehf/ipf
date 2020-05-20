@@ -52,7 +52,7 @@ public class Hl7v2MarshalUtils {
      *      on parsing and marshaling errors.
      */
     public static String marshalStandardTypes(Message message, String charset, Parser parser) throws Exception {
-        Object body = message.getBody();
+        var body = message.getBody();
         if( ! typeSupported(body)) {
             return null;
         }
@@ -65,7 +65,7 @@ public class Hl7v2MarshalUtils {
         } else if(body instanceof File) {
             s = readFile(body, charset);
         } else if(body instanceof WrappedFile<?>) {
-            Object file = ((WrappedFile<?>) body).getFile();
+            var file = ((WrappedFile<?>) body).getFile();
             if(file instanceof File) {
                 s = readFile(file, charset);
             }
@@ -73,7 +73,7 @@ public class Hl7v2MarshalUtils {
             // In standard Camel distribution this will concern  
             // byte[], InputStream and ByteBuffer.
             // See also: http://camel.apache.org/list-of-type-conversions.html
-            byte[] bytes = message.getBody(byte[].class);
+            var bytes = message.getBody(byte[].class);
             if(bytes != null) {
                 s = new String(bytes, charset);
             }
@@ -83,7 +83,7 @@ public class Hl7v2MarshalUtils {
     
 
     private static String readFile(Object file, String charset) throws Exception {
-        byte[] bytes = IOConverter.toByteArray((File) file);
+        var bytes = IOConverter.toByteArray((File) file);
         return new String(bytes, charset).replace('\n', '\r');
     }
     
@@ -98,7 +98,7 @@ public class Hl7v2MarshalUtils {
      *      by the HL7v2 adapter out-of-the-box, <code>false</code> otherwise.
      */
     public static boolean typeSupported(Object body) {
-        final Class<?>[] knownTypes = new Class<?>[] {
+        final var knownTypes = new Class<?>[] {
             String.class,
             ca.uhn.hl7v2.model.Message.class,
             File.class,
@@ -108,7 +108,7 @@ public class Hl7v2MarshalUtils {
             WrappedFile.class
         };
         
-        for(Class<?> type : knownTypes) {
+        for(var type : knownTypes) {
             try {
                 type.cast(body);
                 return true;
@@ -131,9 +131,9 @@ public class Hl7v2MarshalUtils {
             String charset, 
             boolean defragmentSegments) throws Exception 
     {
-        InputStream stream = message.getBody(InputStream.class);
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream, charset));
-        String s = IOConverter.toString(br);
+        var stream = message.getBody(InputStream.class);
+        var br = new BufferedReader(new InputStreamReader(stream, charset));
+        var s = IOConverter.toString(br);
         s = s.replace('\n', '\r');
         if (defragmentSegments) {
             s = s.replace("\rADD" + s.charAt(3), "");
@@ -160,14 +160,14 @@ public class Hl7v2MarshalUtils {
             String charset,
             Parser parser) throws Exception 
     {
-        Object body = message.getBody();
+        var body = message.getBody();
         ca.uhn.hl7v2.model.Message msg = null;
         if (body instanceof ca.uhn.hl7v2.model.Message) {
             msg = (ca.uhn.hl7v2.model.Message) body;
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
             // by means of the standard routine.  An exception here will be o.k.
-            String s = marshalStandardTypes(message, charset, parser);
+            var s = marshalStandardTypes(message, charset, parser);
             if(s != null) {
                 s = s.replace('\n', '\r');
                 msg = parser.parse(s);

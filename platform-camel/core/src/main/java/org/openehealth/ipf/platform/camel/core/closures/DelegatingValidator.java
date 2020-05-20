@@ -33,7 +33,7 @@ public class DelegatingValidator extends ClosureAdapter<Boolean> implements Vali
 
     @Override
     public void validate(Object message, Object profile) {
-        Boolean result = validateInternal(message, profile);
+        var result = validateInternal(message, profile);
         if (!result) {
             throw new ValidationException("validation closure returned false");
         }

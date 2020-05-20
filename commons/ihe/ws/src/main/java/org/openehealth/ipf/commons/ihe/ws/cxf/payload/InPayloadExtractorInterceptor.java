@@ -78,7 +78,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
         // substitute the used stream by an again-usable one.
         byte[] bytes;
         try {
-            InputStream stream = message.getContent(InputStream.class);
+            var stream = message.getContent(InputStream.class);
             bytes = IOUtils.readBytesFromStream(stream);
             message.setContent(InputStream.class, new ByteArrayInputStream(bytes));
         } catch (IOException e) {
@@ -88,7 +88,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
         // optionally extract SOAP Body from the SOAP Envelope
         String payload;
         try {
-            String charsetName = (String) message.get(Message.ENCODING);
+            var charsetName = (String) message.get(Message.ENCODING);
             payload = (charsetName != null) ? new String(bytes, charsetName) : new String(bytes);
         } catch (UnsupportedEncodingException e) {
             // actually cannot occur, because non-supported encodings
@@ -101,7 +101,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
         }
 
         // save the String payload into the message's content map
-        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        var payloadHolder = message.getContent(StringPayloadHolder.class);
         if (payloadHolder == null) {
             payloadHolder = new StringPayloadHolder();
             message.setContent(StringPayloadHolder.class, payloadHolder);
@@ -131,7 +131,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
 
         @Override
         public void handleMessage(Message message) throws Fault {
-            StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+            var payloadHolder = message.getContent(StringPayloadHolder.class);
             if (payloadHolder != null) {
                 payloadHolder.remove(PayloadType.HTTP);
             }

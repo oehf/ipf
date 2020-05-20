@@ -44,14 +44,14 @@ public class XmlParserDataFormat extends AbstractXmlDataFormat {
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
-        XmlParser xmlParser = new XmlParser(newSaxParser());
+        var xmlParser = new XmlParser(newSaxParser());
         xmlParser.setErrorHandler(getErrorHandler());
         xmlParser.setTrimWhitespace(!isKeepWhitespace());
         return xmlParser.parse(stream);
     }
 
     private XmlNodePrinter newPrinter(OutputStream stream) {
-        XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(stream));
+        var xmlNodePrinter = new XmlNodePrinter(new PrintWriter(stream));
         xmlNodePrinter.setNamespaceAware(isNamespaceAware());
         return xmlNodePrinter;
     }

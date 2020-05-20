@@ -55,8 +55,8 @@ public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset>
             svrFactory.getInInterceptors().add(new AuditInRequestInterceptor<>(
                     auditStrategy, auditContext, wsTransactionConfiguration));
 
-            AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                    new AuditResponseInterceptor<>(auditStrategy, auditContext, true, null, false);
+            var auditInterceptor =
+                    new AuditResponseInterceptor<AuditDatasetType>(auditStrategy, auditContext, true, null, false);
             svrFactory.getOutInterceptors().add(auditInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditInterceptor);
         }

@@ -194,7 +194,7 @@ public class RouteHelper {
      * @return an adapted validator.
      */
     public ValidatorAdapter xsdValidator() {
-        ValidatorAdapter adapter = new ValidatorAdapter(new XsdValidator());
+        var adapter = new ValidatorAdapter(new XsdValidator());
         adapter.input(Builder.bodyAs(StreamSource.class));
         return adapter;
     }
@@ -206,7 +206,7 @@ public class RouteHelper {
      * @return an adapted validator.
      */
     public ValidatorAdapter schematronValidator() {
-        ValidatorAdapter adapter = new ValidatorAdapter(new SchematronValidator());
+        var adapter = new ValidatorAdapter(new SchematronValidator());
         adapter.input(Builder.bodyAs(StreamSource.class));
         return adapter;
     }    

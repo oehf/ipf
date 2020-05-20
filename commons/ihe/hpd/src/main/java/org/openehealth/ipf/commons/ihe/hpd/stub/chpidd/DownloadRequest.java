@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AuthRequest;
 
+import java.util.Objects;
+
 
 /**
  * <p>Java class for DownloadRequest complex type.
@@ -180,11 +182,7 @@ public class DownloadRequest {
      *     
      */
     public boolean isFilterMyTransactions() {
-        if (filterMyTransactions == null) {
-            return true;
-        } else {
-            return filterMyTransactions;
-        }
+        return Objects.requireNonNullElse(filterMyTransactions, true);
     }
 
     /**

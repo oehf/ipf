@@ -139,7 +139,7 @@ public class ConditionalRule implements TestRule {
     }
 
     private static boolean isIgnoredException(Throwable throwable) {
-        Throwable t = throwable;
+        var t = throwable;
         List<Throwable> list = new ArrayList<>();
         while (t != null && !list.contains(t)) {
             if (t instanceof IgnoredException) return true;

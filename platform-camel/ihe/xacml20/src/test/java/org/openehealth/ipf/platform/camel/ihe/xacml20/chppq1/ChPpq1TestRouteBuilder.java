@@ -42,14 +42,14 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
         from("ch-ppq1:ch-ppq-success")
                 .process(chPpq1RequestValidator())
                 .process(exchange -> {
-                    Object request = exchange.getIn().getBody();
-                    AssertionBasedRequestType assertionRequest = (AssertionBasedRequestType) request;
-                    EprPolicyRepositoryResponse response = new EprPolicyRepositoryResponse();
+                    var request = exchange.getIn().getBody();
+                    var assertionRequest = (AssertionBasedRequestType) request;
+                    var response = new EprPolicyRepositoryResponse();
                     response.setStatus(PpqConstants.StatusCode.SUCCESS);
                     exchange.getOut().setBody(response);
-                    Marshaller marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
+                    var marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    StringWriter writer = new StringWriter();
+                    var writer = new StringWriter();
                     marshaller.marshal(exchange.getOut().getBody(), writer);
                     log.debug("PPQ output message:\n{}", writer.toString());
                 })
@@ -64,7 +64,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
         from("ch-ppq1:ch-ppq-exception")
                 .process(chPpq1RequestValidator())
                 .process(exchange -> {
-                    UnknownPolicySetId unknownSetId = new UnknownPolicySetId();
+                    var unknownSetId = new UnknownPolicySetId();
                     unknownSetId.setMessage("Policy set ID '12345' is unknown");
                     throw new UnknownPolicySetIdFaultMessage("An error is occurred", unknownSetId);
                 });

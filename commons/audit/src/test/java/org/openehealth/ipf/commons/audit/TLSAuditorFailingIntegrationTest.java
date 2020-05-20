@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Before;
@@ -50,7 +49,7 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
     public void testTLSTwoWayTLSWrongClientCert(TestContext testContext) throws Exception {
         auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
-        Async async = testContext.async();
+        var async = testContext.async();
         deploy(testContext, createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,

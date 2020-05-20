@@ -42,9 +42,9 @@ abstract public class AbstractHl7v2WsRejectionHandlingStrategy extends AbstractW
 
         // exchange does not contain a valid HL7v2 message at all
         // or does contain an HL7v2 NAK with code 'AR' or 'CR'
-        String response = SoapUtils.extractOutgoingPayload(cxfExchange);
+        var response = SoapUtils.extractOutgoingPayload(cxfExchange);
         try {
-            int pos = response.indexOf("\r\nMSA");
+            var pos = response.indexOf("\r\nMSA");
             return ((pos < 0) || (response.charAt(pos + 7) == 'R'));
         } catch (Exception e) {
             return true;

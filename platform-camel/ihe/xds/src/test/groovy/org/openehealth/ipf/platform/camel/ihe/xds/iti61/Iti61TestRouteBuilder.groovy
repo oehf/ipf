@@ -16,7 +16,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti61
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -25,7 +25,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti61RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti61ResponseValidator
 
-public class Iti61TestRouteBuilder extends SpringRouteBuilder {
+public class Iti61TestRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti61:xds-iti61-service1')

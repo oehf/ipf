@@ -28,14 +28,14 @@ public class DataFormatRouteTest extends AbstractRouteTest {
 
 	@Test
 	public void testUnmarshal() throws Exception {
-		String result = (String) producerTemplate.sendBody("direct:external",
+		var result = (String) producerTemplate.sendBody("direct:external",
 				ExchangePattern.InOut, "message");
 		assertEquals("stream: message", result);
 	}
 
 	@Test
 	public void testMarshal() throws Exception {
-		String result = (String) producerTemplate.sendBody("direct:internal",
+		var result = (String) producerTemplate.sendBody("direct:internal",
 				ExchangePattern.InOut, "message");
 		assertEquals("message", result);
 	}

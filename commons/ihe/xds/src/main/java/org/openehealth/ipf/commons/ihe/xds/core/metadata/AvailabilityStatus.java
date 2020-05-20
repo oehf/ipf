@@ -70,7 +70,7 @@ public enum AvailabilityStatus {
             return null;
         }
         
-        for (AvailabilityStatus status : AvailabilityStatus.values()) {
+        for (var status : AvailabilityStatus.values()) {
             if (opcode.equals(status.getOpcode()) || opcode.equals(status.getQueryOpcode())) {
                 return status;
             }

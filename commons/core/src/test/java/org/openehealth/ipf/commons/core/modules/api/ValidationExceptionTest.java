@@ -28,7 +28,7 @@ public class ValidationExceptionTest {
     @Test
     public void testMessages() {
         String s;
-        String message = "exception message 12345";
+        var message = "exception message 12345";
         Throwable[] causes;
 
         // ----------------- 

@@ -28,17 +28,17 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
 public class SplitIndexTest {
     @Test
     public void testValueOf() {
-        SplitIndex index = SplitIndex.valueOf(14, true);
+        var index = SplitIndex.valueOf(14, true);
         assertEquals(14, index.getIndex());
         assertEquals(true, index.isLast());
     }
     
     @Test
     public void testEquals() {
-        SplitIndex index1a = SplitIndex.valueOf(4, false);
-        SplitIndex index1b = SplitIndex.valueOf(4, false);
-        SplitIndex index2 = SplitIndex.valueOf(5, false);
-        SplitIndex index3 = SplitIndex.valueOf(4, true);
+        var index1a = SplitIndex.valueOf(4, false);
+        var index1b = SplitIndex.valueOf(4, false);
+        var index2 = SplitIndex.valueOf(5, false);
+        var index3 = SplitIndex.valueOf(4, true);
         
         assertTrue("Should be equal", index1a.equals(index1b));
         assertFalse("Should not be equal", index1a.equals(index2));
@@ -52,10 +52,10 @@ public class SplitIndexTest {
     
     @Test
     public void testHashCode() {
-        SplitIndex index1a = SplitIndex.valueOf(4, false);
-        SplitIndex index1b = SplitIndex.valueOf(4, false);
-        SplitIndex index2 = SplitIndex.valueOf(5, false);
-        SplitIndex index3 = SplitIndex.valueOf(4, true);
+        var index1a = SplitIndex.valueOf(4, false);
+        var index1b = SplitIndex.valueOf(4, false);
+        var index2 = SplitIndex.valueOf(5, false);
+        var index3 = SplitIndex.valueOf(4, true);
         
         assertEquals(index1a.hashCode(), index1b.hashCode());
         
@@ -66,8 +66,8 @@ public class SplitIndexTest {
     
     @Test
     public void testToString() {
-        SplitIndex index = SplitIndex.valueOf(14, true);
-        String str = index.toString();
+        var index = SplitIndex.valueOf(14, true);
+        var str = index.toString();
         assertTrue("Class name missing", str.contains(Splitter.class.getName()));
         assertTrue("index missing", str.contains("14"));
         assertTrue("last flag missing", str.contains("true"));

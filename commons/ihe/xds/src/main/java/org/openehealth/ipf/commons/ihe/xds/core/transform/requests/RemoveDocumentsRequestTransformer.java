@@ -49,7 +49,7 @@ public class RemoveDocumentsRequestTransformer {
             return null;
         }
 
-        EbXMLNonconstructiveDocumentSetRequest ebXML = factory.createRemoveDocumentsRequest();
+        var ebXML = factory.createRemoveDocumentsRequest();
         ebXML.setDocuments(request.getDocuments());
         return ebXML;
     }
@@ -65,7 +65,7 @@ public class RemoveDocumentsRequestTransformer {
             return null;
         }
 
-        RemoveDocuments request = new RemoveDocuments();
+        var request = new RemoveDocuments();
         request.getDocuments().addAll(ebXML.getDocuments());
         return request;
     }

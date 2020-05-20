@@ -44,7 +44,7 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromString(DOC_ENTRY_UUID, query.getUuid());
         slots.fromString(DOC_ENTRY_UNIQUE_ID, query.getUniqueId());
     }
@@ -65,7 +65,7 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         
         query.setUniqueId(slots.toString(DOC_ENTRY_UNIQUE_ID));
         query.setUuid(slots.toString(DOC_ENTRY_UUID));

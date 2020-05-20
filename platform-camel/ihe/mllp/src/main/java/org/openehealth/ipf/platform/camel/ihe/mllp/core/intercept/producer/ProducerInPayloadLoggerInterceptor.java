@@ -80,7 +80,7 @@ public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
 
         @Override
         public ProducerInPayloadLoggerInterceptor getNewInstance() {
-            ProducerInPayloadLoggerInterceptor interceptor = new ProducerInPayloadLoggerInterceptor(resolver);
+            var interceptor = new ProducerInPayloadLoggerInterceptor(resolver);
             interceptor.setEnabled(enabled);
             return interceptor;
         }

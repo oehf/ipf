@@ -101,7 +101,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      * @param originalMessage original HAPI request message.
      */
     public Message createNak(Message originalMessage, Throwable t) throws HL7Exception, IOException {
-        HL7Exception hl7Exception = getHl7Exception(t);
+        var hl7Exception = getHl7Exception(t);
         return createNak(originalMessage, hl7Exception, getAckTypeCode(hl7Exception));
     }
 
@@ -113,7 +113,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      * @param e thrown exception.
      */
     public Message createDefaultNak(HL7Exception e) {
-        HL7Exception hl7Exception = new HL7Exception(
+        var hl7Exception = new HL7Exception(
                 formatErrorMessage(e),
                 config.getRequestErrorDefaultErrorCode(),
                 e);
@@ -146,7 +146,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      * to the given instance of {@link Throwable}.
      */
     protected AcknowledgmentCode getAckTypeCode(Throwable t) {
-        AcknowledgmentCode ackTypeCode = (t instanceof Hl7v2AcceptanceException) ? AcknowledgmentCode.AR : AcknowledgmentCode.AE;
+        var ackTypeCode = (t instanceof Hl7v2AcceptanceException) ? AcknowledgmentCode.AR : AcknowledgmentCode.AE;
         if (useCAckTypeCodes) {
             ackTypeCode = (ackTypeCode == AcknowledgmentCode.AR) ? AcknowledgmentCode.CR : AcknowledgmentCode.CE;
         }
@@ -164,7 +164,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      * @return formatted error message from the given exception.
      */
     public static String formatErrorMessage(Throwable t) {
-        String s = t.getMessage();
+        var s = t.getMessage();
         if (s == null) {
             s = t.getClass().getName();
         }
@@ -200,7 +200,7 @@ public class NakFactory<T extends MllpAuditDataset> {
         }
 
         //check the suppressed exception first
-        Optional<T> result = identifyException(Stream.of(exception.getSuppressed()), type);
+        var result = identifyException(Stream.of(exception.getSuppressed()), type);
         if (result.isPresent()) return result;
         return createExceptionStream(exception)
                 .filter(type::isInstance)
@@ -217,7 +217,7 @@ public class NakFactory<T extends MllpAuditDataset> {
 
     private static Stream<Throwable> createExceptionStream(Throwable exception) {
         List<Throwable> throwables = new ArrayList<>();
-        Throwable current = exception;
+        var current = exception;
         while (current != null) {
             throwables.add(current);
             current = current.getCause();

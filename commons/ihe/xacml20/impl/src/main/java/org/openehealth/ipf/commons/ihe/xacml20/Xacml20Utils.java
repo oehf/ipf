@@ -16,10 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xacml20;
 
 import org.apache.commons.lang3.StringUtils;
-import org.herasaf.xacml.core.context.impl.AttributeType;
-import org.herasaf.xacml.core.context.impl.AttributeValueType;
 import org.herasaf.xacml.core.context.impl.RequestType;
-import org.herasaf.xacml.core.context.impl.ResourceType;
 import org.herasaf.xacml.core.policy.Evaluatable;
 import org.herasaf.xacml.core.policy.impl.IdReferenceType;
 import org.herasaf.xacml.core.simplePDP.initializers.InitializerExecutor;
@@ -34,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UpdatePolicyReq
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.XACMLPolicySetIdReferenceStatementType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.StatementAbstractType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusCodeType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusType;
@@ -105,11 +101,11 @@ public class Xacml20Utils {
     }
 
     public static ResponseType createXacmlQueryResponse(String status) {
-        StatusCodeType statusCodeType = new StatusCodeType();
+        var statusCodeType = new StatusCodeType();
         statusCodeType.setValue(status);
-        StatusType statusType = new StatusType();
+        var statusType = new StatusType();
         statusType.setStatusCode(statusCodeType);
-        ResponseType responseType = new ResponseType();
+        var responseType = new ResponseType();
         responseType.setStatus(statusType);
         return responseType;
     }
@@ -123,12 +119,12 @@ public class Xacml20Utils {
     public static Stream<Evaluatable> toStream(ResponseType response) {
         Stream<Evaluatable> result = Stream.of();
         if (response != null) {
-            for (Object object : response.getAssertionOrEncryptedAssertion()) {
+            for (var object : response.getAssertionOrEncryptedAssertion()) {
                 if (object instanceof AssertionType) {
-                    AssertionType assertion = (AssertionType) object;
-                    for (StatementAbstractType statement : assertion.getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
+                    var assertion = (AssertionType) object;
+                    for (var statement : assertion.getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
                         if (statement instanceof XACMLPolicyStatementType) {
-                            XACMLPolicyStatementType policyStatement = (XACMLPolicyStatementType) statement;
+                            var policyStatement = (XACMLPolicyStatementType) statement;
                             result = Stream.concat(result, policyStatement.getPolicyOrPolicySet().stream().map(x -> (Evaluatable) x));
                         }
                     }
@@ -141,9 +137,9 @@ public class Xacml20Utils {
     private static Stream<Evaluatable> toStream(AssertionBasedRequestType request) {
         Stream<Evaluatable> result = Stream.of();
         if (request != null) {
-            for (StatementAbstractType abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
+            for (var abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
                 if (abstractStatement instanceof XACMLPolicyStatementType) {
-                    XACMLPolicyStatementType policyStatement = (XACMLPolicyStatementType) abstractStatement;
+                    var policyStatement = (XACMLPolicyStatementType) abstractStatement;
                     result = Stream.concat(result, policyStatement.getPolicyOrPolicySet().stream().map(x -> (Evaluatable) x));
                 }
             }
@@ -180,9 +176,9 @@ public class Xacml20Utils {
     public static Stream<IdReferenceType> toStream(DeletePolicyRequest request) {
         Stream<IdReferenceType> result = Stream.of();
         if ((request != null) && (request.getAssertion() != null)) {
-            for (StatementAbstractType abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
+            for (var abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
                 if (abstractStatement instanceof XACMLPolicySetIdReferenceStatementType) {
-                    XACMLPolicySetIdReferenceStatementType xacmlStatement = (XACMLPolicySetIdReferenceStatementType) abstractStatement;
+                    var xacmlStatement = (XACMLPolicySetIdReferenceStatementType) abstractStatement;
                     result = Stream.concat(result, xacmlStatement.getPolicySetIdReference().stream());
                 }
             }
@@ -191,20 +187,20 @@ public class Xacml20Utils {
     }
 
     public static Optional<String> extractPatientId(XACMLPolicyQueryType request) {
-        for (JAXBElement<?> jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
+        for (var jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
             if (QUERY_REQUEST_QNAME.equals(jaxbElement.getName()) && (jaxbElement.getValue() instanceof RequestType)) {
-                RequestType requestType = (RequestType) jaxbElement.getValue();
-                for (ResourceType resourceType : requestType.getResources()) {
-                    for (AttributeType attributeType : resourceType.getAttributes()) {
+                var requestType = (RequestType) jaxbElement.getValue();
+                for (var resourceType : requestType.getResources()) {
+                    for (var attributeType : resourceType.getAttributes()) {
                         if (Xacml20Utils.ATTRIBUTE_TYPE_PATIENT_ID.equals(attributeType.getAttributeId()) && (attributeType.getDataType() instanceof IiDataTypeAttribute)) {
-                            for (AttributeValueType attributeValueType : attributeType.getAttributeValues()) {
-                                for (Object valueObject : attributeValueType.getContent()) {
+                            for (var attributeValueType : attributeType.getAttributeValues()) {
+                                for (var valueObject : attributeValueType.getContent()) {
                                     if (valueObject instanceof JAXBElement) {
-                                        JAXBElement jaxbElement1 = (JAXBElement) valueObject;
+                                        var jaxbElement1 = (JAXBElement) valueObject;
                                         if (Xacml20Utils.ELEMENT_NAME_PATIENT_ID.equals(jaxbElement1.getName().getLocalPart()) && (jaxbElement1.getValue() instanceof II)) {
-                                            II ii = (II) jaxbElement1.getValue();
-                                            String root = StringUtils.trimToEmpty(ii.getRoot());
-                                            String extension = StringUtils.trimToEmpty(ii.getExtension());
+                                            var ii = (II) jaxbElement1.getValue();
+                                            var root = StringUtils.trimToEmpty(ii.getRoot());
+                                            var extension = StringUtils.trimToEmpty(ii.getExtension());
                                             return Optional.of(extension + "^^^&" + root + "&ISO");
                                         }
                                     }
@@ -219,7 +215,7 @@ public class Xacml20Utils {
     }
 
     public static Optional<IdReferenceType> extractPolicyId(XACMLPolicyQueryType request) {
-        for (JAXBElement<?> jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
+        for (var jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
             if ((QUERY_POLICY_SET_ID_QNAME.equals(jaxbElement.getName()) || QUERY_POLICY_ID_QNAME.equals(jaxbElement.getName()))
                     && (jaxbElement.getValue() instanceof IdReferenceType))
             {

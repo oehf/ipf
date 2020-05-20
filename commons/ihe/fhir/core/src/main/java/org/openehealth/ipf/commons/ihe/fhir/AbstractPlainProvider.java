@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -90,9 +89,9 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             Object payload, FhirSearchParameters parameters, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleResourceRequest(payload, headers, resultType);
     }
 
@@ -113,9 +112,9 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -141,9 +140,9 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
+        var headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
             headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
@@ -165,9 +164,9 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleAction(payload, headers);
     }
 

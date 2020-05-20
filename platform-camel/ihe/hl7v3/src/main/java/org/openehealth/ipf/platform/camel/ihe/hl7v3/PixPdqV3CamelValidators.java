@@ -182,7 +182,7 @@ abstract public class PixPdqV3CamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        String message = exchange.getIn().getBody(String.class);
+        var message = exchange.getIn().getBody(String.class);
         VALIDATOR.validate(message, request
                 ? interactionId.getRequestValidationProfile()
                 : interactionId.getResponseValidationProfile());

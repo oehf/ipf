@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
@@ -58,11 +56,11 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        String requestString = exchange.getIn().getBody(String.class);
-        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
-        Message requestMessage = parser.parse(requestString);
-        Terser requestTerser = new Terser(requestMessage);
-        String msh14 = requestTerser.get("MSH-14");
+        var requestString = exchange.getIn().getBody(String.class);
+        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var requestMessage = parser.parse(requestString);
+        var requestTerser = new Terser(requestMessage);
+        var msh14 = requestTerser.get("MSH-14");
         String dsc1 = null;
         try {
             if (! "I".equals(requestTerser.get("DSC-2"))) {
@@ -79,9 +77,9 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
         }
 
         // get pieces of the accumulator's key
-        String msh31 = requestTerser.get("MSH-3-1");
-        String msh32 = requestTerser.get("MSH-3-2");
-        String msh33 = requestTerser.get("MSH-3-3");
+        var msh31 = requestTerser.get("MSH-3-1");
+        var msh32 = requestTerser.get("MSH-3-2");
+        var msh33 = requestTerser.get("MSH-3-3");
 
         // create an accumulator (on the arrival of the first fragment) 
         // or get an existing one (on the arrival of fragments 2..n)
@@ -98,8 +96,8 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
         }
 
         // append current fragment to the accumulator
-        int beginIndex = isEmpty(msh14) ? 0 : requestString.indexOf('\r');
-        int endIndex = isEmpty(dsc1) ? requestString.length() : (requestString.indexOf("\rDSC") + 1);
+        var beginIndex = isEmpty(msh14) ? 0 : requestString.indexOf('\r');
+        var endIndex = isEmpty(dsc1) ? requestString.length() : (requestString.indexOf("\rDSC") + 1);
         accumulator.append(requestString, beginIndex, endIndex);
         
         // DSC-1 is empty -- finish accumulation, pass message to the marshaller
@@ -114,10 +112,10 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
         LOG.debug("Processed fragment {} requesting {}", msh14, dsc1);
             
         storage.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
-        Message ack = MessageUtils.response(
+        var ack = MessageUtils.response(
                 requestMessage, "ACK", 
                 requestTerser.get("MSH-9-2"));
-        Terser ackTerser = new Terser(ack);
+        var ackTerser = new Terser(ack);
         ackTerser.set("MSA-1", "CA");
         ackTerser.set("MSA-2", requestTerser.get("MSH-10"));
         Exchanges.resultMessage(exchange).setBody(parser.encode(ack));

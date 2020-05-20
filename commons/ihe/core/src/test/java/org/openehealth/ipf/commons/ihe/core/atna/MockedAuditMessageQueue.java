@@ -57,8 +57,8 @@ public class MockedAuditMessageQueue implements AbstractMockedAuditMessageQueue 
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
-        for (AuditMessage message : auditMessages) {
-            String s = Current.toString(message, true);
+        for (var message : auditMessages) {
+            var s = Current.toString(message, true);
             log.debug(s);
             if (needValidation) {
                 validator.validate(source(s), NEW_VALIDATION_SCHEMA);

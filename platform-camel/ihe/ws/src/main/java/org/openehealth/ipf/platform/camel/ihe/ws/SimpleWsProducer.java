@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.jws.WebMethod;
-import java.lang.reflect.Method;
 
 /**
  * Generic producer for Web Services which have only one operation.
@@ -53,8 +52,8 @@ public class SimpleWsProducer<
     {
         super(endpoint, clientFactory, requestClass, responseClass);
 
-        for (Method method : endpoint.getComponent().getWsTransactionConfiguration().getSei().getDeclaredMethods()) {
-            WebMethod annotation = method.getAnnotation(WebMethod.class);
+        for (var method : endpoint.getComponent().getWsTransactionConfiguration().getSei().getDeclaredMethods()) {
+            var annotation = method.getAnnotation(WebMethod.class);
             if (annotation != null) {
                 this.operationName = annotation.operationName();
                 return;
@@ -67,8 +66,8 @@ public class SimpleWsProducer<
     @SuppressWarnings("unchecked")
     @Override
     protected OutType callService(Object clientObject, InType request) throws Exception {
-        ClientImpl client = (ClientImpl) ClientProxy.getClient(clientObject);
-        Object[] result = client.invoke(operationName, request);
+        var client = (ClientImpl) ClientProxy.getClient(clientObject);
+        var result = client.invoke(operationName, request);
         return (result != null) ? (OutType) result[0] : null;
     }
 }

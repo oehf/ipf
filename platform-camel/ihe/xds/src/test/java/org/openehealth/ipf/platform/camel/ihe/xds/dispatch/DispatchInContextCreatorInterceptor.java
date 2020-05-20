@@ -37,7 +37,7 @@ public class DispatchInContextCreatorInterceptor extends AbstractPhaseIntercepto
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
+        var messageContext = new WebServiceContextImpl().getMessageContext();
         if (messageContext == null) {
             messageContext = new LogicalMessageContextImpl(message);
             WebServiceContextImpl.setMessageContext(messageContext);

@@ -31,7 +31,7 @@ public class InterceptorUtils {
             Endpoint endpoint,
             Producer originalProducer) {
         Processor processor = originalProducer;
-        for (Interceptor interceptor : chain) {
+        for (var interceptor : chain) {
             interceptor.setEndpoint(endpoint);
             interceptor.setWrappedProcessor(processor);
             processor = interceptor;

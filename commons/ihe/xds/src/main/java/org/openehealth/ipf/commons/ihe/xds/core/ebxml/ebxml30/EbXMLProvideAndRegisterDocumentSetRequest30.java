@@ -29,9 +29,7 @@ import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.Document;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
 
 /**
@@ -67,8 +65,8 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
     @Override
     public void addDocument(String id, DataHandler dataHandler) {
         if (dataHandler != null && id != null) {
-            List<Document> documents = request.getDocument();
-            Document document = new Document();
+            var documents = request.getDocument();
+            var document = new Document();
             document.setId(id);
             document.setValue(dataHandler);
             documents.add(document);
@@ -77,7 +75,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
 
     @Override
     public void removeDocument(String id) {
-        for (Document doc : request.getDocument()) {
+        for (var doc : request.getDocument()) {
             if (doc.getId().equals(id)) {
                 request.getDocument().remove(doc);
                 return;
@@ -88,7 +86,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
     @Override
     public Map<String, DataHandler> getDocuments() {
         Map<String, DataHandler> map = new HashMap<>();
-        for (Document document : request.getDocument()) {
+        for (var document : request.getDocument()) {
             map.put(document.getId(), document.getValue());
         }
         return map;
@@ -101,11 +99,11 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
 
     @Override
     List<JAXBElement<? extends IdentifiableType>> getContents() {
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        var submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest == null) {
             return Collections.emptyList();
         }
-        RegistryObjectListType list = submitObjectsRequest.getRegistryObjectList();
+        var list = submitObjectsRequest.getRegistryObjectList();
         if (list == null) {
             return Collections.emptyList();
         }
@@ -118,7 +116,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
      */
     @Delegate
     private EbXMLSlotList30 getSlotList() {
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        var submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest.getRequestSlotList() == null) {
             submitObjectsRequest.setRequestSlotList(new SlotListType());
         }

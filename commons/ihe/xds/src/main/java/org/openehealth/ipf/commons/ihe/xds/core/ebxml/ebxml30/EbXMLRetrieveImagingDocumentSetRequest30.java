@@ -53,17 +53,17 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
     @Override
     public List<RetrieveStudy> getRetrieveStudies() {
         List<RetrieveStudy> retrieveStudies = new ArrayList<>();
-        for (StudyRequest studyRequest : request.getStudyRequest())
+        for (var studyRequest : request.getStudyRequest())
         {
-            RetrieveStudy retrieveStudy = new RetrieveStudy();
+            var retrieveStudy = new RetrieveStudy();
             retrieveStudy.setStudyInstanceUID(studyRequest.getStudyInstanceUID());
-            for (SeriesRequest seriesRequest : studyRequest.getSeriesRequest())
+            for (var seriesRequest : studyRequest.getSeriesRequest())
             {
-                RetrieveSeries retrieveSeries = new RetrieveSeries();
+                var retrieveSeries = new RetrieveSeries();
                 retrieveSeries.setSeriesInstanceUID(seriesRequest.getSeriesInstanceUID());
-                for (DocumentRequest documentRequest : seriesRequest.getDocumentRequests())
+                for (var documentRequest : seriesRequest.getDocumentRequests())
                 {
-                    DocumentReference documentReference = new DocumentReference();
+                    var documentReference = new DocumentReference();
                     documentReference.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
                     documentReference.setHomeCommunityId(documentRequest.getHomeCommunityId());
                     documentReference.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
@@ -87,17 +87,17 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
     public void setRetrieveStudies(List<RetrieveStudy> retrieveStudies) {
         request.getStudyRequest().clear();
         if (retrieveStudies != null) {
-            for (RetrieveStudy retrieveStudy : retrieveStudies)
+            for (var retrieveStudy : retrieveStudies)
             {
-                StudyRequest studyRequest = new StudyRequest();
+                var studyRequest = new StudyRequest();
                 studyRequest.setStudyInstanceUID(retrieveStudy.getStudyInstanceUID());
-                for ( RetrieveSeries retrieveSeries : retrieveStudy.getRetrieveSerieses())
+                for (var retrieveSeries : retrieveStudy.getRetrieveSerieses())
                 {
-                    SeriesRequest seriesRequest = new SeriesRequest();
+                    var seriesRequest = new SeriesRequest();
                     seriesRequest.setSeriesInstanceUID(retrieveSeries.getSeriesInstanceUID());
-                    for (DocumentReference documentReference : retrieveSeries.getDocuments())
+                    for (var documentReference : retrieveSeries.getDocuments())
                     {
-                        DocumentRequest documentRequest = new DocumentRequest();
+                        var documentRequest = new DocumentRequest();
                         documentRequest.setDocumentUniqueId(documentReference.getDocumentUniqueId());
                         documentRequest.setHomeCommunityId(documentReference.getHomeCommunityId());
                         documentRequest.setRepositoryUniqueId(documentReference.getRepositoryUniqueId());

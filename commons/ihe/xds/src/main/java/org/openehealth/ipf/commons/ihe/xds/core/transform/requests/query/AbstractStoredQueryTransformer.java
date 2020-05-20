@@ -16,13 +16,9 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
 
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
-
-import java.util.Map;
 
 /**
  * Base transformations for all stored queries.
@@ -47,8 +43,8 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
         ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
 
-        QuerySlotHelper slotHelper = new QuerySlotHelper(ebXML);
-        for (Map.Entry<String, QueryList<String>> entry : query.getExtraParameters().entrySet()) {
+        var slotHelper = new QuerySlotHelper(ebXML);
+        for (var entry : query.getExtraParameters().entrySet()) {
             slotHelper.fromStringList(entry.getKey(), entry.getValue());
         }
     }
@@ -70,11 +66,11 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
 
         query.setHomeCommunityId(ebXML.getHome());
 
-        QuerySlotHelper slotHelper = new QuerySlotHelper(ebXML);
-        for (EbXMLSlot slot : ebXML.getSlots()) {
-            String slotName = slot.getName();
+        var slotHelper = new QuerySlotHelper(ebXML);
+        for (var slot : ebXML.getSlots()) {
+            var slotName = slot.getName();
             if ((QueryParameter.valueOfSlotName(slotName) == null) && (! query.getExtraParameters().containsKey(slotName))) {
-                QueryList<String> queryList = slotHelper.toStringQueryList(slotName);
+                var queryList = slotHelper.toStringQueryList(slotName);
                 if (queryList != null) {
                     query.getExtraParameters().put(slotName, queryList);
                 }

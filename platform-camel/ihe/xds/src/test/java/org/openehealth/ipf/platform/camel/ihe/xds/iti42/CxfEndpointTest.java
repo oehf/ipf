@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.After;
 import org.junit.Assert;
@@ -31,12 +29,9 @@ import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -88,8 +83,8 @@ public class CxfEndpointTest {
 
         JaxWsServiceFactory<? extends XdsAuditDataset> serviceFactory = new JaxWsRequestServiceFactory<>(
                 ITI_42.getWsTransactionConfiguration(), "/iti-42", null, null, null, null);
-        ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
-        Server serviceServer = factory.create();
+        var factory = serviceFactory.createServerFactory(MyIti42.class);
+        var serviceServer = factory.create();
 
         runRequestAndExpectFailure();
 
@@ -122,12 +117,12 @@ public class CxfEndpointTest {
                 "http://localhost:" + port + "/iti-42",
                 null, null, null, null, null, null, null);
 
-        Iti42PortType client = (Iti42PortType) clientFactory.getClient();
-        RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
-        EbXMLSubmitObjectsRequest ebXMLReq = reqTransformer.toEbXML(request);
-        SubmitObjectsRequest rawReq = (SubmitObjectsRequest) ebXMLReq.getInternal();
-        RegistryResponseType rawResp = client.documentRegistryRegisterDocumentSetB(rawReq);
-        EbXMLRegistryResponse30 ebXMLResp = new EbXMLRegistryResponse30(rawResp);
+        var client = (Iti42PortType) clientFactory.getClient();
+        var request = SampleData.createRegisterDocumentSet();
+        var ebXMLReq = reqTransformer.toEbXML(request);
+        var rawReq = (SubmitObjectsRequest) ebXMLReq.getInternal();
+        var rawResp = client.documentRegistryRegisterDocumentSetB(rawReq);
+        var ebXMLResp = new EbXMLRegistryResponse30(rawResp);
         return respTransformer.fromEbXML(ebXMLResp);
     }
 
@@ -149,17 +144,17 @@ public class CxfEndpointTest {
         @Override
         public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest rawReq) {
 
-            EbXMLSubmitObjectsRequest30 ebXMLReq = new EbXMLSubmitObjectsRequest30(rawReq);
+            var ebXMLReq = new EbXMLSubmitObjectsRequest30(rawReq);
             reqValidator.validate(ebXMLReq, ITI_42);
-            RegisterDocumentSet request = reqTransformer.fromEbXML(ebXMLReq);
+            var request = reqTransformer.fromEbXML(ebXMLReq);
 
-            Response response = new Response(Status.SUCCESS);
+            var response = new Response(Status.SUCCESS);
             if (!request.getSubmissionSet().getEntryUuid().equals("submissionSet01")) {
                 response.setStatus(Status.FAILURE);
                 response.setErrors(Arrays.asList(new ErrorInfo(ErrorCode.REGISTRY_ERROR, "unexpected value", Severity.ERROR, null, null)));
             }
 
-            EbXMLRegistryResponse ebXMLResp = respTransformer.toEbXML(response);
+            var ebXMLResp = respTransformer.toEbXML(response);
             respValidator.validate(ebXMLResp, ITI_42);
             return (RegistryResponseType) ebXMLResp.getInternal();
         }

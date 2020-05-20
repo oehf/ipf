@@ -48,7 +48,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
     @Override
     public void put(String continuationPointer, String chainId, Message fragment) {
         InteractiveContinuationChain chain;
-        Element element = ehcache.get(chainId);
+        var element = ehcache.get(chainId);
         if (element != null) {
             chain = (InteractiveContinuationChain) element.getObjectValue();
         } else {
@@ -65,9 +65,9 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
             String continuationPointer,
             String chainId)
     {
-        Element element = ehcache.get(chainId);
+        var element = ehcache.get(chainId);
         if (element != null) {
-            InteractiveContinuationChain chain = (InteractiveContinuationChain) element.getObjectValue();
+            var chain = (InteractiveContinuationChain) element.getObjectValue();
             return chain.get(continuationPointer);
         }
         return null;

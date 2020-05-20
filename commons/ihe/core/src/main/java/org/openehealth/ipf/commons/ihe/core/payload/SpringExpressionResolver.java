@@ -35,7 +35,7 @@ public class SpringExpressionResolver implements ExpressionResolver {
     public SpringExpressionResolver(final String filePathPattern) {
         requireNonNull(filePathPattern, "log file path/name pattern must not be null");
         final ExpressionParser parser = new SpelExpressionParser();
-        final TemplateParserContext parserContext = new TemplateParserContext("[", "]");
+        final var parserContext = new TemplateParserContext("[", "]");
         parser.parseExpression(filePathPattern, parserContext);
         expression = parser.parseExpression(filePathPattern, parserContext);
     }

@@ -55,14 +55,14 @@ public class InteractionIdTest {
     @Test
     public void testReconstruct() throws IOException, ClassNotFoundException {
 
-        MyIntegrationProfile.Interactions original = Interaction1;
+        var original = Interaction1;
         SerializableEnumInteractionId<?> serializableEnumInteractionId = SerializableEnumInteractionId.create(original);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        var baos = new ByteArrayOutputStream();
+        var oos = new ObjectOutputStream(baos);
         oos.writeObject(serializableEnumInteractionId);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        ObjectInputStream ois = new ObjectInputStream(bais);
+        var bais = new ByteArrayInputStream(baos.toByteArray());
+        var ois = new ObjectInputStream(bais);
         SerializableEnumInteractionId<?> deserialized = (SerializableEnumInteractionId<?>) ois.readObject();
 
         assertSame(original, deserialized.getInteractionId());

@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
-import org.hl7.fhir.r4.model.Type;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
@@ -57,20 +56,20 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        FhirQueryAuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+        var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
-        Parameters params = (Parameters) request;
+        var params = (Parameters) request;
         if (params != null) {
-            Type sourceIdentifier = params.getParameter().stream()
+            var sourceIdentifier = params.getParameter().stream()
                     .filter(ppc -> Constants.SOURCE_IDENTIFIER_NAME.equals(ppc.getName()))
                     .map(Parameters.ParametersParameterComponent::getValue)
                     .findFirst().orElseThrow(() -> new RuntimeException("No sourceIdentifier in PIX query"));
 
             if (sourceIdentifier instanceof Identifier) {
-                Identifier identifier = (Identifier) sourceIdentifier;
+                var identifier = (Identifier) sourceIdentifier;
                 dataset.getPatientIds().add(String.format("%s|%s", identifier.getSystem(), identifier.getValue()));
             } else if (sourceIdentifier instanceof StringType) {
-                StringType identifier = (StringType) sourceIdentifier;
+                var identifier = (StringType) sourceIdentifier;
                 dataset.getPatientIds().add(identifier.getValue());
             } else {
                 dataset.getPatientIds().add(sourceIdentifier.toString());
@@ -81,7 +80,7 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
+        var result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         if (auditContext.isIncludeParticipantsFromResponse()) {
         // TODO
         }

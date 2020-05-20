@@ -35,8 +35,8 @@ public class AggregatorAdapterTest {
     @Test
     public void testAggregateDefault() {
         strategy = new AggregatorAdapter(new TestAggregator());
-        Exchange a = exchangeWithInBody("a");
-        Exchange b = exchangeWithInBody("b");
+        var a = exchangeWithInBody("a");
+        var b = exchangeWithInBody("b");
         strategy.aggregate(a, b);
         assertEquals("a:b", a.getIn().getBody());
     }
@@ -44,20 +44,20 @@ public class AggregatorAdapterTest {
     @Test
     public void testAggregateCustom() {
         strategy = new AggregatorAdapter(new TestAggregator()).aggregationInput(body());
-        Exchange a = exchangeWithInBody("a");
-        Exchange b = exchangeWithOutBody("b");
+        var a = exchangeWithInBody("a");
+        var b = exchangeWithOutBody("b");
         strategy.aggregate(a, b);
         assertEquals("a:b", a.getIn().getBody());
     }
     
     private static Exchange exchangeWithInBody(Object body) {
-        Exchange exchange = exchange();
+        var exchange = exchange();
         exchange.getIn().setBody(body);
         return exchange;
     }
     
     private static Exchange exchangeWithOutBody(Object body) {
-        Exchange exchange = exchange();
+        var exchange = exchange();
         exchange.getMessage().setBody(body);
         return exchange;
     }

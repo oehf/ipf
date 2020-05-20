@@ -48,7 +48,7 @@ public class IpfAtnaAutoConfiguration {
                                      AuditExceptionHandler auditExceptionHandler,
                                      AuditMessagePostProcessor auditMessagePostProcessor,
                                      @Value("${spring.application.name}") String appName) {
-        DefaultAuditContext auditContext = new DefaultAuditContext();
+        var auditContext = new DefaultAuditContext();
         auditContext.setAuditEnabled(config.isAuditEnabled());
 
         // Simple properties
@@ -105,7 +105,7 @@ public class IpfAtnaAutoConfiguration {
     @ConditionalOnMissingBean
     public AuditMetadataProvider auditMetadataProvider(IpfAtnaConfigurationProperties config,
                                                        @Value("${spring.application.name}") String appName) {
-        DefaultAuditMetadataProvider auditMetadataProvider = new DefaultAuditMetadataProvider();
+        var auditMetadataProvider = new DefaultAuditMetadataProvider();
         auditMetadataProvider.setSendingApplication(config.getAuditSendingApplication() != null ?
                 config.getAuditSendingApplication() :
                 appName);

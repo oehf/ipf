@@ -27,8 +27,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -119,8 +117,8 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     @Override
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
         if (auditMessage != null) {
-            byte[] msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
-            byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
+            var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+            var syslogFrame = String.format("%d ", msgBytes.length).getBytes();
             LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
             if (LOG.isTraceEnabled()) {
                 LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
@@ -154,7 +152,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private synchronized void doSend(AuditContext auditContext, byte[] syslogFrame, byte[] msgBytes)
             throws IOException {
-        final Socket socket = getSocket(auditContext);
+        final var socket = getSocket(auditContext);
 
         if (socketTestPolicy.isBeforeWrite()) {
             LOG.trace("Testing whether socket connection is alive and well before attempting to write");
@@ -168,7 +166,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
         LOG.trace("Now writing out ATNA record");
 
-        OutputStream out = socket.getOutputStream();
+        var out = socket.getOutputStream();
         out.write(syslogFrame);
         out.write(msgBytes);
         out.flush();
@@ -189,7 +187,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private Socket getTLSSocket(AuditContext auditContext) {
         final SSLSocket socket;
-        InetAddress auditRepositoryAddress = auditContext.getAuditRepositoryAddress();
+        var auditRepositoryAddress = auditContext.getAuditRepositoryAddress();
         try {
             socket = (SSLSocket) socketFactory.createSocket(
                     auditRepositoryAddress,
@@ -251,7 +249,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         boolean isAlive;
         try {
             if (socket.getSoTimeout() > 0) {
-                final int nextByte = socket.getInputStream().read();
+                final var nextByte = socket.getInputStream().read();
                 if (nextByte > -1) {
                     LOG.warn(
                             "Socket test was able to read a byte from the socket other than the 'stream closed' value of -1. "

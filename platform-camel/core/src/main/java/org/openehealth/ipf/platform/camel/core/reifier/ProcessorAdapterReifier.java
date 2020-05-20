@@ -16,7 +16,7 @@ public abstract class ProcessorAdapterReifier<T extends ProcessorAdapterDefiniti
 
     @Override
     protected Processor doCreateDelegate() {
-        ProcessorAdapter adapter = doCreateProcessor();
+        var adapter = doCreateProcessor();
         if (definition.getInputExpression() != null) {
             adapter.input(definition.getInputExpression());
         }

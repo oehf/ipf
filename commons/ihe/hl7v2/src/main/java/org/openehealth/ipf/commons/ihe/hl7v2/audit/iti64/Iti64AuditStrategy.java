@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64;
 
-import ca.uhn.hl7v2.model.v25.datatype.CX;
-import ca.uhn.hl7v2.model.v25.group.ADT_A43_PATIENT;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -46,10 +44,10 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
     @Override
     public Iti64AuditDataset enrichAuditDatasetFromRequest(Iti64AuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
-        ADT_A43 message = (ADT_A43) msg;
-        ADT_A43_PATIENT patient = message.getPATIENT(0);
+        var message = (ADT_A43) msg;
+        var patient = message.getPATIENT(0);
 
-        CX[] pidPatientIdList = patient.getPID().getPatientIdentifierList();
+        var pidPatientIdList = patient.getPID().getPatientIdentifierList();
         if (pidPatientIdList.length > 0) {
             auditDataset.setNewPatientId(PipeParser.encode(pidPatientIdList[0], ENCODING_CHARACTERS));
             if (pidPatientIdList.length > 1) {
@@ -57,7 +55,7 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
             }
         }
 
-        CX[] mrgPatientIdList = patient.getMRG().getMrg1_PriorPatientIdentifierList();
+        var mrgPatientIdList = patient.getMRG().getMrg1_PriorPatientIdentifierList();
         if (mrgPatientIdList.length > 0) {
             auditDataset.setPreviousPatientId(PipeParser.encode(mrgPatientIdList[0], ENCODING_CHARACTERS));
             if (mrgPatientIdList.length > 1) {
@@ -70,7 +68,7 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti64AuditDataset auditDataset) {
-        IHEPatientRecordChangeLinkBuilder builder = new IHEPatientRecordChangeLinkBuilder<>(auditContext, auditDataset)
+        var builder = new IHEPatientRecordChangeLinkBuilder<>(auditContext, auditDataset)
                 .setLocalPatientId(auditDataset);
         if (auditDataset.getSubsumedLocalPatientId() != null) {
             builder.setSubsumedLocalPatientId(auditDataset);

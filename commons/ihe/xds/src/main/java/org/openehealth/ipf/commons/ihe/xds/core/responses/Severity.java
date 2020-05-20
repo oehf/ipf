@@ -65,7 +65,7 @@ public enum Severity {
      * @return the severity.
      */
     public static Severity valueOfOpcode30(String opcode30) {
-        for (Severity severity : values()) {
+        for (var severity : values()) {
             if (severity.getOpcode30().equals(opcode30)) {
                 return severity;
             }

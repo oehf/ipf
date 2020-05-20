@@ -48,18 +48,18 @@ public class TransportTest2 {
 
     @Test
     public void testMessage01() throws Exception {
-        String message = inputMessage("message/msg-01.hl7");
+        var message = inputMessage("message/msg-01.hl7");
 
-        Socket socket = new Socket("localhost", 8888);
-        BufferedOutputStream out = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
-        final BufferedInputStream in = new BufferedInputStream(new DataInputStream(socket.getInputStream()));
+        var socket = new Socket("localhost", 8888);
+        var out = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
+        final var in = new BufferedInputStream(new DataInputStream(socket.getInputStream()));
 
-        int messageCount = 100;
-        CountDownLatch latch = new CountDownLatch(messageCount);
+        var messageCount = 100;
+        var latch = new CountDownLatch(messageCount);
 
-        Thread t = new Thread(() -> {
+        var t = new Thread(() -> {
             int response;
-            StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
             try {
                 while ((response = in.read()) >= 0) {
                     if (response == 28) {
@@ -79,8 +79,8 @@ public class TransportTest2 {
         });
         t.start();
 
-        for (int i = 0; i < messageCount; i++) {
-            String msg = message.replace("123456", String.valueOf(i));
+        for (var i = 0; i < messageCount; i++) {
+            var msg = message.replace("123456", String.valueOf(i));
             out.write(11);
             out.flush();
             // Some systems send end bytes in a separate frame
@@ -95,7 +95,7 @@ public class TransportTest2 {
             // Thread.sleep(10);
         }
 
-        boolean success = latch.await(20, TimeUnit.SECONDS);
+        var success = latch.await(20, TimeUnit.SECONDS);
 
         out.close();
         in.close();

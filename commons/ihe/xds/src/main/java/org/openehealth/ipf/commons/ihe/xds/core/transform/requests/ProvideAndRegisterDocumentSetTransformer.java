@@ -17,18 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.activation.DataHandler;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
@@ -74,29 +67,29 @@ public class ProvideAndRegisterDocumentSetTransformer {
         if (request == null) {
             return null;
         }
+
+        var library = factory.createObjectLibrary();
+        var ebXML = factory.createProvideAndRegisterDocumentSetRequest(library);
         
-        EbXMLObjectLibrary library = factory.createObjectLibrary();        
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = factory.createProvideAndRegisterDocumentSetRequest(library);
-        
-        for (Document doc : request.getDocuments()) {
-            DocumentEntry docEntry = doc.getDocumentEntry();
+        for (var doc : request.getDocuments()) {
+            var docEntry = doc.getDocumentEntry();
             if (docEntry != null) {
                 ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
                 ebXML.addDocument(docEntry.getEntryUuid(), doc.getContent(DataHandler.class));
             }
         }
         
-        for (Folder folder : request.getFolders()) {
+        for (var folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
             addClassification(ebXML, folder.getEntryUuid(), FOLDER_CLASS_NODE, library);
         }
-        
-        SubmissionSet submissionSet = request.getSubmissionSet();
+
+        var submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
-        String entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
+        var entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
         addClassification(ebXML, entryUUID, SUBMISSION_SET_CLASS_NODE, library);
         
-        for (Association association : request.getAssociations()) {
+        for (var association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
 
@@ -117,34 +110,34 @@ public class ProvideAndRegisterDocumentSetTransformer {
         if (ebXML == null) {
             return null;
         }
-        
-        ProvideAndRegisterDocumentSet request = new ProvideAndRegisterDocumentSet();
-        
-        Map<String, DataHandler> documents = ebXML.getDocuments();
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
-            DocumentEntry docEntry = documentEntryTransformer.fromEbXML(extrinsic);
+
+        var request = new ProvideAndRegisterDocumentSet();
+
+        var documents = ebXML.getDocuments();
+        for (var extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
+            var docEntry = documentEntryTransformer.fromEbXML(extrinsic);
             if (docEntry != null) {
-                Document document = new Document();
+                var document = new Document();
                 document.setDocumentEntry(docEntry);
                 if (docEntry.getEntryUuid() != null) {
-                    String id = docEntry.getEntryUuid();
-                    DataHandler data = documents.get(id);
+                    var id = docEntry.getEntryUuid();
+                    var data = documents.get(id);
                     document.setContent(DataHandler.class, data);
                 }
                 request.getDocuments().add(document);
             }
         }
 
-        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(FOLDER_CLASS_NODE)) {
+        for (var regPackage : ebXML.getRegistryPackages(FOLDER_CLASS_NODE)) {
             request.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
+        var regPackages = ebXML.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
         
-        for (EbXMLAssociation association : ebXML.getAssociations()) {
+        for (var association : ebXML.getAssociations()) {
             request.getAssociations().add(associationTransformer.fromEbXML(association));
         }
 
@@ -154,7 +147,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
     }
 
     private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        EbXMLClassification classification = factory.createClassification(library);
+        var classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         classification.assignUniqueId();

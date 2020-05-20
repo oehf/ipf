@@ -29,7 +29,7 @@ public class AssigningAuthorityTransformerTest {
 
     @Test
     public void testToHL7() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("nam&ID_ui^ID");
         assigningAuthority.setUniversalIdType("type|ID");
         assertEquals("&nam\\T\\ID_ui\\S\\ID&type\\F\\ID", Hl7v2Based.render(assigningAuthority));
@@ -37,7 +37,7 @@ public class AssigningAuthorityTransformerTest {
     
     @Test
     public void testToHL7OptionalParams() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalIdType("type|ID");
         assertEquals("&&type\\F\\ID", Hl7v2Based.render(assigningAuthority));
     }
@@ -55,7 +55,7 @@ public class AssigningAuthorityTransformerTest {
 
     @Test
     public void testFromHL7() {
-        AssigningAuthority assigningAuthority =
+        var assigningAuthority =
                 Hl7v2Based.parse("nam\\T\\ID&ui\\S\\ID&type\\F\\ID", AssigningAuthority.class);
         assertEquals("ui^ID", assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
@@ -68,7 +68,7 @@ public class AssigningAuthorityTransformerTest {
 
     @Test
     public void testFromHL7OptionalParams() {
-        AssigningAuthority assigningAuthority = Hl7v2Based.parse("nam\\T\\ID&&type\\F\\ID", AssigningAuthority.class);
+        var assigningAuthority = Hl7v2Based.parse("nam\\T\\ID&&type\\F\\ID", AssigningAuthority.class);
         assertNull(assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
     }
