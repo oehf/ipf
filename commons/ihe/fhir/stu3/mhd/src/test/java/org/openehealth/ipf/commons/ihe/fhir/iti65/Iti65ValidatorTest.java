@@ -26,11 +26,13 @@ import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
 import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 
@@ -76,10 +78,14 @@ public class Iti65ValidatorTest {
 
         var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        var timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
+        var instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        var timestamp = Date.from(instant);
+
         var reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 

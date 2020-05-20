@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -29,6 +27,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,10 +98,10 @@ public class PatientInfoTest {
         // check using other iterator type
         var xdsIterator = patientInfo.getNames();
         assertEquals(new XcnName("Krause", "Peter", null, null, null, "Dr."), xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
+        assertNull(xdsIterator.next());
         assertEquals(new XpnName("Schmitt", "Jens", "Klaus Heinz", null, "Ritter", null), xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
-        assertEquals(null, xdsIterator.next());
+        assertNull(xdsIterator.next());
+        assertNull(xdsIterator.next());
         assertFalse(xdsIterator.hasNext());
 
         // check rendering
@@ -158,7 +158,7 @@ public class PatientInfoTest {
         rawIterator.add("20010203040506");
 
         // check
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
         var renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~~20010203040506", renderedStrings.get(0));
 
@@ -166,7 +166,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|~20010203040506", renderedStrings.get(0));
 
@@ -174,7 +174,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(new Timestamp(new DateTime(2001, 2, 3, 4, 5, 6, DateTimeZone.UTC), Timestamp.Precision.SECOND), patientInfo.getDateOfBirth());
+        assertEquals(new Timestamp(ZonedDateTime.of(2001, 2, 3, 4, 5, 6,0, ZoneId.of("UTC")), Timestamp.Precision.SECOND), patientInfo.getDateOfBirth());
         renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|20010203040506", renderedStrings.get(0));
     }
@@ -205,28 +205,25 @@ public class PatientInfoTest {
         assertFalse(rawIterator.hasNext());
         var renderedStrings = getRenderedStrings(patientInfo, "PID-7", 1);
         assertEquals("PID-7|20010203", renderedStrings.get(0));
-        assertEquals(new Timestamp(new DateTime(2001, 2, 3, 4, 5, 6, DateTimeZone.UTC), Timestamp.Precision.DAY), patientInfo.getDateOfBirth());
+        assertEquals(new Timestamp(ZonedDateTime.of(2001, 2, 3, 4, 5, 6,0, ZoneId.of("UTC")), Timestamp.Precision.DAY), patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 2
         patientInfo.setDateOfBirth("");
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setDateOfBirth((String) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
 
         // overwrite the value using metadata mechanisms 4
         patientInfo.setDateOfBirth((Timestamp) null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-7");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-7", 0);
-        assertEquals(null, patientInfo.getDateOfBirth());
+        assertNull(patientInfo.getDateOfBirth());
     }
 
     @Test
@@ -249,7 +246,7 @@ public class PatientInfoTest {
         rawIterator.add("M");
 
         // check
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
         var renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~~M", renderedStrings.get(0));
 
@@ -257,7 +254,7 @@ public class PatientInfoTest {
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         rawIterator.next();
         rawIterator.remove();
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
         renderedStrings = getRenderedStrings(patientInfo, "PID-8", 1);
         assertEquals("PID-8|~M", renderedStrings.get(0));
 
@@ -302,15 +299,13 @@ public class PatientInfoTest {
         patientInfo.setGender("");
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
 
         // overwrite the value using metadata mechanisms 3
         patientInfo.setGender(null);
         rawIterator = patientInfo.getHl7FieldIterator("PID-8");
         assertFalse(rawIterator.hasNext());
-        renderedStrings = getRenderedStrings(patientInfo, "PID-8", 0);
-        assertEquals(null, patientInfo.getGender());
+        assertNull(patientInfo.getGender());
     }
 
     @Test

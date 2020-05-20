@@ -48,7 +48,7 @@
         <jar-plugin-version>3.2.0</jar-plugin-version>
         <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.10.0</lombok-plugin-version>
+        <lombok-plugin-version>1.18.12.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.8</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
@@ -72,7 +72,6 @@
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jetty-version>9.4.26.v20200117</jetty-version>
-        <joda-time-version>2.9.9</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.13.2</log4j-version>
         <lombok-version>1.18.12</lombok-version>
@@ -310,11 +309,6 @@
                 <version>${geronimo-spec-javamail-14-version}</version>
             </dependency>
             <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty-version}</version>
@@ -451,11 +445,6 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jaxb-annotations</artifactId>
-                <version>${jackson-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-joda</artifactId>
                 <version>${jackson-version}</version>
             </dependency>
             <dependency>

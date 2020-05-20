@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDM;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -24,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -55,7 +55,7 @@ public class LimitedMetadataTest {
         submissionSet.setLimitedMetadata(true);
         submissionSet.setEntryUuid(UUID.randomUUID().toString());
         submissionSet.setSourceId("1.2.3.4.5");
-        submissionSet.setSubmissionTime(new Timestamp(new DateTime(), Timestamp.Precision.SECOND));
+        submissionSet.setSubmissionTime(new Timestamp(ZonedDateTime.now(), Timestamp.Precision.SECOND));
         submissionSet.setUniqueId("1.2.3.4.5.777");
 
         var association1 = new Association();
@@ -81,7 +81,7 @@ public class LimitedMetadataTest {
     }
 
     @Test
-    public void testXdmRequestValidation() throws Exception {
+    public void testXdmRequestValidation() {
         var xdmRequest = createXdmRequest();
 
         var transformer = new RegisterDocumentSetTransformer(new EbXMLFactory30());

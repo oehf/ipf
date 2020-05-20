@@ -30,12 +30,15 @@ import org.hl7.fhir.r4.model.Narrative;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Reference;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
 import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Date;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE;
@@ -98,10 +101,13 @@ public class Iti65ValidatorTest {
 
         var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        var timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
+        var instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        var timestamp = Date.from(instant);
 
         var practitioner = new Practitioner();
         var reference = new DocumentReference();

@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import static org.junit.Assert.*;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import static org.junit.Assert.*;
 
 /**
  * Tests for date of birth transformation in SourcePatientInfo.
@@ -49,7 +49,7 @@ public class DateOfBirthPIDTransformerTest {
     public void testFromHL7() {
         var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-7").add("19800102030405-0100^sdf");
-        var expected = new DateTime(1980, 1, 2, 3, 4, 5, DateTimeZone.forOffsetHoursMinutes(-1, 0));
+        var expected = ZonedDateTime.of(1980, 1, 2, 3, 4, 5, 0, ZoneId.of("-01:00"));
         assertEquals(
                 new Timestamp(expected, Timestamp.Precision.SECOND),
                 patientInfo.getDateOfBirth());

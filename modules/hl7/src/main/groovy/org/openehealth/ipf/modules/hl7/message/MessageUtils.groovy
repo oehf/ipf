@@ -21,12 +21,12 @@ import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.util.DeepCopy
 import ca.uhn.hl7v2.util.ReflectionUtil
 import ca.uhn.hl7v2.util.Terser
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
 import java.lang.reflect.Constructor
+
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * This is a utility class that offers convenience methods for
@@ -40,7 +40,7 @@ import java.lang.reflect.Constructor
  */
 class MessageUtils {
     
-    private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
     private static final Parser PARSER
 
@@ -85,7 +85,7 @@ class MessageUtils {
      * @return Returns current time in HL7 format
      */
     static String hl7Now() {
-        FMT.print(new DateTime())[0..7, 9..14]
+        ZonedDateTime.now().format(FMT)
     }
     
     /**
@@ -225,7 +225,7 @@ class MessageUtils {
     }
 
     private static Group newInstance(Group group) {
-        group.class.getConstructor().newInstance()
+        group.class.newInstance()
     }
 
     /**
