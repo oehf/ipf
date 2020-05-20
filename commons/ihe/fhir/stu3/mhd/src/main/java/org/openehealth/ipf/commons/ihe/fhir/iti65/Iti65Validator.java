@@ -17,17 +17,32 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.dstu3.hapi.ctx.IValidationSupport;
-import org.hl7.fhir.dstu3.hapi.validation.FhirInstanceValidator;
-import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
+import org.hl7.fhir.dstu3.model.Binary;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.DocumentManifest;
+import org.hl7.fhir.dstu3.model.DocumentReference;
+import org.hl7.fhir.dstu3.model.ListResource;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r5.utils.IResourceValidator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.support.CustomValidationSupport;
+import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -38,30 +53,38 @@ import java.util.function.Function;
  */
 public class Iti65Validator extends FhirTransactionValidator.Support {
 
-    private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("META-INF/profiles/MHD-");
-
-    // Prepare the required validator instances so that the structure definitions are not reloaded each time
-    private static final Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
+    private final FhirContext fhirContext;
+    private final Map<Class<?>, FhirInstanceValidator> validators;
 
 
-    static {
-        VALIDATORS.put(DocumentManifest.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
-        VALIDATORS.put(DocumentReference.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
-        VALIDATORS.put(ListResource.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
+    public Iti65Validator(FhirContext fhirContext) {
+        this.fhirContext = fhirContext;
+        IValidationSupport validationSupport = new CustomValidationSupport(fhirContext, "META-INF/profiles/MHD-");
+        validators = new HashMap<>();
+        validators.put(DocumentManifest.class, fhirInstanceValidator(validationSupport));
+        validators.put(DocumentReference.class, fhirInstanceValidator(validationSupport));
+        validators.put(ListResource.class, fhirInstanceValidator(validationSupport));
     }
 
+    private FhirInstanceValidator fhirInstanceValidator(IValidationSupport validationSupport) {
+        FhirInstanceValidator fhirInstanceValidator = new FhirInstanceValidator(validationSupport);
+        fhirInstanceValidator.setNoTerminologyChecks(true);
+        fhirInstanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
+        fhirInstanceValidator.setErrorForUnknownProfiles(true);
+        return fhirInstanceValidator;
+    }
 
     @Override
-    public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
+    public void validateRequest(Object payload, Map<String, Object> parameters) {
         var transactionBundle = (Bundle) payload;
         validateTransactionBundle(transactionBundle);
         validateBundleConsistency(transactionBundle);
 
         for (var entry : transactionBundle.getEntry()) {
             Class<? extends IBaseResource> clazz = entry.getResource().getClass();
-            if (VALIDATORS.containsKey(clazz)) {
-                var validator = context.newValidator();
-                validator.registerValidatorModule(VALIDATORS.get(clazz));
+            if (validators.containsKey(clazz)) {
+                var validator = fhirContext.newValidator();
+                validator.registerValidatorModule(validators.get(clazz));
                 var validationResult = validator.validateWithResult(entry.getResource());
                 if (!validationResult.isSuccessful()) {
                     var operationOutcome = validationResult.toOperationOutcome();

@@ -112,7 +112,7 @@ public final class FhirCamelValidators {
                          var fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
                          if (fhirInteractionId != null) {
                              var validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
-                             validator.validateRequest(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+                             validator.validateRequest(exchange.getIn().getBody(), exchange.getIn().getHeaders());
                          } else {
                              LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
                          }
@@ -141,7 +141,7 @@ public final class FhirCamelValidators {
                     var fhirInteractionId = exchange.getIn().getHeader(INTERACTION_ID_NAME, FhirInteractionId.class);
                     if (fhirInteractionId != null) {
                         var validator = fhirInteractionId.getFhirTransactionConfiguration().getFhirValidator();
-                        validator.validateResponse(context, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+                        validator.validateResponse(exchange.getIn().getBody(), exchange.getIn().getHeaders());
                     } else {
                         LOG.warn("Could not validate request because FHIR Transaction ID is unknown");
                     }

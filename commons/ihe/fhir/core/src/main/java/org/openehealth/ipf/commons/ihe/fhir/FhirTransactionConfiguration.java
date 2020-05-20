@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -51,7 +52,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirContext defaultFhirContext,
             FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, defaultFhirContext,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
@@ -65,13 +66,13 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirContext fhirContext,
             List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
         this.fhirContextProvider = () -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator;
+        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContext) : null;
     }
 
     public FhirTransactionConfiguration(
@@ -83,7 +84,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirVersionEnum fhirVersion,
             FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirVersion,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
@@ -97,13 +98,13 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirVersionEnum fhirVersion,
             List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;
         this.fhirContextProvider = () -> new FhirContext(fhirVersion);
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator;
+        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContextProvider.get()) : null;
     }
 
 
@@ -132,7 +133,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     public FhirContext initializeFhirContext() {
         var fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
-        fhirValidator.initialize(fhirContext);
         return fhirContext;
     }
 

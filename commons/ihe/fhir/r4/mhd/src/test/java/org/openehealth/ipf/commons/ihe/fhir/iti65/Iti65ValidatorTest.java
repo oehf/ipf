@@ -54,9 +54,8 @@ public class Iti65ValidatorTest {
         var context = FhirContext.forR4();
         var bundle = provideAndRegister();
         try {
-            var iti65Validator = new Iti65Validator();
-            iti65Validator.initialize(context);
-            iti65Validator.validateRequest(context, bundle, Collections.emptyMap());
+            var iti65Validator = new Iti65Validator(context);
+            iti65Validator.validateRequest(bundle, Collections.emptyMap());
         } catch (UnprocessableEntityException e) {
             var oo = (OperationOutcome) e.getOperationOutcome();
             oo.getIssue()

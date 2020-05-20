@@ -81,7 +81,7 @@
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
         <tomcat-version>9.0.34</tomcat-version>
-        <woodstox-version>6.0.3</woodstox-version>
+        <woodstox-version>6.2.1</woodstox-version>
         <xbean-spring-version>4.17</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>

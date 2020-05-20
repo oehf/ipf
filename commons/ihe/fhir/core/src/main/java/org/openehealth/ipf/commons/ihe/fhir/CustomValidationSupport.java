@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
-import org.hl7.fhir.r4.model.StructureDefinition;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -31,37 +30,39 @@ import java.util.Scanner;
  * default.
  *
  * @author Christian Ohr
- * @since 3.6
+ * @since 3.4
  */
 public class CustomValidationSupport extends DefaultProfileValidationSupport {
 
-    static final String HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION = "http://hl7.org/fhir/StructureDefinition/";
+    public static final String HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION = "http://hl7.org/fhir/StructureDefinition/";
     private String prefix = "profiles/";
 
-    public CustomValidationSupport() {
+    public CustomValidationSupport(FhirContext fhirContext) {
+        super(fhirContext);
     }
 
-    public CustomValidationSupport(String prefix) {
+    public CustomValidationSupport(FhirContext fhirContext, String prefix) {
+        this(fhirContext);
         this.prefix = prefix;
     }
 
     @Override
-    public <T extends IBaseResource> T fetchResource(FhirContext fhirContext, Class<T> clazz, String uri) {
+    public <T extends IBaseResource> T fetchResource(Class<T> clazz, String uri) {
         if (uri.startsWith(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION)) {
-            return (T) findProfile(fhirContext, uri.substring(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION.length()))
-                    .orElseGet(() -> super.fetchResource(fhirContext, clazz, uri));
+            return (T) findProfile(clazz, uri.substring(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION.length()))
+                    .orElseGet(() -> super.fetchResource(clazz, uri));
         } else {
-            return super.fetchResource(fhirContext, clazz, uri);
+            return super.fetchResource(clazz, uri);
         }
     }
 
-    private <T extends IBaseResource> Optional<T> findProfile(FhirContext fhirContext, String resourceName) {
+    private <T extends IBaseResource> Optional<T> findProfile(Class<T> clazz, String resourceName) {
         var path = prefix + resourceName + ".xml";
         var is = getClass().getClassLoader().getResourceAsStream(path);
         if (is != null) {
             var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), StandardCharsets.UTF_8).useDelimiter("\\A").next();
-            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
-            var structureDefinition = (T) parser.parseResource(StructureDefinition.class, profileText);
+            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(getFhirContext());
+            var structureDefinition = (T) parser.parseResource(clazz, profileText);
             return Optional.of(structureDefinition);
         }
         return Optional.empty();

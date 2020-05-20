@@ -17,14 +17,16 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
+import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
-import org.hl7.fhir.r4.hapi.ctx.IValidationSupport;
-import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
-import org.hl7.fhir.r4.hapi.validation.PrePopulatedValidationSupport;
-import org.hl7.fhir.r4.hapi.validation.SnapshotGeneratingValidationSupport;
-import org.hl7.fhir.r4.hapi.validation.ValidationSupportChain;
+import org.hl7.fhir.common.hapi.validation.support.CommonCodeSystemsTerminologyService;
+import org.hl7.fhir.common.hapi.validation.support.InMemoryTerminologyServerValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.PrePopulatedValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.SnapshotGeneratingValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
+import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentManifest;
@@ -66,28 +68,29 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     private static final Logger LOG = LoggerFactory.getLogger(Iti65Validator.class);
     private static final String IHE_PROFILE_PREFIX = "http://ihe.net/fhir/StructureDefinition/";
 
+    private final FhirContext fhirContext;
     private IValidationSupport validationSupport;
 
-    @Override
-    public void initialize(FhirContext context) {
+    public Iti65Validator(FhirContext fhirContext) {
+        this.fhirContext = fhirContext;
         LOG.info("Initializing Validator for ITI-65 bundles");
-        validationSupport = loadStructureDefinitions(context, new DefaultProfileValidationSupport(), "Minimal");
-        validationSupport = loadStructureDefinitions(context, validationSupport, "Comprehensive");
+        validationSupport = loadStructureDefinitions(new DefaultProfileValidationSupport(fhirContext), "Minimal");
+        validationSupport = loadStructureDefinitions(validationSupport, "Comprehensive");
         LOG.info("Initialized Validator for ITI-65 bundles");
     }
 
     @Override
-    public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
+    public void validateRequest(Object payload, Map<String, Object> parameters) {
 
         var transactionBundle = (Bundle) payload;
 
         validateBundleConsistency(transactionBundle);
 
-        var validator = context.newValidator();
+        var validator = fhirContext.newValidator();
         validator.setValidateAgainstStandardSchema(false);
         validator.setValidateAgainstStandardSchematron(false);
         var instanceValidator = new FhirInstanceValidator(validationSupport);
-        instanceValidator.setNoTerminologyChecks(true);
+        instanceValidator.setNoTerminologyChecks(false);
         instanceValidator.setErrorForUnknownProfiles(true);
         instanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
         validator.registerValidatorModule(instanceValidator);
@@ -98,24 +101,27 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         }
     }
 
-    public ValidationSupportChain loadStructureDefinitions(FhirContext context, IValidationSupport baseValidationSupport, String kind) {
-        var validationSupport = new PrePopulatedValidationSupport();
-        var supportChain = new ValidationSupportChain(validationSupport, baseValidationSupport);
-        findProfile(context, supportChain, String.format("IHE_MHD_%s_List", kind))
+    public ValidationSupportChain loadStructureDefinitions(IValidationSupport baseValidationSupport, String kind) {
+        var validationSupport = new PrePopulatedValidationSupport(fhirContext);
+        var supportChain = new ValidationSupportChain(
+                validationSupport,
+                baseValidationSupport,
+                new InMemoryTerminologyServerValidationSupport(baseValidationSupport.getFhirContext()),
+                new CommonCodeSystemsTerminologyService(baseValidationSupport.getFhirContext()));
+        findProfile(supportChain, String.format("IHE_MHD_%s_List", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
-        findProfile(context, supportChain, String.format("IHE_MHD_Provide_%s_DocumentReference", kind))
+        findProfile(supportChain, String.format("IHE_MHD_Provide_%s_DocumentReference", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
-        findProfile(context, supportChain, String.format("IHE_MHD_Query_%s_DocumentReference", kind))
+        findProfile(supportChain, String.format("IHE_MHD_Query_%s_DocumentReference", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
-        findProfile(context, supportChain, String.format("IHE_MHD_%s_DocumentManifest", kind))
+        findProfile(supportChain, String.format("IHE_MHD_%s_DocumentManifest", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
-        findProfile(context, supportChain, String.format("IHE_MHD_Provide_%s_DocumentBundle", kind))
+        findProfile(supportChain, String.format("IHE_MHD_Provide_%s_DocumentBundle", kind))
                 .ifPresent(validationSupport::addStructureDefinition);
         return supportChain;
     }
 
-    private static Optional<StructureDefinition> findProfile(
-            FhirContext fhirContext,
+    private Optional<StructureDefinition> findProfile(
             ValidationSupportChain snaphotGenerationSupport,
             String name) {
         var path = "META-INF/profiles/" + name + ".xml";
@@ -127,8 +133,8 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
             return Optional.of(structureDefinition.hasSnapshot() ?
                     structureDefinition :
-                    new SnapshotGeneratingValidationSupport(fhirContext, snaphotGenerationSupport)
-                            .generateSnapshot(structureDefinition, url, url, name));
+                    (StructureDefinition) new SnapshotGeneratingValidationSupport(fhirContext)
+                            .generateSnapshot(snaphotGenerationSupport, structureDefinition, url, url, name));
         }
         return Optional.empty();
     }
