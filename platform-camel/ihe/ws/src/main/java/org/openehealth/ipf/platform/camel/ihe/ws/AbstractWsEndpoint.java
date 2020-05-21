@@ -29,7 +29,11 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.*;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
+import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
@@ -38,6 +42,7 @@ import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.xml.namespace.QName;
+
 import java.util.List;
 import java.util.Map;
 
@@ -183,8 +188,8 @@ public abstract class AbstractWsEndpoint<
         if (service == null) {
             if (serviceClass != null) {
                 try {
-                    return serviceClass.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
+                    return serviceClass.getDeclaredConstructor().newInstance();
+                } catch (ReflectiveOperationException e) {
                     throw new RuntimeException("Could not instantiate service of type " + serviceClass, e);
                 }
             } else {
