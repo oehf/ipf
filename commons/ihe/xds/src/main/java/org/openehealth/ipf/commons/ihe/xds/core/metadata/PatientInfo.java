@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -175,13 +174,9 @@ public class PatientInfo implements Serializable {
         return new SynchronizingListIterator<>(xdsIterator, stringsIterator) {
             private T prepareValue(T xdsObject) {
                 if ("PID-5".equals(fieldId) && (xdsObject != null) && !(xdsObject instanceof XpnName)) {
-                    Name xpnName = new XpnName();
-                    try {
-                        BeanUtils.copyProperties(xpnName, xdsObject);
-                        return (T) xpnName;
-                    } catch (Exception e) {
-                        throw new RuntimeException("Could not copy properties", e);
-                    }
+                    XpnName xpnName = new XpnName();
+                    xpnName.copyFrom((Name)xdsObject);
+                    return (T) xpnName;
                 }
                 return xdsObject;
             }

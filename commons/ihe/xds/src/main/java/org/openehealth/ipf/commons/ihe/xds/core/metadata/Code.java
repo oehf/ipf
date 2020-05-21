@@ -19,11 +19,11 @@ import ca.uhn.hl7v2.model.v25.datatype.CE;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.LocalizedStringAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.util.Objects;
 
 /**

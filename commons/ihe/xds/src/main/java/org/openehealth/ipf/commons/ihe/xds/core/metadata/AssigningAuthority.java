@@ -18,11 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
 import java.util.Objects;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVERSAL_ID_TYPE_OID;
 
 /**
  * Represents an authority that assigns IDs.
@@ -80,7 +82,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public AssigningAuthority(String universalId) {
         this();
         setUniversalId(universalId);
-        setUniversalIdType("ISO");
+        setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
     }
 
     /**

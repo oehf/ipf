@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
 import java.util.Objects;
 
 /**
@@ -37,6 +37,8 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "CXiAssigningAuthority", propOrder = {"namespaceId"})
 public class CXiAssigningAuthority extends AssigningAuthority {
+
+    private static final long serialVersionUID = 264032769452660318L;
 
     public CXiAssigningAuthority() {
         super();

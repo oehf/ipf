@@ -21,11 +21,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.util.Objects;
 
 /**
@@ -73,6 +73,20 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
             return new XpnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
         }
         throw new ExceptionInInitializerError("Unknown name type " + type);
+    }
+    
+    /**
+     * Copy all name properties from the given name to this object.
+     * 
+     * @param name
+     */
+    protected void copyFrom(Name name) {
+        setDegree(name.getDegree());
+        setFamilyName(name.getFamilyName());
+        setGivenName(name.getGivenName());
+        setPrefix(name.getPrefix());
+        setSecondAndFurtherGivenNames(name.getSecondAndFurtherGivenNames());
+        setSuffix(name.getSuffix());
     }
 
 
