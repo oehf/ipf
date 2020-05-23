@@ -70,15 +70,15 @@
         <jackson-version>2.10.3</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.26.v20200117</jetty-version>
+        <jetty-version>9.4.28.v20200408</jetty-version>
         <junit-version>4.12</junit-version>
-        <log4j-version>2.13.2</log4j-version>
+        <log4j-version>2.13.3</log4j-version>
         <lombok-version>1.18.12</lombok-version>
         <mockito-version>3.2.4</mockito-version>
         <mockserver-version>5.10</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
-        <tomcat-version>9.0.34</tomcat-version>
+        <tomcat-version>9.0.35</tomcat-version>
         <woodstox-version>6.2.1</woodstox-version>
         <xbean-spring-version>4.17</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>

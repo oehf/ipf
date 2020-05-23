@@ -27,12 +27,12 @@ public class TestDispatch extends XdsStandardTestContainer {
     
     static final String CONTEXT_DESCRIPTOR = "dispatch/dispatch-test-context.xml";
 
-    final String ITI_18_SERVICE_URI = "xds-iti18://localhost:8888/xdsRegistry";
-    final String ITI_42_SERVICE_URI = "xds-iti42://localhost:8888/xdsRegistry";
-    final String PHARM_1_SERVICE_URL = "cmpd-pharm1://localhost:8888/xdsRegistry";
+    final String ITI_18_SERVICE_URI = "xds-iti18://localhost:%d/xdsRegistry";
+    final String ITI_42_SERVICE_URI = "xds-iti42://localhost:%d/xdsRegistry";
+    final String PHARM_1_SERVICE_URL = "cmpd-pharm1://localhost:%d/xdsRegistry";
 
     public static void main(String... args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8889);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8888);
     }
     
     @BeforeClass
@@ -43,9 +43,9 @@ public class TestDispatch extends XdsStandardTestContainer {
 
     @Test
     public void testXdsDispatch() {
-        send(ITI_42_SERVICE_URI, SampleData.createRegisterDocumentSet());
-        send(ITI_18_SERVICE_URI, SampleData.createFindDocumentsQuery());
-        send(PHARM_1_SERVICE_URL, SampleData.createFindDispensesQuery());
+        send(String.format(ITI_42_SERVICE_URI, getPort()), SampleData.createRegisterDocumentSet());
+        send(String.format(ITI_18_SERVICE_URI, getPort()), SampleData.createFindDocumentsQuery());
+        send(String.format(PHARM_1_SERVICE_URL, getPort()), SampleData.createFindDispensesQuery());
         var queue = getAuditSender();
         var messages = queue.getMessages();
         assertEquals(6, messages.size());
