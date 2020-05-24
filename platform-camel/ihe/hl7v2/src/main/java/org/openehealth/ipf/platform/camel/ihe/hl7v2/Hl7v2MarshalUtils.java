@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -129,16 +130,17 @@ public class Hl7v2MarshalUtils {
     public static String convertBodyToString(
             Message message, 
             String charset, 
-            boolean defragmentSegments) throws Exception 
+            boolean defragmentSegments) throws IOException 
     {
         var stream = message.getBody(InputStream.class);
-        var br = new BufferedReader(new InputStreamReader(stream, charset));
-        var s = IOConverter.toString(br);
-        s = s.replace('\n', '\r');
-        if (defragmentSegments) {
-            s = s.replace("\rADD" + s.charAt(3), "");
+        try (var br = new BufferedReader(new InputStreamReader(stream, charset))){
+            var s = IOConverter.toString(br);
+            s = s.replace('\n', '\r');
+            if (defragmentSegments) {
+                s = s.replace("\rADD" + s.charAt(3), "");
+            }
+            return s;
         }
-        return s;
     }
     
     

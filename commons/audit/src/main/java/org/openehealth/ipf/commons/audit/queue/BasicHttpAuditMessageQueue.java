@@ -55,7 +55,7 @@ public class BasicHttpAuditMessageQueue extends AbstractAuditMessageQueue {
     /**
      * @param url       URL
      * @param user      user name, maybe null
-     * @param password, may be null
+     * @param password  password, maybe null
      */
     public BasicHttpAuditMessageQueue(URL url, String user, String password) {
         this.url = requireNonNull(url, "url must not be null");

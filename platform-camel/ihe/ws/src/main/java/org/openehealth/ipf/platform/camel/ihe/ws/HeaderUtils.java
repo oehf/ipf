@@ -92,7 +92,7 @@ abstract public class HeaderUtils {
             : wrappedContext.getWrappedMessage().getExchange().getOutMessage();
 
         var headers = (T) headersContainer.get(key);
-        if ((headers == null) && needCreateWhenNotExist) {
+        if (headers == null && needCreateWhenNotExist && defaultValueFactory != null) {
             headers = defaultValueFactory.get();
             headersContainer.put(key, headers);
         }

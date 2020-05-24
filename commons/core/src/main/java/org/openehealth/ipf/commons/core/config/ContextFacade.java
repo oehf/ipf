@@ -79,7 +79,7 @@ public class ContextFacade {
     }
 
     private static Registry getInstance() {
-        if (instance == null) throw new IllegalStateException("Registry instance has not been set. Call ContextFacade.setRegistry" +
+        if (instance == null) throw new IllegalStateException("Registry instance has not been set. Call ContextFacade.setRegistry " +
         "or initialize a Spring Registry");
         return instance;
     }
