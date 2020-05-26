@@ -17,15 +17,32 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.*;
+import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
+import org.openehealth.ipf.commons.ihe.xds.RMU;
+import org.openehealth.ipf.commons.ihe.xds.XCF;
+import org.openehealth.ipf.commons.ihe.xds.XDM;
+import org.openehealth.ipf.commons.ihe.xds.XDR;
+import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -190,7 +207,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         validateSubmissionSet(container, profile);
         if (!profile.isQuery()) {
             validateUniquenessOfUUIDs(container);
-            validateUniqueIds(container);
+            validateUniqueIds(container, profile);
         }
         validateAssociations(container, profile);
         validateDocumentEntries(container, profile);
@@ -302,17 +319,21 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
-        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
-        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
-        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+    private void validateUniqueIds(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
+        Set<String> idsInRequest = new HashSet<>();
+        ValidationMessage validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
+        ValueValidator uniquenessValidator = (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
+        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
+        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
+        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
     }
 
-    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme) throws XDSMetaDataException {
+    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme, ValueValidator uniquenessValidator) throws XDSMetaDataException {
         for (EbXMLRegistryObject obj : objects) {
             var uniqueId = obj.getExternalIdentifierValue(scheme);
             metaDataAssert(uniqueId != null, UNIQUE_ID_MISSING);
             metaDataAssert(uniqueId.length() <= 128, UNIQUE_ID_TOO_LONG);
+            uniquenessValidator.validate(uniqueId);
         }
     }
 
@@ -327,8 +348,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLRegistryObject obj : objects) {
             var uuid = obj.getId();
             if (uuid != null) {
-                metaDataAssert(!uuids.contains(uuid), UUID_NOT_UNIQUE);
-                uuids.add(uuid);
+                metaDataAssert(uuids.add(uuid), UUID_NOT_UNIQUE);
             }
         }
     }

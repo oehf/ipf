@@ -519,7 +519,14 @@ public class SubmitObjectsRequestValidatorTest {
 
         assertTrue(failed);
     }
-
+    
+    @Test
+    public void testUniqueIdsAreNotUnique() {
+        request.getFolders().get(0).setUniqueId("1.2.3");
+        docEntry.setUniqueId("1.2.3");
+        docEntry.setEntryUuid("doc01");
+        expectFailure(UNIQUE_ID_NOT_UNIQUE);
+    }
 
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request));
