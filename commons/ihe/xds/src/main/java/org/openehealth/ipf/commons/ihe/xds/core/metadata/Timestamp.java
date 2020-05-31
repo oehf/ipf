@@ -43,6 +43,8 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Timestamp", propOrder = {"dateTime", "precision"})
 public class Timestamp implements Serializable {
+    private static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+
     private static final long serialVersionUID = 4324651691599629794L;
 
     @XmlEnum
@@ -157,18 +159,25 @@ public class Timestamp implements Serializable {
         return (timestamp != null) ? timestamp.toHL7() : null;
     }
 
-    private String toHL7() {
+    public String toHL7() {
         return FORMATTERS.get(getPrecision()).format(getDateTime());
     }
 
     public void setDateTime(ZonedDateTime dateTime) {
-        this.dateTime = (dateTime != null) ? dateTime.withZoneSameInstant(ZoneId.of("UTC")) : null;
+        this.dateTime = (dateTime != null) ? dateTime.withZoneSameInstant(UTC_ZONE_ID) : null;
     }
 
     public Precision getPrecision() {
         return (precision != null) ? precision : Precision.SECOND;
     }
-
+    
+    /**
+     * 
+     * @return a {@link Timestamp} with the current date-time in second precision.
+     */
+    public static Timestamp now() {
+        return new Timestamp(ZonedDateTime.now(), Precision.SECOND);
+    }
 
     /**
      * Two HL7 timestamps are equal when they have the same values in the relevant fields

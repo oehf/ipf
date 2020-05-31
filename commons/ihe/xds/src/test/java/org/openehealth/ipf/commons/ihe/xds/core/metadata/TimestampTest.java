@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.Precision;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
 import org.openehealth.ipf.commons.xml.XmlUtils;
@@ -163,6 +164,15 @@ public class TimestampTest {
         var query1 = (FetchQuery) jaxbContext.createUnmarshaller().unmarshal(stream);
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getFrom().getPrecision());
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getTo().getPrecision());
+    }
+    
+    @Test
+    public void timestampNow() {
+        Timestamp now = Timestamp.now();
+        assertEquals(Precision.SECOND, now.getPrecision());
+        String hl7FromNow = now.toHL7();
+        assertTrue(hl7FromNow.startsWith("20"));
+        assertTrue(hl7FromNow.matches("\\d+"));
     }
 
 }

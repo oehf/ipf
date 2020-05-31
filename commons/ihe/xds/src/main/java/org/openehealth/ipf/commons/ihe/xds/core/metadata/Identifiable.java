@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.CX;
+import org.ietf.jgss.Oid;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,7 +55,15 @@ public class Identifiable extends Hl7v2Based<CX> {
     public Identifiable(CX cx) {
         super(cx);
     }
-
+    
+    /**
+     * Constructs an identifiable.
+     * @param id person ID (CX.1) / Code.
+     */
+    public Identifiable(String id) {
+        this();
+        setId(id);
+    }
 
     /**
      * Constructs an identifiable.
@@ -64,11 +73,19 @@ public class Identifiable extends Hl7v2Based<CX> {
      *          assigning authority (CX.4) / Code System.
      */
     public Identifiable(String id, AssigningAuthority assigningAuthority) {
-        this();
-        setId(id);
+        this(id);
         setAssigningAuthority(assigningAuthority);
     }
 
+    /**
+     * Constructs an identifiable, where the assigningAuthority is expected to an Oid
+     * @param id
+     * @param assigningAuthorityOid
+     */
+    public Identifiable(String id, Oid assigningAuthorityOid) {
+        this(id, new AssigningAuthority(assigningAuthorityOid));
+    }
+    
     /**
      * @return person ID (CX.1) / Code.
      */

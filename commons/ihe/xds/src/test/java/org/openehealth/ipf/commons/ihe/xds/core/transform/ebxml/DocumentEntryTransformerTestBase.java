@@ -53,9 +53,9 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author1.getAuthorInstitution().add(new Organization("inst1"));
         author1.getAuthorInstitution().add(new Organization("inst2"));
         author1.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
-        author1.getAuthorRole().add(new Identifiable("role2", null));
+        author1.getAuthorRole().add(new Identifiable("role2"));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
-        author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
+        author1.getAuthorSpecialty().add(new Identifiable("spec2"));
         author1.getAuthorTelecom().add(new Telecom(null, null, 7771L, null));
         author1.getAuthorTelecom().add(new Telecom(null, null, 7772L, null));
 
@@ -63,9 +63,9 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author2.setAuthorPerson(createPerson(30));
         author2.getAuthorInstitution().add(new Organization("inst3"));
         author2.getAuthorInstitution().add(new Organization("inst4"));
-        author2.getAuthorRole().add(new Identifiable("role3", null));
+        author2.getAuthorRole().add(new Identifiable("role3"));
         author2.getAuthorRole().add(new Identifiable("role4", new AssigningAuthority("2.3.6", "ISO")));
-        author2.getAuthorSpecialty().add(new Identifiable("spec3", null));
+        author2.getAuthorSpecialty().add(new Identifiable("spec3"));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", new AssigningAuthority("2.3.8", "ISO")));
         author2.getAuthorTelecom().add(new Telecom(null, null, 7773L, null));
         author2.getAuthorTelecom().add(new Telecom(null, null, 7774L, null));

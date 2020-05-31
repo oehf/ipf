@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.commons.core;
 
+import org.ietf.jgss.Oid;
+
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
  */
 public final class URN implements Comparable<URN>, Serializable {
 
+    private static final long serialVersionUID = -7978304633360508549L;
     public static final String UUID = "uuid";
     public static final String OID = "oid";
     public static final String PIN = "pin";
@@ -54,12 +56,16 @@ public final class URN implements Comparable<URN>, Serializable {
         return new URN(text);
     }
 
-    public URN(URI uri) throws URISyntaxException {
-        this(uri.toString());
+    public URN(URI uri) {
+        this.uri = URI.create(uri.toString());
     }
 
-    public URN(UUID uuid) throws URISyntaxException {
-        this(String.format("%s%s%s%2$s%s", PREFIX, SEP, UUID, uuid.toString()));
+    public URN(UUID uuid) {
+        this.uri = URI.create(String.format("%s%s%s%2$s%s", PREFIX, SEP, UUID, uuid.toString()));
+    }
+    
+    public URN(Oid oid) {
+        this.uri = URI.create(String.format("%s%s%s%2$s%s", PREFIX, SEP, OID, oid.toString()));
     }
 
     public URN(String namespaceId, String namespaceSpecificString) throws URISyntaxException {

@@ -62,10 +62,10 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         author.getAuthorInstitution().add(new Organization("inst2"));
         
         author.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
-        author.getAuthorRole().add(new Identifiable("role2", null));
+        author.getAuthorRole().add(new Identifiable("role2"));
         
         author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
-        author.getAuthorSpecialty().add(new Identifiable("spec2", null));
+        author.getAuthorSpecialty().add(new Identifiable("spec2"));
 
         author.getAuthorTelecom().add(new Telecom(null, null, 7771L, null));
         author.getAuthorTelecom().add(new Telecom(null, null, 7772L, null));

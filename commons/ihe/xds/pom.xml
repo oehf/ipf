@@ -127,6 +127,13 @@
                         <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/requests</source>
                         <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/responses</source>
                     </sources>
+                    <schemaSourceExcludeFilters>
+		                 <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
+		                     <patterns>
+		                         <pattern>builder/*\.java</pattern>
+		                     </patterns>
+		                 </filter>
+                    </schemaSourceExcludeFilters>
                     <outputDirectory>${project.build.directory}/jaxb2</outputDirectory>
                     <createJavaDocAnnotations>false</createJavaDocAnnotations>
                 </configuration>

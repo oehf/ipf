@@ -1,5 +1,7 @@
 package org.openehealth.ipf.commons.core;
 
+import org.ietf.jgss.GSSException;
+import org.ietf.jgss.Oid;
 import org.junit.Test;
 
 import java.net.URI;
@@ -71,5 +73,11 @@ public class URNTest {
         Set<URN> set = new HashSet<>();
         set.add(URN.create("urn:oid:1.2.3.4"));
         assertTrue(set.contains(URN.create("urn:OID:1.2.3.4")));
+    }
+
+    @Test
+    public void testFromOid() throws GSSException, URISyntaxException {
+        String oid = "2.999.2.3.2.43.54";
+        assertEquals(URN.create("urn:oid:" + oid), new URN(new Oid(oid)));
     }
 }

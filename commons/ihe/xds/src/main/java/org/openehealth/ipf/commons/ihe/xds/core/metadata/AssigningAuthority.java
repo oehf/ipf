@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
+import org.ietf.jgss.Oid;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -82,6 +83,17 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public AssigningAuthority(String universalId) {
         this();
         setUniversalId(universalId);
+        setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
+    }
+    
+    /**
+     * Constructs an assigning authority that complies with the rules of the XDS profile.
+     * @param universalId
+     *          the universal ID (HD.2).
+     */
+    public AssigningAuthority(Oid universalId) {
+        this();
+        setUniversalId(universalId.toString());
         setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
     }
 

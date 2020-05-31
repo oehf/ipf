@@ -53,9 +53,9 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author1.getAuthorInstitution().add(new Organization("inst1"));
         author1.getAuthorInstitution().add(new Organization("inst2"));
         author1.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
-        author1.getAuthorRole().add(new Identifiable("role2", null));
+        author1.getAuthorRole().add(new Identifiable("role2"));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
-        author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
+        author1.getAuthorSpecialty().add(new Identifiable("spec2"));
         author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 0L));
         author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 1L));
 
@@ -64,9 +64,9 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author2.getAuthorInstitution().add(new Organization("inst3"));
         author2.getAuthorInstitution().add(new Organization("inst4"));
         author2.getAuthorRole().add(new Identifiable("role3", new AssigningAuthority("2.3.5", "ISO")));
-        author2.getAuthorRole().add(new Identifiable("role4", null));
+        author2.getAuthorRole().add(new Identifiable("role4"));
         author2.getAuthorSpecialty().add(new Identifiable("spec3", new AssigningAuthority("2.3.7", "ISO")));
-        author2.getAuthorSpecialty().add(new Identifiable("spec4", null));
+        author2.getAuthorSpecialty().add(new Identifiable("spec4"));
         author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 2L));
         author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 3L));
 

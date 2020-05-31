@@ -19,6 +19,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.openehealth.ipf.commons.core.OidGenerator;
+import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
@@ -28,9 +30,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Common base class of all XDS meta data classes.
@@ -62,5 +66,23 @@ abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder 
     @XmlJavaTypeAdapter(StringMapAdapter.class)
     @XmlElement(name = "extraMetadata", type = StringMap.class)
     @Getter @Setter private Map<String, List<String>> extraMetadata;
+    
+    /**
+     * If a Document Source do not have a uniqueId to assign, this
+     * supportive method can be used to generate one in OID format,
+     * based on a random UUID.
+     * 
+     */
+    public void assignUniqueId() {
+        this.uniqueId = OidGenerator.uniqueOid().toString();
+    }
+    
+    /**
+     * Supportive method for a document source to provide a entryUuid
+     * in uuid format.
+     */
+    public void assignEntryUuid() {
+        this.entryUuid = new URN(UUID.randomUUID()).toString();
+    }
 
 }
