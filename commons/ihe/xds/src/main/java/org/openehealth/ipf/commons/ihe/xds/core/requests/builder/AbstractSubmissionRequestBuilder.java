@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.builder;
 import lombok.NonNull;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
@@ -32,7 +33,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Abstract builder to support build for certain types of
@@ -114,7 +114,10 @@ abstract class AbstractSubmissionRequestBuilder<T extends AbstractSubmissionRequ
         assignDefault(submissionSet, XDSMetaClass::getEntryUuid, XDSMetaClass::assignEntryUuid);
         assignDefault(submissionSet, SubmissionSet::getSubmissionTime, (set) -> set.setSubmissionTime(Timestamp.now()));
 
-        associations.addAll(Stream.concat(docEntries.stream(), folders.stream())
+        associations.addAll(docEntries.stream()
+                .filter(metadata -> !hasAssociationFromSubmissionSetWithHasMemberTo(metadata.getEntryUuid()))
+                .map(metadata -> createHasMemberAssocationWithOriginalLabel(metadata.getEntryUuid())).collect(Collectors.toList()));
+        associations.addAll(folders.stream()
                 .filter(metadata -> !hasAssociationFromSubmissionSetWithHasMemberTo(metadata.getEntryUuid()))
                 .map(metadata -> createHasMemberAssocation(metadata.getEntryUuid())).collect(Collectors.toList()));
         associations.addAll(associations.stream()
@@ -122,6 +125,12 @@ abstract class AbstractSubmissionRequestBuilder<T extends AbstractSubmissionRequ
                 .filter(assoc -> !Objects.equals(assoc.getSourceUuid(), submissionSet.getEntryUuid()))
                 .filter(assoc -> !hasAssociationFromSubmissionSetWithHasMemberTo(assoc.getEntryUuid()))
                 .map(assoc -> createHasMemberAssocation(assoc.getEntryUuid())).collect(Collectors.toList()));
+    }
+    
+    private Association createHasMemberAssocationWithOriginalLabel(String entryUuid) {
+        var assoc = createHasMemberAssocation(entryUuid);
+        assoc.setLabel(AssociationLabel.ORIGINAL);
+        return assoc;
     }
 
     private Association createHasMemberAssocation(String entryUuid) {
