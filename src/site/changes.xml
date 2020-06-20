@@ -23,9 +23,12 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.0.0" description="IPF 3.7.0" date="17 Apr 2020">
+        <release version="4.0.0" description="IPF 4.0.0" date="17 Apr 2020">
             <action dev="JurrianFahner" issue="307" type="update">
                 Replace joda time in favor for java.time.
+            </action>
+			<action dev="thopap" issue="310" type="add">
+                Improvements to simplified XDS model for sources to support creation of unique OIDs and Has-Member Associations.
             </action>
         </release>
         <release version="3.7.0" description="IPF 3.7.0" date="17 Apr 2020">
