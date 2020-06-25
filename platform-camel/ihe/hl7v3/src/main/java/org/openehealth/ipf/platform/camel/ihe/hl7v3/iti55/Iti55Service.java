@@ -39,7 +39,9 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND;
@@ -141,7 +143,10 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
             // in a separate thread: run the route, send its result synchronously
             // to the deferred response URI, ignore all errors and ACKs
+            Map<String, String> mdcContextMap = MDC.getCopyOfContextMap();
             Runnable processRouteAndNotifyTask = () -> {
+                MDC.setContextMap(mdcContextMap);
+                
                 // Message context is a thread local object, so we need to propagate in into
                 // this new thread.  Note that the producer (see producerTemplate below) will
                 // get its own message context, precisely spoken a freshly created one.
