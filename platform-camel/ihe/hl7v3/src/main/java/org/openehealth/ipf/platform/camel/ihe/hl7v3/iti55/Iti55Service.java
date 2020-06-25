@@ -145,30 +145,34 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             // to the deferred response URI, ignore all errors and ACKs
             Map<String, String> mdcContextMap = MDC.getCopyOfContextMap();
             Runnable processRouteAndNotifyTask = () -> {
-                MDC.setContextMap(mdcContextMap);
-                
-                // Message context is a thread local object, so we need to propagate in into
-                // this new thread.  Note that the producer (see producerTemplate below) will
-                // get its own message context, precisely spoken a freshly created one.
-                WebServiceContextImpl.setMessageContext(messageContext);
+                try {
+                    MDC.setContextMap(mdcContextMap);
 
-                // run the route
-                Object result = doProcess0(requestString, requestXml);
+                    // Message context is a thread local object, so we need to propagate in into
+                    // this new thread.  Note that the producer (see producerTemplate below) will
+                    // get its own message context, precisely spoken a freshly created one.
+                    WebServiceContextImpl.setMessageContext(messageContext);
 
-                // prepare and send deferred response.
-                // NB: Camel message headers will be used in Iti55DeferredResponseProducer
-                Exchange exchange = new DefaultExchange(camelContext);
-                exchange.getIn().setBody(result);
-                exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
-                exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
+                    // run the route
+                    Object result = doProcess0(requestString, requestXml);
 
-                AbstractWsEndpoint<?, ?> responseEndpoint = (AbstractWsEndpoint<?, ?>) camelContext.getEndpoint(deferredResponseUri);
-                responseEndpoint.setAuditContext(endpoint.getAuditContext());
+                    // prepare and send deferred response.
+                    // NB: Camel message headers will be used in Iti55DeferredResponseProducer
+                    Exchange exchange = new DefaultExchange(camelContext);
+                    exchange.getIn().setBody(result);
+                    exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
+                    exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
 
-                exchange = producerTemplate.send(responseEndpoint, exchange);
-                Exception exception = Exchanges.extractException(exchange);
-                if (exception != null) {
-                    LOG.error("Sending deferred response failed", exception);
+                    AbstractWsEndpoint<?, ?> responseEndpoint = (AbstractWsEndpoint<?, ?>) camelContext.getEndpoint(deferredResponseUri);
+                    responseEndpoint.setAuditContext(endpoint.getAuditContext());
+
+                    exchange = producerTemplate.send(responseEndpoint, exchange);
+                    Exception exception = Exchanges.extractException(exchange);
+                    if (exception != null) {
+                        LOG.error("Sending deferred response failed", exception);
+                    }
+                } finally {
+                    MDC.clear();
                 }
            };
 
