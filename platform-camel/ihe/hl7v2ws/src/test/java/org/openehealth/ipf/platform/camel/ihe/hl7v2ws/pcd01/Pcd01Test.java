@@ -105,13 +105,13 @@ public class Pcd01Test extends StandardTestContainer {
     @Test
     public void testInacceptableRequestOnConsumer() throws Exception {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        var endpoint = getCamelContext().getEndpoint(uri);
+        var endpoint = camelContext.getEndpoint(uri);
         Processor processor = endpoint.createProducer();
         processor = ((Interceptor2ProducerAdapter) processor).getProcessor();
         while (processor instanceof Interceptor) {
             processor = ((Interceptor) processor).getWrappedProcessor();
         }
-        Exchange exchange = new DefaultExchange(getCamelContext());
+        Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
         processor.process(exchange);
         assertEquals(1, MyRejectionHandlingStrategy.getCount());
@@ -172,7 +172,7 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testJmxAttribute() throws Exception {
-        var mbsc = getCamelContext().getManagementStrategy().getManagementAgent()
+        var mbsc = camelContext.getManagementStrategy().getManagementAgent()
                 .getMBeanServer();
         Set<ObjectName> s = CastUtils.cast(mbsc.queryNames(new ObjectName(
                 "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\\?rejectionHandlingStrategy=%23rejectionHandlingStrategy\""), null));

@@ -100,7 +100,7 @@ public class TestIti65Success extends AbstractTestIti65 {
 
     @Ignore
     public void testSendEndpointMhd() throws Exception {
-        var result = getProducerTemplate().requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
+        var result = producerTemplate.requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
         // printAsXML(result);
 
         // Check ATNA Audit

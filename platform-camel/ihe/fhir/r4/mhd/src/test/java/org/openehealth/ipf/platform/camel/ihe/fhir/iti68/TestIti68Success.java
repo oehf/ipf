@@ -40,7 +40,7 @@ public class TestIti68Success extends AbstractTestIti68 {
     @Test
     public void testRetrieveDocument() {
 
-        var response = getProducerTemplate().requestBody("direct:input", null, byte[].class);
+        var response = producerTemplate.requestBody("direct:input", null, byte[].class);
         assertArrayEquals(Iti68TestRouteBuilder.DATA, response);
 
         // Check ATNA Audit

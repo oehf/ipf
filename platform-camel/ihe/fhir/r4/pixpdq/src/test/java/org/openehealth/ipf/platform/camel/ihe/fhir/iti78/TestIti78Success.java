@@ -131,7 +131,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        var result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
@@ -142,7 +142,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmString() {
-        var result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit

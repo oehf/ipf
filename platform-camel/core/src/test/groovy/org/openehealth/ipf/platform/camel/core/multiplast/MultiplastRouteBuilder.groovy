@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.multiplast
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
-class MultiplastRouteBuilder extends SpringRouteBuilder {
+class MultiplastRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
 

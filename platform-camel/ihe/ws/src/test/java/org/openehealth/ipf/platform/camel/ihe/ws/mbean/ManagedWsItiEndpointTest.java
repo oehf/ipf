@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.ContextTestSupport;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.util.CastUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * @author Stefan Ivanov
  */
-public class ManagedWsItiEndpointTest extends ContextTestSupport {
+public class ManagedWsItiEndpointTest extends CamelTestSupport {
 
     static final String NAME = "org.apache.camel.jmx.mbeanObjectDomainName";
     private static String oldValue;

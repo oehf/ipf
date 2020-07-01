@@ -41,7 +41,7 @@ public class TestIti68Error extends AbstractTestIti68 {
     @Test
     public void testRetrieveDocument() {
         try {
-            getProducerTemplate().requestBody("direct:input", null, byte[].class);
+            producerTemplate.requestBody("direct:input", null, byte[].class);
             fail();
         } catch (CamelExecutionException e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);

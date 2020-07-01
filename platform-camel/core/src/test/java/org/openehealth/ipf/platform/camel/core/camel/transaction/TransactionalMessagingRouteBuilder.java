@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.camel.transaction;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcessor;
 
 /**
  * @author Martin Krasser
  */
-public class TransactionalMessagingRouteBuilder extends SpringRouteBuilder {
+public class TransactionalMessagingRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {

@@ -16,16 +16,16 @@
 package org.openehealth.ipf.platform.camel.core.camel.exception;
 
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcessor;
 
 
 /**
  * @author Martin Krasser
  */
-public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
+public class ErrorHandlingRouteBuilder extends RouteBuilder {
 
-    private FailureProcessor failure = new FailureProcessor("blah");
+    private final FailureProcessor failure = new FailureProcessor("blah");
     
         
     @Override

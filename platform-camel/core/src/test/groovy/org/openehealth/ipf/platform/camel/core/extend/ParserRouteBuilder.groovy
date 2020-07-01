@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConverter
-
-import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Martin Krasser
  */
-class ParserRouteBuilder extends SpringRouteBuilder {
+class ParserRouteBuilder extends RouteBuilder {
     
     void configure() {
         

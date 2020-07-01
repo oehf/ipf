@@ -32,13 +32,13 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-secure.xml";
 
     @BeforeClass
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, true);
     }
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        var result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
@@ -48,7 +48,7 @@ public class TestIti78SecureSuccess extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmString() {
-        var result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit

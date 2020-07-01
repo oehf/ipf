@@ -26,7 +26,6 @@ import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -41,12 +40,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils
 class StandardTestContainer {
     private static final transient Logger log = LoggerFactory.getLogger(StandardTestContainer.class)
 
-    static ProducerTemplate producerTemplate
-    static ServletServer servletServer
-    static ApplicationContext appContext
-    private static AbstractMockedAuditMessageQueue auditSender
+    protected static ProducerTemplate producerTemplate
+    protected static ServletServer servletServer
+    protected static ApplicationContext appContext
+    protected static AbstractMockedAuditMessageQueue auditSender
 
-    static CamelContext camelContext
+    protected static CamelContext camelContext
 
     static int port
 

@@ -59,7 +59,7 @@ public class TransactedRouteTest extends StandardTestContainer {
         transactionPolicy.setTransactionManager(txManager);
         final var resource = ClassLoader.getSystemResource("transacted-test-context.xml");
         startServer(new CXFServlet(), "transacted-test-context.xml");
-        getCamelContext().addRoutes(new TestRoutes(transactionPolicy));
+        camelContext.addRoutes(new TestRoutes(transactionPolicy));
     }
     
     @Test
@@ -90,9 +90,9 @@ public class TransactedRouteTest extends StandardTestContainer {
     
     public String sendRequest(final String url, final String body) {
         final Exchange exchange = new DefaultExchange(
-                getCamelContext(), ExchangePattern.InOut);
+                camelContext, ExchangePattern.InOut);
         exchange.getIn().setBody(body);
-        final var response = getProducerTemplate().send(url, exchange);
+        final var response = producerTemplate.send(url, exchange);
         return response.getMessage().getBody(String.class);
     }
     

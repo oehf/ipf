@@ -67,7 +67,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
                     servlet.registerProvider(resourceProvider);
                 }
             } else {
-                LOG.warn("Resource Provider {} was already registered. Ignored registration.", resourceProvider);
+                LOG.info("Resource Provider {} was already registered. Ignored registration.", resourceProvider);
             }
         }
     }
@@ -80,7 +80,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
                     provider.unregisterProvider(resourceProvider);
                 }
             } else {
-                LOG.warn("Resource Provider {} was not registered. Ignored deregistration.", resourceProvider);
+                LOG.info("Resource Provider {} was not registered. Ignored deregistration.", resourceProvider);
             }
         }
     }

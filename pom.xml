@@ -875,12 +875,6 @@
                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
                 <directory>src/main/groovy</directory>
             </resource>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>META-INF/**/*</include>
-                </includes>
-            </resource>
         </resources>
         <testResources>
             <testResource>

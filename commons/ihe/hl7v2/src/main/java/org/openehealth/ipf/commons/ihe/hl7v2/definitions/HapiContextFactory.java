@@ -127,4 +127,5 @@ public class HapiContextFactory {
         context.setValidationExceptionHandlerFactory(new SimpleValidationExceptionHandler(context));
         return context;
     }
+
 }

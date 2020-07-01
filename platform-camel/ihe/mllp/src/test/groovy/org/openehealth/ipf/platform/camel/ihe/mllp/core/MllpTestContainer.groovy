@@ -39,10 +39,10 @@ import static org.junit.Assert.*
  */
 class MllpTestContainer {
 
-    static ProducerTemplate producerTemplate
-    static CamelContext camelContext
-    static AbstractMockedAuditMessageQueue auditSender
-    static ClassPathXmlApplicationContext appContext
+    protected static ProducerTemplate producerTemplate
+    protected static CamelContext camelContext
+    protected static AbstractMockedAuditMessageQueue auditSender
+    protected static ClassPathXmlApplicationContext appContext
 
     static String TIMEOUT = '15000'
     

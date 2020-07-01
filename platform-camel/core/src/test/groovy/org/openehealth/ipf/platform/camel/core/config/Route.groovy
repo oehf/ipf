@@ -1,8 +1,8 @@
 package org.openehealth.ipf.platform.camel.core.config
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
-class Route extends SpringRouteBuilder {
+class Route extends RouteBuilder {
 	
 	void configure() {
 	    from('direct:input')

@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * @author Martin Krasser
  */
-class SampleRouteBuilder extends SpringRouteBuilder {
+class SampleRouteBuilder extends RouteBuilder {
     
     void configure() {
         

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.management;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 
 /**
  * 
@@ -23,7 +23,7 @@ import org.apache.camel.spring.SpringRouteBuilder;
  * 
  */
 public class ManagementNamingStrategyTestRouteBuilder extends
-        SpringRouteBuilder {
+        RouteBuilder {
 
     @Override
     public void configure() throws Exception {
