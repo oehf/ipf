@@ -138,13 +138,14 @@ public class QueryResponseTransformer {
             foundNonObjRefs = true;
         }
 
-        for (var regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
-            response.getFolders().add(folderTransformer.fromEbXML(regPackage));
-            foundNonObjRefs = true;
-        }
-
-        for (var regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
-            response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
+        var folderPackages = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
+        var regPackages = ebXML.getRegistryPackages();
+        for (var regPackage : regPackages) {
+            if (folderPackages!=null && folderPackages.contains(regPackage)) {
+                response.getFolders().add(folderTransformer.fromEbXML(regPackage));
+            } else {
+                response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
+            }
             foundNonObjRefs = true;
         }
 
