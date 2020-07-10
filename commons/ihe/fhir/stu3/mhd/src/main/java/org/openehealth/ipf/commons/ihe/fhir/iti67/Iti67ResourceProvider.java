@@ -65,6 +65,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITYLABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATED_ID) TokenOrListParam relatedId,
+            @OptionalParam(name = DocumentReference.SP_RELATED_REF) ReferenceOrListParam relatedRef,
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -85,6 +86,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .securityLabel(securityLabel)
                 .format(format)
                 .relatedId(relatedId)
+                .relatedRef(relatedRef)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)

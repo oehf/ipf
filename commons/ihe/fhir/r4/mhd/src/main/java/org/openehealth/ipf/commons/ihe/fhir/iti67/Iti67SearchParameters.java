@@ -21,6 +21,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceOrListParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -29,6 +30,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
@@ -60,9 +62,8 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam securityLabel;
     @Getter @Setter private TokenOrListParam format;
 
-    // This is normally a ReferenceParameter but we assume that we are chaining this
-    // with identifier
-    @Getter @Setter private TokenOrListParam related;
+    @Getter @Setter private TokenOrListParam relatedId;
+    @Getter @Setter private ReferenceOrListParam relatedRef;
     @Getter @Setter private TokenParam _id;
 
     @Getter @Setter private SortSpec sortSpec;
@@ -89,6 +90,22 @@ public class Iti67SearchParameters implements FhirSearchParameters {
                     setAuthorFamilyName(ref.toStringParam(getFhirContext()));
                 } else if (Practitioner.SP_GIVEN.equals(authorChain)) {
                     setAuthorGivenName(ref.toStringParam(getFhirContext()));
+                }
+            });
+        }
+        return this;
+    }
+
+    public Iti67SearchParameters setRelated(ReferenceOrListParam related) {
+        if (related != null) {
+            relatedId = new TokenOrListParam();
+            relatedRef = new ReferenceOrListParam();
+            related.getValuesAsQueryTokens().forEach(param -> {
+                String relatedChain = param.getChain();
+                if ("identifier".equals(relatedChain)) {
+                    relatedId.addOr(param.toTokenParam(getFhirContext()));
+                } else if ("reference".equals(relatedChain)) {
+                    relatedRef.addOr(param);
                 }
             });
         }
