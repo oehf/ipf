@@ -16,8 +16,6 @@
 
 package org.openehealth.ipf.commons.audit.utils;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Map;
@@ -33,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AuditUtils {
 
-    private static Map<String, String> systemData = new ConcurrentHashMap<>();
+    private static final Map<String, String> systemData = new ConcurrentHashMap<>();
 
     private static final String PID = "PID";
     private static final String IP = "IP";
@@ -41,18 +39,10 @@ public class AuditUtils {
     private static final String USER = "USER";
 
     /**
-     * @return the process ID of the running process or "unknown"
+     * @return the process ID of the running process
      */
     public static String getProcessId() {
-        return systemData.computeIfAbsent(PID, s -> {
-            RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
-            String name = mx.getName();
-            int pointer;
-            if ((pointer = name.indexOf('@')) != -1) {
-                return name.substring(0, pointer);
-            }
-            return "unknown";
-        });
+        return systemData.computeIfAbsent(PID, s -> Long.toString(ProcessHandle.current().pid()));
     }
 
     /**
@@ -90,7 +80,7 @@ public class AuditUtils {
         if (url == null) return null;
 
         // drop schema
-        int pos = url.indexOf("://");
+        var pos = url.indexOf("://");
         if (pos > 0) {
             url = url.substring(pos + 3);
         }
@@ -102,8 +92,8 @@ public class AuditUtils {
         }
 
         // drop trailing parts: port number, query parameters, path, fragment
-        for (int i = 0; i < url.length(); ++i) {
-            char c = url.charAt(i);
+        for (var i = 0; i < url.length(); ++i) {
+            var c = url.charAt(i);
             if ((c == ':') || (c == '?') || (c == '/') || (c == '#')) {
                 return url.substring(0, i);
             }
@@ -112,7 +102,7 @@ public class AuditUtils {
     }
 
     public static Optional<InetAddress> localInetAddress() {
-        try (DatagramSocket socket = new DatagramSocket()) {
+        try (var socket = new DatagramSocket()) {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             return Optional.of(socket.getLocalAddress());
         } catch (Exception e) {

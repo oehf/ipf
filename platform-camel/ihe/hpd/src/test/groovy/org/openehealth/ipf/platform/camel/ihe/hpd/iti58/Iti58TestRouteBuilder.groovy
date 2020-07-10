@@ -28,10 +28,8 @@ class Iti58TestRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
         from('hpd-iti58:hpd-service1')
-            .process(iti58RequestValidator())
-            .process {
-                it.out.body = new BatchResponse()
-            }
-            .process(iti58ResponseValidator())
+                .process(iti58RequestValidator())
+                .transform().constant(new BatchResponse())
+                .process(iti58ResponseValidator())
     }
 }

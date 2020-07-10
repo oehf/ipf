@@ -39,24 +39,24 @@ class Null extends AbstractType {
     def getAt(int idx) {
         this
     }
-    	
-	String getValue() {
+
+    static String getValue() {
 		null
 	}
 
-    String getValueOr(String defaultValue) {
+    static String getValueOr(String defaultValue) {
         defaultValue
     }
 
-    String valueOr(String defaultValue) {
+    static String valueOr(String defaultValue) {
         defaultValue
     }
 
     String toString() {
         null
     }
-	
-	void setValue(String value) throws DataTypeException {
+
+    static void setValue(String value) throws DataTypeException {
 		throw new DataTypeException("Cannot assign a value Null")
 	}
 

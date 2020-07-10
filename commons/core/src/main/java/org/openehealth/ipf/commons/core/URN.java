@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.commons.core;
 
+import org.ietf.jgss.Oid;
+
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -33,6 +35,7 @@ import java.util.regex.Pattern;
  */
 public final class URN implements Comparable<URN>, Serializable {
 
+    private static final long serialVersionUID = -7978304633360508549L;
     public static final String UUID = "uuid";
     public static final String OID = "oid";
     public static final String PIN = "pin";
@@ -53,12 +56,16 @@ public final class URN implements Comparable<URN>, Serializable {
         return new URN(text);
     }
 
-    public URN(URI uri) throws URISyntaxException {
-        this(uri.toString());
+    public URN(URI uri) {
+        this.uri = URI.create(uri.toString());
     }
 
-    public URN(UUID uuid) throws URISyntaxException {
-        this(String.format("%s%s%s%2$s%s", PREFIX, SEP, UUID, uuid.toString()));
+    public URN(UUID uuid) {
+        this.uri = URI.create(String.format("%s%s%s%2$s%s", PREFIX, SEP, UUID, uuid.toString()));
+    }
+    
+    public URN(Oid oid) {
+        this.uri = URI.create(String.format("%s%s%s%2$s%s", PREFIX, SEP, OID, oid.toString()));
     }
 
     public URN(String namespaceId, String namespaceSpecificString) throws URISyntaxException {
@@ -74,14 +81,14 @@ public final class URN implements Comparable<URN>, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        URN urn = (URN) o;
+        var urn = (URN) o;
         return getNamespaceId().equalsIgnoreCase(urn.getNamespaceId()) &&
                 getNamespaceSpecificString().equals(urn.getNamespaceSpecificString());
     }
 
     @Override
     public int hashCode() {
-        int result = getNamespaceId().toLowerCase(Locale.ROOT).hashCode();
+        var result = getNamespaceId().toLowerCase(Locale.ROOT).hashCode();
         result = 31 * result + getNamespaceSpecificString().hashCode();
         return result;
     }
@@ -117,11 +124,7 @@ public final class URN implements Comparable<URN>, Serializable {
      * @return namespace-specific string, i.e. an OID or UUID value
      */
     public String getNamespaceSpecificString() {
-        try {
-            return URLDecoder.decode(this.part(2), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
+        return URLDecoder.decode(this.part(2), StandardCharsets.UTF_8);
     }
 
     @Override

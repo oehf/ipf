@@ -22,7 +22,6 @@ import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
@@ -39,7 +38,7 @@ public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bu
     @Override
     public IClientExecutable<IQuery<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<IBaseBundle> query;
-        String queriedResourceType = (String)parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
+        var queriedResourceType = (String)parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
         if (requestData instanceof ICriterion) {
             query = client.search()
                     .forResource(queriedResourceType)

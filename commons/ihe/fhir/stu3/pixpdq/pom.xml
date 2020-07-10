@@ -3,16 +3,21 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-stu3</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-commons-ihe-fhir-stu3-pixpdq</artifactId>
     <name>ipf-commons-ihe-fhir-stu3-pixpdq</name>
     <description>FHIR-specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
@@ -33,7 +38,6 @@
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -63,13 +67,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "AssociationType")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum AssociationType {
     /** An entry that is appended to another one. */
     @XmlEnumValue("APND") APPEND("APND", "urn:ihe:iti:2007:AssociationType:APND"),
@@ -103,7 +103,7 @@ public enum AssociationType {
             return null;
         }
 
-        for (AssociationType type : AssociationType.values()) {
+        for (var type : AssociationType.values()) {
             if (opcode.equals(type.getOpcode21())) {
                 return type;
             }
@@ -125,7 +125,7 @@ public enum AssociationType {
             return null;
         }
 
-        for (AssociationType type : AssociationType.values()) {
+        for (var type : AssociationType.values()) {
             if (opcode.equals(type.getOpcode30())) {
                 return type;
             }

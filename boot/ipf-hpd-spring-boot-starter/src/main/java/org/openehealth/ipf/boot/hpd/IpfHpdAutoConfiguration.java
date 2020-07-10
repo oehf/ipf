@@ -16,7 +16,6 @@
 package org.openehealth.ipf.boot.hpd;
 
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(IpfHpdConfigurationProperties.class)
 public class IpfHpdAutoConfiguration {
 
-    @Autowired
-    private IpfHpdConfigurationProperties hpdConfig;
+    private final IpfHpdConfigurationProperties hpdConfig;
 
+    public IpfHpdAutoConfiguration(IpfHpdConfigurationProperties hpdConfig) {
+        this.hpdConfig = hpdConfig;
+    }
 }

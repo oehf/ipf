@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.commons.xml.XmlYielder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -206,7 +206,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
     /**
      * Constructs an v3 error location string from the given v2 ERR-2 field. 
      */
-    String getV3ErrorLocation(Composite err2, GPathResult xml) {
+    static String getV3ErrorLocation(Composite err2, GPathResult xml) {
         if (err2[1].value == 'QPD') {
             String errorLocation = "/${xml.interactionId.@extension.text()}/controlActProcess/queryByParameter"
             if (err2[3].value == '8') {

@@ -52,15 +52,15 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        IBaseResource msg = exchange.getIn().getBody(IBaseResource.class);
+        var msg = exchange.getIn().getBody(IBaseResource.class);
 
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
         determineParticipantsAddresses(exchange, auditDataset);
 
-        boolean failed = false;
+        var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            IBaseResource result = resultMessage(exchange).getBody(IBaseResource.class);
+            var result = resultMessage(exchange).getBody(IBaseResource.class);
             failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
         } catch (Exception e) {
             // FHIR exception or unexpected exception
@@ -93,7 +93,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset();
+            var auditDataset = strategy.createAuditDataset();
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(exchange.getProperty("CamelToEndpoint").toString());
 

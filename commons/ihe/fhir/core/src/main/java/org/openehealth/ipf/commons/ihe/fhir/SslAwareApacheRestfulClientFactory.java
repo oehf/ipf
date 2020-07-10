@@ -37,7 +37,6 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,13 +49,13 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
     private HttpClient httpClient;
     private HttpHost proxy;
     private FhirSecurityInformation securityInformation;
-    private final Optional<HttpClientBuilder> httpClientBuilder;
+    private final HttpClientBuilder httpClientBuilder;
 
     public SslAwareApacheRestfulClientFactory(FhirContext theFhirContext) {
-        this(theFhirContext, Optional.empty());
+        this(theFhirContext, null);
     }
 
-    public SslAwareApacheRestfulClientFactory(FhirContext fhirContext, Optional<HttpClientBuilder> httpClientBuilder) {
+    public SslAwareApacheRestfulClientFactory(FhirContext fhirContext, HttpClientBuilder httpClientBuilder) {
         super(fhirContext);
         this.httpClientBuilder = httpClientBuilder;
     }
@@ -115,14 +114,14 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
      * @return HttpClientBuilder instance
      */
     protected HttpClientBuilder newHttpClientBuilder() {
-        return httpClientBuilder.orElse(HttpClients.custom());
+        return httpClientBuilder != null ? httpClientBuilder : HttpClients.custom();
     }
 
     protected synchronized HttpClient getNativeHttpClient() {
         if (httpClient == null) {
 
             // @formatter:off
-            RequestConfig defaultRequestConfig = RequestConfig.custom()
+            var defaultRequestConfig = RequestConfig.custom()
                     .setConnectTimeout(getConnectTimeout())
                     .setSocketTimeout(getSocketTimeout())
                     .setConnectionRequestTimeout(getConnectionRequestTimeout())
@@ -130,7 +129,7 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
                     .setStaleConnectionCheckEnabled(true)
                     .build();
 
-            HttpClientBuilder builder = newHttpClientBuilder()
+            var builder = newHttpClientBuilder()
                     .useSystemProperties()
                     .setDefaultRequestConfig(defaultRequestConfig)
                     .setMaxConnTotal(getPoolMaxTotal())

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti51
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable
@@ -35,7 +35,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForM
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
-class Iti51TestRouteBuilder extends SpringRouteBuilder {
+class Iti51TestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         from('xds-iti51:xds-iti51-service1')
             .id('service1route')

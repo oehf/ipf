@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti92
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti9
 /**
  * @author Dmytro Rud
  */
-public class Iti92TestRouteBuilder extends SpringRouteBuilder {
+public class Iti92TestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {

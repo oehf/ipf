@@ -31,7 +31,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
-        ORU_R01 adapter = (ORU_R01)getParser().parse(maximumMessage.toString().trim());
+        var adapter = (ORU_R01)getParser().parse(maximumMessage.toString().trim());
         validate(adapter);
         assertObservationCount(5, adapter);
     }
@@ -141,7 +141,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
     @Ignore
     @Test(expected = HL7Exception.class)
     public void testMissingOBR7_OBR8_OBX14() throws HL7Exception {
-        ORU_R01 msg = (ORU_R01)getParser().parse(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "||"));
+        var msg = (ORU_R01)getParser().parse(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "||"));
         msg = (ORU_R01)getParser().parse(msg.toString().replace("|R|||20090813095725+0500|", "|R||||"));
         validate(msg);
     }
@@ -156,7 +156,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
     //check for messages without OBR-7, OBR-8 and OBX-14
     //check: OBX-14 and OBX-19 should be equivalent
     private void assertObservationCount(int expected, ORU_R01 msg){
-        int observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
+        var observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
         assertEquals(expected, observationsInMsg);
     }
     

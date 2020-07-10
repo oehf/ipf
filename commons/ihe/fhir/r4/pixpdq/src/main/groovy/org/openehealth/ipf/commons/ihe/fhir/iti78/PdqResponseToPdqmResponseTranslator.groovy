@@ -110,7 +110,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         resultList
     }
 
-    protected void addSearchScore(PdqPatient pdqPatient, response) {
+    protected static void addSearchScore(PdqPatient pdqPatient, response) {
         ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.code)
         /*
         String searchScoreString = response.QRI[1]?.value
@@ -244,7 +244,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         patient
     }
 
-    protected CodeableConcept makeCodeableConcept(String originalCode, String code, String system, String display) {
+    protected static CodeableConcept makeCodeableConcept(String originalCode, String code, String system, String display) {
         CodeableConcept codeableConcept = new CodeableConcept()
         codeableConcept.addCoding()
                 .setCode(code)
@@ -255,7 +255,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
 
     // Handle an error response from the Cross-reference manager
-    protected List<PdqPatient> handleErrorResponse(RSP_K21 message) {
+    protected static List<PdqPatient> handleErrorResponse(RSP_K21 message) {
 
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
@@ -355,28 +355,28 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             telecom.setSystem(ContactPointSystem.EMAIL)
                     .setValue(xtn[4].value)
         }
-        if ("CP".equals(xtn[3]?.value)) {
-            telecom.setUse(ContactPointUse.MOBILE);
+        if ("CP" == xtn[3]?.value) {
+            telecom.setUse(ContactPointUse.MOBILE)
         }
         telecom
     }
 
-    protected ContactPointUse telecomUse(field, ContactPointUse defaultUse) {
+    protected static ContactPointUse telecomUse(field, ContactPointUse defaultUse) {
         String fhirTelecomUse = (field?.value ?: '').map('hl7v2fhir-telecom-use')
         return fhirTelecomUse ? ContactPointUse.fromCode(fhirTelecomUse) : defaultUse
     }
 
-    protected ContactPointSystem telecomSystem(field, ContactPointSystem defaultSystem) {
+    protected static ContactPointSystem telecomSystem(field, ContactPointSystem defaultSystem) {
         String fhirTelecomSystem = (field?.value ?: '').map('hl7v2fhir-telecom-type')
         return fhirTelecomSystem ? ContactPointSystem.fromCode(fhirTelecomSystem) : defaultSystem
     }
 
-    protected NameUse nameUse(field, NameUse defaultUse) {
+    protected static NameUse nameUse(field, NameUse defaultUse) {
         String fhirNameUse = (field?.value ?: '').map('hl7v2fhir-name-use')
         return fhirNameUse ? NameUse.fromCode(fhirNameUse) : defaultUse
     }
 
-    protected AddressUse addressUse(field, AddressUse defaultUse) {
+    protected static AddressUse addressUse(field, AddressUse defaultUse) {
         String addressUse = (field?.value ?: '').map('hl7v2fhir-address-use')
         return addressUse ? AddressUse.fromCode(addressUse) : defaultUse
     }

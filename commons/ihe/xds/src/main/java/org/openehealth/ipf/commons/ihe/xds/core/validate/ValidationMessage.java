@@ -31,7 +31,8 @@ public enum ValidationMessage {
     TITLE_TOO_LONG("Document entry title too long: %1s"),
     UNIQUE_ID_MISSING("Document entries, folders and submission sets are required to define a unique ID"),
     UNIQUE_ID_TOO_LONG("Unique IDs must not be longer than 128 characters"),
-    UNIQUE_ID_NOT_UNIQUE("Duplicate ID found"),
+    UNIQUE_ID_NOT_UNIQUE("Duplicate ID found: %1s", ErrorCode.REGISTRY_DUPLICATE_UNIQUE_ID_IN_MESSAGE),
+    UNIQUE_ID_NOT_UNIQUE_REPO("Duplicate ID found: %1s", ErrorCode.REPOSITORY_DUPLICATE_UNIQUE_ID_IN_MESSAGE),
     UUID_NOT_UNIQUE("Duplicate UUID found"),
     DOC_ENTRY_PATIENT_ID_WRONG("Document entry and submission set must define the same patient ID", ErrorCode.PATIENT_ID_DOES_NOT_MATCH),
     FOLDER_PATIENT_ID_WRONG("Folder and submission set must define the same patient ID", ErrorCode.PATIENT_ID_DOES_NOT_MATCH),
@@ -144,7 +145,16 @@ public enum ValidationMessage {
     TIME_WRONG_CHRONOLOGY("Timestamp %s must be equal or before %s"),
     ASSOCIATION_ID_MISSING("Attribute 'id' must be provided in the Association"),
     OBJECT_NOT_UPDATABLE("%s %s is not updatable"),     // 1st param=object type, e.g. "Folder"; 2nd param=object UUID
-    ;
+    UNRESOLVED_REFERENCE("A reference in the Remove Metadata Request cannot be resolved for entry: '%1s'", ErrorCode.UNRESOLVED_REFERENCE_EXCEPTION),
+    REFERENCES_EXIST("A reference which is not in the Remove Metadata Request exists", ErrorCode.REFERENCE_EXISTS_EXCEPTION),
+    UNREFERENCED_OBJECT("A metadata object is no longer referenced by any Association for entry: '%1s'", ErrorCode.UNREFERENCED_OBJECT_EXCEPTION),
+    UNKNOWN_REPOSITORY_ID("The repositoryUniqueId value could not be resolved to a valid document repository or the value does not match the repositoryUniqueId for the document: '%1s'", ErrorCode.UNKNOWN_REPOSITORY_ID),
+    DOCUMENT_NOT_FOUND_ERROR("The document associated with the unique ID '%1s' is not available", ErrorCode.DOCUMENT_UNIQUE_ID_ERROR),
+    REMOVE_DOCUMENTS_ERROR("The Document Repository was not able to remove the document: '%1s'", ErrorCode.REMOVE_DOCUMENTS_ERROR),
+    DIFFERENT_SIZE_IN_RESUBMISSION("A document was resubmitted with a different size", ErrorCode.NON_IDENTICAL_SIZE),
+    UNKNOWN_COMMUNITY("A value for the homeCommunityId '%1s' is not recognized", ErrorCode.UNKNOWN_COMMUNITY),
+    UNAVAILABLE_COMMUNITY("A community with homeCommunityId '%1s' which would have been contacted was not available", ErrorCode.UNAVAILABLE_COMMUNITY),
+    MISSING_HOME_COMMUNITY_ID_FOR_ELEMENT("A community with homeCommunityId '%1s' did not include the homeCommunityId for the element '%2s' with id '%3s'", ErrorCode.MISSING_HOME_COMMUNITY_ID);   // 1st param=home community id; 2nd param=xds entry type, e.g. 'folders'; 3rd param=entry UUID
 
 
     private final String text;

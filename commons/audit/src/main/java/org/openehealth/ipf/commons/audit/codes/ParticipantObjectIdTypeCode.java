@@ -54,7 +54,7 @@ public enum ParticipantObjectIdTypeCode implements ParticipantObjectIdType, Enum
     XdsMetadata("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", "submission set classificationNode", "IHE XDS Metadata");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private final ParticipantObjectIdType value;
 
     ParticipantObjectIdTypeCode(String code, String displayName, String codeSystemName) {
         this.value = ParticipantObjectIdType.of(code, codeSystemName, displayName);

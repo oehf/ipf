@@ -43,7 +43,7 @@ public class FixContentTypeOutInterceptor extends AbstractSoapInterceptor {
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
         // Cool stuff for Axis 0.9
-        String ct  = (String) message.get(Message.CONTENT_TYPE);
+        var ct  = (String) message.get(Message.CONTENT_TYPE);
         if (!ct.contains("type=")) {
             message.put(Message.CONTENT_TYPE, ct + "; type=\"text/xml\"");
         }

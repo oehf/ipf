@@ -64,9 +64,9 @@ public class PpqConstants {
         public static final String FAILURE = "urn:e-health-suisse:2015:response-status:failure";
     }
 
-    public static final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
+    public final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
 
-    public static final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";
+    public final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";
 
 
 }

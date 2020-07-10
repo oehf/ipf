@@ -18,12 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
-import javax.xml.ws.handler.MessageContext;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
@@ -55,11 +53,11 @@ abstract public class AbstractWebService {
             Map<String, Object> additionalHeaders,
             ExchangePattern exchangePattern) {
         requireNonNull(consumer);
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);
+        var messageContext = new WebServiceContextImpl().getMessageContext();
+        var exchange = consumer.getEndpoint().createExchange(exchangePattern);
         
         // prepare input message & headers
-        Message inputMessage = exchange.getIn();
+        var inputMessage = exchange.getIn();
         inputMessage.setBody(body);
         processIncomingHeaders(messageContext, inputMessage);
         if (additionalHeaders != null) {
@@ -73,18 +71,18 @@ abstract public class AbstractWebService {
         // process
         consumer.process(exchange);
 
-        Exception exception = Exchanges.extractException(exchange, false);
+        var exception = Exchanges.extractException(exchange, false);
         if (exception instanceof SoapFault) {
             log.debug("Rethrowing SOAP fault occurred in the route", exception);
             throw (SoapFault) exception;
         }
 
         // handle resulting message and headers
-        Message resultMessage = Exchanges.resultMessage(exchange);
+        var resultMessage = Exchanges.resultMessage(exchange);
         processUserDefinedOutgoingHeaders(messageContext, resultMessage, false);
 
         // set response encoding based on Camel exchange property
-        String responseEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        var responseEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
         if (responseEncoding != null) {
             messageContext.put(org.apache.cxf.message.Message.ENCODING, responseEncoding);
         }

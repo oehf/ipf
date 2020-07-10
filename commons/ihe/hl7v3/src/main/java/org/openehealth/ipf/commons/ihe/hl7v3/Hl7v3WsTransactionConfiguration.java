@@ -32,6 +32,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
     @Getter private final String controlActProcessCode;
     @Getter private final CombinedXmlValidationProfile requestValidationProfile;
     @Getter private final CombinedXmlValidationProfile responseValidationProfile;
+    @Getter private final boolean includeQuantities;
 
     /**
      * Constructs the transaction configuration.
@@ -65,6 +66,9 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
      *      whether request payload is needed for ATNA audit.
      * @param supportAsynchrony
      *      whether producers can request asynchronous responses via WSA.
+     * @param includeQuantities
+     *      whether the elements <tt>resultTotalQuantity</tt>, <tt>resultCurrentQuantity</tt>,
+     *      <tt>resultRemainingQuantity</tt> will be included into the NAK.
      */
     public Hl7v3WsTransactionConfiguration(
             String name,
@@ -82,7 +86,8 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
             boolean auditRequestPayload,
             boolean supportAsynchrony,
             CombinedXmlValidationProfile requestValidationProfile,
-            CombinedXmlValidationProfile responseValidationProfile)
+            CombinedXmlValidationProfile responseValidationProfile,
+            boolean includeQuantities)
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
                 serviceName, sei, bindingName, mtom, wsdlLocation,
@@ -92,6 +97,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
         this.controlActProcessCode = controlActProcessCode;
         this.requestValidationProfile = requestValidationProfile;
         this.responseValidationProfile = responseValidationProfile;
+        this.includeQuantities = includeQuantities;
     }
 
 }

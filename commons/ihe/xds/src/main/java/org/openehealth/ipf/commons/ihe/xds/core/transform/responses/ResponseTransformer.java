@@ -48,8 +48,8 @@ public class ResponseTransformer {
      */
     public EbXMLRegistryResponse toEbXML(Response response) {
         notNull(response, "response cannot be null");
-        
-        EbXMLRegistryResponse ebXML = factory.createRegistryResponse();
+
+        var ebXML = factory.createRegistryResponse();
         
         ebXML.setStatus(response.getStatus());
         if (!response.getErrors().isEmpty()) {
@@ -67,8 +67,8 @@ public class ResponseTransformer {
      */
     public Response fromEbXML(EbXMLRegistryResponse ebXML) {
         notNull(ebXML, "ebXML cannot be null");
-        
-        Response response = new Response();
+
+        var response = new Response();
         
         response.setStatus(ebXML.getStatus());
         if (!ebXML.getErrors().isEmpty()) {

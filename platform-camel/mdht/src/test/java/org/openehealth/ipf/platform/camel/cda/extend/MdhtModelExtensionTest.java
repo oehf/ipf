@@ -37,7 +37,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private String cdaExample = "/message/SampleCDADocument.xml";
     private String ccdExample = "/message/SampleCCDDocument.xml";
 
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
     
@@ -64,7 +64,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testMarshalCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        ClinicalDocument message = inputMessage(file);
+        var message = inputMessage(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, message);
         mockOutput.assertIsSatisfied();
@@ -74,7 +74,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testUnmarshalCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();
@@ -84,7 +84,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testValidateCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();

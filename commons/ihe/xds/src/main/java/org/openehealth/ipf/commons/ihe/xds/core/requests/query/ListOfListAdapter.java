@@ -33,15 +33,15 @@ import java.util.stream.Collectors;
 @XmlTransient
 public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfListWrapper<T>, List<List<T>>> {
     @Override
-    public List<List<T>> unmarshal(ListOfListWrapper<T> v) throws Exception {
+    public List<List<T>> unmarshal(ListOfListWrapper<T> v) {
         return v.getInnerList().stream()
                 .map(ListWrapper::getValue)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ListOfListWrapper<T> marshal(List<List<T>> v) throws Exception {
-        List<ListWrapper<T>> outerList = v.stream()
+    public ListOfListWrapper<T> marshal(List<List<T>> v) {
+        var outerList = v.stream()
                 .map(ListWrapper::new)
                 .collect(Collectors.toList());
         return new ListOfListWrapper<>(outerList);
@@ -54,7 +54,7 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
 
         // Required for JAXB
         @SuppressWarnings({"UnusedDeclaration"})
-        protected ListOfListWrapper() {
+        public ListOfListWrapper() {
         }
 
         public ListOfListWrapper(List<ListWrapper<T>> list) {
@@ -73,7 +73,7 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
 
         // Required for JAXB
         @SuppressWarnings({"UnusedDeclaration"})
-        protected ListWrapper() {
+        public ListWrapper() {
         }
 
         public ListWrapper(List<T> list) {

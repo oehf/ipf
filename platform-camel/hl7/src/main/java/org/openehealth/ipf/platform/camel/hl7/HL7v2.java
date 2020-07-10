@@ -49,7 +49,7 @@ public final class HL7v2 {
      * @return Expression that extracts data from HL7 messages based on a HAPI Terser expression
      */
     public static ValueBuilder get(String terserSpec) {
-        return HL7.terser(terserSpec);
+        return HL7.hl7terser(terserSpec);
     }
 
     /**
@@ -128,7 +128,7 @@ public final class HL7v2 {
                 return;
             }
 
-            Message msg = bodyMessage(exchange);
+            var msg = bodyMessage(exchange);
             Validator.validate(msg, context);
         };
     }
@@ -163,14 +163,14 @@ public final class HL7v2 {
      * @throws ca.uhn.hl7v2.HL7Exception
      */
     public static Message bodyMessage(Exchange exchange) throws HL7Exception {
-        Object body = exchange.getIn().getBody();
+        var body = exchange.getIn().getBody();
         Message message;
 
         if (body instanceof Message) {
             message = (Message) body;
         } else if (body instanceof String) {
-            HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
-            Parser parser = context != null ? context.getGenericParser() : FALLBACK;
+            var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
+            var parser = context != null ? context.getGenericParser() : FALLBACK;
             message = parser.parse((String) body);
         } else {
             // try type conversion

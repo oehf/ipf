@@ -4,12 +4,12 @@
     <artifactId>ipf-commons-ihe-hl7v2ws</artifactId>
     <name>ipf-commons-ihe-hl7v2ws</name>
     <description>HL7v2 Web-Service specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -48,13 +48,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

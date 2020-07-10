@@ -1,12 +1,12 @@
 /*
  * Copyright 2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,63 +15,77 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
-import java.util.Set;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.management.DefaultManagementNamingStrategy;
-import org.apache.camel.management.ManagementTestSupport;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.util.CastUtils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.util.Set;
 
 /**
- * 
  * @author Stefan Ivanov
- * 
  */
-public class ManagedWsItiEndpointTest extends ManagementTestSupport {
-    
+public class ManagedWsItiEndpointTest extends CamelTestSupport {
+
+    static final String NAME = "org.apache.camel.jmx.mbeanObjectDomainName";
+    private static String oldValue;
+
+    @BeforeClass
+    public static void setupClass() {
+        oldValue = System.getProperty(NAME);
+        System.setProperty(NAME, "org.gablorg");
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        if (oldValue != null)
+            System.setProperty(NAME, oldValue);
+        else
+            System.clearProperty(NAME);
+    }
+
     @Override
     protected boolean useJmx() {
         return true;
     }
-    
+
     protected CamelContext createCamelContext() throws Exception {
-        CamelContext context = super.createCamelContext();
+
+        var context = super.createCamelContext();
         context.addComponent("some-ws-iti", new SomeItiComponent());
-        DefaultManagementNamingStrategy naming = (DefaultManagementNamingStrategy) context
-            .getManagementStrategy().getManagementNamingStrategy();
-        naming.setHostName("localhost");
-        naming.setDomainName("org.apache.camel");
         return context;
     }
-    
+
+
+    @Test
     public void testInit() throws Exception {
-        MBeanServer mbeanServer = getMBeanServer();
-        ObjectName on = ObjectName
-            .getInstance("org.apache.camel:context=camel-1,type=context,name=\"camel-1\"");
-        ObjectInstance oi = mbeanServer.getObjectInstance(on);
+        var mbeanServer = getMBeanServer();
+        var on = ObjectName
+                .getInstance("org.gablorg:context=camel-1,type=context,name=\"camel-1\"");
+        var oi = mbeanServer.getObjectInstance(on);
         assertNotNull(oi);
     }
 
-
+    @Test
     public void testEndpointAttributes() throws Exception {
-        MBeanServer mbeanServer = getMBeanServer();
-        
+        var mbeanServer = getMBeanServer();
+
         Set<ObjectName> s = CastUtils.cast(mbeanServer.queryNames(new ObjectName(
-            "org.apache.camel:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
-        ObjectName on = (ObjectName) s.toArray()[0];
+                "org.gablorg:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
+        var on = (ObjectName) s.toArray()[0];
         assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
-            ((Boolean) mbeanServer.getAttribute(on, "Addressing")).booleanValue());
+                mbeanServer.getAttribute(on, "Addressing"));
         assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),
-            ((Boolean) mbeanServer.getAttribute(on, "Mtom")).booleanValue());
+                mbeanServer.getAttribute(on, "Mtom"));
         assertEquals(SomeItiComponent.WS_CONFIG.isSwaOutSupport(),
-            ((Boolean) mbeanServer.getAttribute(on, "SwaOutSupport")).booleanValue());
+                mbeanServer.getAttribute(on, "SwaOutSupport"));
     }
-    
+
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
@@ -82,4 +96,7 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
         };
     }
 
+    protected MBeanServer getMBeanServer() {
+        return context.getManagementStrategy().getManagementAgent().getMBeanServer();
+    }
 }

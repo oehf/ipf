@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 
-import java.util.List;
-
 /**
  * Validation for slots.
  */
@@ -40,7 +38,7 @@ public class SlotValidation implements RegistryObjectValidator {
 
     @Override
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
-        List<String> slotValues = obj.getSlotValues(slotName);
+        var slotValues = obj.getSlotValues(slotName);
         validator.validate(slotValues);
     }
 }

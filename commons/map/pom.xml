@@ -4,12 +4,12 @@
     <artifactId>ipf-commons-map</artifactId>
     <name>ipf-commons-map</name>
     <description>Generic IPF Mapping Service</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -34,14 +34,5 @@
             <artifactId>easymock</artifactId>
         </dependency> 		        
     </dependencies>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
-
 
 </project>

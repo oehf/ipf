@@ -44,7 +44,7 @@ abstract class PharmacyDocumentsQueryTransformer<T extends PharmacyDocumentsQuer
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
@@ -66,7 +66,7 @@ abstract class PharmacyDocumentsQueryTransformer<T extends PharmacyDocumentsQuer
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
         query.setPatientId(Hl7v2Based.parse(slots.toString(DOC_ENTRY_PATIENT_ID), Identifiable.class));

@@ -61,7 +61,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Iti81SearchParameters searchParameters = Iti81SearchParameters.builder()
+        var searchParameters = Iti81SearchParameters.builder()
                 .interval(interval)
                 .address(address)
                 .patientId(patientId)

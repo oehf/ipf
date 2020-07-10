@@ -43,11 +43,11 @@ class BidiMappingService implements MappingService {
 
     List<URL> scripts = []
 
-    public BidiMappingService() {
+    BidiMappingService() {
         this(SEPARATOR)
     }
 
-    public BidiMappingService(String separator) {
+    BidiMappingService(String separator) {
         this.separator = separator
     }
 
@@ -58,20 +58,6 @@ class BidiMappingService implements MappingService {
 
     synchronized void setMappingScripts(URL[] scripts) {
         this.scripts.addAll(scripts)
-        evaluateMappingScripts(scripts)
-    }
-
-    /**
-     * @deprecated use #setMappingScript
-     */
-    void addMappingScript(URL script) {
-        evaluateMappingScript(script)
-    }
-
-    /**
-     * @deprecated use #setMappingScript
-     */
-    void addMappingScripts(URL[] scripts) {
         evaluateMappingScripts(scripts)
     }
 
@@ -105,54 +91,54 @@ class BidiMappingService implements MappingService {
     }
 
     @Override
-    public Object get(Object mappingKey, Object key) {
+    Object get(Object mappingKey, Object key) {
         splitKey(retrieve(map, mappingKey, joinKey(key)))
     }
 
     @Override
-    public Object getKey(Object mappingKey, Object value) {
+    Object getKey(Object mappingKey, Object value) {
         splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
     }
 
     @Override
-    public Object get(Object mappingKey, Object key, Object defaultValue) {
+    Object get(Object mappingKey, Object key, Object defaultValue) {
         def v = splitKey(retrieve(map, mappingKey, joinKey(key)))
         v ? v : defaultValue
     }
 
     @Override
-    public Object getKey(Object mappingKey, Object value, Object defaultValue) {
+    Object getKey(Object mappingKey, Object value, Object defaultValue) {
         checkMappingKey(reverseMap, mappingKey)
         def v = splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
         v ? v : defaultValue
     }
 
     @Override
-    public Object getKeySystem(Object mappingKey) {
+    Object getKeySystem(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey][KEYSYSTEM]
     }
 
     @Override
-    public Object getValueSystem(Object mappingKey) {
+    Object getValueSystem(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey][VALUESYSTEM]
     }
 
     @Override
-    public Set<?> mappingKeys() {
+    Set<?> mappingKeys() {
         map.keySet()
     }
 
     @Override
-    public Set<?> keys(Object mappingKey) {
+    Set<?> keys(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         Set<?> result = map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
         result
     }
 
     @Override
-    public Collection<?> values(Object mappingKey) {
+    Collection<?> values(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey].findAll({
             !(it.key.startsWith('_%'))
@@ -164,7 +150,7 @@ class BidiMappingService implements MappingService {
         m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
     }
 
-    protected Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
+    protected static Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
         def elseClause = m[mappingKey][ELSE]
         if (elseClause instanceof Closure) {
             return elseClause.call(key)
@@ -195,7 +181,7 @@ class BidiMappingService implements MappingService {
         }
     }
 
-    protected void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
+    protected static void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
         if (!map[mappingKey])
             throw new IllegalArgumentException("Unknown key $mappingKey")
     }
@@ -225,7 +211,7 @@ class BidiMappingService implements MappingService {
             try {
                 // Try to parse the location as a URL...
                 url = new URL(location)
-            } catch (MalformedURLException ex) {
+            } catch (MalformedURLException ignored) {
                 // No URL -> resolve as resource path.
                 url = getClass().getClassLoader().getResource(location)
             }

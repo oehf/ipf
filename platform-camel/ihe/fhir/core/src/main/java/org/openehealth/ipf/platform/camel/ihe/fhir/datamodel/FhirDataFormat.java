@@ -20,7 +20,8 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
-import org.apache.camel.util.ExchangeHelper;
+import org.apache.camel.support.ExchangeHelper;
+import org.apache.camel.support.service.ServiceSupport;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
@@ -31,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 /**
  *
  */
-abstract class FhirDataFormat implements DataFormat {
+public abstract class FhirDataFormat extends ServiceSupport implements DataFormat  {
 
     private FhirContext defaultFhirContext = FhirContext.forDstu3();
     private Charset defaultCharset = StandardCharsets.UTF_8;
@@ -46,7 +47,7 @@ abstract class FhirDataFormat implements DataFormat {
 
     @Override
     public void marshal(Exchange exchange, Object body, OutputStream stream) throws Exception {
-        IBaseResource resource = ExchangeHelper.convertToMandatoryType(exchange, IBaseResource.class, body);
+        var resource = ExchangeHelper.convertToMandatoryType(exchange, IBaseResource.class, body);
         Writer writer = new OutputStreamWriter(stream, getCharset(exchange));
         getParser(getFhirContext(exchange))
                 .setPrettyPrint(true)
@@ -54,23 +55,31 @@ abstract class FhirDataFormat implements DataFormat {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         Reader reader = new InputStreamReader(stream, getCharset(exchange));
         return getParser(getFhirContext(exchange)).parseResource(reader);
     }
 
     protected FhirContext getFhirContext(Exchange exchange) {
-        FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
+        var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
         if (context == null) context = defaultFhirContext;
         return context;
     }
 
     protected Charset getCharset(Exchange exchange) {
-        Charset charset = defaultCharset;
-        String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        var charset = defaultCharset;
+        var charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
         if (charsetName != null) charset = Charset.forName(charsetName);
         return charset;
     }
 
     protected abstract IParser getParser(FhirContext context);
+
+    @Override
+    protected void doStart() {
+    }
+
+    @Override
+    protected void doStop() {
+    }
 }

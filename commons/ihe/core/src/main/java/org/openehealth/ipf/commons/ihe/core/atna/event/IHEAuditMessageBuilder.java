@@ -131,7 +131,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     }
 
     protected final T addHumanRequestor(AuditDataset auditDataset) {
-        for (AuditDataset.HumanUser humanUser : auditDataset.getHumanUsers()) {
+        for (var humanUser : auditDataset.getHumanUsers()) {
             if (!humanUser.isEmpty()) {
                 delegate.addActiveParticipant(
                         humanUser.getId() != null ?
@@ -164,7 +164,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            var type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
             tvp.add(getTypeValuePair(type, homeCommunityId));
         }
         return tvp;
@@ -187,33 +187,12 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            var type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
             tvp.add(getTypeValuePair(type, homeCommunityId));
         }
         return tvp;
     }
 
-
-    /**
-     * @deprecated use {@link IHEAuditMessageBuilder#documentDetails(String, String, String, String, boolean)}
-     */
-    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId, boolean xcaHomeCommunityId) {
-        List<TypeValuePairType> tvp = new ArrayList<>();
-        if (studyInstanceId != null) {
-            tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
-        }
-        if (seriesInstanceId != null) {
-            tvp.add(new TypeValuePairType(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
-        }
-        if (repositoryId != null) {
-            tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
-        }
-        if (homeCommunityId != null) {
-            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
-            tvp.add(new TypeValuePairType(type, homeCommunityId));
-        }
-        return tvp;
-    }
 
     /**
      * Adds a Participant Object representing a Security Resource involved in the event

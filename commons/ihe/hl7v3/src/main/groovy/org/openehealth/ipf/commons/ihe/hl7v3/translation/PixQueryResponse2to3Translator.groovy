@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.commons.xml.XmlYielder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -138,11 +138,11 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    void addPerson(MarkupBuilder builder, Message rsp) {
+    static void addPerson(MarkupBuilder builder, Message rsp) {
         fakePatientPerson(builder)
     }
      
-    protected Map getStatusInformation(Message rsp, GPathResult xml) {
+    protected static Map getStatusInformation(Message rsp, GPathResult xml) {
         def ackCode   = rsp.MSA[1].value.endsWith('A') ? 'AA' : 'AE'
         def errorCode = rsp.ERR[3][1].value ?: ''
         def errorText = "PIXv2 Interface Reported [${collectErrorInfo(rsp)}]"

@@ -3,14 +3,14 @@
     <parent>
         <artifactId>ipf-tutorials</artifactId>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-tutorials-iheclient</artifactId>
     <name>ipf-tutorials-iheclient</name>
     <description>This project demonstrates how a client-side application can make use of IHE Producer Endpoints</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -67,6 +67,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <scope>test</scope>
@@ -77,12 +82,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
     
 </project>

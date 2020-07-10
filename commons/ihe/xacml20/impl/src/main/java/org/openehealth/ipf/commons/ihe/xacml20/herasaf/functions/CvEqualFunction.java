@@ -38,8 +38,8 @@ public class CvEqualFunction extends AbstractFunction {
             throw new FunctionProcessingException("Invalid number of parameters.");
         }
         try {
-            CV arg0 = (CV) args[0];
-            CV arg1 = (CV) args[1];
+            var arg0 = (CV) args[0];
+            var arg1 = (CV) args[1];
             return arg0.getCode().equals(arg1.getCode()) && arg0.getCodeSystem().equals(arg1.getCodeSystem());
 
         } catch (ClassCastException e) {

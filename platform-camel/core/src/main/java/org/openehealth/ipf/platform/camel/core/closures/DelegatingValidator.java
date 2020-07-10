@@ -25,25 +25,21 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  * 
  * @author Martin Krasser
  */
-public class DelegatingValidator extends ClosureAdapter implements Validator<Object, Object> {
+public class DelegatingValidator extends ClosureAdapter<Boolean> implements Validator<Object, Object> {
 
-    public DelegatingValidator(Closure closure) {
+    public DelegatingValidator(Closure<Boolean> closure) {
         super(closure);
     }
 
     @Override
     public void validate(Object message, Object profile) {
-        Object result;
-        result = validateInternal(message, profile);
-        if (!(result instanceof Boolean)) {
-            return;
-        }
-        if (!(Boolean)result) {
+        var result = validateInternal(message, profile);
+        if (!result) {
             throw new ValidationException("validation closure returned false");
         }
     }
     
-    private Object validateInternal(Object message, Object profile) {
+    private Boolean validateInternal(Object message, Object profile) {
         if (getClosure().getParameterTypes().length == 2) {
             return call(message, profile);
         } else {

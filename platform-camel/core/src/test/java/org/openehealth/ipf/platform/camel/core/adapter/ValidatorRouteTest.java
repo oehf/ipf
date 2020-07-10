@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.core.adapter;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
@@ -37,7 +36,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ValidatorRouteTest extends AbstractRouteTest {
 
-    @EndpointInject(uri = "mock:error")
+    @EndpointInject(value = "mock:error")
     protected MockEndpoint error;
 
     @After
@@ -47,7 +46,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator1() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody(
+        var result = (String) producerTemplate.sendBody(
                 "direct:validator-test", ExchangePattern.InOut, "correct");
         assertEquals("correct", result);
     }
@@ -55,7 +54,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     @Test
     public void testValidator2() throws InterruptedException {
         error.expectedMessageCount(1);
-        Exchange exchange = producerTemplate.send("direct:validator-test",
+        var exchange = producerTemplate.send("direct:validator-test",
                 ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody("incorrect"));
         assertEquals(ValidationException.class, exchange.getException().getClass());
         error.assertIsSatisfied(2000);
@@ -63,41 +62,41 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator3() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"), Charset.defaultCharset());
-        String response = (String)producerTemplate.sendBody(
+        final var xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"), Charset.defaultCharset());
+        var response = (String)producerTemplate.sendBody(
         		"direct:validator-xml-test", ExchangePattern.InOut, xml);
         assertEquals("passed", response);
      }
 
     @Test
     public void testValidator4() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/invalidtest.xml"), Charset.defaultCharset());
+        final var xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/invalidtest.xml"), Charset.defaultCharset());
         error.expectedMessageCount(1);
-        Exchange exchange = producerTemplate.send("direct:validator-xml-test",
+        var exchange = producerTemplate.send("direct:validator-xml-test",
                 ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));
         assertEquals(ValidationException.class, exchange.getException()
                 .getClass());
-        ValidationException e = (ValidationException) exchange.getException();
+        var e = (ValidationException) exchange.getException();
         assertEquals(5, e.getCauses().length);
         error.assertIsSatisfied(2000);
     }
 
     @Test
     public void testValidator5() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"), Charset.defaultCharset());
-        String response = (String)producerTemplate.sendBody(
+        final var xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"), Charset.defaultCharset());
+        var response = (String)producerTemplate.sendBody(
         		"direct:validator-schematron-test", ExchangePattern.InOut, xml);
         assertEquals("passed", response);
      }
 
     @Test
     public void testValidator6() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"), Charset.defaultCharset());
+        final var xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"), Charset.defaultCharset());
         error.expectedMessageCount(1);
-        Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
+        var exchange = producerTemplate.send("direct:validator-schematron-test",
                 ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));
         assertEquals(SchematronValidationException.class, exchange.getException().getClass());
-        ValidationException e = (ValidationException) exchange.getException();
+        var e = (ValidationException) exchange.getException();
         assertEquals(3, e.getCauses().length);
         error.assertIsSatisfied(2000);
 

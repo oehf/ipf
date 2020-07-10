@@ -34,13 +34,13 @@ import java.util.Set;
 public class ObservationSearchParameters extends Pcc44CommonSearchParameters {
 
     @Getter
-    private DateRangeParam date;
+    private final DateRangeParam date;
 
     @Getter
-    private TokenAndListParam category;
+    private final TokenAndListParam category;
 
     @Getter
-    private TokenOrListParam code;
+    private final TokenOrListParam code;
 
     @Builder
     ObservationSearchParameters(ReferenceParam patientReference,

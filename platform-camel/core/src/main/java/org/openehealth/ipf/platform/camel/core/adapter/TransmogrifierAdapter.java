@@ -52,12 +52,10 @@ public class TransmogrifierAdapter extends ProcessorAdapter {
      *            input data.
      * @param inputParams
      *            input parameters.
-     * @throws Exception
-     *             if a processing error occurs.
      */
     @Override
     protected void doProcess(Exchange exchange, Object inputData, 
-            Object... inputParams) throws Exception {
+            Object... inputParams) {
 
         prepareResult(exchange).setBody(transmogrifier.zap(inputData, inputParams));
     }

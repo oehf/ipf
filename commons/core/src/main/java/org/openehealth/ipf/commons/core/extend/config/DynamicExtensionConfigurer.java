@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import groovy.lang.GroovySystem;
-import groovy.lang.MetaClassRegistry;
 import groovy.lang.MetaMethod;
 import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.m12n.ExtensionModule;
@@ -52,7 +51,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     }
 
     @Override
-    public void configure(DynamicExtension extension) throws Exception {
+    public void configure(DynamicExtension extension) {
         if (extension != null) {
             LOG.info("Registering new extension module {} defined in class {}",
                     extension.getModuleName(), extension.getClass());
@@ -62,10 +61,10 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     }
 
     public static void addExtensionMethods(ExtensionModule module) {
-        MetaClassRegistry metaClassRegistry = GroovySystem.getMetaClassRegistry();
+        var metaClassRegistry = GroovySystem.getMetaClassRegistry();
         ((MetaClassRegistryImpl) metaClassRegistry).getModuleRegistry().addModule(module);
         Map<CachedClass, List<MetaMethod>> classMap = new HashMap<>();
-        for (MetaMethod metaMethod : module.getMetaMethods()){
+        for (var metaMethod : module.getMetaMethods()){
             if (classMap.containsKey(metaMethod.getDeclaringClass())){
                 classMap.get(metaMethod.getDeclaringClass()).add(metaMethod);
             } else {
@@ -80,7 +79,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
             }
             LOG.debug("registered method: {}", metaMethod);
         }
-        for (Map.Entry<CachedClass, List<MetaMethod>> cachedClassEntry : classMap.entrySet()) {
+        for (var cachedClassEntry : classMap.entrySet()) {
             cachedClassEntry.getKey().addNewMopMethods(cachedClassEntry.getValue());
         }
     }

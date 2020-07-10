@@ -58,16 +58,16 @@ public class XDSMetaDataException extends ValidationException {
      * @return the same array instance, possibly modified in-place.
      */
     private static Object[] unwrapQueryParameterNames(Object[] array) {
-        for (int i = 0; i < array.length; ++i) {
+        for (var i = 0; i < array.length; ++i) {
             if (array[i] instanceof QueryParameter) {
-                QueryParameter param = (QueryParameter) array[i];
+                var param = (QueryParameter) array[i];
                 array[i] = param.getSlotName();
             }
             else if (array[i] instanceof QueryParameter[]) {
-                QueryParameter[] params = (QueryParameter[]) array[i];
+                var params = (QueryParameter[]) array[i];
                 if (params.length > 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (QueryParameter param : params) {
+                    var sb = new StringBuilder();
+                    for (var param : params) {
                         sb.append(", ").append(param.getSlotName());
                     }
                     array[i] = sb.replace(0, 2, "[").append(']').toString();

@@ -59,7 +59,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Identifier sourceIdentifier = new Identifier();
+        var sourceIdentifier = new Identifier();
 
         if (resourceId == null) {
             sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
@@ -67,9 +67,9 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
         } else {
             sourceIdentifier.setValue(resourceId.getIdPart());
         }
-        UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
+        var targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
 
-        Parameters inParams = new Parameters();
+        var inParams = new Parameters();
         inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);
         inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
 

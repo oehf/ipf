@@ -29,13 +29,13 @@ import java.util.concurrent.ThreadFactory
  */
 class PrivilegedTestExecutorService extends ThreadPoolExecutor {
 
-        public PrivilegedTestExecutorService(int corePoolSize, int maximumPoolSize,
+        PrivilegedTestExecutorService(int corePoolSize, int maximumPoolSize,
                                    long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory factory) {
             super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, factory
             )
         }
 
-        public void execute(Runnable command) {
+        void execute(Runnable command) {
             super.execute(new SubjectAwareRunnable(command))
         }
 
@@ -62,14 +62,14 @@ class PrivilegedTestExecutorService extends ThreadPoolExecutor {
                 return Subject.getSubject(AccessController.getContext())
             }
 
-            public void run() {
+            void run() {
                 if(subject == null) {
                     runnable.run()
                 } else {
                     Subject.doAsPrivileged(
                             subject,
                             new PrivilegedAction<Void>() {
-                                public Void run() {
+                                Void run() {
                                     runnable.run()
                                     return null
                                 }

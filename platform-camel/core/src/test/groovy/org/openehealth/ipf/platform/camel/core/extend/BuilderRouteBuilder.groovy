@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * @author Martin Krasser
  */
-class BuilderRouteBuilder extends SpringRouteBuilder {
-    
+class BuilderRouteBuilder extends RouteBuilder {
+
     void configure() {
-        
-        direct('input1')
-        .to('mock:output')         
+
+        from('direct:input1')
+                .to('mock:output')
 
     }
-    
+
 }

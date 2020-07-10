@@ -133,7 +133,7 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
     @Override
     public void validate() {
         super.validate();
-        int sources = getMessage().findActiveParticipants(ap -> ap.getRoleIDCodes().contains(ActiveParticipantRoleIdCode.Source)).size();
+        var sources = getMessage().findActiveParticipants(ap -> ap.getRoleIDCodes().contains(ActiveParticipantRoleIdCode.Source)).size();
         if (sources < 1 || sources > 2) {
             throw new AuditException("Must have one or two ActiveParticipant with RoleIDCode Source");
         }

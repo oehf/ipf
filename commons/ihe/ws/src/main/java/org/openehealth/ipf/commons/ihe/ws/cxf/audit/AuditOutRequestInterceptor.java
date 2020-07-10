@@ -62,12 +62,12 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
             return;
         }
 
-        T auditDataset = getAuditDataset(message);
+        var auditDataset = getAuditDataset(message);
         auditDataset.setRemoteAddress((String) message.get(Message.ENDPOINT_ADDRESS));
         auditDataset.setDestinationUserId((String) message.get(Message.ENDPOINT_ADDRESS));
         enrichAuditDatasetFromXuaToken(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
-        Object request = extractPojo(message);
+        var request = extractPojo(message);
 
         // Get request payload, handle different variants thereby:
         //   a) for HL7v3-based transactions, payload corresponds to the "main" message;
@@ -83,7 +83,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
         getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, request, message);
 
         // when the invocation is asynchronous: store audit dataset into the correlator
-        AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
+        var props = (AddressingProperties) message.get(JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
         if (props != null && (Boolean.TRUE.equals(message.getContextualProperty(AsynchronyCorrelator.FORCE_CORRELATION)) ||
             ! Names.WSA_ANONYMOUS_ADDRESS.equals(props.getReplyTo().getAddress().getValue())))
         {

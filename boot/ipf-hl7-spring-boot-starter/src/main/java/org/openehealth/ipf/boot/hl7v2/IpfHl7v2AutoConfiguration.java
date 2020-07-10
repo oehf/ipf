@@ -31,12 +31,14 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -49,7 +51,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
@@ -61,8 +62,11 @@ public class IpfHl7v2AutoConfiguration {
 
     private static final String IPF_HL7_DEFINITIONS_PREFIX = "org.openehealth.ipf.commons.ihe.hl7v2.definitions";
 
-    @Autowired
-    private IpfHl7v2ConfigurationProperties properties;
+    private final IpfHl7v2ConfigurationProperties properties;
+
+    public IpfHl7v2AutoConfiguration(IpfHl7v2ConfigurationProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     @ConditionalOnMissingBean(HL7MLLPCodec.class)
@@ -86,7 +90,7 @@ public class IpfHl7v2AutoConfiguration {
                 IPF_HL7_DEFINITIONS_PREFIX + "pdq.v25",
                 IPF_HL7_DEFINITIONS_PREFIX + "pix.v25"
         });
-        CustomModelClassFactory modelClassFactory = new CustomModelClassFactory(eventMap);
+        var modelClassFactory = new CustomModelClassFactory(eventMap);
         modelClassFactory.setEventMapDirectory("org/openehealth/ipf/commons/ihe/hl7v2/");
         return modelClassFactory;
     }
@@ -134,13 +138,13 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnMissingBean(HapiContext.class)
     public HapiContext hapiContext(CustomModelClassFactory modelClassFactory, ProfileStore profileStore,
                                    ValidationContext validationContext, ParserConfiguration parserConfiguration,
-                                   Optional<IDGenerator> idGenerator) {
+                                   ObjectProvider<IDGenerator> idGenerator) {
         HapiContext context = new DefaultHapiContext();
         context.setModelClassFactory(modelClassFactory);
         context.setValidationContext(validationContext);
         context.setProfileStore(profileStore);
         context.setParserConfiguration(parserConfiguration);
-        idGenerator.ifPresent(ig -> parserConfiguration.setIdGenerator(ig));
+        idGenerator.ifAvailable(parserConfiguration::setIdGenerator);
         context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         return context;
     }
@@ -164,7 +168,7 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.hl7v2.caching")
     public InteractiveContinuationStorage interactiveContinuationStorage(CacheManager cacheManager) {
-        return new CachingInteractiveHl7v2ContinuationStorage(cacheManager);
+        return new SpringCacheInteractiveContinuationStorage(cacheManager);
     }
 
     // Provide "unsolicitedFragmentationStorage" for HL7v2 fragmentation
@@ -173,7 +177,7 @@ public class IpfHl7v2AutoConfiguration {
     @ConditionalOnSingleCandidate(CacheManager.class)
     @ConditionalOnProperty("ipf.hl7v2.caching")
     public UnsolicitedFragmentationStorage unsolicitedFragmentationStorage(CacheManager cacheManager) {
-        return new CachingUnsolicitedFragmentionStorage(cacheManager);
+        return new SpringCacheUnsolicitedFragmentationStorage(cacheManager);
     }
 
 }

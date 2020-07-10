@@ -25,10 +25,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class CE {
-    @Getter private String code;
-    @Getter private String codeSystem;
-    @Getter private String codeSystemName;
-    @Getter private String displayName;
+    @Getter private final String code;
+    @Getter private final String codeSystem;
+    @Getter private final String codeSystemName;
+    @Getter private final String displayName;
 
     @Override
     public String toString() {

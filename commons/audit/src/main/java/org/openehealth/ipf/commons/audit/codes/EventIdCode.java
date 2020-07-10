@@ -48,7 +48,7 @@ public enum EventIdCode implements EventId, EnumeratedCodedValue<EventId> {
     UserAuthentication("110114", "User Authentication");
 
     @Getter
-    private EventId value;
+    private final EventId value;
 
     EventIdCode(String code, String displayName) {
         this.value = EventId.of(code, "DCM", displayName);

@@ -91,7 +91,7 @@ public class PatientRecordBuilder extends BaseAuditMessageBuilder<PatientRecordB
     @Override
     public void validate() {
         super.validate();
-        int aps = getMessage().getActiveParticipants().size();
+        var aps = getMessage().getActiveParticipants().size();
         if (aps < 1 || aps > 2) {
             throw new AuditException("Must have one or two user ActiveParticipants");
         }

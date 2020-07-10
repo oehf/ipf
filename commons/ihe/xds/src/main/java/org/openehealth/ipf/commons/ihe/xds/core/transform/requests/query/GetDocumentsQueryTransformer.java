@@ -45,7 +45,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(DOC_ENTRY_LOGICAL_ID, query.getLogicalUuid());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
@@ -63,7 +63,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setLogicalUuid(slots.toStringList(DOC_ENTRY_LOGICAL_ID));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

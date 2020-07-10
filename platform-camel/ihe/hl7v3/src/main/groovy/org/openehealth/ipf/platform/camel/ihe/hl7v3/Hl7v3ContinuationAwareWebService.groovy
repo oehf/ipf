@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
@@ -278,8 +278,8 @@ abstract class Hl7v3ContinuationAwareWebService
         String responseString = storage.getMessage(key)
         if (responseString) {
             storage.remove(key)
-            GPathResult response = slurp(responseString)
-            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true)
+            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true,
+                                                     wsTransactionConfiguration.includeQuantities)
             if (LOG.debugEnabled) {
                 LOG.debug('cancel(): generated ACK\n' + result)
             }

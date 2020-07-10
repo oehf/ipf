@@ -48,7 +48,7 @@ public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, Enum
     SourceMedia("110155", "Source Media");
 
     @Getter
-    private ActiveParticipantRoleId value;
+    private final ActiveParticipantRoleId value;
 
     ActiveParticipantRoleIdCode(String code, String displayName) {
         this.value = ActiveParticipantRoleId.of(code, "DCM", displayName);

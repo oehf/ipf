@@ -40,7 +40,7 @@ public class PDQV3 implements IntegrationProfile {
     public enum Interactions implements Hl7v3InteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration> {
         ITI_47(ITI_47_WS_CONFIG);
 
-        @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private final Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -78,6 +78,7 @@ public class PDQV3 implements IntegrationProfile {
             ITI_47_REQUEST_VALIDATION_PROFILE,
             ITI_47_RESPONSE_VALIDATION_PROFILE,
             "PRPA_IN201305UV02",
-            "PRPA_IN201306UV02");
+            "PRPA_IN201306UV02",
+            true);
 
 }

@@ -38,21 +38,21 @@ import java.util.stream.Stream;
  */
 abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
+
+
     @Setter
     private boolean pretty = false;
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
         if (auditMessages != null) {
-            String[] auditRecords = Stream.of(auditMessages)
+            Stream.of(auditMessages)
                     .map(msg -> auditContext.getSerializationStrategy().marshal(msg, pretty))
-                    .toArray(value -> new String[auditMessages.length]);
-
-            handle(auditContext, auditRecords);
+                    .forEach(msg -> handle(auditContext, msg));
         }
     }
 
-    protected abstract void handle(AuditContext auditContext, String... auditRecords);
+    protected abstract void handle(AuditContext auditContext, String auditRecord);
 
 
 }

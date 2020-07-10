@@ -16,14 +16,12 @@
 package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormat
 
 /**
  * @author Christian Ohr
  */
 class MdhtRouteBuilder extends RouteBuilder {
 
-    private MdhtDataFormat mdht = new MdhtDataFormat()
 
     void configure() {
         
@@ -39,7 +37,7 @@ class MdhtRouteBuilder extends RouteBuilder {
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .unmarshal(mdht)
+            .unmarshal().mdht()
             .verify().mdht()
             .to('mock:output')
             
@@ -47,7 +45,7 @@ class MdhtRouteBuilder extends RouteBuilder {
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .unmarshal(mdht)
+            .unmarshal().mdht()
             .verify().mdht()
             .to('mock:output')             
     }

@@ -29,9 +29,10 @@ import org.slf4j.LoggerFactory
 
 /**
  * A simple store for meta data and documents.
+ *
  * @author Jens Riemschneider
  */
-public class DataStore {
+class DataStore {
      private final static Logger log = LoggerFactory.getLogger(DataStore.class)
      
      def entries = new CopyOnWriteArrayList()
@@ -120,7 +121,7 @@ public class DataStore {
          key != null ? evalIndex([key], index) : null
      }
      
-     private def getFromIndex(index, key) {
+     private static def getFromIndex(index, key) {
           index.putIfAbsent(key, new CopyOnWriteArrayList())
           index[key]
      }

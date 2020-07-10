@@ -72,7 +72,7 @@ public class RegistryResponseValidatorTest {
 
     @Test
     public void testInvalidSeverity() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         ((RegistryResponseType)ebXML.getInternal()).getRegistryErrorList().getRegistryError().get(0).setSeverity("lol");
         expectFailure(INVALID_SEVERITY_IN_RESPONSE, ebXML);
     }    

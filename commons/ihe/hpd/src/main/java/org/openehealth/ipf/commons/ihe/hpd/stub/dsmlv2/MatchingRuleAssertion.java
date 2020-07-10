@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import javax.xml.bind.annotation.*;
+import java.util.Objects;
 
 
 /**
@@ -89,11 +90,7 @@ public class MatchingRuleAssertion {
      *     
      */
     public boolean isDnAttributes() {
-        if (dnAttributes == null) {
-            return false;
-        } else {
-            return dnAttributes;
-        }
+        return Objects.requireNonNullElse(dnAttributes, false);
     }
 
     /**

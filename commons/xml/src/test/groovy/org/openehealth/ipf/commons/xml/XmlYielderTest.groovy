@@ -15,14 +15,16 @@
  */
 package org.openehealth.ipf.commons.xml
 
-import static org.openehealth.ipf.commons.xml.XmlYielder.*
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
 import groovy.xml.MarkupBuilder
-
+import groovy.xml.slurpersupport.GPathResult
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
 import org.junit.BeforeClass
 import org.junit.Test
+
+import static org.openehealth.ipf.commons.xml.XmlYielder.yieldChildren
+import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 
 /**
  * Unit test for GPath-to-XMLBuilder content yielding.
@@ -219,7 +221,7 @@ class XmlYielderTest {
         yieldAndAssertIdentical(expected, sourceText, true)
     }
 
-    private yieldAndAssertIdentical(String expected, String yielded, boolean useChildElement) {
+    private static yieldAndAssertIdentical(String expected, String yielded, boolean useChildElement) {
         GPathResult source = new XmlSlurper(false, true).parseText(yielded)
         Writer writer = new StringWriter()
         MarkupBuilder builder = getBuilder(writer)

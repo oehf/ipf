@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.support.DefaultExchange;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator;
 
-import static org.apache.camel.builder.Builder.outBody;
+import static org.apache.camel.builder.Builder.body;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -35,30 +35,30 @@ public class AggregatorAdapterTest {
     @Test
     public void testAggregateDefault() {
         strategy = new AggregatorAdapter(new TestAggregator());
-        Exchange a = exchangeWithInBody("a");
-        Exchange b = exchangeWithInBody("b");
+        var a = exchangeWithInBody("a");
+        var b = exchangeWithInBody("b");
         strategy.aggregate(a, b);
         assertEquals("a:b", a.getIn().getBody());
     }
     
     @Test
     public void testAggregateCustom() {
-        strategy = new AggregatorAdapter(new TestAggregator()).aggregationInput(outBody());
-        Exchange a = exchangeWithInBody("a");
-        Exchange b = exchangeWithOutBody("b");
+        strategy = new AggregatorAdapter(new TestAggregator()).aggregationInput(body());
+        var a = exchangeWithInBody("a");
+        var b = exchangeWithOutBody("b");
         strategy.aggregate(a, b);
         assertEquals("a:b", a.getIn().getBody());
     }
     
     private static Exchange exchangeWithInBody(Object body) {
-        Exchange exchange = exchange();
+        var exchange = exchange();
         exchange.getIn().setBody(body);
         return exchange;
     }
     
     private static Exchange exchangeWithOutBody(Object body) {
-        Exchange exchange = exchange();
-        exchange.getOut().setBody(body);
+        var exchange = exchange();
+        exchange.getMessage().setBody(body);
         return exchange;
     }
     

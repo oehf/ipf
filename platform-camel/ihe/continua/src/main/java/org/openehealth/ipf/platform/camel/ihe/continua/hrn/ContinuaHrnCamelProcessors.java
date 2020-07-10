@@ -20,12 +20,11 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
-import org.openehealth.ipf.modules.cda.CDAR2Constants;
+import org.openehealth.ipf.modules.cda.constants.CDAR2Constants;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators;
 
 import javax.xml.transform.Source;
@@ -45,17 +44,17 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
 abstract public class ContinuaHrnCamelProcessors {
 
     private static final Processor HRN_REQUEST_TRANSFORMER_AND_VALIDATOR = exchange -> {
-        boolean validationEnabled = validationEnabled(exchange);
+        var validationEnabled = validationEnabled(exchange);
 
         // ebXML validation
         if (validationEnabled) {
-            EbXMLProvideAndRegisterDocumentSetRequest30 message =
+            var message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, CONTINUA_HRN.Interactions.ITI_41);
         }
 
         // transform ebXML into simplified model, extract embedded documents, check document count
-        ProvideAndRegisterDocumentSet request = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class);
+        var request = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class);
         exchange.getIn().setBody(request);
 
         if (validationEnabled) {
@@ -65,9 +64,9 @@ abstract public class ContinuaHrnCamelProcessors {
         }
 
         // Document content type enrichment: create byte array and String
-        Document document = request.getDocuments().get(0);
-        byte[] documentBytes = document.getContent(byte[].class);
-        String documentString = document.getContent(String.class);
+        var document = request.getDocuments().get(0);
+        var documentBytes = document.getContent(byte[].class);
+        var documentString = document.getContent(String.class);
 
         // PHMR-specific validation
         if (validationEnabled) {
@@ -121,7 +120,7 @@ abstract public class ContinuaHrnCamelProcessors {
 
         @Override
         public Map<String, Object> getCustomSchematronParameters(String rootElementName) {
-            return Collections.<String, Object>singletonMap("phase", "errors");
+            return Collections.singletonMap("phase", "errors");
         }
     }
 }

@@ -16,12 +16,11 @@
 
 package org.openehealth.ipf.platform.camel.ihe.atna.util;
 
-import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.support.DefaultComponent;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -30,13 +29,13 @@ import java.util.Map;
 public abstract class AuditConfiguration {
 
     public static AuditContext obtainAuditContext(DefaultComponent component, Map<String, Object> parameters) {
-        Boolean audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
-        AuditContext auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
+        var audit = component.getAndRemoveParameter(parameters, "audit", Boolean.class, true);
+        var auditContext = component.resolveAndRemoveReferenceParameter(parameters, "auditContext", AuditContext.class);
         if (auditContext == null) {
             if (audit != null && !audit) {
                 auditContext = AuditContext.noAudit();
             } else {
-                Collection<AuditContext> beans = ContextFacade.getBeans(AuditContext.class);
+                var beans = ContextFacade.getBeans(AuditContext.class);
                 if (beans.size() == 1) {
                     auditContext = beans.iterator().next();
                 } else {

@@ -16,12 +16,9 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-
-import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
@@ -36,16 +33,16 @@ public class DocumentEntryTypeValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> slotValues = request.getSlotValues(param.getSlotName());
-        for (String slotValue : slotValues) {
+        var slotValues = request.getSlotValues(param.getSlotName());
+        for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
         }
 
-        QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<DocumentEntryType> list = slots.toDocumentEntryType(param);
+        var slots = new QuerySlotHelper(request);
+        var list = slots.toDocumentEntryType(param);
 
         if (list != null) {
-            for (DocumentEntryType type : list) {
+            for (var type : list) {
                 metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
             }
         }

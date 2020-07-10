@@ -19,8 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Map;
-
 import ca.uhn.hl7v2.HL7Exception;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +37,7 @@ public class GroovyCustomModelClassFactoryTest {
     
     @Test
     public void testMappings() throws HL7Exception {
-        Map<String, String[]> map = configurer.getCustomModelClassFactory().getCustomModelClasses();
+        var map = configurer.getCustomModelClassFactory().getCustomModelClasses();
         assertTrue(map.containsKey("2.5"));
         assertTrue(map.containsKey("2.4"));
         Class<?> clazz = configurer.getCustomModelClassFactory()

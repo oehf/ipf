@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
 import org.apache.camel.Exchange
 import org.apache.camel.component.mock.MockEndpoint
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -217,7 +217,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = '< some ill-formed XML !'
         Exchanges.resultMessage(producerTemplate.send(
-                "http4://localhost:${port}/iti55service",
+                "http://localhost:${port}/iti55service",
                 requestExchange))
         assert MyRejectionHandlingStrategy.count == 1
     }

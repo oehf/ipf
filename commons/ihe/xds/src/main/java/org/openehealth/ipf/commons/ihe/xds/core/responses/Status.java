@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "Status")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum Status {
     /** The request execution failed. */
     @XmlEnumValue("Failure") FAILURE("Failure", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure"),
@@ -90,7 +90,7 @@ public enum Status {
             return null;
         }
         
-        for (Status status : values()) {
+        for (var status : values()) {
             if (opcode.equals(status.getOpcode21()) || opcode.equals(status.getOpcode30())) {
                 return status;
             }

@@ -38,7 +38,7 @@ public class EagerBundleProvider extends AbstractBundleProvider {
 
     @Override
     public List<IBaseResource> getResources(int fromIndex, int toIndex) {
-        List<IBaseResource> resources = fetchResources();
+        var resources = fetchResources();
         return resources.subList(fromIndex, Math.min(toIndex, resources.size()));
     }
 

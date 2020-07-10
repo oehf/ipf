@@ -44,7 +44,7 @@ class Iti9TestRouteBuilder extends RouteBuilder {
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process { Thread.sleep(50) }  // simulate some processing effort
+             .delay(50)  // simulate some processing effort
              .transform(constant(rsp))
 
          from('pix-iti9://0.0.0.0:18090')

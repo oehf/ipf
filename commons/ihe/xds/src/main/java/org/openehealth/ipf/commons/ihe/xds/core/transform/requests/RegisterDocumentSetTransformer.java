@@ -17,14 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
@@ -67,25 +61,25 @@ public class RegisterDocumentSetTransformer {
      */
     public EbXMLSubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
         notNull(request, "request cannot be null");
-                
-        EbXMLSubmitObjectsRequest ebXML = factory.createSubmitObjectsRequest();
-        EbXMLObjectLibrary library = ebXML.getObjectLibrary();        
+
+        var ebXML = factory.createSubmitObjectsRequest();
+        var library = ebXML.getObjectLibrary();
         
-        for (DocumentEntry docEntry : request.getDocumentEntries()) {
+        for (var docEntry : request.getDocumentEntries()) {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
         }
         
-        for (Folder folder : request.getFolders()) {
+        for (var folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
             addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
-        
-        SubmissionSet submissionSet = request.getSubmissionSet();
+
+        var submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
-        String entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
+        var entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
         addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         
-        for (Association association : request.getAssociations()) {
+        for (var association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
 
@@ -100,23 +94,23 @@ public class RegisterDocumentSetTransformer {
      */
     public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
+
+        var request = new RegisterDocumentSet();
         
-        RegisterDocumentSet request = new RegisterDocumentSet();        
-        
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+        for (var extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
         }
 
-        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (var regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             request.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        var regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
         
-        for (EbXMLAssociation association : ebXML.getAssociations()) {
+        for (var association : ebXML.getAssociations()) {
             request.getAssociations().add(associationTransformer.fromEbXML(association));
         }
 
@@ -124,7 +118,7 @@ public class RegisterDocumentSetTransformer {
     }
 
     private void addClassification(EbXMLSubmitObjectsRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        EbXMLClassification classification = factory.createClassification(library);
+        var classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         classification.assignUniqueId();

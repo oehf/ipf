@@ -78,11 +78,7 @@ class ManagedMllpItiEndpointTest extends MllpTestContainer {
         on
     }
 
-    private CamelContext getContext() {
-        return (CamelContext) getCamelContext()
-    }
-
     private MBeanServer getMBeanServer() {
-        return getContext().getManagementStrategy().getManagementAgent().getMBeanServer()
+        return camelContext.getManagementStrategy().getManagementAgent().getMBeanServer()
     }
 }

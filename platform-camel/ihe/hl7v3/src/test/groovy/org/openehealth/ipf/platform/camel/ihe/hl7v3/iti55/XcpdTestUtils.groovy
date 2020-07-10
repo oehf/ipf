@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
-import groovy.util.slurpersupport.GPathResult
-
-import javax.xml.datatype.Duration
-import javax.xml.datatype.DatatypeFactory
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import org.apache.camel.Message
+
+import javax.xml.datatype.DatatypeFactory
+import javax.xml.datatype.Duration
 
 /**
  * Helper functions for XCPD tests.
@@ -31,11 +32,11 @@ class XcpdTestUtils {
         Duration dura = DatatypeFactory.newInstance().newDuration("P${n}Y")
         TtlHeaderUtils.setTtl(dura, message)
     }
-    
+
     static void testPositiveAckCode(String message) {
         GPathResult xml = new XmlSlurper().parseText(message)
         assert xml.acknowledgement.typeCode.@code == 'AA'
         assert xml.controlActProcess.queryAck.queryResponseCode.@code == 'OK'
     }
-    
+
 }

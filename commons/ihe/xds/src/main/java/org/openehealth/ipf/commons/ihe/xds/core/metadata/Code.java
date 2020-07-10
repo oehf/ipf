@@ -19,11 +19,11 @@ import ca.uhn.hl7v2.model.v25.datatype.CE;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.LocalizedStringAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.util.Objects;
 
 /**
@@ -33,7 +33,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Code", propOrder = {"code", "schemeName", "displayName"})
 public class Code extends Hl7v2Based<CE> {
     private static final long serialVersionUID = 7603534956639945984L;
@@ -93,7 +93,7 @@ public class Code extends Hl7v2Based<CE> {
     @XmlAttribute
     @XmlJavaTypeAdapter(value = LocalizedStringAdapter.class)
     public LocalizedString getDisplayName() {
-        String value = getHapiObject().getCe2_Text().getValue();
+        var value = getHapiObject().getCe2_Text().getValue();
 
         if (StringUtils.isEmpty(value)) {
             localizedString = null;
@@ -141,7 +141,7 @@ public class Code extends Hl7v2Based<CE> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Code that = (Code) o;
+        var that = (Code) o;
         return Objects.equals(getCode(), that.getCode()) &&
                 Objects.equals(getDisplayName(), that.getDisplayName()) &&
                 Objects.equals(getSchemeName(), that.getSchemeName());

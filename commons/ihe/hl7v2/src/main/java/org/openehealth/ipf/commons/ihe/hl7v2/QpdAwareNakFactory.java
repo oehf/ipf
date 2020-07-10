@@ -63,7 +63,7 @@ public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
 
     public Message createNak0(Message originalMessage, HL7Exception e, AcknowledgmentCode ackTypeCode)
         throws HL7Exception {
-        AbstractMessage ack = (AbstractMessage) MessageUtils.response(
+        var ack = (AbstractMessage) MessageUtils.response(
                 originalMessage,
                 messageType,
                 triggerEvent);
@@ -72,13 +72,13 @@ public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
 
         e.populateResponse(ack, ackTypeCode, 0);
 
-        Segment msa = (Segment) ack.get("MSA");
+        var msa = (Segment) ack.get("MSA");
         Terser.set(msa, 1, 0, 1, 1, ackTypeCode.name());
 
-        Segment ackQak = (Segment) ack.get("QAK");
-        Segment origQpd = (Segment) originalMessage.get("QPD");
+        var ackQak = (Segment) ack.get("QAK");
+        var origQpd = (Segment) originalMessage.get("QPD");
         if (origQpd != null) {
-            String queryTag = Terser.get(origQpd, 2, 0, 1, 1);
+            var queryTag = Terser.get(origQpd, 2, 0, 1, 1);
             Terser.set(ackQak, 1, 0, 1, 1, queryTag);
             LOG.debug("Set QAK-1 to {}", queryTag);
         }
@@ -86,7 +86,7 @@ public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
 
         // create a dummy QPD segment, it will be replaced with proper contents by
         // org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor
-        Segment ackQpd = (Segment) ack.get("QPD");
+        var ackQpd = (Segment) ack.get("QPD");
         Terser.set(ackQpd, 1, 0, 1, 1, "dummy");
 
         return ack;

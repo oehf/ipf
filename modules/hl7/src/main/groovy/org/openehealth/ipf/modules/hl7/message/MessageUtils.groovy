@@ -21,12 +21,12 @@ import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.util.DeepCopy
 import ca.uhn.hl7v2.util.ReflectionUtil
 import ca.uhn.hl7v2.util.Terser
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
 import java.lang.reflect.Constructor
+
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * This is a utility class that offers convenience methods for
@@ -40,7 +40,7 @@ import java.lang.reflect.Constructor
  */
 class MessageUtils {
     
-    private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
     private static final Parser PARSER
 
@@ -85,7 +85,7 @@ class MessageUtils {
      * @return Returns current time in HL7 format
      */
     static String hl7Now() {
-        FMT.print(new DateTime())[0..7, 9..14]
+        ZonedDateTime.now().format(FMT)
     }
     
     /**
@@ -95,24 +95,6 @@ class MessageUtils {
     static String encodeHL7String(String s, Message msg) {
         Escaping escaping = msg?.parser?.parserConfiguration?.escaping ?: ESCAPE
         escaping.escape(s, encodingCharacters(msg))
-    }
-    
-    /**
-     * @return ER7-formatted representation of the type
-     * 
-     * @deprecated use {@link Type#encode()}
-     */
-    static String pipeEncode(Type t) {
-		t.encode()
-    }
-    
-    /**
-     * @return ER7-formatted representation of the segment
-     * 
-     * @deprecated use {@link Segment#encode()}
-     */
-    static String pipeEncode(Segment s) {
-        s.encode()
     }
     
     /**
@@ -144,15 +126,6 @@ class MessageUtils {
         return messageStructure(eventType(msg), triggerEvent(msg), msg.version, msg.parser.hapiContext.modelClassFactory)
     }
 
-    /**
-     * @param msg
-     * @return acknowledgement for the msg
-     * @deprecated use {@link Message#generateACK()}
-     */
-    static Message ack(Message msg) {
-        return msg.generateACK()
-    }
-
     /** 
      *  @return a negative ACK response message constructed from scratch
      */
@@ -166,7 +139,8 @@ class MessageUtils {
         def cause = encodeHL7String(e.message ?: e.class.simpleName, null)
         def now = hl7Now()
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
-                "MSA|AE|MsgIdUnknown|$cause|\r"
+                "MSA|AE|MsgIdUnknown|$cause|\r" +
+                "ERR|\r"
 
         def nak = PARSER.parse(cannedNak)
         e.populateResponse(nak, ackCode, 0)
@@ -361,14 +335,6 @@ class MessageUtils {
             }
         }
         composite
-    }
-    
-    /** 
-     *  @return a hierarchical dump of the message
-     *  @deprecated use {@link Message#printStructure()}
-     */
-    static String dump(Message msg) {
-        msg.printStructure()
     }
 
     // Some stuff rescued from MessageAdapters, creating HL7 messages from resources/streams

@@ -20,13 +20,15 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 /**
- * Audit queue that uses an injectable {@link ExecutorService} to asynchonously send away audit events.
+ * Audit queue that uses an injectable {@link ExecutorService} to asynchronously send away audit events.
  * When this queue is {@link #shutdown() shut down}, the executor service is also, waiting for at most
  * {@link #shutdownTimeoutSeconds} until all pending events are sent.
  * <p>
@@ -64,25 +66,33 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     }
 
     @Override
-    protected void handle(AuditContext auditContext, String... auditRecords) {
-        Runnable runnable = runnable(auditContext, auditRecords);
-        if (executorService != null && !executorService.isShutdown()) {
-            CompletableFuture.runAsync(runnable, executorService)
-                    .exceptionally(e -> {
-                        auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecords);
-                        return null;
-                    });
-        } else {
-            runnable.run();
+    protected void handle(AuditContext auditContext, String auditRecord) {
+        if (auditRecord != null) {
+            var runnable = runnable(auditContext, auditRecord);
+            if (executorService != null && !executorService.isShutdown()) {
+                CompletableFuture.runAsync(runnable, executorService)
+                        .exceptionally(e -> {
+                            auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecord);
+                            return null;
+                        });
+            } else {
+                runnable.run();
+            }
         }
     }
 
-    private Runnable runnable(AuditContext auditContext, String... auditRecords) {
+    private Runnable runnable(AuditContext auditContext, String auditRecord) {
+        // Copy the MDC contextMap to re-use it in the worker thread
+        // See this recommendation here: http://logback.qos.ch/manual/mdc.html#managedThreads
+        Map<String, String> mdcContextMap = MDC.getCopyOfContextMap();
         return () -> {
             try {
-                auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecords);
+                MDC.setContextMap(mdcContextMap);
+                auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecord);
             } catch (Exception e) {
                 throw new AuditException(e);
+            } finally {
+                MDC.clear();
             }
         };
     }

@@ -17,15 +17,32 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.*;
+import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
+import org.openehealth.ipf.commons.ihe.xds.RMU;
+import org.openehealth.ipf.commons.ihe.xds.XCF;
+import org.openehealth.ipf.commons.ihe.xds.XDM;
+import org.openehealth.ipf.commons.ihe.xds.XDR;
+import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -74,13 +91,13 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided, boolean limitedMetadata) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
-        boolean isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
-        DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+        var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
+        var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 
-        boolean isOnDemand    = (profile == XDS.Interactions.ITI_61) ||
+        var isOnDemand    = (profile == XDS.Interactions.ITI_61) ||
                                 (profile.isQuery() && onDemandProvided);
 
-        boolean needHashAndSize = (! isOnDemand) &&
+        var needHashAndSize = (! isOnDemand) &&
                 (isContinuaHRN || profile.isQuery()
                         || (profile == XDS.Interactions.ITI_42)
                         || (profile == XDM.Interactions.ITI_41)
@@ -136,8 +153,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private List<RegistryObjectValidator> getSubmissionSetSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
-        boolean isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
-        DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+        var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
+        var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 
         List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
@@ -167,7 +184,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private boolean checkLimitedMetadata(EbXMLRegistryObject object, String limitedMetadataClassNode, ValidationProfile profile) {
-        boolean limitedMetadata = object.getClassifications().stream().anyMatch(cl -> limitedMetadataClassNode.equals(cl.getClassificationNode()));
+        var limitedMetadata = object.getClassifications().stream().anyMatch(cl -> limitedMetadataClassNode.equals(cl.getClassificationNode()));
         if (limitedMetadata) {
             metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
@@ -190,7 +207,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         validateSubmissionSet(container, profile);
         if (!profile.isQuery()) {
             validateUniquenessOfUUIDs(container);
-            validateUniqueIds(container);
+            validateUniqueIds(container, profile);
         }
         validateAssociations(container, profile);
         validateDocumentEntries(container, profile);
@@ -202,15 +219,15 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
-        for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
+        for (var folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
              if (profile == RMU.Interactions.ITI_92) {
                  throw new XdsRuntimeException(ErrorCode.OBJECT_TYPE_ERROR, "Folders cannot be updated", Severity.ERROR, folder.getId());
              }
 
-            boolean limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_NODE, profile);
+            var limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_NODE, profile);
             runValidations(folder, getFolderSlotValidations(limitedMetadata));
 
-            AvailabilityStatus status = folder.getStatus();
+            var status = folder.getStatus();
             if (profile.isQuery() || status != null) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
@@ -219,7 +236,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(StringUtils.isBlank(folder.getLid()) || logicalIds.add(folder.getLid()),
                     LOGICAL_ID_SAME, folder.getLid());
 
-            LocalizedString name = folder.getName();
+            var name = folder.getName();
             metaDataAssert(limitedMetadata || ((name != null) && (name.getValue() != null)),
                     MISSING_FOLDER_NAME, folder.getId());
 
@@ -230,16 +247,16 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateSubmissionSet(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        List<EbXMLRegistryPackage> submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
+        var submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
         if (!profile.isQuery()) {
             metaDataAssert(submissionSets.size() == 1, EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST);
         }
 
-        for (EbXMLRegistryPackage submissionSet : submissionSets) {
-            boolean limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE, profile);
+        for (var submissionSet : submissionSets) {
+            var limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE, profile);
             runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
 
-            AvailabilityStatus status = submissionSet.getStatus();
+            var status = submissionSet.getStatus();
             if (profile.isQuery() || (status != null)) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED,
                         SUBMISSION_SET_INVALID_AVAILABILITY_STATUS, status);
@@ -249,11 +266,11 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_NODE, profile);
+        for (var docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            var limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_NODE, profile);
 
             // on-demand is required for ITI-61 and allowed for ITI-92
-            boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
+            var onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
             if (onDemandProvided) {
                 metaDataAssert((profile == XDS.Interactions.ITI_61) || (profile == RMU.Interactions.ITI_92) || profile.isQuery(),
                         WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
@@ -264,12 +281,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             runValidations(docEntry, documentEntrySlotValidators(profile, onDemandProvided, limitedMetadata));
 
             if (profile.isQuery()) {
-                AvailabilityStatus status = docEntry.getStatus();
+                var status = docEntry.getStatus();
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
                         DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
             }
 
-            LocalizedString name = docEntry.getName();
+            var name = docEntry.getName();
             if (name != null && name.getValue() != null) {
                 metaDataAssert("UTF8".equals(name.getCharset()) || "UTF-8".equals(name.getCharset()),
                         INVALID_TITLE_ENCODING, name.getCharset());
@@ -278,8 +295,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                         TITLE_TOO_LONG, name.getValue());
             }
 
-            boolean attachmentExpected = (profile.getInteractionId() == XCF.Interactions.ITI_63);
-            boolean attachmentProvided = (docEntry.getDataHandler() != null);
+            var attachmentExpected = (profile.getInteractionId() == XCF.Interactions.ITI_63);
+            var attachmentProvided = (docEntry.getDataHandler() != null);
             metaDataAssert(attachmentProvided == attachmentExpected,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
                     docEntry.getId());
@@ -287,7 +304,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
-            String mimeType = docEntry.getMimeType();
+            var mimeType = docEntry.getMimeType();
             metaDataAssert(StringUtils.isNotEmpty(mimeType), MIME_TYPE_MUST_BE_SPECIFIED);
 
             if ((profile == XDS.Interactions.ITI_57) || (profile == RMU.Interactions.ITI_92)) {
@@ -297,22 +314,26 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void runValidations(EbXMLRegistryObject obj, List<RegistryObjectValidator> validations) throws XDSMetaDataException {
-        for (RegistryObjectValidator validation : validations) {
+        for (var validation : validations) {
             validation.validate(obj);
         }
     }
 
-    private void validateUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
-        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
-        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
-        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+    private void validateUniqueIds(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
+        Set<String> idsInRequest = new HashSet<>();
+        ValidationMessage validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
+        ValueValidator uniquenessValidator = (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
+        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
+        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
+        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
     }
 
-    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme) throws XDSMetaDataException {
+    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme, ValueValidator uniquenessValidator) throws XDSMetaDataException {
         for (EbXMLRegistryObject obj : objects) {
-            String uniqueId = obj.getExternalIdentifierValue(scheme);
+            var uniqueId = obj.getExternalIdentifierValue(scheme);
             metaDataAssert(uniqueId != null, UNIQUE_ID_MISSING);
             metaDataAssert(uniqueId.length() <= 128, UNIQUE_ID_TOO_LONG);
+            uniquenessValidator.validate(uniqueId);
         }
     }
 
@@ -325,47 +346,46 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void addUUIDs(List<? extends EbXMLRegistryObject> objects, Set<String> uuids) throws XDSMetaDataException {
         for (EbXMLRegistryObject obj : objects) {
-            String uuid = obj.getId();
+            var uuid = obj.getId();
             if (uuid != null) {
-                metaDataAssert(!uuids.contains(uuid), UUID_NOT_UNIQUE);
-                uuids.add(uuid);
+                metaDataAssert(uuids.add(uuid), UUID_NOT_UNIQUE);
             }
         }
     }
 
     private void validatePatientIdsAreIdentical(EbXMLObjectContainer container) throws XDSMetaDataException {
-        List<EbXMLRegistryPackage> submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
-        EbXMLRegistryPackage submissionSet = submissionSets.get(0);
+        var submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
+        var submissionSet = submissionSets.get(0);
 
-        String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
+        var patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
 
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
+        for (var docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            var patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(StringUtils.equals(patientId, patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
 
-        for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
-            String patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
+        for (var folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
+            var patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(StringUtils.equals(patientId, patientIdFolder), FOLDER_PATIENT_ID_WRONG);
         }
     }
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
-        Set<String> docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
+        var docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
                 .filter(docEntry -> docEntry.getId() != null)
                 .map(EbXMLRegistryObject::getId)
                 .collect(Collectors.toSet());
-        Set<String> submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
+        var submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
                 .map(EbXMLRegistryObject::getId)
                 .collect(Collectors.toSet());
         Set<String> associationIds = new HashSet<>();
-        boolean hasSubmitAssociationType = false;
-        for (EbXMLAssociation association : container.getAssociations()) {
+        var hasSubmitAssociationType = false;
+        for (var association : container.getAssociations()) {
             //metaDataAssert(StringUtils.isNotEmpty(association.getId()), ASSOCIATION_ID_MISSING);
             associationIds.add(association.getId());
 
-            AssociationType type = association.getAssociationType();
+            var type = association.getAssociationType();
             metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
             hasSubmitAssociationType = hasSubmitAssociationType
                     || (type == AssociationType.SUBMIT_ASSOCIATION)
@@ -375,17 +395,17 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     LOGICAL_ID_SAME, association.getLid());
         }
 
-        for (EbXMLAssociation association : container.getAssociations()) {
+        for (var association : container.getAssociations()) {
             switch (association.getAssociationType()) {
                 case HAS_MEMBER:
-                    boolean isSubmissionSetToDocEntry =
+                    var isSubmissionSetToDocEntry =
                             submissionSetIds.contains(association.getSource()) && docEntryIds.contains(association.getTarget());
                     validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
                     break;
 
                 case IS_SNAPSHOT_OF:
                     if (!profile.isQuery()) {
-                        EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
+                        var sourceDocEntry = getExtrinsicObject(
                                 container, association.getSource(), DocumentEntryType.STABLE.getUuid());
                         metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
                         metaDataAssert(hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
@@ -418,14 +438,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         metaDataAssert(association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME) == null,
                 DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER);
 
-        List<String> slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
+        var slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
         if (isSubmissionSetToDocEntry){
             metaDataAssert(!slotValues.isEmpty(), SUBMISSION_SET_STATUS_MANDATORY);
         }
         if (!slotValues.isEmpty()) {
             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
 
-            AssociationLabel status = AssociationLabel.fromOpcode(slotValues.get(0));
+            var status = AssociationLabel.fromOpcode(slotValues.get(0));
 
             if (status == AssociationLabel.ORIGINAL && !profile.isQuery()) {
                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
@@ -434,7 +454,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private EbXMLExtrinsicObject getExtrinsicObject(EbXMLObjectContainer container, String docEntryId, String... objectTypes) {
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
+        for (var docEntry : container.getExtrinsicObjects(objectTypes)) {
             if (docEntry.getId() != null && docEntry.getId().equals(docEntryId)) {
                 return docEntry;
             }
@@ -443,7 +463,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private EbXMLRegistryPackage getRegistryPackage(EbXMLObjectContainer container, String submissionSetId, String classificationNode) {
-        for (EbXMLRegistryPackage registryPackage : container.getRegistryPackages(classificationNode)) {
+        for (var registryPackage : container.getRegistryPackages(classificationNode)) {
             if (registryPackage.getId() != null && registryPackage.getId().equals(submissionSetId)) {
                 return registryPackage;
             }
@@ -454,7 +474,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container, ValidationProfile profile) {
 
         // logicalId is required for ITI-57 and optional for ITI-92
-        String logicalId = registryObject.getLid();
+        var logicalId = registryObject.getLid();
         if (logicalId != null) {
             uuidValidator.validate(logicalId);
             if (logicalId.equals(registryObject.getId())) {
@@ -470,8 +490,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     registryObject.getId());
         }
 
-        boolean foundHasMemberAssociation = false;
-        for (EbXMLAssociation association : container.getAssociations()) {
+        var foundHasMemberAssociation = false;
+        for (var association : container.getAssociations()) {
             if (association.getAssociationType() == AssociationType.HAS_MEMBER
                 && association.getTarget().equals(registryObject.getId())
                 && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null))

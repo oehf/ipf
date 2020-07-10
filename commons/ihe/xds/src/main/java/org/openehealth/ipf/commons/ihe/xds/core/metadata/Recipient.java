@@ -50,19 +50,6 @@ public class Recipient implements Serializable {
      * Constructs a recipient.
      */
     public Recipient() {}
-    
-    /**
-     * Constructs a recipient.
-     * @param organization
-     *          the organization.
-     * @param person
-     *          the person.
-     * @deprecated please use {@link #Recipient(Organization, Person, Telecom)} instead.
-     */
-    @Deprecated
-    public Recipient(Organization organization, Person person) {
-        this(organization, person, null);
-    }
 
     /**
      * Constructs a recipient.

@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Transforms between a {@link QueryRegistry} and an {@link EbXMLAdhocQueryRequest}. 
  * @author Jens Riemschneider
@@ -40,9 +42,9 @@ public class QueryRegistryTransformer {
         if (request == null) {
             return null;
         }
-        
-        Query query = request.getQuery();
-        EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest();
+
+        var query = request.getQuery();
+        var ebXML = createAdhocQueryRequest();
         query.accept(new ToEbXMLVisitor(ebXML));        
 
         ebXML.setReturnType(request.getReturnType().getCode());
@@ -60,17 +62,17 @@ public class QueryRegistryTransformer {
         if (ebXML == null) {
             return null;
         }
-        
-        String id = ebXML.getId();
-        QueryType queryType = QueryType.valueOfId(id);
+
+        var id = ebXML.getId();
+        var queryType = QueryType.valueOfId(id);
         if (queryType == null) {
             return null;
         }
-        
-        Query query = createQuery(queryType);        
+
+        var query = createQuery(queryType);
         query.accept(new FromEbXMLVisitor(ebXML));
-        
-        QueryRegistry queryRegistry = new QueryRegistry(query);
+
+        var queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.valueOfCode(ebXML.getReturnType()));
 
         return queryRegistry;
@@ -78,8 +80,8 @@ public class QueryRegistryTransformer {
 
     private Query createQuery(QueryType queryType) {
         try {
-            return queryType.getType().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return queryType.getType().getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new IllegalStateException("Invalid query class for type: " + queryType, e);
         }
     }

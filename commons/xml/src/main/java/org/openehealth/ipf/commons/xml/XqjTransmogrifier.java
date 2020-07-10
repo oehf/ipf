@@ -28,9 +28,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.xquery.*;
-import java.io.InputStream;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -110,7 +108,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
         this.outputFormat = outputFormat;
 
         if (globalParams != null) {
-            for (Entry<String, Object> entry : globalParams.entrySet()) {
+            for (var entry : globalParams.entrySet()) {
                 XQUERY_GLOBAL_CONFIG.setConfigurationProperty(entry.getKey(), entry.getValue());
             }
         }
@@ -131,9 +129,9 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
      */
     @Override
     public T zap(Source source, Object... params) {
-        ResultHolder<T> accessor = ResultHolderFactory.create(outputFormat);
-        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat.getClass() + " is not supported");
-        Result result = accessor.createResult();
+        var accessor = ResultHolderFactory.create(outputFormat);
+        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat + " is not supported");
+        var result = accessor.createResult();
         doZap(source, result, params);
         return accessor.getResult();
     }
@@ -141,7 +139,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
     private void doZap(Source source, Result result, Object... params) {
         XQResultSequence seq = null;
         try {
-            XQPreparedExpression expression = resource(params);
+            var expression = resource(params);
             expression.bindDocument(XQConstants.CONTEXT_ITEM, source, null);
             bindExpressionContext(expression, staticParams);
             bindExpressionContext(expression, resourceParameters(params));
@@ -164,11 +162,11 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
         if (params == null) {
             return;
         }
-        for (Entry<String, Object> entry : params.entrySet()) {
+        for (var entry : params.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(RESOURCE_LOCATION)) {
                 continue;
             }
-            Object value = entry.getValue();
+            var value = entry.getValue();
             if (value instanceof java.lang.String) {
                 exp.bindString(new QName(entry.getKey()), (String) value, null);
             } else if (value instanceof javax.xml.transform.Source) {
@@ -187,16 +185,16 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
      */
     @Override
     protected XQPreparedExpression resource(Object... params) throws Exception {
-        XQPreparedExpression expression = super.resource(params);
+        var expression = super.resource(params);
         return getConnection().copyPreparedExpression(expression);
     }
 
     @Override
     public XQPreparedExpression createResource(Object... params) {
-        String resourceLocation = resourceLocation(params);
+        var resourceLocation = resourceLocation(params);
         LOG.debug("Create new template for {}", resourceLocation);
         try {
-            InputStream stream = resourceContent(params).getInputStream();
+            var stream = resourceContent(params).getInputStream();
             return getConnection().prepareExpression(stream);
         } catch (Exception e) {
             throw new IllegalArgumentException("The resource "
@@ -204,7 +202,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
         }
     }
 
-    synchronized private SaxonXQConnection getConnection() throws XQException {
+    synchronized private SaxonXQConnection getConnection() {
         if (connection == null) {
             connection = (SaxonXQConnection) DATA_SOURCE.getConnection();
         }

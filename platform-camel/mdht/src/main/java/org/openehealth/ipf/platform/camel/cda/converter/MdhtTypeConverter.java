@@ -24,16 +24,16 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
-@Converter
+@Converter(generateLoader = true)
 public class MdhtTypeConverter {
 
     private final static CDAR2Renderer renderer = new CDAR2Renderer();
 
     @Converter
     public static InputStream toInputStream(ClinicalDocument document, Exchange exchange) {
-        Charset charset = Charset.defaultCharset();
+        var charset = Charset.defaultCharset();
         if (exchange != null) {
-            String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            var charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
             if (charsetName != null) {
                 charset = Charset.forName(charsetName);
             }

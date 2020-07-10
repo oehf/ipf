@@ -68,7 +68,7 @@ class Hl7TranslationTestContainer {
         Hl7TranslationTestContainer.context = context
 
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(getClass().getResource('/META-INF/map/hl7-v2-v3-translation.map'))
+        mappingService.setMappingScript(Hl7TranslationTestContainer.class.getResource('/META-INF/map/hl7-v2-v3-translation.map'))
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()

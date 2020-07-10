@@ -35,7 +35,7 @@ import java.util.Collection;
 public class ContextFacade {
 
     private static Registry instance;
-    private static Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
 
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))
@@ -79,7 +79,7 @@ public class ContextFacade {
     }
 
     private static Registry getInstance() {
-        if (instance == null) throw new IllegalStateException("Registry instance has not been set. Call ContextFacade.setRegistry" +
+        if (instance == null) throw new IllegalStateException("Registry instance has not been set. Call ContextFacade.setRegistry " +
         "or initialize a Spring Registry");
         return instance;
     }

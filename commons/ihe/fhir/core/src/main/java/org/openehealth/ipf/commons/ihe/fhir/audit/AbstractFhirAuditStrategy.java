@@ -57,7 +57,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         if (response instanceof IBaseResource) {
-            EventOutcomeIndicator eventOutcomeIndicator = getEventOutcomeIndicator(response);
+            var eventOutcomeIndicator = getEventOutcomeIndicator(response);
             auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);
             auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
             return eventOutcomeIndicator == EventOutcomeIndicator.Success;

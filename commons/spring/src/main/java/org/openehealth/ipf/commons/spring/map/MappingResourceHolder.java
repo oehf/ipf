@@ -22,7 +22,7 @@ import java.util.Collection;
 
 /**
  * Interface that isolates methods for registering {@link Resource resources} for a
- * {@link MappingService mapping service}.
+ * {@link org.openehealth.ipf.commons.map.MappingService mapping service}.
  */
 public interface MappingResourceHolder {
 

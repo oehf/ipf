@@ -36,7 +36,7 @@ public interface TransactionOptionsUtils {
      */
     static <T extends Enum<T> & TransactionOptions<?>> List<T> split(String optionString, Class<T> clazz) {
         if (optionString == null || optionString.isEmpty()) return null;
-        String[] optionStrings = optionString.split("\\s*,\\s*");
+        var optionStrings = optionString.split("\\s*,\\s*");
         return Stream.of(optionStrings)
                 .map(s -> Enum.valueOf(clazz, s))
                 .collect(Collectors.toList());

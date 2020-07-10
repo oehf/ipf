@@ -17,12 +17,39 @@ package org.openehealth.ipf.commons.ihe.hl7v3
 
 /**
  * HL7v3-specific exception class.
+ *
  * @author Dmytro Rud
  */
 class Hl7v3Exception extends RuntimeException {
-    // overwrite fields of the base class due to syntax concerns
-    String message
-    Throwable cause
+
+    Hl7v3Exception() {
+        super()
+    }
+
+    Hl7v3Exception(String message) {
+        super(message)
+    }
+
+    Hl7v3Exception(String message, Throwable cause) {
+        super(message, cause)
+    }
+
+    static Hl7v3Exception make(String message, Throwable cause = null,
+                               String typeCode = 'AE',
+                               String statusCode = 'aborted',
+                               String acknowledgementDetailCode = 'INTERR',
+                               String queryResponseCode = 'AE',
+                               String detectedIssueEventCode = 'ActAdministrativeDetectedIssueCode',
+                               String detectedIssueManagementCode = null) {
+        Hl7v3Exception e = new Hl7v3Exception(message, cause)
+        e.typeCode = typeCode
+        e.statusCode = statusCode
+        e.acknowledgementDetailCode = acknowledgementDetailCode
+        e.queryResponseCode = queryResponseCode
+        e.detectedIssueEventCode = detectedIssueEventCode
+        e.detectedIssueManagementCode = detectedIssueManagementCode
+        e
+    }
 
 
     /*
@@ -52,5 +79,5 @@ class Hl7v3Exception extends RuntimeException {
     String detectedIssueEventCode = 'ActAdministrativeDetectedIssueCode'
     String detectedIssueEventCodeSystem = '2.16.840.1.113883.5.4'
     String detectedIssueManagementCode
-    String detectedIssueManagementCodeSystem = "2.16.840.1.113883.5.4"
+    String detectedIssueManagementCodeSystem = '2.16.840.1.113883.5.4'
 }

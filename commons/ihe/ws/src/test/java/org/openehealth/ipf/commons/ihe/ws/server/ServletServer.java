@@ -247,8 +247,8 @@ public abstract class ServletServer {
      * @return a free port for testing between 8000-9999.
      */
     public static int getFreePort() {
-        int port = 8000;
-        boolean portFree = false;
+        var port = 8000;
+        var portFree = false;
         while (!portFree) {
             port = 8000 + new Random().nextInt(2000);
             portFree = isPortFree(port);

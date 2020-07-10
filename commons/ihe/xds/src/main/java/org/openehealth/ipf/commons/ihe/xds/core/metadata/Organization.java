@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XON;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
 import java.util.Objects;
 
 /**
@@ -34,7 +34,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Organization", propOrder = {"idNumber", "assigningAuthority", "organizationName"})
 public class Organization extends Hl7v2Based<XON> {
     private static final long serialVersionUID = 8283797476558181158L;
@@ -85,7 +85,7 @@ public class Organization extends Hl7v2Based<XON> {
      * @return the assigning authority (XON.6).
      */
     public AssigningAuthority getAssigningAuthority() {
-        AssigningAuthority authority = new AssigningAuthority(getHapiObject().getXon6_AssigningAuthority());
+        var authority = new AssigningAuthority(getHapiObject().getXon6_AssigningAuthority());
         return authority.isEmpty() ? null : authority;
     }
     
@@ -132,7 +132,7 @@ public class Organization extends Hl7v2Based<XON> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Organization that = (Organization) o;
+        var that = (Organization) o;
         return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
                 Objects.equals(getOrganizationName(), that.getOrganizationName()) &&
                 Objects.equals(getIdNumber(), that.getIdNumber());

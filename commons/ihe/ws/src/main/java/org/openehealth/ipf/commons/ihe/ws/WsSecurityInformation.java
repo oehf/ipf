@@ -35,7 +35,7 @@ public class WsSecurityInformation extends SecurityInformation {
 
     protected void configureHttpConduit(HTTPConduit httpConduit) {
         if (isSecure()) {
-            TLSClientParameters tlsClientParameters = httpConduit.getTlsClientParameters();
+            var tlsClientParameters = httpConduit.getTlsClientParameters();
 
             // If no TLSClientParameters are configured and no custom SslContext is configured, we use the system default
             // otherwise we overwrite TLSClientParameters if a custom SslContext is configured
@@ -51,7 +51,7 @@ public class WsSecurityInformation extends SecurityInformation {
             httpConduit.setTlsClientParameters(tlsClientParameters);
         }
         if (getUsername() != null) {
-            AuthorizationPolicy authorizationPolicy = new AuthorizationPolicy();
+            var authorizationPolicy = new AuthorizationPolicy();
             authorizationPolicy.setUserName(getUsername());
             authorizationPolicy.setPassword(getPassword());
             httpConduit.setAuthorization(authorizationPolicy);

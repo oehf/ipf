@@ -6,12 +6,12 @@
     <name>ipf-tutorials</name>
     <packaging>pom</packaging>
     <description>IPF Tutorials</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
 
     <modules>

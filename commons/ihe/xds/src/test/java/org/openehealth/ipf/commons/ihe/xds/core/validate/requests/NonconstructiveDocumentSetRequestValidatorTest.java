@@ -58,14 +58,14 @@ public class NonconstructiveDocumentSetRequestValidatorTest {
     @Test
     public void testRepoIdMustBeSpecified() {
         request.getDocuments().add(new DocumentReference(null, "doc3", "home3"));
-        EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
     public void testDocIdMustBeSpecified() {
         request.getDocuments().add(new DocumentReference("repo3", "", "home3"));
-        EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
         

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import ca.uhn.hl7v2.model.v25.datatype.CX;
-import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
@@ -42,10 +40,10 @@ public class CXValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
-        Identifiable identifiable = Hl7v2Based.parse(hl7CX, Identifiable.class);
+        var identifiable = Hl7v2Based.parse(hl7CX, Identifiable.class);
         metaDataAssert(identifiable != null, CX_NEEDS_ID);
 
-        CX cx = identifiable.getHapiObject();
+        var cx = identifiable.getHapiObject();
 
         // prohibited fields
         metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CX_TOO_MANY_COMPONENTS);
@@ -60,7 +58,7 @@ public class CXValidator implements ValueValidator {
         // required and optional fields
         metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
 
-        HD assigningAuthority = cx.getCx4_AssigningAuthority();
+        var assigningAuthority = cx.getCx4_AssigningAuthority();
         if (assigningAuthorityRequired || (! isEmptyField(assigningAuthority))) {
             HD_VALIDATOR.validate(assigningAuthority, hl7CX);
         }

@@ -44,7 +44,7 @@ import static org.junit.Assert.*
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class HapiModelExtensionTest {
+class HapiModelExtensionTest {
 	
 	static def customGroovyPackageName = 'org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25'
 
@@ -84,7 +84,7 @@ public class HapiModelExtensionTest {
     void testAck() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message ack = msg.ack()
+    	Message ack = msg.generateACK()
     	assertEquals 'ACK', ack.MSH.messageType.messageType.value
     	assertEquals 'AA', ack.MSA.acknowledgementCode.value
     }
@@ -93,7 +93,7 @@ public class HapiModelExtensionTest {
     void testNak() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak(new HL7Exception("blarg", 204), AcknowledgmentCode.AR)
+    	Message nak = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception("blarg", 204))
     	assertEquals 'ACK', nak.MSH.messageType.messageType.value
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value 
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value
@@ -103,7 +103,7 @@ public class HapiModelExtensionTest {
     void testNakCause() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak("blarg", AcknowledgmentCode.AR)
+    	Message nak = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception("blarg"))
     	assertEquals 'ACK', nak.MSH.messageType.messageType.value
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value
     }
@@ -112,7 +112,7 @@ public class HapiModelExtensionTest {
     void testNak25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak(new HL7Exception("blarg", 204), AcknowledgmentCode.AR)
+    	Message nak = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception("blarg", 204))
     	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
     	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }
@@ -120,8 +120,8 @@ public class HapiModelExtensionTest {
     @Test
     void testNak25Cause() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak("blarg", AcknowledgmentCode.AR)
+        Message msg = new GenericParser().parse(msgText)
+        Message nak = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception("blarg"))
     	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
     	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }

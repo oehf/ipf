@@ -21,11 +21,6 @@ import org.hl7.fhir.dstu3.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
@@ -56,7 +51,7 @@ public class TestIti78Success extends AbstractTestIti78 {
     @Test
     public void testSendManualPdqm() {
 
-        Bundle result = sendManually(familyParameters());
+        var result = sendManually(familyParameters());
 
         // printAsXML(result);
 
@@ -65,16 +60,16 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertTrue(result.hasEntry());
 
 
-        PdqPatient p = (PdqPatient)result.getEntry().get(0).getResource();
+        var p = (PdqPatient)result.getEntry().get(0).getResource();
         assertEquals("Test", p.getName().get(0).getFamily());
         assertEquals("http://localhost:8999/Patient/4711", p.getId());
 
 
         // Check ATNA Audit
 
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         // Event
         assertEquals(
@@ -87,24 +82,24 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals(FhirEventTypeCode.MobilePatientDemographicsQuery, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipants().get(0);
+        var source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipants().get(1);
+        var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Audit Source
-        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();
+        var sourceIdentificationType = event.getAuditSourceIdentification();
         assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
         assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
         // Query
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(0);
+        var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Patient?family=Test&_format=xml",
@@ -116,18 +111,18 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testGetResource() {
-        PdqPatient p = client.read()
+        var p = client.read()
                 .resource(PdqPatient.class)
                 .withId("4711")
                 .execute();
         assertEquals("Test", p.getName().get(0).getFamily());
         assertEquals(String.format("http://localhost:%d/Patient/4711", DEMO_APP_PORT), p.getId());
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         // Patient
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(0);
+        var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.Person, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patient.getParticipantObjectTypeCodeRole());
         assertEquals("Patient/4711", patient.getParticipantObjectID());
@@ -136,22 +131,22 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
     }
 
     @Test
     public void testSendEndpointPdqmString() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
     }

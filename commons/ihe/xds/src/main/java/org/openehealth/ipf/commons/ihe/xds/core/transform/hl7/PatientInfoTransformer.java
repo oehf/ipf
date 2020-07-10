@@ -41,18 +41,18 @@ public class PatientInfoTransformer {
         if (hl7PID == null || hl7PID.isEmpty()) {
             return null;
         }
+
+        var patientInfo = new PatientInfo();
         
-        PatientInfo patientInfo = new PatientInfo();
-        
-        for (String hl7PIDLine : hl7PID) {
-            String[] fields = PipeParser.split(hl7PIDLine.trim(), "|");
+        for (var hl7PIDLine : hl7PID) {
+            var fields = PipeParser.split(hl7PIDLine.trim(), "|");
             if (fields.length == 2) {
-                ListIterator<String> iterator = patientInfo.getHl7FieldIterator(fields[0]);
+                var iterator = patientInfo.getHl7FieldIterator(fields[0]);
                 while (iterator.hasNext()) {
                     iterator.next();
                 }
-                String[] strings = PipeParser.split(fields[1], "~");
-                for (String string : strings) {
+                var strings = PipeParser.split(fields[1], "~");
+                for (var string : strings) {
                     iterator.add(string);
                 }
             }
@@ -76,11 +76,11 @@ public class PatientInfoTransformer {
         List<String> result = new ArrayList<>();
 
         patientInfo.getAllFieldIds().stream().sorted(new PatientInfo.Hl7FieldIdComparator()).forEach(fieldId -> {
-            ListIterator<String> iterator = patientInfo.getHl7FieldIterator(fieldId);
-            String prefix = fieldId + '|';
-            StringBuilder sb = new StringBuilder(prefix);
+            var iterator = patientInfo.getHl7FieldIterator(fieldId);
+            var prefix = fieldId + '|';
+            var sb = new StringBuilder(prefix);
             while (iterator.hasNext()) {
-                String repetition = StringUtils.trimToEmpty(iterator.next());
+                var repetition = StringUtils.trimToEmpty(iterator.next());
                 if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
                     sb.setLength(sb.length() - 1);
                     result.add(sb.toString());

@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.support.DefaultConsumer;
 import org.apache.cxf.endpoint.Server;
 import org.openehealth.ipf.commons.ihe.core.Constants;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;

@@ -26,11 +26,13 @@ import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.Enumerations;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
 import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 
@@ -45,17 +47,17 @@ public class Iti65ValidatorTest {
 
     @Test
     public void validate() throws Exception {
-        Iti65Validator iti65Validator = new Iti65Validator();
-        iti65Validator.validateRequest(FhirContext.forDstu3(), provideAndRegister(), Collections.emptyMap());
+        var iti65Validator = new Iti65Validator(FhirContext.forDstu3());
+        iti65Validator.validateRequest(provideAndRegister(), Collections.emptyMap());
     }
 
     protected Bundle provideAndRegister() throws Exception {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Iti65Constants.ITI65_PROFILE);
 
         // Manifest
 
-        DocumentManifest manifest = new DocumentManifest();
+        var manifest = new DocumentManifest();
         manifest.setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
                 .setCreated(new Date())
                 .setDescription("description")
@@ -74,13 +76,17 @@ public class Iti65ValidatorTest {
 
         // Reference
 
-        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Date timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
-        DocumentReference reference = new DocumentReference();
+        var instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        var timestamp = Date.from(instant);
+
+        var reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 
         reference.setMasterIdentifier(
@@ -117,7 +123,7 @@ public class Iti65ValidatorTest {
 
         // Binary
 
-        Binary binary = new Binary()
+        var binary = new Binary()
                 .setContentType("text/plain")
                 .setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);

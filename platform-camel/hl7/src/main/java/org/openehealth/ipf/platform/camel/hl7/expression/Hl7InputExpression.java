@@ -25,7 +25,7 @@ public class Hl7InputExpression implements Expression {
 
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
-        Object body = exchange.getIn().getBody();
+        var body = exchange.getIn().getBody();
         return type.cast(body);
     }
 

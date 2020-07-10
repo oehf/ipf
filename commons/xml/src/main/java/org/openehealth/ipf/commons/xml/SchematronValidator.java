@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.xml;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.xml.svrl.DiagnosticReference;
 import org.openehealth.ipf.commons.xml.svrl.FailedAssert;
 import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
 
@@ -41,12 +40,12 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
             new SchematronTransmogrifier<>(SchematronOutput.class);
 
     public void validate(Source message, SchematronProfile profile) {
-        SchematronOutput svrl = schematronTransmogrifier.zap(message, profile);
+        var svrl = schematronTransmogrifier.zap(message, profile);
         List<ValidationException> exceptions = new ArrayList<>();
         svrl.getActivePatternAndFiredRuleAndFailedAssert().stream()
                 .filter(o -> o instanceof FailedAssert)
                 .forEach(o -> {
-                    FailedAssert failedAssert = (FailedAssert) o;
+                    var failedAssert = (FailedAssert) o;
                     exceptions.add(new ValidationException(message(failedAssert)));
                 });
         if (!exceptions.isEmpty()) {
@@ -55,7 +54,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
     }
 
     private static String message(FailedAssert failedAssert) {
-        StringBuilder sb = new StringBuilder()
+        var sb = new StringBuilder()
                 .append("Validation error at ")
                 .append(failedAssert.getLocation())
                 .append(" : ")
@@ -63,7 +62,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
 
         if (!failedAssert.getDiagnosticReference().isEmpty()) {
             sb.append("\nDetail:");
-            for (DiagnosticReference diagnosticReference : failedAssert.getDiagnosticReference()) {
+            for (var diagnosticReference : failedAssert.getDiagnosticReference()) {
                 sb.append('\n').append(diagnosticReference.getText());
             }
         }

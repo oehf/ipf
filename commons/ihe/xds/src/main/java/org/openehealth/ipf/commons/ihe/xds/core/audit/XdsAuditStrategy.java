@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
@@ -57,7 +56,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
                 return EventOutcomeIndicator.SeriousFailure;
             }
             // determine the highest error severity
-            for (EbXMLRegistryError error : response.getErrors()) {
+            for (var error : response.getErrors()) {
                 if (error.getSeverity() == Severity.ERROR) {
                     return EventOutcomeIndicator.SeriousFailure;
                 }
@@ -72,7 +71,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
         if (response.getErrors().isEmpty()) {
             return null;
         }
-        for (EbXMLRegistryError error : response.getErrors()) {
+        for (var error : response.getErrors()) {
             if (error.getSeverity() == Severity.ERROR) {
                 return error.getCodeContext();
             }
@@ -83,21 +82,21 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
+        var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 
     @Override
     public String getEventOutcomeDescription(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
+        var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
     }
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
-        EventOutcomeIndicator outcomeCodes = getEventOutcomeIndicator(response);
+        var outcomeCodes = getEventOutcomeIndicator(response);
         auditDataset.setEventOutcomeIndicator(outcomeCodes);
         auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
         return outcomeCodes == EventOutcomeIndicator.Success;

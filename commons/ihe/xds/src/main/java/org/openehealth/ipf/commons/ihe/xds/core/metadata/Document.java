@@ -39,7 +39,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Document")
 @XmlRootElement(name = "document")
-@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
+@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 @ToString(doNotUseGetters = true)
 public class Document extends ContentMap implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;

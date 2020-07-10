@@ -19,8 +19,8 @@ import groovy.lang.Closure;
 
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 /**
  * An aggregation strategy that delegates to a {@link Closure}.
@@ -37,7 +37,7 @@ public class DelegatingAggregationStrategy extends ClosureAdapter implements Agg
 
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-        Object result = call(oldExchange, newExchange);
+        var result = call(oldExchange, newExchange);
         if (result instanceof Exchange) {
             return (Exchange)result;
         } else {

@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -52,11 +53,7 @@ public class FilterType {
      *     
      */
     public boolean isNegate() {
-        if (negate == null) {
-            return false;
-        } else {
-            return negate;
-        }
+        return Objects.requireNonNullElse(negate, false);
     }
 
     /**

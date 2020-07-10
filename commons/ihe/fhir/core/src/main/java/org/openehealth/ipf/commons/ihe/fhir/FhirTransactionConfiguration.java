@@ -17,13 +17,13 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
-import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -41,12 +41,8 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
-    private boolean deferModelScanning;
     private Predicate<Object> staticConsumerSelector = o -> true;
 
-    /**
-     * @deprecated
-     */
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -56,14 +52,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirContext defaultFhirContext,
             FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, defaultFhirContext,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
 
-    /**
-     * @deprecated
-     */
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -73,13 +66,13 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirContext fhirContext,
             List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
-        this.fhirContextProvider = () -> new FhirContext(fhirVersion);
+        this.fhirContextProvider = () -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator;
+        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContext) : null;
     }
 
     public FhirTransactionConfiguration(
@@ -91,7 +84,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirVersionEnum fhirVersion,
             FhirProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirVersion,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
@@ -105,13 +98,13 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             FhirVersionEnum fhirVersion,
             List<? extends FhirProvider> resourceProviders,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator) {
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;
         this.fhirContextProvider = () -> new FhirContext(fhirVersion);
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator;
+        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContextProvider.get()) : null;
     }
 
 
@@ -138,12 +131,8 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * @return the initialized FhirContext
      */
     public FhirContext initializeFhirContext() {
-        FhirContext fhirContext = fhirContextProvider.get();
+        var fhirContext = fhirContextProvider.get();
         fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
-        if (deferModelScanning) {
-            fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
-        }
-        fhirValidator.initialize(fhirContext);
         return fhirContext;
     }
 
@@ -167,26 +156,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
 
     public boolean supportsLazyLoading() {
         return supportsLazyLoading;
-    }
-
-    /**
-     * @deprecated
-     */
-    public boolean isDeferModelScanning() {
-        return deferModelScanning;
-    }
-
-    /**
-     * By default, HAPI will scan each model type it encounters as soon as it encounters it. This scan includes a check
-     * for all fields within the type, and makes use of reflection to do this. While this process is not particularly significant
-     * on reasonably performant machines, on some devices it may be desirable to defer this scan. When the scan is deferred,
-     * objects will only be scanned when they are actually accessed, meaning that only types that are actually used in an
-     * application get scanned.
-     *
-     * @deprecated
-     */
-    public void setDeferModelScanning(boolean deferModelScanning) {
-        this.deferModelScanning = deferModelScanning;
     }
 
 

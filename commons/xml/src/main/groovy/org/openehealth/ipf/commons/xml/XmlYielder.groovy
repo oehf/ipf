@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.xml
 
-import groovy.util.slurpersupport.GPathResult
-import groovy.util.slurpersupport.Node
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.Node
 import groovy.xml.MarkupBuilder
-import groovy.xml.QName
+import groovy.namespace.QName
 
 import javax.xml.XMLConstants
 

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.xml.bind.annotation.*;
 
 
@@ -149,7 +150,7 @@ public class BatchRequest {
      */
     public List<DsmlMessage> getBatchRequests() {
         if (batchRequests == null) {
-            batchRequests = new ArrayList<DsmlMessage>();
+            batchRequests = new ArrayList<>();
         }
         return this.batchRequests;
     }
@@ -187,11 +188,7 @@ public class BatchRequest {
      *     
      */
     public RequestProcessingType getProcessing() {
-        if (processing == null) {
-            return RequestProcessingType.SEQUENTIAL;
-        } else {
-            return processing;
-        }
+        return Objects.requireNonNullElse(processing, RequestProcessingType.SEQUENTIAL);
     }
 
     /**
@@ -215,11 +212,7 @@ public class BatchRequest {
      *     
      */
     public RequestResponseOrder getResponseOrder() {
-        if (responseOrder == null) {
-            return RequestResponseOrder.SEQUENTIAL;
-        } else {
-            return responseOrder;
-        }
+        return Objects.requireNonNullElse(responseOrder, RequestResponseOrder.SEQUENTIAL);
     }
 
     /**
@@ -243,11 +236,7 @@ public class BatchRequest {
      *     
      */
     public RequestErrorHandlingType getOnError() {
-        if (onError == null) {
-            return RequestErrorHandlingType.EXIT;
-        } else {
-            return onError;
-        }
+        return Objects.requireNonNullElse(onError, RequestErrorHandlingType.EXIT);
     }
 
     /**
@@ -297,7 +286,7 @@ public class BatchRequest {
         }
 
         public static RequestErrorHandlingType fromValue(String v) {
-            for (RequestErrorHandlingType c: RequestErrorHandlingType.values()) {
+            for (var c: RequestErrorHandlingType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }
@@ -342,7 +331,7 @@ public class BatchRequest {
         }
 
         public static RequestProcessingType fromValue(String v) {
-            for (RequestProcessingType c: RequestProcessingType.values()) {
+            for (var c: RequestProcessingType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }
@@ -387,7 +376,7 @@ public class BatchRequest {
         }
 
         public static RequestResponseOrder fromValue(String v) {
-            for (RequestResponseOrder c: RequestResponseOrder.values()) {
+            for (var c: RequestResponseOrder.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }

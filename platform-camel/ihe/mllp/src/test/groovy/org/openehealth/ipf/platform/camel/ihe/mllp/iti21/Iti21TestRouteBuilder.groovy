@@ -53,9 +53,6 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
 
          from('pdq-iti21://0.0.0.0:18211?secure=true&clientAuth=MUST&sslContext=#sslContext')
              .transform(constant(rsp))
-         
-         from('pdq-iti21://0.0.0.0:18230?secure=true&clientAuth=WANT&sslContext=#sslContext')
-             .transform(constant(rsp))
 
          // for cancel messages
          from('pdq-iti21://0.0.0.0:18212')
@@ -66,21 +63,8 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              .process {
                  throw new RuntimeException('12345')
              }
-             
 
          from('pdq-iti21://0.0.0.0:18214?interceptorFactories=#dummyInterceptor,#authenticationInterceptor')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18215?secure=true&sslContext=#sslContext')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
                  .transform(constant(rsp))
 
          // for NAK with magic header

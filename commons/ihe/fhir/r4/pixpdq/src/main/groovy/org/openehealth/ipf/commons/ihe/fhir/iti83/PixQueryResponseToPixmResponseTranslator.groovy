@@ -87,7 +87,7 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
     }
 
     // Handle an error response from the Cross-reference manager
-    protected Parameters handleErrorResponse(RSP_K23 message) {
+    protected static Parameters handleErrorResponse(RSP_K23 message) {
 
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0

@@ -41,11 +41,9 @@ import org.vibur.objectpool.PoolService;
 import org.vibur.objectpool.util.ConcurrentLinkedQueueCollection;
 
 import javax.xml.namespace.QName;
-import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -134,15 +132,15 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
 
         // WS-Addressing-related interceptors
         if (wsTransactionConfiguration.isAddressing()) {
-            MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
-            for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
+            var interceptor = new MustUnderstandDecoratorInterceptor();
+            for (var nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
                 interceptor.addHeader(new QName(nsUri, "Action"));
             }
 
             client.getOutInterceptors().add(interceptor);
 
-            MAPCodec mapCodec = new MAPCodec();
-            MAPAggregator mapAggregator = new MAPAggregator();
+            var mapCodec = new MAPCodec();
+            var mapAggregator = new MAPAggregator();
             client.getInInterceptors().add(mapCodec);
             client.getInInterceptors().add(mapAggregator);
             client.getInFaultInterceptors().add(mapCodec);
@@ -159,7 +157,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         }
 
         if (features != null) {
-            for (AbstractFeature feature : features) {
+            for (var feature : features) {
                 client.getEndpoint().getActiveFeatures().add(feature);
                 feature.initialize(client, client.getBus());
             }
@@ -189,13 +187,13 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      * Configures SOAP binding of the given SOAP port.
      */
     private void configureBinding(Object port) {
-        BindingProvider bindingProvider = (BindingProvider) port;
+        var bindingProvider = (BindingProvider) port;
 
-        Map<String, Object> reqContext = bindingProvider.getRequestContext();
+        var reqContext = bindingProvider.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceUrl);
 
-        Binding binding = bindingProvider.getBinding();
-        SOAPBinding soapBinding = (SOAPBinding) binding;
+        var binding = bindingProvider.getBinding();
+        var soapBinding = (SOAPBinding) binding;
         soapBinding.setMTOMEnabled(wsTransactionConfiguration.isMtom());
     }
 
@@ -216,10 +214,10 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     class PortFactory implements PoolObjectFactory<Object> {
         @Override
         public Object create() {
-            URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
-            Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
-            Object port = service.getPort(wsTransactionConfiguration.getSei());
-            Client client = ClientProxy.getClient(port);
+            var wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
+            var service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
+            var port = service.getPort(wsTransactionConfiguration.getSei());
+            var client = ClientProxy.getClient(port);
             configureBinding(port);
             configureInterceptors(client);
             configureProperties(client);

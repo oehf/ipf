@@ -36,7 +36,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
@@ -70,8 +69,8 @@ public class AdhocQueryRequestValidatorTest {
     }
     
     @Test
-    public void testUnknownReturnType() {        
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+    public void testUnknownReturnType() {
+        var ebXML = transformer.toEbXML(request);
         ebXML.setReturnType("lol");
         expectFailure(UNKNOWN_RETURN_TYPE, ebXML, ITI_18);
     }
@@ -84,35 +83,35 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testTooManyQueryParameterValues() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("'lol'");
         expectFailure(TOO_MANY_VALUES_FOR_QUERY_PARAMETER, ebXML, ITI_18);
     }
 
     @Test
     public void testParameterValueNotString() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().set(0, "lol");
         expectFailure(PARAMETER_VALUE_NOT_STRING, ebXML, ITI_18);
     }
 
     @Test
     public void testParameterValueNotStringList() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("lol");
         expectFailure(PARAMETER_VALUE_NOT_STRING_LIST, ebXML, ITI_18);
     }
 
     @Test
     public void testCodeListNotEnoughSchemes() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("('code^^')");
         expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
     }
 
     @Test
     public void testCodeListOldStyleNotEnoughSchemes() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1')");
@@ -121,8 +120,8 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testUnknownStatusCodes() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        List<String> valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_STATUS.getSlotName()).get(0).getValueList();
+        var ebXML = transformer.toEbXML(request);
+        var valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_STATUS.getSlotName()).get(0).getValueList();
 
         // no codes at all -- should fail
         valueList.clear();
@@ -141,8 +140,8 @@ public class AdhocQueryRequestValidatorTest {
     }
     
     @Test public void testUnknownFormatCode() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        List<String> valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()).get(0).getValueList();
+        var ebXML = transformer.toEbXML(request);
+        var valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()).get(0).getValueList();
 
         // invalid code without code -- should fail
         valueList.clear();
@@ -164,7 +163,7 @@ public class AdhocQueryRequestValidatorTest {
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
-        boolean exceptionOccurred = false;
+        var exceptionOccurred = false;
         try {
             validator.validate(transformer.toEbXML(request), ITI_18);
         } catch (XdsRuntimeException e) {
@@ -179,7 +178,7 @@ public class AdhocQueryRequestValidatorTest {
     public void testQueryParametersEitherOrChoiceMissing() {
         request = SampleData.createGetDocumentsQuery();
         ((GetDocumentsQuery)request.getQuery()).setUuids(null);
-        boolean exceptionOccurred = false;
+        var exceptionOccurred = false;
         try {
             validator.validate(transformer.toEbXML(request), ITI_18);
         } catch (XDSMetaDataException e) {
@@ -210,14 +209,14 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testPatientIdMustBeISO_MPQ() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(requestMpq);
+        var ebXML = transformer.toEbXML(requestMpq);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
     }
 
     @Test
     public void testAtLeastOneOfPresentMPQ() {
-        FindDocumentsForMultiplePatientsQuery query = (FindDocumentsForMultiplePatientsQuery) requestMpq.getQuery();
+        var query = (FindDocumentsForMultiplePatientsQuery) requestMpq.getQuery();
         query.setPatientIds(null);
         query.setClassCodes(null);
         query.setEventCodes(null);
@@ -239,7 +238,7 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testAtLeastOnePresentFolderMPQ() {
-        FindFoldersForMultiplePatientsQuery query = (FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery();
+        var query = (FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery();
         query.setPatientIds(null);
         assertNotNull(query.getCodes());
         validator.validate(transformer.toEbXML(folderRequestMpq), ITI_51);
@@ -255,14 +254,14 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testPatientIdMustBeISOFolder_MPQ() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(folderRequestMpq);
+        var ebXML = transformer.toEbXML(folderRequestMpq);
         ebXML.getSlots(QueryParameter.FOLDER_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
     }
     
     @Test
     public void testUnknownQueryType() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.setId("lol");
         expectFailure(UNKNOWN_QUERY_TYPE, ebXML, ITI_18);
     }
@@ -284,8 +283,8 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testDuplicateSlotForFindDocumentsQueryValidationWithFailure() {
-        FindDocumentsQuery query = new FindDocumentsQuery();
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(new QueryRegistry(query));
+        var query = new FindDocumentsQuery();
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName(), "('class-code-1^^class-code-scheme-1')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName(), "('class-code-2^^class-code-scheme-2')");
         expectFailure(DUPLICATE_SLOT_NAME, ebXML, ITI_18);
@@ -293,9 +292,9 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testDuplicateSlotForFindDocumentsQueryValidationWithSuccess() {
-        FindDocumentsQuery query = new FindDocumentsQuery();
+        var query = new FindDocumentsQuery();
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         ebXML.addSlot(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName(), "('event-code-1^^event-code-scheme-1')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName(), "('event-code-2^^event-code-scheme-2')");
 
@@ -309,8 +308,8 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testDuplicateSlotForGetDocumentsQueryValidationWithFailure() {
-        GetDocumentsQuery query = new GetDocumentsQuery();
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(new QueryRegistry(query));
+        var query = new GetDocumentsQuery();
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
         ebXML.addSlot(QueryParameter.DOC_ENTRY_UUID.getSlotName(), "('urn:uuid:5678-9012-3456-7890-1234-1')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_UUID.getSlotName(), "('urn:uuid:6543-2109-8765-4321-0987-2')");
         expectFailure(DUPLICATE_SLOT_NAME, ebXML, ITI_18);

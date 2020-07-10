@@ -19,7 +19,7 @@ import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
@@ -69,7 +69,6 @@ public abstract class AbstractWsProducer<
      * @param clientFactory the factory for clients to produce messages for the service.
      * @param requestClass  type of request messages.
      */
-    @SuppressWarnings("unchecked")
     public AbstractWsProducer(
             AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
             JaxWsClientFactory<AuditDatasetType> clientFactory,
@@ -85,7 +84,7 @@ public abstract class AbstractWsProducer<
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        InType body = exchange.getIn().getMandatoryBody(requestClass);
+        var body = exchange.getIn().getMandatoryBody(requestClass);
         Object client = null;
         BindingProvider bindingProvider = null;
         String replyToUri = null;
@@ -96,20 +95,20 @@ public abstract class AbstractWsProducer<
             client = clientFactory.getClient();
             configureClient(client);
             bindingProvider = (BindingProvider) client;
-            WrappedMessageContext requestContext = (WrappedMessageContext) bindingProvider.getRequestContext();
+            var requestContext = (WrappedMessageContext) bindingProvider.getRequestContext();
             cleanRequestContext(requestContext);
 
             enrichRequestContext(exchange, requestContext);
             processUserDefinedOutgoingHeaders(requestContext, exchange.getIn(), true);
 
             // set request encoding based on Camel exchange property
-            String requestEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            var requestEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
             if (requestEncoding != null) {
                 requestContext.put(org.apache.cxf.message.Message.ENCODING, requestEncoding);
             }
 
             // get and analyse WS-Addressing asynchrony configuration
-            String replyToHeader = exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
+            var replyToHeader = exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
             replyToHeader = replyToHeader != null ? replyToHeader.trim() : null;
             replyToUri = getWsTransactionConfiguration().isAllowAsynchrony()
                     ? (replyToHeader == null || replyToHeader.isEmpty() ? null : replyToHeader)
@@ -117,20 +116,20 @@ public abstract class AbstractWsProducer<
 
             // for asynchronous interaction: configure WSA headers and store correlation data
             if ((replyToUri != null) || Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION))) {
-                String messageId = "urn:uuid:" + UUID.randomUUID().toString();
+                var messageId = "urn:uuid:" + UUID.randomUUID().toString();
                 configureWSAHeaders(messageId, replyToUri, requestContext);
 
-                AsynchronyCorrelator<AuditDatasetType> correlator = getEndpoint().getCorrelator();
+                var correlator = getEndpoint().getCorrelator();
                 correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
 
-                String correlationKey = exchange.getIn().getHeader(
+                var correlationKey = exchange.getIn().getHeader(
                         AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME,
                         String.class);
                 if (correlationKey != null) {
                     correlator.storeCorrelationKey(messageId, correlationKey);
                 }
 
-                String[] alternativeKeys = getAlternativeRequestKeys(exchange);
+                var alternativeKeys = getAlternativeRequestKeys(exchange);
                 if (alternativeKeys != null) {
                     correlator.storeAlternativeKeys(messageId, alternativeKeys);
                 }
@@ -157,9 +156,9 @@ public abstract class AbstractWsProducer<
         // (async responses are handled in the service instance derived from 
         // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
         if (replyToUri == null) {
-            Message responseMessage = Exchanges.resultMessage(exchange);
+            var responseMessage = Exchanges.resultMessage(exchange);
             responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-            WrappedMessageContext responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
+            var responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
             processIncomingHeaders(responseContext, responseMessage);
             enrichResponseMessage(responseMessage, responseContext);
 
@@ -220,7 +219,7 @@ public abstract class AbstractWsProducer<
      * Sets thread safety & timeout options of the given CXF client.
      */
     protected void configureClient(Object o) {
-        ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
+        var client = (ClientImpl) ClientProxy.getClient(o);
         client.setThreadLocalRequestContext(true);
         client.setSynchronousTimeout(Integer.MAX_VALUE);
     }
@@ -241,23 +240,23 @@ public abstract class AbstractWsProducer<
      */
     private static void configureWSAHeaders(String messageId, String replyToUri, WrappedMessageContext context) {
         // obtain headers' container
-        AddressingProperties apropos = (AddressingProperties) context.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES);
+        var apropos = (AddressingProperties) context.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES);
         if (apropos == null) {
             apropos = new AddressingProperties();
             context.put(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES, apropos);
         }
 
         // MessageID header
-        AttributedURIType uri = new AttributedURIType();
+        var uri = new AttributedURIType();
         uri.setValue(messageId);
         apropos.setMessageID(uri);
         LOG.debug("Set WS-Addressing message ID: {}", messageId);
 
         // ReplyTo header
         if (replyToUri != null) {
-            AttributedURIType uri2 = new AttributedURIType();
+            var uri2 = new AttributedURIType();
             uri2.setValue(replyToUri);
-            EndpointReferenceType endpointReference = new EndpointReferenceType();
+            var endpointReference = new EndpointReferenceType();
             endpointReference.setAddress(uri2);
             apropos.setReplyTo(endpointReference);
         }

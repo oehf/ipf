@@ -16,9 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.validation.FhirValidator;
-import ca.uhn.fhir.validation.SingleValidationMessage;
-import ca.uhn.fhir.validation.ValidationResult;
 import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -58,17 +55,17 @@ public class FhirMockedSender implements AbstractMockedAuditMessageQueue {
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
-        for (AuditMessage message : auditMessages) {
-            AuditEvent auditEventResource = translator.translate(message);
+        for (var message : auditMessages) {
+            var auditEventResource = translator.translate(message);
             log.debug(fhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEventResource));
             if (needValidation) {
-                FhirValidator validator = fhirContext.newValidator();
+                var validator = fhirContext.newValidator();
                 // FhirInstanceValidator instanceValidator = new FhirInstanceValidator();
                 // validator.registerValidatorModule(instanceValidator);
-                ValidationResult result = validator.validateWithResult(auditEventResource);
+                var result = validator.validateWithResult(auditEventResource);
                 if (!result.isSuccessful()) {
-                    StringBuilder sb = new StringBuilder("Validation of FHIR AuditEvent failed:");
-                    for (SingleValidationMessage error : result.getMessages()) {
+                    var sb = new StringBuilder("Validation of FHIR AuditEvent failed:");
+                    for (var error : result.getMessages()) {
                         sb.append('\n').append(error.toString());
                     }
                     throw new ValidationException(sb.toString());

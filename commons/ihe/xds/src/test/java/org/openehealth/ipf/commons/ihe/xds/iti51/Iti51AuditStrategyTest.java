@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
@@ -45,12 +44,12 @@ public class Iti51AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private void testRequest(boolean serverSide) {
-        Iti51AuditStrategy strategy = new Iti51AuditStrategy(serverSide);
-        XdsQueryAuditDataset auditDataset = getXdsAuditDataset(strategy);
-        AuditMessage[] auditMessages = makeAuditMessages(strategy, auditContext, auditDataset);
+        var strategy = new Iti51AuditStrategy(serverSide);
+        var auditDataset = getXdsAuditDataset(strategy);
+        var auditMessages = makeAuditMessages(strategy, auditContext, auditDataset);
 
         assertEquals(2, auditMessages.length);
-        for (AuditMessage auditMessage : auditMessages) {
+        for (var auditMessage : auditMessages) {
             auditMessage.validate();
         }
 
@@ -63,7 +62,7 @@ public class Iti51AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private XdsQueryAuditDataset getXdsAuditDataset(Iti51AuditStrategy strategy) {
-        XdsQueryAuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

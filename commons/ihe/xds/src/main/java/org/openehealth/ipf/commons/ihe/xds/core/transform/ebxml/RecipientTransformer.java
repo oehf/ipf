@@ -36,16 +36,16 @@ public class RecipientTransformer {
         if (recipient == null) {
             return null;
         }
-        
-        String person = Hl7v2Based.render(recipient.getPerson());
-        String organization = Hl7v2Based.render(recipient.getOrganization());
-        String telecom = Hl7v2Based.render(recipient.getTelecom());
+
+        var person = Hl7v2Based.render(recipient.getPerson());
+        var organization = Hl7v2Based.render(recipient.getOrganization());
+        var telecom = Hl7v2Based.render(recipient.getTelecom());
 
         if ((person == null) && (organization == null) && (telecom == null)) {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         if (organization != null) {
             sb.append(organization);
         }
@@ -72,10 +72,10 @@ public class RecipientTransformer {
         if (slotValue == null || slotValue.isEmpty()) {
             return null;
         }
-        
-        Recipient recipient = new Recipient();
 
-        String[] parts = slotValue.split("\\|");
+        var recipient = new Recipient();
+
+        var parts = slotValue.split("\\|");
         recipient.setOrganization(Hl7v2Based.parse(parts[0], Organization.class));
         if (parts.length > 1) {
             recipient.setPerson(Hl7v2Based.parse(parts[1], Person.class));

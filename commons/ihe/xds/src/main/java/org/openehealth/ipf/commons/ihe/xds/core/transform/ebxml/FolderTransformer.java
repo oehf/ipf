@@ -18,14 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 
 /**
@@ -92,8 +89,8 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     @Override
     protected void addClassificationsFromEbXML(Folder folder, EbXMLRegistryPackage regPackage) {
         super.addClassificationsFromEbXML(folder, regPackage);
-        
-        List<Code> codes = folder.getCodeList();
+
+        var codes = folder.getCodeList();
         codes.addAll(regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
                 .collect(Collectors.toList()));
@@ -103,8 +100,8 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     protected void addClassifications(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(folder, regPackage, objectLibrary);
         
-        for (Code codeListElem : folder.getCodeList()) {
-            EbXMLClassification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
+        for (var codeListElem : folder.getCodeList()) {
+            var code = codeTransformer.toEbXML(codeListElem, objectLibrary);
             regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
         }
     }

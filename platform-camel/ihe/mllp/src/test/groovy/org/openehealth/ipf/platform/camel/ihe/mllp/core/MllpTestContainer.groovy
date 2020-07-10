@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.camel.spi.Synchronization
 import org.junit.After
 import org.junit.AfterClass
@@ -39,10 +39,10 @@ import static org.junit.Assert.*
  */
 class MllpTestContainer {
 
-    static ProducerTemplate producerTemplate
-    static CamelContext camelContext
-    static AbstractMockedAuditMessageQueue auditSender
-    static ClassPathXmlApplicationContext appContext
+    protected static ProducerTemplate producerTemplate
+    protected static CamelContext camelContext
+    protected static AbstractMockedAuditMessageQueue auditSender
+    protected static ClassPathXmlApplicationContext appContext
 
     static String TIMEOUT = '15000'
     
@@ -71,7 +71,7 @@ class MllpTestContainer {
     
     @AfterClass
     static void tearDownAfterClass() {
-        appContext?.destroy()
+        appContext?.close()
     }
     
     
@@ -126,7 +126,7 @@ class MllpTestContainer {
         if (result.exception) {
             throw result.exception
         }
-        def response = Exchanges.resultMessage(result)
+        def response = result.getMessage()
         response.getBody(Message.class)
     }
 

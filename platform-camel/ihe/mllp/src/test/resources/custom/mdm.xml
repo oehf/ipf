@@ -30,12 +30,14 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
             resource="some-keystore"
-            password="changeit"/>
+            password="changeit"
+            type="JKS"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
             resource="some-keystore"
-            password="changeit"/>
+            password="changeit"
+            type="JKS"/>
         </camel:trustManagers>
 
         <camel:serverParameters clientAuthentication="REQUIRE"/>

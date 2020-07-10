@@ -27,15 +27,15 @@ import java.util.Map;
 public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<String>>> {
 
     @Override
-    public StringMap marshal(Map<String, List<String>> v) throws Exception {
+    public StringMap marshal(Map<String, List<String>> v) {
         if (v == null) {
             return null;
         }
 
-        StringMap result = new StringMap();
+        var result = new StringMap();
         result.entries = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : v.entrySet()) {
-            StringMapEntry extra = new StringMapEntry();
+        for (var entry : v.entrySet()) {
+            var extra = new StringMapEntry();
             extra.setKey(entry.getKey());
             extra.setValues(new ArrayList<>());
             extra.getValues().addAll(entry.getValue());
@@ -47,13 +47,13 @@ public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<Str
 
 
     @Override
-    public Map<String, List<String>> unmarshal(StringMap v) throws Exception {
+    public Map<String, List<String>> unmarshal(StringMap v) {
         if ((v == null) || (v.entries == null)) {
             return null;
         }
 
-        HashMap<String, List<String>> result = new HashMap<>();
-        for (StringMapEntry extra : v.entries) {
+        var result = new HashMap<String, List<String>>();
+        for (var extra : v.entries) {
             result.put(extra.getKey(), extra.getValues());
         }
         return result;

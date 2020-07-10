@@ -57,13 +57,21 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
     }
     
     @Override
-    public void configure(CustomRouteBuilder configuration) throws Exception{
-        if (configuration.getIntercepted() != null) {
-            configuration.getIntercepted().includeRoutes(configuration);
+    public void configure(CustomRouteBuilder customRouteBuilder) throws Exception{
+        if (customRouteBuilder.getIntercepted() != null) {
+            var intercepted = customRouteBuilder.getIntercepted();
+            customRouteBuilder.setContext(camelContext);
+            customRouteBuilder.setRouteCollection(intercepted.getRouteCollection());
+            customRouteBuilder.setRestCollection(intercepted.getRestCollection());
+            customRouteBuilder.setErrorHandlerBuilder(intercepted.getErrorHandlerBuilder());
+
+            // must invoke configure on the original builder so it adds its configuration to me
+            customRouteBuilder.configure();
+
         } else {
-            camelContext.addRoutes(configuration);
+            camelContext.addRoutes(customRouteBuilder);
         }
-        LOG.debug("Custom route builder configured: {}", configuration);
+        LOG.debug("Custom route builder configured: {}", customRouteBuilder);
     }
 
     public CamelContext getCamelContext() {

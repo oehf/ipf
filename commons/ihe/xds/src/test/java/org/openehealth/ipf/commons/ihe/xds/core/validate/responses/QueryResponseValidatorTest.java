@@ -65,24 +65,24 @@ public class QueryResponseValidatorTest {
     
     @Test
     public void testQueryResponseMultiplePatientIdsDueToDocEntry() {
-        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
-        DocumentEntry docEntryOtherPatientId = SampleData.createDocumentEntry(otherId);
+        var otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        var docEntryOtherPatientId = SampleData.createDocumentEntry(otherId);
         response.getDocumentEntries().add(docEntryOtherPatientId);
         expectFailure(RESULT_NOT_SINGLE_PATIENT);
     }
 
     @Test
     public void testQueryResponseMultiplePatientIdsDueToFolder() {
-        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
-        Folder folderOtherPatientId = SampleData.createFolder(otherId);
+        var otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        var folderOtherPatientId = SampleData.createFolder(otherId);
         response.getFolders().add(folderOtherPatientId);
         expectFailure(RESULT_NOT_SINGLE_PATIENT);
     }
 
     @Test
     public void testQueryResponseMultiplePatientIdsDueToSubmissionSet() {
-        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
-        SubmissionSet submissionSetOtherPatientId = SampleData.createSubmissionSet(otherId);
+        var otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        var submissionSetOtherPatientId = SampleData.createSubmissionSet(otherId);
         response.getSubmissionSets().add(submissionSetOtherPatientId);
         expectFailure(RESULT_NOT_SINGLE_PATIENT);
     }

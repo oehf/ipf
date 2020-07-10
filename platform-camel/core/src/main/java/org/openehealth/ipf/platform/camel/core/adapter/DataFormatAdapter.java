@@ -52,15 +52,22 @@ public class DataFormatAdapter extends AdapterSupport implements DataFormat {
     
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
-        Object input = adaptInput(exchange);
-        Object params = adaptParams(exchange);
+        var input = adaptInput(exchange);
+        var params = adaptParams(exchange);
         renderer.render(input, stream, params);
     }
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
-        Object params = adaptParams(exchange);
+        var params = adaptParams(exchange);
         return parser.parse(stream, params);
     }
 
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

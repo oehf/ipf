@@ -45,7 +45,7 @@ class Server {
         servletServer.servletPath = '/*'
         servletServer.servlet = servlet
         servletServer.servletName = 'FhirServlet'
-        servletServer.secure = args.length == 1 && args[0].equals('secure')
+        servletServer.secure = args.length == 1 && args[0] == 'secure'
         servletServer.keystoreFile = 'keystore'
         servletServer.keystorePass = 'changeit'
         servletServer.truststoreFile = 'keystore'

@@ -21,7 +21,7 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.*
 import org.apache.camel.component.mock.MockEndpoint
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Rule
@@ -80,85 +80,6 @@ class TestIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18887?audit=false&timeout=${TIMEOUT}", 0)
     }
 
-    @Test
-    void testHappyCaseAndAuditSecure() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
-    }
-
-    // Client without certificates (empty key store in SSL context) should fail
-    // when trying to access an endpoint with clientAuth=MUST, but should have
-    // success when accessing an endpoint with clientAuth=WANT.
-    @Test
-    void testHappyCaseAndAuditSecureWant() {
-        boolean failed = false
-        try {
-            doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 3)
-        } catch (Exception e) {
-            failed = true
-        }
-        assert failed
-
-        auditSender.clear()
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
-    }
-
-    @Ignore
-    @Test(timeout = 300000L)
-    void testHappyCaseWithSSLv3() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3&timeout=${TIMEOUT}", 2)
-    }
-
-    @Test
-    void testHappyCaseWithSSLv3AndTLSv1() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1&timeout=${TIMEOUT}", 2)
-    }
-
-    @Test
-    void testHappyCaseWithCiphers() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
-    }
-
-    @Test
-    void testSSLFailureWithIncompatibleProtocols() {
-        try {
-            send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (Exception expected) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
-        }
-    }
-
-    @Test
-	@Ignore("Test runs into JUnit test timeout (see @Rule above)")
-    void testSSLFailureWithIncompatibleCiphers() {
-        try {
-            send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (Exception expected) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
-        }
-
-        def messages = auditSender.messages
-        assertEquals(3, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
-        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID())
-    }
-
-    @Test
-    void testSSLFailureWithIncompatibleKeystores() {
-        try {
-            send("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-            fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
-        } catch (Exception expected) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
-        }
-    }
 
     @Test
     void testSSLFailureDueToNonSSLClient() {
@@ -190,11 +111,6 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(3, messages.size())
         LOG.warn("{}", messages)
         assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
-    }
-
-    @Test
-    void testServerDoesNotNeedToAcceptCertificate() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
 
     @Ignore
@@ -238,27 +154,27 @@ class TestIti21 extends MllpTestContainer {
      * (it is really a feature, not a bug! ;-))
      */
     @Test
-    public void testInacceptanceOnConsumer1() {
+    void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.5')
     }
 
     @Test
-    public void testInacceptanceOnConsumer2() {
+    void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('QBP^Q21', '2.5')
     }
 
     @Test
-    public void testInacceptanceOnConsumer3() {
+    void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('QBP^Q22', '2.3.1')
     }
 
     @Test
-    public void testInacceptanceOnConsumer4() {
+    void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('QBP^Q22', '3.1415926')
     }
 
     @Test
-    public void testInacceptanceOnConsumer5() {
+    void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('QBP^Q22^QBP_Q26', '2.5')
     }
 

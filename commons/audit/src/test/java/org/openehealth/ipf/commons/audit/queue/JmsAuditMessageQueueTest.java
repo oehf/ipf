@@ -40,22 +40,21 @@ import static org.junit.Assert.assertEquals;
  */
 public class JmsAuditMessageQueueTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
+
     private static final String JMS_BROKER_URL = "tcp://localhost:61616";
     private static final String JMS_QUEUE_NAME = "atna";
-
-    private static BrokerService jmsBroker;
 
     private JmsAuditMessageQueue atnaQueue;
     private DefaultAuditContext auditContext;
     private RecordingAuditMessageTransmission recorder;
 
-    private Logger LOG = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
 
     @BeforeClass
     public static void beforeClass() throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
-        jmsBroker = new BrokerService();
+        var jmsBroker = new BrokerService();
         jmsBroker.addConnector(JMS_BROKER_URL);
         jmsBroker.setUseJmx(false);
         jmsBroker.setPersistent(false);
@@ -81,11 +80,11 @@ public class JmsAuditMessageQueueTest {
 
     @Test
     public void testActiveMQ() throws Exception {
-        PooledConnectionFactory jmsConnectionFactory = new PooledConnectionFactory(JMS_BROKER_URL);
+        var jmsConnectionFactory = new PooledConnectionFactory(JMS_BROKER_URL);
         MessageListener messageListener = new JmsAuditMessageListener(auditContext);
 
         // Setup Consumer
-        SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer();
+        var messageListenerContainer = new SimpleMessageListenerContainer();
         messageListenerContainer.setupMessageListener(messageListener);
         messageListenerContainer.setConnectionFactory(jmsConnectionFactory);
         messageListenerContainer.setDestinationName(JMS_QUEUE_NAME);

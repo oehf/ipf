@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
@@ -32,18 +31,18 @@ import javax.activation.DataHandler;
 public class ContinuaHrnRouteBuilder extends RouteBuilder {
     
     private static final Processor CHECK_PROCESSOR = exchange -> {
-        Object body = exchange.getIn().getBody();
+        var body = exchange.getIn().getBody();
         if (! (body instanceof ProvideAndRegisterDocumentSet)) {
             throw new Exception("wrong body type");
         }
 
-        Class<?>[] expectedContentTypes = new Class<?>[] {
+        var expectedContentTypes = new Class<?>[] {
                 DataHandler.class,
                 byte[].class,
                 String.class
         };
-        Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
-        for (Class<?> contentType : expectedContentTypes) {
+        var document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
+        for (var contentType : expectedContentTypes) {
             if (! document.hasContent(contentType)) {
                 throw new Exception("Missing content type: " + contentType);
             }

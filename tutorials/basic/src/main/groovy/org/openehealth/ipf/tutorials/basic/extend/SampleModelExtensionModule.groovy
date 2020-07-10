@@ -22,7 +22,7 @@ import org.apache.camel.model.ProcessorDefinition
 /**
  * @author Martin Krasser
  */
-public class SampleModelExtensionModule {
+class SampleModelExtensionModule {
 
     static ProcessorDefinition reverse(ProcessorDefinition self) {
         self.transmogrify { it.reverse() }

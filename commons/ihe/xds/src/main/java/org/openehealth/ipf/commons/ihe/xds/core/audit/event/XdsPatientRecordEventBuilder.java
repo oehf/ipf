@@ -65,7 +65,7 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
 
     public XdsPatientRecordEventBuilder addPatients(List<String> patientIds) {
         return addPatients(null, null,
-                patientIds.toArray(new String[patientIds.size()]));
+                patientIds.toArray(new String[0]));
     }
 
     public XdsPatientRecordEventBuilder addObjectIds(List<String> objectIds, ParticipantObjectDataLifeCycle lifeCycle) {
@@ -92,8 +92,8 @@ public class XdsPatientRecordEventBuilder extends PatientRecordEventBuilder<XdsP
                                                        XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
                                                        ParticipantObjectIdType participantObjectIdType,
                                                        ParticipantObjectDataLifeCycle lifeCycle) {
-        String[] documentIds = auditDataset.getDocumentIds(status);
-        String[] repositoryIds = auditDataset.getRepositoryIds(status);
+        var documentIds = auditDataset.getDocumentIds(status);
+        var repositoryIds = auditDataset.getRepositoryIds(status);
         IntStream.range(0, documentIds.length).forEach(i ->
                 delegate.addParticipantObjectIdentification(
                         participantObjectIdType,

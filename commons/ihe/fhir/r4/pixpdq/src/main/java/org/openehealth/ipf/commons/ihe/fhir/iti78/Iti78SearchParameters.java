@@ -55,7 +55,7 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private Set<Include> includeSpec;
 
     @Getter
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {

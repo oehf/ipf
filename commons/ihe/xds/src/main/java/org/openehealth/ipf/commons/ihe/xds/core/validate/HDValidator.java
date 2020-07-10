@@ -18,7 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.apache.commons.lang3.StringUtils;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVERSAL_ID_TYPE_OID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.HD_MUST_NOT_HAVE_NAMESPACE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.HD_NEEDS_UNIVERSAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIVERSAL_ID_TYPE_MUST_BE_ISO;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -40,10 +43,10 @@ public class HDValidator {
         metaDataAssert(StringUtils.isEmpty(hd.getHd1_NamespaceID().getValue()),
                 HD_MUST_NOT_HAVE_NAMESPACE_ID, original);
 
-        metaDataAssert("ISO".equals(hd.getHd3_UniversalIDType().getValue()),
+        metaDataAssert(UNIVERSAL_ID_TYPE_OID.equals(hd.getHd3_UniversalIDType().getValue()),
                 UNIVERSAL_ID_TYPE_MUST_BE_ISO, original);
 
-        String oid = hd.getHd2_UniversalID().getValue();
+        var oid = hd.getHd2_UniversalID().getValue();
         metaDataAssert(StringUtils.isNotEmpty(oid), HD_NEEDS_UNIVERSAL_ID, original);
 
         OID_VALIDATOR.validate(oid);

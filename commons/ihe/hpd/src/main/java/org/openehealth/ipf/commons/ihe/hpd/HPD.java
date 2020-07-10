@@ -47,7 +47,7 @@ public class HPD implements IntegrationProfile {
         CH_CIDD(CH_CIDD_WS_CONFIG);
 
         @Getter
-        private WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -55,7 +55,7 @@ public class HPD implements IntegrationProfile {
         ITI_59(ITI_59_WS_CONFIG);
 
         @Getter
-        private WsTransactionConfiguration<Iti59AuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration<Iti59AuditDataset> wsTransactionConfiguration;
     }
 
     @Override

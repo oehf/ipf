@@ -59,7 +59,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setLocalPatientId(Iti64AuditDataset auditDataset) {
-        String patientId = auditDataset.getLocalPatientId() != null ?
+        var patientId = auditDataset.getLocalPatientId() != null ?
                 auditDataset.getLocalPatientId() : getAuditContext().getAuditValueIfMissing();
         delegate.addPatient(patientId, null,
                 Arrays.asList(
@@ -74,7 +74,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubsumedLocalPatientId(Iti64AuditDataset auditDataset) {
-        String patientId = auditDataset.getSubsumedLocalPatientId() != null ?
+        var patientId = auditDataset.getSubsumedLocalPatientId() != null ?
                 auditDataset.getSubsumedLocalPatientId() : getAuditContext().getAuditValueIfMissing();
         delegate.addPatient(patientId, null,
                 Arrays.asList(
@@ -86,7 +86,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setNewPatientId(Iti64AuditDataset auditDataset) {
-        String patientId = auditDataset.getNewPatientId() != null ?
+        var patientId = auditDataset.getNewPatientId() != null ?
                 auditDataset.getNewPatientId() : getAuditContext().getAuditValueIfMissing();
         delegate.addPatient(patientId, null,
                 Arrays.asList(
@@ -101,7 +101,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setPreviousPatientId(Iti64AuditDataset auditDataset) {
-        String patientId = auditDataset.getPreviousPatientId() != null ?
+        var patientId = auditDataset.getPreviousPatientId() != null ?
                 auditDataset.getPreviousPatientId() : getAuditContext().getAuditValueIfMissing();
         delegate.addPatient(patientId, null,
                 Arrays.asList(
@@ -116,7 +116,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubmissionSet(Iti64AuditDataset auditDataset) {
-        String submissionSetUuid = auditDataset.getSubmissionSetUuid() != null ?
+        var submissionSetUuid = auditDataset.getSubmissionSetUuid() != null ?
                 auditDataset.getSubmissionSetUuid() : getAuditContext().getAuditValueIfMissing();
         if (auditDataset.getSubmissionSetUuid() != null) {
             delegate.addParticipantObjectIdentification(

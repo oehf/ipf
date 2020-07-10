@@ -41,17 +41,17 @@ public abstract class AbstractRouteTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:mock")
+    @EndpointInject(value="mock:mock")
     protected MockEndpoint mock;
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mock.reset();
     }
 
     protected List<String> sendBodies(String endpointUri, ExchangePattern pattern, String body, int repeats) {
-        ArrayList<String> result = new ArrayList<>(repeats);
-        for (int i = 0; i < repeats; i++) {
+        var result = new ArrayList<String>(repeats);
+        for (var i = 0; i < repeats; i++) {
             result.add((String)producerTemplate.sendBody(endpointUri, pattern, body));
         }
         return result;

@@ -70,19 +70,6 @@ public class ValidatorAdapter extends ProcessorAdapter {
     }
     
     /**
-     * Sets the profile to validate the input data against.
-     * 
-     * @param profile
-     *            validation profile.
-     * @return this object.
-     */
-    @Deprecated
-    public ValidatorAdapter profile(Object profile) {
-        this.profile = profile;
-        return this;
-    }
-    
-    /**
      * Sets the profile expression to validate the input data against.
      * Sets an {@link Expression} for obtaining profile data from an
      * {@link Exchange}. Profile data are passed to adapted
@@ -107,11 +94,9 @@ public class ValidatorAdapter extends ProcessorAdapter {
      *            input data.
      * @param inputParams
      *            input parameters.
-     * @throws IOException
-     *             if a general processing error occurs.
      */
     @Override
-    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
+    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) {
         prepareResult(exchange);
         if (validationEnabled(exchange)) {
             validator.validate(inputData, getProfile(exchange));

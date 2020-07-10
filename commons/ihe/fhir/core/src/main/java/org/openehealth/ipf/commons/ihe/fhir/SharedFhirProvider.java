@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -48,7 +47,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
     private static final Logger LOG = LoggerFactory.getLogger(SharedFhirProvider.class);
 
     private FhirContext fhirContext;
-    private List<RequestConsumer> consumers = new ArrayList<>();
+    private final List<RequestConsumer> consumers = new ArrayList<>();
 
     @Override
     protected FhirContext getFhirContext() {
@@ -85,24 +84,6 @@ public abstract class SharedFhirProvider extends FhirProvider {
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
-     *
-     * @deprecated use {@link #requestTransaction(Object, Class, HttpServletRequest, HttpServletResponse, RequestDetails)}
-     */
-    protected final <T extends IBaseBundle> T requestTransaction(
-            Object payload,
-            Class<T> bundleClass,
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        return requestTransaction(payload, bundleClass, httpServletRequest, httpServletResponse, null);
-    }
-
-    /**
-     * Submits a transaction request bundle, expecting a corresponding response bundle
-     *
-     * @param payload             transaction bundle
-     * @param httpServletRequest  servlet request
-     * @param httpServletResponse servlet response
-     * @return result of processing
      */
     protected final <T extends IBaseBundle> T requestTransaction(
             Object payload,
@@ -110,9 +91,9 @@ public abstract class SharedFhirProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getConsumer(payload).orElseThrow(() ->
                 new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
-        Map<String, Object> headers = enrichParameters(null, httpServletRequest, requestDetails);
+        var headers = enrichParameters(null, httpServletRequest, requestDetails);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }
 

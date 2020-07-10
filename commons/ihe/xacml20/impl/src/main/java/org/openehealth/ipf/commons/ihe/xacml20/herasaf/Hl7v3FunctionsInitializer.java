@@ -21,7 +21,6 @@ import org.herasaf.xacml.core.function.Function;
 import org.herasaf.xacml.core.simplePDP.initializers.jaxb.typeadapter.xacml20.functions.AbstractFunctionsJaxbTypeAdapterInitializer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,10 +31,10 @@ public class Hl7v3FunctionsInitializer extends AbstractFunctionsJaxbTypeAdapterI
 
     @Override
     protected Map<String, Function> createTypeInstances() {
-        List<Function> functions = createInstances(IiEqualFunction.class, CvEqualFunction.class);
+        var functions = createInstances(IiEqualFunction.class, CvEqualFunction.class);
 
         Map<String, Function> instancesMap = new HashMap<>();
-        for (Function function : functions) {
+        for (var function : functions) {
             instancesMap.put(function.toString(), function);
         }
 

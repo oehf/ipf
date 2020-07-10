@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.core.extend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.apache.camel.Exchange;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -31,12 +30,12 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionObject() throws InterruptedException {
         mockOutput.expectedMessageCount(1);
-        Exchange result = producerTemplate.request("direct:input1", exchange -> {
+        var result = producerTemplate.request("direct:input1", exchange -> {
             exchange.getIn().setBody("blah");
         });
         mockOutput.assertIsSatisfied();
-        Exchange received = mockOutput.getExchanges().get(0);
-        Exception exception = (Exception)received.getIn().getHeader("foo");
+        var received = mockOutput.getExchanges().get(0);
+        var exception = (Exception)received.getIn().getHeader("foo");
         assertEquals("message rejected", result.getException().getMessage());
         assertEquals("message rejected", exception.getMessage());
         assertNull(received.getException());
@@ -45,11 +44,11 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionMessage() throws InterruptedException {
         mockOutput.expectedMessageCount(1);
-        Exchange result = producerTemplate.request("direct:input2", exchange -> exchange.getIn().setBody("blah"));
+        var result = producerTemplate.request("direct:input2", exchange -> exchange.getIn().setBody("blah"));
         mockOutput.assertIsSatisfied();
-        Exchange received = mockOutput.getExchanges().get(0);
+        var received = mockOutput.getExchanges().get(0);
         assertEquals("message rejected", result.getException().getMessage());
-        assertEquals("message rejected", result.getOut().getBody());
+        assertEquals("message rejected", result.getMessage().getBody());
         assertNull(received.getException());
     }
     

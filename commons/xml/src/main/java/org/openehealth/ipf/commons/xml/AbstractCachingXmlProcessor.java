@@ -48,8 +48,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     public static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 
-    private final ClassLoader classLoader;
-
     protected static abstract class Loader<S> {
 
         private S loaded;
@@ -69,7 +67,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
      */
     protected AbstractCachingXmlProcessor(ClassLoader classLoader) {
         super();
-        this.classLoader = classLoader == null ? this.getClass().getClassLoader() : classLoader;
     }
 
     /**
@@ -90,7 +87,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
         } else if (params[0] instanceof Map) {
             return (String) ((Map<?, ?>) params[0]).get(RESOURCE_LOCATION);
         } else if (params[0] instanceof SchematronProfile) {
-            SchematronProfile p = (SchematronProfile) params[0];
+            var p = (SchematronProfile) params[0];
             return p.getRules();
         }
         throw new IllegalStateException("Cannot extract resource location");
@@ -120,7 +117,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
         if (params[0] instanceof Map) {
             return (Map<String, Object>) params[0];
         } else if (params[0] instanceof SchematronProfile) {
-            SchematronProfile p = (SchematronProfile) params[0];
+            var p = (SchematronProfile) params[0];
             return p.getParameters();
         } else if (params.length > 1 && params[1] instanceof Map) {
             return (Map<String, Object>) params[1];
@@ -141,8 +138,8 @@ abstract public class AbstractCachingXmlProcessor<T> {
      * @throws Exception
      */
     protected T resource(final Object... params) throws Exception {
-        String key = resourceCacheKey(params);
-        getCache().putIfAbsent(key, new Loader<T>() {
+        var key = resourceCacheKey(params);
+        getCache().putIfAbsent(key, new Loader<>() {
             @Override
             protected T load() throws RuntimeException {
                 return createResource(params);
@@ -172,7 +169,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
      * @return resource of the configured type.
      */
     protected StreamSource resourceContent(Object... params) {
-        String location = resourceLocation(params);
+        var location = resourceLocation(params);
         URL url;
         try {
             if (location.startsWith("/")) {

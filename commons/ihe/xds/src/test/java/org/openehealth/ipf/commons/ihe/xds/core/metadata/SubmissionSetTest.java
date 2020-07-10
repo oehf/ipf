@@ -19,10 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformerTestBase;
 
-import java.util.Collections;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link SubmissionSet}.
@@ -41,19 +38,6 @@ public class SubmissionSetTest {
         author2 = new Author();
         author3 = new Author();
         submissionSet = new SubmissionSet();
-    }
-
-    @Test
-    public void testSetAuthorResetsAuthorList() {
-        submissionSet.getAuthors().add(author1);
-        submissionSet.getAuthors().add(author2);
-        submissionSet.setAuthor(author3);
-        assertEquals(Collections.singletonList(author3), submissionSet.getAuthors());
-    }
-
-    @Test
-    public void testGetAuthorOnEmptyAuthorList() {
-        assertTrue(null, submissionSet.getAuthors().isEmpty());
     }
 
     @Test

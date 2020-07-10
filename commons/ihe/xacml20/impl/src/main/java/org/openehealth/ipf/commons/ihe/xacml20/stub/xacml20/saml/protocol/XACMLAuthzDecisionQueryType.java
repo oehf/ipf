@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -119,7 +120,7 @@ public class XACMLAuthzDecisionQueryType
      */
     public List<JAXBElement<?>> getRest() {
         if (rest == null) {
-            rest = new ArrayList<JAXBElement<?>>();
+            rest = new ArrayList<>();
         }
         return this.rest;
     }
@@ -133,11 +134,7 @@ public class XACMLAuthzDecisionQueryType
      *     
      */
     public boolean isInputContextOnly() {
-        if (inputContextOnly == null) {
-            return false;
-        } else {
-            return inputContextOnly;
-        }
+        return Objects.requireNonNullElse(inputContextOnly, false);
     }
 
     /**
@@ -161,11 +158,7 @@ public class XACMLAuthzDecisionQueryType
      *     
      */
     public boolean isReturnContext() {
-        if (returnContext == null) {
-            return false;
-        } else {
-            return returnContext;
-        }
+        return Objects.requireNonNullElse(returnContext, false);
     }
 
     /**
@@ -189,11 +182,7 @@ public class XACMLAuthzDecisionQueryType
      *     
      */
     public boolean isCombinePolicies() {
-        if (combinePolicies == null) {
-            return true;
-        } else {
-            return combinePolicies;
-        }
+        return Objects.requireNonNullElse(combinePolicies, true);
     }
 
     /**

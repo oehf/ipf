@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -28,7 +28,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
 /**
  * @author Jens Riemschneider
  */
-class Iti42TestRouteBuilder extends SpringRouteBuilder {
+class Iti42TestRouteBuilder extends RouteBuilder {
     @Override
     void configure() throws Exception {
         from('xds-iti42:xds-iti42-service1')

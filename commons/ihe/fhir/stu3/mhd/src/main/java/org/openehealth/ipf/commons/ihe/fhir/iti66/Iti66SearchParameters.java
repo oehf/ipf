@@ -26,7 +26,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.dstu3.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
-import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67SearchParameters;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +51,7 @@ public class Iti66SearchParameters implements FhirSearchParameters {
     @Getter @Setter private Set<Include> includeSpec;
 
     @Getter
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {
@@ -67,8 +66,8 @@ public class Iti66SearchParameters implements FhirSearchParameters {
     public Iti66SearchParameters setAuthor(ReferenceAndListParam author) {
         if (author != null) {
             author.getValuesAsQueryTokens().forEach(param -> {
-                ReferenceParam ref = param.getValuesAsQueryTokens().get(0);
-                String authorChain = ref.getChain();
+                var ref = param.getValuesAsQueryTokens().get(0);
+                var authorChain = ref.getChain();
                 if (Practitioner.SP_FAMILY.equals(authorChain)) {
                     setAuthorFamilyName(ref.toStringParam(getFhirContext()));
                 } else if (Practitioner.SP_GIVEN.equals(authorChain)) {

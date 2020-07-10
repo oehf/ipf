@@ -17,9 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
 import lombok.Getter;
-import org.openehealth.ipf.commons.audit.codes.EventTypeCode;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.EventId;
 
 /**
@@ -30,7 +28,7 @@ public enum FhirEventIdCode implements EventId, EnumeratedCodedValue<EventId> {
     RestfulOperation("rest", "RESTful Operation");
 
     @Getter
-    private EventId value;
+    private final EventId value;
 
     FhirEventIdCode(String code, String displayName) {
         this.value = EventId.of(code, "http://hl7.org/fhir/audit-event-type", displayName);

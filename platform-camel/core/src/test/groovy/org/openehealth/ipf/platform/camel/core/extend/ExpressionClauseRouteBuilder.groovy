@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
-
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcessor
 
 /**
  * @author Martin Krasser
  */
-class ExpressionClauseRouteBuilder extends SpringRouteBuilder {
+class ExpressionClauseRouteBuilder extends RouteBuilder {
     
     void configure() {
         

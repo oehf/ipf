@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
@@ -51,14 +50,14 @@ public class ChPpq1Service extends AbstractWebService implements ChPpq1PortType 
     }
 
     private static EprPolicyRepositoryResponse errorResponse() {
-        EprPolicyRepositoryResponse repositoryResponse = new EprPolicyRepositoryResponse();
+        var repositoryResponse = new EprPolicyRepositoryResponse();
         repositoryResponse.setStatus(PpqConstants.StatusCode.FAILURE);
         return repositoryResponse;
     }
 
     private <T extends AssertionBasedRequestType> EprPolicyRepositoryResponse processPolicyRequest(T request) throws UnknownPolicySetIdFaultMessage {
-        Exchange result = process(request);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(request);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
             if (exception instanceof UnknownPolicySetIdFaultMessage) {
@@ -66,7 +65,7 @@ public class ChPpq1Service extends AbstractWebService implements ChPpq1PortType 
             }
             return errorResponse();
         }
-        return Exchanges.resultMessage(result).getBody(EprPolicyRepositoryResponse.class);
+        return result.getMessage().getBody(EprPolicyRepositoryResponse.class);
     }
 
 }

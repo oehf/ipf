@@ -1,0 +1,6 @@
+moduleName = MDHTExtension
+moduleVersion = 2.5
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses = org.openehealth.ipf.platform.camel.cda.extend.MdhtExtensionModule
+staticExtensionClasses =
+moduleInitializerClass=org.openehealth.ipf.platform.camel.cda.extend.MdhtExtensionModuleInitializer

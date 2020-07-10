@@ -16,22 +16,17 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,29 +41,29 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     protected IGenericClient getClient(Exchange exchange) {
-        FhirContext context = getEndpoint().getContext();
-        IRestfulClientFactory clientFactory = context.getRestfulClientFactory();
-        FhirEndpointConfiguration<AuditDatasetType> config = getEndpoint().getInterceptableConfiguration();
+        var context = getEndpoint().getContext();
+        var clientFactory = context.getRestfulClientFactory();
+        var config = getEndpoint().getInterceptableConfiguration();
 
-        FhirSecurityInformation securityInformation = config.getSecurityInformation();
+        var securityInformation = config.getSecurityInformation();
         if (clientFactory instanceof SslAwareApacheRestfulClientFactory) {
             ((SslAwareApacheRestfulClientFactory) clientFactory).setSecurityInformation(securityInformation);
         }
 
         // For the producer, the path is supposed to be the server URL
-        String path = config.getPath();
+        var path = config.getPath();
 
         path = (config.getSecurityInformation().isSecure() ? "https://" : "http://") + path;
-        IGenericClient client = clientFactory.newGenericClient(path);
+        var client = clientFactory.newGenericClient(path);
 
         if (securityInformation != null && securityInformation.getUsername() != null) {
             client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
         }
 
         // deploy user-defined HAPI interceptors
-        List<HapiClientInterceptorFactory> factories = config.getHapiClientInterceptorFactories();
+        var factories = config.getHapiClientInterceptorFactories();
         if (factories != null) {
-            for (HapiClientInterceptorFactory factory : factories) {
+            for (var factory : factories) {
                 client.registerInterceptor(factory.newInstance(getEndpoint(), exchange));
             }
         }
@@ -91,13 +86,13 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     @Override
     public void process(Exchange exchange) {
-        ClientRequestFactory<?> requestFactory = getEndpoint().getClientRequestFactory();
+        var requestFactory = getEndpoint().getClientRequestFactory();
         IClientExecutable<?, ?> executableClient = requestFactory.getClientExecutable(
                 getClient(exchange),
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
-        Object result = executableClient.execute();
-        Message resultMessage = Exchanges.resultMessage(exchange);
+        var result = executableClient.execute();
+        var resultMessage = Exchanges.resultMessage(exchange);
         resultMessage.setBody(result);
     }
 

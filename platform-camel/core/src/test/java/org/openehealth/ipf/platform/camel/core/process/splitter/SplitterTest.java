@@ -15,8 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.apache.camel.AggregationStrategy;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.Expression;
+import org.apache.camel.Processor;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.support.DefaultExchange;
+import org.apache.camel.util.ObjectHelper;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,19 +36,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Expression;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.apache.camel.util.ObjectHelper;
-import org.junit.*;
-import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
-import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -56,8 +56,8 @@ public class SplitterTest {
 
     @Before
     public void setUp() {
-        TestSplitRule splitRule = new TestSplitRule();
-        TestAggregationStrategy aggregationStrat = new TestAggregationStrategy();
+        var splitRule = new TestSplitRule();
+        var aggregationStrat = new TestAggregationStrategy();
         dest = new TestProcessor();
         
         splitter = new Splitter(splitRule, dest);
@@ -66,17 +66,17 @@ public class SplitterTest {
     
     @Test
     public void testProcess() throws Exception {
-        Exchange origExchange = createTestExchange();
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitter.process(origExchange);
-        
-        List<Exchange> received = dest.getReceived();
+
+        var received = dest.getReceived();
         assertEquals(2, received.size());
         
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("bla:blu", origExchange.getOut().getBody());
+        assertEquals("bla:blu", origExchange.getMessage().getBody());
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -87,25 +87,25 @@ public class SplitterTest {
     @Test
     public void testResetToDefaults() throws Exception {
         splitter.aggregate(null);
-        
-        Exchange origExchange = createTestExchange();
+
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitter.process(origExchange);
-        
-        List<Exchange> received = dest.getReceived();
+
+        var received = dest.getReceived();
         assertEquals(2, received.size());
         
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("blu", origExchange.getOut().getBody());
+        assertEquals("blu", origExchange.getMessage().getBody());
     }
     
     @Test
     public void testSplitRuleWithArrayResult() throws Exception {
-        Exchange origExchange = createTestExchange();
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
-        Splitter splitterWithArrayResult = new Splitter(new Expression() {
+        var splitterWithArrayResult = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast(getContent(exchange).split(","));            
@@ -113,69 +113,69 @@ public class SplitterTest {
         splitterWithArrayResult.aggregate(new TestAggregationStrategy());
 
         splitterWithArrayResult.process(origExchange);
-        
-        List<Exchange> received = dest.getReceived();
+
+        var received = dest.getReceived();
         assertEquals(2, received.size());
         
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));
         
-        assertEquals("bla:blu", origExchange.getOut().getBody());
+        assertEquals("bla:blu", origExchange.getMessage().getBody());
     }
     
     @Test
     public void testSplitRuleWithNonIterableResult() throws Exception {
-        Splitter splitterSimpleRule = new Splitter(new Expression() {
+        var splitterSimpleRule = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast("smurf:" + exchange.getIn().getBody());
             }}, dest);
 
-        Exchange origExchange = createTestExchange();
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterSimpleRule.process(origExchange);
 
-        List<Exchange> received = dest.getReceived();
+        var received = dest.getReceived();
         assertEquals(1, received.size());        
         assertEquals("smurf:bla,blu", getContent(received.get(0)));
     }
     
     @Test
     public void testSplitRuleResultsInNothing() throws Exception {
-        Splitter splitterEmptyRule = new Splitter(new Expression() {
+        var splitterEmptyRule = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return null;
             }}, dest);
 
-        Exchange origExchange = createTestExchange();
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterEmptyRule.process(origExchange);
 
-        List<Exchange> received = dest.getReceived();
+        var received = dest.getReceived();
         assertEquals(0, received.size());        
     }
     
     @Test
     public void testSplitRuleResultsInIterator() throws Exception {
-        final List<String> results = Arrays.asList("bla", "blu"); 
-        
-        Splitter splitterIteratorRule = new Splitter(new Expression() {
+        final var results = Arrays.asList("bla", "blu");
+
+        var splitterIteratorRule = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast(results.iterator());
             }}, dest);
 
-        Exchange origExchange = createTestExchange();
+        var origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterIteratorRule.process(origExchange);
 
-        List<Exchange> received = dest.getReceived();
+        var received = dest.getReceived();
         assertEquals(2, received.size());
         
         assertEquals("bla", getContent(received.get(0)));
         assertEquals("blu", getContent(received.get(1)));        
-        assertEquals("blu", origExchange.getOut().getBody());
+        assertEquals("blu", origExchange.getMessage().getBody());
     }
 
     private Exchange createTestExchange() {
@@ -183,7 +183,7 @@ public class SplitterTest {
     }
     
     private static String getContent(Exchange exchange) {
-        Message message = exchange.getIn();
+        var message = exchange.getIn();
         return (String)message.getBody();
     }
     
@@ -194,7 +194,7 @@ public class SplitterTest {
     public static class TestSplitRule implements Expression {
         @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
-            String[] parts = getContent(exchange).split(",");            
+            var parts = getContent(exchange).split(",");
             return type.cast(Arrays.asList(parts));
         }
     }
@@ -232,8 +232,8 @@ public class SplitterTest {
                 throw new IllegalStateException("evaluate() can only be called once");
             }
             evaluateCalled = true;
-            
-            String[] parts = getContent(exchange).split(",");
+
+            var parts = getContent(exchange).split(",");
             return type.cast(new OneTimeUsageIterable<>(Arrays.asList(parts)));
         }
 
@@ -243,7 +243,7 @@ public class SplitterTest {
     public static class TestSplitFileRule implements Expression {
         @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
-            String filename = (String)exchange.getIn().getBody();
+            var filename = (String)exchange.getIn().getBody();
             try {
                 return type.cast(new TextFileIterator(filename));
             } catch (IOException e) {
@@ -256,10 +256,10 @@ public class SplitterTest {
     public static class TestAggregationStrategy implements AggregationStrategy {
         @Override
         public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-            String oldContent = getContent(oldExchange);
-            String newContent = getContent(newExchange);
-            String aggregateContent = oldContent + ":" + newContent;
-            Exchange aggregate = oldExchange.copy();
+            var oldContent = getContent(oldExchange);
+            var newContent = getContent(newExchange);
+            var aggregateContent = oldContent + ":" + newContent;
+            var aggregate = oldExchange.copy();
             aggregate.getIn().setBody(aggregateContent);
             return aggregate;
         }

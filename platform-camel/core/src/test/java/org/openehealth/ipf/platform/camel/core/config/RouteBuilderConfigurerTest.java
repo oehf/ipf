@@ -25,14 +25,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/context-custom-configurer.xml",
+@ContextConfiguration(locations = {
+        "/context-custom-configurer.xml",
         "/context-custom-routes.xml" })
 public class RouteBuilderConfigurerTest {
 
     @Autowired
     ProducerTemplate producer;
     
-    @EndpointInject(uri = "mock:output")
+    @EndpointInject(value = "mock:output")
     MockEndpoint mockOut;
     
     @Test

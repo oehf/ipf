@@ -17,10 +17,9 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,16 +29,27 @@ import static org.junit.Assert.fail;
 import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createTCPServerTwoWayTLS;
 
 @RunWith(VertxUnitRunner.class)
-@Ignore
 public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSAuditorFailingIntegrationTest.class);
 
-    @Test @Ignore
+    private CustomTlsParameters tlsParameters;
+
+    @Before
+    public void setup() {
+        tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(EXPIRED_CLIENT_KEY_STORE);
+        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
+        tlsParameters.setTrustStoreFile(TRUST_STORE);
+        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
+        tlsParameters.setEnabledProtocols("TLSv1.2");
+    }
+
+    @Test
     public void testTLSTwoWayTLSWrongClientCert(TestContext testContext) throws Exception {
-        initTLSSystemProperties(EXPIRED_CLIENT_KEY_STORE);
+        auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
-        Async async = testContext.async();
+        var async = testContext.async();
         deploy(testContext, createTCPServerTwoWayTLS(port,
                 TRUST_STORE,
                 TRUST_STORE_PASS,

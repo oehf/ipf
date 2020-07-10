@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
@@ -30,7 +30,7 @@ import javax.activation.DataHandler
 /**
  * @author Jens Riemschneider
  */
-class Iti43TestRouteBuilder extends SpringRouteBuilder {
+class Iti43TestRouteBuilder extends RouteBuilder {
     @Override
     void configure() throws Exception {
         from('xds-iti43:xds-iti43-service1')

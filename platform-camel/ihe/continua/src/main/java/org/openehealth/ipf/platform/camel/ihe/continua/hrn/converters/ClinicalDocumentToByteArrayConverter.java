@@ -28,7 +28,7 @@ public class ClinicalDocumentToByteArrayConverter implements Converter<ClinicalD
 
     @Override
     public byte[] convert(ClinicalDocument clinicalDocument) {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        var os = new ByteArrayOutputStream();
         try {
             new CDAR2Renderer().render(clinicalDocument, os);
             return os.toByteArray();

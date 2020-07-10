@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
@@ -39,17 +38,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 public class Iti41Service extends AbstractWebService implements Iti41PortType {
     @Override
     public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(ProvideAndRegisterDocumentSetRequestType body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body.getSubmitObjectsRequest()), ExchangePattern.InOut);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(body, XdsJaxbDataBinding.getCamelHeaders(body.getSubmitObjectsRequest()), ExchangePattern.InOut);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("ITI-41 service failed", exception);
-            Response errorResponse = new Response(
+            var errorResponse = new Response(
                     exception,
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         
-        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            
+        return result.getMessage().getBody(RegistryResponseType.class);
     }
 }

@@ -35,21 +35,21 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
     public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
         requireNonNull(profile, "validation profile must be not null");
         // check whether the root element name is valid
-        String rootElementName = rootElementName(requireNonNull(message, "message must be not null"));
+        var rootElementName = rootElementName(requireNonNull(message, "message must be not null"));
         if (! profile.isValidRootElement(rootElementName)) {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }
 
         // XSD validation
-        String xsdPath = profile.getXsdPath(rootElementName);
+        var xsdPath = profile.getXsdPath(rootElementName);
         if (xsdPath != null) {
             XSD_VALIDATOR.validate(source(message), xsdPath);
         }
 
         // Schematron validation
-        String schematronPath = profile.getSchematronPath(rootElementName);
+        var schematronPath = profile.getSchematronPath(rootElementName);
         if (schematronPath != null) {
-            SchematronProfile schematronProfile = new SchematronProfile(
+            var schematronProfile = new SchematronProfile(
                     schematronPath,
                     profile.getCustomSchematronParameters(rootElementName));
             SCHEMATRON_VALIDATOR.validate(source(message), schematronProfile);

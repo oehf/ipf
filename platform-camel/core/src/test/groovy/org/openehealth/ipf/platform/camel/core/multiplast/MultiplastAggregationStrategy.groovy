@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.core.multiplast
 
+import org.apache.camel.AggregationStrategy
 import org.apache.camel.Exchange
-import org.apache.camel.processor.aggregate.AggregationStrategy
 
-public class MultiplastAggregationStrategy implements AggregationStrategy {
+class MultiplastAggregationStrategy implements AggregationStrategy {
 
     Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         if (oldExchange) {

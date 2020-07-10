@@ -42,7 +42,7 @@ public class ExternalIdentifierValidation implements RegistryObjectValidator {
 
     @Override
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
-        String value = obj.getExternalIdentifierValue(scheme);
+        var value = obj.getExternalIdentifierValue(scheme);
         metaDataAssert(value != null, MISSING_EXTERNAL_IDENTIFIER, scheme);
         
         validator.validate(value);

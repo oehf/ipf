@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.openehealth.ipf.modules.cda.CDAR2Constants;
+import org.openehealth.ipf.modules.cda.constants.CDAR2Constants;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;

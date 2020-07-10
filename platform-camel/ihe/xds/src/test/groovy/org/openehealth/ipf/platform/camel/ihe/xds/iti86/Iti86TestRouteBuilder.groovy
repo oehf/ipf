@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti86
 
 import org.apache.camel.Exchange
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
@@ -31,7 +31,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti8
 /**
  * @author Dmytro Rud
  */
-public class Iti86TestRouteBuilder extends SpringRouteBuilder {
+public class Iti86TestRouteBuilder extends RouteBuilder {
 
     @Override
     void configure() throws Exception {

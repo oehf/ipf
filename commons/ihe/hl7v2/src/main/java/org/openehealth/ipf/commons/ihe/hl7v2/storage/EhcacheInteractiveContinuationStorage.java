@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 import ca.uhn.hl7v2.model.Message;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +48,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
     @Override
     public void put(String continuationPointer, String chainId, Message fragment) {
         InteractiveContinuationChain chain;
-        Element element = ehcache.get(chainId);
+        var element = ehcache.get(chainId);
         if (element != null) {
             chain = (InteractiveContinuationChain) element.getObjectValue();
         } else {
@@ -66,9 +65,9 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
             String continuationPointer,
             String chainId)
     {
-        Element element = ehcache.get(chainId);
+        var element = ehcache.get(chainId);
         if (element != null) {
-            InteractiveContinuationChain chain = (InteractiveContinuationChain) element.getObjectValue();
+            var chain = (InteractiveContinuationChain) element.getObjectValue();
             return chain.get(continuationPointer);
         }
         return null;
@@ -90,7 +89,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
      */
     private static class InteractiveContinuationChain implements Serializable {
         private final Map<String, Message> responseMessages =
-            Collections.synchronizedMap(new HashMap<String, Message>());
+            Collections.synchronizedMap(new HashMap<>());
 
         public void put(String continuationPointer, Message message) {
             responseMessages.put(continuationPointer, message);

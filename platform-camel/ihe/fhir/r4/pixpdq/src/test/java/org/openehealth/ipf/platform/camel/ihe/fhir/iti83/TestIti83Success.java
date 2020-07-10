@@ -22,11 +22,6 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
@@ -50,11 +45,11 @@ public class TestIti83Success extends AbstractTestIti83 {
 
     @Test
     public void testGetConformance() {
-        CapabilityStatement conf = client.capabilities().ofType(CapabilityStatement.class).execute();
+        var conf = client.capabilities().ofType(CapabilityStatement.class).execute();
 
         assertEquals(1, conf.getRest().size());
-        CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
-        CapabilityStatement.CapabilityStatementRestResourceOperationComponent operation = component.getOperation().iterator().next();
+        var component = conf.getRest().iterator().next();
+        var operation = component.getOperation().iterator().next();
         assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());
 
         // printAsXML(conf);
@@ -63,17 +58,17 @@ public class TestIti83Success extends AbstractTestIti83 {
     @Test
     public void testSendManualPixm() {
 
-        Parameters result = sendManuallyOnType(validQueryParameters());
+        var result = sendManuallyOnType(validQueryParameters());
 
         // printAsXML(result);
 
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         assertEquals(
                 EventOutcomeIndicator.Success,
@@ -86,30 +81,30 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipants().get(0);
+        var source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipants().get(1);
+        var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$ihe-pix", destination.getUserID());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Audit Source
-        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification();
+        var sourceIdentificationType = event.getAuditSourceIdentification();
         assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
         assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
         // Patient (going in)
-        ParticipantObjectIdentificationType patientIn = event.getParticipantObjectIdentifications().get(0);
+        var patientIn = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.Person, patientIn.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patientIn.getParticipantObjectTypeCodeRole());
         assertEquals("urn:oid:1.2.3.4|0815", patientIn.getParticipantObjectID());
 
         // Query
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(1);
+        var patient = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
         assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn:oid:1.2.3.4|0815&targetSystem=urn:oid:1.2.3.4.6&_format=xml",
@@ -121,32 +116,32 @@ public class TestIti83Success extends AbstractTestIti83 {
 
     @Test
     public void testSendManualRead() {
-        Parameters result = sendManuallyOnInstance("0815", validTargetSystemParameters());
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        var result = sendManuallyOnInstance("0815", validTargetSystemParameters());
+        var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
     }
 
     @Test
     public void testSendEndpointPixm() {
-        Parameters result = getProducerTemplate().requestBody("direct:input", validQueryParameters(), Parameters.class);
+        var result = producerTemplate.requestBody("direct:input", validQueryParameters(), Parameters.class);
 
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
     @Test
     public void testSendEndpointPixmRead() {
-        Parameters result = getProducerTemplate().requestBody("direct:input", validReadParameters(), Parameters.class);
+        var result = producerTemplate.requestBody("direct:input", validReadParameters(), Parameters.class);
 
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

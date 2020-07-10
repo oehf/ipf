@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -32,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindFol
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,7 +51,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("uni2", "uniType2"))));
         query.getLastUpdateTime().setFrom("20150102030405");
         query.getLastUpdateTime().setTo("20150102030406");
-        QueryList<Code> codes = new QueryList<>();
+        var codes = new QueryList<Code>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -79,7 +77,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         assertEquals(Collections.singletonList("20150102030406"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_TO.getSlotName()));
 
-        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());
+        var slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code9^^scheme9')"), slots.get(1).getValueList());
@@ -107,7 +105,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
+        var result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -118,7 +116,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         ebXML.getSlots().get(5).getValueList().clear();
         ebXML.getSlots().get(5).getValueList().add("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved',\n'urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')");
-        FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
+        var result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -126,14 +124,14 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
+        var result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new FindFoldersForMultiplePatientsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
+        var result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new FindFoldersForMultiplePatientsQuery().toString(), result.toString());
     }

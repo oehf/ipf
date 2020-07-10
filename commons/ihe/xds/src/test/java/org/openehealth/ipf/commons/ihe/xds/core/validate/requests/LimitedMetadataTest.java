@@ -16,15 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDM;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -34,7 +33,7 @@ import java.util.UUID;
 public class LimitedMetadataTest {
 
     private RegisterDocumentSet createXdmRequest() {
-        DocumentEntry documentEntry1 = new DocumentEntry();
+        var documentEntry1 = new DocumentEntry();
         documentEntry1.setLimitedMetadata(true);
         documentEntry1.setEntryUuid(UUID.randomUUID().toString());
         documentEntry1.setHash("01234567890ABCDEF01234567890ABCDEF012345");
@@ -43,7 +42,7 @@ public class LimitedMetadataTest {
         documentEntry1.setUniqueId("1.2.3.4.5.111");
         documentEntry1.setUri("CDA-1.XML");
 
-        DocumentEntry documentEntry2 = new DocumentEntry();
+        var documentEntry2 = new DocumentEntry();
         documentEntry2.setLimitedMetadata(true);
         documentEntry2.setEntryUuid(UUID.randomUUID().toString());
         documentEntry2.setHash("ABCDEF0123456789ABCDEF0123456789ABCDEF01");
@@ -52,26 +51,26 @@ public class LimitedMetadataTest {
         documentEntry2.setUniqueId("1.2.3.4.5.222");
         documentEntry2.setUri("CDA-2.XML");
 
-        SubmissionSet submissionSet = new SubmissionSet();
+        var submissionSet = new SubmissionSet();
         submissionSet.setLimitedMetadata(true);
         submissionSet.setEntryUuid(UUID.randomUUID().toString());
         submissionSet.setSourceId("1.2.3.4.5");
-        submissionSet.setSubmissionTime(new Timestamp(new DateTime(), Timestamp.Precision.SECOND));
+        submissionSet.setSubmissionTime(new Timestamp(ZonedDateTime.now(), Timestamp.Precision.SECOND));
         submissionSet.setUniqueId("1.2.3.4.5.777");
 
-        Association association1 = new Association();
+        var association1 = new Association();
         association1.setLabel(AssociationLabel.ORIGINAL);
         association1.setAssociationType(AssociationType.HAS_MEMBER);
         association1.setSourceUuid(submissionSet.getEntryUuid());
         association1.setTargetUuid(documentEntry1.getEntryUuid());
 
-        Association association2 = new Association();
+        var association2 = new Association();
         association2.setLabel(AssociationLabel.ORIGINAL);
         association2.setAssociationType(AssociationType.HAS_MEMBER);
         association2.setSourceUuid(submissionSet.getEntryUuid());
         association2.setTargetUuid(documentEntry2.getEntryUuid());
 
-        RegisterDocumentSet request = new RegisterDocumentSet();
+        var request = new RegisterDocumentSet();
         request.getDocumentEntries().add(documentEntry1);
         request.getDocumentEntries().add(documentEntry2);
         request.setSubmissionSet(submissionSet);
@@ -82,11 +81,11 @@ public class LimitedMetadataTest {
     }
 
     @Test
-    public void testXdmRequestValidation() throws Exception {
-        RegisterDocumentSet xdmRequest = createXdmRequest();
+    public void testXdmRequestValidation() {
+        var xdmRequest = createXdmRequest();
 
-        RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(new EbXMLFactory30());
-        EbXMLSubmitObjectsRequest ebXmlRequest = transformer.toEbXML(xdmRequest);
+        var transformer = new RegisterDocumentSetTransformer(new EbXMLFactory30());
+        var ebXmlRequest = transformer.toEbXML(xdmRequest);
 
         /*
         JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
@@ -97,7 +96,7 @@ public class LimitedMetadataTest {
         System.out.println(writer.toString());
         */
 
-        SubmitObjectsRequestValidator validator = new SubmitObjectsRequestValidator();
+        var validator = new SubmitObjectsRequestValidator();
         validator.validate(ebXmlRequest, XDM.Interactions.ITI_41);
     }
 

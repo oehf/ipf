@@ -46,8 +46,8 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
-        List<Header> headers = message.getHeaders();
-        for (QName name : mustUnderstandHeaders) {
+        var headers = message.getHeaders();
+        for (var name : mustUnderstandHeaders) {
             mustUnderstand(headers, name);
         }
     }
@@ -60,10 +60,10 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
      *          the headers to flag, represented as Strings 
      */
     public void addHeaders(List<String> headers) {
-        for (String header : headers) {
-            int namespaceEnd = header.indexOf('}');
-            String namespace = header.substring(1, namespaceEnd);
-            String name = header.substring(namespaceEnd + 1);
+        for (var header : headers) {
+            var namespaceEnd = header.indexOf('}');
+            var namespace = header.substring(1, namespaceEnd);
+            var name = header.substring(namespaceEnd + 1);
             mustUnderstandHeaders.add(new QName(namespace, name));
         }
     }
@@ -81,7 +81,7 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
     
     
     private Header getHeader(List<Header> headers, QName name) {
-        for (Header header : headers) {
+        for (var header : headers) {
             if (header.getName().equals(name)) {
                 return header;
             }
@@ -90,19 +90,19 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
     }
 
     private void mustUnderstand(List<Header> headers, QName name) {
-        Header header = getHeader(headers, name);
+        var header = getHeader(headers, name);
         if (header == null) {
             return;
         }
 
         if (header instanceof SoapHeader) {
-            SoapHeader soapHeader = (SoapHeader) header;
+            var soapHeader = (SoapHeader) header;
             soapHeader.setMustUnderstand(true);
             return;
         }
 
         headers.remove(header);
-        SoapHeader newHeader = new SoapHeader(name, header.getObject());
+        var newHeader = new SoapHeader(name, header.getObject());
         newHeader.setMustUnderstand(true);
         headers.add(newHeader);
     }

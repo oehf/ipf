@@ -165,7 +165,7 @@ public enum LDAPResultCode {
     }
 
     public static LDAPResultCode fromValue(String v) {
-        for (LDAPResultCode c: LDAPResultCode.values()) {
+        for (var c: LDAPResultCode.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

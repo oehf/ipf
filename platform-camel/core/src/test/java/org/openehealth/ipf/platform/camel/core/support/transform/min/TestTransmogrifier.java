@@ -32,8 +32,8 @@ public class TestTransmogrifier implements Transmogrifier<Dog, Cat>{
         if (params == null) {
             return "";
         }
-        StringBuilder buffer = new StringBuilder();
-        for (Object param : params) {
+        var buffer = new StringBuilder();
+        for (var param : params) {
             buffer.append(param);
         }
         return buffer.toString();

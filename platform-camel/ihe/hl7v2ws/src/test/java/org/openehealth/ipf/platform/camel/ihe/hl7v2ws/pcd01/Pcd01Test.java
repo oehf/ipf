@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
-import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.util.CastUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
@@ -35,7 +34,6 @@ import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.util.Scanner;
 import java.util.Set;
@@ -75,45 +73,45 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testHappyCase() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
     public void testHappyCaseInboundValidation() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
     public void testHappyCaseInboundAndOutboundValidation() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test(expected = Hl7v2AcceptanceException.class)
     public void testInacceptableRequestOnProducer() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
     public void testInacceptableRequestOnConsumer() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        Endpoint endpoint = getCamelContext().getEndpoint(uri);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
+        var endpoint = camelContext.getEndpoint(uri);
         Processor processor = endpoint.createProducer();
         processor = ((Interceptor2ProducerAdapter) processor).getProcessor();
         while (processor instanceof Interceptor) {
             processor = ((Interceptor) processor).getWrappedProcessor();
         }
-        Exchange exchange = new DefaultExchange(getCamelContext());
+        Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
         processor.process(exchange);
         assertEquals(1, MyRejectionHandlingStrategy.getCount());
@@ -121,8 +119,8 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testApplicationError() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_throws_exception";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_throws_exception";
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue("The response message must contain the cause", response.contains("java.lang.RuntimeException"));
         assertTrue("On application error the request message id must be returned.", response.contains("MSA|AE|MSGID1234"));
@@ -131,8 +129,8 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testInboundValidation() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
@@ -140,10 +138,10 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testInboundValidationError() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         //this must be a validation error
-        String invalidMSG = PCD_01_SPEC_REQUEST.replace("|1.0.1|", "||");
-        String response = requestBody(uri, invalidMSG);
+        var invalidMSG = PCD_01_SPEC_REQUEST.replace("|1.0.1|", "||");
+        var response = requestBody(uri, invalidMSG);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue(response.contains("MSA|AE"));
         assertTrue(response.contains("Observation Sub-ID"));
@@ -152,9 +150,9 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testInboundAndOutboundValidationError() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
+        var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         //this must be a validation error
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
@@ -162,9 +160,9 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testDefaultAcceptedResponse() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort()
+        var uri = "pcd-pcd01://localhost:" + getPort()
                 + "/route_unacceptable_response";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue(response.contains("|ACK^R01^ACK|"));
         assertTrue(response.contains("MSA|AR|MSGID1234"));
@@ -174,18 +172,18 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Test
     public void testJmxAttribute() throws Exception {
-        MBeanServer mbsc = getCamelContext().getManagementStrategy().getManagementAgent()
+        var mbsc = camelContext.getManagementStrategy().getManagementAgent()
                 .getMBeanServer();
         Set<ObjectName> s = CastUtils.cast(mbsc.queryNames(new ObjectName(
                 "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\\?rejectionHandlingStrategy=%23rejectionHandlingStrategy\""), null));
         assertEquals(1, s.size());
-        ObjectName object = (ObjectName) s.toArray()[0];
+        var object = (ObjectName) s.toArray()[0];
         assertNotNull(object);
         assertTrue((Boolean) mbsc.getAttribute(object, "Addressing"));
     }
 
     private String requestBody(String uri, String msg) {
-        Object response = send(uri, msg);
+        var response = send(uri, msg);
         return Exchanges.resultMessage((Exchange) response).getBody(String.class);
     }
 

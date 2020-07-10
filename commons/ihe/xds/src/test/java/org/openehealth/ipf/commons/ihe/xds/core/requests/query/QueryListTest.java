@@ -23,61 +23,59 @@ import org.w3c.dom.Node;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMResult;
 import java.util.Arrays;
-import java.util.List;
 
 public class QueryListTest {
     @Test
     public void testXmlSerializationWithString() throws Exception {
-        List<String> innerList1 = Arrays.asList("Lisa", "Jodi", "Terry", "Cassandra");
-        List<String> innerList2 = Arrays.asList("Brock", "Thor", "Venus");
+        var innerList1 = Arrays.asList("Lisa", "Jodi", "Terry", "Cassandra");
+        var innerList2 = Arrays.asList("Brock", "Thor", "Venus");
 
-        QueryList<String> queryList = new QueryList<>();
+        var queryList = new QueryList<String>();
         queryList.getOuterList().add(innerList1);
         queryList.getOuterList().add(innerList2);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(QueryList.class);
+        var jaxbContext = JAXBContext.newInstance(QueryList.class);
         checkSerialization(jaxbContext, "queryList", queryList);
     }
 
     @Test
     public void testXmlSerializationWithCode() throws Exception {
-        List<Code> innerList1 = Arrays.asList(
+        var innerList1 = Arrays.asList(
                 new Code("Lisa", null, "Girlfriend scheme"),
                 new Code("Jodi", null, "Girlfriend scheme"),
                 new Code("Terry", null, "Girlfriend scheme"),
                 new Code("Cassandra", null, "Girlfriend scheme"));
-        List<Code> innerList2 = Arrays.asList(
+        var innerList2 = Arrays.asList(
                 new Code("Brock", null, "Children scheme"),
                 new Code("Thor", null, "Children scheme"),
                 new Code("Venus", null, "Children scheme"));
 
-        QueryList<Code> queryList = new QueryList<>();
+        var queryList = new QueryList<Code>();
         queryList.getOuterList().add(innerList1);
         queryList.getOuterList().add(innerList2);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(QueryList.class, Code.class);
+        var jaxbContext = JAXBContext.newInstance(QueryList.class, Code.class);
         checkSerialization(jaxbContext, "queryList", queryList);
     }
 
     @SuppressWarnings({"unchecked"})
     private <T> void checkSerialization(JAXBContext jaxbContext, String name, T object) throws Exception {
-        QName qname = new QName("http://www.openehealth.org/ipf/xds", name);
-        JAXBElement<T> jaxbElement = new JAXBElement<>(qname, (Class<T>) object.getClass(), object);
-        Marshaller marshaller = jaxbContext.createMarshaller();
+        var qname = new QName("http://www.openehealth.org/ipf/xds", name);
+        var jaxbElement = new JAXBElement<T>(qname, (Class<T>) object.getClass(), object);
+        var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         // marshaller.marshal(jaxbElement, System.out);
 
-        DOMResult domResult = new DOMResult();
+        var domResult = new DOMResult();
         marshaller.marshal(jaxbElement, domResult);
         Node marshalledNode = ((org.w3c.dom.Document) domResult.getNode()).getDocumentElement();
 
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        var unmarshaller = jaxbContext.createUnmarshaller();
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, QueryList.class);
-        T objectToo = jaxbElement.getValue();
+        var objectToo = jaxbElement.getValue();
 
         Assert.assertEquals(object, objectToo);
     }

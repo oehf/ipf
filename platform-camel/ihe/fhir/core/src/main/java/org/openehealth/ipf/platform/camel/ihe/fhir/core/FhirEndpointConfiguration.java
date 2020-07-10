@@ -23,8 +23,8 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.camel.util.EndpointHelper;
-import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.support.EndpointHelper;
+import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -63,25 +63,25 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
-    private String servletName = IpfFhirServlet.DEFAULT_SERVLET_NAME;
+    private String servletName;
 
     @Getter
     @UriParam
-    private List<? extends FhirProvider> resourceProvider;
+    private final List<? extends FhirProvider> resourceProvider;
 
     // Producer only
 
     @UriParam
-    private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+    private final ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
 
 
     @Getter
     @UriParam
-    private List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
+    private final List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
 
     @Getter
     @UriParam
-    private List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
+    private final List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
     /**
      * If this is true, all paging requests are routed into the route (see {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
@@ -89,13 +89,13 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean lazyLoadBundles;
+    private final boolean lazyLoadBundles;
 
     @Getter
-    private FhirSecurityInformation securityInformation;
+    private final FhirSecurityInformation securityInformation;
 
     @Getter
-    private Predicate<Object> consumerSelector;
+    private final Predicate<Object> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
@@ -103,7 +103,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean cacheBundles = true;
+    private boolean cacheBundles;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
@@ -126,18 +126,18 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         if (context == null) {
             context = component.initializeFhirContext();
-            String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
+            var parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
             if (STRICT.equals(parserErrorHandling)) {
                 context.setParserErrorHandler(new StrictErrorHandler());
             } else if (!LENIENT.equals(parserErrorHandling)) {
                 throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
             }
 
-            Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
+            var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
             if (connectTimeout != null) {
                 setConnectTimeout(connectTimeout);
             }
-            Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
+            var timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
             if (timeout != null) {
                 setTimeout(timeout);
             }
@@ -155,18 +155,18 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class);
 
         // Security stuff
-        SSLContextParameters sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(
+        var sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "sslContextParameters", SSLContextParameters.class);
-        HostnameVerifier hostnameVerifier = component.getAndRemoveOrResolveReferenceParameter(
+        var hostnameVerifier = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "hostnameVerifier", HostnameVerifier.class);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
-        String username = component.getAndRemoveParameter(parameters, "username", String.class);
-        String password = component.getAndRemoveParameter(parameters, "password", String.class);
+        var username = component.getAndRemoveParameter(parameters, "username", String.class);
+        var password = component.getAndRemoveParameter(parameters, "password", String.class);
 
         if (secure && sslContextParameters == null) {
-            Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+            var sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
             if (sslContextParameterMap.size() == 1) {
-                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                var entry = sslContextParameterMap.entrySet().iterator().next();
                 sslContextParameters = entry.getValue();
             } else if (sslContextParameterMap.size() > 1) {
                 throw new AmbiguousBeanException(SSLContextParameters.class);
@@ -183,7 +183,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     }
 
     public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters, String key, Class<T> type) {
-        String values = component.getAndRemoveParameter(parameters, key, String.class);
+        var values = component.getAndRemoveParameter(parameters, key, String.class);
         if (values == null) {
             return null;
         } else {

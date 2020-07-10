@@ -23,8 +23,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.builder.RegisterDocumentSetBuilder;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,5 +59,22 @@ public class RegisterDocumentSet implements Serializable {
     @Getter private final List<DocumentEntry> documentEntries = new ArrayList<>();
     @XmlElementRef
     @Getter private final List<Association> associations = new ArrayList<>();
+    
+    public static RegisterDocumentSetBuilder builderWith(SubmissionSet submissionSet) {
+        return new RegisterDocumentSetBuilder(false, submissionSet);
+    }
+
+    /**
+     * Provide a builder with additional support for generating attributes if not already present.
+     * - SubmissionSet.submissionTime
+     * - UniqueId's
+     * - EntryUuid's
+     * - HasMember associations
+     * 
+     * @return Builder that constructs a RegisterDocumentSet and generate certain attributes.
+     */
+    public static RegisterDocumentSetBuilder supportiveBuilderWith(SubmissionSet submissionSet) {
+        return new RegisterDocumentSetBuilder(true, submissionSet);
+    }
 
 }

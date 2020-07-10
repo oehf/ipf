@@ -21,7 +21,7 @@ import org.apache.camel.builder.RouteBuilder
 /**
  * @author Martin Krasser
  */
-public class SampleRouteBuilder extends RouteBuilder {
+class SampleRouteBuilder extends RouteBuilder {
 
     void configure() {
         

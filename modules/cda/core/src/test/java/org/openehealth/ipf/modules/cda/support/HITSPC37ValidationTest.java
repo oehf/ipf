@@ -29,8 +29,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.HITSP_37_SCHEMATRON_RULES;
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.IHE_LAB_SCHEMA;
+import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.HITSP_37_SCHEMATRON_RULES;
+import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.IHE_LAB_SCHEMA;
 
 /**
  * Validates the HITSP C37 schematron rule set.

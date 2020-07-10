@@ -41,7 +41,7 @@ public class HL7v3AuditorTestBase<T extends Hl7v3AuditStrategy> extends AuditorT
     }
 
     protected Hl7v3AuditDataset getHl7v3AuditDataset(T strategy) {
-        Hl7v3AuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
         auditDataset.setMessageId(MESSAGE_ID);

@@ -67,7 +67,7 @@ public class ConsumerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
     public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?,?,?>, ConsumerOutPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
-        private boolean locallyEnabled = true;
+        private boolean enabled = true;
 
         public Factory(String fileNamePattern) {
             this(new SpringExpressionResolver(fileNamePattern));
@@ -80,13 +80,13 @@ public class ConsumerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
 
         @Override
         public ConsumerOutPayloadLoggerInterceptor getNewInstance() {
-            ConsumerOutPayloadLoggerInterceptor interceptor = new ConsumerOutPayloadLoggerInterceptor(resolver);
-            interceptor.setLocallyEnabled(locallyEnabled);
+            var interceptor = new ConsumerOutPayloadLoggerInterceptor(resolver);
+            interceptor.setEnabled(enabled);
             return interceptor;
         }
 
-        public void setLocallyEnabled(boolean locallyEnabled) {
-            this.locallyEnabled = locallyEnabled;
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
         }
     }
 }

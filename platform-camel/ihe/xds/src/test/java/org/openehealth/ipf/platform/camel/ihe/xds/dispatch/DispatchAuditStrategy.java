@@ -101,13 +101,13 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public T createAuditDataset() {
-        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
+        var strategy = getAuditStrategy();
         return (strategy != null) ? (T)strategy.createAuditDataset() : null;
     }
 
     @Override
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters ) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         }
@@ -116,7 +116,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         }
@@ -125,7 +125,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public void doAudit(AuditContext auditContext, T auditDataset) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditContext, auditDataset);
         }
@@ -133,18 +133,18 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         return (strategy != null) ? strategy.makeAuditMessage(auditContext, auditDataset) : null;
     }
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
+        var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.getEventOutcomeIndicator(response) : null;
     }
 
     private XdsAuditStrategy<? extends XdsAuditDataset> getAuditStrategy() {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
+        var messageContext = new WebServiceContextImpl().getMessageContext();
         if ("GET".equals(messageContext.get(MessageContext.HTTP_REQUEST_METHOD))) {
             return null;
         }
@@ -152,8 +152,8 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
             return null;
         }
 
-        QName operationName = (QName) messageContext.get(MessageContext.WSDL_OPERATION);
-        XdsAuditStrategy<? extends XdsAuditDataset> auditStrategy = map.get(operationName);
+        var operationName = (QName) messageContext.get(MessageContext.WSDL_OPERATION);
+        var auditStrategy = map.get(operationName);
         if (auditStrategy == null) {
             log.debug("No strategy could be found for operation {}", operationName);
         } else {

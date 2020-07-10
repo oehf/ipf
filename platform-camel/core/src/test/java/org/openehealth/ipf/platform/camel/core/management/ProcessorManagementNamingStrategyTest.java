@@ -17,10 +17,7 @@ package org.openehealth.ipf.platform.camel.core.management;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Set;
-
 import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
 import org.apache.camel.CamelContext;
@@ -50,22 +47,22 @@ public class ProcessorManagementNamingStrategyTest {
     @Test
     public void testProcessorManagementNamingStrategy() throws Exception {
 
-        ObjectName on = queryForNamedObjects("org.apache.camel:context=camelContext,type=processors,name=\"namingStrategyProcessor\"");
+        var on = queryForNamedObjects("org.apache.camel:context=camelContext,type=processors,route=\"namingStrategyRoute\",name=\"namingStrategyProcessor\"");
 
-        ObjectInstance oi = getMBeanServer().getObjectInstance(on);
+        var oi = getMBeanServer().getObjectInstance(on);
         assertNotNull(oi);
     }
 
     @AfterClass
     public static void tearDownAfterClass() {
 
-        appContext.destroy();
+        appContext.close();
     }
 
     private ObjectName queryForNamedObjects(String query) throws Exception {
 
-        MBeanServer mbeanServer = getMBeanServer();
-        Set<ObjectName> s = mbeanServer.queryNames(new ObjectName(query), null);
+        var mbeanServer = getMBeanServer();
+        var s = mbeanServer.queryNames(new ObjectName(query), null);
         return (ObjectName) s.toArray()[0];
     }
 

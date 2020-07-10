@@ -20,9 +20,8 @@ import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.va
 import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Request;
 import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Response;
 
-import java.io.InputStream;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
@@ -39,9 +38,9 @@ public class MessageValidationTest {
     }
 
     private static <T> T loadFile(String fn) throws Exception {
-        InputStream stream = MessageValidationTest.class.getClassLoader().getResourceAsStream("messages/" + fn);
-        Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
-        Object object = unmarshaller.unmarshal(stream);
+        var stream = MessageValidationTest.class.getClassLoader().getResourceAsStream("messages/" + fn);
+        var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
+        var object = unmarshaller.unmarshal(stream);
         if (object instanceof JAXBElement) {
             object = ((JAXBElement) object).getValue();
         }

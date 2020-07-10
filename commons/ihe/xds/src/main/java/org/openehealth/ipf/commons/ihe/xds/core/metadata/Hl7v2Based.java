@@ -27,6 +27,7 @@ import org.apache.commons.lang3.Validate;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * An XDS model object backed up by an HL7 v2 element.
@@ -90,10 +91,10 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         try {
-            T xdsModelObject = xdsModelClass.newInstance();
+            var xdsModelObject = xdsModelClass.getConstructor().newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
-        } catch (InstantiationException | IllegalAccessException | HL7Exception e) {
+        } catch (InstantiationException | IllegalAccessException | HL7Exception | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
@@ -181,13 +182,13 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     }
 
     protected static Integer getIntegerValue(Primitive p) {
-        String value = p.getValue();
-        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Integer(value);
+        var value = p.getValue();
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : Integer.parseInt(value);
     }
 
     protected static Long getLongValue(Primitive p) {
-        String value = p.getValue();
-        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Long(value);
+        var value = p.getValue();
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : Long.parseLong(value);
     }
 
     /**
@@ -199,7 +200,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      */
     protected static void setAssigningAuthority(AssigningAuthority assigningAuthority, HD target) {
         if (assigningAuthority != null) {
-            HD source = assigningAuthority.getHapiObject().getInternal();
+            var source = assigningAuthority.getHapiObject().getInternal();
             setValue(target.getHd1_NamespaceID(), source.getHd1_NamespaceID().getValue());
             setValue(target.getHd2_UniversalID(), source.getHd2_UniversalID().getValue());
             setValue(target.getHd3_UniversalIDType(), source.getHd3_UniversalIDType().getValue());
@@ -215,7 +216,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     static class Holder<T extends Type> extends AbstractType implements Composite {
         private static final long serialVersionUID = -9084300955263787034L;
 
-        private Type[] data = new Type[1];
+        private final Type[] data = new Type[1];
 
         public Holder(T t) {
             super(t.getMessage());
@@ -242,7 +243,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         }
 
         @Override
-        public boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {
+        public boolean accept(MessageVisitor visitor, Location currentLocation) {
             return false;
         }
     }

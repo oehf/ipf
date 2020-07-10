@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openhealthtools.mdht.uml.cda.CDAFactory;
 import org.openhealthtools.mdht.uml.cda.CDAPackage;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
-import org.openhealthtools.mdht.uml.cda.DocumentRoot;
 import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResourceFactoryImpl;
 
 /**
@@ -39,7 +38,7 @@ import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResourceFactoryImpl
 public class CDAR2Renderer implements Renderer<ClinicalDocument> {
 
     public String render(ClinicalDocument doc, Object... options) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        var bos = new ByteArrayOutputStream();
         try {
             render(doc, bos, options);
             return bos.toString();
@@ -57,7 +56,6 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
      * @param os the stream to write the XML to
      * @param options may contains a map with options for rendering.
      */
-    @SuppressWarnings("unchecked")
     public OutputStream render(ClinicalDocument doc,
             OutputStream os, Object... options) throws IOException {
         XMLResource resources = new CDAResourceFactoryImpl()
@@ -72,7 +70,7 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
         }
         
         // Create document root
-        DocumentRoot root = CDAFactory.eINSTANCE.createDocumentRoot();
+        var root = CDAFactory.eINSTANCE.createDocumentRoot();
         root.getXMLNSPrefixMap().put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.getXMLNSPrefixMap().put("", "urn:hl7-org:v3");
         root.getXSISchemaLocation().put("urn:hl7-org:v3", "CDA.xsd");
@@ -84,13 +82,13 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
     }
 
     public Result render(ClinicalDocument doc, Result result,
-            Object... options) throws IOException {
+            Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public Writer render(ClinicalDocument doc, Writer writer,
             Object... options) throws IOException {
-        String s = render(doc, options);
+        var s = render(doc, options);
         writer.write(s);
         return writer;
     }

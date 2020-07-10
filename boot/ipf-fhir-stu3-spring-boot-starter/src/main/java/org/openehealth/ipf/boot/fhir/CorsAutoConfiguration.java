@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.boot.fhir;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -37,14 +36,17 @@ import java.util.Arrays;
 @ConditionalOnProperty(prefix = "ipf.fhir.cors", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class CorsAutoConfiguration {
 
-    @Autowired
-    private IpfFhirConfigurationProperties config;
+    private final IpfFhirConfigurationProperties config;
+
+    public CorsAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
 
     @Bean
     @ConditionalOnMissingBean(CorsConfiguration.class)
     @ConfigurationProperties(prefix = "ipf.fhir.cors")
     public CorsConfiguration corsConfiguration() {
-        CorsConfiguration config = new CorsConfiguration();
+        var config = new CorsConfiguration();
 
         // A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.
         config.addAllowedOrigin("*");
@@ -59,7 +61,7 @@ public class CorsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "corsFilterRegistration")
     public FilterRegistrationBean corsFilterRegistration(CorsConfiguration corsConfiguration) {
-        FilterRegistrationBean frb = new FilterRegistrationBean();
+        var frb = new FilterRegistrationBean();
         frb.addUrlPatterns(config.getFhirMapping());
         frb.setFilter(new CorsFilter(request -> corsConfiguration));
         return frb;

@@ -45,7 +45,7 @@ public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTrans
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
@@ -77,9 +77,9 @@ public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTrans
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
+        var slots = new QuerySlotHelper(ebXML);
+
+        var patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         
         query.setSourceIds(slots.toStringList(SUBMISSION_SET_SOURCE_ID));

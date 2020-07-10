@@ -20,12 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.Soap11;
 import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.message.Exchange;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.Names;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200403;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200408;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.util.HashSet;
 import java.util.List;
@@ -103,9 +101,9 @@ public abstract class SoapUtils {
                 return "";
             }
             pos2 = soapEnvelope.indexOf(":", pos1);
-            String soapPrefix = ((pos2 == -1) || (pos5 < pos2)) ?
+            var soapPrefix = ((pos2 == -1) || (pos5 < pos2)) ?
                     "" : soapEnvelope.substring(pos1 + 2, pos2 + 1);
-            String bodyElementStart = "<" + soapPrefix + "Body";
+            var bodyElementStart = "<" + soapPrefix + "Body";
             pos3 = soapEnvelope.indexOf(bodyElementStart);
             pos4 = soapEnvelope.indexOf('>', pos3 + bodyElementStart.length());
             return soapEnvelope.substring(pos4 + 1, pos1);
@@ -122,7 +120,7 @@ public abstract class SoapUtils {
      * CXF exchange, or <code>null</code>, when no exception could be extracted.
      */
     public static Exception extractOutgoingException(Exchange exchange) {
-        Message outFaultMessage = exchange.getOutFaultMessage();
+        var outFaultMessage = exchange.getOutFaultMessage();
         return (outFaultMessage != null) ? outFaultMessage.getContent(Exception.class) : null;
     }
 
@@ -157,7 +155,7 @@ public abstract class SoapUtils {
             return null;
         }
 
-        Node node = root.getFirstChild();
+        var node = root.getFirstChild();
         while (node != null) {
             if ((node instanceof Element) &&
                     nsUris.contains(node.getNamespaceURI()) &&

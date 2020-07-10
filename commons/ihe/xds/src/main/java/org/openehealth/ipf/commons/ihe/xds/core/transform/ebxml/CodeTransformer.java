@@ -23,8 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CODING_SCHEME;
 
-import java.util.List;
-
 /**
  * Transforms between {@link Code} and its ebXML representation.
  * @author Jens Riemschneider
@@ -55,8 +53,8 @@ public class CodeTransformer {
         if (code == null) {
             return null;
         }
-        
-        EbXMLClassification classification = factory.createClassification(objectLibrary);
+
+        var classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation(code.getCode());
         classification.setName(code.getDisplayName());
         
@@ -77,12 +75,12 @@ public class CodeTransformer {
         if (classification == null) {
             return null;
         }
-        
-        Code code = new Code();
+
+        var code = new Code();
         code.setCode(classification.getNodeRepresentation());
         code.setDisplayName(classification.getName());
 
-        List<String> slotValues = classification.getSlotValues(SLOT_NAME_CODING_SCHEME);
+        var slotValues = classification.getSlotValues(SLOT_NAME_CODING_SCHEME);
         if (slotValues.size() > 0) {
             code.setSchemeName(slotValues.get(0));
         }

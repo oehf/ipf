@@ -33,13 +33,13 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti83.class);
 
     public static void startServer(String contextDescriptor) {
-        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.R4);
+        var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
     protected Parameters validQueryParameters() {
-        Parameters inParams = new Parameters();
+        var inParams = new Parameters();
         inParams.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
                 .setValue(new StringType("urn:oid:1.2.3.4|0815"));
@@ -50,7 +50,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters validReadParameters() {
-        Parameters inParams = new Parameters();
+        var inParams = new Parameters();
         inParams.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
                 .setValue(new StringType("|0815"));
@@ -61,7 +61,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters validTargetSystemParameters() {
-        Parameters inParams = new Parameters();
+        var inParams = new Parameters();
         inParams.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(new UriType("urn:oid:1.2.3.4.6"));
@@ -69,7 +69,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters sendManuallyOnType(Parameters queryParameters) {
-        Parameters result = client.operation()
+        var result = client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
@@ -80,7 +80,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters sendManuallyOnInstance(String resourceId, Parameters queryParameters) {
-        Parameters result = client.operation()
+        var result = client.operation()
                 .onInstance(new IdType("Patient", resourceId))
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)

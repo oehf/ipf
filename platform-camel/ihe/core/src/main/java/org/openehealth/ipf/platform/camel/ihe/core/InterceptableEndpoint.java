@@ -49,14 +49,14 @@ public interface InterceptableEndpoint<
      */
     @Override
     default Producer createProducer() throws Exception {
-        Producer producer = doCreateProducer();
+        var producer = doCreateProducer();
 
-        List<Interceptor> initialChain = createInitialProducerInterceptorChain();
+        var initialChain = createInitialProducerInterceptorChain();
         List<Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(getInterceptableComponent().getAdditionalProducerInterceptors());
         // add interceptors provided by the user
         additionalInterceptors.addAll(getCustomInterceptors());
-        List<Interceptor> producerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+        var producerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
 
         return InterceptorUtils.adaptProducerChain(
                 producerInterceptorChain,
@@ -76,17 +76,17 @@ public interface InterceptableEndpoint<
     @Override
     default Consumer createConsumer(Processor originalProcessor) throws Exception {
         // Configure interceptor chain
-        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
+        var initialChain = createInitialConsumerInterceptorChain();
 
         List<Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(getInterceptableComponent().getAdditionalConsumerInterceptors());
         // add interceptors provided by the user
         additionalInterceptors.addAll(getCustomInterceptors());
-        List<Interceptor> consumerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+        var consumerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
 
-        Processor processor = originalProcessor;
-        for (int i = consumerInterceptorChain.size() - 1; i >= 0; --i) {
-            Interceptor interceptor = consumerInterceptorChain.get(i);
+        var processor = originalProcessor;
+        for (var i = consumerInterceptorChain.size() - 1; i >= 0; --i) {
+            var interceptor = consumerInterceptorChain.get(i);
             interceptor.setWrappedProcessor(processor);
             interceptor.setEndpoint(this);
             processor = interceptor;
@@ -102,7 +102,7 @@ public interface InterceptableEndpoint<
      */
     default List<Interceptor> getCustomInterceptors() {
         List<Interceptor> result = new ArrayList<>();
-        List<InterceptorFactory> factories = getInterceptableConfiguration().getCustomInterceptorFactories();
+        var factories = getInterceptableConfiguration().getCustomInterceptorFactories();
         factories.stream()
                 .map((Function<InterceptorFactory, Interceptor>) InterceptorFactory::getNewInstance)
                 .forEach(result::add);

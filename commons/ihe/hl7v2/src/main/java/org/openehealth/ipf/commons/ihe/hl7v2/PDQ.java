@@ -42,8 +42,8 @@ public class PDQ implements IntegrationProfile {
         ITI_21(ITI_21_CONFIGURATION, ITI_21_NAK_FACTORY),
         ITI_22(ITI_22_CONFIGURATION, ITI_22_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private NakFactory<QueryAuditDataset> nakFactory;
+        @Getter private final Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
+        @Getter private final NakFactory<QueryAuditDataset> nakFactory;
     }
 
     @Override

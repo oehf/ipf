@@ -16,11 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hpd.HpdException;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
@@ -30,25 +28,25 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 abstract public class HpdService extends AbstractWebService {
 
     public BatchResponse doProcess(BatchRequest request) {
-        Exchange result = process(request);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(request);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
             return errorMessage(request, exception);
         }
-        return Exchanges.resultMessage(result).getBody(BatchResponse.class);
+        return result.getMessage().getBody(BatchResponse.class);
     }
 
     private BatchResponse errorMessage(BatchRequest request, Exception exception) {
-        ObjectFactory factory = new ObjectFactory();
+        var factory = new ObjectFactory();
 
-        ErrorResponse error = factory.createErrorResponse();
+        var error = factory.createErrorResponse();
         error.setMessage(exception.getMessage());
         error.setRequestID(request.getRequestID());
-        ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorType.OTHER;
+        var errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorType.OTHER;
         error.setType(errorType);
 
-        BatchResponse response = factory.createBatchResponse();
+        var response = factory.createBatchResponse();
         response.setRequestID(request.getRequestID());
         response.getBatchResponses().add(factory.createBatchResponseErrorResponse(error));
         
