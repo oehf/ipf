@@ -47,7 +47,7 @@ public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTr
         var slots = new QuerySlotHelper(ebXML);
 
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
-        slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
 
         slots.fromNumber(DOC_ENTRY_SERVICE_START_FROM, toHL7(query.getServiceStart().getFrom()));
         slots.fromNumber(DOC_ENTRY_SERVICE_START_TO, toHL7(query.getServiceStart().getTo()));
@@ -75,7 +75,7 @@ public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTr
         var slots = new QuerySlotHelper(ebXML);
 
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
-        query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
 
         query.getServiceStart().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_START_FROM));
         query.getServiceStart().setTo(slots.toNumber(DOC_ENTRY_SERVICE_START_TO));
