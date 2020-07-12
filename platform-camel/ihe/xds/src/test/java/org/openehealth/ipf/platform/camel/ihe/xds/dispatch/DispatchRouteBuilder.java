@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -30,15 +29,21 @@ import javax.xml.ws.soap.SOAPFaultException;
  * @author Dmytro Rud
  */
 public class DispatchRouteBuilder extends RouteBuilder {
+
+    private static final String ACTION_PROPERTY = "action";
+
     @Override
     public void configure() throws Exception {
         from("cxf:bean:xdsRegistryEndpoint")
+            .process(exchange -> {
+                exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor.extractWsaAction(exchange.getIn().getHeaders()));
+            })
             .choice()
-                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("DocumentRegistry_RegistryStoredQuery"))
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegistryStoredQuery"))
                     .to("direct:handle-iti18")
-                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("DocumentRegistry_RegisterDocumentSet-b"))
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegisterDocumentSet-b"))
                     .to("direct:handle-iti42")
-                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("CommunityPharmacyManager_QueryPharmacyDocuments"))
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments"))
                     .to("direct:handle-pharm1")
                 .otherwise()
                     .to("direct:unsupportedOperation");

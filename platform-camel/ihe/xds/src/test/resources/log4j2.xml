@@ -9,7 +9,8 @@
     </Appenders>
     
     <Loggers>
-        <Logger name="org.openehealth.ipf.commons.ihe.core.payload" level="DEBUG"/>
+        <Logger name="org.openehealth.ipf.commons.ihe.core.payload" level="INFO"/>
+        <Logger name="org.openehealth.ipf.platform.camel.ihe.xds.dispatch" level="INFO"/>
 
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>
