@@ -15,15 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.handler.logical.LogicalMessageContextImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.apache.cxf.ws.addressing.Names;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
+import org.w3c.dom.Element;
 
 import javax.xml.ws.handler.MessageContext;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.cxf.headers.Header.HEADER_LIST;
 
 /**
  * @author Dmytro Rud
@@ -33,7 +40,20 @@ public class DispatchInContextCreatorInterceptor extends AbstractPhaseIntercepto
     public DispatchInContextCreatorInterceptor() {
         super(Phase.UNMARSHAL);
         addBefore(AuditInRequestInterceptor.class.getName());
-   }
+    }
+
+    public static String extractWsaAction(Map<String, Object> map) {
+        List<Header> soapHeaders = (List) map.get(HEADER_LIST);
+        if (soapHeaders != null) {
+            for (Header header : soapHeaders) {
+                if (Names.WSA_ACTION_QNAME.equals(header.getName())) {
+                    Element element = (Element) header.getObject();
+                    return element.getTextContent();
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public void handleMessage(Message message) throws Fault {
@@ -42,6 +62,5 @@ public class DispatchInContextCreatorInterceptor extends AbstractPhaseIntercepto
             messageContext = new LogicalMessageContextImpl(message);
             WebServiceContextImpl.setMessageContext(messageContext);
         }
-        messageContext.put(MessageContext.WSDL_OPERATION, message.get(MessageContext.WSDL_OPERATION));
     }
 }

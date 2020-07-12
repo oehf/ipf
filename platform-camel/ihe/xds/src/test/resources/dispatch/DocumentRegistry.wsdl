@@ -62,6 +62,11 @@
         <part name="body" element="query:AdhocQueryRequest"/>
     </message>
 
+    <message name="QueryPharmacyDocumentsResponse_Message">
+        <documentation>Registry Stored Query Response</documentation>
+        <part name="body" element="query:AdhocQueryResponse"/>
+    </message>
+
     <portType name="DocumentRegistry_PortType">
         <operation name="DocumentRegistry_RegistryStoredQuery">
             <input message="ihe:RegistryStoredQuery_Message"
@@ -80,7 +85,7 @@
         <operation name="CommunityPharmacyManager_QueryPharmacyDocuments">
             <input message="ihe:QueryPharmacyDocuments_Message"
                    wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments"/>
-            <output message="ihe:RegistryStoredQueryResponse_Message"
+            <output message="ihe:QueryPharmacyDocumentsResponse_Message"
                     wsam:Action="urn:ihe:pharm:cmpd:2010:QueryPharmacyDocumentsResponse"/>
         </operation>
     </portType>
