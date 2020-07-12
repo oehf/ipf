@@ -829,7 +829,7 @@ public abstract class SampleData {
         query.getServiceEnd().setTo("1985");
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         return new QueryRegistry(query);
     }

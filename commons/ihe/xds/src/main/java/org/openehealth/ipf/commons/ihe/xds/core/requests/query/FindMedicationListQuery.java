@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import javax.xml.bind.annotation.*;
@@ -31,7 +32,8 @@ import java.util.List;
  * @since 3.7
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindMedicationListQuery", propOrder = {"formatCodes", "typeCodes", "serviceStart", "serviceEnd"})
+@XmlType(name = "FindMedicationListQuery", propOrder = {
+        "formatCodes", "documentEntryTypes", "serviceStart", "serviceEnd"})
 @XmlRootElement(name = "findMedicationListQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
@@ -40,8 +42,8 @@ public class FindMedicationListQuery extends PharmacyDocumentsQuery {
 
     @XmlElement(name = "formatCode")
     @Getter @Setter private List<Code> formatCodes;
-    @XmlElement(name = "typeCode")
-    @Getter @Setter private List<Code> typeCodes;
+    @XmlElement(name = "documentEntryType")
+    @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
     @Getter private final TimeRange serviceStart = new TimeRange();
     @Getter private final TimeRange serviceEnd = new TimeRange();
 
