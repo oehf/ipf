@@ -86,12 +86,12 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     @Override
     public T createAuditDataset() {
         var strategy = getAuditStrategy();
-        return (strategy != null) ? (T)strategy.createAuditDataset() : null;
+        return (strategy != null) ? strategy.createAuditDataset() : null;
     }
 
     @Override
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters ) {
-        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         }
@@ -100,7 +100,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
-        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         }
@@ -109,7 +109,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public void doAudit(AuditContext auditContext, T auditDataset) {
-        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditContext, auditDataset);
         }
@@ -117,7 +117,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
-        var strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.makeAuditMessage(auditContext, auditDataset) : null;
     }
 
