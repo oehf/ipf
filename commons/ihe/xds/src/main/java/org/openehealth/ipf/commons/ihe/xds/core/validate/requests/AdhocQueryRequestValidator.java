@@ -124,7 +124,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     private static final Map<InteractionId, Set<QueryType>> ALLOWED_QUERY_TYPES;
 
     static {
-        Set<QueryType> storedQueryTypes = EnumSet.of(
+        Set<QueryType> itiStoredQueryTypes = EnumSet.of(
                 FIND_DOCUMENTS,
                 FIND_DOCUMENTS_BY_REFERENCE_ID,
                 FIND_SUBMISSION_SETS,
@@ -138,7 +138,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 GET_SUBMISSION_SET_AND_CONTENTS,
                 GET_FOLDER_AND_CONTENTS,
                 GET_FOLDERS_FOR_DOCUMENT,
-                GET_RELATED_DOCUMENTS,
+                GET_RELATED_DOCUMENTS);
+
+        Set<QueryType> pharmStoredQueryTypes = EnumSet.of(
                 FIND_MEDICATION_TREATMENT_PLANS,
                 FIND_PRESCRIPTIONS,
                 FIND_DISPENSES,
@@ -148,11 +150,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 FIND_MEDICATION_LIST);
 
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
-        ALLOWED_QUERY_TYPES.put(ITI_18, storedQueryTypes);
-        ALLOWED_QUERY_TYPES.put(ITI_38, storedQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_18, itiStoredQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_38, itiStoredQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));
         ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
-        ALLOWED_QUERY_TYPES.put(PHARM_1, storedQueryTypes);
+        ALLOWED_QUERY_TYPES.put(PHARM_1, pharmStoredQueryTypes);
     }
 
 
