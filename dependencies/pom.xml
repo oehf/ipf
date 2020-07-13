@@ -820,7 +820,6 @@
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-r4-test</artifactId>
                 <version>${project.version}</version>
-                <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -847,7 +846,6 @@
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-stu3-test</artifactId>
                 <version>${project.version}</version>
-                <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
