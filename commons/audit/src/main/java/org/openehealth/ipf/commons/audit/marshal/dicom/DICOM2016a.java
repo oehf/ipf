@@ -78,15 +78,18 @@ public class DICOM2016a implements SerializationStrategy {
         element.setAttribute("UserIsRequestor", Boolean.toString(activeParticipant.isUserIsRequestor()));
         conditionallyAddAttribute(element, "NetworkAccessPointID", activeParticipant.getNetworkAccessPointID());
         conditionallyAddAttribute(element, "NetworkAccessPointTypeCode", activeParticipant.getNetworkAccessPointTypeCode());
-        if (activeParticipant.getMediaType() != null) {
-            element.addContent(
-                    new Element("MediaIdentifier")
-                            .addContent(codedValueType("MediaType", activeParticipant.getMediaType())));
-        }
+        // as per https://docs.oracle.com/cd/E63053_01/doc.30/e61289/xmlschema.htm
+        // RoleIDCode and MediaIdentifier are in a sequence so they should be written
+        // in exactly this order
         if (activeParticipant.getRoleIDCodes() != null) {
             activeParticipant.getRoleIDCodes().stream()
                     .map(roleIdCode -> codedValueType("RoleIDCode", roleIdCode))
                     .forEach(element::addContent);
+        }
+        if (activeParticipant.getMediaType() != null) {
+            element.addContent(
+                    new Element("MediaIdentifier")
+                            .addContent(codedValueType("MediaType", activeParticipant.getMediaType())));
         }
         return element;
     }
