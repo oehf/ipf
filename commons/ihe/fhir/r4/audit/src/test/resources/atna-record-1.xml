@@ -1,0 +1,30 @@
+<AuditMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="D:\data\DICOM\security\audit-message.rnc">
+    <EventIdentification EventActionCode="C" EventDateTime="2001-12-17T09:30:47" EventOutcomeIndicator="0">
+        <EventID code="110104" codeSystemName="DCM" displayName="DICOM Instances Transferred"/>
+    </EventIdentification>
+    <ActiveParticipant UserID="123" AlternativeUserID="AETITLE=AEFOO" UserIsRequestor="false" NetworkAccessPointID="192.168.1.2" NetworkAccessPointTypeCode="2">
+        <RoleIDCode code="110153" codeSystemName="DCM" displayName="Source Role ID "/>
+    </ActiveParticipant>
+    <ActiveParticipant UserID="67562" AlternativeUserID="AETITLE=AEPACS" UserIsRequestor="false" NetworkAccessPointID="192.168.1.5" NetworkAccessPointTypeCode="2">
+        <RoleIDCode code="110152" codeSystemName="DCM" displayName="Destination Role ID "/>
+    </ActiveParticipant>
+    <ActiveParticipant UserID="smitty@readingroom.hospital.org" AlternativeUserID="smith@nema" UserName="Dr. Smith" UserIsRequestor="true" NetworkAccessPointID="192.168.1.2" NetworkAccessPointTypeCode="2">
+        <RoleIDCode code="110153" codeSystemName="DCM" displayName="Source Role ID "/>
+    </ActiveParticipant>
+    <AuditSourceIdentification AuditEnterpriseSiteID="Hospital" AuditSourceID="ReadingRoom">
+        <AuditSourceTypeCode code="1"/>
+    </AuditSourceIdentification>
+    <ParticipantObjectIdentification ParticipantObjectID="1.2.840.10008.2.3.4.5.6.7.78.8" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="3" ParticipantObjectDataLifeCycle="1">
+        <ParticipantObjectIDTypeCode code="110180" codeSystemName="DCM" displayName="Study Instance 725 UID"/>
+        <ParticipantObjectDescription>
+            <MPPS UID="1.2.840.10008.1.2.3.4.5"/>
+            <Accession Number="12341234"/>
+            <SOPClass UID="1.2.840.10008.5.1.4.1.1.2" NumberOfInstances="1500"/>
+            <SOPClass UID="1.2.840.10008.5.1.4.1.1.11.1" NumberOfInstances="3"/>
+        </ParticipantObjectDescription>
+    </ParticipantObjectIdentification>
+    <ParticipantObjectIdentification ParticipantObjectID="ptid12345" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+        <ParticipantObjectIDTypeCode code="2"/>
+        <ParticipantObjectName>John Doe</ParticipantObjectName>
+    </ParticipantObjectIdentification>
+</AuditMessage>
