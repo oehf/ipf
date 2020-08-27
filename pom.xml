@@ -56,21 +56,21 @@
         <site-plugin-version>3.9.0</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.12</activemq-version>
+        <activemq-version>5.16.0</activemq-version>
         <commons-codec-version>1.14</commons-codec-version>
-        <commons-io-version>2.6</commons-io-version>
-        <commons-lang3-version>3.10</commons-lang3-version>
+        <commons-io-version>2.7</commons-io-version>
+        <commons-lang3-version>3.11</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
-        <ehcache-version>2.10.6</ehcache-version>
+        <ehcache-version>3.8.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>29.0-jre</guava-version>
         <httpclient4-version>4.5.12</httpclient4-version>
-        <jackson-version>2.10.3</jackson-version>
+        <jackson-version>2.11.2</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.28.v20200408</jetty-version>
+        <jetty-version>9.4.31.v20200723</jetty-version>
         <junit-version>4.12</junit-version>
         <log4j-version>2.13.3</log4j-version>
         <lombok-version>1.18.12</lombok-version>
@@ -78,7 +78,7 @@
         <mockserver-version>5.10</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
-        <tomcat-version>9.0.35</tomcat-version>
+        <tomcat-version>9.0.37</tomcat-version>
         <woodstox-version>6.2.1</woodstox-version>
         <xbean-spring-version>4.17</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -223,7 +223,7 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>net.sf.ehcache</groupId>
+                <groupId>org.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${ehcache-version}</version>
             </dependency>

@@ -16,8 +16,10 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v3.storage;
 
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
+
+import javax.cache.Cache;
+
+import java.io.Serializable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,56 +29,62 @@ import static java.util.Objects.requireNonNull;
  */
 public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
 
-    private final Ehcache ehcache;
+    private final Cache<String, Serializable> ehcache;
 
     private static final String MESSAGE_SUFFIX = ".message";
     private static final String LAST_RESULT_NUMBER_SUFFIX = ".lastIndex";
     private static final String CONTINUATION_QUANTITY_SUFFIX = ".quantity";
 
-    EhcacheHl7v3ContinuationStorage(Ehcache ehcache) {
+    EhcacheHl7v3ContinuationStorage(Cache<String, Serializable> ehcache) {
         requireNonNull(ehcache);
         this.ehcache = ehcache;
     }
 
+    @Override
     public void storeMessage(String key, String message) {
-        ehcache.put(new Element(key + MESSAGE_SUFFIX, message));
+        ehcache.put(key + MESSAGE_SUFFIX, message);
     }
 
+    @Override
     public String getMessage(String key) {
-        var element = ehcache.get(key + MESSAGE_SUFFIX);
-        return element != null ? (String) element.getObjectValue() : null;
+        return (String) ehcache.get(key + MESSAGE_SUFFIX);
     }
 
+    @Override
     public void storeLastResultNumber(String key, int lastResultNumber) {
-        ehcache.put(new Element(key + LAST_RESULT_NUMBER_SUFFIX, lastResultNumber));
+        ehcache.put(key + LAST_RESULT_NUMBER_SUFFIX, lastResultNumber);
     }
 
+    @Override
     public int getLastResultNumber(String key) {
-        var element = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
-        if (element != null) {
-            var i = (Integer) element.getObjectValue();
-            return (i != null) ? i : -1;
+        var value = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
+        if (value != null) {
+            return (value != null) ? (int) value : -1;
         }
         return -1;
     }
 
+    @Override
     public void storeContinuationQuantity(String key, int continuationQuantity) {
-        ehcache.put(new Element(key + CONTINUATION_QUANTITY_SUFFIX, continuationQuantity));
+        ehcache.put(key + CONTINUATION_QUANTITY_SUFFIX, continuationQuantity);
     }
 
+    @Override
     public int getContinuationQuantity(String key) {
-        var element = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
-        if (element != null) {
-            var i = (Integer) element.getObjectValue();
-            return (i != null) ? i : -1;
+        var value = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
+        if (value != null) {
+            return (value != null) ? (int) value : -1;
         }
         return -1;
     }
 
+    @Override
     public boolean remove(String key) {
+        boolean exists = ehcache.get(key + MESSAGE_SUFFIX) != null;
         ehcache.remove(key + LAST_RESULT_NUMBER_SUFFIX);
         ehcache.remove(key + CONTINUATION_QUANTITY_SUFFIX);
-        return ehcache.remove(key + MESSAGE_SUFFIX);
+        ehcache.remove(key + MESSAGE_SUFFIX);
+        return exists;
     }
 
 }

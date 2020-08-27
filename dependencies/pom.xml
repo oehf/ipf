@@ -9,10 +9,10 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.11.2</brave-version>
+        <brave-version>5.12.5</brave-version>
         <camel-version>3.4.0</camel-version>
-        <cxf-version>3.3.6</cxf-version>
-        <groovy-version>3.0.4</groovy-version>
+        <cxf-version>3.4.0</cxf-version>
+        <groovy-version>3.0.5</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.0.2</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
@@ -26,17 +26,18 @@
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
         <mina-version>2.1.3</mina-version>
-        <netty-version>4.1.50.Final</netty-version>
+        <netty-version>4.1.51.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
         <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.2.7.RELEASE</spring-version>
-        <spring-boot-version>2.3.1.RELEASE</spring-boot-version>
+        <spring-version>5.2.8.RELEASE</spring-version>
+        <spring-boot-version>2.3.3.RELEASE</spring-boot-version>
         <vertx-version>3.9.0</vertx-version>
         <vibur-version>22.2</vibur-version>
-        <xmlsec-version>2.1.5</xmlsec-version>
+        <xmlsec-version>2.2.0</xmlsec-version>
+        <cacheing-api-version>1.1.1</cacheing-api-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -969,6 +970,11 @@
                 <groupId>org.openehealth.ipf.gazelle</groupId>
                 <artifactId>ipf-gazelle-validation-profiles-rad</artifactId>
                 <version>${ipf-gazelle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.cache</groupId>
+                <artifactId>cache-api</artifactId>
+                <version>${cacheing-api-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
+import static org.junit.Assert.assertFalse
 
 /**
  * Tests for ITI-47.
@@ -99,7 +100,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether cancel message has had effect
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
-        assertEquals(0, storage.ehcache.size)
+        assertFalse(storage.ehcache.iterator().hasNext())
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
@@ -197,6 +198,6 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether HL7 v2 continuation has really been used
         EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
-        assertTrue(storage.ehcache.size > 0)
+        assertTrue(storage.ehcache.iterator().hasNext())
     }
 }

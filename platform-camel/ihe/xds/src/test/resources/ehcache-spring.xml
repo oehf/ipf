@@ -20,7 +20,11 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+    <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
+    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
+            <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
+        <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
+    </bean>
 
     <bean id="correlator"
           class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">
