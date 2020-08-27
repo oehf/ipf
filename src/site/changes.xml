@@ -30,6 +30,9 @@
 			<action dev="thopap" issue="310" type="add">
                 Improvements to simplified XDS model for sources to support creation of unique OIDs and Has-Member Associations.
             </action>
+            <action dev="thopap" issue="311" type="update">
+                Replace usage of Ehcache 2.x with JCache (jsr-107) where Ehcache 3.x can be used as implementation.
+            </action>
         </release>
         <release version="3.7.0" description="IPF 3.7.0" date="17 Apr 2020">
             <action dev="ohr" issue="304" type="add">
