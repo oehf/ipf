@@ -369,7 +369,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new NumberValidation(DOC_ENTRY_SERVICE_START_TO, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_END_FROM, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_END_TO, timeValidator),
-                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
                         new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
                 };
