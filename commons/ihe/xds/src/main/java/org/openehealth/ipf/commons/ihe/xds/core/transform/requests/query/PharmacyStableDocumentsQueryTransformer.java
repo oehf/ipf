@@ -80,10 +80,10 @@ abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableD
         var slots = new QuerySlotHelper(ebXML);
 
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
-        query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
+        query.setConfidentialityCodes(slots.toCodeList(DOC_ENTRY_CONFIDENTIALITY_CODE));
         query.getCreationTime().setFrom(slots.toNumber(DOC_ENTRY_CREATION_TIME_FROM));
         query.getCreationTime().setTo(slots.toNumber(DOC_ENTRY_CREATION_TIME_TO));
-        query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
+        query.setEventCodes(slots.toCodeList(DOC_ENTRY_EVENT_CODE));
         query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
         query.setUniqueIds(slots.toStringList(DOC_ENTRY_UNIQUE_ID));

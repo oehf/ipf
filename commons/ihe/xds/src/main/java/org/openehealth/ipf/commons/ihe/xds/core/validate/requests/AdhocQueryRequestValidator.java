@@ -356,8 +356,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
                         new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                        new CodeValidation(DOC_ENTRY_EVENT_CODE),
+                        new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
                         new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                         new StatusValidation(DOC_ENTRY_STATUS),
                 };

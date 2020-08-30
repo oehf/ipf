@@ -53,9 +53,9 @@ public abstract class PharmacyStableDocumentsQuery extends PharmacyDocumentsQuer
     @XmlElement(name = "healthcareFacilityTypeCode")
     @Getter @Setter private List<Code> healthcareFacilityTypeCodes;
     @XmlElement(name = "eventCode")
-    @Getter @Setter private QueryList<Code> eventCodes;
+    @Getter @Setter private List<Code> eventCodes;
     @XmlElement(name = "confidentialityCode")
-    @Getter @Setter private QueryList<Code> confidentialityCodes;
+    @Getter @Setter private List<Code> confidentialityCodes;
     @XmlElement(name = "authorPerson")
     @Getter @Setter private List<String> authorPersons;
 
