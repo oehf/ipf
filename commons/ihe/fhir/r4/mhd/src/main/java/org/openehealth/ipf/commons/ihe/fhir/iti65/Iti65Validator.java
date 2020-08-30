@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
 import ca.uhn.fhir.context.support.IValidationSupport;
+import ca.uhn.fhir.context.support.ValidationSupportContext;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.common.hapi.validation.support.CommonCodeSystemsTerminologyService;
@@ -27,17 +28,7 @@ import org.hl7.fhir.common.hapi.validation.support.PrePopulatedValidationSupport
 import org.hl7.fhir.common.hapi.validation.support.SnapshotGeneratingValidationSupport;
 import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
-import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.DocumentManifest;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.ListResource;
-import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
-import org.hl7.fhir.r4.model.ResourceType;
-import org.hl7.fhir.r4.model.StructureDefinition;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r5.utils.IResourceValidator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
@@ -128,13 +119,15 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         var url = IHE_PROFILE_PREFIX + name;
         var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
         if (is != null) {
-            var profileText = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
-            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
-            var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
-            return Optional.of(structureDefinition.hasSnapshot() ?
-                    structureDefinition :
-                    (StructureDefinition) new SnapshotGeneratingValidationSupport(fhirContext)
-                            .generateSnapshot(snaphotGenerationSupport, structureDefinition, url, url, name));
+            try (var scanner = new Scanner(is, StandardCharsets.UTF_8)) {
+                var profileText = scanner.useDelimiter("\\A").next();
+                var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
+                var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
+                return Optional.of(structureDefinition.hasSnapshot() ? structureDefinition
+                        : (StructureDefinition) new SnapshotGeneratingValidationSupport(fhirContext).generateSnapshot(
+                                new ValidationSupportContext(snaphotGenerationSupport), structureDefinition, url, url,
+                                name));
+            }
         }
         return Optional.empty();
     }
