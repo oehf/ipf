@@ -269,7 +269,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_DOCUMENTS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
                 };
@@ -277,7 +277,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_DOCUMENTS_AND_ASSOCIATIONS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
                 };
@@ -285,7 +285,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_FOLDERS_FOR_DOCUMENT:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                 };
@@ -293,7 +293,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_FOLDERS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
+                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
                         new StringListValidation(FOLDER_UUID, nopValidator),
                         new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
                 };
@@ -308,7 +308,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_SUBMISSION_SET_AND_CONTENTS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
+                        new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                         new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
                         new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
@@ -319,7 +319,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_FOLDER_AND_CONTENTS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
+                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
                         new StringValidation(FOLDER_UUID, nopValidator, true),
                         new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
@@ -330,7 +330,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_RELATED_DOCUMENTS:
                 return new QueryParameterValidation[]{
                         new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                         new AssociationValidation(ASSOCIATION_TYPE),
@@ -345,7 +345,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case FIND_PRESCRIPTIONS_FOR_DISPENSE:
                 return new QueryParameterValidation[]{
                         new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new ChoiceValidation(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringListValidation(FOLDER_UUID, nopValidator),
                         new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
                         new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
@@ -356,8 +356,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
                         new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                        new CodeValidation(DOC_ENTRY_EVENT_CODE),
+                        new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
                         new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                         new StatusValidation(DOC_ENTRY_STATUS),
                 };
@@ -369,7 +369,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new NumberValidation(DOC_ENTRY_SERVICE_START_TO, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_END_FROM, timeValidator),
                         new NumberValidation(DOC_ENTRY_SERVICE_END_TO, timeValidator),
-                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
                         new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
                 };

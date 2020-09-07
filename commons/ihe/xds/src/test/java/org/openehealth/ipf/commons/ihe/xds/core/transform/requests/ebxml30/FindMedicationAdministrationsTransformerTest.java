@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationAdministrationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindMedicationAdministrationsQueryTransformer;
@@ -51,12 +50,7 @@ public class FindMedicationAdministrationsTransformerTest {
         query = new FindMedicationAdministrationsQuery();
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
         query.setHomeCommunityId("12.21.41");
-        var confidentialityCodes = new QueryList<Code>();
-        confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
-        confidentialityCodes.getOuterList().add(
-                Collections.singletonList(new Code("code12", null, "scheme12")));
-        query.setConfidentialityCodes(confidentialityCodes);
+        query.setConfidentialityCodes(Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         query.getCreationTime().setFrom("1980");
         query.getCreationTime().setTo("1981");
         query.getServiceStartTime().setFrom("1982");
@@ -68,12 +62,7 @@ public class FindMedicationAdministrationsTransformerTest {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        var eventCodes = new QueryList<Code>();
-        eventCodes.getOuterList().add(
-                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
-        eventCodes.getOuterList().add(
-                Collections.singletonList(new Code("code9", null, "scheme9")));
-        query.setEventCodes(eventCodes);
+        query.setEventCodes(Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
@@ -87,10 +76,8 @@ public class FindMedicationAdministrationsTransformerTest {
         assertEquals("12.21.41", ebXML.getHome());
         assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        var confidentialitySlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
-        assertEquals(2, confidentialitySlots.size());
-        assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), confidentialitySlots.get(0).getValueList());
-        assertEquals(Collections.singletonList("('code12^^scheme12')"), confidentialitySlots.get(1).getValueList());
+        assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName()));
         assertEquals(Collections.singletonList("1980"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_FROM.getSlotName()));
         assertEquals(Collections.singletonList("1981"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_TO.getSlotName()));
         assertEquals(Collections.singletonList("1982"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_FROM.getSlotName()));
@@ -105,10 +92,8 @@ public class FindMedicationAdministrationsTransformerTest {
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()));
-        var eventSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
-        assertEquals(2, eventSlots.size());
-        assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), eventSlots.get(0).getValueList());
-        assertEquals(Collections.singletonList("('code9^^scheme9')"), eventSlots.get(1).getValueList());
+        assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName()));
         assertEquals(Arrays.asList("('per''son1')", "('person2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_AUTHOR_PERSON.getSlotName()));
     }
