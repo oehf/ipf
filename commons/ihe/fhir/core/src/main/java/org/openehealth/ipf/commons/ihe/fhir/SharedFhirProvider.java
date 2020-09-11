@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * Shared Resource provider, primarily (but not exclusively)  meant for batch/transaction requests.
  * Use this resource provider if you have several consumers that share the same FHIR interface.
- * The request is dispatched to the first consumer that returns true on {@link RequestConsumer#test(Object)}.
+ * The request is dispatched to the first consumer that returns true on {@link RequestConsumer#test(RequestDetails)}.
  * <p>
  * Components/Endpoints that use this resource provider must reference a (shared) singleton instance of a
  * concrete implementation of this class.
@@ -55,9 +55,9 @@ public abstract class SharedFhirProvider extends FhirProvider {
     }
 
     @Override
-    protected Optional<RequestConsumer> getConsumer(Object payload) {
+    protected Optional<RequestConsumer> getRequestConsumer(RequestDetails requestDetails) {
         return consumers.stream()
-                .filter(c -> c.test(payload))
+                .filter(c -> c.test(requestDetails))
                 .findFirst();
     }
 
@@ -91,7 +91,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        var consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
         var headers = enrichParameters(null, httpServletRequest, requestDetails);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);

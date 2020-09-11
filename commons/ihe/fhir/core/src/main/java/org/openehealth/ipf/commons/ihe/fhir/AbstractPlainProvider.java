@@ -51,9 +51,9 @@ public abstract class AbstractPlainProvider extends FhirProvider {
     }
 
     @Override
-    protected Optional<RequestConsumer> getConsumer(Object payload) {
+    protected Optional<RequestConsumer> getRequestConsumer(RequestDetails requestDetails) {
         return Optional.ofNullable(consumer)
-                .filter(c -> c.test(payload));
+                .filter(c -> c.test(requestDetails));
     }
 
     @Override
@@ -89,7 +89,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             Object payload, FhirSearchParameters parameters, Class<R> resultType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        var consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
         var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleResourceRequest(payload, headers, resultType);
@@ -112,7 +112,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             String resourceType,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        var consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
         var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
@@ -140,7 +140,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        var consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
         var headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
@@ -164,7 +164,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
-        var consumer = getConsumer(payload).orElseThrow(() ->
+        var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
         var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
         return consumer.handleAction(payload, headers);

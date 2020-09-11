@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.apache.camel.Consumer;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
@@ -176,7 +177,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return factory;
     }
 
-    public Predicate<Object> getConsumerSelector() {
+    public Predicate<RequestDetails> getConsumerSelector() {
         var consumerSelector = config.getConsumerSelector();
         if (consumerSelector == null) {
             consumerSelector = fhirComponent.getFhirTransactionConfiguration().getStaticConsumerSelector();

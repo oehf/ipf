@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -57,8 +58,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     @Override
-    public boolean test(Object payload) {
-        return getEndpoint().getConsumerSelector().test(payload);
+    public boolean test(RequestDetails requestDetails) {
+        return getEndpoint().getConsumerSelector().test(requestDetails);
     }
 
     @Override

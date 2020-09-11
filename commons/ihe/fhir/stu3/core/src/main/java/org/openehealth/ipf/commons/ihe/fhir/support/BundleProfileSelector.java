@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.UriType;
 import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
@@ -33,7 +34,7 @@ import java.util.function.Predicate;
  * @author Christian Ohr
  * @since 3.6
  */
-public class BundleProfileSelector implements Predicate<Object> {
+public class BundleProfileSelector implements Predicate<RequestDetails> {
 
     private final Set<String> profileUris;
 
@@ -45,12 +46,12 @@ public class BundleProfileSelector implements Predicate<Object> {
     }
 
     /**
-     * @param object bundle
+     * @param requestDetails request
      * @return true if one of the {@link #profileUris} are present in the Bundle's meta.profile
      */
     @Override
-    public boolean test(Object object) {
-        var bundle = (Bundle) object;
+    public boolean test(RequestDetails requestDetails) {
+        var bundle = (Bundle) requestDetails.getResource();
         return bundle.getMeta().getProfile().stream()
                 .map(UriType::getValueAsString)
                 .anyMatch(profileUris::contains);

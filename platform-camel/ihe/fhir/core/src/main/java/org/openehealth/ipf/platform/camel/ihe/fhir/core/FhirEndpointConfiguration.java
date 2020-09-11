@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
@@ -95,7 +96,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private final FhirSecurityInformation securityInformation;
 
     @Getter
-    private final Predicate<Object> consumerSelector;
+    private final Predicate<RequestDetails> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent

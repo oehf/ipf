@@ -39,23 +39,10 @@ public abstract class FhirProvider implements Serializable {
     /**
      * Returns the first consumer that is able to handle the provided paylaod
      *
-     * @param payload FHIR payload
+     * @param requestDetails FHIR request
      * @return consumer or {@link Optional#empty()}
      */
-    protected abstract Optional<RequestConsumer> getConsumer(Object payload);
-
-    /**
-     * Returns the (first) configured consumer if its {@link RequestConsumer#test(Object)}
-     * method always returns true.
-     *
-     * @return consumer
-     * @throws IllegalStateException if the consumer is not initialized or did reject
-     *                               being selected.
-     */
-    protected RequestConsumer getConsumer() {
-        return getConsumer(null).orElseThrow(() ->
-                new IllegalStateException("Consumer is not initialized"));
-    }
+    protected abstract Optional<RequestConsumer> getRequestConsumer(RequestDetails requestDetails);
 
     /**
      * Ensures that the provided consumer is considered by this provider

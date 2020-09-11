@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
@@ -41,7 +42,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
-    private Predicate<Object> staticConsumerSelector = o -> true;
+    private Predicate<RequestDetails> staticConsumerSelector = o -> true;
 
     public FhirTransactionConfiguration(
             String name,
@@ -116,11 +117,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return staticClientRequestFactory;
     }
 
-    public void setStaticConsumerSelector(Predicate<Object> staticConsumerSelector) {
+    public void setStaticConsumerSelector(Predicate<RequestDetails> staticConsumerSelector) {
         this.staticConsumerSelector = staticConsumerSelector;
     }
 
-    public Predicate<Object> getStaticConsumerSelector() {
+    public Predicate<RequestDetails> getStaticConsumerSelector() {
         return staticConsumerSelector;
     }
 
