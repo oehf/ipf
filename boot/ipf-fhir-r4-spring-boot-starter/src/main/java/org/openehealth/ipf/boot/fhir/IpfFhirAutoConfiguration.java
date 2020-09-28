@@ -25,27 +25,30 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.r4.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.Filter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Configuration
@@ -53,8 +56,11 @@ import java.util.Optional;
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirAutoConfiguration {
 
-    @Autowired
-    private IpfFhirConfigurationProperties config;
+    private final IpfFhirConfigurationProperties config;
+
+    public IpfFhirAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
 
     @Bean
     public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
@@ -74,7 +80,9 @@ public class IpfFhirAutoConfiguration {
     public NamingSystemService namingSystemService(FhirContext fhirContext) throws IOException {
         DefaultNamingSystemServiceImpl namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
         for (Resource resource : config.getNamingSystems()) {
-            namingSystemService.addNamingSystemsFromXml(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+                namingSystemService.addNamingSystemsFromXml(reader);
+            }
         }
         return namingSystemService;
     }
@@ -109,7 +117,7 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(INarrativeGenerator.class)
     public INarrativeGenerator narrativeGenerator() {
-        return (context, resource) -> false;
+        return (fhirContext, resource) -> false;
     }
 
     @Bean
@@ -130,7 +138,7 @@ public class IpfFhirAutoConfiguration {
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            Optional<IPagingProvider> pagingProvider,
+            ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);

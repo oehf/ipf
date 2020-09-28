@@ -23,13 +23,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -47,6 +45,10 @@ public class IpfFhirConfigurationProperties {
     @NestedConfigurationProperty
     @Getter
     private final Servlet servlet = new Servlet();
+
+    @NestedConfigurationProperty
+    @Getter
+    private final CorsConfiguration cors;
 
     /**
      * Path that serves as the base URI for the FHIR services.
@@ -68,7 +70,9 @@ public class IpfFhirConfigurationProperties {
     @Getter @Setter
     private boolean caching;
 
-
+    public IpfFhirConfigurationProperties() {
+        this.cors = defaultCorsConfiguration();
+    }
 
     String getFhirMapping() {
         String path = getPath();
@@ -143,5 +147,18 @@ public class IpfFhirConfigurationProperties {
          */
         @Getter @Setter
         private boolean strict = false;
+    }
+
+    private static CorsConfiguration defaultCorsConfiguration() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.addAllowedOrigin("*");
+        cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+        // A comma separated list of allowed headers when making a non simple CORS request.
+        cors.setAllowedHeaders(Arrays.asList("Origin", "Accept", "Content-Type",
+                "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization",
+                "Prefer", "If-Match", "If-None-Match", "If-Modified-Since", "If-None-Exist"));
+        cors.setExposedHeaders(Arrays.asList("Location", "Content-Location", "ETag", "Last-Modified"));
+        cors.setMaxAge(300L);
+        return cors;
     }
 }

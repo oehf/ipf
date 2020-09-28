@@ -25,11 +25,11 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Configuration
@@ -53,8 +52,11 @@ import java.util.Optional;
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirAutoConfiguration {
 
-    @Autowired
-    private IpfFhirConfigurationProperties config;
+    private final IpfFhirConfigurationProperties config;
+
+    public IpfFhirAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
 
     @Bean
     public FhirContext fhirContext(FhirContextCustomizer fhirContextCustomizer) {
@@ -74,7 +76,9 @@ public class IpfFhirAutoConfiguration {
     public NamingSystemService namingSystemService(FhirContext fhirContext) throws IOException {
         DefaultNamingSystemServiceImpl namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
         for (Resource resource : config.getNamingSystems()) {
-            namingSystemService.addNamingSystemsFromXml(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+                namingSystemService.addNamingSystemsFromXml(reader);
+            }
         }
         return namingSystemService;
     }
@@ -82,9 +86,9 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "fhirServletRegistration")
     @ConditionalOnWebApplication
-    public ServletRegistrationBean fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
+    public ServletRegistrationBean<IpfFhirServlet> fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
         String urlMapping = config.getFhirMapping();
-        ServletRegistrationBean registration = new ServletRegistrationBean(camelFhirServlet, urlMapping);
+        ServletRegistrationBean<IpfFhirServlet> registration = new ServletRegistrationBean<>(camelFhirServlet, urlMapping);
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         registration.setLoadOnStartup(servletProperties.getLoadOnStartup());
         registration.setName(servletProperties.getName());
@@ -109,7 +113,7 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(INarrativeGenerator.class)
     public INarrativeGenerator narrativeGenerator() {
-        return (context, resource) -> false;
+        return (fhirContext, resource) -> false;
     }
 
     @Bean
@@ -130,7 +134,7 @@ public class IpfFhirAutoConfiguration {
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
             IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
-            Optional<IPagingProvider> pagingProvider,
+            ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);

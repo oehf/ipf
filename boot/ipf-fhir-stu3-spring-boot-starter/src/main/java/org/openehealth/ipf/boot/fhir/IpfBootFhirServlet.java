@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.util.Optional;
 
@@ -27,15 +28,15 @@ import java.util.Optional;
  */
 public class IpfBootFhirServlet extends IpfFhirServlet {
 
-    private final Optional<IPagingProvider> pagingProvider;
+    private final ObjectProvider<IPagingProvider> pagingProvider;
 
-    public IpfBootFhirServlet(FhirContext fhirContext, Optional<IPagingProvider> pagingProvider) {
+    public IpfBootFhirServlet(FhirContext fhirContext, ObjectProvider<IPagingProvider> pagingProvider) {
         super(fhirContext);
         this.pagingProvider = pagingProvider;
     }
 
     @Override
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        return pagingProvider.orElse(super.getDefaultPagingProvider(pagingProviderSize));
+        return pagingProvider.getIfAvailable(() -> super.getDefaultPagingProvider(pagingProviderSize));
     }
 }
