@@ -42,7 +42,7 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.R4,
                 BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
-                new Iti65Validator());
+                Iti65Validator::new);
         setStaticConsumerSelector(new BundleProfileSelector(
                 ITI65_COMPREHENSIVE_METADATA_PROFILE,
                 ITI65_MINIMAL_METADATA_PROFILE,

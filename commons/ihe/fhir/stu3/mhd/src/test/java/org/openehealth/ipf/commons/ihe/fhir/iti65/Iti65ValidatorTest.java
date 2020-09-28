@@ -45,8 +45,8 @@ public class Iti65ValidatorTest {
 
     @Test
     public void validate() throws Exception {
-        Iti65Validator iti65Validator = new Iti65Validator();
-        iti65Validator.validateRequest(FhirContext.forDstu3(), provideAndRegister(), Collections.emptyMap());
+        Iti65Validator iti65Validator = new Iti65Validator(FhirContext.forDstu3());
+        iti65Validator.validateRequest(provideAndRegister(), Collections.emptyMap());
     }
 
     protected Bundle provideAndRegister() throws Exception {

@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Instances of {@link FhirTransactionValidator} are used in order to have FHIR request and response validated.
@@ -27,7 +28,7 @@ import java.util.Map;
  */
 public interface FhirTransactionValidator {
 
-    FhirTransactionValidator NO_VALIDATION = new Support();
+    Function<FhirContext, FhirTransactionValidator> NO_VALIDATION = fhirContext -> new Support();
 
     default void initialize(FhirContext context) {
     }
@@ -36,31 +37,29 @@ public interface FhirTransactionValidator {
      * Validates a FHIR request, throwing an {@link ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException}
      * on validation failure
      *
-     * @param context    FHIR context
      * @param payload    request payload
      * @param parameters request parameters
      */
-    void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters);
+    void validateRequest(Object payload, Map<String, Object> parameters);
 
     /**
      * Validates a FHIR response, throwing an appropriate subclass of
      * {@link ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException} on
      * validation failure
      *
-     * @param context    FHIR context
      * @param payload    response payload
      * @param parameters response parameters
      */
-    void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters);
+    void validateResponse(Object payload, Map<String, Object> parameters);
 
     class Support implements FhirTransactionValidator {
 
         @Override
-        public void validateRequest(FhirContext context, Object payload, Map<String, Object> headers) {
+        public void validateRequest(Object payload, Map<String, Object> headers) {
         }
 
         @Override
-        public void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters) {
+        public void validateResponse(Object payload, Map<String, Object> parameters) {
         }
     }
 }
