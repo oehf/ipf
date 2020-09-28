@@ -25,8 +25,8 @@ import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
 import org.springframework.beans.factory.ObjectProvider;
@@ -35,11 +35,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.Filter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -84,15 +87,13 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "fhirServletRegistration")
     @ConditionalOnWebApplication
-    public ServletRegistrationBean fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
+    public ServletRegistrationBean<IpfFhirServlet> fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
         var urlMapping = config.getFhirMapping();
-        var registration = new ServletRegistrationBean(camelFhirServlet, urlMapping);
+        var registration = new ServletRegistrationBean<>(camelFhirServlet, urlMapping);
         var servletProperties = config.getServlet();
         registration.setLoadOnStartup(servletProperties.getLoadOnStartup());
         registration.setName(servletProperties.getName());
-        for (var entry : servletProperties.getInit().entrySet()) {
-            registration.addInitParameter(entry.getKey(), entry.getValue());
-        }
+        servletProperties.getInit().forEach(registration::addInitParameter);
         return registration;
     }
 
@@ -152,4 +153,13 @@ public class IpfFhirAutoConfiguration {
         return fhirServlet;
     }
 
+    @Bean
+    @ConditionalOnMissingBean(name = "corsFilterRegistration")
+    @ConditionalOnWebApplication
+    public FilterRegistrationBean<Filter> corsFilterRegistration() {
+        var frb = new FilterRegistrationBean<>();
+        frb.addUrlPatterns(config.getFhirMapping());
+        frb.setFilter(new CorsFilter(request -> config.getCors()));
+        return frb;
+    }
 }
