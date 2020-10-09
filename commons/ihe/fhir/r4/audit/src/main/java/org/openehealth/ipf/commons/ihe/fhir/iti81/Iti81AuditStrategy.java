@@ -16,24 +16,42 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
-
-import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.hl7.fhir.r4.model.AuditEvent;
+import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 /**
- * ITI-81 audit strategy: none
+ * ITI-81 audit strategy
  *
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti81AuditStrategy extends NoAuditStrategy<FhirQueryAuditDataset> {
+public class Iti81AuditStrategy extends FhirAuditStrategy<FhirAuditEventQueryAuditDataset> {
 
     public Iti81AuditStrategy(boolean serverSide) {
-        super(serverSide);
+        super(serverSide, OperationOutcomeOperations.INSTANCE);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
+    public FhirAuditEventQueryAuditDataset createAuditDataset() {
+        return new FhirAuditEventQueryAuditDataset(isServerSide());
+    }
+
+    @Override
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirAuditEventQueryAuditDataset auditDataset) {
+        return new IHEAuditLogUsedBuilder(auditContext, auditDataset).getMessages();
+    }
+
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirAuditEventQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
+        var bundle = (Bundle) response;
+        bundle.getEntry().stream()
+                        .filter(bundleEntryComponent -> bundleEntryComponent.getResource() instanceof AuditEvent)
+                        .map(Bundle.BundleEntryComponent::getFullUrl)
+                        .forEach(uri -> auditDataset.getAuditEventUris().add(uri));
+        return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 }

@@ -36,13 +36,13 @@ public class Iti81SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private DateRangeParam interval;
     @Getter @Setter private StringAndListParam address;
+    @Getter @Setter private ReferenceParam agent;
     @Getter @Setter private TokenAndListParam patientId;
     @Getter @Setter private ReferenceParam entity;
     @Getter @Setter private TokenAndListParam entityType;
     @Getter @Setter private TokenAndListParam entityRole;
-    @Getter @Setter private StringAndListParam source;
+    @Getter @Setter private ReferenceParam source;
     @Getter @Setter private TokenAndListParam type;
-    @Getter @Setter private StringAndListParam user;
     @Getter @Setter private TokenAndListParam subtype;
     @Getter @Setter private TokenAndListParam outcome;
 

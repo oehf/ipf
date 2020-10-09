@@ -18,22 +18,14 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 
 /**
- * ITI-81 audit strategy: none
+ * ITI-81 audit strategy
  *
  * @author Christian Ohr
  * @since 3.6
  */
 public class Iti81ServerAuditStrategy extends Iti81AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti81ServerAuditStrategy INSTANCE = new Iti81ServerAuditStrategy();
-    }
-
-    public static Iti81ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti81ServerAuditStrategy() {
+    public Iti81ServerAuditStrategy() {
         super(true);
     }
 

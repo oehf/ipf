@@ -17,7 +17,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.annotation.IncludeParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.RequiredParam;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
@@ -47,14 +51,15 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider auditSearch(
             @RequiredParam(name = AuditEvent.SP_DATE) DateRangeParam interval,
             @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
+            @OptionalParam(name = AuditEvent.SP_AGENT) ReferenceParam agent,
             @OptionalParam(name = AuditEvent.SP_PATIENT + ".identifier") TokenAndListParam patientId,
             @OptionalParam(name = AuditEvent.SP_ENTITY) ReferenceParam entity,
             @OptionalParam(name = AuditEvent.SP_ENTITY_TYPE) TokenAndListParam entityType,
             @OptionalParam(name = AuditEvent.SP_ENTITY_ROLE) TokenAndListParam entityRole,
-            @OptionalParam(name = AuditEvent.SP_SOURCE) StringAndListParam source,
+            @OptionalParam(name = AuditEvent.SP_SOURCE) ReferenceParam source,
             @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
-            @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
+            @OptionalParam(name = AuditEvent.SP_OUTCOME) TokenAndListParam outcome,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             RequestDetails requestDetails,
@@ -64,6 +69,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
         var searchParameters = Iti81SearchParameters.builder()
                 .interval(interval)
                 .address(address)
+                .agent(agent)
                 .patientId(patientId)
                 .entity(entity)
                 .entityType(entityType)

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 
 /**
- * ParticipantObjectIdTypeCodes for the XDS transactions in this module
+ * ParticipantObjectIdTypeCodes for the FHIR transactions in this module
  *
  * @author Christian Ohr
  */
@@ -32,6 +32,7 @@ public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
     MobileDocumentReferenceQuery("ITI-67", "Mobile Document Reference Query"),
     MobileDocumentRetrieval("ITI-68", "Mobile Document Retrieval"),
     MobilePatientDemographicsQuery("ITI-78", "Mobile Patient Demographics Query"),
+    RetrieveATNAAuditEvent("ITI-81", "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query"),
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 

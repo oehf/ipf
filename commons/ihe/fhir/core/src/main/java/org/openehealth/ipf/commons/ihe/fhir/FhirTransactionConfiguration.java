@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -35,6 +36,9 @@ import java.util.function.Supplier;
  * @since 3.2
  */
 public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
+
+    // Avoid recreating the same FhirContext instances
+    private static final ConcurrentHashMap<FhirVersionEnum, FhirContext> fhirContexts = new ConcurrentHashMap<>();
 
     private final FhirVersionEnum fhirVersion;
     private final Supplier<FhirContext> fhirContextProvider;
@@ -102,7 +106,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;
-        this.fhirContextProvider = () -> new FhirContext(fhirVersion);
+        this.fhirContextProvider = () -> initializeFhirContext(fhirVersion);
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContextProvider.get()) : null;
@@ -132,9 +136,16 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * @return the initialized FhirContext
      */
     public FhirContext initializeFhirContext() {
-        var fhirContext = fhirContextProvider.get();
-        fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
-        return fhirContext;
+        return fhirContextProvider.get();
+    }
+
+    private static FhirContext initializeFhirContext(FhirVersionEnum fhirVersion) {
+        return fhirContexts.computeIfAbsent(fhirVersion, fhirVersionEnum -> {
+            FhirContext fhirContext = new FhirContext(fhirVersionEnum);
+            fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
+            return fhirContext;
+        });
+
     }
 
     public FhirVersionEnum getFhirVersion() {
@@ -158,6 +169,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     public boolean supportsLazyLoading() {
         return supportsLazyLoading;
     }
+
 
 
 }

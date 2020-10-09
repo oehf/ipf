@@ -31,6 +31,7 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobileDocumentReferenceQuery("ITI-67", "Mobile Document Reference Query"),
     MobileDocumentRetrieval("ITI-68", "Mobile Document Retrieval"),
     MobilePatientDemographicsQuery("ITI-78", "Mobile Patient Demographics Query"),
+    RetrieveATNAAuditEvent("ITI-81", "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query"),
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 

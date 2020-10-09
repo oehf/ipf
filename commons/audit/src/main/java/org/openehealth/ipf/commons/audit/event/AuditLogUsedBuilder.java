@@ -18,8 +18,10 @@ package org.openehealth.ipf.commons.audit.event;
 
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Builds an Audit Event representing a Audit Log Used event as specified in
@@ -56,19 +58,46 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
      * @param altUserId The Active Participant's Alternate UserID
      * @param userName  The Active Participant's UserName
      * @param networkId The Active Participant's Network Access Point ID
+     *
+     * @deprecated use {@link #addAccessingParticipant(String, String, String, boolean, List, String)}
      */
+    @Deprecated
     public AuditLogUsedBuilder addAccessingParticipant(String userId,
                                                        String altUserId,
                                                        String userName,
                                                        boolean userIsRequestor,
                                                        String networkId) {
+        return addAccessingParticipant(
+                userId,
+                altUserId,
+                userName,
+                userIsRequestor,
+                Collections.emptyList(),
+                networkId);
+    }
+
+    /**
+     * Adds the Active Participant of the User or System that accessed the log
+     *
+     * @param userId    The person or process accessing the audit trail. If both are known,
+     *                  then two active participants shall be included (both the person and the process).
+     * @param altUserId The Active Participant's Alternate UserID
+     * @param userName  The Active Participant's UserName
+     * @param networkId The Active Participant's Network Access Point ID
+     */
+    public AuditLogUsedBuilder addAccessingParticipant(String userId,
+                                                       String altUserId,
+                                                       String userName,
+                                                       boolean userIsRequestor,
+                                                       List<ActiveParticipantRoleId> roleIds,
+                                                       String networkId) {
         return addActiveParticipant(
-                        userId,
-                        altUserId,
-                        userName,
-                        userIsRequestor,
-                        Collections.emptyList(),
-                        networkId);
+                userId,
+                altUserId,
+                userName,
+                userIsRequestor,
+                roleIds,
+                networkId);
     }
 
     /**
@@ -95,8 +124,9 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
         if (getMessage().getActiveParticipants().isEmpty() || getMessage().getActiveParticipants().size() > 2) {
             throw new AuditException("Must have one or two participants that started the Application");
         }
-        if (getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.URI.equals(poi.getParticipantObjectIDTypeCode())).size() != 1) {
-            throw new AuditException("Must have exactly Audit Log Identity Participating Object ");
-        }
+        // ITI-81 allows multiple Audit Log Identity Participating Objects, so we disable this DICOM restriction for now
+        // if (getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.URI.equals(poi.getParticipantObjectIDTypeCode())).size() != 1) {
+        //    throw new AuditException("Must have exactly Audit Log Identity Participating Object ");
+        // }
     }
 }

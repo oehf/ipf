@@ -64,7 +64,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
-    private String servletName;
+    private final String servletName;
 
     @Getter
     @UriParam
@@ -104,7 +104,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean cacheBundles;
+    private final boolean cacheBundles;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
@@ -125,6 +125,8 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         context = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
 
+        // No FhirContext parameter is set on the endpoint, so the component must provide one according
+        // to the component's transaction configuration
         if (context == null) {
             context = component.initializeFhirContext();
             var parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");

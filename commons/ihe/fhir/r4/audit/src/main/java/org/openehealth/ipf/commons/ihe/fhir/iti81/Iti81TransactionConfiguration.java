@@ -26,14 +26,14 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti81TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
+public class Iti81TransactionConfiguration extends FhirTransactionConfiguration<FhirAuditEventQueryAuditDataset> {
 
     public Iti81TransactionConfiguration() {
         super("atna-iti81",
                 "Retrieve ATNA Audit Event",
                 true,
-                new Iti81AuditStrategy(false),
-                new Iti81AuditStrategy(true),
+                new Iti81ClientAuditStrategy(),
+                new Iti81ServerAuditStrategy(),
                 FhirVersionEnum.R4,
                 new Iti81ResourceProvider(),       // Consumer side. accept audit searches
                 new Iti81ClientRequestFactory(),

@@ -17,6 +17,13 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-fhir-r4-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
 
         <!-- FIXME get rid of this -->
         <dependency>
