@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="4.0.0" description="IPF 4.0.0" date="17 Apr 2020">
+            <action dev="ohr" issue="321" type="fix">
+                Correct ITI-81 audit strategy. Thanks to Mikolaj Novak for reporting.
+            </action>
+            <action dev="ohr" issue="317" type="fix">
+                Correct translation of lexical namespaces containing spaces into a URN
+            </action>
             <action dev="JurrianFahner" issue="307" type="update">
                 Replace joda time in favor for java.time.
             </action>
@@ -32,6 +38,36 @@
             </action>
             <action dev="thopap" issue="311" type="update">
                 Replace usage of Ehcache 2.x with JCache (jsr-107) where Ehcache 3.x can be used as implementation.
+            </action>
+        </release>
+        <release version="3.7.2" description="IPF 3.7.2" date="14 Jul 2020">
+            <action dev="ohr" issue="328" type="fix">
+                Updated to HAPI FHIR 5.1.0 and Camel 2.25.2
+            </action>
+            <action dev="ohr" issue="324" type="fix">
+                Fixing configuration of FHIR CORS Configuration (ipf.fhir.cors)
+            </action>
+            <action dev="unixoid" issue="320" type="fix">
+                Fixed RoleIDCode and MediaIdentifier order inside an ActiveParticipant entity.
+                Thanks to Dumitru Pascu for the PR.
+            </action>
+            <action dev="ohr" issue="319" type="fix">
+                Fixed MissingPropertyException when converting AuditMessage to AuditEvent.
+                Thanks to Mikolaj Nowak for reporting.
+            </action>
+        </release>
+        <release version="3.7.1" description="IPF 3.7.1" date="14 Jul 2020">
+            <action dev="unixoid" issue="316" type="fix">
+                Fix parameter type in PHARM-1 FindMedicationList query. Thanks to Quentin Ligier for the PR.
+                Also fixed the dispatching machinery (WSA actions shall be used instead of operation names,
+                because CXF cannot determine operation names properly
+            </action>
+            <action dev="unixoid" issue="313" type="fix">
+                Keep MDC context while sending audit records via ExecutorService. Thanks to Dumitru Pascu for the PR.
+                Leverage the same approach in asynchronous Iti55Service
+            </action>
+            <action dev="ohr" issue="307" type="fix">
+                Fixed header in JmsAuditMessageListener
             </action>
         </release>
         <release version="3.7.0" description="IPF 3.7.0" date="17 Apr 2020">

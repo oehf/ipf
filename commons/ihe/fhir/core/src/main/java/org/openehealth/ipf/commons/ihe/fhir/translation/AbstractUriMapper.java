@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import org.openehealth.ipf.commons.core.URN;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public abstract class AbstractUriMapper implements UriMapper {
     public String namespaceToUri(String namespace) {
         return mapNamespaceToUri(namespace)
                 .filter(uri -> !namespace.equals(uri))
-                .orElse(urn(URN.PIN, namespace.replaceAll("\\s+", "_")).toString());
+                .orElse(urn(URN.PIN, namespace).toString());
     }
 
     /**
@@ -118,11 +119,13 @@ public abstract class AbstractUriMapper implements UriMapper {
         }
     }
 
-    private URN urn(String nid, String nss) {
+    private static URN urn(String nid, String nss) {
+        String urn = String.format("%s:%s", nid, nss);
         try {
-            return new URN(nid, nss);
+            // This does the escaping e.g. of whitespaces in the nss
+            return new URN(new URI("urn", urn, null));
         } catch (URISyntaxException e) {
-            throw new InvalidUriSyntaxException("uri:urn:" + nss, e);
+            throw new InvalidUriSyntaxException(urn, e);
         }
     }
 
