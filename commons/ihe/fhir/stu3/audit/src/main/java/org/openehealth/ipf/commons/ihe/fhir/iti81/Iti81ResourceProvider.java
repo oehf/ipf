@@ -54,7 +54,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
             @OptionalParam(name = AuditEvent.SP_USER) StringAndListParam user,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
-            @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
+            @OptionalParam(name = AuditEvent.SP_OUTCOME) TokenAndListParam outcome,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             RequestDetails requestDetails,
