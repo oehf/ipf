@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="U" EventDateTime="2020-03-19T13:59:32.298Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110110" codeSystemName="DCM" originalText="Patient Record"/>
+    <EventTypeCode csd-code="ITI-64" codeSystemName="IHE Transactions" originalText="Notify XAD-PID Link Change"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="BLA|IHE_SYS_IHERED" AlternativeUserID="14756" UserIsRequestor="true" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="BLUB" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="EHR_019" AuditSourceID="EHR_2019">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEGREEN-2340^^^IHEGREEN&amp;1.3.6.1.4.1.21367.13.20.2000&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1" ParticipantObjectDataLifeCycle="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+    <ParticipantObjectDetail type="MSH-10" value="MjA0OTAx"/>
+    <ParticipantObjectDetail type="urn:ihe:iti:xpid:2017:patientIdentifierType" value="bG9jYWxQYXRpZW50SWQ="/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEGREEN-2342^^^IHEGREEN&amp;1.3.6.1.4.1.21367.13.20.2000&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1" ParticipantObjectDataLifeCycle="14">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+    <ParticipantObjectDetail type="MSH-10" value="MjA0OTAx"/>
+    <ParticipantObjectDetail type="urn:ihe:iti:xpid:2017:patientIdentifierType" value="c3Vic3VtZWRQYXRpZW50SWQ="/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHERED-2340^^^IHERED&amp;1.3.6.1.4.1.21367.13.20.1000&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1" ParticipantObjectDataLifeCycle="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+    <ParticipantObjectDetail type="MSH-10" value="MjA0OTAx"/>
+    <ParticipantObjectDetail type="urn:ihe:iti:xpid:2017:patientIdentifierType" value="bmV3UGF0aWVudElk"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHERED-2342^^^IHERED&amp;1.3.6.1.4.1.21367.13.20.1000&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1" ParticipantObjectDataLifeCycle="14">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+    <ParticipantObjectDetail type="MSH-10" value="MjA0OTAx"/>
+    <ParticipantObjectDetail type="urn:ihe:iti:xpid:2017:patientIdentifierType" value="cHJldmlvdXNQYXRpZW50SWQ="/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

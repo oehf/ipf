@@ -20,6 +20,8 @@ import io.vertx.core.net.NetClientOptions;
 /**
  * Extension interface for {@link TlsParameters} for Vert.x based
  * ATNA clients.
+ *
+ * @deprecated 
  */
 public interface VertxTlsParameters extends TlsParameters {
 

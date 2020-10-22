@@ -17,18 +17,17 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
+import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createTCPServerTwoWayTLS;
+import java.util.concurrent.TimeUnit;
 
-@RunWith(VertxUnitRunner.class)
+import static org.junit.Assert.assertFalse;
+
 public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSAuditorFailingIntegrationTest.class);
@@ -36,7 +35,7 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
     private CustomTlsParameters tlsParameters;
 
     @Before
-    public void setup() {
+    public void setupTls() {
         tlsParameters = new CustomTlsParameters();
         tlsParameters.setKeyStoreFile(EXPIRED_CLIENT_KEY_STORE);
         tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
@@ -46,27 +45,16 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
     }
 
     @Test
-    public void testTLSTwoWayTLSWrongClientCert(TestContext testContext) throws Exception {
+    public void testTLSTwoWayTLSWrongClientCert() throws InterruptedException {
         auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
-        var async = testContext.async();
-        deploy(testContext, createTCPServerTwoWayTLS(port,
-                TRUST_STORE,
-                TRUST_STORE_PASS,
-                SERVER_KEY_STORE,
-                SERVER_KEY_STORE_PASS,
-                async));
-        sendAudit();
-        try {
-            async.awaitSuccess(WAIT_TIME);
-            fail("Expected time-out");
-        } catch (Exception e) {
-            LOG.info("Exception thrown :" + e.getMessage());
+        var consumer = new SyslogEventCollector.WithExpectation(1);
+        try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, TlsParameters.getDefault())
+                .start("localhost", port)) {
+            sendAudit();
+            assertFalse(consumer.await(1, TimeUnit.SECONDS));
         }
-        if (async.isSucceeded()) {
-            fail("Expected failure");
-        }
-        async.complete();
+
     }
 
 

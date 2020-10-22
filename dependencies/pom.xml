@@ -30,7 +30,9 @@
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.9</ph-commons-version>
+        <reactor-netty-version>0.9.12.RELEASE</reactor-netty-version>
         <saxon-he-version>10.2</saxon-he-version>
+        <simple-syslog-version>0.0.13</simple-syslog-version>
         <slf4j-version>1.7.30</slf4j-version>
         <spring-version>5.2.8.RELEASE</spring-version>
         <spring-boot-version>2.3.3.RELEASE</spring-boot-version>
@@ -628,7 +630,16 @@
                 <artifactId>netty-handler</artifactId>
                 <version>${netty-version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty</artifactId>
+                <version>${reactor-netty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.palindromicity</groupId>
+                <artifactId>simple-syslog-5424</artifactId>
+                <version>${simple-syslog-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.vibur</groupId>
                 <artifactId>vibur-object-pool</artifactId>

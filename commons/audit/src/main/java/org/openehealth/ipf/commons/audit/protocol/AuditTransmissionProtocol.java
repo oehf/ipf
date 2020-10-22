@@ -30,7 +30,7 @@ public interface AuditTransmissionProtocol {
 
     String JAVAX_NET_DEBUG = "javax.net.debug";
     String JAVAX_NET_SSL_TRUSTSTORE = "javax.net.ssl.trustStore";
-    String JAVAX_NET_SSL_TRUSTSTORE_TYPE = "javax.net.ssl.trustStoretype";
+    String JAVAX_NET_SSL_TRUSTSTORE_TYPE = "javax.net.ssl.trustStoreType";
     String JAVAX_NET_SSL_TRUSTSTORE_PASSWORD = "javax.net.ssl.trustStorePassword";
     String JAVAX_NET_SSL_KEYSTORE = "javax.net.ssl.keyStore";
     String JAVAX_NET_SSL_KEYSTORE_TYPE = "javax.net.ssl.keyStoreType";

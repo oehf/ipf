@@ -35,6 +35,8 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author Christian Ohr
  * @since 3.5
+ *
+ * @deprecated
  */
 public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, VertxTLSSyslogSenderImpl.VertxDestination> {
 

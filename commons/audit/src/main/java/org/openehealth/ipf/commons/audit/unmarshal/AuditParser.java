@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.openehealth.ipf.commons.audit.unmarshal;
 
-package org.openehealth.ipf.commons.audit;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
-public class NettyTLSAuditorIntegrationTest extends AbstractTLSAuditorIntegrationTest {
+/**
+ * @author Christian Ohr
+ * @since 4.0
+ */
+public interface AuditParser {
 
-    @Override
-    protected String transport() {
-        return "NETTY-TLS";
-    }
+    AuditMessage parse(String s, boolean validate);
+
 }

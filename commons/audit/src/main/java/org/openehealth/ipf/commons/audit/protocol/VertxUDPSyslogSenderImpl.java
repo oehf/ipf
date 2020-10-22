@@ -33,6 +33,8 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Christian Ohr
  * @since 3.5
+ *
+ * @deprecated
  */
 public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 

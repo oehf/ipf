@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T12:34:06.367Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-9" codeSystemName="IHE Transactions" originalText="PIX Query"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="MESA_DEPARTMENT|MESA_PIX_CLIENT" UserIsRequestor="true" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="XYZ_HOSPITAL|MESA_XREF" AlternativeUserID="18996" UserIsRequestor="false" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="PI" AuditSourceID="MPI">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="10501108" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-9" codeSystemName="IHE Transactions" originalText="PIX Query"/>
+    <ParticipantObjectQuery>TVNIfF5+XCZ8TUVTQV9QSVhfQ0xJRU5UfE1FU0FfREVQQVJUTUVOVHxNRVNBX1hSRUZ8WFlaX0hPU1BJVEFMfDIwMDYwMzEyMTIwMHx8UUJQXlEyM15RQlBfUTIxfDEwNTAxMTA4fFB8Mi41DVFQRHxRUllfMTAwMV5RdWVyeSBmb3IgQ29ycmVzcG9uZGluZyBJZGVudGlmaWVyc15JSEVERU1PfFFSWTEwNTAxMTA4fDc4MTA2Xl5eUEtMTiYyLjE2Ljg0MC4xLjExMzg4My4zLjM3LjQuMS4xLjIuNTExLjEmSVNPDVJDUHxJDQ==</ParticipantObjectQuery>
+    <ParticipantObjectDetail type="MSH-10" value="MTA1MDExMDg="/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="27^^^MPI&amp;2.16.840.1.113883.3.37.4.1.1.2.1.1&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="78106^^^PKLN&amp;2.16.840.1.113883.3.37.4.1.1.2.511.1&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

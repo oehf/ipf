@@ -1,0 +1,15 @@
+<AuditMessage>
+	<EventIdentification EventActionCode="E" EventDateTime="2020-03-09T10:17:39.575Z" EventOutcomeIndicator="0">
+		<EventID csd-code="110100" originalText="Application Activity" codeSystemName="DCM"/>
+		<EventTypeCode csd-code="110120" originalText="Application Start" codeSystemName="DCM"/>
+	</EventIdentification>
+	<ActiveParticipant UserID="" UserIsRequestor="false" NetworkAccessPointID="10.0.75.1" NetworkAccessPointTypeCode="2">
+		<RoleIDCode csd-code="110150" originalText="Application" codeSystemName="DCM"/>
+	</ActiveParticipant>
+	<ActiveParticipant UserID="WDF-LAP-1237$" UserIsRequestor="true">
+		<RoleIDCode csd-code="110151" originalText="Application Launcher" codeSystemName="DCM"/>
+	</ActiveParticipant>
+	<AuditSourceIdentification AuditSourceID="app-connect">
+		<AuditSourceTypeCode csd-code="9" originalText="Other" codeSystemName="DCM"/>
+	</AuditSourceIdentification>
+</AuditMessage>

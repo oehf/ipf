@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T14:38:04.293Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-55" codeSystemName="IHE Transactions" originalText="Cross Gateway Patient Discovery"/>
+    <EventOutcomeDescription/>
+  </EventIdentification>
+  <ActiveParticipant UserID="unknown" UserIsRequestor="true" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="https://localhost:8444/mpi/ws/iti55Service" AlternativeUserID="14756" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="EHR_2019" AuditSourceID="EHR_2019">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHERED-1040^^^IHERED&amp;1.3.6.1.4.1.21367.13.20.1000&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="1523963781490@1.3.6.1.4.1.21367.2011.2.6.181" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-55" codeSystemName="IHE Transactions" originalText="Cross Gateway Patient Discovery"/>
+    <ParticipantObjectQuery>PHF1ZXJ5QnlQYXJhbWV0ZXI+CiAgPHF1ZXJ5SWQgZXh0ZW5zaW9uPSIxNTIzOTYzNzgxNDg5IiByb290PSJjMWY3MWUxZC00MjMwLTExZTgtYjdjZi0wODAwMjc1YzNmYTYiIC8+CiAgPHN0YXR1c0NvZGUgY29kZT0ibmV3IiAvPgogIDxyZXNwb25zZU1vZGFsaXR5Q29kZSBjb2RlPSJSIiAvPgogIDxyZXNwb25zZVByaW9yaXR5Q29kZSBjb2RlPSJJIiAvPgogIDxtYXRjaENyaXRlcmlvbkxpc3QgLz4KICA8cGFyYW1ldGVyTGlzdD4KICAgIDxsaXZpbmdTdWJqZWN0QmlydGhUaW1lPgogICAgICA8dmFsdWUgdmFsdWU9IjE5NzcwNzA2IiAvPgogICAgICA8c2VtYW50aWNzVGV4dD5MaXZpbmdTdWJqZWN0LmJpcnRoVGltZTwvc2VtYW50aWNzVGV4dD4KICAgIDwvbGl2aW5nU3ViamVjdEJpcnRoVGltZT4KICAgIDxsaXZpbmdTdWJqZWN0TmFtZT4KICAgICAgPHZhbHVlPgogICAgICAgIDxmYW1pbHk+WGNwZDwvZmFtaWx5PgogICAgICAgIDxnaXZlbj5QYXQ8L2dpdmVuPgogICAgICA8L3ZhbHVlPgogICAgICA8c2VtYW50aWNzVGV4dD5MaXZpbmdTdWJqZWN0Lm5hbWU8L3NlbWFudGljc1RleHQ+CiAgICA8L2xpdmluZ1N1YmplY3ROYW1lPgogIDwvcGFyYW1ldGVyTGlzdD4KPC9xdWVyeUJ5UGFyYW1ldGVyPg==</ParticipantObjectQuery>
+    <ParticipantObjectDetail type="ihe:homeCommunityID" value="MS4zLjYuMS40LjEuMjEzNjcuMjAxMS4yLjYuMTgx"/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

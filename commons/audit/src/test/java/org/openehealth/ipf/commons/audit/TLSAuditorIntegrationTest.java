@@ -16,70 +16,10 @@
 
 package org.openehealth.ipf.commons.audit;
 
+public class TLSAuditorIntegrationTest extends AbstractTLSAuditorIntegrationTest {
 
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createTCPServerTwoWayTLS;
-
-
-/**
- *
- */
-@RunWith(VertxUnitRunner.class)
-public class TLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
-
-    private CustomTlsParameters tlsParameters;
-
-    @Before
-    public void setup() {
-        tlsParameters = new CustomTlsParameters();
-        tlsParameters.setKeyStoreFile(CLIENT_KEY_STORE);
-        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
-        tlsParameters.setTrustStoreFile(TRUST_STORE);
-        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
-        tlsParameters.setEnabledProtocols("TLSv1.2");
+    @Override
+    protected String transport() {
+        return "TLS";
     }
-
-    @Test
-    public void testTwoWayTLS(TestContext testContext) throws Exception {
-        initTLSSystemProperties(null);
-        auditContext.setTlsParameters(TlsParameters.getDefault());
-        auditContext.setAuditRepositoryTransport("TLS");
-        var count = 10;
-        var async = testContext.async(count);
-        deploy(testContext, createTCPServerTwoWayTLS(port,
-                TRUST_STORE,
-                TRUST_STORE_PASS,
-                SERVER_KEY_STORE,
-                SERVER_KEY_STORE_PASS,
-                async));
-        for (var i = 0; i < count; i++) sendAudit();
-        async.awaitSuccess(WAIT_TIME);
-    }
-
-    @Test
-    public void testTwoWayTLSInterrupted(TestContext testContext) throws Exception {
-        auditContext.setTlsParameters(tlsParameters);
-        auditContext.setAuditRepositoryTransport("TLS");
-        var count = 5;
-        var async = testContext.async(count);
-        var tcpServer = createTCPServerTwoWayTLS(port,
-                TRUST_STORE,
-                TRUST_STORE_PASS,
-                SERVER_KEY_STORE,
-                SERVER_KEY_STORE_PASS,
-                async);
-        deploy(testContext, tcpServer);
-        for (var i = 0; i < count; i++) sendAudit();
-        async.awaitSuccess(WAIT_TIME);
-        undeploy(testContext);
-        deploy(testContext, tcpServer);
-        for (var i = 0; i < count; i++) sendAudit();
-        async.awaitSuccess(WAIT_TIME);
-    }
-
 }

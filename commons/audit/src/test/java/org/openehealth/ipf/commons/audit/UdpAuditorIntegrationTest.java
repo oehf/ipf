@@ -16,32 +16,30 @@
 
 package org.openehealth.ipf.commons.audit;
 
-
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.audit.server.UdpSyslogServer;
+import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
-import static org.openehealth.ipf.commons.audit.SyslogServerFactory.createUDPServer;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
+import static org.junit.Assert.assertTrue;
 
 /**
  *
  */
-@RunWith(VertxUnitRunner.class)
 public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
     @Test
-    public void testUDP(TestContext testContext) throws Exception {
+    public void testUDP() throws InterruptedException {
         auditContext.setAuditRepositoryTransport("UDP");
         var count = 10;
-        var async = testContext.async(count + 1);
-        deploy(testContext, createUDPServer(LOCALHOST, port, async));
-        while (async.count() > count) {
-            Thread.sleep(10);
+        var consumer = new SyslogEventCollector.WithExpectation(count);
+        try (var ignored = new UdpSyslogServer(consumer, Throwable::printStackTrace)
+                .start("localhost", port)) {
+            IntStream.range(0, count).forEach(i -> sendAudit());
+            assertTrue(consumer.await(5, TimeUnit.SECONDS));
         }
-        for (var i = 0; i < count; i++) sendAudit();
-        async.awaitSuccess(WAIT_TIME);
     }
 
 

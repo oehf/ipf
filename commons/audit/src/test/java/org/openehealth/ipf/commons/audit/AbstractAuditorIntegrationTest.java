@@ -17,11 +17,6 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
-import io.vertx.core.Verticle;
-import io.vertx.core.Vertx;
-import io.vertx.ext.unit.TestContext;
 import org.junit.After;
 import org.junit.Before;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -33,10 +28,12 @@ import org.slf4j.LoggerFactory;
 import java.net.ServerSocket;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.*;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
 
 
 /**
@@ -55,7 +52,9 @@ abstract class AbstractAuditorIntegrationTest {
     static final String TRUST_STORE_PASS = "initinit";
 
     static final String LOCALHOST = "localhost";
-    static final long WAIT_TIME = 2000L;
+    int port;
+    DefaultAuditContext auditContext;
+    private Properties p;
 
     static {
         try {
@@ -68,61 +67,27 @@ abstract class AbstractAuditorIntegrationTest {
         }
     }
 
-    Vertx vertx;
-    int port;
-    DefaultAuditContext auditContext;
-
-    private Properties p;
-    private String deploymentId;
+    void initTLSSystemProperties(String clientKeyStore) {
+        System.setProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD, CLIENT_KEY_STORE_PASS);
+        System.setProperty(JAVAX_NET_SSL_KEYSTORE, clientKeyStore != null ? clientKeyStore : CLIENT_KEY_STORE);
+        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD, TRUST_STORE_PASS);
+        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE, TRUST_STORE);
+        System.setProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
+    }
 
     @Before
-    public void setup(TestContext context) {
+    public void setup() {
         p = System.getProperties();
         port = freePort();
         this.auditContext = new DefaultAuditContext();
         auditContext.setAuditRepositoryPort(port);
         auditContext.setAuditRepositoryHost(LOCALHOST);
         auditContext.setAuditEnabled(true);
-        vertx = Vertx.vertx();
     }
 
     @After
-    public void tearDown(TestContext context) {
+    public void tearDown() {
         System.setProperties(p);
-        deploymentId = null;
-        vertx.close(undeployVertx(context));
-    }
-
-    void deploy(TestContext testContext, Verticle verticle) throws InterruptedException {
-        var latch = new CountDownLatch(1);
-        vertx.deployVerticle(verticle, deployHandler(testContext, latch));
-        latch.await(2000, TimeUnit.MILLISECONDS);
-    }
-
-    private Handler<AsyncResult<String>> deployHandler(TestContext testContext, CountDownLatch latch) {
-        return testContext.asyncAssertSuccess(id -> {
-            LOG.info("Server deployed with ID {}", id);
-            deploymentId = id;
-            latch.countDown();
-        });
-    }
-
-    void undeploy(TestContext testContext) throws InterruptedException {
-        var latch = new CountDownLatch(1);
-        vertx.undeploy(deploymentId, undeployHandler(testContext, latch));
-        latch.await(2000, TimeUnit.MILLISECONDS);
-    }
-
-    private Handler<AsyncResult<Void>> undeployHandler(TestContext testContext, CountDownLatch latch) {
-        return testContext.asyncAssertSuccess(id -> {
-            LOG.info("Server undeployed with ID {}", deploymentId);
-            deploymentId = null;
-            latch.countDown();
-        });
-    }
-
-    Handler<AsyncResult<Void>> undeployVertx(TestContext testContext) {
-        return testContext.asyncAssertSuccess(event -> LOG.info("Vertx stopped"));
     }
 
     void sendAudit() {
@@ -137,14 +102,6 @@ abstract class AbstractAuditorIntegrationTest {
                                 AuditUtils.getLocalHostName())
                         .addApplicationStarterParticipant(System.getProperty("user.name"))
                         .getMessages());
-    }
-
-    void initTLSSystemProperties(String clientKeyStore) {
-        System.setProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD, CLIENT_KEY_STORE_PASS);
-        System.setProperty(JAVAX_NET_SSL_KEYSTORE, clientKeyStore != null ? clientKeyStore : CLIENT_KEY_STORE);
-        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD, TRUST_STORE_PASS);
-        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE, TRUST_STORE);
-        System.setProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
     }
 
     int freePort() {
