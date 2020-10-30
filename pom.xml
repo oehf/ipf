@@ -43,12 +43,12 @@
         <compiler-plugin-version>3.8.1</compiler-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
-        <gmavenplus-plugin-version>1.9.0</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>1.11.0</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.2.0</jar-plugin-version>
         <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.10.0</lombok-plugin-version>
+        <lombok-plugin-version>1.18.12.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.8</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
@@ -65,18 +65,18 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <guava-version>29.0-jre</guava-version>
-        <httpclient4-version>4.5.12</httpclient4-version>
+        <httpclient4-version>4.5.13</httpclient4-version>
         <jackson-version>2.11.2</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
-        <jetty-version>9.4.31.v20200723</jetty-version>
-        <junit-version>4.12</junit-version>
+        <jetty-version>9.4.33.v20201020</jetty-version>
+        <junit-version>4.13.1</junit-version>
         <log4j-version>2.13.3</log4j-version>
-        <lombok-version>1.18.12</lombok-version>
+        <lombok-version>1.18.16</lombok-version>
         <mockito-version>3.2.4</mockito-version>
         <mockserver-version>5.10</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.2</servlet-api-version>
-        <tomcat-version>9.0.37</tomcat-version>
+        <tomcat-version>9.0.39</tomcat-version>
         <woodstox-version>6.2.1</woodstox-version>
         <xbean-spring-version>4.17</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
@@ -717,6 +717,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <parallelParsing>true</parallelParsing>
+                    <targetBytecode>11</targetBytecode>
+                    <parameters>true</parameters>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>

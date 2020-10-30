@@ -9,10 +9,10 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.12.5</brave-version>
-        <camel-version>3.4.3</camel-version>
+        <brave-version>5.12.7</brave-version>
+        <camel-version>3.6.0</camel-version>
         <cxf-version>3.4.0</cxf-version>
-        <groovy-version>3.0.5</groovy-version>
+        <groovy-version>3.0.6</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.1.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
@@ -26,16 +26,16 @@
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
         <mina-version>2.1.4</mina-version>
-        <netty-version>4.1.51.Final</netty-version>
+        <netty-version>4.1.53.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.9</ph-commons-version>
-        <reactor-netty-version>0.9.12.RELEASE</reactor-netty-version>
+        <reactor-netty-version>1.0.0</reactor-netty-version>
         <saxon-he-version>10.2</saxon-he-version>
         <simple-syslog-version>0.0.13</simple-syslog-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.2.8.RELEASE</spring-version>
-        <spring-boot-version>2.3.3.RELEASE</spring-boot-version>
+        <spring-version>5.2.9.RELEASE</spring-version>
+        <spring-boot-version>2.3.4.RELEASE</spring-boot-version>
         <vertx-version>3.9.0</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.2.0</xmlsec-version>
@@ -532,6 +532,17 @@
                 <groupId>org.openhealthtools.mdht.cda</groupId>
                 <artifactId>org.openhealthtools.mdht.uml.cda</artifactId>
                 <version>${oht-mdht-cda-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.equinox</groupId>
+                        <artifactId>app</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>app</artifactId>
+                <version>1.3.200-v20130910-1609</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>
@@ -632,7 +643,7 @@
             </dependency>
             <dependency>
                 <groupId>io.projectreactor.netty</groupId>
-                <artifactId>reactor-netty</artifactId>
+                <artifactId>reactor-netty-core</artifactId>
                 <version>${reactor-netty-version}</version>
             </dependency>
             <dependency>
@@ -1174,9 +1185,23 @@
             </snapshots>
         </repository>
         <repository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>projects.suisse-open-exchange.healthcare-rel</id>
             <name>projects.suisse-open-exchange.healthcare-releases</name>
             <url>https://projects.suisse-open-exchange.healthcare/artifactory/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

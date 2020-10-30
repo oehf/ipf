@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 /**
  *
  */
+@Ignore
 public class TestIti78SecureSuccess extends AbstractTestIti78 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-78-secure.xml";
