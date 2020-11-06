@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +112,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
             HttpServletResponse httpServletResponse,
             RequestDetails requestDetails) {
         RequestConsumer consumer = getConsumer(payload).orElseThrow(() ->
-                new IllegalStateException("Request does not match any consumer or consumers are not initialized"));
+                new InvalidRequestException("Request with this profile does not match any existing consumer"));
         Map<String, Object> headers = enrichParameters(null, httpServletRequest, requestDetails);
         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }

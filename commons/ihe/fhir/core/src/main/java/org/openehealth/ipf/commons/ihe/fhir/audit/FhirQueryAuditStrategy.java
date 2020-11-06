@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
@@ -68,6 +69,7 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
             if (tokenParams != null) {
                 dataset.getPatientIds().addAll(
                         tokenParams.stream()
+                                .filter(Objects::nonNull)
                                 .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
                                 .collect(Collectors.toList()));
             }
