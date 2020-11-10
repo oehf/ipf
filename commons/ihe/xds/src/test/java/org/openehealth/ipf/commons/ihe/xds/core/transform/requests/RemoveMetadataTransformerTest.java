@@ -15,13 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
+import java.io.StringWriter;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 
 /**
  * Tests for {@link RemoveMetadataRequestTransformer}.
@@ -79,5 +91,17 @@ public class RemoveMetadataTransformerTest {
     public void testFromEbXMLEmpty() {
         EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(new RemoveMetadata());
         assertEquals(new RemoveMetadata(), transformer.fromEbXML(ebXML));
+    }
+    
+    @Test
+    public void serializeXml() throws JAXBException {
+        var ebXML = transformer.toEbXML(SampleData.createRemoveMetadata());
+        JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(ebXML.getInternal(), writer);
+        new RemoveMetadataRequestValidator().validate(ebXML, ITI_62);
+        assertFalse("AdhocQuery is expected in ITI-62 request", writer.toString().contains("AdhocQuery"));
     }
 }
