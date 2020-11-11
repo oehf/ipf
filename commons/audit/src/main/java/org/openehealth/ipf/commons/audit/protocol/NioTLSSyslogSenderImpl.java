@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Christian Ohr
  * @since 3.7
  */
-public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl.Destination<H>> extends RFC5424Protocol implements AuditTransmissionProtocol {
+public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl.Destination<H>> extends RFC5425Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
     private boolean loggingEnabled = false;
@@ -53,32 +54,31 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
      * Allows to customize the destination, e.g. to set network-specific parameters
      * @param destination destination used for the connection
      */
-    protected abstract void customizeDestination(D destination);
+    protected D customizeDestination(D destination) {
+        return destination;
+    }
 
     @Override
-    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) {
         if (auditMessage != null) {
             Destination<H> destination = getDestination(auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
-            var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
-            var length = String.format("%d ", msgBytes.length).getBytes();
-            LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(),
-                    auditContext.getAuditRepositoryPort());
-            destination.write(length, msgBytes);
+            var payload = getTransportPayload(auditMetadataProvider, auditMessage);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Auditing {} bytes to {}:{}",
+                        payload.length,
+                        auditContext.getAuditRepositoryHostName(),
+                        auditContext.getAuditRepositoryPort());
+            }
+            destination.write(payload);
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(new String(payload, StandardCharsets.UTF_8));
+            }
         }
     }
 
     private D getDestination(String host, int port) {
-        var destination = destinations.get(host + port);
-        if (destination == null) {
-            synchronized (this) {
-                destination = makeDestination(tlsParameters, host, port, loggingEnabled);
-                customizeDestination(destination);
-                Destination<H> existing = destinations.put(host + port, destination);
-                // shutdown replaced connection
-                if (existing != null) existing.shutdown();
-            }
-        }
-        return destination;
+        return destinations.computeIfAbsent(host + port, s ->
+                customizeDestination(makeDestination(tlsParameters, host, port, loggingEnabled)));
     }
 
     protected abstract D makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging);
@@ -98,7 +98,7 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
          *
          * @param bytes audit record content
          */
-        void write(byte[]... bytes);
+        void write(byte[] bytes);
 
         /**
          * Shut down the destination

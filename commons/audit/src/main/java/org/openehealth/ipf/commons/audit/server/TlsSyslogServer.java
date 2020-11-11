@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.audit.server;
 
 import io.netty.channel.ChannelOption;
+import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.handler.ssl.ApplicationProtocolConfig;
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
@@ -24,7 +25,6 @@ import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 import reactor.netty.DisposableChannel;
 import reactor.netty.tcp.TcpServer;
 import reactor.util.Metrics;
@@ -60,12 +60,12 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
     @Override
     public TlsSyslogServer start(String host, int port) {
         var sslContext = initSslContext();
-        //noinspection unchecked
         channel = TcpServer.create()
                 .host(host)
                 .port(port)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+                .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .wiretap(true)
                 .metrics(Metrics.isInstrumentationAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
@@ -76,14 +76,13 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                     LOG.debug("Received connection from {}", connection.channel().localAddress());
                     connection
                             .addHandler(new Rfc5425Decoder())   // extract frame
-                            .addHandler(new Rfc5424Decoder());  // parse frame
+                            .addHandler(new Rfc5424Decoder());  // parse frame, fast enough for receiver thread
                 })
-                // parse frame
                 .handle((nettyInbound, nettyOutbound) -> nettyInbound.receiveObject()
                         .cast(Map.class)
-                        .doOnNext((Consumer<? super Map>) consumer)
+                        .flatMap(this::handleMap)
                         .doOnError(errorConsumer)
-                        .then(Mono.empty()))
+                        .then())
                 .bindNow(Duration.ofSeconds(TIMEOUT));
         return this;
     }

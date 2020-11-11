@@ -48,7 +48,7 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
     public void testTLSTwoWayTLSWrongClientCert() throws InterruptedException {
         auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
-        var consumer = new SyslogEventCollector.WithExpectation(1);
+        var consumer = SyslogEventCollector.newInstance().withExpectation(1);
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, TlsParameters.getDefault())
                 .start("localhost", port)) {
             sendAudit();

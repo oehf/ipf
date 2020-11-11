@@ -91,12 +91,16 @@ abstract class AbstractAuditorIntegrationTest {
     }
 
     void sendAudit() {
+        sendAudit("appName");
+    }
+
+    void sendAudit(String userName) {
         LOG.debug("Sending audit record");
         auditContext.audit(
                 new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
                         .setAuditSource(auditContext)
                         .setApplicationParticipant(
-                                "appName",
+                                userName,
                                 null,
                                 null,
                                 AuditUtils.getLocalHostName())

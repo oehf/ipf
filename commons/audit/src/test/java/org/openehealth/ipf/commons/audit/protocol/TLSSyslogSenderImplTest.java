@@ -94,8 +94,8 @@ public class TLSSyslogSenderImplTest {
         verify(socket, times(1)).setKeepAlive(true);
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // This is what counts: The DONT_TEST_POLICY shall not trigger any reads from the inputstream
         verify(is, never()).read();
@@ -121,8 +121,8 @@ public class TLSSyslogSenderImplTest {
         handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // This is what counts: The TEST_BEFORE_AND_AFTER_WRITE shall trigger a read before and after the write operation
         verify(is, times(2)).read();
@@ -151,8 +151,8 @@ public class TLSSyslogSenderImplTest {
         handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // On the first read/test we discover the connection has been closed -> triggers fall back loop, new socket connection
         // is opened and then we succeed on the second attempt with the normal flow of one test before and one after the write
@@ -179,8 +179,8 @@ public class TLSSyslogSenderImplTest {
         handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // This is what counts: The TEST_BEFORE_WRITE shall trigger a read before the write operation.
         // Matter of fact, we cannot tell when the read happened. We just have to assume at this point.
@@ -210,8 +210,8 @@ public class TLSSyslogSenderImplTest {
         handshakeBeforeSoTimeout.verify(socket).setSoTimeout(any(Integer.class));
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // On the first read/test we discover the connection has been closed -> triggers fall back loop, new socket connection
         // is opened and then we succeed on the second attempt with the normal flow of one test before and one after the write
@@ -235,8 +235,8 @@ public class TLSSyslogSenderImplTest {
         verify(socket, times(1)).setReceiveBufferSize(5);
         // write #1: syslog frame metadata
         // write #2: audit message
-        verify(os, times(2)).write(streamWriteCaptor.capture());
-        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(1), StandardCharsets.UTF_8);
+        verify(os, times(1)).write(streamWriteCaptor.capture());
+        final var auditMessageWithPreamble = new String(streamWriteCaptor.getAllValues().get(0), StandardCharsets.UTF_8);
         assertTrue(auditMessageWithPreamble.endsWith(AUDIT_MESSAGE));
         // This is what counts: The DONT_TEST_POLICY shall not trigger any reads from the inputstream
         verify(is, never()).read();

@@ -39,7 +39,7 @@ import static org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImp
  * Simple Netty client implementation of RFC 5425 TLS syslog transport
  * for sending audit messages to an Audit Record Repository that implements TLS syslog.
  * Multiple messages may be sent over the same socket.
- *
+ *1
  * @author Christian Ohr
  * @since 3.7
  */
@@ -62,16 +62,6 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     @Override
     protected NettyDestination makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
         return new NettyDestination(tlsParameters, host, port, workerThreads, connectTimeoutMillis, sendTimeoutMillis, logging);
-    }
-
-    /**
-     * Overwrite this method to customize the NettyDestination. Use {@link NettyDestination#getBootstrap()}
-     * to access the {@link Bootstrap} instance.
-     *
-     * @param destination destination used for the connection
-     */
-    @Override
-    protected void customizeDestination(NettyDestination destination) {
     }
 
     /**
@@ -163,7 +153,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         }
 
         @Override
-        public void write(byte[]... bytes) {
+        public void write(byte[] bytes) {
             // The write operation is asynchronous.
             var channel = getHandle().channel();
             LOG.trace("Writing {} bytes using session: {}", bytes.length, channel);
@@ -191,7 +181,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
             @Override
             public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                LOG.info("TLS Channel to Audit Repository at {}:{} is now active", host, port);
+                LOG.info("TLS Channel {} to Audit Repository at {}:{} is now active", ctx.name(), host, port);
                 super.channelActive(ctx);
             }
 

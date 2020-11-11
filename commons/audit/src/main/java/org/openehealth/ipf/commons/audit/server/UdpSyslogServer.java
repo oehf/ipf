@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.audit.server;
 
 import io.netty.channel.ChannelOption;
+import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.socket.DatagramPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 import reactor.netty.Connection;
 import reactor.netty.udp.UdpServer;
 import reactor.util.Metrics;
@@ -48,6 +48,7 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
         channel = UdpServer.create()
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+                .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .host(host)
                 .port(port)
                 .wiretap(true)
@@ -57,19 +58,20 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
                 //.doOnBound(connection -> connection
                 //        .addHandler(new Rfc5426Decoder())
                 //        .addHandler(new Rfc5424Decoder()))
-                .doOnBind(serverBootstrap -> LOG.debug("Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.debug("Server bound on {}", disposableServer.channel().localAddress()))
-                .doOnUnbound(disposableServer -> LOG.debug("Server unbound from {}", disposableServer.channel().localAddress()))
-                .handle((udpInbound, udpOutbound) -> udpInbound.receiveObject()
+                .doOnBind(serverBootstrap -> LOG.info("Server is about to be started"))
+                .doOnBound(disposableServer -> LOG.info("Server bound on {}", disposableServer.channel().localAddress()))
+                .doOnUnbound(disposableServer -> LOG.info("Server unbound from {}", disposableServer.channel().localAddress()))
+                .handle((udpInbound, udpOutbound) -> udpInbound
+                        .receiveObject()
                         // Because the handlers don't seem to step in, we handle it here
-                        .map(o -> ((DatagramPacket) o).content())
-                        .map(Rfc5424Decoder::parseByteBuf)
-                        .cast(Map.class)
-                        .doOnNext((Consumer<? super Map>) consumer)
+                        .map(o -> ((DatagramPacket) o))
+                        .map(Rfc5424Decoder::decodeDatagram)
+                        .flatMap(this::handleMap)
                         .doOnError(errorConsumer)
-                        .then(Mono.empty()))
+                        .then())
                 .bindNow(Duration.ofSeconds(TIMEOUT));
         return this;
     }
+
 
 }

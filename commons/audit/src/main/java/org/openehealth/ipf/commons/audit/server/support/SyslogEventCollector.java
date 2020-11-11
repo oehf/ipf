@@ -22,9 +22,9 @@ import org.openehealth.ipf.commons.audit.unmarshal.dicom.DICOMAuditParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -41,7 +41,26 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SyslogEventCollector.class);
     private static final AuditParser PARSER = new DICOMAuditParser();
-    private final List<Map<String, Object>> syslogMaps = new CopyOnWriteArrayList<>();
+    private final Collection<Map<String, Object>> syslogMaps = new ConcurrentLinkedQueue<>();
+
+    public static SyslogEventCollector newInstance() {
+        return new SyslogEventCollector();
+    }
+
+    public SyslogEventCollector withExpectation(Predicate<Map<String, Object>> predicate, int expectedElements) {
+        return new WithExpectation(this, predicate, expectedElements);
+    }
+
+    public SyslogEventCollector withExpectation(int expectedElements) {
+        return new WithExpectation(this, expectedElements);
+    }
+
+    public SyslogEventCollector withDelay(long delay) {
+        return new WithDelay(this, delay);
+    }
+
+    private SyslogEventCollector() {
+    }
 
     @Override
     public void accept(Map<String, Object> syslogMap) {
@@ -49,11 +68,11 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
         syslogMaps.add(syslogMap);
     }
 
-    public List<Map<String, Object>> getSyslogEvents() {
+    public Collection<Map<String, Object>> getSyslogEvents() {
         return getSyslogEvents(syslogEvent -> true);
     }
 
-    public List<Map<String, Object>> getSyslogEvents(Predicate<Map<String, Object>> predicate) {
+    public Collection<Map<String, Object>> getSyslogEvents(Predicate<Map<String, Object>> predicate) {
         return syslogMaps.stream()
                 .filter(predicate)
                 .collect(Collectors.toUnmodifiableList());
@@ -67,17 +86,22 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
         return PARSER.parse(syslogMap.get(SyslogFieldKeys.MESSAGE.getField()).toString(), validate);
     }
 
+    public boolean await(long timeout, TimeUnit timeUnit) throws InterruptedException {
+        throw new UnsupportedOperationException();
+    }
 
-    public static class WithExpectation extends SyslogEventCollector {
+    private static class WithExpectation extends SyslogEventCollector {
 
         private final Predicate<Map<String, Object>> predicate;
         private final CountDownLatch latch;
+        private final SyslogEventCollector wrapped;
 
-        public WithExpectation(int expectedElements) {
-            this(m -> true, expectedElements);
+        private WithExpectation(SyslogEventCollector wrapped, int expectedElements) {
+            this(wrapped, m -> true, expectedElements);
         }
 
-        public WithExpectation(Predicate<Map<String, Object>> predicate, int expectedElements) {
+        private WithExpectation(SyslogEventCollector wrapped, Predicate<Map<String, Object>> predicate, int expectedElements) {
+            this.wrapped = wrapped;
             this.predicate = predicate;
             this.latch = new CountDownLatch(expectedElements);
         }
@@ -85,14 +109,63 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
         @Override
         public void accept(Map<String, Object> syslogMap) {
             if (predicate.test(syslogMap)) {
-                super.accept(syslogMap);
+                wrapped.accept(syslogMap);
                 latch.countDown();
             }
         }
 
+        @Override
         public boolean await(long timeout, TimeUnit timeUnit) throws InterruptedException {
             return latch.await(timeout, timeUnit);
         }
+
+        @Override
+        public Collection<Map<String, Object>> getSyslogEvents() {
+            return wrapped.getSyslogEvents();
+        }
+
+        @Override
+        public Collection<Map<String, Object>> getSyslogEvents(Predicate<Map<String, Object>> predicate) {
+            return wrapped.getSyslogEvents(predicate);
+        }
+
+        public long missingElements() {
+            return latch.getCount();
+        }
+
     }
 
+    private static class WithDelay extends SyslogEventCollector {
+        private final long delay;
+        private final SyslogEventCollector wrapped;
+
+        public WithDelay(SyslogEventCollector wrapped, long delay) {
+            this.delay = delay;
+            this.wrapped = wrapped;
+        }
+
+        @Override
+        public void accept(Map<String, Object> syslogMap) {
+            try {
+                Thread.sleep(delay);
+                wrapped.accept(syslogMap);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
+        @Override
+        public boolean await(long timeout, TimeUnit timeUnit) throws InterruptedException {
+            return wrapped.await(timeout, timeUnit);
+        }
+
+        @Override
+        public Collection<Map<String, Object>> getSyslogEvents() {
+            return wrapped.getSyslogEvents();
+        }
+
+        @Override
+        public Collection<Map<String, Object>> getSyslogEvents(Predicate<Map<String, Object>> predicate) {
+            return wrapped.getSyslogEvents(predicate);
+        }
+    }
 }

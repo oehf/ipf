@@ -20,27 +20,48 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.server.UdpSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- *
- */
 public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
     @Test
     public void testUDP() throws InterruptedException {
         auditContext.setAuditRepositoryTransport("UDP");
         var count = 10;
-        var consumer = new SyslogEventCollector.WithExpectation(count);
+        var consumer = SyslogEventCollector.newInstance().withExpectation(count);
         try (var ignored = new UdpSyslogServer(consumer, Throwable::printStackTrace)
                 .start("localhost", port)) {
-            IntStream.range(0, count).forEach(i -> sendAudit());
-            assertTrue(consumer.await(5, TimeUnit.SECONDS));
+            IntStream.range(0, count).forEach(i -> sendAudit(Integer.toString(i)));
+            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
         }
     }
 
+    // FIXME: the server is losing packets when more than ~90 events are sent basically parallel that
+    //  cannot be handled in comparable speed.
+    @Test
+    public void testUDPFlooding() throws Exception {
+        auditContext.setAuditRepositoryTransport("UDP");
+        var count = 50;
+        var threads = 2;
+        var consumer = SyslogEventCollector.newInstance()
+                .withExpectation(count)
+                .withDelay(100);  // even if handling artificially takes long, we're done fast enough
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
+
+        try (var ignored = new UdpSyslogServer(consumer, Throwable::printStackTrace)
+                .start("localhost", port)) {
+            IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
+            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
+        } finally {
+            executor.shutdownNow();
+        }
+    }
 
 }

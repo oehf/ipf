@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Christian Ohr
  * @since 3.5
  */
-public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
+public class TLSSyslogSenderImpl extends RFC5425Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
     private static final int MIN_SO_TIMEOUT = 1;
@@ -118,19 +118,21 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
         if (auditMessage != null) {
             var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
-            var syslogFrame = String.format("%d ", msgBytes.length).getBytes();
-            LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
-            if (LOG.isTraceEnabled()) {
-                LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
-            }
+            LOG.debug("Auditing {} bytes to {}:{}",
+                    msgBytes.length,
+                    auditContext.getAuditRepositoryHostName(),
+                    auditContext.getAuditRepositoryPort());
             try {
-                doSend(auditContext, syslogFrame, msgBytes);
+                doSend(auditContext, msgBytes);
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                }
             } catch (SocketException | SocketTimeoutException e) {
                 try {
                     LOG.info("Failed to use existing TLS socket. Will create a new connection and retry.");
                     closeSocket(socket.get());
                     socket.set(null);
-                    doSend(auditContext, syslogFrame, msgBytes);
+                    doSend(auditContext, msgBytes);
                 } catch (Exception exception) {
                     LOG.error("Failed to audit using new TLS socket, giving up - this audit message will be lost.");
                     closeSocket(socket.get());
@@ -150,7 +152,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
     }
 
-    private synchronized void doSend(AuditContext auditContext, byte[] syslogFrame, byte[] msgBytes)
+    private synchronized void doSend(AuditContext auditContext, byte[] msgBytes)
             throws IOException {
         final var socket = getSocket(auditContext);
 
@@ -165,13 +167,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
 
         LOG.trace("Now writing out ATNA record");
-
         var out = socket.getOutputStream();
-        out.write(syslogFrame);
         out.write(msgBytes);
         out.flush();
-
-        LOG.debug("ATNA record has been written ({} bytes)", syslogFrame.length + msgBytes.length);
+        LOG.trace("ATNA record has been written ({} bytes)", msgBytes.length);
 
         if (socketTestPolicy.isAfterWrite()) {
             LOG.trace(

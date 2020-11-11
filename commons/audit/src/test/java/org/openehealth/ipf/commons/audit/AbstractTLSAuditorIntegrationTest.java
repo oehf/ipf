@@ -21,15 +21,13 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertTrue;
 
-
-/**
- *
- */
 abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
     protected abstract String transport();
@@ -41,12 +39,34 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
         var count = 10;
-        var consumer = new SyslogEventCollector.WithExpectation(count);
+        var consumer = SyslogEventCollector.newInstance().withExpectation(count);
 
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit());
-            assertTrue(consumer.await(1, TimeUnit.SECONDS));
+            assertTrue(consumer.await(5, TimeUnit.SECONDS));
+        }
+    }
+
+    @Test
+    public void testTwoWayTLSFlooding() throws Exception {
+        initTLSSystemProperties(null);
+        var defaultTls = TlsParameters.getDefault();
+        auditContext.setTlsParameters(defaultTls);
+        auditContext.setAuditRepositoryTransport(transport());
+        var count = 500;
+        var threads = 2;
+        var consumer = SyslogEventCollector.newInstance()
+                .withExpectation(count)
+                .withDelay(100); // even if handling takes artificially long, we're done fast enough
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
+        try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
+                .start("localhost", port)) {
+            IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
+            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
+        } finally {
+            executor.shutdownNow();
         }
     }
 
@@ -57,18 +77,20 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
         var count = 10;
-        var consumer = new SyslogEventCollector.WithExpectation(count);
+        var consumer = SyslogEventCollector.newInstance().withExpectation(count);
 
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit());
-            assertTrue(consumer.await(1, TimeUnit.SECONDS));
+            assertTrue(consumer.await(5, TimeUnit.SECONDS));
         }
 
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit());
-            assertTrue(consumer.await(1, TimeUnit.SECONDS));
+            assertTrue(consumer.await(5, TimeUnit.SECONDS));
         }
+
     }
+
 }

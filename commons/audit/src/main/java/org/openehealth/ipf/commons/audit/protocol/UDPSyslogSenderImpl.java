@@ -64,19 +64,20 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             try (var socket = new DatagramSocket()) {
                 var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
                 var inetAddress = auditContext.getAuditRepositoryAddress();
-                LOG.debug("Auditing to {}:{} ({})",
+                LOG.debug("Auditing {} bytes to {}:{} ({})",
+                        msgBytes.length,
                         auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort(),
                         inetAddress.getHostAddress());
-                if (LOG.isTraceEnabled()) {
-                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
-                }
                 var packet = new DatagramPacket(
                         msgBytes,
                         Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
                         inetAddress,
                         auditContext.getAuditRepositoryPort());
                 socket.send(packet);
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                }
             }
         }
     }

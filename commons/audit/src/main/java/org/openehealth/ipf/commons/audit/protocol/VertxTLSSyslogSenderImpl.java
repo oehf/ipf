@@ -71,10 +71,6 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
         return AuditTransmissionChannel.VERTX_TLS.getProtocolName();
     }
 
-    @Override
-    protected void customizeDestination(VertxDestination destination) {
-    }
-
     public static class VertxDestination implements NioTLSSyslogSenderImpl.Destination<String> {
 
         private final Vertx vertx;
@@ -91,9 +87,9 @@ public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, Ver
         }
 
         @Override
-        public void write(byte[]... bytes) {
+        public void write(byte[] bytes) {
             Buffer buffer = new BufferImpl();
-            for (var b : bytes) buffer.appendBytes(b);
+            buffer.appendBytes(bytes);
             vertx.eventBus().send(getHandle(), buffer);
         }
 

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.audit.server;
 
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import reactor.netty.DisposableChannel;
 
 import java.io.Closeable;
@@ -56,10 +58,12 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
     }
 
     /**
-     * Starts the server and returns when started within 10 seconds
+     * Starts the server and returns when started within 10 seconds. Requests are handled
+     * on the receiver thread.
      *
      * @param host exposed host
      * @param port port
+     * @return this instance
      */
     public abstract SyslogServer<T> start(String host, int port);
 
@@ -70,6 +74,20 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
         if (channel != null) {
             channel.disposeNow(Duration.ofSeconds(TIMEOUT));
         }
+    }
+
+    /**
+     * Asynchronously consumes syslog records. This trick is described at
+     * https://levelup.gitconnected.com/reactive-asynchronous-programming-in-java-using-reactor-core-part-2-e9c6caeb8833.
+     * It generates a Mono from a potentially blocking call and subscribes using a scheduler.
+     *
+     * @param map syslog map
+     * @return nothing
+     */
+    protected Mono<Object> handleMap(Map<String, Object> map) {
+        return Mono
+                .fromRunnable(() -> consumer.accept(map))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override

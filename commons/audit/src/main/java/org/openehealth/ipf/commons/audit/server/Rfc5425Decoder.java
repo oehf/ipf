@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.audit.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -39,6 +41,8 @@ import static java.util.OptionalInt.empty;
  * @since 4.0
  */
 class Rfc5425Decoder extends ByteToMessageDecoder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Rfc5425Decoder.class);
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private OptionalInt frameLength = empty();
@@ -68,6 +72,7 @@ class Rfc5425Decoder extends ByteToMessageDecoder {
         // Read part until the first space and convert it into a number
         var byteBuf = in.readBytes(index);
         var number = byteBuf.readCharSequence(byteBuf.readableBytes(), StandardCharsets.US_ASCII);
+        byteBuf.release();
         try {
             return OptionalInt.of(Integer.parseInt(number.toString()));
         } catch (NumberFormatException ignored) {
