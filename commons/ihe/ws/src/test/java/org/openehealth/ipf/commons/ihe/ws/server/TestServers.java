@@ -42,7 +42,7 @@ public class TestServers {
      */
     @Test
     public void testTomcat() throws Exception {
-        checkServer(new TomcatServer(), 9090);
+        checkServer(new TomcatServer(), 9092);
     }
 
     /**

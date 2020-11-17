@@ -65,7 +65,15 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
      * @param port port
      * @return this instance
      */
-    public abstract SyslogServer<T> start(String host, int port);
+    public SyslogServer<T> start(String host, int port) {
+        if (channel != null) {
+            throw new IllegalStateException("Syslog server is already running");
+        }
+        return doStart(host, port);
+    }
+
+    protected abstract SyslogServer<T> doStart(String host, int port);
+
 
     /**
      * Stops the server if it was started before, and returns when stopped within 10 seconds.
@@ -74,6 +82,7 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
         if (channel != null) {
             channel.disposeNow(Duration.ofSeconds(TIMEOUT));
         }
+        channel = null;
     }
 
     /**

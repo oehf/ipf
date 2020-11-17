@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.12.7</brave-version>
         <camel-version>3.6.0</camel-version>
-        <cxf-version>3.4.0</cxf-version>
+        <cxf-version>3.4.1</cxf-version>
         <groovy-version>3.0.6</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.1.0</hapi-fhir-version>
@@ -30,12 +30,12 @@
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.9</ph-commons-version>
-        <reactor-netty-version>1.0.0</reactor-netty-version>
-        <saxon-he-version>10.2</saxon-he-version>
+        <reactor-netty-version>1.0.1</reactor-netty-version>
+        <saxon-he-version>10.3</saxon-he-version>
         <simple-syslog-version>0.0.13</simple-syslog-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.2.9.RELEASE</spring-version>
-        <spring-boot-version>2.3.4.RELEASE</spring-boot-version>
+        <spring-version>5.3.1</spring-version>
+        <spring-boot-version>2.4.0</spring-boot-version>
         <vertx-version>3.9.0</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.2.0</xmlsec-version>

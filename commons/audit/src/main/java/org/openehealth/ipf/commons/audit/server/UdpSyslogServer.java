@@ -44,7 +44,7 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
     }
 
     @Override
-    public UdpSyslogServer start(String host, int port) {
+    public UdpSyslogServer doStart(String host, int port) {
         channel = UdpServer.create()
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)

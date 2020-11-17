@@ -71,12 +71,13 @@ class Rfc5425Decoder extends ByteToMessageDecoder {
 
         // Read part until the first space and convert it into a number
         var byteBuf = in.readBytes(index);
-        var number = byteBuf.readCharSequence(byteBuf.readableBytes(), StandardCharsets.US_ASCII);
-        byteBuf.release();
         try {
+            var number = byteBuf.readCharSequence(byteBuf.readableBytes(), StandardCharsets.US_ASCII);
             return OptionalInt.of(Integer.parseInt(number.toString()));
         } catch (NumberFormatException ignored) {
             return empty();
+        } finally {
+            byteBuf.release();
         }
 
     }
