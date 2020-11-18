@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.*;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 
 
@@ -35,6 +37,9 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
  *         &lt;element ref="{urn:oasis:names:tc:DSML:2:0:core}batchRequest" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name="requestID" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;xsd:attribute name="pageNumber" type="xsd:unsignedInt" use="optional"/&gt;
+ *       &lt;xsd:attribute name="pageSize" type="xsd:unsignedInt" use="optional"/&gt;
+ *       &lt;xsd:attribute name="totalNumber" type="xsd:unsignedInt" use="optional"/&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -53,6 +58,13 @@ public class DownloadResponse {
     protected List<BatchRequest> batchRequest;
     @XmlAttribute(name = "requestID")
     protected String requestID;
+
+    @XmlAttribute(name = "pageNumber")
+    @Getter @Setter protected int pageNumber;
+    @XmlAttribute(name = "pageSize")
+    @Getter @Setter protected int pageSize;
+    @XmlAttribute(name = "totalCount")
+    @Getter @Setter protected int totalCount;
 
     /**
      * Gets the value of the batchRequest property.
