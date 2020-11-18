@@ -29,7 +29,7 @@ class ChPiddTestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         from('ch-pidd:ch-pidd-service1')
                 .process(chPiddRequestValidator())
-                .transform().constant(new DownloadResponse(requestID: '456'))
+                .transform().constant(new DownloadResponse(requestID: '456', totalCount: 777))
                 .process(chPiddResponseValidator())
     }
 }

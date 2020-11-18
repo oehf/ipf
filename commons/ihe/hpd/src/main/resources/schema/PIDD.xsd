@@ -40,6 +40,18 @@ History:
                 <xsd:restriction base="xsd:boolean"/>
             </xsd:simpleType>
         </xsd:attribute>
+        <xsd:attribute name="pageNumber" use="optional" default="1">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:unsignedInt"/>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="pageSize" use="optional" default="1000">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:unsignedInt">
+                    <xsd:maxInclusive value="5000"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
     </xsd:complexType>
 
     <!-- **** Download Response **** -->
@@ -48,6 +60,9 @@ History:
             <xsd:element ref="dsml:batchRequest" maxOccurs="unbounded" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="requestID" type="xsd:string" use="optional"/>
+        <xsd:attribute name="pageNumber" type="xsd:unsignedInt" use="optional"/>
+        <xsd:attribute name="pageSize" type="xsd:unsignedInt" use="optional"/>
+        <xsd:attribute name="totalCount" type="xsd:unsignedInt" use="optional"/>
     </xsd:complexType>
 
 </xsd:schema>
