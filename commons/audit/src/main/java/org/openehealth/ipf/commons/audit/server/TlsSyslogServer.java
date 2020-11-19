@@ -69,9 +69,9 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .wiretap(true)
                 .metrics(Metrics.isInstrumentationAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
-                .doOnBind(serverBootstrap -> LOG.debug("Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.debug("Server bound on {}:{}", disposableServer.host(), disposableServer.port()))
-                .doOnUnbound(disposableServer -> LOG.debug("Server unbound from {}:{}", disposableServer.host(), disposableServer.port()))
+                .doOnBind(serverBootstrap -> LOG.info("TLS Server is about to be started"))
+                .doOnBound(disposableServer -> LOG.info("TLS Server bound on {}", disposableServer.address()))
+                .doOnUnbound(disposableServer -> LOG.info("TLS Server unbound from {}", disposableServer.address()))
                 .doOnConnection(connection -> {
                     LOG.debug("Received connection from {}", connection.channel().localAddress());
                     connection

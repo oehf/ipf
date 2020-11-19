@@ -58,9 +58,9 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
                 //.doOnBound(connection -> connection
                 //        .addHandler(new Rfc5426Decoder())
                 //        .addHandler(new Rfc5424Decoder()))
-                .doOnBind(serverBootstrap -> LOG.info("Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.info("Server bound on {}", disposableServer.channel().localAddress()))
-                .doOnUnbound(disposableServer -> LOG.info("Server unbound from {}", disposableServer.channel().localAddress()))
+                .doOnBind(serverBootstrap -> LOG.info("UDP Server is about to be started"))
+                .doOnBound(disposableServer -> LOG.info("UDP Server bound on {}", disposableServer.channel().localAddress()))
+                .doOnUnbound(disposableServer -> LOG.info("UDP Server unbound from {}", disposableServer.channel().localAddress()))
                 .handle((udpInbound, udpOutbound) -> udpInbound
                         .receiveObject()
                         // Because the handlers don't seem to step in, we handle it here
