@@ -52,7 +52,7 @@
         <jar-plugin-version>3.1.0</jar-plugin-version>
         <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.8.1</lombok-plugin-version>
+        <lombok-plugin-version>1.18.16.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.1.0</resources-plugin-version>
@@ -72,19 +72,19 @@
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>29.0-jre</guava-version>
-        <httpclient4-version>4.5.12</httpclient4-version>
-        <jackson-version>2.10.5</jackson-version>
+        <httpclient4-version>4.5.13</httpclient4-version>
+        <jackson-version>2.11.3</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
-        <jetty-version>9.4.31.v20200723</jetty-version>
-        <joda-time-version>2.10.6</joda-time-version>
-        <junit-version>4.12</junit-version>
-        <log4j-version>2.12.1</log4j-version>
-        <lombok-version>1.18.12</lombok-version>
+        <jetty-version>9.4.34.v20201102</jetty-version>
+        <joda-time-version>2.10.8</joda-time-version>
+        <junit-version>4.13.1</junit-version>
+        <log4j-version>2.13.3</log4j-version>
+        <lombok-version>1.18.16</lombok-version>
         <mockserver-version>5.10</mockserver-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>4.0.1</servlet-api-version>
-        <tomcat-version>9.0.38</tomcat-version>
+        <tomcat-version>9.0.40</tomcat-version>
         <woodstox-version>5.3.0</woodstox-version>
         <xbean-spring-version>4.14</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>

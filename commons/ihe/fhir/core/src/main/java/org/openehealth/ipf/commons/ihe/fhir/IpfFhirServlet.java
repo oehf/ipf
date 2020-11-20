@@ -77,9 +77,9 @@ public class IpfFhirServlet extends RestfulServer {
     @Getter @Setter
     private int pagingProviderSize = 50;
     @Getter @Setter
-    private int defaultPageSize = 25;
+    private Integer defaultPageSize = 25;
     @Getter @Setter
-    private int maximumPageSize = 100;
+    private Integer maximumPageSize = 100;
     @Getter @Setter
     private boolean strictErrorHandler;
     @Getter @Setter

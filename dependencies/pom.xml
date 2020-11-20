@@ -11,24 +11,24 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.11.2</brave-version>
         <camel-version>2.25.2</camel-version>
-        <cxf-version>3.3.7</cxf-version>
+        <cxf-version>3.3.8</cxf-version>
         <groovy-version>2.5.13</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>5.1.0</hapi-fhir-version>
+        <hapi-fhir-version>5.2.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.5.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.0</jaxb-version>
         <jdom-version>2.0.6</jdom-version>
         <mina2-version>2.0.21</mina2-version>
-        <netty-version>4.1.52.Final</netty-version>
+        <netty-version>4.1.54.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
         <saxon-he-version>9.9.1-1</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.2.9.RELEASE</spring-version>
-        <spring-boot-version>2.2.7.RELEASE</spring-boot-version>
+        <spring-version>5.2.11.RELEASE</spring-version>
+        <spring-boot-version>2.2.11.RELEASE</spring-boot-version>
         <vertx-version>3.9.3</vertx-version>
         <vibur-version>22.2</vibur-version>
         <xmlsec-version>2.1.5</xmlsec-version>
