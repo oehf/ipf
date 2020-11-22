@@ -95,7 +95,7 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void verifyEbXmlSerialization() throws JAXBException {
-        var ebXML = transformer.toEbXML(SampleData.createRemoveMetadata());
+        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(SampleData.createRemoveMetadata());
         JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
