@@ -27,7 +27,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti5
 class Iti58TestRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
-        from('hpd-iti58:hpd-service1')
+        from('hpd-iti58:hpd-service1?inInterceptors=#serverInLogger&outInterceptors=#serverOutLogger')
             .process(iti58RequestValidator())
             .process {
                 it.out.body = new BatchResponse()

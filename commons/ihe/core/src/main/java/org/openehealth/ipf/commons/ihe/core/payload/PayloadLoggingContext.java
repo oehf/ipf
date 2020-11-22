@@ -21,8 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Evaluation context of expressions for payload log file names. Expression or templating engines being
- * used should be able to call
+ * Evaluation context of expressions for payload log file names.
  *
  * @author Dmytro Rud
  */
@@ -36,15 +35,17 @@ public class PayloadLoggingContext {
 
     private final String sequenceId;
     private final Date currentDate;
+    private final String interactionId;
 
     /**
      * Initializes this context with a sequence ID
      *
      * @param sequenceId sequence ID
      */
-    public PayloadLoggingContext(Long sequenceId) {
+    public PayloadLoggingContext(Long sequenceId, String interactionId) {
         this.sequenceId = String.format("%012d", sequenceId);
         this.currentDate = new Date();
+        this.interactionId = interactionId;
     }
 
     /**
@@ -68,5 +69,12 @@ public class PayloadLoggingContext {
      */
     public String date(String formatSpecification) {
         return new SimpleDateFormat(formatSpecification).format(currentDate);
+    }
+
+    /**
+     * @return ID of the interaction where this message participates
+     */
+    public String getInteractionId() {
+        return interactionId;
     }
 }
