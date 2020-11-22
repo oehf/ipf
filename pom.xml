@@ -77,7 +77,7 @@
         <jaspic-api-version>1.1</jaspic-api-version>
         <jetty-version>9.4.34.v20201102</jetty-version>
         <joda-time-version>2.10.8</joda-time-version>
-        <junit-version>4.13.1</junit-version>
+        <junit-version>4.12</junit-version>
         <log4j-version>2.13.3</log4j-version>
         <lombok-version>1.18.16</lombok-version>
         <mockserver-version>5.10</mockserver-version>
