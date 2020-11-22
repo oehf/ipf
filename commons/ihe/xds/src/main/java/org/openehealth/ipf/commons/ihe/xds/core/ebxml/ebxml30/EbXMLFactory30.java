@@ -159,7 +159,6 @@ public class EbXMLFactory30 implements EbXMLFactory {
     @Override
     public EbXMLRemoveMetadataRequest createRemoveMetadataRequest() {
         RemoveObjectsRequest removeObjectsRequest = LCM_FACTORY.createRemoveObjectsRequest();
-        removeObjectsRequest.setAdhocQuery(RIM_FACTORY.createAdhocQueryType());
         return new EbXMLRemoveMetadataRequest30(removeObjectsRequest);
     }
 }
