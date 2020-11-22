@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver;
 import org.openehealth.ipf.commons.ihe.core.payload.SpringExpressionResolver;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
@@ -53,6 +54,7 @@ public class ConsumerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
     public ConsumerOutPayloadLoggerInterceptor(ExpressionResolver resolver) {
         super();
         addBefore(ConsumerStringProcessingInterceptor.class.getName());
+        addAfter(ConsumerRequestInteractionSetterInterceptor.class.getName());
         setExpressionResolver(resolver);
     }
 
@@ -60,7 +62,7 @@ public class ConsumerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
     public void process(Exchange exchange) throws Exception {
         getWrappedProcessor().process(exchange);
         if (canProcess()) {
-            logPayload(exchange, true);
+            logPayload(exchange, getEndpoint().getInteractionId());
         }
     }
 

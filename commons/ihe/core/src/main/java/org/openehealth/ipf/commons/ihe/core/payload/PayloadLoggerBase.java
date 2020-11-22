@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,6 +44,7 @@ import static java.util.Objects.requireNonNull;
  * number and the host name, e.g. <tt>"12345-myhostname"</tt>.</li>
  * <li><tt>date('format_spec')</tt>&nbsp;&mdash; current date and time, formatted
  * using {@link java.text.SimpleDateFormat} according to the given specification.</li>
+ * <li><tt>interactionId</tt>&nbsp;&mdash; ID of the interaction where the message participates.</li>
  * </ul>
  * <br>
  * Example of a file name pattern:<br>
@@ -110,10 +110,11 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         } else {
             // compute the file path and write payload pieces into this file
             var path = resolver.resolveExpression(context);
-            try (FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-                var writer = (charsetName != null) ?
+            try (var outputStream = FileUtils.openOutputStream(new File(path), true);
+                 var writer = (charsetName != null) ?
                          new OutputStreamWriter(outputStream, charsetName) :
-                             new OutputStreamWriter(outputStream)){
+                         new OutputStreamWriter(outputStream))
+            {
                 for (String payloadPiece : payloadPieces) {
                     writer.write(payloadPiece);
                 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
@@ -54,6 +55,7 @@ public class WsPayloadLoggerBase
 
         var spelContext = new WsPayloadLoggingContext(
                 sequenceId,
+                getInteractionId(message),
                 Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE)));
 
         var isOutbound = MessageUtils.isOutbound(message);
@@ -143,6 +145,11 @@ public class WsPayloadLoggerBase
         return wrapper.getCollectedPayload();
     }
 
+    private static String getInteractionId(Message message) {
+        var seiClass = (Class<?>) message.getContextualProperty(ReflectionServiceFactoryBean.ENDPOINT_CLASS);
+        var name = seiClass.getSimpleName();
+        return name.endsWith("PortType") ? name.substring(0, name.length() - 8) : name;
+    }
 
     /**
      * SPEL evaluation context for patterns of file names where WS-based payload should be saved.
@@ -150,8 +157,8 @@ public class WsPayloadLoggerBase
     static class WsPayloadLoggingContext extends PayloadLoggingContext {
         private final boolean partialResponse;
 
-        WsPayloadLoggingContext(long sequenceId, boolean partialResponse) {
-            super(sequenceId);
+        WsPayloadLoggingContext(long sequenceId, String interactionId, boolean partialResponse) {
+            super(sequenceId, interactionId);
             this.partialResponse = partialResponse;
         }
 
