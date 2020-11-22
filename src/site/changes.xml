@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="4.0.0" description="IPF 4.0.0" date="17 Apr 2020">
+            <action dev="unixoid" issue="332" type="add">
+                Possibility to use interaction IDs in payload logging file name patterns
+            </action>
+            <action dev="unixoid" issue="331" type="add">
+                Paging mechanism in CH:PIDD transactions
+            </action>
             <action dev="ohr" issue="329" type="add">
                 Add Syslog server and ATNA parser
             </action>
