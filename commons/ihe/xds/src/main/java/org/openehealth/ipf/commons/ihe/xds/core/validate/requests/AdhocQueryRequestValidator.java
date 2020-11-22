@@ -159,7 +159,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        var requireHomeCommunityId = profile.getInteractionProfile().requiresHomeCommunityId();
+        var homeCommunityIdOptionality = profile.getInteractionProfile().getHomeCommunityIdOptionality();
 
         switch (queryType) {
             case FETCH:
@@ -179,7 +179,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                         new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new HomeCommunityIdValidation(true),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                 };
 
             case FIND_DOCUMENTS:
@@ -268,7 +268,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_DOCUMENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
@@ -276,7 +276,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_DOCUMENTS_AND_ASSOCIATIONS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
@@ -284,7 +284,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_FOLDERS_FOR_DOCUMENT:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
@@ -292,7 +292,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_FOLDERS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
                         new StringListValidation(FOLDER_UUID, nopValidator),
                         new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
@@ -301,13 +301,13 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_ASSOCIATIONS:
             case GET_SUBMISSION_SETS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new StringListValidation(UUID, nopValidator),
                 };
 
             case GET_SUBMISSION_SET_AND_CONTENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                         new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
                         new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
@@ -318,7 +318,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_FOLDER_AND_CONTENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
                         new StringValidation(FOLDER_UUID, nopValidator, true),
                         new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
@@ -329,7 +329,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_RELATED_DOCUMENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),

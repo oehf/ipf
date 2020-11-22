@@ -57,8 +57,8 @@ public class XCDR implements XdsIntegrationProfile {
 	}
 
 	@Override
-	public boolean requiresHomeCommunityId() {
-		return true;
+	public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+		return HomeCommunityIdOptionality.ALWAYS;
 	}
 
 	@Override

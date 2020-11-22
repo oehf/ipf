@@ -82,8 +82,8 @@ public class XDS implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean requiresHomeCommunityId() {
-        return false;
+    public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+        return HomeCommunityIdOptionality.NEVER;
     }
 
     @Override

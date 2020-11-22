@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
@@ -45,7 +46,7 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
             metaDataAssert(registryError.getErrorCode() != null, INVALID_ERROR_CODE_IN_RESPONSE);
             metaDataAssert(registryError.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);
 
-            if (profile.getInteractionProfile().requiresHomeCommunityId()) {
+            if (profile.getInteractionProfile().getHomeCommunityIdOptionality() != XdsIntegrationProfile.HomeCommunityIdOptionality.NEVER) {
                 hcValidator.validate(registryError.getLocation());
             }
         }
