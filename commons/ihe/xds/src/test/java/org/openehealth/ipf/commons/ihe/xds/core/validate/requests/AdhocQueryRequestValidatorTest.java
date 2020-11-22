@@ -40,6 +40,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
@@ -276,6 +277,24 @@ public class AdhocQueryRequestValidatorTest {
         // wrong suffix
         ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("urn:oid:foo");
         expectFailure(INVALID_OID, ITI_18);
+    }
+
+    @Test
+    public void testHomeCommunityIdAttributeValidationIti38() {
+        // neither patient ID nor home community ID are present -- shall fail
+        request = SampleData.createGetDocumentsQuery();
+        ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId(null);
+        expectFailure(HOME_COMMUNITY_ID_MUST_BE_SPECIFIED, ITI_38);
+
+        // patient ID is not present, but the home community ID is present -- shall succeed
+        request = SampleData.createGetDocumentsQuery();
+        ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("urn:oid:1.2.3");
+        validator.validate(transformer.toEbXML(request), ITI_38);
+
+        // patient ID is present, but the home community ID is not -- shall succeed
+        request = SampleData.createFindDocumentsQuery();
+        ((FindDocumentsQuery)request.getQuery()).setHomeCommunityId(null);
+        validator.validate(transformer.toEbXML(request), ITI_38);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {
