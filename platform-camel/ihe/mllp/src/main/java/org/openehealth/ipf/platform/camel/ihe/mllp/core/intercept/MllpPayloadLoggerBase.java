@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
 
@@ -28,20 +28,19 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
  */
 public class MllpPayloadLoggerBase extends PayloadLoggerBase<PayloadLoggingContext> {
 
-    public void logPayload(Exchange exchange, boolean useOutMessage) {
+    public void logPayload(Exchange exchange, InteractionId interactionId) {
         Long sequenceId = exchange.getProperty(SEQUENCE_ID_PROPERTY_NAME, Long.class);
         if (sequenceId == null) {
             sequenceId = getNextSequenceId();
             exchange.setProperty(SEQUENCE_ID_PROPERTY_NAME, sequenceId);
         }
 
-        PayloadLoggingContext spelContext = new PayloadLoggingContext(sequenceId);
+        PayloadLoggingContext spelContext = new PayloadLoggingContext(sequenceId, interactionId.toString());
 
-        Message message = useOutMessage ? exchange.getOut() : exchange.getIn();
         doLogPayload(
                 spelContext,
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                message.getBody(String.class));
+                exchange.getMessage().getBody(String.class));
     }
 
 }

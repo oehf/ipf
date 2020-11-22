@@ -47,6 +47,7 @@ import static java.util.Objects.requireNonNull;
  * number and the host name, e.g. <tt>"12345-myhostname"</tt>.</li>
  * <li><tt>date('format_spec')</tt>&nbsp;&mdash; current date and time, formatted
  * using {@link java.text.SimpleDateFormat} according to the given specification.</li>
+ * <li><tt>interactionId</tt>&nbsp;&mdash; ID of the interaction where the message participates.</li>
  * </ul>
  * <br>
  * Example of a file name pattern:<br>
@@ -112,12 +113,11 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         } else {
             // compute the file path and write payload pieces into this file
             String path = resolver.resolveExpression(context);
-            Writer writer = null;
-            try {
-                FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-                writer = (charsetName != null) ?
-                        new OutputStreamWriter(outputStream, charsetName) :
-                        new OutputStreamWriter(outputStream);
+            try (FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
+                 Writer writer = (charsetName != null) ?
+                         new OutputStreamWriter(outputStream, charsetName) :
+                         new OutputStreamWriter(outputStream))
+            {
                 for (String payloadPiece : payloadPieces) {
                     writer.write(payloadPiece);
                 }
@@ -125,8 +125,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
             } catch (IOException e) {
                 errorCount.incrementAndGet();
                 LOG.warn("Cannot write into " + path, e);
-            } finally {
-                IOUtils.closeQuietly(writer);
             }
         }
     }

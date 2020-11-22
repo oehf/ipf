@@ -24,6 +24,7 @@ import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import zipkin2.Span
@@ -39,11 +40,13 @@ class TestIti8 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti8/iti-8.xml'
     
     static void main(args) {
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, true)
     }
     
     @BeforeClass
     static void setUpClass() {
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, false)
     }
     
@@ -65,19 +68,19 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit("xds-iti8://localhost:18082?timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("xds-iti8://localhost:18082?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit("pix-iti8://localhost:18082?audit=true&timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pix-iti8://localhost:18082?audit=true&timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 2)
     }
     @Test
     void testHappyCaseAndAudit3() {
-        doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}", 0)
+        doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 0)
     }
     @Test
     void testHappyCaseAndTrace() {
-        doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor&timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor,#clientInLogger,#clientOutLogger&timeout=${TIMEOUT}", 2)
         MockReporter reporter = appContext.getBean(MockReporter)
         assertEquals(2, reporter.spans.size())
 
@@ -176,7 +179,7 @@ class TestIti8 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = "xds-iti8://localhost:18084?timeout=${TIMEOUT}"
+        def endpointUri = "xds-iti8://localhost:18084?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger"
         def body = getMessageString(msh9, msh12)
         def failed = true
         
@@ -200,8 +203,8 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testExceptions() {
         def body = getMessageString('ADT^A01', '2.3.1')
-        doTestException("pix-iti8://localhost:18085?timeout=${TIMEOUT}", body, 'you cry')
-        doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}", body, 'lazy dog')
+        doTestException("pix-iti8://localhost:18085?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", body, 'you cry')
+        doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", body, 'lazy dog')
     }
 
     @Ignore

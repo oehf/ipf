@@ -60,7 +60,7 @@ public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
     public void process(Exchange exchange) throws Exception {
         getWrappedProcessor().process(exchange);
         if (canProcess()) {
-            logPayload(exchange, true);
+            logPayload(exchange, getEndpoint().getInteractionId());
         }
     }
 

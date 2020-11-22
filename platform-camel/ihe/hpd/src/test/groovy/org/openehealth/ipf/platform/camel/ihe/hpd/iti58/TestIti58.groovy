@@ -21,6 +21,7 @@ import org.apache.cxf.staxutils.StaxUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -32,15 +33,17 @@ class TestIti58 extends StandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'iti-58.xml'
 
-    final String SERVICE1 = "hpd-iti58://localhost:${port}/hpd-service1"
+    final String SERVICE1 = "hpd-iti58://localhost:${port}/hpd-service1?inInterceptors=#clientInLogger&outInterceptors=#clientOutLogger"
 
 
     static void main(args) {
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
     @BeforeClass
     static void classSetUp() {
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 
