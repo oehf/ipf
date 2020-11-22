@@ -63,7 +63,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
-            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            boolean completed = consumer.await(10, TimeUnit.SECONDS);
             assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
         } finally {
             executor.shutdownNow();

@@ -20,6 +20,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.netty.DisposableChannel;
 
 import java.io.Closeable;
+import java.net.SocketAddress;
 import java.time.Duration;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -70,6 +71,10 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
             throw new IllegalStateException("Syslog server is already running");
         }
         return doStart(host, port);
+    }
+
+    public SocketAddress address() {
+        return channel.address();
     }
 
     protected abstract SyslogServer<T> doStart(String host, int port);
