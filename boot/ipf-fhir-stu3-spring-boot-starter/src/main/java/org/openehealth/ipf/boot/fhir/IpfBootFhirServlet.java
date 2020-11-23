@@ -21,8 +21,6 @@ import ca.uhn.fhir.rest.server.IPagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.springframework.beans.factory.ObjectProvider;
 
-import java.util.Optional;
-
 /**
  * @author Christian Ohr
  */

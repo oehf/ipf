@@ -21,7 +21,7 @@ import javax.activation.DataSource
 class ByteArrayDataSource implements DataSource {
 
     private final byte[] data
-    private final String contentType;
+    private final String contentType
 
     ByteArrayDataSource(byte[] data, String contentType) {
         this.data = data

@@ -76,11 +76,11 @@ public enum QueryParameter {
     DOC_ENTRY_UNIQUE_ID("$XDSDocumentEntryUniqueId"),
     /** Used to filter {@link DocumentEntry#getType()}. */
     DOC_ENTRY_TYPE("$XDSDocumentEntryType"),
-    /** Used to filter {@link DocumentEntry#referenceIdList}. */
+    /** Used to filter {@link DocumentEntry#getReferenceIdList()}. */
     DOC_ENTRY_REFERENCE_IDS("$XDSDocumentEntryReferenceIdList"),
-    /** Used to filter {@link DocumentEntry#documentAvailability}. */
+    /** Used to filter {@link DocumentEntry#getDocumentAvailability()}. */
     DOC_ENTRY_DOCUMENT_AVAILABILITY("$XDSDocumentEntryDocumentAvailability"),
-    /** Used to filter {@link DocumentEntry#logicalUuid}. */
+    /** Used to filter {@link DocumentEntry#getLogicalUuid()}. */
     DOC_ENTRY_LOGICAL_ID("$XDSDocumentEntryLogicalID"),
 
     // specific for PHARM-1
@@ -109,7 +109,7 @@ public enum QueryParameter {
     FOLDER_UUID("$XDSFolderEntryUUID"),
     /** Used to filter {@link Folder#getUniqueId()}. */
     FOLDER_UNIQUE_ID("$XDSFolderUniqueId"),
-    /** Used to filter {@link Folder#logicalUuid}. */
+    /** Used to filter {@link Folder#getLogicalUuid()}. */
     FOLDER_LOGICAL_ID("$XDSFolderLogicalID"),
     
     /** Used to filter {@link SubmissionSet#getPatientId()}. */

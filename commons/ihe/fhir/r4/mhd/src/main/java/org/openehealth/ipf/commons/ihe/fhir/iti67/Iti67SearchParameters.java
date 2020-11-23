@@ -30,7 +30,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
