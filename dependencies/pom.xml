@@ -25,13 +25,13 @@
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.2.0</ph-schematron-version>
         <ph-commons-version>9.3.8</ph-commons-version>
-        <saxon-he-version>9.9.1-1</saxon-he-version>
+        <saxon-he-version>10.3</saxon-he-version>
         <slf4j-version>1.7.30</slf4j-version>
         <spring-version>5.2.11.RELEASE</spring-version>
         <spring-boot-version>2.2.11.RELEASE</spring-boot-version>
-        <vertx-version>3.9.3</vertx-version>
-        <vibur-version>22.2</vibur-version>
-        <xmlsec-version>2.1.5</xmlsec-version>
+        <vertx-version>3.9.4</vertx-version>
+        <vibur-version>25.0</vibur-version>
+        <xmlsec-version>2.2.0</xmlsec-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>

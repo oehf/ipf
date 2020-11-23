@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.camel.Exchange
+
 import org.apache.camel.Expression
-import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
@@ -28,7 +27,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
@@ -46,7 +44,7 @@ class Iti4142RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti4142RouteBuilder.class)
     
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         errorHandler(noErrorHandler())
         
         // Entry point for Provide and Register Document Set

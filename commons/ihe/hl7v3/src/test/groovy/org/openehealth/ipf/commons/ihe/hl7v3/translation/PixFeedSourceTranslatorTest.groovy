@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3

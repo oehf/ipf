@@ -36,7 +36,7 @@ class Iti43RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti43RouteBuilder.class)
     
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         errorHandler(noErrorHandler())
         
         // Entry point for Retrieve Document Set

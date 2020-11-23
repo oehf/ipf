@@ -15,26 +15,27 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicLong
-import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import javax.activation.DataHandler
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
+
 import static org.junit.Assert.assertEquals
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -91,7 +92,7 @@ class TestThreading extends StandardTestContainer {
     def provideTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         provide.documents[0].setContent(DataHandler,
-                new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
+                new DataHandler(new ByteArrayDataSource('test'.getBytes(), 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()            
@@ -135,7 +136,7 @@ class TestThreading extends StandardTestContainer {
     def retrieveTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         provide.documents[0].setContent(DataHandler,
-                    new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
+                    new DataHandler(new ByteArrayDataSource('test'.getBytes(), 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()
