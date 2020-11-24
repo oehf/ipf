@@ -64,7 +64,7 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
     }
 
     private static boolean patientIdMissing(EbXMLAdhocQueryRequest request) {
-        for (QueryParameter parameter : PATIENT_ID_PARAMETERS) {
+        for (var parameter : PATIENT_ID_PARAMETERS) {
             if (!request.getSlotValues(parameter.getSlotName()).isEmpty()) {
                 return false;
             }

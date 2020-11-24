@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.xml
 
-import groovy.xml.XmlSlurper
 import groovy.xml.MarkupBuilder
+import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
-import org.junit.BeforeClass
 import org.junit.Test
+import org.xmlunit.builder.DiffBuilder
+import org.xmlunit.builder.Input
+import org.xmlunit.diff.Diff
 
+import static org.junit.Assert.assertFalse
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldChildren
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 
@@ -32,14 +33,6 @@ import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
  * @author Mitko Kolev
  */
 class XmlYielderTest {
-
-    @BeforeClass
-    static void setUpClass() {
-        XMLUnit.setCompareUnmatched(true)
-        XMLUnit.setIgnoreAttributeOrder(true)
-        XMLUnit.setIgnoreComments(true)
-        XMLUnit.setIgnoreWhitespace(true)
-    }
 
     private static MarkupBuilder getBuilder(StringWriter writer) {
         MarkupBuilder builder = new MarkupBuilder(writer)
@@ -236,8 +229,13 @@ class XmlYielderTest {
                 yieldElement(source.element, builder, defaultNs)
             }
         }
-        Diff diff = new Diff(expected, writer.toString())
-        assert diff.identical()
+        Diff diff = DiffBuilder.compare(Input.fromString(expected))
+                .withTest(writer.toString())
+                .ignoreComments()
+                .ignoreWhitespace()
+                .checkForSimilar()
+                .build()
+        assertFalse(diff.toString(), diff.hasDifferences())
     }
 
     @Test

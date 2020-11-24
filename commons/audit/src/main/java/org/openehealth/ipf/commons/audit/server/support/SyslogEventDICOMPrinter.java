@@ -74,7 +74,7 @@ public class SyslogEventDICOMPrinter {
                     syslogMap.get(SyslogFieldKeys.HEADER_HOSTNAME.getField()),
                     syslogMap.get(SyslogFieldKeys.HEADER_TIMESTAMP.getField()));
             try {
-                AuditMessage auditMessage = parse(syslogMap);
+                var auditMessage = parse(syslogMap);
                 LOG.info("DICOM Payload is");
                 LOG.info("{}", auditMessage.toString());
             } catch (Exception e) {

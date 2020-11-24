@@ -106,7 +106,7 @@ public class Person extends Hl7v2Based<XCN> {
      */
     public void setName(Name name) {
         if (name != null) {
-            XcnName thisName = new XcnName(getHapiObject());
+            var thisName = new XcnName(getHapiObject());
             thisName.copyFrom(name);
         }
         else {

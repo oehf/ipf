@@ -84,7 +84,7 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     private Runnable runnable(AuditContext auditContext, String auditRecord) {
         // Copy the MDC contextMap to re-use it in the worker thread
         // See this recommendation here: http://logback.qos.ch/manual/mdc.html#managedThreads
-        Map<String, String> mdcContextMap = MDC.getCopyOfContextMap();
+        var mdcContextMap = MDC.getCopyOfContextMap();
         return () -> {
             try {
                 MDC.setContextMap(mdcContextMap);

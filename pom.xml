@@ -63,8 +63,7 @@
         <easymock-version>3.4</easymock-version>
         <ehcache-version>3.8.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
-        <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
-        <guava-version>29.0-jre</guava-version>
+        <guava-version>30.0-jre</guava-version>
         <httpclient4-version>4.5.13</httpclient4-version>
         <jackson-version>2.11.2</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
@@ -79,7 +78,7 @@
         <tomcat-version>9.0.39</tomcat-version>
         <woodstox-version>6.2.1</woodstox-version>
         <xbean-spring-version>4.17</xbean-spring-version>
-        <xmlunit-version>1.6</xmlunit-version>
+        <xmlunit-version>2.8.1</xmlunit-version>
     </properties>
 
     <scm>
@@ -285,11 +284,6 @@
                 <version>${activemq-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty-version}</version>
@@ -387,8 +381,8 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>xmlunit</groupId>
-                <artifactId>xmlunit</artifactId>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-core</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
             </dependency>
@@ -501,13 +495,14 @@
                     <inherited>false</inherited>
                     <configuration>
                         <links>
-                            <link>http://docs.oracle.com/en/java/javase/11/docs/api/</link>
-                            <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
-                            <link>http://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-base/</link>
-                            <link>http://cxf.apache.org/javadoc/latest/</link>
-                            <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                            <link>http://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
-                            <link>http://docs.spring.io/spring/docs/5.2.x/javadoc-api/</link>
+                            <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                            <link>https://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-base/</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-server</link>
+                            <link>https://cxf.apache.org/javadoc/latest/</link>
+                            <link>https://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
+                            <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
+                            <link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
                         </links>
                         <source>${java.version}</source>
                         <linksource>false</linksource>

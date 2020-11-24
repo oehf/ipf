@@ -321,7 +321,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateUniqueIds(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> idsInRequest = new HashSet<>();
-        ValidationMessage validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
+        var validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
         ValueValidator uniquenessValidator = (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
         validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);

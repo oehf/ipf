@@ -69,9 +69,9 @@ public class CustomHL7MLLPCodec extends HL7MLLPCodec {
 
     private HL7MLLPConfig config() {
         try {
-            Field field = HL7MLLPCodec.class.getDeclaredField("config");
+            var field = HL7MLLPCodec.class.getDeclaredField("config");
             field.setAccessible(true);
-            Object value = field.get(this);
+            var value = field.get(this);
             field.setAccessible(false);
             return (HL7MLLPConfig) value;
         } catch (Exception e) {

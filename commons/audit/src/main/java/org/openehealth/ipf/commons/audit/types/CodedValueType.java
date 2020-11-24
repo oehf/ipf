@@ -36,7 +36,7 @@ public interface CodedValueType extends Serializable {
     }
 
     static CodedValueType of(String code, String codeSystemName, String originalText, String displayName) {
-        CodedValueTypeImpl c = new CodedValueTypeImpl(code, codeSystemName, originalText);
+        var c = new CodedValueTypeImpl(code, codeSystemName, originalText);
         c.setDisplayName(displayName);
         return c;
     }

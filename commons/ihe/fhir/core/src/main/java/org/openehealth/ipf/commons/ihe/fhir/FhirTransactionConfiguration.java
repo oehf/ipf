@@ -141,7 +141,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
 
     private static FhirContext initializeFhirContext(FhirVersionEnum fhirVersion) {
         return fhirContexts.computeIfAbsent(fhirVersion, fhirVersionEnum -> {
-            FhirContext fhirContext = new FhirContext(fhirVersionEnum);
+            var fhirContext = new FhirContext(fhirVersionEnum);
             fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
             return fhirContext;
         });

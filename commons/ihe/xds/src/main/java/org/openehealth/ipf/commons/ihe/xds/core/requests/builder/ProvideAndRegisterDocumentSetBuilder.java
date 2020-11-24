@@ -41,7 +41,7 @@ public class ProvideAndRegisterDocumentSetBuilder
 
     @Override
     public ProvideAndRegisterDocumentSet doBuild(SubmissionSet submissionSet, List<Folder> folders, List<Document> documents, List<Association> associations) {
-        ProvideAndRegisterDocumentSet pnrSet = new ProvideAndRegisterDocumentSet();
+        var pnrSet = new ProvideAndRegisterDocumentSet();
         pnrSet.setSubmissionSet(submissionSet);
         pnrSet.getFolders().addAll(folders);
         pnrSet.getDocuments().addAll(documents);

@@ -41,7 +41,7 @@ public class Iti86Service extends AbstractWebService implements Iti86PortType {
         var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("ITI-86 service failed", exception);
-            Response errorResponse = new Response(
+            var errorResponse = new Response(
                     exception,
                     ErrorCode.REMOVE_DOCUMENTS_ERROR,
                     ErrorCode.REPOSITORY_ERROR,

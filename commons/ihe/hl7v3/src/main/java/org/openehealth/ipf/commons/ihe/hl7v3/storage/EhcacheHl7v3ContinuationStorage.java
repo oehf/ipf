@@ -80,7 +80,7 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
 
     @Override
     public boolean remove(String key) {
-        boolean exists = ehcache.get(key + MESSAGE_SUFFIX) != null;
+        var exists = ehcache.get(key + MESSAGE_SUFFIX) != null;
         ehcache.remove(key + LAST_RESULT_NUMBER_SUFFIX);
         ehcache.remove(key + CONTINUATION_QUANTITY_SUFFIX);
         ehcache.remove(key + MESSAGE_SUFFIX);

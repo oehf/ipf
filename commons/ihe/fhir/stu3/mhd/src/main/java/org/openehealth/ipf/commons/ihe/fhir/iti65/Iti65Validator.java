@@ -67,7 +67,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     }
 
     private FhirInstanceValidator fhirInstanceValidator(IValidationSupport validationSupport) {
-        FhirInstanceValidator fhirInstanceValidator = new FhirInstanceValidator(validationSupport);
+        var fhirInstanceValidator = new FhirInstanceValidator(validationSupport);
         fhirInstanceValidator.setNoTerminologyChecks(true);
         fhirInstanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
         fhirInstanceValidator.setErrorForUnknownProfiles(true);

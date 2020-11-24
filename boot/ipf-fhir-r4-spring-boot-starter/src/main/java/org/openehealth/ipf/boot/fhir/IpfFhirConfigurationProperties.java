@@ -150,7 +150,7 @@ public class IpfFhirConfigurationProperties {
     }
 
     private static CorsConfiguration defaultCorsConfiguration() {
-        CorsConfiguration cors = new CorsConfiguration();
+        var cors = new CorsConfiguration();
         cors.addAllowedOrigin("*");
         cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         // A comma separated list of allowed headers when making a non simple CORS request.

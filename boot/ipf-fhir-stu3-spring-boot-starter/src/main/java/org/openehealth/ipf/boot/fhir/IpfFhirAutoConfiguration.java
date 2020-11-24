@@ -77,7 +77,7 @@ public class IpfFhirAutoConfiguration {
     public NamingSystemService namingSystemService(FhirContext fhirContext) throws IOException {
         var namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
         for (var resource : config.getNamingSystems()) {
-            try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            try (var reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
                 namingSystemService.addNamingSystemsFromXml(reader);
             }
         }

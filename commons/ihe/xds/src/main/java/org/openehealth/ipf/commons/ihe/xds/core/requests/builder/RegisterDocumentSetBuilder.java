@@ -34,7 +34,7 @@ public class RegisterDocumentSetBuilder extends AbstractSubmissionRequestBuilder
 
     @Override
     public RegisterDocumentSet doBuild(SubmissionSet submissionSet, List<Folder> folders, List<DocumentEntry> documents, List<Association> associations) {
-        RegisterDocumentSet set = new RegisterDocumentSet();
+        var set = new RegisterDocumentSet();
         set.setSubmissionSet(submissionSet);
         set.getFolders().addAll(folders);
         set.getDocumentEntries().addAll(documents);

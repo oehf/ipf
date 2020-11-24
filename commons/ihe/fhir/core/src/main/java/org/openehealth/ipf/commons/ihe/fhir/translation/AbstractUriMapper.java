@@ -120,7 +120,7 @@ public abstract class AbstractUriMapper implements UriMapper {
     }
 
     private static URN urn(String nid, String nss) {
-        String urn = String.format("%s:%s", nid, nss);
+        var urn = String.format("%s:%s", nid, nss);
         try {
             // This does the escaping e.g. of whitespaces in the nss
             return new URN(new URI("urn", urn, null));

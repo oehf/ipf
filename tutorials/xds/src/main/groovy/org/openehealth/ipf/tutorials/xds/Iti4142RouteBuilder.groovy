@@ -27,7 +27,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED

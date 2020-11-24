@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
-import java.io.IOException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.slf4j.Logger;

@@ -174,7 +174,7 @@ public class PatientInfo implements Serializable {
         return new SynchronizingListIterator<>(xdsIterator, stringsIterator) {
             private T prepareValue(T xdsObject) {
                 if ("PID-5".equals(fieldId) && (xdsObject != null) && !(xdsObject instanceof XpnName)) {
-                    XpnName xpnName = new XpnName();
+                    var xpnName = new XpnName();
                     xpnName.copyFrom((Name)xdsObject);
                     return (T) xpnName;
                 }

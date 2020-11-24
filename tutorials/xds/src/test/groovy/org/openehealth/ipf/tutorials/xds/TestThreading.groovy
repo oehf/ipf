@@ -20,7 +20,6 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
@@ -91,7 +90,7 @@ class TestThreading extends StandardTestContainer {
     def provideTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         provide.documents[0].setContent(DataHandler,
-                new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
+                new DataHandler(new ByteArrayDataSource('test'.getBytes(), 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()            
@@ -135,7 +134,7 @@ class TestThreading extends StandardTestContainer {
     def retrieveTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         provide.documents[0].setContent(DataHandler,
-                    new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
+                    new DataHandler(new ByteArrayDataSource('test'.getBytes(), 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()

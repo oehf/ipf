@@ -69,7 +69,7 @@ class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decoding message with {} bytes into RFC 5424 map.", msg.readableBytes());
         }
-        Map<String, Object> map = parseByteBuf(msg);
+        var map = parseByteBuf(msg);
         if (socketAddress instanceof InetSocketAddress) {
             Map<String, Object> enriched = new HashMap<>(map);
             var inetSocketAddress = (InetSocketAddress) socketAddress;

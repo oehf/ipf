@@ -16,7 +16,7 @@ public class Base {
     private static String descriptorList = "base-context.xml;extender-context.xml";
 
     public static void main(String... args) {
-        StringBuilder customContextFiles = new StringBuilder();
+        var customContextFiles = new StringBuilder();
         for (var customContext : args) {
             if (Base.class.getClassLoader().getResource(customContext) != null) {
                 customContextFiles.append(customContext).append(";");

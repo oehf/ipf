@@ -115,7 +115,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
                          new OutputStreamWriter(outputStream, charsetName) :
                          new OutputStreamWriter(outputStream))
             {
-                for (String payloadPiece : payloadPieces) {
+                for (var payloadPiece : payloadPieces) {
                     writer.write(payloadPiece);
                 }
                 errorCount.set(0);
