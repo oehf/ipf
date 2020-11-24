@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
@@ -26,14 +29,47 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  * @author Dmytro Rud
  */
 public class HomeCommunityIdValidation implements QueryParameterValidation {
-    private final HomeCommunityIdValidator validator;
 
-    public HomeCommunityIdValidation(boolean required) {
-        this.validator = new HomeCommunityIdValidator(required);
+    private static final QueryParameter[] PATIENT_ID_PARAMETERS = new QueryParameter[]{
+            QueryParameter.DOC_ENTRY_PATIENT_ID,
+            QueryParameter.SUBMISSION_SET_PATIENT_ID,
+            QueryParameter.FOLDER_PATIENT_ID,
+            QueryParameter.PATIENT_ID};
+
+    private final XdsIntegrationProfile.HomeCommunityIdOptionality optionality;
+
+    public HomeCommunityIdValidation(XdsIntegrationProfile.HomeCommunityIdOptionality optionality) {
+        this.optionality = optionality;
     }
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+        final boolean homeCommunityRequired;
+        switch (optionality) {
+            case NEVER:
+                homeCommunityRequired = false;
+                break;
+            case ALWAYS:
+                homeCommunityRequired = true;
+                break;
+            case ON_MISSING_PATIENT_ID:
+                homeCommunityRequired = patientIdMissing(request);
+                break;
+            default:
+                throw new NotImplementedException("Cannot handle optionality " + optionality);
+        }
+
+        var validator = new HomeCommunityIdValidator(homeCommunityRequired);
         validator.validate(request.getHome());
     }
+
+    private static boolean patientIdMissing(EbXMLAdhocQueryRequest request) {
+        for (QueryParameter parameter : PATIENT_ID_PARAMETERS) {
+            if (!request.getSlotValues(parameter.getSlotName()).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

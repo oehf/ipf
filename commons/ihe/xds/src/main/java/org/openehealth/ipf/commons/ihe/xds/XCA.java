@@ -64,8 +64,8 @@ public class XCA implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean requiresHomeCommunityId() {
-        return true;
+    public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+        return HomeCommunityIdOptionality.ON_MISSING_PATIENT_ID;
     }
 
     @Override
