@@ -35,7 +35,8 @@ public enum AuditTransmissionChannel {
     TLS("TLS", TLSSyslogSenderImpl.class),
     NIO_TLS("NIO-TLS", NettyTLSSyslogSenderImpl.class),
     VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderImpl.class),
-    NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderImpl.class);
+    NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderImpl.class),
+    REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderImpl.class);
 
     private final String protocolName;
     private final Class<? extends AuditTransmissionProtocol> protocol;

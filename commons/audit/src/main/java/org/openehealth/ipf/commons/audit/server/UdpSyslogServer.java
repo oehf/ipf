@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.server;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.socket.DatagramPacket;
+import io.netty.handler.logging.LogLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.Connection;
@@ -51,16 +52,16 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
                 .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .host(host)
                 .port(port)
-                .wiretap(true)
+                .wiretap(getClass().getName(), LogLevel.TRACE)
                 .metrics(Metrics.isInstrumentationAvailable())
 
                 // This does not work!
                 //.doOnBound(connection -> connection
                 //        .addHandler(new Rfc5426Decoder())
                 //        .addHandler(new Rfc5424Decoder()))
-                .doOnBind(serverBootstrap -> LOG.info("UDP Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.info("UDP Server bound on {}", disposableServer.channel().localAddress()))
-                .doOnUnbound(disposableServer -> LOG.info("UDP Server unbound from {}", disposableServer.channel().localAddress()))
+                .doOnBind(serverBootstrap -> LOG.info("UDP Syslog Server is about to be started"))
+                .doOnBound(disposableServer -> LOG.info("UDP Syslog Server bound on {}", disposableServer.channel().localAddress()))
+                .doOnUnbound(disposableServer -> LOG.info("UDP Syslog Server unbound from {}", disposableServer.channel().localAddress()))
                 .handle((udpInbound, udpOutbound) -> udpInbound
                         .receiveObject()
                         // Because the handlers don't seem to step in, we handle it here

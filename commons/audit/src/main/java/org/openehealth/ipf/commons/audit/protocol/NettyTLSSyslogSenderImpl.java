@@ -18,20 +18,24 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.*;
 import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import static org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImpl.NettyDestination;
 
@@ -39,7 +43,7 @@ import static org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImp
  * Simple Netty client implementation of RFC 5425 TLS syslog transport
  * for sending audit messages to an Audit Record Repository that implements TLS syslog.
  * Multiple messages may be sent over the same socket.
- *1
+ *
  * @author Christian Ohr
  * @since 3.7
  */
@@ -181,7 +185,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
             @Override
             public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                LOG.info("TLS Channel {} to Audit Repository at {}:{} is now active", ctx.name(), host, port);
+                LOG.info("TLS Channel to Audit Repository at {}:{} is now active", host, port);
                 super.channelActive(ctx);
             }
 
@@ -213,7 +217,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
             @Override
             protected void initChannel(SocketChannel channel) {
                 var pipeline = channel.pipeline();
-                var sslContext = initSslContext();
+                var sslContext = NettyUtils.initSslContext(tlsParameters, true);
                 pipeline.addLast(sslContext.newHandler(channel.alloc(), host, port));
                 pipeline.addLast(new InboundHandler(host, port));
                 if (withLogging) {
@@ -221,21 +225,6 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
                 }
             }
 
-            private SslContext initSslContext() {
-                var allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
-                var protocols = Stream.of(allowedProtocols.split("\\s*,\\s*"))
-                        .toArray(String[]::new);
-                return new JdkSslContext(
-                        tlsParameters.getSSLContext(),
-                        true,
-                        null, // use default
-                        SupportedCipherSuiteFilter.INSTANCE,
-                        ApplicationProtocolConfig.DISABLED,
-                        ClientAuth.REQUIRE,
-                        protocols,
-                        false
-                );
-            }
         }
     }
 

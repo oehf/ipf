@@ -17,11 +17,13 @@ package org.openehealth.ipf.commons.audit.server;
 
 import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
+import io.netty.handler.logging.LogLevel;
 import io.netty.handler.ssl.ApplicationProtocolConfig;
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SupportedCipherSuiteFilter;
+import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,19 +61,19 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
 
     @Override
     public TlsSyslogServer doStart(String host, int port) {
-        var sslContext = initSslContext();
+        var sslContext = NettyUtils.initSslContext(tlsParameters, false);
         channel = TcpServer.create()
                 .host(host)
                 .port(port)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
                 .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
-                .wiretap(true)
+                .wiretap(getClass().getName(), LogLevel.TRACE)
                 .metrics(Metrics.isInstrumentationAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
-                .doOnBind(serverBootstrap -> LOG.info("TLS Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.info("TLS Server bound on {}", disposableServer.address()))
-                .doOnUnbound(disposableServer -> LOG.info("TLS Server unbound from {}", disposableServer.address()))
+                .doOnBind(serverBootstrap -> LOG.info("TLS Syslog Server is about to be started"))
+                .doOnBound(disposableServer -> LOG.info("TLS Syslog Server bound on {}", disposableServer.address()))
+                .doOnUnbound(disposableServer -> LOG.info("TLS Syslog Server unbound from {}", disposableServer.address()))
                 .doOnConnection(connection -> {
                     LOG.debug("Received connection from {}", connection.channel().localAddress());
                     connection
@@ -87,19 +89,6 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
         return this;
     }
 
-    private SslContext initSslContext() {
-        var allowedProtocols = System.getProperty("jdk.tls.client.protocols", "TLSv1.2");
-        var protocols = Stream.of(allowedProtocols.split("\\s*,\\s*")).toArray(String[]::new);
-        return new JdkSslContext(
-                tlsParameters.getSSLContext(),
-                false,
-                null, // use default
-                SupportedCipherSuiteFilter.INSTANCE,
-                ApplicationProtocolConfig.DISABLED,
-                ClientAuth.REQUIRE, // require mutual authentication
-                protocols,
-                false
-        );
-    }
+
 
 }
