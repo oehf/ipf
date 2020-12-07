@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.13.1</brave-version>
-        <cacheing-api-version>1.1.1</cacheing-api-version>
+        <caching-api-version>1.1.1</caching-api-version>
         <camel-version>3.6.0</camel-version>
         <cxf-version>3.4.1</cxf-version>
         <groovy-version>3.0.6</groovy-version>
@@ -882,6 +882,12 @@
                 <groupId>org.openehealth.ipf.gazelle</groupId>
                 <artifactId>ipf-gazelle-validation-commons-core</artifactId>
                 <version>${ipf-gazelle-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>
@@ -931,7 +937,7 @@
             <dependency>
                 <groupId>javax.cache</groupId>
                 <artifactId>cache-api</artifactId>
-                <version>${cacheing-api-version}</version>
+                <version>${caching-api-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
