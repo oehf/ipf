@@ -48,6 +48,9 @@
             <action dev="thopap" issue="311" type="update">
                 Replace usage of Ehcache 2.x with JCache (jsr-107) where Ehcache 3.x can be used as implementation.
             </action>
+            <action dev="unixoid" issue="291" type="update">
+                Define usage and validation of homeCommunityID query parameter for many IHE profiles
+            </action>
         </release>
         <release version="3.7.2" description="IPF 3.7.2" date="14 Jul 2020">
             <action dev="ohr" issue="328" type="fix">
