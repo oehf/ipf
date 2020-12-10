@@ -2,6 +2,9 @@ name: Build IPF with Maven
 
 on: [push, pull_request]
 
+env:
+  MAVEN_OPTS: -Xmx2048m
+
 jobs:
   compile:
     runs-on: ubuntu-latest
@@ -10,7 +13,7 @@ jobs:
         java: [ 11, 13 ]
     name: Java ${{ matrix.java }} compile
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -22,4 +25,4 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
-        run: mvn -B clean compile --file pom.xml
+        run: mvn -B clean package --file pom.xml
