@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.core.payload;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
@@ -33,9 +36,10 @@ public class PayloadLoggingContext {
         PROCESS_ID = mx.getName().replace("@", "-");
     }
 
-    private final String sequenceId;
+    @Getter @Setter private static String applicationId = "ipf";
+    @Getter private final String sequenceId;
     private final Date currentDate;
-    private final String interactionId;
+    @Getter private final String interactionId;
 
     /**
      * Initializes this context with a sequence ID
@@ -56,13 +60,6 @@ public class PayloadLoggingContext {
     }
 
     /**
-     * @return the sequence ID
-     */
-    public String getSequenceId() {
-        return sequenceId;
-    }
-
-    /**
      * @param formatSpecification date format specification
      * @return the current date/time of this context
      * @see SimpleDateFormat
@@ -71,10 +68,4 @@ public class PayloadLoggingContext {
         return new SimpleDateFormat(formatSpecification).format(currentDate);
     }
 
-    /**
-     * @return ID of the interaction where this message participates
-     */
-    public String getInteractionId() {
-        return interactionId;
-    }
 }

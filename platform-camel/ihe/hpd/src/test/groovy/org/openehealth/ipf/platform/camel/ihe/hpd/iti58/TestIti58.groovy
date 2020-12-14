@@ -22,6 +22,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -44,6 +45,7 @@ class TestIti58 extends StandardTestContainer {
     @BeforeClass
     static void classSetUp() {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
+        PayloadLoggingContext.applicationId = 'hpdserver'
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 
