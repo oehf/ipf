@@ -15,32 +15,37 @@
  */
 package org.openehealth.ipf.commons.audit;
 
-import io.vertx.core.net.JksOptions;
-import io.vertx.core.net.NetClientOptions;
-import io.vertx.core.net.PfxOptions;
-
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.Principal;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.*;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.HTTPS_CIPHERSUITES;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_TYPE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
 
 /**
  * {@link TlsParameters} that can be set independently of the javax.net.ssl system
  * properties. Still, a newly instantiated instance of this class defaults to these
  * properties.
  */
-public class CustomTlsParameters implements VertxTlsParameters {
+public class CustomTlsParameters implements TlsParameters {
 
     private String provider = "SunJSSE";
     private String tlsProtocol = "TLSv1.2";
@@ -48,20 +53,23 @@ public class CustomTlsParameters implements VertxTlsParameters {
 
     private String certAlias;
 
-    private String keyStoreType;
-    private String trustStoreType;
-    private String keyStoreFile;
-    private String keyStorePassword;
-    private String trustStoreFile;
-    private String trustStorePassword;
+    protected String keyStoreType;
+    protected String trustStoreType;
+    protected String keyStoreFile;
+    protected String keyStorePassword;
+    protected String trustStoreFile;
+    protected String trustStorePassword;
 
-    private String enabledCipherSuites;
-    private String enabledProtocols;
+    protected String enabledCipherSuites;
+    protected String enabledProtocols;
 
     private int sessionTimeout;
     private boolean performDomainValidation;
     private final List<String> sniHostnames = new ArrayList<>();
 
+    static TlsParameters getDefault() {
+        return new CustomTlsParameters();
+    }
 
     public void setProvider(String provider) {
         this.provider = provider;
@@ -174,7 +182,7 @@ public class CustomTlsParameters implements VertxTlsParameters {
         };
     }
 
-    private String[] split(String s) {
+    protected String[] split(String s) {
         return s.split("\\s*,\\s*");
     }
 
@@ -213,35 +221,6 @@ public class CustomTlsParameters implements VertxTlsParameters {
                     sslSocketFactoryConfigurer()));
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void initNetClientOptions(NetClientOptions options) {
-        if ("JKS".equalsIgnoreCase(keyStoreType)) {
-            options.setKeyStoreOptions(new JksOptions()
-                    .setPath(keyStoreFile)
-                    .setPassword(keyStorePassword));
-        } else {
-            options.setPfxKeyCertOptions(new PfxOptions()
-                    .setPath(keyStoreFile)
-                    .setPassword(keyStorePassword));
-        }
-        if ("JKS".equalsIgnoreCase(trustStoreType)) {
-            options.setTrustStoreOptions(new JksOptions()
-                    .setPath(trustStoreFile)
-                    .setPassword(trustStorePassword));
-        } else {
-            options.setPfxTrustOptions(new PfxOptions()
-                    .setPath(trustStoreFile)
-                    .setPassword(trustStorePassword));
-        }
-        Stream.of(split(enabledProtocols))
-                .forEach(options::addEnabledSecureTransportProtocol);
-
-        if (enabledCipherSuites != null) {
-            Stream.of(split(enabledCipherSuites))
-                    .forEach(options::addEnabledCipherSuite);
         }
     }
 

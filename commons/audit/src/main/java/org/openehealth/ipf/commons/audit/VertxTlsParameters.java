@@ -15,7 +15,11 @@
  */
 package org.openehealth.ipf.commons.audit;
 
+import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.NetClientOptions;
+import io.vertx.core.net.PfxOptions;
+
+import java.util.stream.Stream;
 
 /**
  * Extension interface for {@link TlsParameters} for Vert.x based
@@ -23,10 +27,10 @@ import io.vertx.core.net.NetClientOptions;
  *
  * @deprecated 
  */
-public interface VertxTlsParameters extends TlsParameters {
+public class VertxTlsParameters extends CustomTlsParameters {
 
-    static VertxTlsParameters getDefault() {
-        return new CustomTlsParameters();
+    public static VertxTlsParameters getDefault() {
+        return new VertxTlsParameters();
     }
 
     /**
@@ -34,5 +38,31 @@ public interface VertxTlsParameters extends TlsParameters {
      *
      * @param options Vert.x {@link NetClientOptions}
      */
-    void initNetClientOptions(NetClientOptions options);
+    public void initNetClientOptions(NetClientOptions options) {
+        if ("JKS".equalsIgnoreCase(keyStoreType)) {
+            options.setKeyStoreOptions(new JksOptions()
+                    .setPath(keyStoreFile)
+                    .setPassword(keyStorePassword));
+        } else {
+            options.setPfxKeyCertOptions(new PfxOptions()
+                    .setPath(keyStoreFile)
+                    .setPassword(keyStorePassword));
+        }
+        if ("JKS".equalsIgnoreCase(trustStoreType)) {
+            options.setTrustStoreOptions(new JksOptions()
+                    .setPath(trustStoreFile)
+                    .setPassword(trustStorePassword));
+        } else {
+            options.setPfxTrustOptions(new PfxOptions()
+                    .setPath(trustStoreFile)
+                    .setPassword(trustStorePassword));
+        }
+        Stream.of(split(enabledProtocols))
+                .forEach(options::addEnabledSecureTransportProtocol);
+
+        if (enabledCipherSuites != null) {
+            Stream.of(split(enabledCipherSuites))
+                    .forEach(options::addEnabledCipherSuite);
+        }
+    }
 }
