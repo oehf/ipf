@@ -44,7 +44,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     <!-- ============ Payload Logging Interceptors ============= -->
 
     <bean id="logFileNamePrefix" class="java.lang.String">
-        <constructor-arg value="./target/[processId]/[date('yyyyMMdd-HH00')]/[interactionId]-[sequenceId]" />
+        <constructor-arg value="./target/[applicationId]/[processId]/[date('yyyyMMdd-HH00')]/[interactionId]-[sequenceId]" />
         <!--constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[interactionId]-[sequenceId]" /-->
         <!--<constructor-arg value="c:/iti21-logs/[processId]/[sequenceId]" />-->
     </bean>
