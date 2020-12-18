@@ -49,14 +49,6 @@ public class MappingExtensionTest {
         assert 'X'.map('encounterType', 'WRONG') == 'WRONG'
     }
     
-    @Test 
-    void testMapWithKey() {
-        assert 'E'.mapEncounterType() == 'EMER'
-        assert 'X'.mapEncounterType() == null
-        assert 'X'.mapEncounterType('WRONG') == 'WRONG'
-        assert 'Y'.mapVip() == 'VIP'
-    }
-    
     @Test(expected=IllegalArgumentException)
     void testUnknownKey() {
         'Y'.map('BLABLA')
@@ -67,14 +59,6 @@ public class MappingExtensionTest {
         assert 'EMER'.mapReverse('encounterType') == 'E'
         assert 'X'.mapReverse('encounterType') == null
         assert 'X'.mapReverse('encounterType', 'WRONG') == 'WRONG'
-    }
-    
-    @Test
-    void testMapReverseWithKey() {
-        assert 'EMER'.mapReverseEncounterType() == 'E'
-        assert 'X'.mapReverseEncounterType() == null
-        assert 'X'.mapReverseEncounterType('WRONG') == 'WRONG'
-        assert 'VIP'.mapReverseVip() == 'Y'
     }
     
     @Test(expected=IllegalArgumentException)

@@ -481,7 +481,8 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static Object call(Segment delegate, args) {
-        throw new HL7DslException("The segment ${delegate.class.simpleName} is not repeatable in this group or message")
+        getStructure(delegate.parent, delegate.name, args)
+        // throw new HL7DslException("The segment ${delegate.class.simpleName} is not repeatable in this group or message")
     }
 
     /**
@@ -682,7 +683,7 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static def call(Group delegate, args) {
-        throw new HL7DslException("The group ${delegate.class.simpleName} is not repeatable in this group or message")
+        getStructure(delegate.parent, delegate.name, args)
     }
 
     //==========================================================================

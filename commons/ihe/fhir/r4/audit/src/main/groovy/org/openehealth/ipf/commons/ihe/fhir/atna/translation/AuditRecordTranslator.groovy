@@ -37,7 +37,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
         return new Coding(
                 code: codedValueType.code,
                 display: codedValueType.originalText,
-                system: codedValueType.codeSystemName.mapAtnaCodingSystem())
+                system: codedValueType.codeSystemName.map('atnaCodingSystem'))
     }
 
     /**

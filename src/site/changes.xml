@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="4.0.0" description="IPF 4.0.0" date="17 Apr 2020">
+            <action dev="ohr"  type="update">
+                Updated to Groovy 3.0.7. Metaprogramming has changed a bit, please read migration guide
+            </action>
             <action dev="unixoid" issue="332" type="add">
                 Possibility to use interaction IDs in payload logging file name patterns
             </action>

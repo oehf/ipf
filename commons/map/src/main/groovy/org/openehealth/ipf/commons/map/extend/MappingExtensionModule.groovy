@@ -18,9 +18,6 @@ package org.openehealth.ipf.commons.map.extend
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.map.MappingService
 
-import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.*
-
-
 /**
  * Extensions for mapping strings
  *
@@ -106,9 +103,6 @@ class MappingExtensionModule {
         values(delegate).contains(value)
     }
 
-    static Object methodMissing(String delegate, String name, Object args) {
-        simpleMethodMissingLogic(mappingService(), delegate, name, args)
-    }
     
     private static MappingService mappingService() {
         ContextFacade.getBean(MappingService)
