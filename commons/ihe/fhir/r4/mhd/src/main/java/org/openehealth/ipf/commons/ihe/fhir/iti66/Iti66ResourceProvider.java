@@ -48,7 +48,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentManifest.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_SOURCE) TokenOrListParam source,
-            @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
+            @RequiredParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
