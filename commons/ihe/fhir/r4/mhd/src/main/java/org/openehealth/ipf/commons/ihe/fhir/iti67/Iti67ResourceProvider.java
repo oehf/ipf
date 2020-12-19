@@ -73,7 +73,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     @Search(type = DocumentReference.class)
     public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
-            @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
+            @RequiredParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
             @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
