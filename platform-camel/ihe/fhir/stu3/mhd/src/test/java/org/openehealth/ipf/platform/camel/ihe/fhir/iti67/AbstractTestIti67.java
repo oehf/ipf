@@ -50,6 +50,7 @@ abstract class AbstractTestIti67 extends FhirTestContainer {
         return client.search()
                 .forResource(DocumentReference.class)
                 .where(requestData)
+                .where(new TokenClientParam("status").exactly().code("current"))
                 .returnBundle(Bundle.class)
                 .encodedXml()
                 .execute();
