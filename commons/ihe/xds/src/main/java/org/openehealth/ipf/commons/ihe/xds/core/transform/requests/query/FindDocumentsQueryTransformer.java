@@ -45,6 +45,7 @@ public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends
     }
 
 
+    @Override
     public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

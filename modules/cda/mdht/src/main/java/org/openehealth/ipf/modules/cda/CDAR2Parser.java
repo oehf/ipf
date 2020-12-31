@@ -37,6 +37,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.lang.String, java.lang.Object[])
      */
+    @Override
     public ClinicalDocument parse(String s, Object... options) {
         return parse(new ByteArrayInputStream(s.getBytes()), options);
     }
@@ -51,6 +52,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      *
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.InputStream, java.lang.Object[])
      */
+    @Override
     public ClinicalDocument parse(InputStream is, Object... options) {
         try {
             final var documentBuilder = this.newSafeDocumentBuilder();
@@ -74,6 +76,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(javax.xml.transform.Source, java.lang.Object[])
      */
+    @Override
     public ClinicalDocument parse(Source source, Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -82,6 +85,7 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
      * (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.Reader, java.lang.Object[])
      */
+    @Override
     public ClinicalDocument parse(Reader reader, Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }

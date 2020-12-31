@@ -33,6 +33,7 @@ public class GetFoldersForDocumentQueryTransformer extends GetFromDocumentQueryT
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void toEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -51,6 +52,7 @@ public class GetFoldersForDocumentQueryTransformer extends GetFromDocumentQueryT
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void fromEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

@@ -38,6 +38,7 @@ public class FindDocumentsByReferenceIdQueryTransformer extends FindDocumentsQue
     }
 
 
+    @Override
     public void fromEbXML(FindDocumentsByReferenceIdQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

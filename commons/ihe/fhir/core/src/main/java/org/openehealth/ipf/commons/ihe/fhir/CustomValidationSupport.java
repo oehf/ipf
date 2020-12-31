@@ -49,7 +49,7 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
     @Override
     public <T extends IBaseResource> T fetchResource(Class<T> clazz, String uri) {
         if (uri.startsWith(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION)) {
-            return (T) findProfile(clazz, uri.substring(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION.length()))
+            return findProfile(clazz, uri.substring(HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION.length()))
                     .orElseGet(() -> super.fetchResource(clazz, uri));
         } else {
             return super.fetchResource(clazz, uri);
@@ -62,7 +62,7 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
         if (is != null) {
             var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), StandardCharsets.UTF_8).useDelimiter("\\A").next();
             var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(getFhirContext());
-            var structureDefinition = (T) parser.parseResource(clazz, profileText);
+            var structureDefinition = parser.parseResource(clazz, profileText);
             return Optional.of(structureDefinition);
         }
         return Optional.empty();

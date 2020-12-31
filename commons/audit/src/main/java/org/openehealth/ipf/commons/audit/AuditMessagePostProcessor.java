@@ -26,6 +26,7 @@ import java.util.function.Function;
  */
 public interface AuditMessagePostProcessor extends Function<AuditMessage, AuditMessage> {
 
+    @Override
     AuditMessage apply(AuditMessage auditMessage);
 
     static AuditMessagePostProcessor noOp() {

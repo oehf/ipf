@@ -36,6 +36,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @deprecated
  */
+@Deprecated
 public class VertxUDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(VertxUDPSyslogSenderImpl.class);

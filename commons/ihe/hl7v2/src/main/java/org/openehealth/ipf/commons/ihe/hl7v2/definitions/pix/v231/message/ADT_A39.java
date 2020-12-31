@@ -47,6 +47,7 @@ public class ADT_A39 extends AbstractMessage {
         return s;
     }
 
+    @Override
     public String getVersion() {
         return "2.3.1";
     }

@@ -373,10 +373,12 @@ public class CustomTlsParameters implements TlsParameters {
             this.certAlias = certAlias;
         }
 
+        @Override
         public String chooseClientAlias(String[] keyTypes, Principal[] issuers, Socket socket) {
             return certAlias != null ? certAlias : keyManager.chooseClientAlias(keyTypes, issuers, socket);
         }
 
+        @Override
         public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
             return certAlias != null ? certAlias : keyManager.chooseServerAlias(keyType, issuers, socket);
         }
@@ -391,18 +393,22 @@ public class CustomTlsParameters implements TlsParameters {
             return certAlias != null ? certAlias : super.chooseEngineClientAlias(keyTypes, issuers, engine);
         }
 
+        @Override
         public String[] getClientAliases(String keyType, Principal[] issuers) {
             return keyManager.getClientAliases(keyType, issuers);
         }
 
+        @Override
         public String[] getServerAliases(String keyType, Principal[] issuers) {
             return keyManager.getServerAliases(keyType, issuers);
         }
 
+        @Override
         public X509Certificate[] getCertificateChain(String alias) {
             return keyManager.getCertificateChain(alias);
         }
 
+        @Override
         public PrivateKey getPrivateKey(String alias) {
             return keyManager.getPrivateKey(alias);
         }

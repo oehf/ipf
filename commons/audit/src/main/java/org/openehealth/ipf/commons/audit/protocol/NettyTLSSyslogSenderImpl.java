@@ -59,6 +59,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         super(tlsParameters);
     }
 
+    @Override
     public String getTransportName() {
         return AuditTransmissionChannel.NETTY_TLS.getProtocolName();
     }

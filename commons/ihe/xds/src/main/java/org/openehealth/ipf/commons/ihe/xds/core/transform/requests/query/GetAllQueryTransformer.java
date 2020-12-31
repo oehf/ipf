@@ -37,6 +37,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -69,6 +70,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

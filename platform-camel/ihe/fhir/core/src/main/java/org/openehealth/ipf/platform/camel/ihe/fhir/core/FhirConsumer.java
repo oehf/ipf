@@ -119,7 +119,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     @Override
     public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
-        return (List<R>) handleInRoute(payload, headers, List.class);
+        return handleInRoute(payload, headers, List.class);
     }
 
     @Override

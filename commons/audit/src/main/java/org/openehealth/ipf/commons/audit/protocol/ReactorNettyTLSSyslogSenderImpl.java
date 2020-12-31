@@ -53,6 +53,7 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
         super(tlsParameters);
     }
 
+    @Override
     public String getTransportName() {
         return AuditTransmissionChannel.REACTOR_NETTY_TLS.getProtocolName();
     }

@@ -144,6 +144,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
         return client.transaction().withBundle(bundle).encodedXml().execute();
     }
 
+    @Override
     protected void printAsXML(IBaseResource resource) {
         LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }

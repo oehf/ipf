@@ -24,6 +24,7 @@ import java.io.IOException;
 
 public class CommonCallbackHandler implements CallbackHandler {
 
+    @Override
     public void handle(Callback[] callbacks) throws IOException,
             UnsupportedCallbackException {
         for (var callback : callbacks) {

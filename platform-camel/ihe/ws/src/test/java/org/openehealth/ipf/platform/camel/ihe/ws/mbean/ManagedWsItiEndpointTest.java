@@ -54,6 +54,7 @@ public class ManagedWsItiEndpointTest extends CamelTestSupport {
         return true;
     }
 
+    @Override
     protected CamelContext createCamelContext() throws Exception {
 
         var context = super.createCamelContext();

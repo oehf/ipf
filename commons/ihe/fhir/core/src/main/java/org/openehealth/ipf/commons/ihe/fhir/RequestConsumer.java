@@ -63,6 +63,7 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      * @param requestDetails FHIR requestDetails
      * @return true if this RequestConsumer can handle the provided FHIR request, false otherwise
      */
+    @Override
     default boolean test(RequestDetails requestDetails) {
         return true;
     }

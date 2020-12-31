@@ -36,42 +36,51 @@ import org.openehealth.ipf.commons.core.modules.api.Converter;
  */
 public class TestConverter extends Converter<String, String> {
 
+    @Override
     public String parse(String message, Object... params) {
         return "string: " + message;
     }
 
+    @Override
     public String parse(Reader reader, Object... params) throws IOException {
         return "reader: " + IOUtils.toString(reader);
     }
 
+    @Override
     public String parse(InputStream message, Object... params) throws IOException {
         return "stream: " + IOUtils.toString(message, Charset.defaultCharset());
     }
 
+    @Override
     public String parse(Source source, Object... params) throws IOException {
         return "source: " + toString(source);
     }
 
+    @Override
     public Result render(String model, Result result, Object... params) throws IOException {
         var r = (StreamResult)result;
         IOUtils.write(model, r.getWriter());
         return r;
     }
 
+    @Override
     public OutputStream render(String model, OutputStream result, Object... params) throws IOException {
         IOUtils.write(model, result, StandardCharsets.UTF_8);
         return result;
     }
 
+    @Override
     public Writer render(String model, Writer result, Object... params) throws IOException {
         IOUtils.write(model, result);
         return result;
     }
 
+    @Override
     public String render(String model, Object... params) {
         return model;
     }
 
+    @Override
     public String zap(String object, Object... params) {
         return object;
     }

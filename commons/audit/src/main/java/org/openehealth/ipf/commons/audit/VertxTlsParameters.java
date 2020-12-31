@@ -27,6 +27,7 @@ import java.util.stream.Stream;
  *
  * @deprecated 
  */
+@Deprecated
 public class VertxTlsParameters extends CustomTlsParameters {
 
     public static VertxTlsParameters getDefault() {

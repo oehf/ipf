@@ -38,6 +38,7 @@ public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<G
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void toEbXML(GetAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -56,6 +57,7 @@ public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<G
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void fromEbXML(GetAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

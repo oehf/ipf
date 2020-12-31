@@ -76,6 +76,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     /**
      * @return the AuditMessage built
      */
+    @Override
     public AuditMessage getMessage() {
         return auditMessage;
     }

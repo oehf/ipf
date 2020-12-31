@@ -41,6 +41,7 @@ public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQ
     }
 
 
+    @Override
     public void fromEbXML(FindDocumentsForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

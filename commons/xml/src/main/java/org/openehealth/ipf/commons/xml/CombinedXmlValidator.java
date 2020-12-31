@@ -32,6 +32,7 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
     private static final SchematronValidator SCHEMATRON_VALIDATOR = new SchematronValidator();
 
 
+    @Override
     public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
         requireNonNull(profile, "validation profile must be not null");
         // check whether the root element name is valid

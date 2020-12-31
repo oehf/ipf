@@ -43,6 +43,7 @@ public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset>
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext, customInterceptors, rejectionHandlingStrategy);
     }
 
+    @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
 

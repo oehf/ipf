@@ -38,6 +38,7 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -67,6 +68,7 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

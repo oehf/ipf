@@ -29,6 +29,7 @@ public class FailureProcessor implements Processor {
         this.selector = selector;
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         if (exchange.getIn().getBody().equals(selector)) {
             throw new Exception("message rejected");

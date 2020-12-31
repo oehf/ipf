@@ -291,6 +291,7 @@ public class QPD extends AbstractSegment {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Type createNewTypeWithoutReflection(int field) {
         switch (field) {
             case 0:

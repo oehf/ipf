@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.core.support.domain.Dog;
  */
 public class TestTransmogrifier implements Transmogrifier<Dog, Cat>{
 
+    @Override
     public Cat zap(Dog object, Object... params) {
         return new Cat(object.getName() + appendix(params));
     }

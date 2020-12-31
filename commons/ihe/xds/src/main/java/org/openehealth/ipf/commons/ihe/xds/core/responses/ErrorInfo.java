@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Contains information about an error.
@@ -186,14 +187,7 @@ public class ErrorInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        final var prime = 31;
-        var result = 1;
-        result = prime * result + ((codeContext == null) ? 0 : codeContext.hashCode());
-        result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
-        result = prime * result + ((customErrorCode == null) ? 0 : customErrorCode.hashCode());
-        return result;
+        return Objects.hash(codeContext, errorCode, location, severity, customErrorCode);
     }
 
     @Override
@@ -205,26 +199,18 @@ public class ErrorInfo implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         var other = (ErrorInfo) obj;
-        if (codeContext == null) {
-            if (other.codeContext != null)
-                return false;
-        } else if (!codeContext.equals(other.codeContext))
+        if (!Objects.equals(codeContext, other.codeContext)) {
             return false;
-        if (errorCode == null) {
-            if (other.errorCode != null)
-                return false;
-        } else if (!errorCode.equals(other.errorCode))
+        }
+        if (!Objects.equals(errorCode, other.errorCode)) {
             return false;
-        if (location == null) {
-            if (other.location != null)
-                return false;
-        } else if (!location.equals(other.location))
+        }
+        if (!Objects.equals(location, other.location)) {
             return false;
-        if (severity == null) {
-            if (other.severity != null)
-                return false;
-        } else if (!severity.equals(other.severity))
+        }
+        if (!Objects.equals(severity, other.severity)) {
             return false;
+        }
         if (customErrorCode == null) {
             return other.customErrorCode == null;
         } else return customErrorCode.equals(other.customErrorCode);

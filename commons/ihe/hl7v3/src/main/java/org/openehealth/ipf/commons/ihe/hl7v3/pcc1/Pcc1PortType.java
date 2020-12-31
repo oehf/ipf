@@ -33,6 +33,7 @@ import javax.xml.ws.Action;
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
     
+    @Override
     @Action(input = "urn:hl7-org:v3:QUPC_IN043100UV01",
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUPC_IN043100UV01",
@@ -42,6 +43,7 @@ public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
         String request
     );
 
+    @Override
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue",
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Continue",
@@ -51,6 +53,7 @@ public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
         String request
     );
 
+    @Override
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel",
             output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Cancel",

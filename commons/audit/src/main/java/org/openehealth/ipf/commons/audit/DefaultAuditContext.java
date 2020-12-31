@@ -115,6 +115,7 @@ public class DefaultAuditContext implements AuditContext {
         );
     }
 
+    @Override
     public String getSendingApplication() {
         return getAuditMetadataProvider().getSendingApplication();
     }
@@ -122,6 +123,7 @@ public class DefaultAuditContext implements AuditContext {
     /**
      * @deprecated use {@link AuditMetadataProvider#setSendingApplication(String)}
      */
+    @Deprecated
     public void setSendingApplication(String sendingApplication) {
         this.getAuditMetadataProvider().setSendingApplication(sendingApplication);
     }

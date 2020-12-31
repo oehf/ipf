@@ -38,6 +38,7 @@ public class GetDocumentsAndAssociationsQueryTransformer extends GetByIDQueryTra
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void toEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -56,6 +57,7 @@ public class GetDocumentsAndAssociationsQueryTransformer extends GetByIDQueryTra
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void fromEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

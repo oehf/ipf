@@ -64,11 +64,13 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
         validate(load(getParser(), "wan/valid-glucose-continua-wan.hl7v2"));
     }
     
+    @Override
     @Test
     public void testResponseMessage() throws HL7Exception {
         validate(load(getParser(), "wan/valid-wan-response.hl7v2"));
     }
     
+    @Override
     @Test(expected=ValidationException.class)
     public void testResponseMessage2() throws HL7Exception {
         ACK rsp2 = load(getParser(), "pcd01/valid-pcd01-response2.hl7v2");

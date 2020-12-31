@@ -37,6 +37,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(FindFoldersForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -65,6 +66,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(FindFoldersForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

@@ -37,6 +37,7 @@ import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResourceFactoryImpl
  */
 public class CDAR2Renderer implements Renderer<ClinicalDocument> {
 
+    @Override
     public String render(ClinicalDocument doc, Object... options) {
         var bos = new ByteArrayOutputStream();
         try {
@@ -56,6 +57,7 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
      * @param os the stream to write the XML to
      * @param options may contains a map with options for rendering.
      */
+    @Override
     public OutputStream render(ClinicalDocument doc,
             OutputStream os, Object... options) throws IOException {
         XMLResource resources = new CDAResourceFactoryImpl()
@@ -81,11 +83,13 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
         return os;
     }
 
+    @Override
     public Result render(ClinicalDocument doc, Result result,
             Object... options) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    @Override
     public Writer render(ClinicalDocument doc, Writer writer,
             Object... options) throws IOException {
         var s = render(doc, options);

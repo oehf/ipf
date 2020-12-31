@@ -39,6 +39,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
     private final SchematronTransmogrifier<SchematronOutput> schematronTransmogrifier =
             new SchematronTransmogrifier<>(SchematronOutput.class);
 
+    @Override
     public void validate(Source message, SchematronProfile profile) {
         var svrl = schematronTransmogrifier.zap(message, profile);
         List<ValidationException> exceptions = new ArrayList<>();

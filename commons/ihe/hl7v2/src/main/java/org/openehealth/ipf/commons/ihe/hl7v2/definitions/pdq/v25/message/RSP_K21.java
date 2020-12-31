@@ -62,6 +62,7 @@ public class RSP_K21 extends AbstractMessage {
         return s;
     }
 
+    @Override
     public String getVersion() {
         return "2.5";
     }

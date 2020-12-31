@@ -62,11 +62,7 @@ public class RendererAdapter extends ProcessorAdapter {
     protected void doProcess(Exchange exchange, Object inputData, 
             Object... inputParams) {
         
-        if (inputData instanceof InputStream) {
-            throw new IllegalArgumentException(errorMessage(inputData));
-        } else if (inputData instanceof Reader) {
-            throw new IllegalArgumentException(errorMessage(inputData));
-        } else if (inputData instanceof Source) {
+        if ((inputData instanceof InputStream) || (inputData instanceof Reader) || (inputData instanceof Source)) {
             throw new IllegalArgumentException(errorMessage(inputData));
         } else {
             prepareResult(exchange).setBody(renderer.render(inputData, inputParams));

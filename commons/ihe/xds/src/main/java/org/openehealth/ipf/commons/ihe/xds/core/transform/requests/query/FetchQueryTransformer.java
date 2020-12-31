@@ -40,6 +40,7 @@ public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery>
     }
 
 
+    @Override
     public void fromEbXML(FetchQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

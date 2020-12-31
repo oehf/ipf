@@ -28,6 +28,7 @@ public class TestPredicate implements Predicate<String> {
         this.selector = selector;
     }
     
+    @Override
     public boolean matches(String source, Object... params) {
         return source.equals(selector);
     }

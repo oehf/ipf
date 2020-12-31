@@ -42,6 +42,7 @@ public class SpringBidiMappingServiceConfigurer implements InitializingBean {
     @Getter @Setter
     private Resource mappingResource;
 
+    @Override
     public void afterPropertiesSet() {
         if (mappingResources != null && !mappingResources.isEmpty()) {
             mappingService.setMappingResources(mappingResources);

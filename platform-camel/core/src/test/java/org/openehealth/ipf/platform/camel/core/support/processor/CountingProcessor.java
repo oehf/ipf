@@ -35,6 +35,7 @@ public class CountingProcessor implements Processor {
         counter.set(0);
     }
     
+    @Override
     public void process(Exchange exchange) throws Exception {
         counter.incrementAndGet();
     }

@@ -37,6 +37,7 @@ public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFolde
      * @param query the query. Can be <code>null</code>.
      * @param ebXML ebXML request
      */
+    @Override
     public void toEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -53,6 +54,7 @@ public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFolde
      * @param query the query. Can be <code>null</code>.
      * @param ebXML ebXML request
      */
+    @Override
     public void fromEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

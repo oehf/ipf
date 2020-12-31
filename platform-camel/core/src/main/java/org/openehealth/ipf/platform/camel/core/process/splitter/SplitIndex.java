@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
+import java.util.Objects;
 
 /**
  * Immutable class specifying an index of a split performed by {@link Splitter}.
@@ -67,11 +68,7 @@ public final class SplitIndex {
      */
     @Override
     public int hashCode() {
-        final var prime = 31;
-        var result = 1;
-        result = prime * result + index;
-        result = prime * result + (last ? 1231 : 1237);
-        return result;
+        return Objects.hash(index, last);
     }
 
     /* (non-Javadoc)

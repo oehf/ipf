@@ -29,6 +29,7 @@ public class ConstantTransformer implements Processor {
         this.constant = constant;
     }
     
+    @Override
     public void process(Exchange exchange) {
         exchange.getMessage().setBody(constant);
     }

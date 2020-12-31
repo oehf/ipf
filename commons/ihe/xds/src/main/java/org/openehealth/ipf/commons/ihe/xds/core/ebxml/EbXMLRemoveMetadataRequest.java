@@ -55,5 +55,6 @@ public interface EbXMLRemoveMetadataRequest extends EbXMLAdhocQueryRequest {
     /**
      * @return the wrapped ebXML representation of this request.
      */
+    @Override
     Object getInternal();
 }

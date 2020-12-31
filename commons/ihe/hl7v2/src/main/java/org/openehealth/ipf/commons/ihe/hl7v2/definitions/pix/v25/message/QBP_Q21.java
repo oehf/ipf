@@ -61,6 +61,7 @@ public class QBP_Q21 extends AbstractMessage {
         return s;
     }
 
+    @Override
     public String getVersion() {
         return "2.5";
     }

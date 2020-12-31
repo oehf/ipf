@@ -42,6 +42,7 @@ public class StaticTransmogrifier implements Transmogrifier<String, String> {
         this.to = to;
     }
 
+    @Override
     public String zap(String object, Object... params) {
         if (object.equals(from)) {
             return to;

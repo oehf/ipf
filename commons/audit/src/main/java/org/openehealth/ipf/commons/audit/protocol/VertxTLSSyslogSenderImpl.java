@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @deprecated
  */
+@Deprecated
 public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, VertxTLSSyslogSenderImpl.VertxDestination> {
 
     private static final Logger LOG = LoggerFactory.getLogger(VertxTLSSyslogSenderImpl.class);

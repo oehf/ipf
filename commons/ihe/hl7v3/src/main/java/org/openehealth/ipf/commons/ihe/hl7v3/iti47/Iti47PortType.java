@@ -28,6 +28,7 @@ import javax.xml.ws.Action;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti47PortType extends Hl7v3ContinuationsPortType {
 
+    @Override
     @WebResult(name = "PRPA_IN201306UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201305UV02", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_PRPA_IN201305UV02",
@@ -37,6 +38,7 @@ public interface Iti47PortType extends Hl7v3ContinuationsPortType {
         String request
     );
 
+    @Override
     @WebResult(name = "PRPA_IN201306UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Continue",
@@ -46,6 +48,7 @@ public interface Iti47PortType extends Hl7v3ContinuationsPortType {
         String request
     );
 
+    @Override
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Cancel",

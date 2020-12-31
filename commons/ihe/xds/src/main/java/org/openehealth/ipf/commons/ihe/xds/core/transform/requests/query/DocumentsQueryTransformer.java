@@ -36,6 +36,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -74,6 +75,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

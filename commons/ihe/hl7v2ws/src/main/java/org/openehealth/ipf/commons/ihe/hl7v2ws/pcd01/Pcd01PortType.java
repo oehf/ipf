@@ -28,6 +28,7 @@ import javax.xml.ws.Action;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Pcd01PortType extends SimpleHl7v2WsPortType {
 
+    @Override
     @WebResult(name = "CommunicatePCDDataResponse", targetNamespace = "urn:ihe:pcd:dec:2010", partName = "Body")
     @Action(input = "urn:ihe:pcd:2010:CommunicatePCDData", output = "urn:ihe:pcd:2010:CommunicatePCDDataResponse")
     @WebMethod(operationName = "CommunicatePCDData", action = "urn:ihe:pcd:2010:CommunicatePCDData")

@@ -35,6 +35,7 @@ public class AssociationTransformerTest extends AssociationTransformerTestBase {
         return new EbXMLFactory30();
     }
 
+    @Override
     @Before
     public void baseSetUp() {
         super.baseSetUp();

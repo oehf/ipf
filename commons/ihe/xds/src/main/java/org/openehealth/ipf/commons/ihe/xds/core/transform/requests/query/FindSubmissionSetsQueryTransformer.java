@@ -38,6 +38,7 @@ public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTrans
      * @param ebXML
      *          the EbXML representation.
      */
+    @Override
     public void toEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -70,6 +71,7 @@ public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTrans
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

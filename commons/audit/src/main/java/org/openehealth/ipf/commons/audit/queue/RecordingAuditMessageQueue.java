@@ -39,6 +39,7 @@ public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQue
     }
 
 
+    @Override
     public List<AuditMessage> getMessages() {
         return Collections.unmodifiableList(messages);
     }
@@ -50,6 +51,7 @@ public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQue
     /**
      * Clears the message list
      */
+    @Override
     public void clear() {
         messages.clear();
     }

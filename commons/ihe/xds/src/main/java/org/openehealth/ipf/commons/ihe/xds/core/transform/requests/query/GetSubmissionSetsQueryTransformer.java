@@ -38,6 +38,7 @@ public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer
      * @param query the query. Can be <code>null</code>.
      * @param ebXML ebXML request
      */
+    @Override
     public void toEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -53,6 +54,7 @@ public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer
      * @param query the query. Can be <code>null</code>.
      * @param ebXML ebXML request
      */
+    @Override
     public void fromEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

@@ -58,7 +58,7 @@ public final class ConformanceProfileValidators {
     static {
         FALLBACK_HAPI_CONTEXT = new DefaultHapiContext();
         FALLBACK_HAPI_CONTEXT.setProfileStore(new GazelleProfileStore());
-        FALLBACK_HAPI_CONTEXT.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
+        FALLBACK_HAPI_CONTEXT.setValidationContext(ValidationContextFactory.noValidation());
         FALLBACK_HAPI_CONTEXT.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
     }
 
