@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,7 @@ final class ToEbXMLVisitor implements Visitor {
 
     @Override
     public void visit(FindFoldersQuery query) {
-        new FindFoldersQueryTransformer().toEbXML(query, ebXML);                
+        new FindFoldersQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
@@ -61,57 +61,57 @@ final class ToEbXMLVisitor implements Visitor {
 
     @Override
     public void visit(GetSubmissionSetsQuery query) {
-        new GetSubmissionSetsQueryTransformer().toEbXML(query, ebXML);                
+        new GetSubmissionSetsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetSubmissionSetAndContentsQuery query) {
-        new GetSubmissionSetAndContentsQueryTransformer().toEbXML(query, ebXML);                
+        new GetSubmissionSetAndContentsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetRelatedDocumentsQuery query) {
-        new GetRelatedDocumentsQueryTransformer().toEbXML(query, ebXML);                
+        new GetRelatedDocumentsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFoldersQuery query) {
-        new GetFoldersQueryTransformer().toEbXML(query, ebXML);                
+        new GetFoldersQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFoldersForDocumentQuery query) {
-        new GetFoldersForDocumentQueryTransformer().toEbXML(query, ebXML);                
+        new GetFoldersForDocumentQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFolderAndContentsQuery query) {
-        new GetFolderAndContentsQueryTransformer().toEbXML(query, ebXML);                
+        new GetFolderAndContentsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetDocumentsQuery query) {
-        new GetDocumentsQueryTransformer().toEbXML(query, ebXML);                
+        new GetDocumentsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetDocumentsAndAssociationsQuery query) {
-        new GetDocumentsAndAssociationsQueryTransformer().toEbXML(query, ebXML);                
+        new GetDocumentsAndAssociationsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetAssociationsQuery query) {
-        new GetAssociationsQueryTransformer().toEbXML(query, ebXML);                
+        new GetAssociationsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetAllQuery query) {
-        new GetAllQueryTransformer().toEbXML(query, ebXML);                
+        new GetAllQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindSubmissionSetsQuery query) {
-        new FindSubmissionSetsQueryTransformer().toEbXML(query, ebXML);                
+        new FindSubmissionSetsQueryTransformer().toEbXML(query, ebXML);
     }
 
     @Override
@@ -157,5 +157,10 @@ final class ToEbXMLVisitor implements Visitor {
     @Override
     public void visit(FindMedicationListQuery query) {
         new FindMedicationListQueryTransformer().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindDocumentsByTitleQuery query) {
+        new FindDocumentsByTitleQueryTransformer().toEbXML(query, ebXML);
     }
 }
