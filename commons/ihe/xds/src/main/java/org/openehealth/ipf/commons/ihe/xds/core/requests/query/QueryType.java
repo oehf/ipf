@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,11 +78,13 @@ public enum QueryType {
     /** Find prescriptions and their related documents containing Prescription Items ready to be dispensed (PHARM-1). */
     @XmlEnumValue("FindPrescriptionsForDispense") FIND_PRESCRIPTIONS_FOR_DISPENSE("urn:uuid:c875eb9c-0254-102e-8469-a6af440562e8", FindPrescriptionsForDispenseQuery.class),
     /** Find the medication list to the patient (PHARM-1). */
-    @XmlEnumValue("FindMedicationList") FIND_MEDICATION_LIST("urn:uuid:80ebbd83-53c1-4453-9860-349585962af6", FindMedicationListQuery.class);
+    @XmlEnumValue("FindMedicationList") FIND_MEDICATION_LIST("urn:uuid:80ebbd83-53c1-4453-9860-349585962af6", FindMedicationListQuery.class),
+    /** Searches for documents by title (DE:GEMATIK). */
+    @XmlEnumValue("FindDocumentsByTitle") FIND_DOCUMENTS_BY_TITLE("urn:uuid:ab474085-82b5-402d-8115-3f37cb1e2405", FindDocumentsByTitleQuery.class);
 
     private final String id;
-    private final Class<? extends Query> type; 
-    
+    private final Class<? extends Query> type;
+
     QueryType(String id, Class<? extends Query> type) {
         this.id = id;
         this.type = type;
@@ -94,9 +96,9 @@ public enum QueryType {
     public String getId() {
         return id;
     }
-    
+
     /**
-     * @return the class implementing the query. 
+     * @return the class implementing the query.
      */
     public Class<? extends Query> getType() {
         return type;
@@ -118,7 +120,7 @@ public enum QueryType {
                 return type;
             }
         }
-        
+
         throw new XDSMetaDataException(ValidationMessage.UNKNOWN_QUERY_TYPE, id);
     }
 }

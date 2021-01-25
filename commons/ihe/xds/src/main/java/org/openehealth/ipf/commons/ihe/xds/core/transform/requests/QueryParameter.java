@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,6 +83,12 @@ public enum QueryParameter {
     /** Used to filter {@link DocumentEntry#getLogicalUuid()}. */
     DOC_ENTRY_LOGICAL_ID("$XDSDocumentEntryLogicalID"),
 
+    // specific for DE:GEMATIK
+    /** Used to filter {@link DocumentEntry#getTitle()}. */
+    DOC_ENTRY_TITLE("$XDSDocumentEntryTitle"),
+    /** Used to filter {@link DocumentEntry#getAuthors()}. */
+    DOC_ENTRY_AUTHOR_INSTITUTION("$XDSDocumentEntryAuthorInstitution"),
+
     // specific for PHARM-1
     /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
     DOC_ENTRY_SERVICE_START_FROM("$XDSDocumentEntryServiceStartFrom"),
@@ -92,7 +98,7 @@ public enum QueryParameter {
     DOC_ENTRY_SERVICE_END_FROM("$XDSDocumentEntryServiceEndFrom"),
     /** Used to filter {@link DocumentEntry#getServiceStopTime()}. */
     DOC_ENTRY_SERVICE_END_TO("$XDSDocumentEntryServiceEndTo"),
-     
+
     /** Used to filter {@link Folder#getCodeList()}. */
     FOLDER_CODES("$XDSFolderCodeList"),
     /** Used to filter {@link Folder#getCodeList()}. */
@@ -111,7 +117,7 @@ public enum QueryParameter {
     FOLDER_UNIQUE_ID("$XDSFolderUniqueId"),
     /** Used to filter {@link Folder#getLogicalUuid()}. */
     FOLDER_LOGICAL_ID("$XDSFolderLogicalID"),
-    
+
     /** Used to filter {@link SubmissionSet#getPatientId()}. */
     SUBMISSION_SET_PATIENT_ID("$XDSSubmissionSetPatientId"),
     /** Used to filter {@link SubmissionSet#getSourceId()}. */
@@ -143,9 +149,9 @@ public enum QueryParameter {
     ASSOCIATION_STATUS("$XDSAssociationStatus"),
     /** Used to filter {none}. */
     METADATA_LEVEL("$MetadataLevel");
-    
+
     private final String slotName;
-    
+
     QueryParameter(String slotName) {
         this.slotName = slotName;
     }
