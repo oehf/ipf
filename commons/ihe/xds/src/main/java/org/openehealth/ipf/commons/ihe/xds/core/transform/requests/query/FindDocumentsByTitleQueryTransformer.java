@@ -30,7 +30,7 @@ public class FindDocumentsByTitleQueryTransformer extends FindDocumentsQueryTran
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(DOC_ENTRY_TITLE, query.getTitle());
         slots.fromStringList(DOC_ENTRY_AUTHOR_INSTITUTION, query.getAuthorInstitution());
     }
@@ -42,7 +42,7 @@ public class FindDocumentsByTitleQueryTransformer extends FindDocumentsQueryTran
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setTitle(slots.toStringList(DOC_ENTRY_TITLE));
         query.setAuthorInstitution(slots.toStringList(DOC_ENTRY_AUTHOR_INSTITUTION));
     }
