@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public abstract class Query implements Serializable {
-    private static final long serialVersionUID = 7597105342752455732L;
 
     @XmlAttribute
     @Getter private QueryType type;
@@ -85,8 +84,10 @@ public abstract class Query implements Serializable {
         void visit(FindPrescriptionsForValidationQuery query);
         void visit(FindPrescriptionsForDispenseQuery query);
         void visit(FindMedicationListQuery query);
+        // extension DE:GEMATIK
+        void visit(FindDocumentsByTitleQuery query);
     }
-    
+
     /**
      * Accept a visitor to process an instance of this class.
      * @param visitor
