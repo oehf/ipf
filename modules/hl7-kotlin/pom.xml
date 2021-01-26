@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>3.7.4</version>
     </parent>
 
     <properties>
