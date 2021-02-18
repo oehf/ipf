@@ -18,7 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import ca.uhn.hl7v2.model.Composite;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -30,8 +36,8 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.Validate.notNull;
 import static org.apache.commons.lang3.Validate.noNullElements;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
@@ -549,7 +555,7 @@ public class QuerySlotHelper {
         if (value.startsWith("'") && value.endsWith("'")) {
             value = value.substring(1, value.length() - 1);
         }
-        return value.replaceAll("''", "'");
+        return value.replace("''", "'");
     }
 
     public static String encodeAsStringList(String value) {
