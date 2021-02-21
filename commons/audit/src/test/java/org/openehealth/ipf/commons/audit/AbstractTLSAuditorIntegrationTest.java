@@ -31,11 +31,10 @@ import static org.junit.Assert.assertTrue;
 abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
     protected abstract String transport();
-
+    
     @Test
     public void testTwoWayTLS() throws Exception {
-        initTLSSystemProperties(null);
-        var defaultTls = TlsParameters.getDefault();
+        var defaultTls = setupDefaultTlsParameter();
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
         var count = 10;
@@ -50,8 +49,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
 
     @Test
     public void testTwoWayTLSFlooding() throws Exception {
-        initTLSSystemProperties(null);
-        var defaultTls = TlsParameters.getDefault();
+        var defaultTls = setupDefaultTlsParameter();
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
         var count = 500;
@@ -72,8 +70,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
 
     @Test
     public void testTwoWayTLSInterrupted() throws Exception {
-        initTLSSystemProperties(null);
-        var defaultTls = TlsParameters.getDefault();
+        var defaultTls = setupDefaultTlsParameter();
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
         var count = 10;
