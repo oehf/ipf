@@ -83,7 +83,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    static void addPerson(MarkupBuilder builder, Message adt) {
+    void addPerson(MarkupBuilder builder, Message adt) {
         fakePatientPerson(builder)
     }
 }

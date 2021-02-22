@@ -138,7 +138,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    static void addPerson(MarkupBuilder builder, Message rsp) {
+    void addPerson(MarkupBuilder builder, Message rsp) {
         fakePatientPerson(builder)
     }
      
