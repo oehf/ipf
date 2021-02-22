@@ -502,7 +502,7 @@
                             <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
                             <link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
                         </links>
-                        <source>${java.version}</source>
+                        <source>11</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                         <additionalJOption>-J-Xmx1024m</additionalJOption>
