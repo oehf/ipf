@@ -9,7 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.13.1</brave-version>
+        <brave-version>5.13.3</brave-version>
         <caching-api-version>1.1.1</caching-api-version>
         <camel-version>3.7.2</camel-version>
         <cxf-version>3.4.2</cxf-version>
@@ -28,7 +28,7 @@
         <jdom-version>2.0.6</jdom-version>
         <joda-time-version>2.10.8</joda-time-version>
         <mina-version>2.1.4</mina-version>
-        <netty-version>4.1.53.Final</netty-version>
+        <netty-version>4.1.59.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.4</ph-commons-version>
@@ -40,7 +40,7 @@
         <spring-boot-version>2.4.3</spring-boot-version>
         <vertx-version>3.9.5</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.2.0</xmlsec-version>
+        <xmlsec-version>2.2.1</xmlsec-version>
 
     </properties>
 
