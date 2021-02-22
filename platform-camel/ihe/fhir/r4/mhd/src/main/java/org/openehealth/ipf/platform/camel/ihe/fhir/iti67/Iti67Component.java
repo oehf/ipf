@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
+import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67Options;
+import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67OptionsProvider;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentWithOptions;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryInteractions.ITI_67;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryDocumentReferenceInteractions.ITI_67;
 
 /**
  * Component for MHD Retrieve Document Reference (ITI-67)
@@ -29,15 +31,14 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryInteractions.ITI
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti67Component extends FhirComponent<FhirQueryAuditDataset> {
-
+public class Iti67Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Iti67Options, Iti67OptionsProvider> {
 
     public Iti67Component() {
-        super(ITI_67);
+        super(ITI_67, Iti67OptionsProvider::new);
     }
 
     public Iti67Component(CamelContext context) {
-        super(context, ITI_67);
+        super(context, ITI_67, Iti67OptionsProvider::new);
     }
 
     @Override

@@ -48,48 +48,30 @@ import java.util.Set;
 
 /**
  * Resource Provider for MHD (ITI-67).
- * <p>
- * Note (CP by Rick Riemer):
- * When searching for XDS documents with specific referenceIdList values, MHD specifies to use the related-id query parameter.
- * This parameter is of type token (https://www.hl7.org/fhir/search.html#token). The token type does not allow searching for
- * the Identifier.type attribute, which would be a primary use case.
- * <p>
- * IHE should provide a mechanism to search for referenceIdList values by type, in addition to system and value.
- * Suggestion: don’t use token, but use composite, (https://www.hl7.org/fhir/search.html#composite) and define how
- * to use it for searching against referenceIdList values. A composite parameter could look like:
- * related id=urn:oid:1.2.3.4.5.6|2013001$urn:ihe:iti:xds:2013:accession.
  *
  * @author Christian Ohr
- * @since 3.6
+ * @since 4.1
  */
-public class Iti67ResourceProvider extends AbstractPlainProvider {
+public class Iti67StrictResourceProvider extends AbstractPlainProvider {
 
-    private static final String STU3_INDEXED = "indexed";
-    private static final String STU3_CLASS = "class";
-    private static final String STU3_RELATED_ID = "related-id";
-    private static final String STU3_SECURITY_LABEL = "securitylabel";
 
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
     public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
-            @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
+            @RequiredParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
-            @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
-            @OptionalParam(name = STU3_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
             @OptionalParam(name = DocumentReference.SP_PERIOD) DateRangeParam period,
             @OptionalParam(name = DocumentReference.SP_FACILITY) TokenOrListParam facility,
             @OptionalParam(name = DocumentReference.SP_EVENT) TokenOrListParam event,
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
-            @OptionalParam(name = STU3_SECURITY_LABEL) TokenOrListParam label,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "identifier"}) ReferenceOrListParam related,
-            @OptionalParam(name = STU3_RELATED_ID) TokenOrListParam relatedId,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -98,14 +80,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        // Be graceful and accept STU3 parameters as well
-        var dateParam = date != null ? date : indexed;
-        var categoryParam = category != null ? category : class_;
-        var securityLabelParam = securityLabel != null ? securityLabel : label;
 
-        var relatedTokenParam = related != null ?
-                new TokenOrListParam() :
-                relatedId;
+        var relatedTokenParam = new TokenOrListParam();
         if (related != null) {
             related.getValuesAsQueryTokens().stream()
                     .map(referenceParam -> referenceParam.toTokenParam(getFhirContext()))
@@ -115,14 +91,14 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         var searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
-                .date(dateParam)
-                .category(categoryParam)
+                .date(date)
+                .category(category)
                 .type(type)
                 .setting(setting)
                 .period(period)
                 .facility(facility)
                 .event(event)
-                .securityLabel(securityLabelParam)
+                .securityLabel(securityLabel)
                 .format(format)
                 .related(relatedTokenParam)
                 ._id(resourceId)

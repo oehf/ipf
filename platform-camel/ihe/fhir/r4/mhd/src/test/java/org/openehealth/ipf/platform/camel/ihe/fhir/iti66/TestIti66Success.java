@@ -49,7 +49,7 @@ public class TestIti66Success extends AbstractTestIti66 {
 
     @Test
     public void testSendManualIti66() {
-        var result = sendManually(manifestPatientIdentifierParameter());
+        var result = sendManually(manifestPatientIdentifierParameter(), statusParameter());
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
@@ -102,7 +102,7 @@ public class TestIti66Success extends AbstractTestIti66 {
         var query = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/DocumentManifest?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1&_format=xml",
+        assertEquals("http://localhost:8999/DocumentManifest?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1&status=active&_format=xml",
                 new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery, query.getParticipantObjectIDTypeCode());
@@ -110,7 +110,7 @@ public class TestIti66Success extends AbstractTestIti66 {
 
     @Test
     public void testSendIti66WithPatientReference() {
-        var result = sendManually(manifestPatientReferenceParameter());
+        var result = sendManually(manifestPatientReferenceParameter(), statusParameter());
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());
