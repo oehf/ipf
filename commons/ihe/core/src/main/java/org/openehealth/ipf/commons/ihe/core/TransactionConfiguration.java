@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.core;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 /**
  * @author Dmytro Rud
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 abstract public class TransactionConfiguration<T extends AuditDataset> {
 
     /**
@@ -57,4 +58,9 @@ abstract public class TransactionConfiguration<T extends AuditDataset> {
     @Getter
     private final AuditStrategy<T> serverAuditStrategy;
 
+    /**
+     * whether strict validation rules are applied to the transaction
+     */
+    @Getter @Setter
+    private boolean strict;
 }

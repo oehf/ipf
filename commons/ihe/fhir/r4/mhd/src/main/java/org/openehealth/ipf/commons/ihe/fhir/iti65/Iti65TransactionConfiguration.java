@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProv
 import org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_COMPREHENSIVE_METADATA_PROFILE;
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_LEGACY_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE;
 
 /**
  * Standard Configuration for Iti65Component.

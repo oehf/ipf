@@ -23,17 +23,18 @@ import java.util.stream.Collectors;
 
 /**
  * @author Christian Ohr
+ * @since 3.5
  */
-public interface FhirTransactionOptions extends TransactionOptions<Class<? extends AbstractResourceProvider>> {
+public interface FhirTransactionOptions extends TransactionOptions<Class<? extends FhirProvider>> {
 
-    static List<? extends AbstractResourceProvider> concatProviders(List<? extends FhirTransactionOptions> options) {
+    static List<? extends FhirProvider> concatProviders(List<? extends FhirTransactionOptions> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
                 .map(FhirTransactionOptions::createResourceProvider)
                 .collect(Collectors.toList());
     }
 
-    static AbstractResourceProvider createResourceProvider(Class<? extends AbstractResourceProvider> c) {
+    static FhirProvider createResourceProvider(Class<? extends FhirProvider> c) {
         try {
             return c.getDeclaredConstructor().newInstance();
         } catch (Exception e) {

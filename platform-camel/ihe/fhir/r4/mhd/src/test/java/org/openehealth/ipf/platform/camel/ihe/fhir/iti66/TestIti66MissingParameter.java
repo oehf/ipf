@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import org.junit.Test;
 /**
  *
  */
-public class TestIti66Error extends AbstractTestIti66 {
+public class TestIti66MissingParameter extends AbstractTestIti66 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
@@ -33,14 +34,9 @@ public class TestIti66Error extends AbstractTestIti66 {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InternalErrorException.class)
+    @Test(expected = InvalidRequestException.class)
     public void testSendManuallyReturningError() {
-        try {
-            sendManually(manifestPatientIdentifierParameter(), statusParameter());
-        } catch (InternalErrorException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
-        }
-
+        sendManually(manifestPatientIdentifierParameter());
     }
 
 }
