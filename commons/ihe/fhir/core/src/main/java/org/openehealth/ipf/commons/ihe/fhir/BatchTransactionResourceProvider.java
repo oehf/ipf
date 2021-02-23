@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.annotation.Transaction;
 import ca.uhn.fhir.rest.annotation.TransactionParam;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import org.hl7.fhir.r4.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * Resource provider for batch requests or transaction requests
  *
  * @author Christian Ohr
- * @since 3.6
- * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider} instead
+ * @since 4.1
  */
 public class BatchTransactionResourceProvider extends SharedFhirProvider {
 
@@ -40,7 +38,7 @@ public class BatchTransactionResourceProvider extends SharedFhirProvider {
     private static final BatchTransactionResourceProvider INSTANCE = new BatchTransactionResourceProvider();
 
     // Enforce to use singleton instance
-    private BatchTransactionResourceProvider() {
+    protected BatchTransactionResourceProvider() {
     }
 
     public static BatchTransactionResourceProvider getInstance() {
@@ -49,11 +47,11 @@ public class BatchTransactionResourceProvider extends SharedFhirProvider {
 
     @SuppressWarnings("unused")
     @Transaction
-    public Bundle provideResponseBundle(@TransactionParam Bundle bundle,
+    public IBaseBundle provideResponseBundle(@TransactionParam IBaseBundle bundle,
                                         RequestDetails requestDetails,
                                         HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse) {
-        return requestTransaction(bundle, Bundle.class, httpServletRequest, httpServletResponse, requestDetails);
+        return requestTransaction(bundle, IBaseBundle.class, httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

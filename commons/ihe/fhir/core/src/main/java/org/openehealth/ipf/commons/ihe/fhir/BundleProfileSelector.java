@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.UriType;
-import org.openehealth.ipf.commons.ihe.fhir.SharedFhirProvider;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
+import org.hl7.fhir.instance.model.api.IPrimitiveType;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,8 +31,7 @@ import java.util.function.Predicate;
  * {@link SharedFhirProvider AbstractBatchTransactionResourceProvider}
  *
  * @author Christian Ohr
- * @since 3.6
- * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector instead}
+ * @since 4.1
  */
 public class BundleProfileSelector implements Predicate<RequestDetails> {
 
@@ -52,9 +50,9 @@ public class BundleProfileSelector implements Predicate<RequestDetails> {
      */
     @Override
     public boolean test(RequestDetails requestDetails) {
-        var bundle = (Bundle) requestDetails.getResource();
+        var bundle = (IBaseBundle) requestDetails.getResource();
         return bundle.getMeta().getProfile().stream()
-                .map(UriType::getValueAsString)
+                .map(IPrimitiveType::getValueAsString)
                 .anyMatch(profileUris::contains);
     }
 }

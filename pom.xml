@@ -42,12 +42,12 @@
         <build-helper-version>3.2.0</build-helper-version>
         <compiler-plugin-version>3.8.1</compiler-plugin-version>
         <enforcer-plugin-version>3.0.0-M3</enforcer-plugin-version>
-        <gmavenplus-plugin-version>1.12.0</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>1.12.1</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.2.0</jar-plugin-version>
         <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.16.0</lombok-plugin-version>
+        <lombok-plugin-version>1.18.18.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.8</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.2.0</resources-plugin-version>
@@ -62,7 +62,7 @@
         <easymock-version>3.4</easymock-version>
         <ehcache-version>3.9.0</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
-        <guava-version>30.0-jre</guava-version>
+        <guava-version>30.1-jre</guava-version>
         <httpclient4-version>4.5.13</httpclient4-version>
         <jackson-version>2.11.4</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
@@ -753,6 +753,7 @@
                 <version>${compiler-plugin-version}</version>
                 <configuration>
                     <release>11</release>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
             </plugin>
             <plugin>
