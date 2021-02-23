@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.support;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.ITransactionTyped;
-import org.hl7.fhir.dstu3.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 
 import java.util.Map;
 
@@ -27,10 +26,9 @@ import java.util.Map;
  * Request Factory for Batch/Transaction requests
  *
  * @author Christian Ohr
- * @since 3.6
- * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory} instead
+ * @since 4.1
  */
-public class BatchTransactionClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
+public class BatchTransactionClientRequestFactory implements ClientRequestFactory<ITransactionTyped<IBaseBundle>> {
 
     private static final BatchTransactionClientRequestFactory INSTANCE = new BatchTransactionClientRequestFactory();
 
@@ -42,8 +40,8 @@ public class BatchTransactionClientRequestFactory implements ClientRequestFactor
     }
 
     @Override
-    public ITransactionTyped<Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-        return client.transaction().withBundle((Bundle)requestData);
+    public ITransactionTyped<IBaseBundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+        return client.transaction().withBundle((IBaseBundle)requestData);
     }
 
 }

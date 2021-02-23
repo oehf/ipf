@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProvider;
-import org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector;
 
 /**
  * Standard Configuration for Iti65Component.
