@@ -16,11 +16,13 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
 
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import org.hl7.fhir.dstu3.model.AuditEvent;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.exceptions.FHIRException;
-import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -35,17 +37,17 @@ import java.sql.Date;
 
 /**
  * @author Christian Ohr
- * @since 3.6
+ * @since 4.1
  */
-abstract class AbstractFhirAuditEvent implements SerializationStrategy {
+abstract class AbstractFhirAuditSerializationStrategy implements SerializationStrategy {
 
     private final FhirContext fhirContext;
 
-    public AbstractFhirAuditEvent() {
-        this(FhirContext.forR4());
+    public AbstractFhirAuditSerializationStrategy() {
+        this(FhirContext.forDstu3());
     }
 
-    public AbstractFhirAuditEvent(FhirContext fhirContext) {
+    public AbstractFhirAuditSerializationStrategy(FhirContext fhirContext) {
         this.fhirContext = fhirContext;
     }
 
@@ -83,8 +85,8 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
 
     protected AuditEvent.AuditEventEntityComponent participantObjectIdentificationToEntity(ParticipantObjectIdentificationType poit) {
         var entity = new AuditEvent.AuditEventEntityComponent()
-                .setWhat(new Reference().setIdentifier(new Identifier()
-                        .setValue(poit.getParticipantObjectID())))
+                .setIdentifier(new Identifier()
+                        .setValue(poit.getParticipantObjectID()))
                 // poit.getParticipantObjectIDTypeCode())) not used here
                 .setType(new Coding()
                         .setCode(String.valueOf(poit.getParticipantObjectTypeCode().getValue()))
@@ -104,7 +106,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
         poit.getParticipantObjectDetails().forEach(tvp ->
                 entity.addDetail(new AuditEvent.AuditEventEntityDetailComponent()
                         .setType(tvp.getType())
-                        .setValue(new Base64BinaryType(tvp.getValue()))));
+                        .setValue(tvp.getValue())));
 
         return entity;
 
@@ -113,7 +115,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
     protected AuditEvent.AuditEventSourceComponent auditSourceIdentificationToEventSource(AuditSourceIdentificationType asit) {
         var source = new AuditEvent.AuditEventSourceComponent()
                 .setSite(asit.getAuditEnterpriseSiteID())
-                .setObserver(new Reference().setIdentifier(new Identifier().setValue(asit.getAuditSourceID())));
+                .setIdentifier(new Identifier().setValue(asit.getAuditSourceID()));
         asit.getAuditSourceType().forEach(ast ->
                 source.addType(codedValueTypeToCoding(ast)));
         return source;
@@ -121,7 +123,7 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
 
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
         var agent = new AuditEvent.AuditEventAgentComponent()
-                .setWho(new Reference().setIdentifier(new Identifier().setValue(ap.getUserID())))
+                .setUserId(new Identifier().setValue(ap.getUserID()))
                 .setAltId(ap.getAlternativeUserID())
                 .setName(ap.getUserName())
                 .setRequestor(ap.isUserIsRequestor())
