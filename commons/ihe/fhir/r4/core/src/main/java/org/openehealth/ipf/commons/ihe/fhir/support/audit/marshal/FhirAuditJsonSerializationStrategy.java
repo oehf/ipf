@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2021 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,22 +13,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
 
 /**
  * @author Christian Ohr
- * @since 3.6
- * @deprecated use FhirAuditJsonSerializationStrategy
+ * @since 4.1
  */
-public class FhirAuditJsonEvent extends FhirAuditJsonSerializationStrategy {
+public class FhirAuditJsonSerializationStrategy extends AbstractFhirAuditSerializationStrategy {
 
-    public FhirAuditJsonEvent() {
+    public FhirAuditJsonSerializationStrategy() {
         super();
     }
 
-    public FhirAuditJsonEvent(FhirContext fhirContext) {
+    public FhirAuditJsonSerializationStrategy(FhirContext fhirContext) {
         super(fhirContext);
+    }
+
+    @Override
+    protected IParser getParser(FhirContext fhirContext) {
+        return fhirContext.newJsonParser();
     }
 }
