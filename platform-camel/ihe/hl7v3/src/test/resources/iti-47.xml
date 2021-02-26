@@ -52,4 +52,8 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         </constructor-arg>
     </bean>
 
+    <bean id="faultMessageOutInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.FaultMessageOutInterceptor">
+        <constructor-arg name="faultMessage" value="Something went wrong!"/>
+    </bean>
+
 </beans>
