@@ -15,7 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
+import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
+import org.apache.http.client.methods.CloseableHttpResponse
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
@@ -28,8 +33,9 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import java.nio.charset.StandardCharsets
+
+import static org.junit.Assert.*
 
 /**
  * Tests for ITI-47.
@@ -72,6 +78,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
     @Test
     void testHappyCaseAndAudit() {
         String responseString = send(SERVICE_1, REQUEST, String.class)
+        assertTrue(responseString.startsWith('<PRPA_IN201306UV02'))
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
             assert it.eventIdentification.eventActionCode == EventActionCode.Execute
@@ -80,6 +87,16 @@ class TestIti47 extends HL7v3StandardTestContainer {
         }
     }
 
+    @Test
+    void testCustomizedSoapFault() {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            // Provoking an error by sending a GET
+            HttpGet httpPost = new HttpGet("http://localhost:${port}/pdqv3-iti47-service1");
+            CloseableHttpResponse response = client.execute(httpPost);
+            String body = IOUtils.toString(response.entity.content, StandardCharsets.UTF_8)
+            assertTrue(body.contains('<soap:Reason><soap:Text xml:lang="en">Something went wrong!</soap:Text></soap:Reason>'))
+        }
+    }
 
     @Test
     void testContinuations() {
@@ -99,7 +116,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether cancel message has had effect
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
-        assertEquals(0, storage.ehcache.size)
+        assertFalse(storage.ehcache.iterator().hasNext())
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
@@ -197,6 +214,6 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether HL7 v2 continuation has really been used
         EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
-        assertTrue(storage.ehcache.size > 0)
+        assertTrue(storage.ehcache.iterator().hasNext())
     }
 }
