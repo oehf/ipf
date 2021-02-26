@@ -31,7 +31,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
  */
 class Iti18TestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
-        from('xds-iti18:xds-iti18-service1')
+        from('xds-iti18:xds-iti18-service1?outFaultInterceptors=#faultMessageOutInterceptor')
             .id('service1route')
             .process(iti18RequestValidator())
             .process { checkValue(it, 'service 1') }

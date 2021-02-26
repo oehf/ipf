@@ -15,21 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.w3c.dom.Document;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.w3c.dom.Document;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Dmytro Rud
@@ -96,26 +94,26 @@ public class InNamespaceMergeInterceptorTest {
         
         // empty target element, short form  
         prefixes = merge("<element/>");
-        assertTrue(prefixes.size() == 5);
+        assertEquals(5, prefixes.size());
 
         // target element without NS declarations
         prefixes = merge("<element>garbage</element>");
-        assertTrue(prefixes.size() == 5);
+        assertEquals(5, prefixes.size());
         
         // target element with redeclared "soap" prefix
         prefixes = merge("<element xmlns:soap=\"12345\">garbage</element>");
-        assertTrue(prefixes.size() == 5);
+        assertEquals(5, prefixes.size());
         assertEquals("12345", prefixes.get("soap"));
 
         // target element with declared prefix that begins with "xmlns"
         prefixes = merge("<element xmlns:xmlns1=\"uri\" xmlns1:soap=\"12345\">garbage</element>");
-        assertTrue(prefixes.size() == 6);
+        assertEquals(6, prefixes.size());
         assertEquals("http://www.w3.org/2003/05/soap-envelope", prefixes.get("soap"));
 
         // target element with redeclared prefix "internal" which has been  
         // initially declared in the SOAP Body
         prefixes = merge("<element xmlns:internal=\"uri\">garbage</element>");
-        assertTrue(prefixes.size() == 5);
+        assertEquals(5, prefixes.size());
         assertEquals("uri", prefixes.get("internal"));
         
         // declaration from SOAP Body have higher priority than the ones from SOAP Envelope

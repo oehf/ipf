@@ -16,7 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
 import org.apache.camel.RuntimeCamelException
+import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
+import org.apache.http.client.methods.CloseableHttpResponse
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -30,6 +35,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
+import java.nio.charset.StandardCharsets
+
+import static org.junit.Assert.assertTrue
 import static org.junit.Assert.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -98,6 +106,17 @@ class TestIti18 extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
         checkAudit(EventOutcomeIndicator.Success)
+    }
+
+    @Test
+    void testCustomizedSoapFault() {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            // Provoking an error by sending a GET
+            HttpGet httpPost = new HttpGet("http://localhost:${port}/xds-iti18-service1");
+            CloseableHttpResponse response = client.execute(httpPost);
+            String body = IOUtils.toString(response.entity.content, StandardCharsets.UTF_8)
+            assertTrue(body.contains('<soap:Reason><soap:Text xml:lang="en">Something went wrong!</soap:Text></soap:Reason>'))
+        }
     }
     
     @Test
