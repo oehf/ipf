@@ -26,7 +26,7 @@
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
-        <joda-time-version>2.10.8</joda-time-version>
+        <joda-time-version>2.10.10</joda-time-version>
         <mina-version>2.1.4</mina-version>
         <netty-version>4.1.59.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>

@@ -30,10 +30,6 @@
             <artifactId>hapi-structures-v25</artifactId>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
         </dependency>
