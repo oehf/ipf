@@ -58,10 +58,7 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     @Override
     public int getLastResultNumber(String key) {
         var value = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
-        if (value != null) {
-            return (value != null) ? (int) value : -1;
-        }
-        return -1;
+        return (value != null) ? (int) value : -1;
     }
 
     @Override
@@ -72,10 +69,7 @@ public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     @Override
     public int getContinuationQuantity(String key) {
         var value = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
-        if (value != null) {
-            return (value != null) ? (int) value : -1;
-        }
-        return -1;
+        return (value != null) ? (int) value : -1;
     }
 
     @Override
