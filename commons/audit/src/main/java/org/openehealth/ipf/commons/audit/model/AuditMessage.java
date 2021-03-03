@@ -89,14 +89,16 @@ public class AuditMessage implements Serializable, Validateable {
         if (auditSourceIdentification == null) {
             throw new AuditException("The event must be have an audit source");
         }
-        if (getActiveParticipants().isEmpty()) {
+        if (activeParticipants == null || activeParticipants.isEmpty()) {
             throw new AuditException("The event must have one or more active participants");
         }
 
         eventIdentification.validate();
         auditSourceIdentification.validate();
         activeParticipants.forEach(ActiveParticipantType::validate);
-        participantObjectIdentifications.forEach(ParticipantObjectIdentificationType::validate);
+        if (participantObjectIdentifications != null) {
+            participantObjectIdentifications.forEach(ParticipantObjectIdentificationType::validate);
+        }
     }
 
     /* (non-Javadoc)
