@@ -110,12 +110,15 @@ class TestIti18 extends XdsStandardTestContainer {
 
     @Test
     void testCustomizedSoapFault() {
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
+        CloseableHttpClient client = HttpClients.createDefault()
+        try {
             // Provoking an error by sending a GET
             HttpGet httpPost = new HttpGet("http://localhost:${port}/xds-iti18-service1");
             CloseableHttpResponse response = client.execute(httpPost);
             String body = IOUtils.toString(response.entity.content, StandardCharsets.UTF_8)
             assertTrue(body.contains('<soap:Reason><soap:Text xml:lang="en">Something went wrong!</soap:Text></soap:Reason>'))
+        } finally {
+            if (client != null) client.close();
         }
     }
     
