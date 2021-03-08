@@ -119,7 +119,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether cancel message has had effect
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
-        assertFalse(storage.ehcache.iterator().hasNext())
+        assertEquals(0, storage.ehcache.getSize())
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
@@ -217,6 +217,6 @@ class TestIti47 extends HL7v3StandardTestContainer {
 
         // check whether HL7 v2 continuation has really been used
         EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
-        assertTrue(storage.ehcache.iterator().hasNext())
+        assertTrue(storage.ehcache.getSize() > 0)
     }
 }
