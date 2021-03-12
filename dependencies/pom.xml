@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.13.3</brave-version>
         <caching-api-version>1.1.1</caching-api-version>
-        <camel-version>3.7.2</camel-version>
+        <camel-version>3.7.3</camel-version>
         <cxf-version>3.4.2</cxf-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
@@ -26,7 +26,6 @@
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
-        <joda-time-version>2.10.10</joda-time-version>
         <mina-version>2.1.4</mina-version>
         <netty-version>4.1.59.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
@@ -41,7 +40,6 @@
         <vertx-version>3.9.5</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.1</xmlsec-version>
-
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -87,11 +85,6 @@
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-xml</artifactId>
                 <version>${groovy-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time-version}</version>
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>

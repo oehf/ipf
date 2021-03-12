@@ -66,7 +66,7 @@
         <httpclient4-version>4.5.13</httpclient4-version>
         <jackson-version>2.11.4</jackson-version>
         <jaspic-api-version>1.1</jaspic-api-version>
-        <jetty-version>9.4.36.v20210114</jetty-version>
+        <jetty-version>9.4.37.v20210219</jetty-version>
         <junit-version>4.13.2</junit-version>
         <log4j-version>2.14.0</log4j-version>
         <lombok-version>1.18.18</lombok-version>
