@@ -10,7 +10,6 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.13.3</brave-version>
-        <caching-api-version>1.1.1</caching-api-version>
         <camel-version>3.7.3</camel-version>
         <cxf-version>3.4.2</cxf-version>
         <groovy-version>3.0.7</groovy-version>
@@ -20,22 +19,13 @@
         <ipf-gazelle-version>1.5.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.3</jaxb-version>
-        <jakarta-validation-version>2.0.2</jakarta-validation-version>
-        <jakarta-annotation-version>1.3.5</jakarta-annotation-version>
-        <jakarta-jmsapi-version>2.0.3</jakarta-jmsapi-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
-        <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
-        <jdom-version>2.0.6</jdom-version>
         <mina-version>2.1.4</mina-version>
-        <netty-version>4.1.59.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.4</ph-commons-version>
-        <reactor-netty-version>1.0.4</reactor-netty-version>
         <saxon-he-version>10.3</saxon-he-version>
         <simple-syslog-version>0.0.13</simple-syslog-version>
-        <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.3.4</spring-version>
         <spring-boot-version>2.4.3</spring-boot-version>
         <vertx-version>3.9.5</vertx-version>
         <vibur-version>25.0</vibur-version>
@@ -57,16 +47,23 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring-version}</version>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-bom</artifactId>
+                <version>${hapi-fhir-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-bom</artifactId>
-                <version>${hapi-fhir-version}</version>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-bom</artifactId>
+                <version>${cxf-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-bom</artifactId>
+                <version>${camel-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -164,86 +161,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom2</artifactId>
-                <version>${jdom-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-core-engine</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-support</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-management</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-groovy</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-cxf</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-direct</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-hl7</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel.springboot</groupId>
-                <artifactId>camel-hl7-starter</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http-common</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel.springboot</groupId>
-                <artifactId>camel-http-common-starter</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel.springboot</groupId>
-                <artifactId>camel-http-starter</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mina</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel.springboot</groupId>
-                <artifactId>camel-mina-starter</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-spring</artifactId>
                 <version>${camel-version}</version>
@@ -253,16 +170,6 @@
                         <artifactId>spring-aop</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-servlet</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-file</artifactId>
-                <version>${camel-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel.springboot</groupId>
@@ -275,10 +182,9 @@
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mock</artifactId>
+                <groupId>org.apache.camel.springboot</groupId>
+                <artifactId>camel-hl7-starter</artifactId>
                 <version>${camel-version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.zipkin.brave</groupId>
@@ -307,41 +213,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-core</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-bindings-soap</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-simple</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxws</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-ws-addr</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-transports-http</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
                 <version>${cxf-version}</version>
                 <exclusions>
@@ -361,27 +232,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-ws-security</artifactId>
-                <version>${cxf-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.codehaus.woodstox</groupId>
-                        <artifactId>woodstox-core-asl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf.services.sts</groupId>
-                <artifactId>cxf-services-sts-core</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-features-logging</artifactId>
-                <version>${cxf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-integration-tracing-brave</artifactId>
                 <version>${cxf.version}</version>
                 <exclusions>
@@ -394,11 +244,6 @@
                         <artifactId>brave-instrumentation-http</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-                <version>${cxf-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.mina</groupId>
@@ -415,45 +260,6 @@
                 <artifactId>Saxon-HE</artifactId>
                 <classifier>xqj</classifier>
                 <version>${saxon-he-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jms</artifactId>
-                <version>${spring-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!-- Replacement for commons-logging use in Spring -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${slf4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j-version}</version>
             </dependency>
 
             <dependency>
@@ -517,29 +323,9 @@
                 <version>${jaxb-version}</version>
             </dependency>
             <dependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${jakarta-validation-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.annotation</groupId>
-                <artifactId>jakarta.annotation-api</artifactId>
-                <version>${jakarta-annotation-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>jakarta.jws</groupId>
                 <artifactId>jakarta.jws-api</artifactId>
                 <version>${jakarta-jwsapi-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.jms</groupId>
-                <artifactId>jakarta.jms-api</artifactId>
-                <version>${jakarta-jmsapi-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.xml.ws</groupId>
-                <artifactId>jakarta.xml.ws-api</artifactId>
-                <version>${jakarta-xml-wsapi-version}</version>
             </dependency>
             <dependency>
                 <groupId>com.helger</groupId>
@@ -567,16 +353,6 @@
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-unit</artifactId>
                 <version>${vertx-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.projectreactor.netty</groupId>
-                <artifactId>reactor-netty-core</artifactId>
-                <version>${reactor-netty-version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.palindromicity</groupId>
@@ -931,11 +707,6 @@
                 <artifactId>ipf-gazelle-validation-profiles-rad</artifactId>
                 <version>${ipf-gazelle-version}</version>
             </dependency>
-            <dependency>
-                <groupId>javax.cache</groupId>
-                <artifactId>cache-api</artifactId>
-                <version>${caching-api-version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1049,6 +820,17 @@
             <email>stefko.ivanov@gmail.com</email>
             <organization>SAP AG</organization>
             <organizationUrl>http://www.sap.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>thopap</id>
+            <name>Thomas Papke</name>
+            <email>thomas.papke@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
