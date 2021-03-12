@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -23,11 +24,13 @@ import java.util.GregorianCalendar;
 import java.util.Optional;
 
 public class DateTimeAdapter extends XmlAdapter<Calendar, ZonedDateTime> {
+    private static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+    
     @Override
     public ZonedDateTime unmarshal(Calendar calendar) {
         return Optional.ofNullable(calendar)
                 .map(Calendar::toInstant)
-                .map(i -> ZonedDateTime.ofInstant(i, ZoneId.of("UTC")))
+                .map(i -> ZonedDateTime.ofInstant(i, UTC_ZONE_ID))
                 .orElse(null);
     }
 
