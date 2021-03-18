@@ -26,8 +26,8 @@
         <ph-commons-version>9.5.4</ph-commons-version>
         <saxon-he-version>10.3</saxon-he-version>
         <simple-syslog-version>0.0.13</simple-syslog-version>
-        <spring-boot-version>2.4.3</spring-boot-version>
-        <vertx-version>3.9.5</vertx-version>
+        <spring-boot-version>2.4.4</spring-boot-version>
+        <vertx-version>3.9.6</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.1</xmlsec-version>
     </properties>
