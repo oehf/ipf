@@ -56,7 +56,7 @@
         <!-- Dependency version properties -->
         <commons-codec-version>1.15</commons-codec-version>
         <commons-io-version>2.8.0</commons-io-version>
-        <commons-lang3-version>3.11</commons-lang3-version>
+        <commons-lang3-version>3.12.0</commons-lang3-version>
         <easymock-version>3.4</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>30.1-jre</guava-version>
