@@ -12,7 +12,7 @@
         <brave-version>5.13.3</brave-version>
         <caching-api-version>1.1.1</caching-api-version>
         <camel-version>3.7.3</camel-version>
-        <cxf-version>3.4.2</cxf-version>
+        <cxf-version>3.4.3</cxf-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.3.0</hapi-fhir-version>
