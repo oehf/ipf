@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="urn:ihe:iti:svs:2008" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:hl7="urn:hl7-org:v3"
+	targetNamespace="urn:ihe:iti:svs:2008" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:include schemaLocation="../HL7V3/NE2008/coreschemas/datatypes-base.xsd"/>
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
+		schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xs:simpleType name="valueSetIdType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-2](\.(0|[1-9][0-9]*))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ConceptListType">
+		<xs:sequence>
+			<xs:element name="Concept" minOccurs="1" maxOccurs="unbounded" type="CD"/>
+		</xs:sequence>
+		<xs:attribute ref="xml:lang" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ValueSetType" abstract="true">
+		<xs:attribute name="id" type="valueSetIdType" use="required"/>
+		<xs:attribute name="version" use="optional" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="ValueSetRequestType">
+		<xs:complexContent>
+			<xs:extension base="ValueSetType">
+				<xs:attribute ref="xml:lang" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ValueSetExtendedType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="ValueSetType">
+				<xs:sequence>
+					<xs:element name="ConceptList" type="ConceptListType" minOccurs="1"
+						maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="displayName" use="optional" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ValueSetResponseType">
+		<xs:complexContent>
+			<xs:restriction base="ValueSetExtendedType">
+				<xs:sequence>
+					<xs:element name="ConceptList" type="ConceptListType" minOccurs="1"
+						maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="id" type="valueSetIdType" use="required"/>
+				<xs:attribute name="displayName" use="required" type="xs:string"/>
+				<xs:attribute name="version" use="optional" type="xs:string"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RetrieveValueSetRequestType">
+		<xs:sequence>
+			<xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ValueSetRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RetrieveValueSetResponseType">
+		<xs:sequence>
+			<xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ValueSetResponseType"/>
+		</xs:sequence>
+		<xs:attribute name="cacheExpirationHint" use="optional" type="xs:dateTime"/>
+	</xs:complexType>
+	<xs:element name="RetrieveValueSetRequest" type="RetrieveValueSetRequestType"/>
+	<xs:element name="RetrieveValueSetResponse" type="RetrieveValueSetResponseType"/>
+</xs:schema>
