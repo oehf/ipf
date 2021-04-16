@@ -905,17 +905,6 @@
             </snapshots>
         </repository>
         <repository>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>https://jcenter.bintray.com/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>projects.suisse-open-exchange.healthcare-rel</id>
             <name>projects.suisse-open-exchange.healthcare-releases</name>
             <url>https://projects.suisse-open-exchange.healthcare/artifactory/releases</url>
