@@ -43,7 +43,6 @@ public class RemoveMetadataRequestValidator implements Validator<EbXMLRemoveMeta
             metaDataAssert(request.getReferences().size() > 0, EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&
-                           request.getSql() == null &&
                            request.getSlots().isEmpty(), OBJECT_SHALL_NOT_BE_SPECIFIED, "AdhocQuery");
         }
     }

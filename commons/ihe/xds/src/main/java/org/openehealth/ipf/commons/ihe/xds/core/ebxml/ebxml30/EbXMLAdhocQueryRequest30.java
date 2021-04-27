@@ -39,16 +39,6 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
     }
     
     @Override
-    public String getSql() {
-        return null;    // not supported in 3.0
-    }
-
-    @Override
-    public void setSql(String sql) {
-        // not supported in 3.0
-    }
-    
-    @Override
     public String getReturnType() {
         var responseOption = request.getResponseOption();
         return responseOption != null ? responseOption.getReturnType() : null;

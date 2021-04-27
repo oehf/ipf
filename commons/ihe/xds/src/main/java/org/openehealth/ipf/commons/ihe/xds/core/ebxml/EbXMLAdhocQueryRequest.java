@@ -23,16 +23,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
  * @author Jens Riemschneider
  */
 public interface EbXMLAdhocQueryRequest extends EbXMLSlotList {
-    /**
-     * @param sql
-     *          SQL string used by the query.
-     */
-    void setSql(String sql);
-    
-    /**
-     * @return SQL string used by the query.
-     */
-    String getSql();
     
     /**
      * @param returnType

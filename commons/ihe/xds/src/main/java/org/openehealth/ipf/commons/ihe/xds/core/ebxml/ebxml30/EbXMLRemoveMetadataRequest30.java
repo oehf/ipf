@@ -98,16 +98,6 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest 
     }
 
     @Override
-    public void setSql(String sql) {
-        //noop
-    }
-
-    @Override
-    public String getSql() {
-        return null;
-    }
-
-    @Override
     public void setReturnType(String returnType) {
         //noop
     }
