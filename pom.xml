@@ -57,16 +57,16 @@
         <commons-codec-version>1.15</commons-codec-version>
         <commons-io-version>2.8.0</commons-io-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
-        <easymock-version>3.4</easymock-version>
+        <easymock-version>4.3</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
-        <guava-version>30.1-jre</guava-version>
-        <jaspic-api-version>1.1</jaspic-api-version>
-        <jetty-version>9.4.39.v20210325</jetty-version>
+        <guava-version>30.1.1-jre</guava-version>
+        <jaspic-api-version>1.1.1</jaspic-api-version>
+        <jetty-version>9.4.40.v20210413</jetty-version>
         <mockserver-version>5.11.2</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>9.0.45</tomcat-version>
-        <woodstox-version>6.2.5</woodstox-version>
-        <xbean-spring-version>4.18</xbean-spring-version>
+        <woodstox-version>6.2.6</woodstox-version>
+        <xbean-spring-version>4.19</xbean-spring-version>
         <xmlunit-version>2.8.2</xmlunit-version>
     </properties>
 

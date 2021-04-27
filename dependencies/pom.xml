@@ -14,7 +14,7 @@
         <cxf-version>3.4.3</cxf-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>5.3.0</hapi-fhir-version>
+        <hapi-fhir-version>5.3.3</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.5.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -23,11 +23,11 @@
         <mina-version>2.1.4</mina-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
-        <ph-commons-version>9.5.4</ph-commons-version>
+        <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>2.4.5</spring-boot-version>
-        <vertx-version>3.9.6</vertx-version>
+        <vertx-version>3.9.7</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.1</xmlsec-version>
     </properties>
