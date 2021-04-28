@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -24,6 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.ws.soap.SOAPFaultException;
+
+import java.util.Map;
 
 /**
  * @author Dmytro Rud
@@ -35,10 +38,10 @@ public class DispatchRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("cxf:bean:xdsRegistryEndpoint")
-            .process(exchange -> {
-                exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor.extractWsaAction(exchange.getIn().getHeaders()));
-            })
-            .choice()
+                .process(exchange -> {
+                    exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor
+                            .extractWsaAction(exchange.getProperty(CxfConstants.JAXWS_CONTEXT, Map.class)));
+                }).choice()
                 .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegistryStoredQuery"))
                     .to("direct:handle-iti18")
                 .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegisterDocumentSet-b"))
