@@ -45,10 +45,10 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
          from('pdq-iti21://0.0.0.0:18215?secure=true&sslContext=#sslContext')
                  .transform(constant(rsp))
 
-         from('pdq-iti21://0.0.0.0:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3')
+         from('pdq-iti21://0.0.0.0:18216?secure=true&sslContext=#sslContext&sslProtocols=TLS1.2')
                  .transform(constant(rsp))
 
-         from('pdq-iti21://0.0.0.0:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1')
+         from('pdq-iti21://0.0.0.0:18217?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2,TLSv1.3')
                  .transform(constant(rsp))
 
          from('pdq-iti21://0.0.0.0:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')

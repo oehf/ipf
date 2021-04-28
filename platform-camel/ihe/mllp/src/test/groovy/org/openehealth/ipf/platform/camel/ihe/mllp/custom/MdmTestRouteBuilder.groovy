@@ -52,8 +52,8 @@ class MdmTestRouteBuilder extends RouteBuilder {
 
         from('mdm://0.0.0.0:19087?audit=false&'+
                 'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=SSLv3,TLSv1&' +
-                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+                'sslProtocols=TLSv1.2,TLSv1.3&' +
+                'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
                 .transform(ack())
 
         from('mdm://0.0.0.0:19088?audit=false&'+

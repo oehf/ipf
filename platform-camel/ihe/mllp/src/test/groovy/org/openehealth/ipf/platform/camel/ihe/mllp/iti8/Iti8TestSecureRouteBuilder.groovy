@@ -29,8 +29,8 @@ class Iti8TestSecureRouteBuilder extends RouteBuilder {
 
         from('xds-iti8://0.0.0.0:18087?audit=false&' +
                 'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=SSLv3,TLSv1&' +
-                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+                'sslProtocols=TLSv1.2,TLSv1.3&' +
+                'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
                 .transform(ack())
 
         from('xds-iti8://0.0.0.0:18088?audit=false&' +

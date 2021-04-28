@@ -41,7 +41,7 @@ class TestSecureIti8 extends MllpTestContainer {
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}"
+        def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertACK(msg)
     }

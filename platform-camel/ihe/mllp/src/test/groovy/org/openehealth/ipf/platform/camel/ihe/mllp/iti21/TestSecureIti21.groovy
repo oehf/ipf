@@ -79,15 +79,9 @@ class TestSecureIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
-    @Ignore
-    @Test(timeout = 300000L)
-    void testHappyCaseWithSSLv3() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3&timeout=${TIMEOUT}", 2)
-    }
-
     @Test
-    void testHappyCaseWithSSLv3AndTLSv1() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1&timeout=${TIMEOUT}", 2)
+    void testHappyCaseWithTLSv12AndTLSv13() {
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2,TLSv1.3&timeout=${TIMEOUT}", 2)
     }
 
     @Test
@@ -97,7 +91,7 @@ class TestSecureIti21 extends MllpTestContainer {
 
     @Test(expected = Exception)
     void testSSLFailureWithIncompatibleProtocols() {
-        send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
     }
 
     @Test

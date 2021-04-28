@@ -198,7 +198,7 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&audit=false'
+        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
