@@ -44,7 +44,7 @@ public class Iti66TestRouteBuilder extends RouteBuilder {
         from("direct:input")
                 .toF("mhd-iti66:localhost:%d", FhirTestContainer.DEMO_APP_PORT);
 
-        from("mhd-iti66:translation?audit=true")
+        from("mhd-iti66:translation?audit=true&options=STRICT")
                 .errorHandler(noErrorHandler())
                 .transform(new Iti66Responder());
     }

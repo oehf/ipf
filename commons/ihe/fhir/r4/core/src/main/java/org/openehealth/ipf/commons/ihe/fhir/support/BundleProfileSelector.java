@@ -33,6 +33,7 @@ import java.util.function.Predicate;
  *
  * @author Christian Ohr
  * @since 3.6
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector instead}
  */
 public class BundleProfileSelector implements Predicate<RequestDetails> {
 

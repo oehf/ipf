@@ -20,7 +20,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -29,6 +31,9 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
+
+    private static final EnumSet<QueryParameter> PATIENT_QUERY_PARAMS = EnumSet.of(QueryParameter.DOC_ENTRY_PATIENT_ID,
+            QueryParameter.FOLDER_PATIENT_ID, QueryParameter.SUBMISSION_SET_PATIENT_ID, QueryParameter.PATIENT_ID);
 
     /**
      * Constructs an XDS query audit strategy.
@@ -51,10 +56,8 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
             }
 
             var slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
-            var patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
-            if (patientIdList != null) {
-                auditDataset.getPatientIds().addAll(patientIdList);
-            }
+            
+            PATIENT_QUERY_PARAMS.stream().map(slotHelper::toStringList).filter(Objects::nonNull).forEach(p -> auditDataset.getPatientIds().addAll(p));
         }
         return auditDataset;
     }

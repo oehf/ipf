@@ -39,18 +39,18 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
                 <constructor-arg index="4"><null/></constructor-arg>
                 <constructor-arg index="5" ref="fhirContext"/>
                 <constructor-arg index="6">
-                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProvider"
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider"
                           factory-method="getInstance"/>
                 </constructor-arg>
                 <constructor-arg index="7">
-                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionClientRequestFactory"
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory"
                           factory-method="getInstance"/>
                 </constructor-arg>
                 <constructor-arg index="8"><null/></constructor-arg>
 
                 <property name="staticConsumerSelector">
-                    <bean class="org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector">
-                        <constructor-arg value="http://thissucks.com"/>
+                    <bean class="org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector">
+                        <constructor-arg name="profileUris" value="http://thissucks.com"/>
                     </bean>
                 </property>
             </bean>

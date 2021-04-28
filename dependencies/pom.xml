@@ -9,13 +9,13 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.13.1</brave-version>
+        <brave-version>5.13.3</brave-version>
         <caching-api-version>1.1.1</caching-api-version>
-        <camel-version>3.7.0</camel-version>
-        <cxf-version>3.4.1</cxf-version>
+        <camel-version>3.7.3</camel-version>
+        <cxf-version>3.4.3</cxf-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>5.2.0</hapi-fhir-version>
+        <hapi-fhir-version>5.3.0</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>1.6.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -26,22 +26,20 @@
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jakarta-xml-wsapi-version>2.3.3</jakarta-xml-wsapi-version>
         <jdom-version>2.0.6</jdom-version>
-        <joda-time-version>2.10.8</joda-time-version>
         <mina-version>2.1.4</mina-version>
-        <netty-version>4.1.53.Final</netty-version>
+        <netty-version>4.1.59.Final</netty-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
-        <ph-schematron-version>5.2.0</ph-schematron-version>
-        <ph-commons-version>9.3.9</ph-commons-version>
-        <reactor-netty-version>1.0.1</reactor-netty-version>
+        <ph-schematron-version>5.6.5</ph-schematron-version>
+        <ph-commons-version>9.5.4</ph-commons-version>
+        <reactor-netty-version>1.0.4</reactor-netty-version>
         <saxon-he-version>10.3</saxon-he-version>
         <simple-syslog-version>0.0.13</simple-syslog-version>
         <slf4j-version>1.7.30</slf4j-version>
-        <spring-version>5.3.2</spring-version>
-        <spring-boot-version>2.4.1</spring-boot-version>
+        <spring-version>5.3.4</spring-version>
+        <spring-boot-version>2.4.3</spring-boot-version>
         <vertx-version>3.9.5</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.2.0</xmlsec-version>
-
+        <xmlsec-version>2.2.1</xmlsec-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -87,11 +85,6 @@
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-xml</artifactId>
                 <version>${groovy-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time-version}</version>
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>

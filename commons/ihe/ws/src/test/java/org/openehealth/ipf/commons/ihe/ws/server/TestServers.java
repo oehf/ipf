@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -26,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -90,7 +90,7 @@ public class TestServers {
 
         @Override
         protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            IOUtils.copy(request.getInputStream(), response.getOutputStream());
+            request.getInputStream().transferTo(response.getOutputStream());
         }
     }
 }

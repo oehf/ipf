@@ -36,7 +36,7 @@ public class TestIti66Error extends AbstractTestIti66 {
     @Test(expected = InternalErrorException.class)
     public void testSendManuallyReturningError() {
         try {
-            sendManually(manifestPatientIdentifierParameter());
+            sendManually(manifestPatientIdentifierParameter(), statusParameter());
         } catch (InternalErrorException e) {
             assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
         }

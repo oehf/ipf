@@ -63,7 +63,7 @@ class Iti47TestRouteBuilder extends RouteBuilder {
 
         int freePort = ServletServer.getFreePort()
 
-        from('pdqv3-iti47:pdqv3-iti47-service1')
+        from('pdqv3-iti47:pdqv3-iti47-service1?outFaultInterceptors=#faultMessageOutInterceptor')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
             .setBody(constant(V3_RESPONSE))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())

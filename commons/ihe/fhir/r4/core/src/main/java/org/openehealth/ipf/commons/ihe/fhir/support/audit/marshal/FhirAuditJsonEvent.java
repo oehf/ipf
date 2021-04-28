@@ -13,27 +13,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 
 /**
  * @author Christian Ohr
  * @since 3.6
+ * @deprecated use FhirAuditJsonSerializationStrategy
  */
-public class FhirAuditJsonEvent extends AbstractFhirAuditEvent {
+public class FhirAuditJsonEvent extends FhirAuditJsonSerializationStrategy {
 
     public FhirAuditJsonEvent() {
+        super();
     }
 
     public FhirAuditJsonEvent(FhirContext fhirContext) {
         super(fhirContext);
-    }
-
-    @Override
-    protected IParser getParser(FhirContext fhirContext) {
-        return fhirContext.newJsonParser();
     }
 }

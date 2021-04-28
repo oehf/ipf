@@ -122,7 +122,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .period(period)
                 .facility(facility)
                 .event(event)
-                .securityLabel(securityLabel)
+                .securityLabel(securityLabelParam)
                 .format(format)
                 .related(relatedTokenParam)
                 ._id(resourceId)

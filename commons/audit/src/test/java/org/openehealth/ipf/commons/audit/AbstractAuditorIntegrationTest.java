@@ -29,12 +29,6 @@ import java.net.ServerSocket;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
-
 
 /**
  *
@@ -67,12 +61,14 @@ abstract class AbstractAuditorIntegrationTest {
         }
     }
 
-    void initTLSSystemProperties(String clientKeyStore) {
-        System.setProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD, CLIENT_KEY_STORE_PASS);
-        System.setProperty(JAVAX_NET_SSL_KEYSTORE, clientKeyStore != null ? clientKeyStore : CLIENT_KEY_STORE);
-        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD, TRUST_STORE_PASS);
-        System.setProperty(JAVAX_NET_SSL_TRUSTSTORE, TRUST_STORE);
-        System.setProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
+    TlsParameters setupDefaultTlsParameter() {
+        var tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(CLIENT_KEY_STORE);
+        tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
+        tlsParameters.setTrustStoreFile(TRUST_STORE);
+        tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
+        tlsParameters.setEnabledProtocols("TLSv1.2");
+        return tlsParameters;
     }
 
     @Before

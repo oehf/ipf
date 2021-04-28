@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.model.*;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
@@ -32,20 +35,21 @@ import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Date;
+import java.util.function.Function;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
-abstract class AbstractFhirAuditEvent implements SerializationStrategy {
+abstract class AbstractFhirAuditSerializationStrategy implements SerializationStrategy {
 
     private final FhirContext fhirContext;
 
-    public AbstractFhirAuditEvent() {
+    public AbstractFhirAuditSerializationStrategy() {
         this(FhirContext.forR4());
     }
 
-    public AbstractFhirAuditEvent(FhirContext fhirContext) {
+    public AbstractFhirAuditSerializationStrategy(FhirContext fhirContext) {
         this.fhirContext = fhirContext;
     }
 
@@ -83,20 +87,12 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
 
     protected AuditEvent.AuditEventEntityComponent participantObjectIdentificationToEntity(ParticipantObjectIdentificationType poit) {
         var entity = new AuditEvent.AuditEventEntityComponent()
-                .setWhat(new Reference().setIdentifier(new Identifier()
-                        .setValue(poit.getParticipantObjectID())))
+                .setWhat(new Reference().setIdentifier(new Identifier().setValue(poit.getParticipantObjectID())))
                 // poit.getParticipantObjectIDTypeCode())) not used here
-                .setType(new Coding()
-                        .setCode(String.valueOf(poit.getParticipantObjectTypeCode().getValue()))
-                        .setSystem("http://hl7.org/fhir/audit-entity-type"))
-                .setRole(new Coding()
-                        .setCode(String.valueOf(poit.getParticipantObjectTypeCodeRole().getValue()))
-                        .setSystem("http://hl7.org/fhir/object-role"))
-                .setLifecycle(new Coding()
-                        .setCode(String.valueOf(poit.getParticipantObjectDataLifeCycle().getValue()))
-                        .setSystem("http://hl7.org/fhir/dicom-audit-lifecycle"))
-                .addSecurityLabel(new Coding()
-                        .setCode(poit.getParticipantObjectSensitivity()))
+                .setType(codeToCoding("http://hl7.org/fhir/audit-entity-type", poit.getParticipantObjectTypeCode(), ParticipantObjectTypeCode::getValue))
+                .setRole(codeToCoding("http://hl7.org/fhir/object-role", poit.getParticipantObjectTypeCodeRole(), ParticipantObjectTypeCodeRole::getValue))
+                .setLifecycle(codeToCoding("http://hl7.org/fhir/dicom-audit-lifecycle", poit.getParticipantObjectDataLifeCycle(), ParticipantObjectDataLifeCycle::getValue))
+                .addSecurityLabel(codeToCoding(null, poit.getParticipantObjectSensitivity(), Function.identity()))
                 .setName(poit.getParticipantObjectName())
                 // poit.getParticipantObjectDescription) not mappable here
                 .setQuery(poit.getParticipantObjectQuery());
@@ -162,6 +158,13 @@ abstract class AbstractFhirAuditEvent implements SerializationStrategy {
         }
     }
 
+    protected <T, V> Coding codeToCoding(String codeSystem, T code, Function<T, V> valueSupplier) {
+        return (code != null) ?
+                new Coding()
+                        .setCode(String.valueOf(valueSupplier.apply(code)))
+                        .setSystem(codeSystem) :
+                null;
+    }
 
     protected Coding codedValueTypeToCoding(CodedValueType cvt) {
         return cvt != null ?
