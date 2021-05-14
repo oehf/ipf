@@ -9,7 +9,7 @@
 
     <types>
         <xsd:schema elementFormDefault="qualified">
-            <xsd:import namespace="urn:ihe:iti:svs:2008" schemaLocation="./schema/SVS.xsd"/>
+            <xsd:import namespace="urn:ihe:iti:svs:2008" schemaLocation="SVS.xsd"/>
         </xsd:schema>
     </types>
     <message name="RetrieveValueSet_Message">

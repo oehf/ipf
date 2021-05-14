@@ -3,7 +3,7 @@
 	xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:hl7="urn:hl7-org:v3"
 	targetNamespace="urn:ihe:iti:svs:2008" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
-	<xs:include schemaLocation="../HL7V3/NE2008/coreschemas/datatypes-base.xsd"/>
+	<xs:include schemaLocation="schema/HL7V3/NE2008/coreschemas/datatypes-base.xsd"/>
 	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
 		schemaLocation="http://www.w3.org/2001/xml.xsd"/>
 	<xs:simpleType name="valueSetIdType">

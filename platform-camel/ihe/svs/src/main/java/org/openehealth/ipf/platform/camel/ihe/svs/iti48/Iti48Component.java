@@ -12,6 +12,8 @@ import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.svs.SVS.Interactions.ITI_48;
+
 /**
  * The Camel component for the ITI-48 transaction.
  *
@@ -53,7 +55,7 @@ public class Iti48Component extends AbstractWsComponent<SvsAuditDataset, WsTrans
             }
 
             @Override
-            public AbstractWsProducer<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>> endpoint, JaxWsClientFactory<SvsAuditDataset> clientFactory) {
+            public AbstractWsProducer<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>, RetrieveValueSetRequest, RetrieveValueSetResponse> getProducer(AbstractWsEndpoint<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>> endpoint, JaxWsClientFactory<SvsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveValueSetRequest.class, RetrieveValueSetResponse.class
                 );
