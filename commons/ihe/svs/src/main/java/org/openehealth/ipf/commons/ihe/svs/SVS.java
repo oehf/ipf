@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Definitions for the Community Medication Prescription and Dispense (SVS) integration profile of the PHARM TF.
+ * Definitions for the Sharing Value Sets (SVS) integration profile of the IHE TF.
  *
  * @author Quentin Ligier
  */
@@ -49,7 +49,7 @@ public class SVS implements IntegrationProfile {
             "wsdl/iti48/iti48.wsdl",
             true,
             false,
-            false, // TODO ?
+            false,
             false
     );
 }

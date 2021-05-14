@@ -1,12 +1,14 @@
 package org.openehealth.ipf.commons.ihe.svs.iti48;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.svs.core.audit.SvsAuditDataset;
+import org.openehealth.ipf.commons.ihe.svs.core.audit.SvsAuditMessageBuilder;
 import org.openehealth.ipf.commons.ihe.svs.core.audit.SvsEventTypeCode;
-import org.openehealth.ipf.commons.ihe.svs.core.audit.SvsQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.svs.core.requests.RetrieveValueSetRequest;
+import org.openehealth.ipf.commons.ihe.svs.core.responses.RetrieveValueSetResponse;
 
 import java.util.Map;
 
@@ -41,9 +43,9 @@ public class Iti48AuditStrategy extends AuditStrategySupport<SvsAuditDataset> {
                                                          final Object request,
                                                          final Map<String, Object> parameters) {
         if (request instanceof RetrieveValueSetRequest) {
-            final RetrieveValueSetRequest rvsRequest = (RetrieveValueSetRequest) request;
+            var rvsRequest = (RetrieveValueSetRequest) request;
             auditDataset.setValueSetId(rvsRequest.getValueSet().getId());
-            //auditDataset.setValueSetName(rvsRequest.getValueSet().ge);
+            auditDataset.setValueSetVersion(rvsRequest.getValueSet().getVersion());
         }
         return auditDataset;
     }
@@ -57,9 +59,17 @@ public class Iti48AuditStrategy extends AuditStrategySupport<SvsAuditDataset> {
      */
     @Override
     public boolean enrichAuditDatasetFromResponse(final SvsAuditDataset auditDataset,
-                                                  final Object response) {
-        System.out.println("enrichAuditDatasetFromResponse");
-        return super.enrichAuditDatasetFromResponse(auditDataset, response);
+                                                  final Object response,
+                                                  AuditContext auditContext) {
+        if (response instanceof RetrieveValueSetResponse) {
+            var rvsResponse = (RetrieveValueSetResponse) response;
+            auditDataset.setValueSetId(rvsResponse.getValueSet().getId());
+            auditDataset.setValueSetVersion(rvsResponse.getValueSet().getVersion());
+            auditDataset.setValueSetName(rvsResponse.getValueSet().getDisplayName());
+
+            auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
+        }
+        return true;
     }
 
     /**
@@ -72,8 +82,30 @@ public class Iti48AuditStrategy extends AuditStrategySupport<SvsAuditDataset> {
     @Override
     public AuditMessage[] makeAuditMessage(final AuditContext auditContext,
                                            final SvsAuditDataset auditDataset) {
-        return new SvsQueryInformationBuilder(auditContext, auditDataset, SvsEventTypeCode.RetrieveValueSet,
-                auditDataset.getPurposesOfUse())
-                .getMessages();
+        var builder = new SvsAuditMessageBuilder();
+        builder.setEventIdentification(
+                auditDataset.getEventOutcomeIndicator(),
+                auditDataset.getEventOutcomeDescription(),
+                auditDataset.isServerSide() ? EventActionCode.Read : EventActionCode.Create,
+                EventIdCode.Export,
+                SvsEventTypeCode.RetrieveValueSet
+        );
+
+        if (auditContext != null) {
+            builder.setAuditSource(auditContext);
+        }
+        builder.addParticipantObjectIdentification(
+                ParticipantObjectIdTypeCode.SearchCriteria,
+                null,
+                null,
+                null, //details
+                auditDataset.getValueSetId(),
+                ParticipantObjectTypeCode.System,
+                ParticipantObjectTypeCodeRole.Report,
+                null,
+                null
+        );
+
+        return builder.getMessages();
     }
 }
