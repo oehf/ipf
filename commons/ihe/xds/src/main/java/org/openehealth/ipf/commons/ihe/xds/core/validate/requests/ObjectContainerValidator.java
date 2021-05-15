@@ -17,32 +17,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
-import org.openehealth.ipf.commons.ihe.xds.RMU;
-import org.openehealth.ipf.commons.ihe.xds.XCF;
-import org.openehealth.ipf.commons.ihe.xds.XDM;
-import org.openehealth.ipf.commons.ihe.xds.XDR;
-import org.openehealth.ipf.commons.ihe.xds.XDS;
+import org.openehealth.ipf.commons.ihe.xds.*;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -90,19 +73,15 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided, boolean limitedMetadata) {
-        List<RegistryObjectValidator> validators = new ArrayList<>();
         var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
-
-        var isOnDemand    = (profile == XDS.Interactions.ITI_61) ||
-                                (profile.isQuery() && onDemandProvided);
-
+        var isOnDemand = (profile == XDS.Interactions.ITI_61) || (profile.isQuery() && onDemandProvided);
         var needHashAndSize = (! isOnDemand) &&
-                (isContinuaHRN || profile.isQuery()
-                        || (profile == XDS.Interactions.ITI_42)
-                        || (profile == XDM.Interactions.ITI_41)
-                );
+                (isContinuaHRN || profile.isQuery() || (profile == XDS.Interactions.ITI_42) || (profile == XDM.Interactions.ITI_41));
+        var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
+        var needRepositoryUniqueId = (profile.getInteractionId() == XDS.Interactions.ITI_42) || isOnDemand || profile.isQuery();
 
+        List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
             new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator,
                     (limitedMetadata || isOnDemand) ? 0 : 1,
@@ -140,21 +119,17 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME,
                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations));
+                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
+            new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA, needPatientId),
+            new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator, needRepositoryUniqueId ? 1 : 0, 1));
 
-        if (! limitedMetadata) {
-            validators.add(new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-        }
-
-        if ((profile.getInteractionId() == XDS.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
-            validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
-        }
         return validators;
     }
 
     private List<RegistryObjectValidator> getSubmissionSetSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
         var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+        var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
 
         List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
@@ -163,23 +138,22 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 new AuthorClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
                 new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
                         limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
-                new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));
-        if (! limitedMetadata) {
-            validators.add(new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-        }
+                new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator, true),
+                new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA, needPatientId));
+
         return validators;
     }
 
+    private List<RegistryObjectValidator> getFolderSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
+        var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
 
-    private List<RegistryObjectValidator> getFolderSlotValidations(boolean limitedMetadata) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
                 new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidatorSec, 0, 1),
                 new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME,
-                        limitedMetadata ? 0 : 1, Integer.MAX_VALUE, OPTIONAL, codingSchemeValidations));
-        if (! limitedMetadata) {
-            validators.add(new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-        }
+                        limitedMetadata ? 0 : 1, Integer.MAX_VALUE, OPTIONAL, codingSchemeValidations),
+                new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA, needPatientId));
+
         return validators;
     }
 
@@ -225,7 +199,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
              }
 
             var limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_NODE, profile);
-            runValidations(folder, getFolderSlotValidations(limitedMetadata));
+            runValidations(folder, getFolderSlotValidations(profile, limitedMetadata));
 
             var status = folder.getStatus();
             if (profile.isQuery() || status != null) {
