@@ -10,8 +10,11 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.13.3</brave-version>
-        <camel-version>3.7.3</camel-version>
+        <camel-version>3.7.4</camel-version>
         <cxf-version>3.4.3</cxf-version>
+        <commons-codec-version>1.15</commons-codec-version>
+        <commons-io-version>2.8.0</commons-io-version>
+        <commons-lang3-version>3.12.0</commons-lang3-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.3.3</hapi-fhir-version>
@@ -29,7 +32,8 @@
         <spring-boot-version>2.4.5</spring-boot-version>
         <vertx-version>3.9.7</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.2.1</xmlsec-version>
+        <xmlsec-version>2.2.2</xmlsec-version>
+        <woodstox-version>6.2.6</woodstox-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -67,7 +71,26 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <dependency>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
+                <version>${woodstox-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy</artifactId>
