@@ -29,7 +29,7 @@
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>2.4.5</spring-boot-version>
+        <spring-boot-version>2.4.6</spring-boot-version>
         <vertx-version>3.9.7</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.2</xmlsec-version>
