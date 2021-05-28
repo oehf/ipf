@@ -22,14 +22,18 @@ import org.apache.cxf.binding.soap.SoapFault;
 import javax.xml.namespace.QName;
 
 /**
- * A SOAP exception for an unknown value set version. Defined by IHE.
+ * A SOAP exception for an unknown value set language. Defined by the Swiss "EPR – Central Services Interface
+ * Documentation" document.
  *
  * @author Quentin Ligier
  */
-public class UnknownVersionException extends SoapFault {
+public class ChUnknownLanguageException extends SoapFault {
 
-    public UnknownVersionException() {
-        super("Version unknown", Soap12.getInstance().getReceiver());
-        this.setSubCode(new QName(null, "VERUNK"));
+    public ChUnknownLanguageException(final String language) {
+        super(
+                String.format("Language '%s' not supported", language),
+                Soap12.getInstance().getReceiver()
+        );
+        this.setSubCode(new QName(null, "LANGUNK"));
     }
 }
