@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.svs.core.responses.RetrieveValueSetRespon
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getHostFromUrl;
 import static org.openehealth.ipf.commons.audit.utils.AuditUtils.getProcessId;
 
 /**
