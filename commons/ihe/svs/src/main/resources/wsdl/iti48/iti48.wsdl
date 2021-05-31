@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
              xmlns:ihe="urn:ihe:iti:svs:2008" targetNamespace="urn:ihe:iti:svs:2008"
              xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
              xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
@@ -8,9 +8,101 @@
     <documentation>IHE SVS Value Set Repository = ITI-48 adaptor (SOAP) = Retrieve Value Set</documentation>
 
     <types>
-        <xsd:schema elementFormDefault="qualified">
-            <xsd:import namespace="urn:ihe:iti:svs:2008" schemaLocation="SVS.xsd"/>
-        </xsd:schema>
+        <xs:schema targetNamespace="urn:ihe:iti:svs:2008">
+            <xs:simpleType name="valueSetIdType">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[0-2](\.(0|[1-9][0-9]*))*"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="ConceptListType">
+                <xs:sequence>
+                    <xs:element name="Concept" minOccurs="1" maxOccurs="unbounded" type="ihe:CD"/>
+                </xs:sequence>
+                <xs:attribute ref="xml:lang" use="optional"/>
+            </xs:complexType>
+            <xs:complexType name="ValueSetType" abstract="true">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="version" use="optional" type="xs:string"/>
+            </xs:complexType>
+            <xs:complexType name="ValueSetRequestType">
+                <xs:complexContent>
+                    <xs:extension base="ihe:ValueSetType">
+                        <xs:attribute ref="xml:lang" use="optional"/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ValueSetExtendedType" abstract="true">
+                <xs:complexContent>
+                    <xs:extension base="ihe:ValueSetType">
+                        <xs:sequence>
+                            <xs:element name="ConceptList" type="ihe:ConceptListType" minOccurs="1"
+                                        maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="displayName" use="optional" type="xs:string"/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ValueSetResponseType">
+                <xs:complexContent>
+                    <xs:restriction base="ihe:ValueSetExtendedType">
+                        <xs:sequence>
+                            <xs:element name="ConceptList" type="ihe:ConceptListType" minOccurs="1"
+                                        maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:string" use="required"/>
+                        <xs:attribute name="displayName" use="required" type="xs:string"/>
+                        <xs:attribute name="version" use="optional" type="xs:string"/>
+                    </xs:restriction>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="RetrieveValueSetRequestType">
+                <xs:sequence>
+                    <xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ihe:ValueSetRequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RetrieveValueSetResponseType">
+                <xs:sequence>
+                    <xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ihe:ValueSetResponseType"/>
+                </xs:sequence>
+                <xs:attribute name="cacheExpirationHint" use="optional" type="xs:dateTime"/>
+            </xs:complexType>
+            <xs:element name="RetrieveValueSetRequest" type="ihe:RetrieveValueSetRequestType"/>
+            <xs:element name="RetrieveValueSetResponse" type="ihe:RetrieveValueSetResponseType"/>
+            <xs:complexType name="CD">
+                <xs:attribute name="code" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The plain code symbol defined by the code system.
+                            For example, "784.0" is the code symbol of the ICD-9
+                            code "784.0" for headache.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="codeSystem" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Specifies the code system that defines the code.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="codeSystemVersion" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            If applicable, a version descriptor defined
+                            specifically for the given code system.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="displayName" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A name or title for the code, under which the sending
+                            system shows the code value to its users.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:complexType>
+        </xs:schema>
     </types>
     <message name="RetrieveValueSet_Message">
         <documentation>Retrieve Value Set</documentation>
