@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.DataTypeException;
-import ca.uhn.hl7v2.model.primitive.CommonTS;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateTimeAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
@@ -120,29 +119,9 @@ public class Timestamp implements Serializable {
             precision = Precision.YEAR;
         }
 
-        // default time zone is UTC
-        if (pos < 0) {
-            s += "+0000";
-        }
-
         // parse timestamp
         try {
-            var ts = new CommonTS(s);
-            var zonedDateTime = ZonedDateTime.of(
-                    ts.getYear(),
-                    (ts.getMonth() == 0) ? 1 : ts.getMonth(),
-                    (ts.getDay() == 0) ? 1 : ts.getDay(),
-                    ts.getHour(),
-                    ts.getMinute(),
-                    ts.getSecond(),
-                    0,
-                    ZoneId.ofOffset("GMT", ZoneOffset.ofHoursMinutes(
-                            ts.getGMTOffset() / 100,
-                            ts.getGMTOffset() % 100
-                    ))
-            );
-
-            return new Timestamp(zonedDateTime, precision);
+            return new Timestamp(HL7DTM.toZonedDateTime(s), precision);
         } catch (DataTypeException e) {
             throw new XDSMetaDataException(ValidationMessage.INVALID_TIME, s);
         }

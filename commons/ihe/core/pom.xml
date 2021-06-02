@@ -18,6 +18,10 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-audit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
