@@ -139,7 +139,9 @@ public class PixV3QueryResponseTransformer {
         final PRPAMT201304UV02Person person = new PRPAMT201304UV02Person();
         person.setClassCode(EntityClass.PSN);
         person.setDeterminerCode(EntityDeterminer.INSTANCE);
-        person.getName().add(simpleResponse.getPersonName());
+        if (simpleResponse.getPersonName() != null) {
+            person.getName().add(simpleResponse.getPersonName());
+        }
         person.getId().addAll(simpleResponse.getPersonIds());
         person.getAsOtherIDs().addAll(simpleResponse.getAsOtherIDs());
         patient.setPatientPerson(person);
