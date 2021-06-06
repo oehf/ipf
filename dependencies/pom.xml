@@ -15,6 +15,7 @@
         <commons-codec-version>1.15</commons-codec-version>
         <commons-io-version>2.8.0</commons-io-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
+        <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
         <groovy-version>3.0.7</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.3.3</hapi-fhir-version>
@@ -386,6 +387,17 @@
                 <groupId>org.vibur</groupId>
                 <artifactId>vibur-object-pool</artifactId>
                 <version>${vibur-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.ihe.gazelle</groupId>
+                <artifactId>hl7v3-code-jar</artifactId>
+                <version>${gazelle-hl7v3-jar-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>saxon9he</groupId>
+                        <artifactId>net.sf.saxon</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- All IPF dependencies -->
@@ -931,6 +943,18 @@
             <id>projects.suisse-open-exchange.healthcare-rel</id>
             <name>projects.suisse-open-exchange.healthcare-releases</name>
             <url>https://projects.suisse-open-exchange.healthcare/artifactory/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>irisa-sumo</id>
+            <name>Sumo Irisa Public Maven Repository Group</name>
+            <url>https://gazelle.ihe.net/nexus/content/repositories/releases/</url>
+            <layout>default</layout>
             <releases>
                 <enabled>true</enabled>
             </releases>

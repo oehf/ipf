@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.reponses;
+package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses;
 
 import ca.uhn.hl7v2.model.DataTypeException;
 import net.ihe.gazelle.hl7v3.coctmt090003UV01.COCTMT090003UV01AssignedEntity;
@@ -30,7 +30,7 @@ import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02PatientIdentifier;
 import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02QueryByParameter;
 import net.ihe.gazelle.hl7v3.voc.*;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.Device;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
 
 import java.util.List;
@@ -40,6 +40,7 @@ import java.util.Optional;
  * Transformer between objects {@link PixV3QueryResponse} and {@link PRPAIN201310UV02Type}.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 public class PixV3QueryResponseTransformer {
 
@@ -138,7 +139,7 @@ public class PixV3QueryResponseTransformer {
         final PRPAMT201304UV02Person person = new PRPAMT201304UV02Person();
         person.setClassCode(EntityClass.PSN);
         person.setDeterminerCode(EntityDeterminer.INSTANCE);
-        person.getName().addAll(simpleResponse.getPersonNames());
+        person.getName().add(simpleResponse.getPersonName());
         person.getId().addAll(simpleResponse.getPersonIds());
         person.getAsOtherIDs().addAll(simpleResponse.getAsOtherIDs());
         patient.setPatientPerson(person);
@@ -248,7 +249,9 @@ public class PixV3QueryResponseTransformer {
             simpleResponse.getPatientIds().addAll(patient.getId());
         }
         if (patient.getPatientPerson() != null) {
-            simpleResponse.getPersonNames().addAll(patient.getPatientPerson().getName());
+            if (!patient.getPatientPerson().getName().isEmpty()) {
+                simpleResponse.setPersonName(patient.getPatientPerson().getName().get(0));
+            }
             simpleResponse.getPersonIds().addAll(patient.getPatientPerson().getId());
             simpleResponse.getAsOtherIDs().addAll(patient.getPatientPerson().getAsOtherIDs());
         }

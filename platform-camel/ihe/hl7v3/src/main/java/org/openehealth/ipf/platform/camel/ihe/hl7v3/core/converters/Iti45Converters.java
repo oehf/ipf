@@ -18,82 +18,71 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters;
 import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02Type;
 import net.ihe.gazelle.hl7v3.prpain201310UV02.PRPAIN201310UV02Type;
 import org.apache.camel.Converter;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryQuery;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.reponses.PixV3QueryResponseTransformer;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryQueryTransformer;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformer;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses.PixV3QueryResponseTransformer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Camel type converters for HL7 PRPA models in ITI-45 transaction.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 @Converter(generateLoader = true)
-public class Iti45Converters {
+public class Iti45Converters extends Hl7v3ConvertersBase {
 
-    private static final PixV3QueryQueryTransformer SIMPLE_QUERY_TRANSFORMER = new PixV3QueryQueryTransformer();
+    private static final PixV3QueryRequestTransformer SIMPLE_REQUEST_TRANSFORMER = new PixV3QueryRequestTransformer();
     private static final PixV3QueryResponseTransformer SIMPLE_RESPONSE_TRANSFORMER = new PixV3QueryResponseTransformer();
-    private static final JAXBContext JAXB_CONTEXT_PRPA_QUERY;
+
+    private static final JAXBContext JAXB_CONTEXT_PRPA_REQUEST;
     private static final JAXBContext JAXB_CONTEXT_PRPA_RESPONSE;
     static {
         try {
-            JAXB_CONTEXT_PRPA_QUERY = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
+            JAXB_CONTEXT_PRPA_REQUEST = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
             JAXB_CONTEXT_PRPA_RESPONSE = JAXBContext.newInstance(PRPAIN201310UV02Type.class);
         } catch (final JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
 
+
+    /* --------------------- Requests --------------------- */
+
     @Converter
-    public static PRPAIN201309UV02Type xmlToPrpaQuery(final String xml) throws JAXBException {
-        final Unmarshaller unmarshaller = JAXB_CONTEXT_PRPA_QUERY.createUnmarshaller();
-        return (PRPAIN201309UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+    public static PRPAIN201309UV02Type xmlToPrpaRequest(final String xml) throws JAXBException {
+        return fromXml(xml, JAXB_CONTEXT_PRPA_REQUEST);
     }
 
     @Converter
-    public static String prpaQueryToXml(final PRPAIN201309UV02Type query) throws JAXBException {
-        final Marshaller marshaller = JAXB_CONTEXT_PRPA_QUERY.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
-        marshaller.marshal(query, stringWriter);
-        return stringWriter.toString();
+    public static String prpaRequestToXml(final PRPAIN201309UV02Type request) throws JAXBException {
+        return toXml(request, JAXB_CONTEXT_PRPA_REQUEST);
     }
 
     @Converter
-    public static String xmlToSimpleQuery(final PixV3QueryQuery simpleQuery) throws JAXBException {
-        return prpaQueryToXml(SIMPLE_QUERY_TRANSFORMER.toPrpa(simpleQuery));
+    public static String xmlToSimpleRequest(final PixV3QueryRequest simpleRequest) throws JAXBException {
+        return prpaRequestToXml(SIMPLE_REQUEST_TRANSFORMER.toPrpa(simpleRequest));
     }
 
     @Converter
-    public static PixV3QueryQuery simpleQueryToXml(final String xml) throws JAXBException {
-        return SIMPLE_QUERY_TRANSFORMER.fromPrpa(xmlToPrpaQuery(xml));
+    public static PixV3QueryRequest simpleRequestToXml(final String xml) throws JAXBException {
+        return SIMPLE_REQUEST_TRANSFORMER.fromPrpa(xmlToPrpaRequest(xml));
     }
+
+
+    /* --------------------- Responses --------------------- */
 
     @Converter
     public static PRPAIN201310UV02Type xmlToPrpaResponse(final String xml) throws JAXBException {
-        final Unmarshaller unmarshaller = JAXB_CONTEXT_PRPA_RESPONSE.createUnmarshaller();
-        return (PRPAIN201310UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        return fromXml(xml, JAXB_CONTEXT_PRPA_RESPONSE);
     }
 
     @Converter
     public static String prpaResponseToXml(final PRPAIN201310UV02Type response) throws JAXBException {
-        final Marshaller marshaller = JAXB_CONTEXT_PRPA_RESPONSE.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
-        marshaller.marshal(response, stringWriter);
-        return stringWriter.toString();
+        return toXml(response, JAXB_CONTEXT_PRPA_RESPONSE);
     }
 
     @Converter

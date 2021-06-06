@@ -1,9 +1,24 @@
+/*
+ * Copyright 2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hl7v3.core.responses;
 
 import net.ihe.gazelle.hl7v3.datatypes.II;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.Device;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryQuery;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +26,7 @@ public class PixV3QueryResponseTest {
 
     @Test
     public void testFromQuery() {
-        final PixV3QueryQuery query = new PixV3QueryQuery();
+        final PixV3QueryRequest query = new PixV3QueryRequest();
         query.getDataSourceOids().add("7.8.9");
         query.setQueryPatientId(new II("123", "1.2.3"));
         query.setQueryId(new II("abc", "4.5.6"));

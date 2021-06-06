@@ -21,7 +21,7 @@ import net.ihe.gazelle.hl7v3.datatypes.II;
 import net.ihe.gazelle.hl7v3.datatypes.PN;
 import net.ihe.gazelle.hl7v3.mccimt000300UV01.MCCIMT000300UV01AcknowledgementDetail;
 import net.ihe.gazelle.hl7v3.prpamt201304UV02.PRPAMT201304UV02OtherIDs;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryQuery;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -31,13 +31,14 @@ import java.util.Objects;
 /**
  * Simplified model of a PIXV3 Query response (ITI-45).
  *
- * <p>It extends {@link PixV3QueryQuery} for convenience, as most properties are duplicated between both models.
+ * <p>It extends {@link PixV3QueryRequest} for convenience, as most properties are duplicated between both models.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PixV3QueryResponse extends PixV3QueryQuery {
+public class PixV3QueryResponse extends PixV3QueryRequest {
 
     /**
      * The acknowledgement type code, either "AA" (Application Accept) or "AE" (Application Error). It shall be
@@ -65,9 +66,9 @@ public class PixV3QueryResponse extends PixV3QueryQuery {
     private final List<II> patientIds = new ArrayList<>();
 
     /**
-     * The list of person names. At least one name shall be provided if data is found, the list is never {@code null}.
+     * The list of person names. Exactly one name shall be provided if data is found.
      */
-    private final List<PN> personNames = new ArrayList<>();
+    private PN personName;
 
     /**
      * The list of IDs associated with the person, not the patient. It may be empty but is never {@code null}.
@@ -104,13 +105,13 @@ public class PixV3QueryResponse extends PixV3QueryQuery {
     }
 
     /**
-     * Creates and prepopulate a {@link PixV3QueryResponse} from a {@link PixV3QueryQuery}. The receiver and sender
+     * Creates and prepopulate a {@link PixV3QueryResponse} from a {@link PixV3QueryRequest}. The receiver and sender
      * are inverted.
      *
      * @param query The query data.
      * @return the created response.
      */
-    public static PixV3QueryResponse fromQuery(final PixV3QueryQuery query) {
+    public static PixV3QueryResponse fromQuery(final PixV3QueryRequest query) {
         Objects.requireNonNull(query);
         final PixV3QueryResponse response = new PixV3QueryResponse();
         response.setQueryPatientId(query.getQueryPatientId());

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.core.requests;
 
 import lombok.Data;
 import net.ihe.gazelle.hl7v3.datatypes.II;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -26,9 +27,10 @@ import java.util.Set;
  * Simplified model of a PIXV3 Query query (ITI-45).
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 @Data
-public class PixV3QueryQuery {
+public class PixV3QueryRequest {
 
     /**
      * The patient identifier known to the PIX Consumer. It shall be provided.
@@ -68,7 +70,7 @@ public class PixV3QueryQuery {
     /**
      * Empty constructor.
      */
-    public PixV3QueryQuery() {
+    public PixV3QueryRequest() {
         this.setCreationTime(ZonedDateTime.now());
     }
 }

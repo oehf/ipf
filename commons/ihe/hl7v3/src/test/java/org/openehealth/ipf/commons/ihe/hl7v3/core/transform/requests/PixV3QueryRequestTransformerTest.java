@@ -1,11 +1,26 @@
+/*
+ * Copyright 2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests;
 
 import net.ihe.gazelle.hl7v3.datatypes.*;
 import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02Type;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.Device;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryQuery;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -19,13 +34,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PixV3QueryQueryTransformerTest {
+public class PixV3QueryRequestTransformerTest {
 
     @Test
     public void testTransform() throws Exception {
-        final PixV3QueryQueryTransformer transformer = new PixV3QueryQueryTransformer();
+        final PixV3QueryRequestTransformer transformer = new PixV3QueryRequestTransformer();
         final JAXBContext jaxbContext = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
-        final PixV3QueryQuery query = getSampleQuery();
+        final PixV3QueryRequest query = getSampleQuery();
 
         // Transform simple query to JAXB model
         final PRPAIN201309UV02Type prpain201309UV02Type = transformer.toPrpa(query);
@@ -45,7 +60,7 @@ public class PixV3QueryQueryTransformerTest {
                 (PRPAIN201309UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
 
         // Transform JAXB model to simple query
-        final PixV3QueryQuery parsedQuery = transformer.fromPrpa(parsedPrpain201309UV02Type);
+        final PixV3QueryRequest parsedQuery = transformer.fromPrpa(parsedPrpain201309UV02Type);
 
         // The two simple queries should be equal
         assertIiEquals(query.getQueryPatientId(), parsedQuery.getQueryPatientId());
@@ -72,8 +87,8 @@ public class PixV3QueryQueryTransformerTest {
         assertEquals(expectedIi.getExtension(), actualIi.getExtension());
     }
 
-    public static PixV3QueryQuery getSampleQuery() {
-        final PixV3QueryQuery query = new PixV3QueryQuery();
+    public static PixV3QueryRequest getSampleQuery() {
+        final PixV3QueryRequest query = new PixV3QueryRequest();
         query.setCreationTime(ZonedDateTime.now());
         query.getDataSourceOids().add("1.2.3");
         query.getDataSourceOids().add("7.8.9");

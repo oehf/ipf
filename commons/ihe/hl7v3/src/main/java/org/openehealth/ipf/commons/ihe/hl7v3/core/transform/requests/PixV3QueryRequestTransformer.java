@@ -28,18 +28,19 @@ import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02PatientIdentifier;
 import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02QueryByParameter;
 import net.ihe.gazelle.hl7v3.voc.*;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.Device;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryQuery;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Transformer between objects {@link PixV3QueryQuery} and {@link PRPAIN201309UV02Type}.
+ * Transformer between objects {@link PixV3QueryRequest} and {@link PRPAIN201309UV02Type}.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
-public class PixV3QueryQueryTransformer {
+public class PixV3QueryRequestTransformer {
 
     /**
      * Transforms a simplified query into the full PRPA model.
@@ -47,7 +48,7 @@ public class PixV3QueryQueryTransformer {
      * @param simpleQuery The simplified query to transform.
      * @return the PRPA model query or {@code null} if the input was {@code null}.
      */
-    public PRPAIN201309UV02Type toPrpa(final PixV3QueryQuery simpleQuery) {
+    public PRPAIN201309UV02Type toPrpa(final PixV3QueryRequest simpleQuery) {
         if (simpleQuery == null) {
             return null;
         }
@@ -103,12 +104,12 @@ public class PixV3QueryQueryTransformer {
      * @param query The full PRPA query to transform.
      * @return the simplified query or {@code null} if the input was {@code null}.
      */
-    public PixV3QueryQuery fromPrpa(final PRPAIN201309UV02Type query) {
+    public PixV3QueryRequest fromPrpa(final PRPAIN201309UV02Type query) {
         if (query == null) {
             return null;
         }
 
-        final PixV3QueryQuery simpleQuery = new PixV3QueryQuery();
+        final PixV3QueryRequest simpleQuery = new PixV3QueryRequest();
         simpleQuery.setMessageId(query.getId());
         simpleQuery.setSender(this.fromSender(query.getSender()));
         if (!query.getReceiver().isEmpty()) {

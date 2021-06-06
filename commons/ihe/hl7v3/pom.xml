@@ -12,15 +12,6 @@
         <version>4.1-SNAPSHOT</version>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>irisa-sumo</id>
-            <name>Sumo Irisa Public Maven Repository Group</name>
-            <url>https://gazelle.ihe.net/nexus/content/groups/public/</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
-    
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
@@ -45,17 +36,10 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <!-- Data models for HL7v3 -->
             <groupId>net.ihe.gazelle</groupId>
             <artifactId>hl7v3-code-jar</artifactId>
-            <version>1.3.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>saxon9he</groupId>
-                    <artifactId>net.sf.saxon</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.xmlunit</groupId>

@@ -1,4 +1,19 @@
-package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.reponses;
+/*
+ * Copyright 2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses;
 
 import net.ihe.gazelle.hl7v3.coctmt150003UV03.COCTMT150003UV03Organization;
 import net.ihe.gazelle.hl7v3.datatypes.*;
@@ -18,7 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryQueryTransformerTest.*;
+import static org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformerTest.*;
 
 public class PixV3QueryResponseTransformerTest {
 
@@ -69,7 +84,7 @@ public class PixV3QueryResponseTransformerTest {
                 parsedResponse.getAcknowledgementDetails().get(0).getText().mixed);
         assertEquals(response.getProviderOrganization().getName().get(0).mixed,
                 parsedResponse.getProviderOrganization().getName().get(0).mixed);
-        assertEquals(response.getPersonNames().get(0).mixed, parsedResponse.getPersonNames().get(0).mixed);
+        assertEquals(response.getPersonName().mixed, parsedResponse.getPersonName().mixed);
         assertIiEquals(response.getPersonIds().get(0), parsedResponse.getPersonIds().get(0));
         assertIiEquals(response.getAsOtherIDs().get(0).getId().get(0),
                 parsedResponse.getAsOtherIDs().get(0).getId().get(0));
@@ -85,8 +100,8 @@ public class PixV3QueryResponseTransformerTest {
         response.setProviderOrganization(new COCTMT150003UV03Organization());
         response.getProviderOrganization().getName().add(new ON());
         response.getProviderOrganization().getName().get(0).mixed = List.of("Provider Organization");
-        response.getPersonNames().add(new PN());
-        response.getPersonNames().get(0).mixed = List.of("Person Name");
+        response.setPersonName(new PN());
+        response.getPersonName().mixed = List.of("Person Name");
         response.getPersonIds().add(new II("76133761", "1.3.6.1.4.1.12559.11.25.1.19"));
         response.getAsOtherIDs().add(new PRPAMT201304UV02OtherIDs());
         response.getAsOtherIDs().get(0).setId(List.of(new II("1.2.840.114350.1.13", "38273N237")));

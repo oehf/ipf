@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.core.requests;
+package org.openehealth.ipf.commons.ihe.hl7v3.core.metadata;
 
 import lombok.Data;
 import net.ihe.gazelle.hl7v3.datatypes.*;
@@ -25,6 +25,7 @@ import java.util.List;
  * Simplified model of a device.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 @Data
 public class Device {

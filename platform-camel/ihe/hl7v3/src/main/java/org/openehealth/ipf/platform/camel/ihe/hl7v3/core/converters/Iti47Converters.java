@@ -21,62 +21,50 @@ import org.apache.camel.Converter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Camel type converters for HL7 PRPA models for ITI-47 transaction.
  *
  * @author Quentin Ligier
+ * @since 4.1
  */
 @Converter(generateLoader = true)
-public class Iti47Converters {
+public class Iti47Converters extends Hl7v3ConvertersBase {
 
-    private static final JAXBContext JAXB_CONTEXT_PRPA_QUERY;
+    private static final JAXBContext JAXB_CONTEXT_PRPA_REQUEST;
     private static final JAXBContext JAXB_CONTEXT_PRPA_RESPONSE;
     static {
         try {
-            JAXB_CONTEXT_PRPA_QUERY = JAXBContext.newInstance(PRPAIN201305UV02Type.class);
+            JAXB_CONTEXT_PRPA_REQUEST = JAXBContext.newInstance(PRPAIN201305UV02Type.class);
             JAXB_CONTEXT_PRPA_RESPONSE = JAXBContext.newInstance(PRPAIN201306UV02Type.class);
         } catch (final JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
 
+
+    /* --------------------- Requests --------------------- */
+
     @Converter
-    public static PRPAIN201305UV02Type xmlToPrpaQuery(final String xml) throws JAXBException {
-        final Unmarshaller unmarshaller = JAXB_CONTEXT_PRPA_QUERY.createUnmarshaller();
-        return (PRPAIN201305UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+    public static PRPAIN201305UV02Type xmlToPrpaRequest(final String xml) throws JAXBException {
+        return fromXml(xml, JAXB_CONTEXT_PRPA_REQUEST);
     }
 
     @Converter
-    public static String prpaQueryToXml(final PRPAIN201305UV02Type query) throws JAXBException {
-        final Marshaller marshaller = JAXB_CONTEXT_PRPA_QUERY.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
-        marshaller.marshal(query, stringWriter);
-        return stringWriter.toString();
+    public static String prpaRequestToXml(final PRPAIN201305UV02Type request) throws JAXBException {
+        return toXml(request, JAXB_CONTEXT_PRPA_REQUEST);
     }
+
+
+    /* --------------------- Responses --------------------- */
 
     @Converter
     public static PRPAIN201306UV02Type xmlToPrpaResponse(final String xml) throws JAXBException {
-        final Unmarshaller unmarshaller = JAXB_CONTEXT_PRPA_RESPONSE.createUnmarshaller();
-        return (PRPAIN201306UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        return fromXml(xml, JAXB_CONTEXT_PRPA_RESPONSE);
     }
 
     @Converter
     public static String prpaResponseToXml(final PRPAIN201306UV02Type response) throws JAXBException {
-        final Marshaller marshaller = JAXB_CONTEXT_PRPA_RESPONSE.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
-        marshaller.marshal(response, stringWriter);
-        return stringWriter.toString();
+        return toXml(response, JAXB_CONTEXT_PRPA_RESPONSE);
     }
 }
