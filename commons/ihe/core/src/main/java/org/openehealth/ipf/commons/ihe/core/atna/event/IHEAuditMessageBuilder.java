@@ -124,7 +124,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
 
     /**
      * @return the remote AltUserId. Usually null, except for ITI-43 where there is
-     * an error in the spec
+     * an error in the spec; the value is inserted by Iti43ServerAuditStrategy.
      */
     protected String getRemoteAltUserId() {
         return null;
