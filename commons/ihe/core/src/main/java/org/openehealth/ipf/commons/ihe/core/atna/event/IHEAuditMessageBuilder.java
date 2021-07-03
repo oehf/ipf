@@ -106,7 +106,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     auditDataset.getSourceUserId() != null ?
                             auditDataset.getSourceUserId() :
                             auditContext.getAuditValueIfMissing(),
-                    getRemoteAltUserId(),
+                    null,
                     auditDataset.getSourceUserName(),
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isSourceUserIsRequestor());
@@ -115,19 +115,11 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     auditDataset.getDestinationUserId() != null ?
                             auditDataset.getDestinationUserId() :
                             auditContext.getAuditValueIfMissing(),
-                    getRemoteAltUserId(),
+                    null,
                     null,
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isDestinationUserIsRequestor());
         return self();
-    }
-
-    /**
-     * @return the remote AltUserId. Usually null, except for ITI-43 where there is
-     * an error in the spec; the value is inserted by Iti43ServerAuditStrategy.
-     */
-    protected String getRemoteAltUserId() {
-        return null;
     }
 
     protected final T addHumanRequestor(AuditDataset auditDataset) {

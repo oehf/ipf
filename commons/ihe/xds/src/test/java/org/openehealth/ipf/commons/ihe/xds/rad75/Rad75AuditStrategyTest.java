@@ -17,7 +17,11 @@
 package org.openehealth.ipf.commons.ihe.xds.rad75;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
@@ -54,7 +58,7 @@ public class Rad75AuditStrategyTest extends XdsAuditorTestBase {
                 EventOutcomeIndicator.Success,
                 serverSide ? EventIdCode.DICOMInstancesTransferred: EventIdCode.DICOMInstancesAccessed,
                 serverSide ? EventActionCode.Read : EventActionCode.Create,
-                serverSide,
+                !serverSide,
                 true);
 
         assertEquals(3, auditMessage.findParticipantObjectIdentifications(

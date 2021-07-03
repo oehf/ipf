@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -28,7 +28,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
 public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
 
     public XdsRetrieveAuditStrategy30(boolean serverSide) {
-        super(serverSide);
+        // These transactions define source and destination in reverse direction, so we need to 
+        // toggle server side indicator
+        super(!serverSide);
     }
 
     /**
@@ -40,8 +42,6 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
         var auditDataset = super.createAuditDataset();
-        // This is also an error in the spec.
-        auditDataset.setSourceUserIsRequestor(false);
         return auditDataset;
     }
 
@@ -59,11 +59,6 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
             }
         }
 
-        // These transactions define source and destination userID the inverted way. This could be a
-        // specification mistake.
-        var sourceUserId = auditDataset.getSourceUserId();
-        auditDataset.setSourceUserId(auditDataset.getDestinationUserId());
-        auditDataset.setDestinationUserId(sourceUserId);
         return true;
     }
 

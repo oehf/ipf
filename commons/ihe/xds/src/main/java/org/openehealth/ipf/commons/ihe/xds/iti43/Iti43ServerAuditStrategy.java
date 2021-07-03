@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.iti43;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.codes.XdsEventTypeCode;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.event.XdsPHIExportBuilder;
 
@@ -42,13 +42,7 @@ public class Iti43ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         return Stream.of(Status.values())
                 .filter(auditDataset::hasDocuments)
-                .map((Status s) -> {
-                    final var auditMessage = doMakeAuditMessage(auditContext, auditDataset, s);
-                    // Fix the @AlternativeUserID (the process ID) that shall go into the source, not the destination
-                    auditMessage.getActiveParticipants().get(0).setAlternativeUserID(AuditUtils.getProcessId());
-                    auditMessage.getActiveParticipants().get(1).setAlternativeUserID(null);
-                    return auditMessage;
-                })
+                .map(s -> doMakeAuditMessage(auditContext, auditDataset, s))
                 .toArray(AuditMessage[]::new);
     }
 
