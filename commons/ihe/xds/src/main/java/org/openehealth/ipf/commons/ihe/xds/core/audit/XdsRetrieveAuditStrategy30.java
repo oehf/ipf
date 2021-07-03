@@ -42,6 +42,8 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset createAuditDataset() {
         var auditDataset = super.createAuditDataset();
+        // This is also an error in the spec.
+        auditDataset.setSourceUserIsRequestor(false);
         return auditDataset;
     }
 
@@ -59,6 +61,11 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
             }
         }
 
+        // These transactions define source and destination userID the inverted way. This could be a
+        // specification mistake.
+        var sourceUserId = auditDataset.getSourceUserId();
+        auditDataset.setSourceUserId(auditDataset.getDestinationUserId());
+        auditDataset.setDestinationUserId(sourceUserId);
         return true;
     }
 
