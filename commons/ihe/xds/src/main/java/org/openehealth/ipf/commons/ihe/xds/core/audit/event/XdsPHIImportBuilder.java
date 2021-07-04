@@ -98,12 +98,4 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                                 studyInstanceIds[i], xcaHomeCommunityId)));
         return self();
     }
-
-    /**
-     * @return "missing". ITI-43 makes the remote alt user ID mandatory and so does the EVS validator
-     */
-    @Override
-    protected String getRemoteAltUserId() {
-        return getAuditContext().getAuditValueIfMissing();
-    }
 }

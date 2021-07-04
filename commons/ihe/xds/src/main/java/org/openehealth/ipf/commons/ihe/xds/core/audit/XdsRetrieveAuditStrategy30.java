@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -28,7 +28,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
 public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
 
     public XdsRetrieveAuditStrategy30(boolean serverSide) {
-        super(serverSide);
+        // These transactions define source and destination in reverse direction, so we need to 
+        // toggle server side indicator
+        super(!serverSide);
     }
 
     /**
