@@ -23,7 +23,48 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.0.0" description="IPF 4.0.0" date="17 Apr 2020">
+        <release version="4.1.0" description="IPF 4.1.0" date="XX Jul 2021">
+            <action dev="thopap" type="update">
+                Various dependency updates
+            </action>
+            <action issue="356" dev="qligier" type="fix">
+                Fix ITI-43 server audit message
+            </action>
+            <action issue="355" dev="qligier" type="add">
+                Introduce message model classes for PIX Query v3
+            </action>
+            <action issue="353" dev="unixoid" type="fix">
+                Implement CP-ITI-1218: patient ID optionality in XCDR
+            </action>
+            <action issue="350" dev="ohr" type="fix">
+                Fixes required for ActiveMQ Artemis
+            </action>
+            <action issue="347" dev="ohr" type="fix">
+                Avoid NPE on AuditMessage validation
+            </action>
+            <action issue="345" dev="thopap" type="update">
+                Update SDTC schema extension (used in context of CCDA schema)
+            </action>
+            <action issue="344" dev="ohr" type="add">
+                CXF interceptor for removing sensitive information from outgoing SOAP faults
+            </action>
+            <action issue="343" dev="ohr" type="fix">
+                Fix NPEs when creating audit records for FHIR transactions
+            </action>
+            <action issue="342" dev="ohr" type="add">
+                Introduce STRICT/LENIENT options for certain FHIR transactions
+            </action>
+            <action issue="341" dev="ohr" type="fix">
+                Fix method declarations in HL7 v2-v3 translators
+            </action>
+            <action issue="340" dev="thopap" type="fix">
+                Fixed audit record generation for ITI-18 GetAll query
+            </action>
+            <action issue="338" dev="stanojevic-boris" type="add">
+                New ITI-18 query type FindDocumentsByTitle (defined by GEMATIK)
+            </action>
+        </release>
+        <release version="4.0.0" description="IPF 4.0.0" date="22 Dec 2020">
             <action dev="ohr"  type="update">
                 Updated to Groovy 3.0.7. Metaprogramming has changed a bit, please read migration guide
             </action>
