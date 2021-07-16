@@ -29,7 +29,7 @@ import javax.xml.namespace.QName;
 public class UnknownVersionException extends SoapFault {
 
     public UnknownVersionException() {
-        super("Version unknown", Soap12.getInstance().getReceiver());
+        super("Version unknown", Soap12.getInstance().getSender());
         this.setSubCode(new QName(null, "VERUNK"));
     }
 }

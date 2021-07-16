@@ -29,7 +29,7 @@ import javax.xml.namespace.QName;
 public class UnknownValueSetException extends SoapFault {
 
     public UnknownValueSetException() {
-        super("Unknown value set", Soap12.getInstance().getReceiver());
+        super("Unknown value set", Soap12.getInstance().getSender());
         this.setSubCode(new QName(null, "NAV"));
     }
 }

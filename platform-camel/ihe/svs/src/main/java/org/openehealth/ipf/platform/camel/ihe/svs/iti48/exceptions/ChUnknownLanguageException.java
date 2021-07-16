@@ -32,7 +32,7 @@ public class ChUnknownLanguageException extends SoapFault {
     public ChUnknownLanguageException(final String language) {
         super(
                 String.format("Language '%s' not supported", language),
-                Soap12.getInstance().getReceiver()
+                Soap12.getInstance().getSender()
         );
         this.setSubCode(new QName(null, "LANGUNK"));
     }
