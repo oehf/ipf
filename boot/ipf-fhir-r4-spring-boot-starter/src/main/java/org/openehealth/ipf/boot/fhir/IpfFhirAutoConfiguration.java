@@ -22,8 +22,9 @@ import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IServerConformanceProvider;
-import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
-import org.hl7.fhir.r4.model.CapabilityStatement;
+import ca.uhn.fhir.rest.server.RestfulServerConfiguration;
+import ca.uhn.fhir.rest.server.provider.ServerCapabilityStatementProvider;
+import org.hl7.fhir.instance.model.api.IBaseConformance;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
@@ -43,6 +44,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -101,8 +103,15 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IServerConformanceProvider.class)
-    public IServerConformanceProvider<CapabilityStatement> serverConformanceProvider() {
-        return new ServerCapabilityStatementProvider();
+    public IServerConformanceProvider<IBaseConformance> serverConformanceProvider(FhirContext fhirContext,
+            RestfulServerConfiguration theServerConfiguration) {
+        return new ServerCapabilityStatementProvider(fhirContext, theServerConfiguration);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RestfulServerConfiguration.class)
+    public RestfulServerConfiguration serverConfiguration() {
+        return new RestfulServerConfiguration();
     }
 
     @Bean
@@ -134,7 +143,7 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
-            IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
+            IServerConformanceProvider<IBaseConformance> serverConformanceProvider,
             ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {

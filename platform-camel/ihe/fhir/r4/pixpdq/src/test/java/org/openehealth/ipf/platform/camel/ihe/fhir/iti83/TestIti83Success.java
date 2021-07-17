@@ -17,11 +17,17 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import org.hl7.fhir.r4.model.CapabilityStatement;
+import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestResourceOperationComponent;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventIdCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
@@ -29,7 +35,9 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -49,7 +57,9 @@ public class TestIti83Success extends AbstractTestIti83 {
 
         assertEquals(1, conf.getRest().size());
         var component = conf.getRest().iterator().next();
-        var operation = component.getOperation().iterator().next();
+        CapabilityStatementRestResourceOperationComponent operation = component.getResource().stream()
+                .filter(resource -> "Patient".equals(resource.getType()))
+                .flatMap(resource -> resource.getOperation().stream()).findFirst().get();
         assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());
 
         // printAsXML(conf);
