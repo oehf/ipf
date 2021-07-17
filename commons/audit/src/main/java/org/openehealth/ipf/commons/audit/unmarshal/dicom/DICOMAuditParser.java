@@ -256,6 +256,7 @@ public class DICOMAuditParser implements AuditParser {
 
     private static Document useSAXParser(Reader reader, boolean validate) throws JDOMException, IOException {
         var saxBuilder = validate ? new SAXBuilder(XSD_FACTORY) : new SAXBuilder();
+        saxBuilder.setExpandEntities(false);
         return saxBuilder.build(reader);
     }
 }
