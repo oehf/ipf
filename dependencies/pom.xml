@@ -15,7 +15,7 @@
         <commons-compress-version>1.21</commons-compress-version>
         <commons-io-version>2.11.0</commons-io-version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
-        <groovy-version>3.0.7</groovy-version>
+        <groovy-version>3.0.8</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.4.2</hapi-fhir-version>
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
