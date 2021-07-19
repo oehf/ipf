@@ -121,7 +121,7 @@ class Hl7TranslationTestContainer {
                 .compare(Input.fromString(expectedV3response))
                 .withTest(translatedV3response)
                 .normalizeWhitespace()
-                .build();
+                .build()
         assert diff.differences.size() == 1
         assert diff.toString().contains('creationTime')
     }
@@ -139,7 +139,7 @@ class Hl7TranslationTestContainer {
                 .compare(Input.fromString(expectedV3response))
                 .withTest(translatedV3response)
                 .normalizeWhitespace()
-                .build();
+                .build()
         assert diff.differences.size() == 1
         assert diff.toString().contains('creationTime')
     }

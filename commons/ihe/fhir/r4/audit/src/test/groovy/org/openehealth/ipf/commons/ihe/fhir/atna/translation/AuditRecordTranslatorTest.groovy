@@ -36,7 +36,7 @@ import java.time.Instant
 @Slf4j
 class AuditRecordTranslatorTest {
 
-    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4()
 
     static MappingService mappingService
 
@@ -56,8 +56,8 @@ class AuditRecordTranslatorTest {
         def auditMessage = createAuditMessage1()
         log.debug('ATNA Record:\n{}\n', auditMessage.toString())
 
-        AuditRecordTranslator translator = new AuditRecordTranslator();
-        AuditEvent auditEvent = translator.translate(auditMessage);
+        AuditRecordTranslator translator = new AuditRecordTranslator()
+        AuditEvent auditEvent = translator.translate(auditMessage)
         log.debug('FHIR Resource:\n{}\n', FHIR_CONTEXT.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEvent))
     }
 

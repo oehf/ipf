@@ -37,7 +37,7 @@ class MessageTracerTest {
 
     @Test
     void traceMessage() {
-        MockReporter reporter = new MockReporter();
+        MockReporter reporter = new MockReporter()
         Tracing tracing = Tracing.newBuilder()
                 .localServiceName('MessageTracerTest')
                 .spanReporter(reporter)
@@ -73,11 +73,11 @@ class MessageTracerTest {
 
     private static final class MockReporter implements Reporter<zipkin2.Span> {
 
-        private List<zipkin2.Span> spans = new ArrayList<>();
+        private List<zipkin2.Span> spans = new ArrayList<>()
 
         @Override
         void report(zipkin2.Span span) {
-            spans.add(span);
+            spans.add(span)
         }
 
         List<zipkin2.Span> getSpans() {
