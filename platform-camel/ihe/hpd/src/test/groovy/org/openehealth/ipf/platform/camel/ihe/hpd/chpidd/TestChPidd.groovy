@@ -16,9 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -41,7 +40,7 @@ class TestChPidd extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         /*
         System.setProperty('javax.net.ssl.keyStore',            );

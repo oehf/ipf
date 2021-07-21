@@ -18,13 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.http.common.HttpOperationFailedException;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -33,7 +31,7 @@ public class TestIti68Error extends AbstractTestIti68 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-68-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }

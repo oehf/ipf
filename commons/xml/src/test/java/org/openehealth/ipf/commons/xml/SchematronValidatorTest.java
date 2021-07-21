@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Christian Ohr
@@ -32,7 +32,7 @@ public class SchematronValidatorTest {
 
     private SchematronValidator v;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         v = new SchematronValidator();
     }

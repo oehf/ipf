@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.ebxml30;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformerTestBase;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link AssociationTransformer}.
@@ -36,7 +36,7 @@ public class AssociationTransformerTest extends AssociationTransformerTestBase {
     }
 
     @Override
-    @Before
+    @BeforeEach
     public void baseSetUp() {
         super.baseSetUp();
         association.setAvailabilityStatus(AvailabilityStatus.APPROVED);

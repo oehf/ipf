@@ -16,7 +16,9 @@
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
 import ca.uhn.hl7v2.HL7Exception;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Kingsley Nwaigbo
@@ -32,10 +34,10 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
                                "EN^English^ISO659^en-US^US English^ISO659^1.0^2.8^Some text"));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingCWE2() throws HL7Exception {
-        validate(maxMsgReplace("EN^English^ISO659",
-                               "EN^^ISO659^en-US^US English^ISO659^1.0^2.8^Some text"));
+    @Test
+    public void testMissingCWE2() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("EN^English^ISO659",
+                "EN^^ISO659^en-US^US English^ISO659^1.0^2.8^Some text")));
     }
 
     @Test
@@ -44,35 +46,34 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
                                "111222333444^6430^M11^Imaginary Hospital&1.3.4.565&ISO^PI^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4"));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingCX1() throws HL7Exception {
-        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
-                               "^6430^M11^Imaginary Hospital&1.3.4.565&ISO^PI^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4"));
+    @Test
+    public void testMissingCX1() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                "^6430^M11^Imaginary Hospital&1.3.4.565&ISO^PI^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingCX4() throws HL7Exception {
-        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
-                               "111222333444^6430^M11^^PI^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4"));
+    @Test
+    public void testMissingCX4() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                "111222333444^6430^M11^^PI^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingCX5() throws HL7Exception {
-        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
-                               "111222333444^6430^M11^Imaginary Hospital&1.3.4.565&ISO^^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4"));
+    @Test
+    public void testMissingCX5() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                "111222333444^6430^M11^Imaginary Hospital&1.3.4.565&ISO^^AssigningFac&3.4.5.6&ISO^20090713^20090713^Ju01&test&test2^Ag01&test3&test4")));
     }
 
-
-    @Test(expected = HL7Exception.class)
-    public void testMissingEI1() throws HL7Exception {
-        validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
-                               "^HL7^2.16.840.1.113883.9.n.m^ISO"));
+    @Test
+    public void testMissingEI1() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
+                "^HL7^2.16.840.1.113883.9.n.m^ISO")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingEI2_3_4() throws HL7Exception {
-        validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
-                               "IHE PCD ORU-R01 2006"));
+    @Test
+    public void testMissingEI2_3_4() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
+                "IHE PCD ORU-R01 2006")));
     }
 
     @Test
@@ -81,16 +82,16 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
                                "IHE PCD ORU-R01 2006^^1.3.6.1.4.1.19376.1.6.1.1.1^ISO"));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testWrongISOFormatInEI3() throws HL7Exception {
-        validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
-                               "IHE PCD ORU-R01 2006^^2.16.840.1.113883.9.n.m^ISO"));
+    @Test
+    public void testWrongISOFormatInEI3() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
+                "IHE PCD ORU-R01 2006^^2.16.840.1.113883.9.n.m^ISO")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testWrongEUI64FormatInEI3() throws HL7Exception {
-        validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
-                               "IHE PCD ORU-R01 2006^^2.16.840.1.113883.9n-zzzz.ww.yy^EUI-64"));
+    @Test
+    public void testWrongEUI64FormatInEI3() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("IHE PCD ORU-R01 2006^HL7^1.3.6.1.4.1.19376.1.6.1.1.1^ISO",
+                "IHE PCD ORU-R01 2006^^2.16.840.1.113883.9n-zzzz.ww.yy^EUI-64")));
     }
 
     @Test
@@ -117,9 +118,9 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
         validate(maxMsgReplace("|Doe^John^Joseph^^^^L^A|", "|Doe^^^^^^L|"));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingXPN7() throws HL7Exception {
-        validate(maxMsgReplace("|Doe^John^Joseph^^^^L^A|", "|Doe|"));
+    @Test
+    public void testMissingXPN7() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("|Doe^John^Joseph^^^^L^A|", "|Doe|")));
     }
 
     @Test
@@ -134,16 +135,16 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
                                "^NET^X.400^wan@continua.com^001^760^123456^02^Any text^GA"));
     }
 
-    @Test(expected = HL7Exception.class)
+    @Test
     public void testMissingXTN2() throws HL7Exception {
-        validate(maxMsgReplace("^PRN^PH^^^^123456",
-                               "^^PH^wan@continua.com^001^760^123456^02^Any text^GA"));
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("^PRN^PH^^^^123456",
+                "^^PH^wan@continua.com^001^760^123456^02^Any text^GA")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingXTN3() throws HL7Exception {
-        validate(maxMsgReplace("^PRN^PH^^^^123456",
-                               "^NET^^wan@continua.com^001^760^123456^02^Any text^GA"));
+    @Test
+    public void testMissingXTN3() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("^PRN^PH^^^^123456",
+                "^NET^^wan@continua.com^001^760^123456^02^Any text^GA")));
     }
 
 }

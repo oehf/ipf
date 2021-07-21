@@ -15,29 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
-import org.apache.camel.AggregationStrategy;
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Expression;
-import org.apache.camel.Processor;
+import org.apache.camel.*;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.util.ObjectHelper;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -49,12 +39,12 @@ public class SplitterTest {
     private Splitter splitter;
     private TestProcessor dest;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         camelContext = new DefaultCamelContext();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         var splitRule = new TestSplitRule();
         var aggregationStrat = new TestAggregationStrategy();
@@ -79,9 +69,9 @@ public class SplitterTest {
         assertEquals("bla:blu", origExchange.getMessage().getBody());
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testForNullSafeConstructor() {
-        splitter = new Splitter(null, dest);
+        assertThrows(IllegalArgumentException.class, () -> new Splitter(null, dest));
     }
     
     @Test

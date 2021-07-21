@@ -15,19 +15,17 @@
  */
 package org.openehealth.ipf.modules.hl7.parser;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import ca.uhn.hl7v2.HL7Exception;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/context-custom-configurer.xml",
 		"/context-custom-classes.xml" })
 public class GroovyCustomModelClassFactoryTest {

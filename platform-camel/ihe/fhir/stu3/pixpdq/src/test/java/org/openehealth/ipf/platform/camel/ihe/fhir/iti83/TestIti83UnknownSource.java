@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -30,18 +32,20 @@ public class TestIti83UnknownSource extends AbstractTestIti83 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-83-unknown-source.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
+    @Test
     public void testSendManualPixm() {
-        try {
-            sendManuallyOnType(validQueryParameters());
-        } catch (InvalidRequestException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
-        }
+        assertThrows(InvalidRequestException.class, ()->{
+            try {
+                sendManuallyOnType(validQueryParameters());
+            } catch (InvalidRequestException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
+            }
+        });
     }
 
 

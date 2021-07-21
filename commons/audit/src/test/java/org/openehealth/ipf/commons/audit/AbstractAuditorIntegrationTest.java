@@ -17,8 +17,8 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -71,7 +71,7 @@ abstract class AbstractAuditorIntegrationTest {
         return tlsParameters;
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         p = System.getProperties();
         port = freePort();
@@ -81,7 +81,7 @@ abstract class AbstractAuditorIntegrationTest {
         auditContext.setAuditEnabled(true);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         System.setProperties(p);
     }

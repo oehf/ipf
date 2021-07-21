@@ -16,11 +16,11 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.core.responses;
 
 import net.ihe.gazelle.hl7v3.datatypes.II;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PixV3QueryResponseTest {
 

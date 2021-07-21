@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for {@link ResponseTransformer}.
@@ -31,7 +35,7 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     private ResponseTransformer transformer;
     private Response response;
 
-    @Before
+    @BeforeEach
     public void baseSetUp() {
         var factory = createFactory();
         transformer = new ResponseTransformer(factory);

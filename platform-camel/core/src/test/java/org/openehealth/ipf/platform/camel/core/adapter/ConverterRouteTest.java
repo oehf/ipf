@@ -15,20 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.camel.ExchangePattern;
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 
+import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.camel.ExchangePattern;
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**

@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-import org.openehealth.ipf.platform.camel.core.process.splitter.SplitIndex;
-import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 /**
@@ -40,14 +40,14 @@ public class SplitIndexTest {
         var index2 = SplitIndex.valueOf(5, false);
         var index3 = SplitIndex.valueOf(4, true);
         
-        assertTrue("Should be equal", index1a.equals(index1b));
-        assertFalse("Should not be equal", index1a.equals(index2));
-        assertFalse("Should not be equal", index1a.equals(index3));
+        assertTrue(index1a.equals(index1b), "Should be equal");
+        assertFalse(index1a.equals(index2), "Should not be equal");
+        assertFalse(index1a.equals(index3), "Should not be equal");
         
-        assertFalse("Null is never equal", index1a.equals(null));
-        assertFalse("Unrelated class is never equal", index1a.equals(this));
+        assertFalse(index1a.equals(null), "Null is never equal");
+        assertFalse(index1a.equals(this), "Unrelated class is never equal");
         
-        assertTrue("Same instances should be equal", index1a.equals(index1a));
+        assertTrue(index1a.equals(index1a), "Same instances should be equal");
     }
     
     @Test
@@ -68,8 +68,8 @@ public class SplitIndexTest {
     public void testToString() {
         var index = SplitIndex.valueOf(14, true);
         var str = index.toString();
-        assertTrue("Class name missing", str.contains(Splitter.class.getName()));
-        assertTrue("index missing", str.contains("14"));
-        assertTrue("last flag missing", str.contains("true"));
+        assertTrue(str.contains(Splitter.class.getName()), "Class name missing");
+        assertTrue(str.contains("14"), "index missing");
+        assertTrue(str.contains("true"), "last flag missing");
     }
 }

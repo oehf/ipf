@@ -20,8 +20,8 @@ import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.support.DefaultExchange
 import org.apache.commons.io.IOUtils
-import org.junit.After
-import org.junit.AfterClass
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
@@ -98,14 +98,14 @@ class StandardTestContainer {
     }
 
 
-    @AfterClass
+    @AfterAll
     static void stopServer() {
         if (servletServer != null) {
             servletServer.stop()
         }
     }
 
-    @After
+    @AfterEach
     void tearDown() {
         if (servletServer == null) {
             String msg = "The test server is not started!\n"

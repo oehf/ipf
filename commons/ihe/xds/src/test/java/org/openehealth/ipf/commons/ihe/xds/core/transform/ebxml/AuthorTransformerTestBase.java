@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
+import ca.uhn.hl7v2.model.v25.datatype.XCN;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import java.util.Arrays;
 
-import ca.uhn.hl7v2.model.v25.datatype.XCN;
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link AuthorTransformer}.
@@ -34,7 +34,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
     private EbXMLObjectLibrary objectLibrary;
     private Author author;
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
         transformer = new AuthorTransformer(factory);

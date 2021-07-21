@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
@@ -42,7 +42,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         this.homeAware = homeAware;
     }
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
         transformer = new SubmissionSetTransformer(factory);

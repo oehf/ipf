@@ -16,10 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+
+import static org.junit.jupiter.api.Assertions.assertThrows
 
 /**
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
@@ -33,7 +35,7 @@ class TestSecureIti8 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -46,14 +48,14 @@ class TestSecureIti8 extends MllpTestContainer {
         assertACK(msg)
     }
     
-    @Test(expected=Exception)
+    @Test
     void testUnsecureProducer() {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def endpointUri = "xds-iti8://localhost:18087?timeout=${TIMEOUT}"
-        send(endpointUri, body)
+        assertThrows(Exception.class, ()-> send(endpointUri, body));
     }
 
-    @Test @Ignore("ignore until TLS problems are solved")
+    @Test @Disabled("ignore until TLS problems are solved")
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters&timeout=${TIMEOUT}"
@@ -61,10 +63,10 @@ class TestSecureIti8 extends MllpTestContainer {
         assertACK(msg)
     }
 
-    @Test(expected=Exception)
+    @Test
     void testSecureEndpointWithCamelJsseConfigClientFails() {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def endpointUri = "xds-iti8://localhost:18088?timeout=${TIMEOUT}"
-        send(endpointUri, body)
+        assertThrows(Exception.class, ()-> send(endpointUri, body));
     }
 }

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -62,14 +62,14 @@ public class AuditorTestBase {
     protected DefaultAuditContext auditContext;
     protected RecordingAuditMessageQueue recorder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         auditContext = new DefaultAuditContext();
         recorder = new RecordingAuditMessageQueue();
         auditContext.setAuditMessageQueue(recorder);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         recorder.clear();
     }

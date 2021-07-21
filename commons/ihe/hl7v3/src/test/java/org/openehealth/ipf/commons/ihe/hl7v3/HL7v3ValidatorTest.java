@@ -16,7 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.helpers.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
@@ -30,12 +31,12 @@ public class HL7v3ValidatorTest {
         validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
 	}
 	
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testValidateError() throws Exception {
 		var message = IOUtils.readStringFromStream(
                 getClass().getResourceAsStream("/xsd/prpa-invalid.xml"));
 		var validator = new CombinedXmlValidator();
-        validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
+		Assertions.assertThrows(ValidationException.class, () -> validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile()));
 	}
 
 	/**
@@ -63,22 +64,22 @@ public class HL7v3ValidatorTest {
 	/**
 	 * With namespace prefix, wrong value.
 	 */
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testQnameComparisonNsWrong() throws Exception {
 		var message = IOUtils.readStringFromStream(
 				getClass().getResourceAsStream("/validation/type-ns-wrong.xml"));
 		var validator = new CombinedXmlValidator();
-		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+		Assertions.assertThrows(ValidationException.class, () -> validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile()));
 	}
 
 	/**
 	 * Without namespace prefix, wrong value.
 	 */
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testQnameComparisonNoNsWrong() throws Exception {
 		var message = IOUtils.readStringFromStream(
 				getClass().getResourceAsStream("/validation/type-nons-wrong.xml"));
 		var validator = new CombinedXmlValidator();
-		validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile());
+		Assertions.assertThrows(ValidationException.class, () -> validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile()));
 	}
 }

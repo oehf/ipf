@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
@@ -29,8 +29,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_41;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
@@ -45,7 +45,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
 
     private DocumentEntry docEntry;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new ProvideAndRegisterDocumentSetRequestValidator();
         EbXMLFactory factory = new EbXMLFactory30();

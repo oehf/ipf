@@ -15,15 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiComponent
+
 import javax.management.MBeanServer
 import javax.management.ObjectInstance
 import javax.management.ObjectName
-import org.apache.camel.CamelContext
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiComponent
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertNotNull
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
+
 
 class ManagedMllpItiEndpointTest extends MllpTestContainer {
 
@@ -33,7 +35,7 @@ class ManagedMllpItiEndpointTest extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }

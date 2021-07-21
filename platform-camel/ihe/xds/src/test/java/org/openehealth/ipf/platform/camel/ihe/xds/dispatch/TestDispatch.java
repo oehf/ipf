@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestDispatch extends XdsStandardTestContainer {
     
@@ -35,7 +35,7 @@ public class TestDispatch extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8888);
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }

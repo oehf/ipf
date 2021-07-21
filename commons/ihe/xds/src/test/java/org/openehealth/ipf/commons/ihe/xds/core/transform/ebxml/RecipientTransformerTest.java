@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link RecipientTransformer}.
@@ -29,7 +29,7 @@ public class RecipientTransformerTest {
     private RecipientTransformer transformer;
     private Recipient recipient;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new RecipientTransformer();
 

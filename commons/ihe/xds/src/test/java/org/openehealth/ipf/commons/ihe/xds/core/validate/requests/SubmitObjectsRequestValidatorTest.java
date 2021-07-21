@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlot30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
@@ -30,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
@@ -48,7 +51,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     private DocumentEntry docEntry;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new SubmitObjectsRequestValidator();
         factory = new EbXMLFactory30();
@@ -431,9 +434,10 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(EMPTY_SLOT_VALUE, ebXML);
     }
 
-    @Test(expected = XDSMetaDataException.class)
+    @Test
     public void testInvalidTime() {
-        docEntry.setCreationTime("lol");
+        Assertions.assertThrows(XDSMetaDataException.class, () ->
+                docEntry.setCreationTime("lol"));
     }
 
     @Test

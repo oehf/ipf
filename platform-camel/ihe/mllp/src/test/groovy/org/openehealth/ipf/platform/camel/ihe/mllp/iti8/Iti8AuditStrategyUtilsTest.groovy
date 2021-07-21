@@ -18,15 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti8.Iti8AuditStrategyUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertNull
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNull
 
 /**
  *

@@ -23,12 +23,11 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.junit.Assert;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -69,14 +68,14 @@ public class FhirTestContainer extends StandardTestContainer {
         // Hmm, I wonder if this could not be done automatically...
         var parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
         var oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
-        Assert.assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
-        Assert.assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
+        assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
+        assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
         var sender = getAuditSender();
-        Assert.assertEquals(1, sender.getMessages().size());
+        assertEquals(1, sender.getMessages().size());
         var event = sender.getMessages().get(0);
-        Assert.assertEquals(EventOutcomeIndicator.MajorFailure,
+        assertEquals(EventOutcomeIndicator.MajorFailure,
                 event.getEventIdentification().getEventOutcomeIndicator());
 
         throw e;

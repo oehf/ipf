@@ -19,9 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 import ca.uhn.fhir.rest.param.*
 import org.easymock.EasyMock
 import org.hl7.fhir.r4.model.IdType
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.URN
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
@@ -32,15 +31,16 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 
+import static org.junit.jupiter.api.Assertions.assertEquals
 /**
  *
  */
-class PdqmRequestToPdqQueryTranslatorTest extends Assert {
+class PdqmRequestToPdqQueryTranslatorTest {
 
     private PdqmRequestToPdqQueryTranslator translator
     MappingService mappingService
 
-    @Before
+    @BeforeEach
     void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScripts( [ getClass().getResource('/mapping.map'),

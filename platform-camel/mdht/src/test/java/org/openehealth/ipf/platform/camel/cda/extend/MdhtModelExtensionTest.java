@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.springframework.test.context.ContextConfiguration;
-import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Christian Ohr

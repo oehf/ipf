@@ -20,7 +20,7 @@ import net.ihe.gazelle.hl7v3.datatypes.*;
 import net.ihe.gazelle.hl7v3.mccimt000300UV01.MCCIMT000300UV01AcknowledgementDetail;
 import net.ihe.gazelle.hl7v3.prpain201310UV02.PRPAIN201310UV02Type;
 import net.ihe.gazelle.hl7v3.prpamt201304UV02.PRPAMT201304UV02OtherIDs;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
 
@@ -32,7 +32,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformerTest.*;
 
 public class PixV3QueryResponseTransformerTest {

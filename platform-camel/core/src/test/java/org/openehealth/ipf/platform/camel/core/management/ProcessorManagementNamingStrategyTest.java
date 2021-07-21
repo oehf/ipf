@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.core.management;
 
-import static org.junit.Assert.assertNotNull;
+import org.apache.camel.CamelContext;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.apache.camel.CamelContext;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Reinhard Luft
@@ -37,7 +37,7 @@ public class ProcessorManagementNamingStrategyTest {
 
     private static ClassPathXmlApplicationContext appContext;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpContext() {
 
         appContext = new ClassPathXmlApplicationContext(CONTEXT);
@@ -53,7 +53,7 @@ public class ProcessorManagementNamingStrategyTest {
         assertNotNull(oi);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
 
         appContext.close();

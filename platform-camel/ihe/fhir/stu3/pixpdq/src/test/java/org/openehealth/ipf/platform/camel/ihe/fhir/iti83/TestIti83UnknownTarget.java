@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -30,20 +32,19 @@ public class TestIti83UnknownTarget extends AbstractTestIti83 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-83-unknown-target.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = ForbiddenOperationException.class)
+    @Test
     public void testSendManualPixm() {
-        try {
-            sendManuallyOnType(validQueryParameters());
-        } catch (ForbiddenOperationException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
-        }
-
+        assertThrows(ForbiddenOperationException.class, ()-> {
+            try {
+                sendManuallyOnType(validQueryParameters());
+            } catch (ForbiddenOperationException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
+            }
+        });
     }
-
-
 }

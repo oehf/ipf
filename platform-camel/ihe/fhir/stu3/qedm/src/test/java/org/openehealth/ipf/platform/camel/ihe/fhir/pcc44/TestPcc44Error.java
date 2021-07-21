@@ -18,8 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.pcc44;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -28,19 +30,20 @@ public class TestPcc44Error extends AbstractTestPcc44 {
 
     private static final String CONTEXT_DESCRIPTOR = "pcc-44-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InternalErrorException.class)
+    @Test
     public void testSendManuallyReturningError() {
-        try {
-            sendManually(observationPatientReferenceParameter());
-        } catch (InternalErrorException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
-        }
-
+        assertThrows(InternalErrorException.class, ()-> {
+            try {
+                sendManually(observationPatientReferenceParameter());
+            } catch (InternalErrorException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
+            }
+        });
     }
 
 }

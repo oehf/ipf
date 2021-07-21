@@ -20,8 +20,8 @@ import org.apache.camel.Exchange
 import org.apache.camel.ExchangePattern
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.support.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.springframework.context.ApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
@@ -35,7 +35,7 @@ class TestMultiplast {
     private static ProducerTemplate producerTemplate
     private static CamelContext camelContext
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         appContext       = new ClassPathXmlApplicationContext('context-core-extend-multiplast.xml')
         producerTemplate = appContext.getBean('template')

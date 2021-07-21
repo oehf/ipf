@@ -20,13 +20,16 @@ import brave.SpanCustomizer
 import brave.Tracing
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import zipkin2.Span
 import zipkin2.reporter.Reporter
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * @author Christian Ohr

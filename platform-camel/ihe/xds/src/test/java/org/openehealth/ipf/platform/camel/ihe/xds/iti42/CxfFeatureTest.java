@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.cxf.ws.security.trust.STSClient;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
@@ -33,14 +32,16 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
-@Ignore
+@Disabled
 public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
@@ -55,13 +56,13 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
         var client = (Iti42PortType) clientFactory.getClient();
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
-            Assert.fail("This line must be not reachable");
+            fail("This line must be not reachable");
         } catch (SOAPFaultException ex) {
-            Assert.assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
+            assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
         }
     }
 
-    @Ignore("fails with java 9")
+    @Disabled("fails with java 9")
     @Test
     public void testFeatureEndpointWithPolicy() {
         var bf = new SpringBusFactory();
@@ -81,7 +82,7 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
         } catch (SOAPFaultException ex) {
             //ex.printStackTrace();
-            Assert.fail();
+            fail();
         } finally {
             SpringBusFactory.setThreadDefaultBus(null);
             SpringBusFactory.setDefaultBus(null);

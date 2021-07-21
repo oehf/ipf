@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.audit.queue;
 
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.pool.PooledConnectionFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -33,7 +33,7 @@ import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import javax.jms.MessageListener;
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Dmytro Rud
@@ -50,7 +50,7 @@ public class JmsAuditMessageQueueTest {
     private RecordingAuditMessageTransmission recorder;
 
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
@@ -62,7 +62,7 @@ public class JmsAuditMessageQueueTest {
         jmsBroker.start();
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         recorder = new RecordingAuditMessageTransmission();
         auditContext = new DefaultAuditContext();
@@ -70,7 +70,7 @@ public class JmsAuditMessageQueueTest {
         auditContext.setAuditEnabled(true);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         if (atnaQueue != null) {
             atnaQueue.shutdown();

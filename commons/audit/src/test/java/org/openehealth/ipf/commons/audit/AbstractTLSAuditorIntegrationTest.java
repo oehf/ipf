@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
@@ -62,7 +62,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
             boolean completed = consumer.await(15, TimeUnit.SECONDS);
-            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
+            assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         } finally {
             executor.shutdownNow();
         }

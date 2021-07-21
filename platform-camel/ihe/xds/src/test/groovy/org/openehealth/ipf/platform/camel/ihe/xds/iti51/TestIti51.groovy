@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti51
 
 import org.apache.camel.RuntimeCamelException
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
-import static org.junit.Assert.fail
+import static org.junit.jupiter.api.Assertions.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
@@ -54,12 +54,12 @@ class TestIti51 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createFindDocumentsForMultiplePatientsQuery()
         query = request.query

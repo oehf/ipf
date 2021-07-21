@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SERVICE_START_TIME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SERVICE_STOP_TIME;
-
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 
 /**
  * Tests for {@link ServiceTimeChronologyValidation}.

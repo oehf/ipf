@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.it8;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.Hl7v2AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti8.Iti8AuditStrategy;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr

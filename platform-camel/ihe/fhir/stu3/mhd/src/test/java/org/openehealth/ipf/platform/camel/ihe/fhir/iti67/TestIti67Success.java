@@ -19,8 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.ResourceType;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdT
 import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -38,7 +38,7 @@ public class TestIti67Success extends AbstractTestIti67 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-67.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }

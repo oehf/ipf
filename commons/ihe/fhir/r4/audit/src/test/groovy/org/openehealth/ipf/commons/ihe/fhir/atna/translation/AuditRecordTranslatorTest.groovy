@@ -19,8 +19,8 @@ import ca.uhn.fhir.context.FhirContext
 import groovy.util.logging.Slf4j
 import org.easymock.EasyMock
 import org.hl7.fhir.r4.model.AuditEvent
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.*
 import org.openehealth.ipf.commons.audit.model.*
 import org.openehealth.ipf.commons.core.config.ContextFacade
@@ -40,7 +40,7 @@ class AuditRecordTranslatorTest {
 
     static MappingService mappingService
 
-    @BeforeClass
+    @BeforeAll
     static void beforeClass() throws Exception {
         mappingService = new BidiMappingService(
                 mappingScript: AuditRecordTranslatorTest.class.classLoader.getResource('META-INF/map/atna2fhir.map')

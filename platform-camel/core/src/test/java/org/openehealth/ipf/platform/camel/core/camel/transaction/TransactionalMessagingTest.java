@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.core.camel.transaction;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.camel.TestSupport;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -46,7 +46,7 @@ public class TransactionalMessagingTest extends TestSupport {
     @EndpointInject(value="mock:error")
     private MockEndpoint errorMock;
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         txmMock.reset();
         txmError.reset();
@@ -62,7 +62,7 @@ public class TransactionalMessagingTest extends TestSupport {
         txmMock.assertIsSatisfied();
     }
 
-    @Test @Ignore
+    @Test @Disabled
     public void testRollbackProcess() throws InterruptedException {
         txmMock.expectedMessageCount(0);
         txmError.expectedBodiesReceived("blah");

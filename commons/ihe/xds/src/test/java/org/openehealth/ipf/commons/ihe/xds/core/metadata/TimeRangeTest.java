@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBContext;
@@ -24,6 +23,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMResult;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TimeRangeTest {
     @Test
@@ -56,6 +57,6 @@ public class TimeRangeTest {
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, TimeRange.class);
         var objectToo = jaxbElement.getValue();
 
-        Assert.assertEquals(object, objectToo);
+        assertEquals(object, objectToo);
     }
 }

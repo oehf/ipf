@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.w3c.dom.Node;
 
@@ -26,6 +25,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMResult;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class QueryListTest {
     @Test
@@ -77,6 +78,6 @@ public class QueryListTest {
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, QueryList.class);
         var objectToo = jaxbElement.getValue();
 
-        Assert.assertEquals(object, objectToo);
+        assertEquals(object, objectToo);
     }
 }

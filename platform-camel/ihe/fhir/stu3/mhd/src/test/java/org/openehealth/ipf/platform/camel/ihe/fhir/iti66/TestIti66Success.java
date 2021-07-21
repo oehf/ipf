@@ -19,8 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.ResourceType;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdT
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -37,7 +37,7 @@ public class TestIti66Success extends AbstractTestIti66 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-66.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }

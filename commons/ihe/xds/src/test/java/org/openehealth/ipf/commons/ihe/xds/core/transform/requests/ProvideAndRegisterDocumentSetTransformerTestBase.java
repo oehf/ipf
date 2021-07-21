@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.junit.Assert.*;
-
-import javax.activation.DataHandler;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
+
+import javax.activation.DataHandler;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link ProvideAndRegisterDocumentSetTransformer}.
@@ -37,7 +37,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     private ProvideAndRegisterDocumentSet request;
     private DataHandler dataHandler;    
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         var factory = createFactory();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        

@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.audit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.UdpSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
 
@@ -38,7 +38,7 @@ public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit(Integer.toString(i)));
             boolean completed = consumer.await(5, TimeUnit.SECONDS);
-            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
+            assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         }
     }
 
@@ -58,7 +58,7 @@ public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
             boolean completed = consumer.await(5, TimeUnit.SECONDS);
-            assertTrue("Consumer only received " + consumer.getSyslogEvents().size(), completed);
+            assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         } finally {
             executor.shutdownNow();
         }

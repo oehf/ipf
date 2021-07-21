@@ -17,14 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
 import org.apache.camel.*
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
-
-import static org.junit.Assert.assertTrue
 
 /**
  * Tests for ITI-44.
@@ -120,7 +118,7 @@ class TestIti44 extends HL7v3StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
@@ -131,7 +129,7 @@ class TestIti44 extends HL7v3StandardTestContainer {
      * because the second parameter to getBytes() would not have any effect.
      */
     @Test
-    @Ignore
+    @Disabled
     void testMpiProblem() {
         Processor processor = [process : { Exchange arg0 ->
                 arg0.in.body = new String(REQUEST2.getBytes('ISO-8859-1'))
@@ -181,7 +179,7 @@ class TestIti44 extends HL7v3StandardTestContainer {
     }
 
 
-    @Test @Ignore
+    @Test @Disabled
     void testRestart() {
         Consumer consumer = ((Route) camelContext.routes.find {
             it.consumer.endpoint.endpointUri == 'pixv3-iti44://pixv3-iti44-service1'

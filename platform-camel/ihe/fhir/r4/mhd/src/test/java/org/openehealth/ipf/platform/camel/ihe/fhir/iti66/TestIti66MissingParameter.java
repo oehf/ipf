@@ -16,11 +16,11 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -29,14 +29,14 @@ public class TestIti66MissingParameter extends AbstractTestIti66 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
+    @Test
     public void testSendManuallyReturningError() {
-        sendManually(manifestPatientIdentifierParameter());
+        assertThrows(InvalidRequestException.class, ()-> sendManually(manifestPatientIdentifierParameter()));
     }
 
 }

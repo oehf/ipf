@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
@@ -29,8 +29,8 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Validates the PHMR schematron rule set.
@@ -46,7 +46,7 @@ public class PHMRValidationTest {
     private static final String sample_good = "/CDA_PHMR_GOOD.xml";
     private static final String sample_wrong = "/CDA_PHMR_WRONG.xml";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new XsdValidator();
         schematron = new SchematronValidator();
@@ -86,7 +86,7 @@ public class PHMRValidationTest {
         }
     }
 
-    @Ignore
+    @Disabled
     public void validateHeaderWarnings() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         params.put("phase", "warnings");

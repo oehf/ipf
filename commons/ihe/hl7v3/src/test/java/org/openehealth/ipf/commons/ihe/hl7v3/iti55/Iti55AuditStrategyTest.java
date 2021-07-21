@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -26,8 +26,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID;
 
 /**

@@ -18,10 +18,11 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.v26.message.ACK;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -105,38 +106,38 @@ public class Pcd01ValidatorTest extends AbstractPCD01ValidatorTest {
     
 
     // ///////// Negative tests
-    @Test(expected = HL7Exception.class)
-    public void testNoOBR() throws HL7Exception {
-        validate(getParser().parse(VALID.replace(OBR, "")));
+    @Test
+    public void testNoOBR() {
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID.replace(OBR, ""))));
     }
 
-    @Ignore
-    @Test(expected = HL7Exception.class)
-    public void testSyntheticResponseUnsupportedCODE() throws HL7Exception {
+    @Disabled
+    @Test
+    public void testSyntheticResponseUnsupportedCODE() {
     	//code SN is not supported
-        validate(getParser().parse(VALID_RESPONSE.replace("MSA|CE|", "MSA|SN|")));
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID_RESPONSE.replace("MSA|CE|", "MSA|SN|"))));
     }
     
 
     /////////////////// Field cheks
-    @Test(expected = HL7Exception.class)
-    public void testIncompletePatientId() throws HL7Exception {
-        validate(getParser().parse(VALID.replace("789567", "")));
+    @Test
+    public void testIncompletePatientId() {
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID.replace("789567", ""))));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testObservationIdentifierNotPresent() throws HL7Exception {
-        validate(getParser().parse(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "")));
+    @Test
+    public void testObservationIdentifierNotPresent() {
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""))));
     }
     
-    @Test(expected = HL7Exception.class)
-    public void testObservationWithNoSubId() throws HL7Exception {
-        validate(getParser().parse(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||")));
+    @Test
+    public void testObservationWithNoSubId() {
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||"))));
     }
     
-    @Test(expected = HL7Exception.class)
-    public void testObservationWithNoSubId2() throws HL7Exception {
-        validate(getParser().parse(VALID.replace("|1.0.1|", "||")));
+    @Test
+    public void testObservationWithNoSubId2() {
+        assertThrows(HL7Exception.class, () -> validate(getParser().parse(VALID.replace("|1.0.1|", "||"))));
     }
     
     private void assertObservationCount(int expected, ORU_R01 msg){

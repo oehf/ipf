@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.core.chain;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Dmytro Rud
@@ -31,7 +32,7 @@ public class ChainUtilsTest {
     private static final List<Chainable> INITIAL = new ArrayList<>();
 
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         for (var i = 1; i <= 7; ++i) {
             INITIAL.add(new MyChainable("i" + i, "", ""));
@@ -72,7 +73,7 @@ public class ChainUtilsTest {
     }
 
 
-    @Test(expected = ChainException.class)
+    @Test
     public void testBeforeEqualsToAfter() {
         List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "", ""),
@@ -81,11 +82,13 @@ public class ChainUtilsTest {
                 new MyChainable("c4", "c2", ""),
                 new MyChainable("c5", "i4", "i4")        // should fail, Before==After
         );
-        doTest(custom, "dummy");
+        Assertions.assertThrows(ChainException.class, () -> {
+            doTest(custom, "dummy");
+        });
     }                                               
 
 
-    @Test(expected = ChainException.class)
+    @Test
     public void testBeforeGreaterThanAfter() {
         List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "", ""),
@@ -94,18 +97,22 @@ public class ChainUtilsTest {
                 new MyChainable("c4", "c2", ""),
                 new MyChainable("c5", "i3", "i4")        // should fail, Before>After
         );
-        doTest(custom, "dummy");
+        Assertions.assertThrows(ChainException.class, () -> {
+            doTest(custom, "dummy");
+        });
     }
 
 
-    @Test(expected = ChainException.class)
+    @Test
     public void testDependencyLoop() {
         List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "c2", "c3"),
                 new MyChainable("c2", "c1", "c3"),
                 new MyChainable("c3", "c1", "c2")
         );
-        doTest(custom, "dummy");
+        Assertions.assertThrows(ChainException.class, () -> {
+            doTest(custom, "dummy");
+        });
     }
 
 }

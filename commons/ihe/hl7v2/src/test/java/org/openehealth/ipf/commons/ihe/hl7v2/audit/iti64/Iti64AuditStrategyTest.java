@@ -16,12 +16,13 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti64;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.Hl7v2AuditorTestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  * @author Christian Ohr

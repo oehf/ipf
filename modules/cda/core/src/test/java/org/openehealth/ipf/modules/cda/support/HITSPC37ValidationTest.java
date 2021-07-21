@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
@@ -27,8 +27,8 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.HITSP_37_SCHEMATRON_RULES;
 import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.IHE_LAB_SCHEMA;
 
@@ -48,7 +48,7 @@ public class HITSPC37ValidationTest {
 	private static final String sample_lab = "/IHE_LabReport_20080103.xml";
 	private static final String sample_wrong = "/CDA_PHMR_WRONG.xml";
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 		schematron = new SchematronValidator();

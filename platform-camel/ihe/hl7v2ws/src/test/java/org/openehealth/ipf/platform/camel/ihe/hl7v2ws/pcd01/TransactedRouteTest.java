@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import static org.junit.Assert.assertTrue;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.spi.TransactedPolicy;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.easymock.EasyMock;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.SimpleTransactionStatus;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for handling of HL7v2 exceptions from within transactional contexts.
@@ -52,7 +52,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     private static PlatformTransactionManager txManager;
 
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass () throws Exception {
         txManager = EasyMock.createMock(PlatformTransactionManager.class);
         transactionPolicy.setPropagationBehaviorName("PROPAGATION_REQUIRES_NEW");

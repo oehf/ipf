@@ -2,7 +2,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
@@ -11,9 +11,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterDocumentSetBuilderTest {
 
@@ -36,7 +34,7 @@ public class RegisterDocumentSetBuilderTest {
         
         RegisterDocumentSet registerDocuments = RegisterDocumentSet.supportiveBuilderWith(submissionSet)
                 .withDocument(document).withFolders(List.of(folder1, folder2)).build();
-        assertEquals("Expecting 3 Association to be created", 3, registerDocuments.getAssociations().size());
+        assertEquals(3, registerDocuments.getAssociations().size(), "Expecting 3 Association to be created");
         assertEquals(2, registerDocuments.getFolders().size());
         assertEquals(1, registerDocuments.getDocumentEntries().size());
         assertNotNull(submissionSet.getEntryUuid());

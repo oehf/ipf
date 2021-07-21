@@ -17,8 +17,8 @@
 package org.openehealth.ipf.commons.audit;
 
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegrationTest {
 
@@ -34,7 +34,7 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
 
     private CustomTlsParameters tlsParameters;
 
-    @Before
+    @BeforeEach
     public void setupTls() {
         tlsParameters = new CustomTlsParameters();
         tlsParameters.setKeyStoreFile(EXPIRED_CLIENT_KEY_STORE);

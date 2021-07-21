@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link RetrieveDocumentSetRequestTransformer}.
@@ -33,7 +33,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
     private RetrieveDocumentSetRequestTransformer transformer;
     private RetrieveDocumentSet request;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);

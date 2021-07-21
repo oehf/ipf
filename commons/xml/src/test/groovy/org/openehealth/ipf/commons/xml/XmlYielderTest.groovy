@@ -18,12 +18,12 @@ package org.openehealth.ipf.commons.xml
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
 import org.xmlunit.diff.Diff
 
-import static org.junit.Assert.assertFalse
+import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldChildren
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 
@@ -235,7 +235,7 @@ class XmlYielderTest {
                 .ignoreWhitespace()
                 .checkForSimilar()
                 .build()
-        assertFalse(diff.toString(), diff.hasDifferences())
+        assertFalse(diff.hasDifferences(), diff.toString())
     }
 
     @Test

@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for {@link QueryRegistryTransformer}.
@@ -29,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 public class QueryRegistryTransformerTest {
     private QueryRegistryTransformer transformer;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new QueryRegistryTransformer();
     }

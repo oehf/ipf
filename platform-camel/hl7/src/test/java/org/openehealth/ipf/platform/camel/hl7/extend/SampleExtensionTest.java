@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend;
 
-import java.util.Scanner;
-
-import static org.junit.Assert.assertTrue;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Martin Krasser
@@ -43,7 +43,7 @@ public class SampleExtensionTest extends AbstractExtensionTest {
     
     private String resource = "message/msg-01.hl7";
     
-    @After
+    @AfterEach
     public void myTearDown() throws Exception {
         mockOutput1.reset();
         mockOutput2.reset();

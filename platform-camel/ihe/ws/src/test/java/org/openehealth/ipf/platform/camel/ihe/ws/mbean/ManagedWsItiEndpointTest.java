@@ -17,15 +17,18 @@ package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.camel.util.CastUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Stefan Ivanov
@@ -35,13 +38,13 @@ public class ManagedWsItiEndpointTest extends CamelTestSupport {
     static final String NAME = "org.apache.camel.jmx.mbeanObjectDomainName";
     private static String oldValue;
 
-    @BeforeClass
+    @BeforeAll
     public static void setupClass() {
         oldValue = System.getProperty(NAME);
         System.setProperty(NAME, "org.gablorg");
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         if (oldValue != null)
             System.setProperty(NAME, oldValue);
@@ -79,11 +82,11 @@ public class ManagedWsItiEndpointTest extends CamelTestSupport {
         Set<ObjectName> s = CastUtils.cast(mbeanServer.queryNames(new ObjectName(
                 "org.gablorg:*,type=endpoints,name=\"some-ws-iti://data*\""), null));
         var on = (ObjectName) s.toArray()[0];
-        assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
+        Assertions.assertEquals(SomeItiComponent.WS_CONFIG.isAddressing(),
                 mbeanServer.getAttribute(on, "Addressing"));
-        assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),
+        Assertions.assertEquals(SomeItiComponent.WS_CONFIG.isMtom(),
                 mbeanServer.getAttribute(on, "Mtom"));
-        assertEquals(SomeItiComponent.WS_CONFIG.isSwaOutSupport(),
+        Assertions.assertEquals(SomeItiComponent.WS_CONFIG.isSwaOutSupport(),
                 mbeanServer.getAttribute(on, "SwaOutSupport"));
     }
 

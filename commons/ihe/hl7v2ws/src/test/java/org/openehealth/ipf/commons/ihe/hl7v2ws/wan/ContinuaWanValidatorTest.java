@@ -17,16 +17,18 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.wan;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.v26.message.ACK;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01ValidatorTest;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Mitko Kolev
  * 
  */
-@Ignore
+@Disabled
 public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
 
 
@@ -71,28 +73,28 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     }
     
     @Override
-    @Test(expected=ValidationException.class)
+    @Test
     public void testResponseMessage2() throws HL7Exception {
         ACK rsp2 = load(getParser(), "pcd01/valid-pcd01-response2.hl7v2");
-        validate(rsp2);
+        assertThrows(ValidationException.class, () -> validate(rsp2));
     }
     
-    @Test(expected=ValidationException.class)
-    public void testInvalidResponseMessage() throws HL7Exception {
-        validate(load(getParser(), "wan/invalid-wan-response.hl7v2"));
+    @Test
+    public void testInvalidResponseMessage() {
+        assertThrows(ValidationException.class, () -> validate(load(getParser(), "wan/invalid-wan-response.hl7v2")));
     }
     
-    @Ignore
+    @Disabled
     @Override
     public void testSyntheticResponseMessage() {
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testInvalidGlucoseMessage() throws HL7Exception {
+    @Test
+    public void testInvalidGlucoseMessage() {
         // When OBX-5 is filled, obx-2 mus not be null. The message can not be parsed.
         // The default obx-2 type must be set with the system property
         // DEFAULT_OBX2_TYPE_PROP
-        validate(load(getParser(), "wan/invalid-glucose-continua-wan.hl7v2"));
+        assertThrows(HL7Exception.class, () -> validate(load(getParser(), "wan/invalid-glucose-continua-wan.hl7v2")));
     }
 
 }

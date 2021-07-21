@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Validator;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
 

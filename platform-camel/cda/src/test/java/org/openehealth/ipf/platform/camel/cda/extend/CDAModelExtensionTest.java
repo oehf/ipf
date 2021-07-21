@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import java.io.InputStream;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.io.InputStream;
 
 /**
  * @author Christian Ohr

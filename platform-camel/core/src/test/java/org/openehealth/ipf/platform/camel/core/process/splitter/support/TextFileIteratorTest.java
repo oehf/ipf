@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter.support;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -33,7 +34,7 @@ import org.junit.Test;
 public class TextFileIteratorTest {
     private File file; 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         file = File.createTempFile("TextFileIteratorTest", "txt");
 
@@ -43,7 +44,7 @@ public class TextFileIteratorTest {
         writer.close();
     }
     
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         assertTrue(file.delete());      // If this fails the last test did not
                                         // close the FileReader in the 
@@ -112,27 +113,27 @@ public class TextFileIteratorTest {
         }
     }
     
-    @Test(expected=UnsupportedOperationException.class)
+    @Test
     public void testRemoveNotSupported() throws Exception {
         var iterator = new TextFileIterator(file.getAbsolutePath());
         try {
-            iterator.remove();
+            assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
         }
         finally {
             assertTrue(iterator.isClosed());
         }
     }    
     
-    @Test(expected=FileNotFoundException.class)
-    public void testFileNotFound() throws Exception {
-        new TextFileIterator("isnotthere");
+    @Test
+    public void testFileNotFound() {
+        assertThrows(FileNotFoundException.class, () -> new TextFileIterator("isnotthere"));
     }
     
-    @Test(expected=IllegalStateException.class)
+    @Test
     public void testSafeAbortOfIteration() throws Exception {
         var iterator = new TextFileIterator(file.getAbsolutePath());
         iterator.close();
-        iterator.next();
+        assertThrows(IllegalStateException.class, () -> iterator.next());
     }
 }
 

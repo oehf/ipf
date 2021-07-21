@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti57
 import org.apache.cxf.headers.Header
 import org.apache.cxf.jaxb.JAXBDataBinding
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -59,12 +59,12 @@ class TestIti57 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createRegisterDocumentSet()
         docEntry = request.documentEntries[0]

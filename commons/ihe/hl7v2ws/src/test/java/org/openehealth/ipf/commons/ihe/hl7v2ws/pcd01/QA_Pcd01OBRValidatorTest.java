@@ -16,15 +16,17 @@
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
 import ca.uhn.hl7v2.HL7Exception;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Kingsley Nwaigbo
  * 
  */
-@Ignore
+@Disabled
 public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
@@ -33,37 +35,31 @@ public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
     }
 
     // ################ OBR Segment tests ###############################
-    @Test(expected = HL7Exception.class)
-    public void testMissingOBR1() throws HL7Exception {
-        validate(maxMsgReplace("OBR|1|", "OBR||"));
+    @Test
+    public void testMissingOBR1() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("OBR|1|", "OBR||")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testWrongSetIDForOBR1() throws HL7Exception {
-        validate(maxMsgReplace("OBR|2|AB112233", "OBR|1|AB112233"));
+    @Test
+    public void testWrongSetIDForOBR1() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("OBR|2|AB112233", "OBR|1|AB112233")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingOBR3() throws HL7Exception {
-        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", ""));
+    @Test
+    public void testMissingOBR3() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", "")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testSpaceAsOBR3() throws HL7Exception {
-        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
-                               " "));
+    @Test
+    public void testSpaceAsOBR3() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                " ")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testEmptyOBR3_1() throws HL7Exception {
-        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
-                               "^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
-    }
-
-    @Test(expected = HL7Exception.class)
-    public void testSpaceAsOBR3_1() throws HL7Exception {
-        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
-                               " ^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
+    @Test
+    public void testEmptyOBR3_1() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                "^AcmeAHDInc^ACDE48234567ABCD^EUI-64")));
     }
 
     @Test
@@ -78,39 +74,39 @@ public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
                                "CD12345^^ACDE48234567ABCD^EUI-64"));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testOnlyOBR31() throws HL7Exception {
-        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
-                               "CD12345"));
+    @Test
+    public void testOnlyOBR31() {
+        assertThrows(ValidationException.class, () -> validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                "CD12345")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingOBR4() throws HL7Exception {
-        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));
+    @Test
+    public void testMissingOBR4() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testSpaceAsOBR4() throws HL7Exception {
-        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", " "));
+    @Test
+    public void testSpaceAsOBR4() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", " ")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testMissingOBR4_2() throws HL7Exception {
-        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
-                               "528391^^MDC"));
+    @Test
+    public void testMissingOBR4_2() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
+                "528391^^MDC")));
     }
 
-    @Test(expected = HL7Exception.class)
-    public void testSpaceAsOBR4_2() throws HL7Exception {
-        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
-                               "528391^ ^MDC"));
+    @Test
+    public void testSpaceAsOBR4_2() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
+                "528391^ ^MDC")));
     }
 
-    @Ignore
-    @Test(expected = HL7Exception.class)
-    public void testOBR7_olderThanOBR8() throws HL7Exception {
-        validate(maxMsgReplace("|20090813095715+0500|20090813105715+0500",
-                               "|20100813095715+0500|20090813105715+0500"));
+    @Disabled
+    @Test
+    public void testOBR7_olderThanOBR8() {
+        assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("|20090813095715+0500|20090813105715+0500",
+                "|20100813095715+0500|20090813105715+0500")));
     }
 
 }

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.XMLConstants;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Dmytro Rud
@@ -51,7 +51,7 @@ public class InNamespaceMergeInterceptorTest {
     private static Document SOURCE;
 
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         var factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);

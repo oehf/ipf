@@ -34,9 +34,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <!-- 
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <!--
                 This scope is only needed to run load tests
                 (using JUnit test classes) as normal Java
                 programs. Otherwise set scope to 'test'.

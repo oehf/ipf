@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformerTestBase;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link SubmissionSet}.
@@ -32,7 +32,7 @@ public class SubmissionSetTest {
     private Author author3;
     private SubmissionSet submissionSet;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         author1 = new Author();
         author2 = new Author();

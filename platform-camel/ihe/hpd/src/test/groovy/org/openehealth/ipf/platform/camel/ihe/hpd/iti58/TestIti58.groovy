@@ -19,8 +19,8 @@ import org.apache.cxf.jaxb.JAXBDataBinding
 import org.apache.cxf.jaxb.io.DataReaderImpl
 import org.apache.cxf.staxutils.StaxUtils
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
@@ -42,7 +42,7 @@ class TestIti58 extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         PayloadLoggingContext.applicationId = 'hpdserver'

@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link RetrieveImagingDocumentSetRequestTransformer}.
@@ -34,7 +34,7 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
     private RetrieveImagingDocumentSetRequestTransformer transformer;
     private RetrieveImagingDocumentSet request;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
@@ -67,8 +67,8 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
         assertEquals("repo2", doc.getRepositoryUniqueId());
 
         var transferSyntaxUIds = ebXML.getTransferSyntaxUIDList();
-        assertEquals("1.2.840.10008.1.2.4.64", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"));
-        assertEquals("1.2.840.10008.1.2.4.70", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"));
+        assertEquals(true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"), "1.2.840.10008.1.2.4.64");
+        assertEquals(true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"), "1.2.840.10008.1.2.4.70");
      }
     
      @Test

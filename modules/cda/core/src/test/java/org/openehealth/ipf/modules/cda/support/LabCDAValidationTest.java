@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
@@ -44,7 +45,7 @@ public class LabCDAValidationTest {
     private String sample_extended = "/IHE_LabReport_21_Extended.xml";
     private String sample2 = "/IHE_LabReport_20080103_Errored.xml";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new XsdValidator();
         schematron = new SchematronValidator();
@@ -78,18 +79,20 @@ public class LabCDAValidationTest {
             params));
     }    
     
-    @Test(expected = ValidationException.class)
-    public void testValidateOnlyErrors() throws Exception {
+    @Test
+    public void testValidateOnlyErrors() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample2));
-        schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
-            params));
+        Assertions.assertThrows(ValidationException.class,
+                () -> schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
+                        params)));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testValidateWarnings() throws Exception {
+    @Test
+    public void testValidateWarnings() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample));
-        schematron
-            .validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES));
+        Assertions.assertThrows(ValidationException.class,
+                () -> schematron
+                        .validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES)));
     }
 
 

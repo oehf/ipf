@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import java.time.ZoneId;
@@ -24,7 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link PatientInfoTransformer}.
@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 public class PatientInfoTransformerTest {
     private PatientInfoTransformer transformer;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new PatientInfoTransformer();
     }

@@ -20,9 +20,8 @@ import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.easymock.EasyMock.eq;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -42,7 +41,7 @@ public class LazyBundleProviderTest {
     private AbstractBundleProvider bundleProvider;
     private List<IBaseResource> response;
 
-    @Before
+    @BeforeEach
     public void setup() {
         requestConsumer = EasyMock.createMock(RequestConsumer.class);
         response = new ArrayList<>();
@@ -68,8 +67,8 @@ public class LazyBundleProviderTest {
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
         var result = bundleProvider.getResources(10, 30);
-        Assert.assertEquals(20, result.size());
-        Assert.assertEquals(response.subList(10, 30), result);
+        assertEquals(20, result.size());
+        assertEquals(response.subList(10, 30), result);
         EasyMock.verify(requestConsumer);
     }
 
@@ -83,8 +82,8 @@ public class LazyBundleProviderTest {
         bundleProvider.getResources(10, 30);
         var result = bundleProvider.getResources(15, 20);
 
-        Assert.assertEquals(5, result.size());
-        Assert.assertEquals(response.subList(15, 20), result);
+        assertEquals(5, result.size());
+        assertEquals(response.subList(15, 20), result);
         EasyMock.verify(requestConsumer);
     }
 
@@ -101,8 +100,8 @@ public class LazyBundleProviderTest {
         bundleProvider.getResources(10, 30);
         var result = bundleProvider.getResources(20, 40);
 
-        Assert.assertEquals(20, result.size());
-        Assert.assertEquals(response.subList(20, 40), result);
+        assertEquals(20, result.size());
+        assertEquals(response.subList(20, 40), result);
         EasyMock.verify(requestConsumer);
     }
 
@@ -121,8 +120,8 @@ public class LazyBundleProviderTest {
         bundleProvider.getResources(10, 30);
         var result = bundleProvider.getResources(5, 35);
 
-        Assert.assertEquals(30, result.size());
-        Assert.assertEquals(response.subList(5, 35), result);
+        assertEquals(30, result.size());
+        assertEquals(response.subList(5, 35), result);
         EasyMock.verify(requestConsumer);
     }
 
@@ -142,8 +141,8 @@ public class LazyBundleProviderTest {
         bundleProvider.getResources(30, 40);
         var result = bundleProvider.getResources(15, 35);
 
-        Assert.assertEquals(20, result.size());
-        Assert.assertEquals(response.subList(15, 35), result);
+        assertEquals(20, result.size());
+        assertEquals(response.subList(15, 35), result);
         EasyMock.verify(requestConsumer);
     }
 

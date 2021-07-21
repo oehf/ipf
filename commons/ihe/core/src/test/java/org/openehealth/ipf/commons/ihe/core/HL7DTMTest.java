@@ -16,11 +16,11 @@
 package org.openehealth.ipf.commons.ihe.core;
 
 import ca.uhn.hl7v2.model.DataTypeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HL7DTMTest {
 

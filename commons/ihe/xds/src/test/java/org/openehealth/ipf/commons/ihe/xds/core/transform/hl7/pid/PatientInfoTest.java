@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -32,7 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -58,7 +58,7 @@ public class PatientInfoTest {
         var result = strings.stream()
                 .filter(s -> s.startsWith(fieldName + '|'))
                 .collect(Collectors.toList());
-        assertEquals("Expected " + expectedCount + " lines for " + fieldName, expectedCount, result.size());
+        assertEquals(expectedCount, result.size(), "Expected " + expectedCount + " lines for " + fieldName);
         return result;
     }
 

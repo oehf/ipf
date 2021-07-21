@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Validates slot lengths.

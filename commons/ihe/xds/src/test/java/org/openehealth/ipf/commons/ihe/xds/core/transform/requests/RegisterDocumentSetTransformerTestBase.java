@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link RegisterDocumentSetTransformer}.
@@ -33,7 +34,7 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     private RegisterDocumentSetTransformer transformer;
     private RegisterDocumentSet request;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         var factory = createFactory();
         transformer = new RegisterDocumentSetTransformer(factory);        

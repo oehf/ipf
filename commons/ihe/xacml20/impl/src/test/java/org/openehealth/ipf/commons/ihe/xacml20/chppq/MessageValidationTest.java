@@ -15,16 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 
-import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq1Request;
-import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq1Response;
-import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Request;
-import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.validateChPpq2Response;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
 import javax.xml.bind.JAXBElement;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
 
 /**
  * @since 3.5.1
@@ -32,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
  */
 public class MessageValidationTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         Xacml20Utils.initializeHerasaf();
     }

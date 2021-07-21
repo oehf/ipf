@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9
 
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Unit tests for the PIX Query transaction a.k.a. ITI-9, where requests are sent
@@ -40,7 +40,7 @@ class TestIti9QueryStream extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }

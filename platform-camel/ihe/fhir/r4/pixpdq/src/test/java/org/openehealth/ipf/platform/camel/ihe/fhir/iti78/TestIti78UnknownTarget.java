@@ -18,8 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
 
@@ -30,19 +31,21 @@ public class TestIti78UnknownTarget extends AbstractTestIti78 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-78-unknown-target.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }
 
-    @Test(expected = ResourceNotFoundException.class)
+    @Test
     public void testSendManualPixm() {
-        try {
-            sendManually(familyParameters());
-        } catch (ResourceNotFoundException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.VALUE);
-        }
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> {
+            try {
+                sendManually(familyParameters());
+            } catch (ResourceNotFoundException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.VALUE);
+            }
+        });
 
     }
 

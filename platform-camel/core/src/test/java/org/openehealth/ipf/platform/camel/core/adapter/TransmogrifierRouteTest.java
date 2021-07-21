@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.core.adapter;
 
 import org.apache.camel.ExchangePattern;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import org.openehealth.ipf.platform.camel.core.support.domain.Cat;
 import org.openehealth.ipf.platform.camel.core.support.domain.Dog;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**

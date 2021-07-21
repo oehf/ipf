@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for transformation between HL7 v2 and {@link Identifiable}.
@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 public class IdentifiableTransformerTest {
     private Identifiable identifiable;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("uni");

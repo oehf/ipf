@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindMed
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link FindMedicationListQueryTransformer}.
@@ -40,7 +40,7 @@ public class FindMedicationListQueryTransformerTest {
     private FindMedicationListQuery query;
     private EbXMLAdhocQueryRequest ebXML;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new FindMedicationListQueryTransformer();
 

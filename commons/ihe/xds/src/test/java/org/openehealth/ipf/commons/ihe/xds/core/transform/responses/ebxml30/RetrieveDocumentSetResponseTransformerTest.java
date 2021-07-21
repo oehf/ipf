@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ebxml30;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -25,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
 
 import javax.activation.DataHandler;
+
+import static org.junit.jupiter.api.Assertions.*;
  
 /**
  * Tests for {@link RetrieveDocumentSetResponseTransformer}.
@@ -36,7 +37,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
     private DataHandler dataHandler1;
     private DataHandler dataHandler2;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);

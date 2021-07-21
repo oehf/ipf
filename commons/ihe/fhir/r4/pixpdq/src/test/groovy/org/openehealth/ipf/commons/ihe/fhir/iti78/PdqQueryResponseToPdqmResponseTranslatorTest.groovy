@@ -21,9 +21,8 @@ import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
@@ -37,10 +36,11 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import java.nio.charset.StandardCharsets
 
+import static org.junit.jupiter.api.Assertions.assertEquals
 /**
  *
  */
-class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
+class PdqQueryResponseToPdqmResponseTranslatorTest {
 
     private static final HapiContext PDQ_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
             CustomModelClassUtils.createFactory("pdq", "2.5"),
@@ -49,7 +49,7 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     private PdqResponseToPdqmResponseTranslator translator
     MappingService mappingService
 
-    @Before
+    @BeforeEach
     void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScripts(

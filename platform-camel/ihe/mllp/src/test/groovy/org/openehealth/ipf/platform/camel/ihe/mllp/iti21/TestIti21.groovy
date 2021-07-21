@@ -19,16 +19,13 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.*
+import org.apache.camel.CamelExchangeException
+import org.apache.camel.Exchange
+import org.apache.camel.Predicate
+import org.apache.camel.Processor
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.FixMethodOrder
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.Timeout
-import org.junit.runners.MethodSorters
+import org.junit.jupiter.api.*
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -38,13 +35,14 @@ import org.slf4j.LoggerFactory
 
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName)
+@Timeout(value = 5L, unit = TimeUnit.MINUTES)
 class TestIti21 extends MllpTestContainer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
@@ -55,10 +53,7 @@ class TestIti21 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @Rule
-    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES)
-
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -116,7 +111,7 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
-    @Ignore
+    @Disabled
     void testSendAndReceiveTracingInformation() {
         String msg = getMessageString('QBP^Q22', '2.5')
         HapiContext hapiContext = appContext.getBean(HapiContext.class)

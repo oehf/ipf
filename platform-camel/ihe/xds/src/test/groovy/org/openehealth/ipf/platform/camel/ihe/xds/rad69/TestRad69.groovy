@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 import org.apache.camel.Exchange
 import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -49,12 +49,12 @@ class TestRad69 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() throws Exception {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createRetrieveImagingDocumentSet()
         doc = request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().get(0)

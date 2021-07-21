@@ -17,8 +17,9 @@ package org.openehealth.ipf.commons.xml;
 
 import net.sf.saxon.lib.FeatureKeys;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 
@@ -30,14 +31,14 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class XqjTransmogrifierTest {
 
     private XqjTransmogrifier<String> transformer;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new XqjTransmogrifier<>(String.class);
     }
@@ -60,9 +61,11 @@ public class XqjTransmogrifierTest {
         check(zapResult2, "/xquery/string-q2g.xml");
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void zapMissingParameter() {
-        transformer.zap(source("/xquery/string.xml"), "/xquery/string-q2.xq");
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            transformer.zap(source("/xquery/string.xml"), "/xquery/string-q2.xq");
+        });
     }
 
     @Test
@@ -130,6 +133,6 @@ public class XqjTransmogrifierTest {
                 .ignoreWhitespace()
                 .checkForSimilar()
                 .build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        assertFalse(diff.hasDifferences(), diff.toString());
     }
 }

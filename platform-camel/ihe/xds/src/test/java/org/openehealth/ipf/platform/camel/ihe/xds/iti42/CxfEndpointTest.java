@@ -16,10 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
@@ -45,6 +44,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
 public class CxfEndpointTest {
@@ -59,7 +60,7 @@ public class CxfEndpointTest {
     private int port;
     private JettyServer server;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException, URISyntaxException {
         port = ServletServer.getFreePort();
         server = new JettyServer();
@@ -72,7 +73,7 @@ public class CxfEndpointTest {
         server.start();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         server.stop();
     }
@@ -89,14 +90,14 @@ public class CxfEndpointTest {
         runRequestAndExpectFailure();
 
         serviceServer.start();
-        Assert.assertEquals(Status.SUCCESS, runRequest().getStatus());
+        assertEquals(Status.SUCCESS, runRequest().getStatus());
 
         serviceServer.stop();
         runRequestAndExpectFailure();
 
         //serviceServer = factory.create();
         serviceServer.start();
-        Assert.assertEquals(Status.SUCCESS, runRequest().getStatus());
+        assertEquals(Status.SUCCESS, runRequest().getStatus());
 
         serviceServer.stop();
     }
@@ -104,7 +105,7 @@ public class CxfEndpointTest {
     private void runRequestAndExpectFailure() {
         try {
             runRequest();
-            Assert.fail("Expected Exception: " + RuntimeException.class);
+            fail("Expected Exception: " + RuntimeException.class);
         }
         catch (RuntimeException e) {
             // ok

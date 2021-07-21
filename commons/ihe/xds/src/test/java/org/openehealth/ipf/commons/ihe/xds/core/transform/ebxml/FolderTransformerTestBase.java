@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
 /**
  * Tests for {@link FolderTransformer}.
@@ -43,7 +43,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         this.homeAware = homeAware;
     }
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
         transformer = new FolderTransformer(factory);

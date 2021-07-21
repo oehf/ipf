@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for transformations between HL7 v2 and {@link Person}.
@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 public class PersonTransformerTest {
     private Person person;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         var assigningAuthority = new AssigningAuthority("1.2&.3.4", "he&llo_WU&RZ");
         var id = new Identifiable("u^fz", assigningAuthority);

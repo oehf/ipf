@@ -16,8 +16,8 @@
 package org.openehealth.ipf.modules.cda.support;
 
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class CCDASchematronValidationTest {
                                                            "HandP 1", "Op Note 1", "Proc Note 1", "Progress Note 1",
                                                            "UD 1", "UD 2"};
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         params = new HashMap<>();
         params.put("phase", "errors");

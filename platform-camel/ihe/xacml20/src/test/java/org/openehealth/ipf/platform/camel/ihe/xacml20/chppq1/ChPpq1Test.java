@@ -15,15 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-import javax.xml.bind.JAXBElement;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
@@ -36,19 +31,24 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessa
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
+import javax.xml.bind.JAXBElement;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author Dmytro Rud
  * @since 3.5.1
  */
 public class ChPpq1Test extends StandardTestContainer {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         startServer(new CXFServlet(), "chppq1-context.xml");
         Xacml20Utils.initializeHerasaf();
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         getAuditSender().clear();
     }

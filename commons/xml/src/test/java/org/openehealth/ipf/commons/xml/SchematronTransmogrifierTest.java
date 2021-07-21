@@ -15,21 +15,21 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SchematronTransmogrifierTest {
 
     private SchematronTransmogrifier<String> svi;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         svi = new SchematronTransmogrifier<>(String.class);
     }

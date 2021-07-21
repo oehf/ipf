@@ -15,23 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import java.io.StringWriter;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 
 /**
@@ -43,7 +39,7 @@ public class RemoveMetadataTransformerTest {
     private RemoveMetadata request;
 
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {        
         transformer = new RemoveMetadataRequestTransformer();
         request = SampleData.createRemoveMetadata();
@@ -101,6 +97,6 @@ public class RemoveMetadataTransformerTest {
         StringWriter writer = new StringWriter();
         marshaller.marshal(ebXML.getInternal(), writer);
         new RemoveMetadataRequestValidator().validate(ebXML, ITI_62);
-        assertFalse("AdhocQuery is not expected in ITI-62 request", writer.toString().contains("AdhocQuery"));
+        assertFalse(writer.toString().contains("AdhocQuery"), "AdhocQuery is not expected in ITI-62 request");
     }
 }

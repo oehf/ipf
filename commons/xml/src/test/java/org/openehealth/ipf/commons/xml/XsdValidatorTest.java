@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
 import javax.xml.transform.Source;
@@ -30,7 +30,7 @@ public class XsdValidatorTest {
 	private Map<String, ?> cache;
 	private static final String SCHEMA_RESOURCE = "/xsd/test.xsd";
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 
@@ -44,20 +44,23 @@ public class XsdValidatorTest {
 		cache.clear();
 		Source testXml = new StreamSource(getClass().getResourceAsStream("/xsd/test.xml"));
 		validator.validate(testXml, SCHEMA_RESOURCE);
-		Assert.assertTrue(cache.containsKey(SCHEMA_RESOURCE));
+		Assertions.assertTrue(cache.containsKey(SCHEMA_RESOURCE));
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testValidateFails() throws Exception {
 		var schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
 		var cacheSize = cache.size();
 		Source testXml = new StreamSource(getClass().getResourceAsStream(
 				"/xsd/invalidtest.xml"));
-		validator.validate(testXml, SCHEMA_RESOURCE);
+		Assertions.assertThrows(ValidationException.class, () -> {
+			validator.validate(testXml, SCHEMA_RESOURCE);
+		});
+
 		if (schemaExisted) {
-			Assert.assertEquals(cacheSize, cache.size());
+			Assertions.assertEquals(cacheSize, cache.size());
 		} else {
-			Assert.assertEquals(cacheSize + 1, cache.size());
+			Assertions.assertEquals(cacheSize + 1, cache.size());
 		}
 	}
 

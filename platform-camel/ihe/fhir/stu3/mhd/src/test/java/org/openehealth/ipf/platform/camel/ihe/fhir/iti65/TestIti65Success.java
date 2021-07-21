@@ -18,16 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
 import javax.servlet.ServletException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -36,7 +36,7 @@ public class TestIti65Success extends AbstractTestIti65 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
@@ -100,7 +100,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
     }
 
-    @Ignore
+    @Disabled
     public void testSendEndpointMhd() throws Exception {
         var result = producerTemplate.requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
         // printAsXML(result);

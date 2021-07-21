@@ -20,15 +20,15 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import zipkin2.Span
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
@@ -43,7 +43,7 @@ class TestIti8 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, false)
@@ -194,7 +194,7 @@ class TestIti8 extends MllpTestContainer {
         doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", body, 'lazy dog')
     }
 
-    @Ignore
+    @Disabled
     void testWrongEncoding() {
         String isoMessage = this.getClass().classLoader.getResource('./iti8/iti8-a40-iso-8859-1.hl7')?.getText('iso-8859-1')
         doTestException("pix-iti8://localhost:18089?timeout=${TIMEOUT}", isoMessage, "java.nio.charset.MalformedInputException")

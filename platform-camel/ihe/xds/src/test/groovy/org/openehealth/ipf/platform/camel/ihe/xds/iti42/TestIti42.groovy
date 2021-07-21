@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
 import org.apache.cxf.binding.soap.SoapHeader
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -70,7 +70,7 @@ class TestIti42 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance()
         dbf.setNamespaceAware(true)
@@ -87,7 +87,7 @@ class TestIti42 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createRegisterDocumentSet()
         docEntry = request.documentEntries[0]

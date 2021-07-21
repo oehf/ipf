@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryRespons
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
@@ -41,7 +41,7 @@ public class QueryResponseValidatorTest {
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new QueryResponseValidator();
         EbXMLFactory factory = new EbXMLFactory30();

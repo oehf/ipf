@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.modules.cda;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ParseException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Christian Ohr
@@ -28,7 +31,7 @@ public class CDAR2ParserTest {
     private CDAR2Parser parser;
     private CDAR2Renderer renderer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         parser = new CDAR2Parser();
         renderer = new CDAR2Renderer();
@@ -41,7 +44,7 @@ public class CDAR2ParserTest {
         var clinicalDocument = parser.parse(is);
         // TODO test document content
         var result = renderer.render(clinicalDocument, (Object[]) null);
-        Assert.assertTrue(result.length() > 0);
+        assertTrue(result.length() > 0);
     }
     
     @Test
@@ -51,7 +54,7 @@ public class CDAR2ParserTest {
                 "/builders/content/document/SampleCCDDocument.xml");
         var clinicalDocument = parser.parse(is);
         var result = renderer.render(clinicalDocument, (Object[]) null);
-        Assert.assertTrue(result.length() > 0);
+        assertTrue(result.length() > 0);
     }
 
     @Test
@@ -61,7 +64,7 @@ public class CDAR2ParserTest {
                 "/builders/content/document/SampleHITSPC32v25Document.xml");
         var clinicalDocument = parser.parse(is);
         var result = renderer.render(clinicalDocument, (Object[]) null);
-        Assert.assertTrue(result.length() > 0);
+        assertTrue(result.length() > 0);
     }
 
     @Test
@@ -69,14 +72,14 @@ public class CDAR2ParserTest {
         var is = getClass().getResourceAsStream(
                 "/builders/content/document/CDADocumentWithXInclude.xml");
         var clinicalDocument = parser.parse(is);
-        Assert.assertEquals("", clinicalDocument.getTitle().getText());
+        assertEquals("", clinicalDocument.getTitle().getText());
     }
 
-    @Test(expected = ParseException.class)
+    @Test
     public void testParseDocumentWithXXEInjection() throws Exception {
         var is = getClass().getResourceAsStream(
                 "/builders/content/document/CDADocumentWithXXEInjection.xml");
-        var clinicalDocument = parser.parse(is);
+        Assertions.assertThrows(ParseException.class, () -> parser.parse(is));
     }
     
 }

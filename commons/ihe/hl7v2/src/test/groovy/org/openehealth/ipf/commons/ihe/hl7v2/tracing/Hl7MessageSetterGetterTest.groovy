@@ -18,11 +18,12 @@ package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
+
 /**
  * @author Christian Ohr
  */

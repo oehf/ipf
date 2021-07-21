@@ -1,6 +1,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.PatientIdBasedSto
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Iti18AuditStrategyTest extends XdsAuditorTestBase {
 

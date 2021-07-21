@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-
-import java.util.Collections;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link CodeTransformer}. 
@@ -35,7 +35,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     private Code code;
     private EbXMLObjectLibrary objectLibrary;
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
         transformer = new CodeTransformer(factory);

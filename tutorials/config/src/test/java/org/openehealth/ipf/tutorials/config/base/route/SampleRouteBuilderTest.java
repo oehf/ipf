@@ -15,26 +15,27 @@
  */
 package org.openehealth.ipf.tutorials.config.base.route;
 
-import static org.junit.Assert.*;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.nio.charset.Charset;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Boris Stanojevic
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/base-context.xml",
         "/extender-context.xml",
         "/extension-context.xml",
@@ -49,7 +50,7 @@ public class SampleRouteBuilderTest {
     
     private final String JETTY_URI = "http://0.0.0.0:8800";
     
-    @Before
+    @BeforeEach
     public void setUp(){
         mockFile.reset();
     }

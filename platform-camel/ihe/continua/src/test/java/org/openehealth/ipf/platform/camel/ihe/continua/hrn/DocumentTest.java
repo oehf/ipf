@@ -15,26 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import javax.activation.DataHandler;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.spring.core.config.SpringTypeConverter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.spring.core.config.SpringTypeConverter;
 import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToClinicalDocumentConverter;
 import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToDomConverter;
 import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToStringConverter;
 import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandlerToByteArrayConverter;
 import org.springframework.core.convert.support.GenericConversionService;
+
+import javax.activation.DataHandler;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests conversion services
@@ -45,7 +42,7 @@ public class DocumentTest {
     private DocumentEntry docEntry;
     private DataHandler someData;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         var somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
         someData = SampleData.createDataHandler();
@@ -102,8 +99,7 @@ public class DocumentTest {
         doc.setContent(String.class, testContent);
         var modContent = testContent.replace('a', 'c');
         doc.setContent(String.class, modContent);
-        assertEquals("String content shoud be \'" + modContent + "\'", modContent,
-            doc.getContent(String.class));
+        assertEquals(modContent, doc.getContent(String.class), "String content shoud be '" + modContent + "'");
     }
     
     @Test
@@ -112,7 +108,7 @@ public class DocumentTest {
         doc.setContent(String.class, "data1");
         doc.setContent(Integer.class, 2);
         doc.setContent(Integer.class, 4);
-        assertEquals("Size of the contents should be 3!", 3, doc.getContentsCount());
+        assertEquals(3, doc.getContentsCount(), "Size of the contents should be 3!");
     }
 
     @Test
@@ -133,8 +129,7 @@ public class DocumentTest {
         var doc = new Document(docEntry, someData);
         doc.getContent(byte[].class);
         doc.getContent(String.class);
-        assertTrue("DataHandler should be converted to String",
-                doc.hasContent(String.class));
+        assertTrue(doc.hasContent(String.class), "DataHandler should be converted to String");
     }
 
     @Test

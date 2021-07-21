@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.Message
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
@@ -29,7 +29,7 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
  */
 class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
  
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         doSetUp('pixquery',
                 new PixQueryRequest3to2Translator(),

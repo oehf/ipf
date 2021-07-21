@@ -19,12 +19,12 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/context-core.xml" })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractRouteTest {
@@ -44,7 +44,7 @@ public abstract class AbstractRouteTest {
     @EndpointInject(value="mock:mock")
     protected MockEndpoint mock;
 
-    @After
+    @AfterEach
     public void tearDown() {
         mock.reset();
     }

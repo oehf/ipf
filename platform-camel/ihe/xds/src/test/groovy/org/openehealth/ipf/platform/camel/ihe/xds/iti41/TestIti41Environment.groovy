@@ -16,10 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.AfterClass
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -44,13 +44,13 @@ class TestIti41Environment extends XdsStandardTestContainer {
 
     static Properties sysProperties
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, true)
         setSystemProperties()
     }
 
-    @AfterClass
+    @AfterAll
     static void classShutdown() {
         resetSystemProperties()
     }
@@ -71,7 +71,7 @@ class TestIti41Environment extends XdsStandardTestContainer {
         System.setProperty("javax.net.debug", sysProperties.get("javax.net.debug"))
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createProvideAndRegisterDocumentSet()
         docEntry = request.documents[0].documentEntry

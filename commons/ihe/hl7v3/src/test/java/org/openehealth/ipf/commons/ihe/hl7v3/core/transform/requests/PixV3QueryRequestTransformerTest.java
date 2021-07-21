@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests;
 
 import net.ihe.gazelle.hl7v3.datatypes.*;
 import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02Type;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
@@ -25,14 +25,13 @@ import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PixV3QueryRequestTransformerTest {
 

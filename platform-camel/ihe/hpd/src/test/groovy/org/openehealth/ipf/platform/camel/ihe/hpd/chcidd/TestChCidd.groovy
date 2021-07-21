@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.chcidd
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
+
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -29,7 +29,7 @@ import javax.xml.datatype.DatatypeFactory
 /**
  * @author Dmytro Rud
  */
-@Ignore
+@Disabled
 class TestChCidd extends StandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'ch-cidd.xml'
@@ -44,7 +44,7 @@ class TestChCidd extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
@@ -67,7 +67,7 @@ class TestChCidd extends StandardTestContainer {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void test_CPI_Community_Information_Delta_Download() {
         DownloadRequest request = new DownloadRequest(
                 requestID: '125',

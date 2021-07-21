@@ -20,8 +20,8 @@ import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.model.v24.datatype.SI
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 
 /**
@@ -89,13 +89,13 @@ class TypeTest {
     private fun assertFieldEquals(expected: String, data: Structure, field: Int) {
         val simpleName = data::class.simpleName
         assertEquals(expected, data[field].encode())
-        assertFalse("$simpleName[$field] must be not empty, but isEmpty() returns true", data[field].empty)
+        assertFalse(data[field].empty, "$simpleName[$field] must be not empty, but isEmpty() returns true")
     }
 
     private fun assertFieldsEmpty(data: Structure, vararg fields: Int) {
         val simpleName = data::class.simpleName
         for (field in fields) {
-            assertTrue("$simpleName[$field] must be empty, but isEmpty() returns false", data[field].empty)
+            assertTrue(data[field].empty, "$simpleName[$field] must be empty, but isEmpty() returns false")
         }
     }
 }

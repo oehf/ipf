@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link EbXML30Converters}.

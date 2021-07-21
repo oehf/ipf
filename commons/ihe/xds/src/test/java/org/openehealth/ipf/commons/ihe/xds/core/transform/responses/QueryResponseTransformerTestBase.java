@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link QueryResponseTransformer}.
@@ -35,7 +35,7 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     private QueryResponse responseLeafClass;    
     private QueryResponse responseObjRef;    
     
-    @Before
+    @BeforeEach
     public void setUp() {
         var factory = createFactory();
         transformer = new QueryResponseTransformer(factory);        

@@ -15,19 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
@@ -37,9 +33,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
@@ -54,7 +50,7 @@ public class AdhocQueryRequestValidatorTest {
     private QueryRegistry request, requestMpq, folderRequest, folderRequestMpq;
     private QueryRegistryTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new AdhocQueryRequestValidator();
         transformer = new QueryRegistryTransformer();

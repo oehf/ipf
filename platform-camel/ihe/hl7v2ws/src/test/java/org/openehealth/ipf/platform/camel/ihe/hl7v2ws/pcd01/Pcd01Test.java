@@ -23,9 +23,9 @@ import org.apache.camel.Processor;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.util.CastUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
@@ -38,9 +38,7 @@ import javax.management.ObjectName;
 import java.util.Scanner;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -61,12 +59,12 @@ public class Pcd01Test extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MyRejectionHandlingStrategy.resetCounter();
     }
@@ -95,10 +93,12 @@ public class Pcd01Test extends StandardTestContainer {
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
-    @Test(expected = Hl7v2AcceptanceException.class)
+    @Test
     public void testInacceptableRequestOnProducer() throws Exception {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
+        assertThrows(Hl7v2AcceptanceException.class, ()->
+            requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"))
+        );
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
@@ -122,8 +122,8 @@ public class Pcd01Test extends StandardTestContainer {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_throws_exception";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
-        assertTrue("The response message must contain the cause", response.contains("java.lang.RuntimeException"));
-        assertTrue("On application error the request message id must be returned.", response.contains("MSA|AE|MSGID1234"));
+        assertTrue(response.contains("java.lang.RuntimeException"), "The response message must contain the cause");
+        assertTrue(response.contains("MSA|AE|MSGID1234"), "On application error the request message id must be returned.");
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 

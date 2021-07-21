@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.audit.queue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -46,7 +46,7 @@ public class BasicHttpAuditMessageQueueTest {
     private Throwable caught;
 
 
-    @Before
+    @BeforeEach
     public void setup() {
         port = freePort();
         mockServer = startClientAndServer(port);
@@ -56,7 +56,7 @@ public class BasicHttpAuditMessageQueueTest {
         auditContext.setAuditEnabled(true);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         caught = null;
         mockServer.stop();

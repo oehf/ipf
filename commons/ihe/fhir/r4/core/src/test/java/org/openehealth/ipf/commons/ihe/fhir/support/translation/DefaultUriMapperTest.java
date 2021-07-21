@@ -16,13 +16,13 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.support.translation;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper;
 import org.openehealth.ipf.commons.map.BidiMappingService;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  *
@@ -32,7 +32,7 @@ public class DefaultUriMapperTest {
     private BidiMappingService mappingService;
     private DefaultUriMapper uriMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         mappingService = new BidiMappingService();
         mappingService.setMappingScript(getClass().getResource("/mapping.map"));

@@ -16,24 +16,23 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import org.apache.camel.CamelExchangeException
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.Timeout
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.fail
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@Ignore("ignore until TLS problems are solved")
+@Disabled("ignore until TLS problems are solved")
+@Timeout(value = 5L, unit = TimeUnit.MINUTES)
 class TestSecureIti21 extends MllpTestContainer {
 
 
@@ -43,10 +42,7 @@ class TestSecureIti21 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @Rule
-    public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES)
-
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -69,9 +65,11 @@ class TestSecureIti21 extends MllpTestContainer {
     // Client without certificates (empty key store in SSL context) should fail
     // when trying to access an endpoint with clientAuth=MUST, but should have
     // success when accessing an endpoint with clientAuth=WANT.
-    @Test(expected = Exception)
+    @Test
     void testFailAuditSecureWant() {
-        send("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        assertThrows(Exception.class, ()->
+            send("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        )
     }
 
     @Test
@@ -89,13 +87,15 @@ class TestSecureIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
     }
 
-    @Test(expected = Exception)
+    @Test
     void testSSLFailureWithIncompatibleProtocols() {
-        send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        assertThrows(Exception.class, ()->
+            send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        )
     }
 
     @Test
-    @Ignore("Test runs into JUnit test timeout (see @Rule above)")
+    @Disabled("Test runs into JUnit test timeout (see @Rule above)")
     void testSSLFailureWithIncompatibleCiphers() {
         try {
             send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
@@ -112,9 +112,11 @@ class TestSecureIti21 extends MllpTestContainer {
         assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID())
     }
 
-    @Test(expected = Exception)
+    @Test
     void testSSLFailureWithIncompatibleKeystores() {
-        send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContextOther&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        assertThrows(Exception.class, ()->
+            send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContextOther&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+        )
     }
 
     @Test

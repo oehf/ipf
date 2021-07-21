@@ -15,16 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import javax.activation.DataHandler;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
@@ -33,7 +27,13 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
-import static org.junit.Assert.assertEquals;
+import javax.activation.DataHandler;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the Continua HRN transaction.
@@ -50,13 +50,13 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws JAXBException {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
         jaxbContext = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30");
     }
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         initRequest();
     }

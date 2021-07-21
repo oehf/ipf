@@ -19,8 +19,8 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -39,7 +39,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     @EndpointInject(value = "mock:error")
     protected MockEndpoint error;
 
-    @After
+    @AfterEach
     public void tearDownError() throws Exception {
         error.reset();
     }

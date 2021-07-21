@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.commons.map.extend
 
-import static org.easymock.EasyMock.*
-
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
-import org.springframework.core.io.ClassPathResource
+
+import static org.easymock.EasyMock.*
 
 /**
  * @author Christian Ohr
@@ -32,7 +31,7 @@ import org.springframework.core.io.ClassPathResource
  */
 public class MappingExtensionTest {
     
-    @BeforeClass
+    @BeforeAll
     static void setupClass() {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.setMappingScript(MappingExtensionTest.class.getResource("/example2.map"))
@@ -49,9 +48,11 @@ public class MappingExtensionTest {
         assert 'X'.map('encounterType', 'WRONG') == 'WRONG'
     }
     
-    @Test(expected=IllegalArgumentException)
+    @Test
     void testUnknownKey() {
-        'Y'.map('BLABLA')
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            'Y'.map('BLABLA')
+        })
     }
     
     @Test
@@ -61,9 +62,11 @@ public class MappingExtensionTest {
         assert 'X'.mapReverse('encounterType', 'WRONG') == 'WRONG'
     }
     
-    @Test(expected=IllegalArgumentException)
+    @Test
     void testMapReverseUnknownKey() {
-        'Y'.mapReverse('BLABLA')
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            'Y'.mapReverse('BLABLA')
+        })
     }
     
     @Test
@@ -72,9 +75,11 @@ public class MappingExtensionTest {
         assert 'encounterType'.valueSystem() == '2.16.840.1.113883.5.4'
     }
     
-    @Test(expected=IllegalArgumentException)
+    @Test
     void testUnknownKeySystem() {
-        'Y'.keySystem()
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            'Y'.keySystem()
+        })
     }
 
     @Test
@@ -91,13 +96,13 @@ public class MappingExtensionTest {
     @Test
     void testHasKey() {
         assert 'encounterType'.hasKey('E')
-        assert 'encounterType'.hasKey('Y') == false
+        assert !'encounterType'.hasKey('Y')
     }
     
     @Test
     void testHasValue() {
         assert 'encounterType'.hasValue('EMER')
-        assert 'encounterType'.hasValue('Y') == false
+        assert !'encounterType'.hasValue('Y')
     }
     
 }

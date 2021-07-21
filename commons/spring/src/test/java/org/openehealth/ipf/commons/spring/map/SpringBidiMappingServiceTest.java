@@ -16,16 +16,17 @@
 
 package org.openehealth.ipf.commons.spring.map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -34,7 +35,7 @@ public class SpringBidiMappingServiceTest {
 
     SpringBidiMappingService mappingService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mappingService = new SpringBidiMappingService();
     }
@@ -61,13 +62,15 @@ public class SpringBidiMappingServiceTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testFailResourceNotFound() {
         List<? extends Resource> resources = Arrays.asList(
                 new ClassPathResource("example2.map.NONEXISTENT"),
                 new ClassPathResource("example3.map")
         );
         mappingService.setIgnoreResourceNotFound(false);
-        mappingService.setMappingResources(resources);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            mappingService.setMappingResources(resources);
+        });
     }
 }

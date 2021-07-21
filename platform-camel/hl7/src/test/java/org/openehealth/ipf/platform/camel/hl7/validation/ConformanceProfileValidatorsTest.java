@@ -25,15 +25,15 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.engine.DefaultProducerTemplate;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Boris Stanojevic
@@ -44,7 +44,7 @@ public class ConformanceProfileValidatorsTest {
 
     ProducerTemplate template;
 
-    @Before
+    @BeforeEach
     public void onBeforeClass() throws Exception {
         camelContext.addRoutes(new TestRouteBuilder());
         camelContext.start();
@@ -52,7 +52,7 @@ public class ConformanceProfileValidatorsTest {
         template.start();
     }
 
-    @After
+    @AfterEach
     public void onAfterClass() throws Exception {
         template.stop();
         camelContext.stop();

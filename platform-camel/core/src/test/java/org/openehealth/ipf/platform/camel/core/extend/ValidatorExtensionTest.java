@@ -16,11 +16,12 @@
 package org.openehealth.ipf.platform.camel.core.extend;
 
 import org.apache.camel.RuntimeCamelException;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Martin Krasser
@@ -59,9 +60,9 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
     
-    @Test(expected=RuntimeCamelException.class)
-    public void testBooleanClosureOneParamInOnlyFailure() throws InterruptedException {
-        producerTemplate.sendBody("direct:input1", "blub");
+    @Test
+    public void testBooleanClosureOneParamInOnlyFailure() {
+        Assertions.assertThrows(RuntimeCamelException.class, () -> producerTemplate.sendBody("direct:input1", "blub"));
     }
     
     @Test

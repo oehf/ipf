@@ -15,13 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import ca.uhn.hl7v2.model.v25.group.RSP_K21_QUERY_RESPONSE;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the fix of issue #69 (Problem with RSP_K21.getRSP_K21_QUERY_RESPONSE())

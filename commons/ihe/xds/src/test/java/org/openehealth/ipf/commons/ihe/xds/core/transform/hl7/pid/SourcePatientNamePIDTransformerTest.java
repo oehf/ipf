@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XcnName;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XpnName;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for patient name transformation in SourcePatientInfo.

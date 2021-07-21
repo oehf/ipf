@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.hl7;
 
-import java.util.Scanner;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.hl7.extend.AbstractExtensionTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertTrue;
+import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -44,7 +44,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
     
     private String resource = "message/msg-01.hl7";
     
-    @After
+    @AfterEach
     public void myTearDown() throws Exception {
         mockOutput1.reset();
         mockOutput2.reset();
