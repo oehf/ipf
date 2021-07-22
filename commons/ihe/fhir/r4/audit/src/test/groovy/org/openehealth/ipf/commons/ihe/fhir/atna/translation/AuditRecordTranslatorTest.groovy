@@ -59,6 +59,10 @@ class AuditRecordTranslatorTest {
         AuditRecordTranslator translator = new AuditRecordTranslator()
         AuditEvent auditEvent = translator.translate(auditMessage)
         log.debug('FHIR Resource:\n{}\n', FHIR_CONTEXT.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEvent))
+
+        auditEvent.entity.each { entity ->
+            assert entity.what.identifier.type != null
+        }
     }
 
     static AuditMessage createAuditMessage1() {
