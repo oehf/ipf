@@ -18,11 +18,6 @@ package org.openehealth.ipf.commons.audit.server;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.handler.logging.LogLevel;
-import io.netty.handler.ssl.ApplicationProtocolConfig;
-import io.netty.handler.ssl.ClientAuth;
-import io.netty.handler.ssl.JdkSslContext;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
@@ -34,7 +29,6 @@ import reactor.util.Metrics;
 import java.time.Duration;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * TLS syslog server following RFC 5425.

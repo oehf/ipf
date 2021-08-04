@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.core.process.splitter.support;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

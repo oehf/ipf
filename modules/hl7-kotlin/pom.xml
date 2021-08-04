@@ -30,8 +30,8 @@
 
     <properties>
         <kotlin.dokka.version>1.4.10.2</kotlin.dokka.version>
-        <kotlin.version>1.4.31</kotlin.version>
-        <kotlin.logging.version>1.12.5</kotlin.logging.version>
+        <kotlin.version>1.5.20</kotlin.version>
+        <kotlin.logging.version>2.0.10</kotlin.logging.version>
     </properties>
 
     <dependencies>
@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>
-            <artifactId>kotlin-logging</artifactId>
+            <artifactId>kotlin-logging-jvm</artifactId>
             <version>${kotlin.logging.version}</version>
         </dependency>
 

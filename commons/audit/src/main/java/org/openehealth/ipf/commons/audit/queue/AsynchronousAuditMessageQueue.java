@@ -25,7 +25,6 @@ import org.slf4j.MDC;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.Map;
 
 /**
  * Audit queue that uses an injectable {@link ExecutorService} to asynchronously send away audit events.

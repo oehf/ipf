@@ -18,7 +18,6 @@ package org.apache.camel.component.hl7;
 
 import ca.uhn.hl7v2.HapiContext;
 
-import java.lang.reflect.Field;
 import java.nio.charset.CodingErrorAction;
 import java.util.Locale;
 

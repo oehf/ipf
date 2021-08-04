@@ -59,7 +59,7 @@ public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2E
             if (responseQpdBoundaries != null) {
                 Exchanges.resultMessage(exchange).setBody(response.substring(0, responseQpdBoundaries[0]) +
                         request.substring(requestQpdBoundaries[0], requestQpdBoundaries[1]) +
-                        response.substring(responseQpdBoundaries[1], response.length()));
+                        response.substring(responseQpdBoundaries[1]));
             }
         }
     }

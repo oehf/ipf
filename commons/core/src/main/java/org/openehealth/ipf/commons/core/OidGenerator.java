@@ -33,7 +33,7 @@ public class OidGenerator {
      */
     public static Oid asOid(final UUID uuid) {
         try {
-            return new Oid(UUID_ARC + "." + asBigInteger(uuid).toString());
+            return new Oid(UUID_ARC + "." + asBigInteger(uuid));
         } catch (final GSSException e) {
             throw new IllegalStateException(e);
         }

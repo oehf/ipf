@@ -116,7 +116,7 @@ public abstract class AbstractWsProducer<
 
             // for asynchronous interaction: configure WSA headers and store correlation data
             if ((replyToUri != null) || Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION))) {
-                var messageId = "urn:uuid:" + UUID.randomUUID().toString();
+                var messageId = "urn:uuid:" + UUID.randomUUID();
                 configureWSAHeaders(messageId, replyToUri, requestContext);
 
                 var correlator = getEndpoint().getCorrelator();

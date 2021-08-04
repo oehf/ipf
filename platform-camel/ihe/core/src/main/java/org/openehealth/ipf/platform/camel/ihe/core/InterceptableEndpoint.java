@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * Interface for endpoints that use the Interceptor framework defined in this module.
@@ -104,7 +103,7 @@ public interface InterceptableEndpoint<
         List<Interceptor> result = new ArrayList<>();
         var factories = getInterceptableConfiguration().getCustomInterceptorFactories();
         factories.stream()
-                .map((Function<InterceptorFactory, Interceptor>) InterceptorFactory::getNewInstance)
+                .map(InterceptorFactory::getNewInstance)
                 .forEach(result::add);
         return result;
     }

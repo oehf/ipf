@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
 import ca.uhn.hl7v2.HL7Exception;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

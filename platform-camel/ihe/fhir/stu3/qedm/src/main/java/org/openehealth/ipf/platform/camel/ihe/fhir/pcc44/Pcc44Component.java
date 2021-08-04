@@ -17,18 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.pcc44;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptionsUtils;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44Options;
 import org.openehealth.ipf.commons.ihe.fhir.pcc44.Pcc44OptionsProvider;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentWithOptions;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
-
-import java.util.List;
-import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.qedm.QEDM.Interactions.PCC_44;
 
