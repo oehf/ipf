@@ -23,7 +23,7 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.1.0" description="IPF 4.1.0" date="XX Jul 2021">
+        <release version="4.1.0" description="IPF 4.1.0" date="23 Jul 2021">
             <action dev="thopap" type="update">
                 Various dependency updates
             </action>
