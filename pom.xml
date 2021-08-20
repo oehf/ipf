@@ -40,7 +40,7 @@
         <assembly-plugin-version>3.3.0</assembly-plugin-version>
         <build-helper-version>3.2.0</build-helper-version>
         <compiler-plugin-version>3.8.1</compiler-plugin-version>
-        <enforcer-plugin-version>3.0.0-M3</enforcer-plugin-version>
+        <enforcer-plugin-version>3.0.0</enforcer-plugin-version>
         <gmavenplus-plugin-version>1.12.1</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.2.0</jar-plugin-version>
@@ -474,6 +474,7 @@
                                         <searchTransitive>true</searchTransitive>
                                         <excludes>
                                             <exclude>commons-logging:commons-logging</exclude>
+                                            <exclude>log4j:log4j</exclude>
                                         </excludes>
                                     </bannedDependencies>
                                     <requireJavaVersion>

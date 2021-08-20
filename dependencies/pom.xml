@@ -21,7 +21,7 @@
         <herasaf-version>1.0.4.RELEASE</herasaf-version>
         <ipf-gazelle-version>2.0.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jaxb-version>2.3.4</jaxb-version>
+        <jaxb-version>2.3.5</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <mina-version>2.1.4</mina-version>
         <oht-mdht-cda-version>1.6.0-201807</oht-mdht-cda-version>
@@ -29,7 +29,7 @@
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>2.5.3</spring-boot-version>
+        <spring-boot-version>2.5.4</spring-boot-version>
         <vertx-version>3.9.8</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.2</xmlsec-version>
