@@ -104,6 +104,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
         // Register resource resolver to resolve external XML schemas
         factory.setResourceResolver(RESOURCE_RESOLVER);
         try {
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             return factory.newSchema(resourceContent(params));
         } catch (SAXException e) {
             throw new IllegalArgumentException("Could not initialize XSD schema", e);

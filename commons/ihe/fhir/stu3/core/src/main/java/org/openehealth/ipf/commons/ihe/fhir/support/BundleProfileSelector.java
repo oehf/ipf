@@ -35,6 +35,7 @@ import java.util.function.Predicate;
  * @since 3.6
  * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector instead}
  */
+@Deprecated
 public class BundleProfileSelector implements Predicate<RequestDetails> {
 
     private final Set<String> profileUris;

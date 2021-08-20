@@ -65,11 +65,11 @@ public class ContentMap {
 
         synchronized (map) {
             // TODO: optimise conversion using some sophisticated iteration ordering ???
-            for (var sourceType : map.keySet()) {
-                if (conversionService.canConvert(sourceType, targetType)) {
-                    result = conversionService.convert(map.get(sourceType), targetType);
+            for (var sourceTypeEntry : map.entrySet()) {
+                if (conversionService.canConvert(sourceTypeEntry.getKey(), targetType)) {
+                    result = conversionService.convert(sourceTypeEntry.getValue(), targetType);
                     if (result != null) {
-                        LOG.debug("Successfully generated {} from {}", targetType, sourceType);
+                        LOG.debug("Successfully generated {} from {}", targetType, sourceTypeEntry.getKey());
                         setContent(targetType, result);
                         return result;
                     }

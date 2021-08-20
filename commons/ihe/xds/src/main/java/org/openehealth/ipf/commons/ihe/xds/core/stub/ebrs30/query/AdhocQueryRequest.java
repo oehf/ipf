@@ -175,7 +175,7 @@ public class AdhocQueryRequest
      *     
      */
     public BigInteger getStartIndex() {
-        return Objects.requireNonNullElseGet(startIndex, () -> new BigInteger("0"));
+        return Objects.requireNonNullElseGet(startIndex, () -> BigInteger.ZERO);
     }
 
     /**
@@ -199,7 +199,7 @@ public class AdhocQueryRequest
      *     
      */
     public BigInteger getMaxResults() {
-        return Objects.requireNonNullElseGet(maxResults, () -> new BigInteger("-1"));
+        return Objects.requireNonNullElseGet(maxResults, () -> BigInteger.valueOf(-1));
     }
 
     /**

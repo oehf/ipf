@@ -88,7 +88,7 @@ public class SpringConfigurationPostProcessor implements
                         OrderedConfigurer.class).values());
                 Collections.sort(springConfigurers);
             }
-            LOG.info("Number of extension beans: " + springConfigurers.size());
+            LOG.info("Number of extension beans: {}", springConfigurers.size());
             configure(registry);
             refreshed = true;
 

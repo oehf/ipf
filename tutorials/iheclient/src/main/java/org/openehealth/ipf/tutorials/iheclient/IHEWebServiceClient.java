@@ -131,12 +131,14 @@ public class IHEWebServiceClient implements CamelContextAware {
             exchange.getIn().getHeaders().putAll(headers);
         }
         */
-        var template = camelContext.createProducerTemplate();
-        var result = template.send(endpoint, exchange);
-        if (result.getException() != null) {
-            throw result.getException();
+        try (var template = camelContext.createProducerTemplate()) {
+            var result = template.send(endpoint, exchange);
+
+            if (result.getException() != null) {
+                throw result.getException();
+            }
+            return result;
         }
-        return result;
     }
 
 }

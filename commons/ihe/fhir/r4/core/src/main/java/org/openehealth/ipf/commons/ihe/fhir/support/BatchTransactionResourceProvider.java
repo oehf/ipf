@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 3.6
  * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider} instead
  */
+@Deprecated
 public class BatchTransactionResourceProvider extends SharedFhirProvider {
 
     /**

@@ -76,7 +76,7 @@ public class SyslogEventDICOMPrinter {
             try {
                 var auditMessage = parse(syslogMap);
                 LOG.info("DICOM Payload is");
-                LOG.info("{}", auditMessage.toString());
+                LOG.info("{}", auditMessage);
             } catch (Exception e) {
                 LOG.warn("Could not parse payload:", e);
                 LOG.info("{}", syslogMap.get(SyslogFieldKeys.MESSAGE.getField()));

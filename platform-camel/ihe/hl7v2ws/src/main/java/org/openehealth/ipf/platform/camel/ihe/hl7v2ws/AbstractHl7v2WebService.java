@@ -72,7 +72,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         // parse request
         Message msg;
         try {
-            msg = config.getParser().parse(trimToEmpty(request).replaceAll("\n", "\r\n"));
+            msg = config.getParser().parse(trimToEmpty(request).replace("\n", "\r\n"));
             config.checkRequestAcceptance(msg);
         } catch (HL7Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);

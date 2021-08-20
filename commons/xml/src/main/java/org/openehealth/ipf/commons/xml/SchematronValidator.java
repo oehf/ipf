@@ -44,7 +44,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
         var svrl = schematronTransmogrifier.zap(message, profile);
         List<ValidationException> exceptions = new ArrayList<>();
         svrl.getActivePatternAndFiredRuleAndFailedAssert().stream()
-                .filter(o -> o instanceof FailedAssert)
+                .filter(FailedAssert.class::isInstance)
                 .forEach(o -> {
                     var failedAssert = (FailedAssert) o;
                     exceptions.add(new ValidationException(message(failedAssert)));

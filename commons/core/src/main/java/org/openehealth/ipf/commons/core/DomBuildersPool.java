@@ -110,6 +110,7 @@ public class DomBuildersPool {
             try {
                 var factory = DocumentBuilderFactory.newInstance();
                 factory.setNamespaceAware(true);
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
                 var documentBuilder = factory.newDocumentBuilder();
                 log.debug("Created a new document builder {}", documentBuilder);
                 return documentBuilder;

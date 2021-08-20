@@ -42,8 +42,6 @@ import static java.util.OptionalInt.empty;
  */
 class Rfc5425Decoder extends ByteToMessageDecoder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Rfc5425Decoder.class);
-
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private OptionalInt frameLength = empty();
 
