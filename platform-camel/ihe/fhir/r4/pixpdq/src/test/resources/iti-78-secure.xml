@@ -27,10 +27,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <camel:sslContextParameters id="myContext" secureSocketProtocol="TLSv1.2">
         <camel:keyManagers keyPassword="changeit">
-            <camel:keyStore type="JKS" password="changeit" resource="client.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="server.jks"/>
         </camel:keyManagers>
         <camel:trustManagers>
-            <camel:keyStore type="JKS" password="changeit" resource="client.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="server.jks"/>
         </camel:trustManagers>
         <camel:clientParameters>
             <camel:cipherSuitesFilter>

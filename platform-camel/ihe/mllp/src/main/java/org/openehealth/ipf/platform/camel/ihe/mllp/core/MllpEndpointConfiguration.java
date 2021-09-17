@@ -71,7 +71,7 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
         this.sslProtocols = sslProtocolsString != null ? sslProtocolsString.split("\\s*,\\s*") : null;
         this.sslCiphers = sslCiphersString != null ? sslCiphersString.split("\\s*,\\s*") : null;
 
-        var configuredClientAuthType = component.getAndRemoveParameter(parameters, "clientAuth", ClientAuthType.class, ClientAuthType.NONE);
+        var configuredClientAuthType = component.getAndRemoveParameter(parameters, "clientAuth", ClientAuthType.class, null);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", boolean.class, false);
         var configuredSslContextParameters = component.resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
         var configuredSslContext = component.resolveAndRemoveReferenceParameter(parameters, "sslContext", SSLContext.class);

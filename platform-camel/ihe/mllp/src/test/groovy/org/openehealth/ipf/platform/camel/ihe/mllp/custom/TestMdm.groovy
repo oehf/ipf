@@ -210,7 +210,7 @@ class TestMdm extends MllpTestContainer {
         assertThrows(CamelExchangeException.class, ()->send(endpointUri, body));
     }
 
-    @Test @Disabled
+    @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('MDM^T01', '2.5')
         def endpointUri = 'mdm://localhost:19088?sslContextParameters=#sslContextParameters&audit=false'

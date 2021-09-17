@@ -211,7 +211,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // PID-7..8
         grp.PID[7][1].value = dropTimeZone(person.birthTime.@value.text())
-        grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        if (person.administrativeGenderCode.@code.text()) {
+            grp.PID[8].value = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        }
 
         if (person.raceCode) {
             for (race in person.raceCode) {

@@ -161,10 +161,10 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
     }
 
     protected static void addOtherParameters(parameterList, queryParams) {
-        queryParams.add([
-                '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text(),
-                '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
-        ])
+        queryParams.add(['@PID.7': parameterList.livingSubjectBirthTime.value.@value.text()])
+        if (parameterList.livingSubjectAdministrativeGender.value.@code.text()) {
+            queryParams.add(['@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')])
+        }
     }
 
     protected static void addAddressParameters(addressValues, queryParams) {

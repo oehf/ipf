@@ -55,10 +55,10 @@ class TestSecureIti8 extends MllpTestContainer {
         assertThrows(Exception.class, ()-> send(endpointUri, body));
     }
 
-    @Test @Disabled("ignore until TLS problems are solved")
+    @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters&timeout=${TIMEOUT}"
+        def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#iti8SslContextParameters&timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertACK(msg)
     }

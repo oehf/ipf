@@ -34,7 +34,7 @@ class Iti8TestSecureRouteBuilder extends RouteBuilder {
                 .transform(ack())
 
         from('xds-iti8://0.0.0.0:18088?audit=false&' +
-                'sslContextParameters=#sslContextParameters')
+                'sslContextParameters=#iti8SslContextParameters')
                 .transform(ack())
 
     }

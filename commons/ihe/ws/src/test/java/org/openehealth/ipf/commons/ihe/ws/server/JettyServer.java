@@ -67,7 +67,7 @@ public class JettyServer extends ServletServer {
     }
 
     private SslContextFactory createSecureContextFactory() {
-        var sslContextFactory = new SslContextFactory();
+        var sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
         sslContextFactory.setTrustStorePath(getTruststoreFile());

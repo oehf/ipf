@@ -40,7 +40,7 @@
                 <given>JOHN</given>
                 <family>LABBE</family>
               </name>
-              <administrativeGenderCode code="U"/>
+              <administrativeGenderCode code="UN"/>
               <birthTime value="19840721"/>
               <addr>
                 <city>Montreal</city>

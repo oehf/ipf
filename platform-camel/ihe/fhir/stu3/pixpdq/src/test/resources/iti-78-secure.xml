@@ -25,7 +25,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="common-fhir-beans.xml" />
 
-    <camel:sslContextParameters id="myContext" secureSocketProtocol="TLSv1.2">
+    <camel:sslContextParameters id="myContext">
+        <camel:secureSocketProtocols>
+            <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
+        </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit">
             <camel:keyStore type="JKS" password="changeit" resource="client.jks"/>
         </camel:keyManagers>

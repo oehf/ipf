@@ -21,7 +21,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <import resource="classpath:common-mllp-beans.xml"/>
 
-    <camel:sslContextParameters id="sslContextParameters">
+    <camel:sslContextParameters id="iti8SslContextParameters">
+        <camel:secureSocketProtocols>
+            <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
+        </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
                     resource="some-keystore"
@@ -32,7 +35,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
                     resource="some-keystore"
                     password="changeit"/>
         </camel:trustManagers>
-
         <camel:serverParameters clientAuthentication="REQUIRE"/>
     </camel:sslContextParameters>
     

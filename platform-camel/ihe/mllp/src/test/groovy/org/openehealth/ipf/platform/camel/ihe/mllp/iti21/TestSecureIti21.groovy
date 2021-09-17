@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@Disabled("ignore until TLS problems are solved")
 @Timeout(value = 5L, unit = TimeUnit.MINUTES)
 class TestSecureIti21 extends MllpTestContainer {
 
@@ -77,7 +76,7 @@ class TestSecureIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
-    @Test
+    @Test @Disabled
     void testHappyCaseWithTLSv12AndTLSv13() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2,TLSv1.3&timeout=${TIMEOUT}", 2)
     }
