@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad75;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75PortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsRetrieveDocumentSetService;
 

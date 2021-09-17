@@ -4,7 +4,9 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2012.07.09 at 11:50:13 AM PDT 
 //
-package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
+package org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi;
+
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 
 import java.util.ArrayList;
 import java.util.List;
