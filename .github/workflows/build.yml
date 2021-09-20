@@ -29,16 +29,13 @@ jobs:
         run: mvn -B clean package --file pom.xml
 
 #   Publish somewhere
-
 #   Maybe in a separate action file
-
 #   for publishing/releasing: https://github.com/marketplace/actions/action-maven-publish
 #   see https://github.com/organizations/oehf/settings/secrets/actions
-#
-#      - name: Deploy to Sonatype Snapshot Repo
-#        uses: samuelmeuli/action-maven-publish@v1
-#        with:
-#          gpg_private_key: ${{ secrets.gpg_private_key }}
-#          gpg_passphrase: ${{ secrets.gpg_passphrase }}
-#          nexus_username: ${{ secrets.nexus_username }}
-#          nexus_password: ${{ secrets.nexus_password }}
+      - name: Deploy to Sonatype Snapshot Repo
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          nexus_username: ${{ secrets.nexus_username }}
+          nexus_password: ${{ secrets.nexus_password }}
