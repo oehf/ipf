@@ -1,6 +1,6 @@
 # Open eHealth Integration Platform
 
-[![Build Status](https://travis-ci.com/oehf/ipf.svg?branch=master)](https://travis-ci.com/oehf/ipf)
+![Build Status](https://github.com/oehf/ipf/actions/workflows/build.yml/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openehealth.ipf/ipf/badge.svg)](http://mvnrepository.com/artifact/org.openehealth.ipf)
 
 ## IPF Overview
