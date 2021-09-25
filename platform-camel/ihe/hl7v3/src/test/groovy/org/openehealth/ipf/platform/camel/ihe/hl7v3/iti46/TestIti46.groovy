@@ -71,7 +71,7 @@ class TestIti46 extends HL7v3StandardTestContainer {
         if (result.exception) {
             throw result.exception
         }
-        assert result.properties[Exchange.CHARSET_NAME] == "windows-1251"
+        assert result.getProperty(Exchange.CHARSET_NAME) == "windows-1251"
         def slurper = new XmlSlurper().parseText(result.getMessage().body)
         assert slurper.@from == 'PIX Consumer'
     }

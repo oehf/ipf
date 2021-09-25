@@ -67,7 +67,9 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
             .onException(SoapFault)
                 .process { Exchanges.extractException(it) }     // clean exchange
                 .end()
-            .setHeader('soapFaultUnhandledEndpoint', constant(soapFaultUnhandledEndpoint))
+            .process {
+                it.in.setHeader('soapFaultUnhandledEndpoint', this.soapFaultUnhandledEndpoint)
+            }
             .recipientList(header('soapFaultUnhandledEndpoint'))
             .setBody(constant(new Response(SUCCESS)))
     }
