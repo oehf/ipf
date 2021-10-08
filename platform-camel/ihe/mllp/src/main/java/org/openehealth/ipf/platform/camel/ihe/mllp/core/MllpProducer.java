@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.experimental.Delegate;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangeTimedOutException;
 import org.apache.camel.component.mina2.Mina2Producer;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.mina.core.service.IoConnector;
@@ -37,18 +39,40 @@ public class MllpProducer extends DefaultProducer {
 
     // The reason for this interface is to convince the Delegate annotation to *not* delegate
     // the stop method. Weird API, really.
-    private interface DoStop {
+    private interface CustomMethods {
         @SuppressWarnings("unused")
         void stop();
+        @SuppressWarnings("unused")
+        void process(Exchange exchange) throws Exception;
     }
 
-    @Delegate(excludes = DoStop.class)
+    @Delegate(excludes = CustomMethods.class)
     private final Mina2Producer producer;
 
     MllpProducer(Mina2Producer producer) {
         // Everything will be delegated
         super(producer.getEndpoint());
         this.producer = producer;
+    }
+
+    /**
+     * Mitigate CAMEL-17022 and close current session for any timeouts
+     *
+     * @param exchange exchange
+     */
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        try {
+            producer.process(exchange);
+        } catch (ExchangeTimedOutException e) {
+            closeCurrentSession(producer);
+            throw e;
+        } finally {
+            if (LOG.isDebugEnabled()) {
+                IoSession session = getField(producer, IoSession.class, "session");
+                LOG.debug("Used session {}", session);
+            }
+        }
     }
 
     @Override
@@ -63,14 +87,20 @@ public class MllpProducer extends DefaultProducer {
      */
     @Override
     protected void doStop() throws Exception {
-        IoSession session = getField(producer, IoSession.class, "session");
-        if (session != null) {
-            invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
-        }
+        closeCurrentSession(producer);
         IoConnector connector = getField(producer, IoConnector.class, "connector");
         // Do NOT wait indefinitely
         connector.dispose(false);
         super.doStop();
+    }
+
+    private static void closeCurrentSession(Mina2Producer producer) throws Exception {
+        IoSession session = getField(producer, IoSession.class, "session");
+        if (session != null) {
+            LOG.debug("Closing session {}", session);
+            invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
+            LOG.debug("Closed session {}", session);
+        }
     }
 
     private static <T> T getField(Object target, Class<T> clazz, String name) throws NoSuchFieldException, IllegalAccessException {

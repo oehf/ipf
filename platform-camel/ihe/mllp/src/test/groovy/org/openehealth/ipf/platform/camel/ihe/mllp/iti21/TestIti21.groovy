@@ -118,7 +118,7 @@ class TestIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
     }
 
-    @Test
+    @Test @Ignore
     void testSSLFailureWithIncompatibleProtocols() {
         try {
             send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
@@ -176,11 +176,37 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
     }
 
+    @Test
+    void testTestTimeoutHandling() {
+        // Timeout after 500ms, but response takes 1000ms => Exception
+        doTestWaitAndAssertTimeout("pdq-iti21://localhost:18220?cachedAddress=false&maximumPoolSize=1&timeout=500", 1000)
+        // Long timeout, response takes 1500ms => check that response is not from previous request, that is handled by now
+        doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?cachedAddress=false&maximumPoolSize=1&timeout=5000", 1500)
+    }
+
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+    }
+
+    def doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+        assertRSP(msg)
+        assertEquals(timeoutString, msg.QAK[1].value)
+    }
+
+    def doTestWaitAndAssertTimeout(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        try {
+            def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+            fail("Assuming timeout after $timeout ms")
+        } catch (ExchangeTimedOutException ignored) {
+        }
     }
 
     @Test
