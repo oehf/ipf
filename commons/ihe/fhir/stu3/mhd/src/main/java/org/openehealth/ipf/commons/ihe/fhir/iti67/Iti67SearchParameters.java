@@ -19,9 +19,15 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.dstu3.model.Practitioner;
@@ -37,6 +43,7 @@ import java.util.Set;
  */
 @Builder
 @ToString
+@RequiredArgsConstructor
 public class Iti67SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private ReferenceParam patientReference;

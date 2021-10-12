@@ -19,10 +19,16 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.util.List;
@@ -32,6 +38,8 @@ import java.util.Set;
  * @since 3.6
  */
 @Builder
+@ToString
+@RequiredArgsConstructor
 public class Iti81SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private DateRangeParam interval;
@@ -45,6 +53,7 @@ public class Iti81SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenAndListParam type;
     @Getter @Setter private TokenAndListParam subtype;
     @Getter @Setter private TokenAndListParam outcome;
+    @Getter @Setter private TokenAndListParam altid;
 
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;

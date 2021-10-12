@@ -27,6 +27,7 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.r4.model.Practitioner;
@@ -39,7 +40,9 @@ import java.util.Set;
 /**
  * @since 3.6
  */
-@Builder @ToString
+@Builder
+@ToString
+@RequiredArgsConstructor
 public class Iti66SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private DateRangeParam created;

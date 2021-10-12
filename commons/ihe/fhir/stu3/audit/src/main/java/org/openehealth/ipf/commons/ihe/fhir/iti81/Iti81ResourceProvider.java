@@ -55,6 +55,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = AuditEvent.SP_USER) StringAndListParam user,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
             @OptionalParam(name = AuditEvent.SP_OUTCOME) TokenAndListParam outcome,
+            @OptionalParam(name = AuditEvent.SP_ALTID) TokenAndListParam altid,
             @Sort SortSpec sortSpec,
             @IncludeParam Set<Include> includeSpec,
             RequestDetails requestDetails,
@@ -73,6 +74,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
                 .user(user)
                 .subtype(subtype)
                 .outcome(outcome)
+                .altid(altid)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)
                 .fhirContext(getFhirContext())
