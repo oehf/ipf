@@ -24,9 +24,9 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
@@ -39,7 +39,7 @@ import java.util.Set;
  */
 @Builder
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Iti81SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private DateRangeParam interval;

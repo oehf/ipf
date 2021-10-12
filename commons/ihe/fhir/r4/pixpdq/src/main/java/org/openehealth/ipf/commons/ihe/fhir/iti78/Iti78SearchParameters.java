@@ -24,9 +24,9 @@ import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 @Builder
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Iti78SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private TokenAndListParam identifiers;

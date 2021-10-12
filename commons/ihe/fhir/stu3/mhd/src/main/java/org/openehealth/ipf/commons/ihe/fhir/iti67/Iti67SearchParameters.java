@@ -25,6 +25,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ import java.util.Set;
  */
 @Builder
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Iti67SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private ReferenceParam patientReference;
