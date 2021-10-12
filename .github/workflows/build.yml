@@ -1,6 +1,6 @@
 name: Build IPF with Maven
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 env:
   MAVEN_OPTS: -Xmx2048m
