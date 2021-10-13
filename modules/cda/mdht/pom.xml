@@ -22,8 +22,8 @@
             <artifactId>ipf-commons-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.openhealthtools.mdht.cda</groupId>
-            <artifactId>org.openhealthtools.mdht.uml.cda</artifactId>
+            <groupId>org.openehealth.ipf.oht.mdht</groupId>
+            <artifactId>ipf-oht-mdht-uml-cda</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.equinox</groupId>
