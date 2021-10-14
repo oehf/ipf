@@ -23,6 +23,27 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.2.0" description="IPF 4.2.0" date="18 Oct 2021">
+            <action dev="thopap" type="update">
+                Various dependency updates. This also fixes a potentially critical problem with timed-out MLLP requests.
+                See https://issues.apache.org/jira/browse/CAMEL-17022 for details.
+            </action>
+            <action issue="364" dev="thopap" type="fix">
+                MDHT Dependencies cannot be retrieved because https://projects.suisse-open-exchange.healthcare does not exist anymore. Thanks to Garrett Montague for reporting.
+            </action>
+            <action issue="361" dev="unixoid" type="fix">
+                RetrieveImagingDocumentSetRequestType should have namespace urn:ihe:rad:xdsi-b:2009 instead of urn:ihe:iti:xds-b:2007. Thanks to Anita Kurz for reporting.
+            </action>
+            <action issue="360" dev="ohr" type="fix">
+                Fix mapping in HL7v3->v2 translation for "UN" gender
+            </action>
+            <action issue="359" dev="unixoid" type="fix">
+                ParticipantObjectIDTypeCode ignored in AuditRecordTranslator. Thanks to Mikolaj Nowak for reporting.
+            </action>
+            <action issue="358" dev="ohr" type="fix">
+                Add ITI-81 search parameter. Thanks to Mikolaj Nowak for reporting.
+            </action>
+        </release>
         <release version="4.1.0" description="IPF 4.1.0" date="23 Jul 2021">
             <action dev="thopap" type="update">
                 Various dependency updates
