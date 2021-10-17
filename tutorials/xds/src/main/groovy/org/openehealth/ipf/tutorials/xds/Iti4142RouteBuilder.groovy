@@ -31,10 +31,15 @@ import javax.activation.DataHandler
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.DEPRECATED
+import static org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer.getPort
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.supportiveBuilderWith
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti42RequestValidator
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+
+import java.util.function.Function
+import java.util.function.Supplier
 
 /**
  * Route builder for ITI-41 and -42.
@@ -60,15 +65,17 @@ class Iti4142RouteBuilder extends RouteBuilder {
             // Further validation based on the registry content
             .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHashAndSize')
             // Store the individual entries contained in the request
-            .multicast().to(
-                'direct:storeDocs',
-                'direct:storeDocEntriesFromProvide',
-                'direct:storeFolders',
-                'direct:storeSubmissionSet',
-                'direct:storeAssociations')
-            .end()
-            // Create success response
-            .transform ( constant(new Response(Status.SUCCESS)) )
+            .to('direct:storeDocs')
+            .to('direct:updateDocEntriesFromProvide')
+            .log('Transform to RegisterDocumentSetRequest')
+            // Transform to ITI-42 RegisterDocumentSet Request
+            .transform().body({entry -> supportiveBuilderWith(entry.req.submissionSet)
+                                            .withDocuments(entry.req.documents*.documentEntry)
+                                            .withFolders(entry.req.folders)
+                                            .withAssociations(entry.req.associations).build()} as Function)
+            .setHeader("port", {"" + getPort()}  as Supplier)
+            .log('Send to ITI-42 endpoint: xds-iti42://localhost:${header.port}/xds-iti42')
+            .toD('xds-iti42://localhost:${header.port}/xds-iti42')
 
         // Entry point for Register Document Set
         from('xds-iti42:xds-iti42')
@@ -154,13 +161,12 @@ class Iti4142RouteBuilder extends RouteBuilder {
             .splitEntries { it.req.documents }
             .store()
 
-        // Put all document entries in the store
-        from('direct:storeDocEntriesFromProvide')
+        // calculate hash + size
+        from('direct:updateDocEntriesFromProvide')
             .splitEntries { it.req.documents }
             // Calculate some additional meta data values
             .updateWithRepositoryData()
             .processBody { it.entry = it.entry.documentEntry }
-            .to('direct:store')
 
         // Put all document entries in the store
         from('direct:storeDocEntriesFromRegister')

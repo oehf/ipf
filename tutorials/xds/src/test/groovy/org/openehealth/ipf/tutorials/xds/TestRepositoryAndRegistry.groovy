@@ -56,6 +56,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
+        docEntry.extraMetadata = ['urn:abc': ['ddd']]
         patientId.id = UUID.randomUUID().toString()
         docEntry.uniqueId = '4.3.2.1'
         docEntry.hash = ContentUtils.sha1(provide.documents[0].getContent(DataHandler))
@@ -73,6 +74,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         assertEquals(Status.SUCCESS, queryResponse.status, queryResponse.toString())
         assertEquals(1, queryResponse.documentEntries.size())
         assertEquals(docEntry.uniqueId, queryResponse.documentEntries[0].uniqueId)
+        assertEquals(docEntry.extraMetadata, queryResponse.documentEntries[0].extraMetadata)
     }
 
     @Test
