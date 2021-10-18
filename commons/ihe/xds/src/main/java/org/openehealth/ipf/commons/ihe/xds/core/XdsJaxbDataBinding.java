@@ -122,6 +122,8 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         private static void injectExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
             if (holder.getExtraMetadata() != null) {
+                slots.removeIf(slot -> isExtraMetadataSlotName(slot.getName())
+                        && holder.getExtraMetadata().containsKey(slot.getName()));
                 holder.getExtraMetadata().entrySet().stream()
                         .filter(entry -> isExtraMetadataSlotName(entry.getKey()))
                         .forEach(entry -> {

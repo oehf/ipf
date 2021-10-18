@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
@@ -29,21 +30,26 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for marshaling objects created with our ebxml 2.1 classes.
@@ -54,14 +60,13 @@ public class Ebrs30MarshalingTest {
     private EbXMLExtrinsicObject docEntry;
     private EbXMLFactory30 factory;
     private EbXMLObjectLibrary objectLibrary;
-
-    private static final QName EXTRINSIC_OBJECT_QNAME = 
-        new QName("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", "ExtrinsicObject", "rim"); 
+    private JAXBContext context;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws JAXBException {
         factory = new EbXMLFactory30();
         objectLibrary = factory.createObjectLibrary();
+        context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
         
         request = new SubmitObjectsRequest();
         var objListElement = new RegistryObjectListType();
@@ -70,12 +75,7 @@ public class Ebrs30MarshalingTest {
 
         docEntry = factory.createExtrinsic("Document01", objectLibrary);
         docEntry.setObjectType(DocumentEntryType.STABLE.getUuid());
-        objList.add(getJaxbElement(EXTRINSIC_OBJECT_QNAME, ((EbXMLExtrinsicObject30)docEntry).getInternal()));
-    }
-    
-    @SuppressWarnings("unchecked")
-    private static JAXBElement<IdentifiableType> getJaxbElement(QName qname, IdentifiableType object) {
-        return new JAXBElement<>(qname, (Class)object.getClass(), object);
+        objList.add(new ObjectFactory().createExtrinsicObject(((EbXMLExtrinsicObject30)docEntry).getInternal()));
     }
     
     @Test
@@ -131,8 +131,7 @@ public class Ebrs30MarshalingTest {
     @Test
     public void testFromRealEbXML() throws Exception {
         var file = new File(getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs30.xml").toURI());
-
-        var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+        
         var unmarshaller = context.createUnmarshaller();
 
         var unmarshalled = unmarshaller.unmarshal(file);
@@ -158,8 +157,6 @@ public class Ebrs30MarshalingTest {
     @Test
     public void testPatientIdSlotRegexp() throws Exception {
         var file = new File(getClass().getClassLoader().getResource("iti18request.xml").toURI());
-
-        var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
         var unmarshaller = context.createUnmarshaller();
 
         var unmarshalled = unmarshaller.unmarshal(file);
@@ -174,7 +171,6 @@ public class Ebrs30MarshalingTest {
     public void testPatientIdMPQSlotRegexp() throws Exception {
         var file = new File(getClass().getClassLoader().getResource("iti51request.xml").toURI());
 
-        var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
         var unmarshaller = context.createUnmarshaller();
 
         var unmarshalled = unmarshaller.unmarshal(file);
@@ -184,9 +180,33 @@ public class Ebrs30MarshalingTest {
         var patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
         assertEquals(2, patientIdList.size());
     }
+    
+    @Test
+    public void verifyExtraMetadataWithJaxbBinding() throws Exception {
+        var file = new File(
+                getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs3_extra_metadata.xml").toURI());
+        var unmarshaller = context.createUnmarshaller();
+        unmarshaller.setListener(new XdsJaxbDataBinding().getUnmarshallerListener());
+
+        var unmarshalled = unmarshaller.unmarshal(file);
+        var original = (SubmitObjectsRequest) unmarshalled;
+        int numberOfSlotsInFirstDoc = new EbXMLSubmitObjectsRequest30(original).getExtrinsicObjects().get(0).getSlots()
+                .size();
+
+        var marshaller = context.createMarshaller();
+        marshaller.setListener(new XdsJaxbDataBinding().getMarshallerListener());
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(original, writer);
+
+        var unmarshalledSecond = (SubmitObjectsRequest) unmarshaller.unmarshal(new StringReader(writer.toString()));
+        int numberOfSlotsInSecondDoc = new EbXMLSubmitObjectsRequest30(unmarshalledSecond).getExtrinsicObjects().get(0)
+                .getSlots().size();
+
+        assertEquals(numberOfSlotsInFirstDoc, numberOfSlotsInSecondDoc,
+                "Number of slots after Marshalling and Unmarsshalling does not match");
+    }
 
     private SubmitObjectsRequest send() throws JAXBException {
-        var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
         var marshaller = context.createMarshaller();
         var unmarshaller = context.createUnmarshaller();
         var outputStream = new ByteArrayOutputStream();
