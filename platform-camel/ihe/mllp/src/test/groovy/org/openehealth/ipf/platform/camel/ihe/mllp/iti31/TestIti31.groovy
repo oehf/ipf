@@ -72,7 +72,7 @@ class TestIti31 extends MllpTestContainer {
 
     @Test
     void testHappyCaseAndAuditLink() {
-        doTestHappyCaseAndAudit('ADT^A09^ADT_A09', "pam-iti31://localhost:18103?audit=false&timeout=${TIMEOUT}&options=BASIC,TEMPORARY_PATIENT_TRANSFERS_TRACKING", 1)
+        doTestHappyCaseAndAudit('ADT^A09^ADT_A09', "pam-iti31://localhost:18103?audit=false&timeout=${TIMEOUT}&iheOptions=BASIC,TEMPORARY_PATIENT_TRANSFERS_TRACKING", 1)
     }
     
     def doTestHappyCaseAndAudit(String trigger, String endpointUri, int expectedAuditItemsCount) {

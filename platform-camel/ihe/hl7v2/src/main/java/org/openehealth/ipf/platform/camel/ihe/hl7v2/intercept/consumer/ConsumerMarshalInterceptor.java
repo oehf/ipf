@@ -83,9 +83,8 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
             // run the route
             try {
                 getWrappedProcessor().process(exchange);
-            } catch (Hl7v2AdaptingException mae) {
-                throw mae;
             } catch (Exception e) {
+                // With Netty, we treat unhandlable response types like other errors
                 LOG.error("Message processing failed", e);
                 resultMessage(exchange).setBody(
                         getEndpoint().getNakFactory().createNak(originalMessage, e));

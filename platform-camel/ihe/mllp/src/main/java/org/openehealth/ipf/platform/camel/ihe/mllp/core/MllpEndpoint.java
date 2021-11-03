@@ -196,6 +196,10 @@ public abstract class MllpEndpoint<
         return getConfiguration().getRequestTimeout();
     }
 
+    @ManagedAttribute(description = "Netty Request Timeout")
+    public long getTimeout() {
+        return getConfiguration().getRequestTimeout();
+    }
 
     /**
      * @return the customInterceptorFactories

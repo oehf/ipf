@@ -48,7 +48,7 @@ class Iti31TestRouteBuilder extends RouteBuilder {
             .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         // route with explicit options
-        from('pam-iti31://0.0.0.0:18103?options=BASIC,TEMPORARY_PATIENT_TRANSFERS_TRACKING')
+        from('pam-iti31://0.0.0.0:18103?iheOptions=BASIC,TEMPORARY_PATIENT_TRANSFERS_TRACKING')
                 .routeId("withOptions")
                 .transform(ack())
     }

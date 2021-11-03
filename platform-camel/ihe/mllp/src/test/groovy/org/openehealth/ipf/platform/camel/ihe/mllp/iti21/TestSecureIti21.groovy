@@ -58,7 +58,12 @@ class TestSecureIti21 extends MllpTestContainer {
 
     @Test
     void testHappyCaseAndAuditSecure() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContextParameters=#iti21SslContextParameters&timeout=${TIMEOUT}", 2)
+    }
+
+    @Test
+    void testServerDoesNotNeedToAcceptCertificate() {
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContextParameters=#iti21SslContextParametersWithoutKeystore&timeout=${TIMEOUT}", 2)
     }
 
     // Client without certificates (empty key store in SSL context) should fail
@@ -67,60 +72,38 @@ class TestSecureIti21 extends MllpTestContainer {
     @Test
     void testFailAuditSecureWant() {
         assertThrows(Exception.class, ()->
-            send("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18211?secure=true&sslContextParameters=#iti21SslContextParametersWithoutKeystore&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
         )
     }
 
     @Test
     void testHappyCaseAndAuditSecureWant() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
-    }
-
-    @Test @Disabled
-    void testHappyCaseWithTLSv12AndTLSv13() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2,TLSv1.3&timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContextParameters=#iti21SslContextParametersWithoutKeystore&timeout=${TIMEOUT}", 2)
     }
 
     @Test
     void testHappyCaseWithCiphers() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContextParameters=#iti21SslContextCiphersParameters&timeout=${TIMEOUT}", 2)
     }
 
     @Test
-    void testSSLFailureWithIncompatibleProtocols() {
-        assertThrows(Exception.class, ()->
-            send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-        )
-    }
-
-    @Test
-    @Disabled("Test runs into JUnit test timeout (see @Rule above)")
     void testSSLFailureWithIncompatibleCiphers() {
         try {
-            send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18218?secure=true&sslContextParameters=#iti21SslContextOtherCiphersParameters&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (Exception ignored) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
         }
 
         def messages = auditSender.messages
-        assertEquals(3, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
-        assertEquals(EventIdCode.SecurityAlert, messages[1].getEventIdentification().getEventID())
+        assertEquals(2, messages.size())
+        messages.any {it.eventIdentification.eventID == EventIdCode.SecurityAlert}
     }
 
     @Test
     void testSSLFailureWithIncompatibleKeystores() {
         assertThrows(Exception.class, ()->
-            send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContextOther&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18218?secure=true&sslContextParameters=#iti21OtherSslContextParameters&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
         )
-    }
-
-    @Test
-    void testServerDoesNotNeedToAcceptCertificate() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {

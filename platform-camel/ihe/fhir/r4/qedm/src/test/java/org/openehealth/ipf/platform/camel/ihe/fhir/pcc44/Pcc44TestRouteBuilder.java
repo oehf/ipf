@@ -44,7 +44,7 @@ public class Pcc44TestRouteBuilder extends RouteBuilder {
         from("direct:input")
                 .toF("qedm-pcc44:localhost:%d", FhirTestContainer.DEMO_APP_PORT);
 
-        from("qedm-pcc44:translation?audit=true&options=OBSERVATIONS")
+        from("qedm-pcc44:translation?audit=true&iheOptions=OBSERVATIONS")
                 .errorHandler(noErrorHandler())
                 .transform(new Pcc44Responder());
     }

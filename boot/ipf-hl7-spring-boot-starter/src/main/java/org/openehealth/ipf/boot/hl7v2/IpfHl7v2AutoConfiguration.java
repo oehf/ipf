@@ -28,12 +28,12 @@ import ca.uhn.hl7v2.util.idgenerator.UUIDGenerator;
 import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.CamelContext;
-import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
-import org.apache.camel.component.hl7.HL7MLLPCodec;
+import org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory;
+import org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
@@ -69,14 +69,25 @@ public class IpfHl7v2AutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(HL7MLLPCodec.class)
-    HL7MLLPCodec hl7codec(IpfHl7v2ConfigurationProperties config) {
-        HL7MLLPCodec hl7MLLPCodec = new CustomHL7MLLPCodec();
+    @ConditionalOnMissingBean(HL7MLLPNettyDecoderFactory.class)
+    HL7MLLPNettyDecoderFactory hl7decoder(IpfHl7v2ConfigurationProperties config) {
+        HL7MLLPNettyDecoderFactory decoder = new HL7MLLPNettyDecoderFactory();
         if (config.getCharset() != null) {
-            hl7MLLPCodec.setCharset(config.getCharset());
+            decoder.setCharset(config.getCharset());
         }
-        hl7MLLPCodec.setConvertLFtoCR(config.isConvertLinefeed());
-        return hl7MLLPCodec;
+        decoder.setConvertLFtoCR(config.isConvertLinefeed());
+        return decoder;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(HL7MLLPNettyEncoderFactory.class)
+    HL7MLLPNettyEncoderFactory hl7encoder(IpfHl7v2ConfigurationProperties config) {
+        HL7MLLPNettyEncoderFactory encoder = new HL7MLLPNettyEncoderFactory();
+        if (config.getCharset() != null) {
+            encoder.setCharset(config.getCharset());
+        }
+        encoder.setConvertLFtoCR(config.isConvertLinefeed());
+        return encoder;
     }
 
     @Bean

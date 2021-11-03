@@ -84,10 +84,7 @@ class TestIti21 extends MllpTestContainer {
         try {
             send("pdq-iti21://localhost:18211?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (Exception expected) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
+        } catch (CamelExchangeException expected) {
         }
 
         def messages = auditSender.messages

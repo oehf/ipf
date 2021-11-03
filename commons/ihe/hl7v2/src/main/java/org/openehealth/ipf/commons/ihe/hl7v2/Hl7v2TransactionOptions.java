@@ -52,6 +52,7 @@ public interface Hl7v2TransactionOptions extends TransactionOptions<String> {
     static <T extends Hl7v2TransactionOptions> String concatAllToString(List<? extends T> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
+                .distinct()
                 .map(Object::toString)
                 .collect(Collectors.joining(" "));
     }

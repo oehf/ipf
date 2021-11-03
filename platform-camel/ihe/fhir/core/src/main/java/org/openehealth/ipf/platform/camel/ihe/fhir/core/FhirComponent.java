@@ -21,14 +21,14 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.support.DefaultComponent;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.*;
+import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
+import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
-import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,16 +103,6 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
                     " is configured to not support lazy-loading of bundles, but the endpoint requested to do so.");
         }
         return doCreateEndpoint(uri, config);
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalProducerInterceptors() {
-        return Collections.emptyList();
     }
 
     /**

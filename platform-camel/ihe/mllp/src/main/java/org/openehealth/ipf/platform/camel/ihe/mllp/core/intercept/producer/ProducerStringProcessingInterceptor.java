@@ -38,11 +38,10 @@ public class ProducerStringProcessingInterceptor extends InterceptorSupport<Mllp
 
         var supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
         var segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
-        Message message;
         
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
-            message = exchange.getIn();
+            var message = exchange.getIn();
             var s = message.getBody(String.class);
             s = FragmentationUtils.ensureMaximalSegmentsLength(s, segmentFragmentationThreshold);
             message.setBody(s);
@@ -51,9 +50,12 @@ public class ProducerStringProcessingInterceptor extends InterceptorSupport<Mllp
         // run the route
         getWrappedProcessor().process(exchange);
 
-        // read in the response
-        message = Exchanges.resultMessage(exchange);
-        message.setBody(Hl7v2MarshalUtils.convertBodyToString(
+        // Read in the response. If an exception is set (e.g. because the connection was closed, return it)
+        if (exchange.getException() != null) {
+            throw exchange.getException();
+        }
+        var message = exchange.getMessage();
+        exchange.getMessage().setBody(Hl7v2MarshalUtils.convertBodyToString(
                 message,
                 charsetName,
                 supportSegmentFragmentation));

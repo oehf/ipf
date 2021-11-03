@@ -26,7 +26,6 @@ import org.apache.camel.spi.PropertyConfigurer;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
-import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.ssl.CamelTlsParameters;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
@@ -34,9 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -54,6 +51,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
     private static final String DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME = "#hl7decoder";
     private static final String DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME = "#hl7encoder";
+    private static final String MLLP_ENDPOINT_CONFIG = "mllpEndpointConfig";
 
     protected MllpComponent() {
         super();
@@ -99,15 +97,18 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         nettyParameters.put("sync", true);
         nettyParameters.put("lazyChannelCreation", true);
         nettyParameters.put("transferExchange", false);
+        nettyParameters.put("serverInitializerFactory", new CustomServerInitializerFactory(getAndRemoveParameter(parameters, MLLP_ENDPOINT_CONFIG, MllpEndpointConfiguration.class)));
+
         if (!nettyParameters.containsKey("decoders")) {
             nettyParameters.put("decoders", DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME);
         }
         if (!nettyParameters.containsKey("encoders")) {
             nettyParameters.put("encoders", DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME);
         }
-
         // Backwards compatibility
-        nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 0L));
+        if (!nettyParameters.containsKey("requestTimeout")) {
+            nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 30000L));
+        }
         nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, false));
         nettyParameters.put("ssl", nettyParameters.containsKey("sslContextParameters") || nettyParameters.containsKey("tlsParameters"));
 
@@ -168,8 +169,9 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             String remaining,
             Map<String, Object> parameters) throws Exception {
 
-        // construct IPF-specific config
+        // construct IPF-specific config and pass in
         var config = createConfig(uri, parameters);
+        parameters.put(MLLP_ENDPOINT_CONFIG, config);
 
         // construct the Netty endpoint
         var endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
@@ -177,16 +179,6 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
         // wrap and return
         return createEndpoint(nettyEndpoint, config);
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalProducerInterceptors() {
-        return Collections.emptyList();
     }
 
     @Override

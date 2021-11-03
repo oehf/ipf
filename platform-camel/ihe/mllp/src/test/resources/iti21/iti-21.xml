@@ -12,11 +12,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:camel="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util.xsd">
+http://www.springframework.org/schema/util/spring-util.xsd
+http://camel.apache.org/schema/spring
+http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="classpath:common-mllp-beans.xml"/>
 
@@ -36,36 +39,29 @@ http://www.springframework.org/schema/util/spring-util.xsd">
         </constructor-arg>
     </bean>
 
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
-        <property name="charset" value="utf-8"/>
-    </bean>
-
     <bean id="dummyInterceptor"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor$Factory"/>
 
     <bean id="authenticationInterceptor"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
 
-    <bean id="sslContext" class="javax.net.ssl.SSLContext"
-          factory-bean="sslContextFactory"
-          factory-method="newInstance" />
-
-    <bean id="sslContextFactory" class="org.apache.mina.filter.ssl.SslContextFactory">
-        <property name="keyManagerFactoryAlgorithm" value="SunX509"/>
-        <property name="keyManagerFactoryKeyStore" ref="keyStore"/>
-        <property name="keyManagerFactoryKeyStorePassword" value="changeit"/>
-        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
-        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
-    </bean>
-
-    <bean id="keyStore" class="java.security.KeyStore"
-          factory-bean="keyStoreFactory"
-          factory-method="newInstance" />
-
-    <bean id="keyStoreFactory" class="org.apache.mina.filter.ssl.KeyStoreFactory">
-        <property name="dataUrl" value="iti21/keystore"/>
-        <property name="password" value="changeit"/>
-    </bean>
+    <camel:sslContextParameters id="sslContextParameters">
+        <camel:secureSocketProtocols>
+            <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
+        </camel:secureSocketProtocols>
+        <camel:keyManagers keyPassword="changeit">
+            <camel:keyStore type="JKS" password="changeit" resource="iti21/keystore"/>
+        </camel:keyManagers>
+        <camel:trustManagers>
+            <camel:keyStore type="JKS" password="changeit" resource="iti21/keystore"/>
+        </camel:trustManagers>
+        <camel:clientParameters>
+            <camel:cipherSuitesFilter>
+                <camel:include>.*_RSA_WITH_AES_.*</camel:include>
+                <camel:exclude>.*_DH_anon_.*</camel:exclude>
+            </camel:cipherSuitesFilter>
+        </camel:clientParameters>
+    </camel:sslContextParameters>
 
     <!--
     <bean id="sendTracingData"

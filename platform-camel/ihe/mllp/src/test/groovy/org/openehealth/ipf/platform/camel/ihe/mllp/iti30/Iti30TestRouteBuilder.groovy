@@ -48,7 +48,7 @@ class Iti30TestRouteBuilder extends RouteBuilder {
             .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         // route with explicit options
-        from('pam-iti30://0.0.0.0:18103?options=MERGE,LINK_UNLINK')
+        from('pam-iti30://0.0.0.0:18103?iheOptions=MERGE,LINK_UNLINK')
                 .routeId("withOptions")
                 .transform(ack())
     }

@@ -23,7 +23,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import java.nio.ByteBuffer
 
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
@@ -124,13 +123,9 @@ class TestIti8Datatypes extends MllpTestContainer {
         // 9-12 should throw exceptions
         def exceptionsCount = 0
         for(int i = 8; i <= 11; ++i) {
-            try {
-                send(endpointUri, body)
-            } catch (Exception e) {
-                ++exceptionsCount
-            }
+            def msg = send(endpointUri, body)
+            assertNAK(msg)
         }
-        assertEquals(4, exceptionsCount)
         
         // 13-18 should return NAKs
         for(int i = 12; i <= 17; ++i) {

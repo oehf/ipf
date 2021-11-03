@@ -35,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse
  * Unit tests for the PDQ transaction aka ITI-22.
  * @author Dmytro Rud
  */
-@Disabled
 class TestIti22 extends MllpTestContainer {
     
     

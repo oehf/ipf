@@ -51,7 +51,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  .end()
              .transform(constant(rsp))
 
-         from('pdq-iti21://0.0.0.0:18211?secure=true&clientAuth=MUST&sslContext=#sslContext')
+         from('pdq-iti21://0.0.0.0:18211?secure=true&sslContextParameters=#sslContextParameters')
              .transform(constant(rsp))
 
          // for cancel messages

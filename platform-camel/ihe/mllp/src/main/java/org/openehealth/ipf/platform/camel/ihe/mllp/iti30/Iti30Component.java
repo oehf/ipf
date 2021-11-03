@@ -32,9 +32,9 @@ import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
 
 /**
  * Camel component for ITI-30 (Patient Identity Management).
- * The endpoints take an additional parameter "options", that refer to the
+ * The endpoints take an additional parameter "iheOptions", that refer to the
  * transaction options as specified in {@link Iti30Options} that need to be supported.
- * You can also provide different options specified by an additional parameter "optionsProvider".
+ * You can also provide different options specified by an additional parameter "iheOptionsProvider".
  *
  * @author Christian Ohr
  */
@@ -53,8 +53,8 @@ public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         var config = super.createConfig(uri, parameters);
         Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
-                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
-        var options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+                getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
+        var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
         List<? extends Hl7v2TransactionOptions> iti30Options = TransactionOptionsUtils.split(options, Iti30Options.class);
         if (iti30Options.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");

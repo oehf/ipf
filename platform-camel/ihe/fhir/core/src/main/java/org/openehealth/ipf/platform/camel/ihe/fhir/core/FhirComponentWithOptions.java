@@ -53,8 +53,8 @@ public abstract class FhirComponentWithOptions<AuditDatasetType extends FhirAudi
     @Override
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
         FhirTransactionOptionsProvider<AuditDatasetType, O> optionsProvider =
-                getAndRemoveOrResolveReferenceParameter(parameters, "optionsProvider", FhirTransactionOptionsProvider.class, optionsProviderSupplier.get());
-        var options = getAndRemoveParameter(parameters, "options", String.class, optionsProvider.getDefaultOption().name());
+                getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", FhirTransactionOptionsProvider.class, optionsProviderSupplier.get());
+        var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
         List<O> itiOptions = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());
         if (itiOptions.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for " + getInteractionId() + " is invalid");
