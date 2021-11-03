@@ -15,18 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.apache.camel.*;
-import org.apache.camel.component.mina.MinaConsumer;
-import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.camel.support.DefaultConsumer;
+import org.apache.camel.AsyncProcessor;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.Route;
+import org.apache.camel.ServiceStatus;
+import org.apache.camel.component.netty.NettyConsumer;
+import org.apache.camel.component.netty.NettyEndpoint;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.camel.spi.UnitOfWork;
-import org.apache.mina.core.service.IoAcceptor;
+import org.apache.camel.support.DefaultConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MllpConsumer wraps a MinaConsumer for having a hook to shutdown some Mina
+ * MllpConsumer wraps a NettyConsumer for having a hook to shutdown some Netty
  * resources when the consumer is closing
  */
 public class MllpConsumer extends DefaultConsumer {
@@ -51,10 +54,6 @@ public class MllpConsumer extends DefaultConsumer {
     @Override
     public boolean isSuspendingOrSuspended() {
         return this.consumer.isSuspendingOrSuspended();
-    }
-
-    public IoAcceptor getAcceptor() {
-        return this.consumer.getAcceptor();
     }
 
     @Override
@@ -102,10 +101,6 @@ public class MllpConsumer extends DefaultConsumer {
         return this.consumer.isRunAllowed();
     }
 
-    public void setAcceptor(IoAcceptor acceptor) {
-        this.consumer.setAcceptor(acceptor);
-    }
-
     @Override
     public void shutdown() {
         this.consumer.shutdown();
@@ -142,7 +137,7 @@ public class MllpConsumer extends DefaultConsumer {
     }
 
     @Override
-    public MinaEndpoint getEndpoint() {
+    public NettyEndpoint getEndpoint() {
         return this.consumer.getEndpoint();
     }
 
@@ -156,9 +151,9 @@ public class MllpConsumer extends DefaultConsumer {
         this.consumer.suspend();
     }
 
-    private final MinaConsumer consumer;
+    private final NettyConsumer consumer;
 
-    MllpConsumer(MinaConsumer consumer) {
+    MllpConsumer(NettyConsumer consumer) {
         // Everything will be delegated
         super(consumer.getEndpoint(), consumer.getProcessor());
         this.consumer = consumer;
@@ -170,6 +165,7 @@ public class MllpConsumer extends DefaultConsumer {
         // super.stop();
     }
 
+    /* Need this with Netty?
     @Override
     protected void doStop() throws Exception {
         super.doStop();
@@ -185,5 +181,7 @@ public class MllpConsumer extends DefaultConsumer {
             ioAcceptor.dispose(false);
         }
     }
+    */
+
 
 }

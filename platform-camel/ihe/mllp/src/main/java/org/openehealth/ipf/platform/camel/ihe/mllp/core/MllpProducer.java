@@ -16,66 +16,20 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.experimental.Delegate;
-import org.apache.camel.component.mina.MinaProducer;
+import org.apache.camel.component.netty.NettyConfiguration;
+import org.apache.camel.component.netty.NettyEndpoint;
+import org.apache.camel.component.netty.NettyProducer;
 import org.apache.camel.support.DefaultProducer;
-import org.apache.mina.core.service.IoConnector;
-import org.apache.mina.core.session.IoSession;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * MllpProducer wraps a MinaProducer for having a hook to shutdown some Mina
- * resources when the consumer is closing
+ * MllpProducer wraps a NettyProducer. TODO Currently it doesn't do anything specifically
  */
-public class MllpProducer extends DefaultProducer {
+public class MllpProducer extends NettyProducer {
 
-    // The reason for this interface is to convince the Delegate annotation to *not* delegate
-    // the stop method. Weird API, really.
-    private interface DoStop {
-        @SuppressWarnings("unused")
-        void stop();
-    }
 
-    @Delegate(excludes = DoStop.class)
-    private final MinaProducer producer;
-
-    MllpProducer(MinaProducer producer) {
-        // Everything will be delegated
-        super(producer.getEndpoint());
-        this.producer = producer;
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-    }
-
-    /**
-     * Hack to circumvent accessing private members of the super class with the effect that
-     * disposing the connector does NOT wait indefinitely.
-     * @throws Exception
-     */
-    @Override
-    protected void doStop() throws Exception {
-        var session = getField(producer, IoSession.class, "session");
-        if (session != null) {
-            invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
-        }
-        var connector = getField(producer, IoConnector.class, "connector");
-        // Do NOT wait indefinitely
-        connector.dispose(false);
-        super.doStop();
-    }
-
-    private static <T> T getField(Object target, Class<T> clazz, String name) throws NoSuchFieldException, IllegalAccessException {
-        var field = target.getClass().getDeclaredField(name);
-        field.setAccessible(true);
-        return (T) field.get(target);
-    }
-
-    private static <T> void invoke(Object target, String name, Class<T> clazz, T arg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        var method = target.getClass().getDeclaredMethod(name, clazz);
-        method.setAccessible(true);
-        method.invoke(target, arg);
+    public MllpProducer(NettyEndpoint nettyEndpoint, NettyConfiguration configuration) {
+        super(nettyEndpoint, configuration);
     }
 }

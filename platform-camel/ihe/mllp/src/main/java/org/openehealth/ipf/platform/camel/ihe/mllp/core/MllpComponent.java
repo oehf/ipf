@@ -17,14 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
-import org.apache.camel.component.hl7.HL7MLLPCodec;
-import org.apache.camel.component.mina.MinaComponent;
-import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.camel.component.mina.MinaEndpointConfigurer;
+import org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory;
+import org.apache.camel.component.netty.NettyComponent;
+import org.apache.camel.component.netty.NettyConfiguration;
+import org.apache.camel.component.netty.NettyEndpoint;
+import org.apache.camel.component.netty.NettyEndpointConfigurer;
 import org.apache.camel.spi.PropertyConfigurer;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.ssl.CamelTlsParameters;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.slf4j.Logger;
@@ -43,13 +46,14 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration, AuditDatasetType extends MllpAuditDataset>
-        extends MinaComponent implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
+        extends NettyComponent implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
 
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
 
-    private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
+    private static final String DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME = "#hl7decoder";
+    private static final String DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME = "#hl7encoder";
 
     protected MllpComponent() {
         super();
@@ -78,12 +82,82 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     /**
      * Creates an endpoint object.
      *
-     * @param wrappedEndpoint standard Camel MINA endpoint instance.
+     * @param wrappedEndpoint standard Camel Netty endpoint instance.
      * @param config          endpoint configuration.
-     * @return configured MLLP endpoint instance which wraps the MINA one.
+     * @return configured MLLP endpoint instance which wraps the Netty one.
      */
-    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(MinaEndpoint wrappedEndpoint, ConfigType config);
+    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(NettyEndpoint wrappedEndpoint, ConfigType config);
 
+
+    /**
+     * Called when the NettyEndpoint is created. We overwrite a few parameters.
+     */
+    @Override
+    protected NettyConfiguration parseConfiguration(NettyConfiguration configuration, String remaining, Map<String, Object> parameters) throws Exception {
+        // Explicitly overwrite or set some standard camel-netty parameters
+        var nettyParameters = new HashMap<>(parameters);
+        nettyParameters.put("sync", true);
+        nettyParameters.put("lazyChannelCreation", true);
+        nettyParameters.put("transferExchange", false);
+        if (!nettyParameters.containsKey("decoders")) {
+            nettyParameters.put("decoders", DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME);
+        }
+        if (!nettyParameters.containsKey("encoders")) {
+            nettyParameters.put("encoders", DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME);
+        }
+
+        // Backwards compatibility
+        nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 0L));
+        nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, false));
+        nettyParameters.put("ssl", nettyParameters.containsKey("sslContextParameters") || nettyParameters.containsKey("tlsParameters"));
+
+        var nettyConfiguration = super.parseConfiguration(configuration, remaining, nettyParameters);
+
+        // Postprocess the configuration
+        var charset = getCharset(nettyConfiguration);
+        nettyConfiguration.setEncoding(charset.name());
+
+        if (nettyConfiguration.isSsl() && nettyConfiguration.getSslContextParameters() == null) {
+            var tlsParameters = getAndRemoveOrResolveReferenceParameter(nettyParameters, "tlsParameters", CamelTlsParameters.class);
+            if (tlsParameters == null) {
+                var map = getCamelContext().getRegistry().findByTypeWithName(CamelTlsParameters.class);
+                if (map.size() == 1) {
+                    var entry = map.entrySet().iterator().next();
+                    tlsParameters = entry.getValue();
+                    LOG.debug("Setting up CamelTlsParameters from bean with name {}", entry.getKey());
+                } else if (map.size() > 1) {
+                    throw new AmbiguousBeanException(CamelTlsParameters.class);
+                } else {
+                    tlsParameters = CamelTlsParameters.SYSTEM;
+                    LOG.debug("Setting up default CamelTlsParameters from system properties");
+                }
+            }
+            nettyConfiguration.setSslContextParameters(tlsParameters.getSSLContextParameters());
+        }
+
+        return nettyConfiguration;
+    }
+
+    private Charset getCharset(NettyConfiguration nettyConfiguration) {
+        Charset charset = null;
+        var decoder = new HL7MLLPNettyDecoderFactory();
+        try {
+            var decoders = nettyConfiguration.getDecoders();
+            if (decoders.isEmpty()) {
+                decoders.add(decoder);
+                LOG.warn("No HL7 decoder factory found, creating new default instance {}", decoder);
+            } else {
+                decoder = (HL7MLLPNettyDecoderFactory)decoders.iterator().next();
+            }
+            charset = decoder.getCharset();
+        } catch (ClassCastException cce) {
+            LOG.warn("Unsupported HL7 decoder factory type {}, using default character set", decoder.getClass().getName());
+        }
+        if (charset == null) {
+            charset = Charset.defaultCharset();
+        }
+        return charset;
+    }
 
     /**
      * Creates and configures the endpoint.
@@ -93,41 +167,16 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             String uri,
             String remaining,
             Map<String, Object> parameters) throws Exception {
-        // explicitly overwrite some standard camel-mina parameters
-        if (parameters.isEmpty()) {
-            parameters = new HashMap<>();
-        }
-        parameters.put("sync", true);
-        parameters.put("lazySessionCreation", true);
-        parameters.put("transferExchange", false);
-        if (!parameters.containsKey("codec")) {
-            parameters.put("codec", DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME);
-        }
 
+        // construct IPF-specific config
         var config = createConfig(uri, parameters);
 
-        Charset charset = null;
-        try {
-            var codecFactory = (HL7MLLPCodec) config.getCodecFactory();
-            if (codecFactory == null) {
-                codecFactory = new HL7MLLPCodec();
-                LOG.warn("No HL7 codec factory found, creating new default instance {}", codecFactory);
-            }
-            charset = codecFactory.getCharset();
-        } catch (ClassCastException cce) {
-            LOG.warn("Unsupported HL7 codec factory type {}, using default character set", config.getCodecFactory().getClass().getName());
-        }
-        if (charset == null) {
-            charset = Charset.defaultCharset();
-        }
-        parameters.put("encoding", charset.name());
-
-        // construct the endpoint
+        // construct the Netty endpoint
         var endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
-        var minaEndpoint = (MinaEndpoint) endpoint;
+        var nettyEndpoint = (NettyEndpoint) endpoint;
 
         // wrap and return
-        return createEndpoint(minaEndpoint, config);
+        return createEndpoint(nettyEndpoint, config);
     }
 
     @Override
@@ -142,6 +191,6 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
     @Override
     public PropertyConfigurer getEndpointPropertyConfigurer() {
-        return new MinaEndpointConfigurer();
+        return new NettyEndpointConfigurer();
     }
 }

@@ -62,7 +62,8 @@ class Iti8TestRouteBuilder extends RouteBuilder {
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         from('xds-iti8://0.0.0.0:18089?audit=false&'+
-                'codec=#alternativeCodec&' +
+                'decoders=#alternativeDecoder&' +
+                'encoders=#alternativeEncoder&' +
                 'exceptionHandler=#iti8MllpExceptionHandler' +
                 '&interceptorFactories=#serverInLogger,#serverOutLogger')
                 .transform(ack())

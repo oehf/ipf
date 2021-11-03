@@ -20,7 +20,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
  * and has to be logged in ATNA.
  */
 public class MllpAuthenticationFailure extends Exception {
-    private static final long serialVersionUID = -7577712062697569080L;
 
     /**
      * Constructs the exception.

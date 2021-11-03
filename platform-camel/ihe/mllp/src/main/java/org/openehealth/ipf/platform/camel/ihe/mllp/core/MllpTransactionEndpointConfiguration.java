@@ -17,19 +17,17 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 
 import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 
 /**
  * Camel endpoint configuration for MLLP-based eHealth transactions (like IHE PIX, PDQ, XAD-PID, etc.).
  * @author Dmytro Rud
  */
 public class MllpTransactionEndpointConfiguration extends MllpEndpointConfiguration {
-    private static final long serialVersionUID = -6154765290339153487L;
 
     @Getter private final boolean supportUnsolicitedFragmentation;
     @Getter private final int unsolicitedFragmentationThreshold;

@@ -20,8 +20,13 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.DatatypesRouteBuilder">
     </bean>
-    
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
+
+    <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
         <property name="charset" value="iso-8859-1"/>
     </bean>
+
+    <bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
+        <property name="charset" value="iso-8859-1"/>
+    </bean>
+
 </beans>

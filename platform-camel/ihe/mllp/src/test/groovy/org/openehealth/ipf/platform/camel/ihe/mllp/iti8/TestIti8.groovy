@@ -212,7 +212,7 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?codec=#alternativeCodec'
+        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?decoders=#alternativeDecoder&encoders=#alternativeEncoder'
         def endpointUri2 = 'xds-iti8://localhost:18085'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)

@@ -47,11 +47,11 @@ import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtoc
  */
 public class CustomTlsParameters implements TlsParameters {
 
-    private String provider = "SunJSSE";
-    private String tlsProtocol = "TLSv1.2";
-    private String certificateType = "SunX509";
+    protected String provider = "SunJSSE";
+    protected String tlsProtocol = "TLSv1.2";
+    protected String certificateType = "SunX509";
 
-    private String certAlias;
+    protected String certAlias;
 
     protected String keyStoreType;
     protected String trustStoreType;
@@ -63,9 +63,10 @@ public class CustomTlsParameters implements TlsParameters {
     protected String enabledCipherSuites;
     protected String enabledProtocols;
 
-    private int sessionTimeout;
-    private boolean performDomainValidation;
-    private final List<String> sniHostnames = new ArrayList<>();
+    protected int sessionTimeout;
+    protected boolean performDomainValidation;
+    protected List<String> sniHostnames = new ArrayList<>();
+    protected String clientAuthentication;
 
     static TlsParameters getDefault() {
         return new CustomTlsParameters();
@@ -127,8 +128,20 @@ public class CustomTlsParameters implements TlsParameters {
         this.performDomainValidation = performDomainValidation;
     }
 
+    public String getClientAuthentication() {
+        return clientAuthentication;
+    }
+
+    public void setClientAuthentication(String clientAuthentication) {
+        this.clientAuthentication = clientAuthentication;
+    }
+
     public List<String> getSniHostnames() {
         return sniHostnames;
+    }
+
+    public void setSniHostnames(List<String> sniHostnames) {
+        this.sniHostnames = sniHostnames;
     }
 
     public CustomTlsParameters() {

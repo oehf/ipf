@@ -66,8 +66,6 @@ class ManagedMllpItiEndpointTest extends MllpTestContainer {
                 ((Boolean) getMBeanServer().getAttribute(on, "Audit")).booleanValue())
         assertEquals(30000L,
                 ((Long) getMBeanServer().getAttribute(on, "Timeout")).longValue())
-        assertEquals(true,
-                ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue())
         assertEquals(2,
                 ((String[]) getMBeanServer().getAttribute(on, "CustomInterceptorFactoryList")).length)
     }
@@ -80,7 +78,7 @@ class ManagedMllpItiEndpointTest extends MllpTestContainer {
         on
     }
 
-    private MBeanServer getMBeanServer() {
+    private static MBeanServer getMBeanServer() {
         return camelContext.getManagementStrategy().getManagementAgent().getMBeanServer()
     }
 }

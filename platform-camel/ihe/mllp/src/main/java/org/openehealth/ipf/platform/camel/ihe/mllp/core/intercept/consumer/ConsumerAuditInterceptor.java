@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.component.mina.MinaConstants;
+import org.apache.camel.component.netty.NettyConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
@@ -46,8 +46,8 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
     @Override
     public void determineParticipantsAddresses(Exchange exchange, MllpAuditDataset auditDataset) {
         var message = exchange.getIn();
-        auditDataset.setLocalAddress(addressFromHeader(message, MinaConstants.MINA_LOCAL_ADDRESS));
-        auditDataset.setRemoteAddress(addressFromHeader(message, MinaConstants.MINA_REMOTE_ADDRESS));
+        auditDataset.setLocalAddress(addressFromHeader(message, NettyConstants.NETTY_LOCAL_ADDRESS));
+        auditDataset.setRemoteAddress(addressFromHeader(message, NettyConstants.NETTY_REMOTE_ADDRESS));
     }
 
     /**

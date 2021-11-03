@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.api.management.ManagedAttribute;
-import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.netty.NettyEndpoint;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
@@ -24,12 +24,20 @@ import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStor
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.*;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInteractiveResponseSenderInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerRequestDefragmenterInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
@@ -51,12 +59,12 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
      * Constructor.
      *
      * @param mllpComponent   MLLP Component instance which is creating this endpoint.
-     * @param wrappedEndpoint The original camel-mina endpoint instance.
+     * @param wrappedEndpoint The original camel-netty endpoint instance.
      * @param config          Configuration parameters.
      */
     public MllpTransactionEndpoint(
             MllpTransactionComponent<AuditDatasetType> mllpComponent,
-            MinaEndpoint wrappedEndpoint,
+            NettyEndpoint wrappedEndpoint,
             MllpTransactionEndpointConfiguration config) {
         super(mllpComponent, wrappedEndpoint, config);
     }

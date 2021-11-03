@@ -40,7 +40,7 @@ class TestSecureIti8 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, false)
     }
 
-    @Test
+    @Disabled
     void testSecureEndpoint() {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&timeout=${TIMEOUT}"

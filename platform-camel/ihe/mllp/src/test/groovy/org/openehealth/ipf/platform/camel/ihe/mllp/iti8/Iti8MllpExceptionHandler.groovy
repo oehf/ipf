@@ -32,17 +32,17 @@ class Iti8MllpExceptionHandler implements ExceptionHandler {
     @Autowired CamelContext camelContext
 
     @Override
-    public void handleException(Throwable exception) {
+    void handleException(Throwable exception) {
         handleException("", exception)
     }
 
     @Override
-    public void handleException(String message, Throwable exception) {
+    void handleException(String message, Throwable exception) {
         handleException(message, null, exception)
     }
 
     @Override
-    public void handleException(String message, Exchange exchange, Throwable exception) {
+    void handleException(String message, Exchange exchange, Throwable exception) {
         if (exchange == null) {
             exchange = new DefaultExchange(camelContext)
         }

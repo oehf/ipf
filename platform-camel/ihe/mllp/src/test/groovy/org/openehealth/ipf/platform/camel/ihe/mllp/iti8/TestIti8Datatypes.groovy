@@ -110,7 +110,7 @@ class TestIti8Datatypes extends MllpTestContainer {
      * Checks whether various response data types are being handled properly.
      */
     @Test
-    public void testResponseDataTypes() {
+    void testResponseDataTypes() {
         final String endpointUri = "pix-iti8://localhost:18187?audit=false&timeout=${TIMEOUT}"
         final String body = getMessageString('ADT^A01', '2.3.1')
         DatatypesRouteBuilder.cleanCheckedContentTypes()

@@ -42,33 +42,20 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8TestSecureRouteBuilder">
     </bean>
     
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
+    <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
         <property name="charset" value="iso-8859-1"/>
     </bean>
 
-    <bean id="alternativeCodec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
+    <bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
+        <property name="charset" value="iso-8859-1"/>
+    </bean>
+
+    <bean id="alternativeDecoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
         <property name="charset" value="utf-8"/>
     </bean>
 
-    <bean id="sslContext" class="javax.net.ssl.SSLContext"
-          factory-bean="sslContextFactory"
-          factory-method="newInstance" />
-
-    <bean id="sslContextFactory" class="org.apache.mina.filter.ssl.SslContextFactory">
-        <property name="keyManagerFactoryAlgorithm" value="SunX509"/>
-        <property name="keyManagerFactoryKeyStore" ref="keyStore"/>
-        <property name="keyManagerFactoryKeyStorePassword" value="changeit"/>
-        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
-        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
-    </bean>
-
-    <bean id="keyStore" class="java.security.KeyStore"
-          factory-bean="keyStoreFactory"
-          factory-method="newInstance" />
-
-    <bean id="keyStoreFactory" class="org.apache.mina.filter.ssl.KeyStoreFactory">
-        <property name="dataUrl" value="some-keystore"/>
-        <property name="password" value="changeit"/>
+    <bean id="alternativeEncoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
+        <property name="charset" value="utf-8"/>
     </bean>
 
     <bean id="iti8MllpExceptionHandler"
