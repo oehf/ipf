@@ -37,10 +37,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <constructor-arg value="d" />
     </bean>
 
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
-        <property name="charset" value="utf-8"/>
-    </bean>
-
     <import resource="ehcache-spring.xml"/>
 
     <bean id="hl7v2ContinuationStorage"

@@ -70,13 +70,13 @@ public abstract class MllpAuditDataset extends AuditDataset {
     private String messageControlId;
 
     /**
-     * Local address from MINA session
+     * Local address
      */
     @Setter
     private String localAddress;
 
     /**
-     * Remote address from MINA session
+     * Remote address
      */
     @Setter @Getter
     private String remoteAddress;

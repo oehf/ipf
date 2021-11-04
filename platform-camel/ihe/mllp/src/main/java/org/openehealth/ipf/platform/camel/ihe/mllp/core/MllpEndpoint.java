@@ -105,7 +105,7 @@ public abstract class MllpEndpoint<
     }
 
     /**
-     * Returns the original starting point of the camel-mina route which will be wrapped
+     * Returns the original starting point of the camel-netty route which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createConsumer(Processor)}.
      *
      * @param processor The original consumer processor.

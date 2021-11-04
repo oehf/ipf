@@ -51,8 +51,8 @@ class TestMultiplast {
         producerTemplate.send('direct:start', ex)
     }
     
-    private String mina(int port) {
-        return "mina:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
+    private String netty(int port) {
+        return "netty:tcp://localhost:${port}?sync=true&lazyChannelCreation=true&textline=true"
     }
 
     @Test
@@ -61,16 +61,16 @@ class TestMultiplast {
 
         // normal parallel processing
         long startTimestamp = System.currentTimeMillis()
-        resultExchange = send('abc, def, ghi', [mina(10000), mina(10001), mina(10002)].join(';'))
+        resultExchange = send('abc, def, ghi', [netty(10000), netty(10001), netty(10002)].join(';'))
         assert Exchanges.resultMessage(resultExchange).body.contains('123')
         assert Exchanges.resultMessage(resultExchange).body.contains('456')
         assert Exchanges.resultMessage(resultExchange).body.contains('789')
 
         // different lengths of bodies' and recipients' lists -- should fail
-        resultExchange = send('abc, def, ghi', [mina(10000), mina(10001)].join(';'))
+        resultExchange = send('abc, def, ghi', [netty(10000), netty(10001)].join(';'))
         assert resultExchange.failed
 
-        resultExchange = send('abc, def', [mina(10000), mina(10001), mina(10002)].join(';'))
+        resultExchange = send('abc, def', [netty(10000), netty(10001), netty(10002)].join(';'))
         assert resultExchange.failed
     }
 

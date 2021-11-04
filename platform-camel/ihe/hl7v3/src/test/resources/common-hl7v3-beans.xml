@@ -41,7 +41,15 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
     
-	<ipf:globalContext id="globalContext"/>    
+	<ipf:globalContext id="globalContext"/>
+
+    <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
+        <property name="charset" value="iso-8859-1"/>
+    </bean>
+
+    <bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
+        <property name="charset" value="iso-8859-1"/>
+    </bean>
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
         <property name="mappingResources">

@@ -39,15 +39,15 @@ class MultiplastRouteBuilder extends RouteBuilder {
                         new MultiplastAggregationStrategy(),
                         privilegedThreadPool)
 
-        from('mina:tcp://localhost:10000?textline=true&sync=true')
+        from('netty:tcp://localhost:10000?textline=true&sync=true')
                 .validate().constant('abc')
                 .transform().constant('123')
 
-        from('mina:tcp://localhost:10001?textline=true&sync=true')
+        from('netty:tcp://localhost:10001?textline=true&sync=true')
                 .validate().constant('def')
                 .transform().constant('456')
 
-        from('mina:tcp://localhost:10002?textline=true&sync=true')
+        from('netty:tcp://localhost:10002?textline=true&sync=true')
                 .validate().constant('ghi')
                 .transform().constant('789')
     }
