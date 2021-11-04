@@ -15,6 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.List;
+import java.util.Map;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.soap.SOAPBinding;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ClientProxy;
@@ -39,15 +47,6 @@ import org.vibur.objectpool.ConcurrentPool;
 import org.vibur.objectpool.PoolObjectFactory;
 import org.vibur.objectpool.PoolService;
 import org.vibur.objectpool.util.ConcurrentLinkedQueueCollection;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.soap.SOAPBinding;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Factory for ITI Web Service stubs.
@@ -205,6 +204,9 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      */
     public void restoreClient(Object client) {
         if (client != null) {
+            // Reset the response context associated with the current thread to allow the context to be GCed.
+            // See https://issues.apache.org/jira/browse/CXF-7710 and https://issues.apache.org/jira/browse/CXF-7591
+            ClientProxy.getClient(client).getResponseContext().clear();
             clientPool.restore(client);
             LOG.debug("Returned client stub {} to the pool", client);
         }
