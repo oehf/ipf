@@ -66,8 +66,8 @@ public class PredicateAdapter extends AdapterSupport implements org.apache.camel
      */
     @Override
     public boolean matches(Exchange exchange) {
-        Object input = adaptInput(exchange);
-        Object params = adaptParams(exchange);
+        var input = adaptInput(exchange);
+        var params = adaptParams(exchange);
         if (params == null) {
             return predicate.matches(input, (Object[])null);
         } else if (params.getClass().isArray()) {

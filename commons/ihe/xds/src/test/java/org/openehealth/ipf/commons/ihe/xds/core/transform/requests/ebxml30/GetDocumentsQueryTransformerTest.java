@@ -15,22 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link GetDocumentsQueryTransformer}.
@@ -41,7 +39,7 @@ public class GetDocumentsQueryTransformerTest {
     private GetDocumentsQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new GetDocumentsQueryTransformer();
         query = new GetDocumentsQuery();
@@ -50,11 +48,11 @@ public class GetDocumentsQueryTransformerTest {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setHomeCommunityId("home");
 
-        QueryList<String> extraParams1 = new QueryList<>();
+        var extraParams1 = new QueryList<String>();
         extraParams1.getOuterList().add(Arrays.asList("para-11", "para-12"));
         extraParams1.getOuterList().add(Arrays.asList("para-21", "para-22", "para-23"));
 
-        QueryList<String> extraParams2 = new QueryList<>();
+        var extraParams2 = new QueryList<String>();
         extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
         extraParams2.getOuterList().add(Collections.singletonList("dia-41"));
 
@@ -75,12 +73,12 @@ public class GetDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
-        List<EbXMLSlot> perimeters = ebXML.getSlots("$PatientPerimeter");
+        var perimeters = ebXML.getSlots("$PatientPerimeter");
         assertEquals(2, perimeters.size());
         assertEquals(Arrays.asList("('para-11')", "('para-12')"), perimeters.get(0).getValueList());
         assertEquals(Arrays.asList("('para-21')", "('para-22')", "('para-23')"), perimeters.get(1).getValueList());
 
-        List<EbXMLSlot> diameters = ebXML.getSlots("$PatientDiameter");
+        var diameters = ebXML.getSlots("$PatientDiameter");
         assertEquals(2, diameters.size());
         assertEquals(Arrays.asList("('dia-31')", "('dia-32')", "('dia-33')"), diameters.get(0).getValueList());
         assertEquals(Collections.singletonList("('dia-41')"), diameters.get(1).getValueList());
@@ -95,7 +93,7 @@ public class GetDocumentsQueryTransformerTest {
     @Test
     public void testRoundtrip() {
         transformer.toEbXML(query, ebXML);
-        GetDocumentsQuery otherQuery = new GetDocumentsQuery();
+        var otherQuery = new GetDocumentsQuery();
         transformer.fromEbXML(otherQuery, ebXML);
         assertEquals(query, otherQuery);
     }
@@ -117,7 +115,7 @@ public class GetDocumentsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetDocumentsQuery result = new GetDocumentsQuery();
+        var result = new GetDocumentsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -125,14 +123,14 @@ public class GetDocumentsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetDocumentsQuery result = new GetDocumentsQuery();
+        var result = new GetDocumentsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetDocumentsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetDocumentsQuery result = new GetDocumentsQuery();
+        var result = new GetDocumentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetDocumentsQuery(), result);
     }

@@ -29,9 +29,7 @@ class ChCiddTestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         from('ch-cidd:ch-cidd-service1')
             .process(chCiddRequestValidator())
-            .process {
-                it.out.body = new DownloadResponse(requestID : '456')
-            }
+            .transform().constant(new DownloadResponse(requestID : '456'))
             .process(chCiddResponseValidator())
     }
 }

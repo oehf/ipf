@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -29,12 +29,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTran
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ERROR_CODE_IN_RESPONSE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_SEVERITY_IN_RESPONSE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_STATUS_IN_RESPONSE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Tests for {@link RegistryResponseValidator}.
@@ -45,7 +43,7 @@ public class RegistryResponseValidatorTest {
     private Response response;
     private ResponseTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new RegistryResponseValidator();
         EbXMLFactory factory = new EbXMLFactory30();
@@ -72,7 +70,7 @@ public class RegistryResponseValidatorTest {
 
     @Test
     public void testInvalidSeverity() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         ((RegistryResponseType)ebXML.getInternal()).getRegistryErrorList().getRegistryError().get(0).setSeverity("lol");
         expectFailure(INVALID_SEVERITY_IN_RESPONSE, ebXML);
     }    

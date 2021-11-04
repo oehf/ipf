@@ -17,12 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -31,6 +31,9 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
+
+    private static final EnumSet<QueryParameter> PATIENT_QUERY_PARAMS = EnumSet.of(QueryParameter.DOC_ENTRY_PATIENT_ID,
+            QueryParameter.FOLDER_PATIENT_ID, QueryParameter.SUBMISSION_SET_PATIENT_ID, QueryParameter.PATIENT_ID);
 
     /**
      * Constructs an XDS query audit strategy.
@@ -45,18 +48,16 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
     @Override
     public XdsQueryAuditDataset enrichAuditDatasetFromRequest(XdsQueryAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof AdhocQueryRequest) {
-            AdhocQueryRequest request = (AdhocQueryRequest) pojo;
-            AdhocQueryType adHocQuery = request.getAdhocQuery();
+            var request = (AdhocQueryRequest) pojo;
+            var adHocQuery = request.getAdhocQuery();
             if (adHocQuery != null) {
                 auditDataset.setQueryUuid(adHocQuery.getId());
                 auditDataset.setHomeCommunityId(adHocQuery.getHome());
             }
 
-            QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
-            List<String> patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
-            if (patientIdList != null) {
-                auditDataset.getPatientIds().addAll(patientIdList);
-            }
+            var slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
+            
+            PATIENT_QUERY_PARAMS.stream().map(slotHelper::toStringList).filter(Objects::nonNull).forEach(p -> auditDataset.getPatientIds().addAll(p));
         }
         return auditDataset;
     }

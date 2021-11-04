@@ -44,7 +44,7 @@ public class Iti67TestRouteBuilder extends RouteBuilder {
         from("direct:input")
                 .toF("mhd-iti67:localhost:%d?fhirContext=#fhirContext", FhirTestContainer.DEMO_APP_PORT);
 
-        from("mhd-iti67:translation?audit=true&fhirContext=#fhirContext")
+        from("mhd-iti67:translation?audit=true&fhirContext=#fhirContext&options=LENIENT")
                 .errorHandler(noErrorHandler())
                 .transform(new Iti67Responder());
     }
@@ -55,7 +55,7 @@ public class Iti67TestRouteBuilder extends RouteBuilder {
         @Override
         public Object evaluate(Exchange exchange) {
             if (!returnError) {
-                Bundle resource = FhirContext.forR4().newXmlParser()
+                var resource = FhirContext.forR4().newXmlParser()
                         .parseResource(Bundle.class, new InputStreamReader(getClass().getResourceAsStream("/FindDocumentReferencesResponse.xml")));
                 // The endpoint expects a list of resources rather than a bundle
                 return resource.getEntry().stream()

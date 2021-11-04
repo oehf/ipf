@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public abstract class Query implements Serializable {
-    private static final long serialVersionUID = 7597105342752455732L;
 
     @XmlAttribute
     @Getter private QueryType type;
@@ -58,6 +57,7 @@ public abstract class Query implements Serializable {
      * Visitor interface used for this class to implement the visitor pattern.
      */
     public interface Visitor {
+        // for ITI-18, ITI-38, ITI-51
         void visit(FindDocumentsQuery query);
         void visit(FindDocumentsForMultiplePatientsQuery query);
         void visit(FindFoldersQuery query);
@@ -73,10 +73,21 @@ public abstract class Query implements Serializable {
         void visit(GetAssociationsQuery query);
         void visit(GetAllQuery query);
         void visit(FindSubmissionSetsQuery query);
-        void visit(FetchQuery query);
         void visit(FindDocumentsByReferenceIdQuery query);
+        // for ITI-63
+        void visit(FetchQuery query);
+        // for PHARM-1
+        void visit(FindMedicationTreatmentPlansQuery query);
+        void visit(FindPrescriptionsQuery query);
+        void visit(FindDispensesQuery query);
+        void visit(FindMedicationAdministrationsQuery query);
+        void visit(FindPrescriptionsForValidationQuery query);
+        void visit(FindPrescriptionsForDispenseQuery query);
+        void visit(FindMedicationListQuery query);
+        // extension DE:GEMATIK
+        void visit(FindDocumentsByTitleQuery query);
     }
-    
+
     /**
      * Accept a visitor to process an instance of this class.
      * @param visitor

@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.platform.camel.core.support.transform.min.TestValidator
 
 /**
  * @author Martin Krasser
  */
-class ValidatorRouteBuilder extends SpringRouteBuilder {
+class ValidatorRouteBuilder extends RouteBuilder {
     
     void configure() {
         

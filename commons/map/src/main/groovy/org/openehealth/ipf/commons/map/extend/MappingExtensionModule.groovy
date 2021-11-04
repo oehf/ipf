@@ -18,97 +18,91 @@ package org.openehealth.ipf.commons.map.extend
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.map.MappingService
 
-import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.*
-
-
 /**
  * Extensions for mapping strings
  *
  * @DSL
  * @author Christian Ohr
  */
-public class MappingExtensionModule {
+class MappingExtensionModule {
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static String firstLower(String delegate) {
+    static String firstLower(String delegate) {
         delegate?.replaceAll('^.') { String s -> s ? s[0].toLowerCase() : s }
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Object map(String delegate, Object key) {
+    static Object map(String delegate, Object key) {
         mappingService()?.get(key, delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Object map(String delegate, Object key, Object defaultValue) {
+    static Object map(String delegate, Object key, Object defaultValue) {
         mappingService()?.get(key, delegate, defaultValue)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Object mapReverse(String delegate, Object value) {
+    static Object mapReverse(String delegate, Object value) {
         mappingService()?.getKey(value, delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Object mapReverse(String delegate, Object value, Object defaultValue) {
+    static Object mapReverse(String delegate, Object value, Object defaultValue) {
         mappingService()?.getKey(value, delegate, defaultValue)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static String keySystem(String delegate) {
+    static String keySystem(String delegate) {
         mappingService()?.getKeySystem(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static String valueSystem(String delegate) {
+    static String valueSystem(String delegate) {
         mappingService()?.getValueSystem(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Collection<?> keys(String delegate) {
+    static Collection<?> keys(String delegate) {
         mappingService()?.keys(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static Collection<?> values(String delegate) {
+    static Collection<?> values(String delegate) {
         mappingService()?.values(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static boolean hasKey(String delegate, Object key) {
+    static boolean hasKey(String delegate, Object key) {
         keys(delegate).contains(key)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
      */
-    public static boolean hasValue(String delegate, Object value) {
+    static boolean hasValue(String delegate, Object value) {
         values(delegate).contains(value)
     }
 
-    public static Object methodMissing(String delegate, String name, Object args) {
-        simpleMethodMissingLogic(mappingService(), delegate, name, args)
-    }
     
     private static MappingService mappingService() {
         ContextFacade.getBean(MappingService)

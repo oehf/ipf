@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlType(name = "DocumentAvailability")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum DocumentAvailability {
 
     /** Online indicates the Document in the Document Repository is available to be retrieved. */
@@ -65,7 +65,7 @@ public enum DocumentAvailability {
             return null;
         }
 
-        for (DocumentAvailability documentAvailability : DocumentAvailability.values()) {
+        for (var documentAvailability : DocumentAvailability.values()) {
             if (opcode.equals(documentAvailability.getOpcode()) || opcode.equals(documentAvailability.getFullQualified())) {
                 return documentAvailability;
             }

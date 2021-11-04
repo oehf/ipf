@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -63,12 +64,12 @@ class TestIti41 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createProvideAndRegisterDocumentSet()
         docEntry = request.documents[0].documentEntry
@@ -122,7 +123,7 @@ class TestIti41 extends XdsStandardTestContainer {
     void testRejectionHandling() {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = '< some ill-formed XML !'
-        producerTemplate.send("http4://localhost:${port}/xds-iti41-service1", exchange)
+        producerTemplate.send("http://localhost:${port}/xds-iti41-service1", exchange)
         assert MyRejectionHandlingStrategy.count == 1
     }
 
@@ -156,12 +157,14 @@ class TestIti41 extends XdsStandardTestContainer {
     }
 
 
-    @Test(expected = SOAPFaultException)
+    @Test
     void testHandlingOfUnhandledSoapFault() {
-        sendIt(SERVICE_SOAP_FAULT_UNHANDLED, 'fail', null)
+        Assertions.assertThrows(SOAPFaultException.class, () ->
+            sendIt(SERVICE_SOAP_FAULT_UNHANDLED, 'fail', null)
+        );
     }
 
-    @Test()
+    @Test
     void testHandlingOfHandledSoapFault() {
         assert SUCCESS == sendIt(SERVICE_SOAP_FAULT_HANDLED, 'ok', null).status
     }

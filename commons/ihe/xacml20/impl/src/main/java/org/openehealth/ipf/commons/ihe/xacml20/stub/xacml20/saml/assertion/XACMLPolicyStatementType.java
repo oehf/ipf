@@ -93,7 +93,7 @@ public class XACMLPolicyStatementType
      */
     public List<Object> getPolicyOrPolicySet() {
         if (policyOrPolicySet == null) {
-            policyOrPolicySet = new ArrayList<Object>();
+            policyOrPolicySet = new ArrayList<>();
         }
         return this.policyOrPolicySet;
     }

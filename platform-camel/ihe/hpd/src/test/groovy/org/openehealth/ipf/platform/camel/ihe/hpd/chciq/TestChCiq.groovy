@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.chciq
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -30,7 +30,7 @@ class TestChCiq extends StandardTestContainer {
 
     final String SERVICE_PTON = 'ch-ciq://10.2.200.16/Cpi/CommunityPortalIndex.svc'
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
@@ -40,7 +40,7 @@ class TestChCiq extends StandardTestContainer {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void test_CPI_Community_Information_Query() {
         BatchRequest request = new BatchRequest(
                 requestID: '123',
@@ -63,7 +63,7 @@ class TestChCiq extends StandardTestContainer {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void test_Querying_Community_Portal_Index() {
         BatchRequest request = new BatchRequest(
                 requestID: '124',

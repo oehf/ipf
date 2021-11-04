@@ -4,12 +4,12 @@
     <artifactId>ipf-tutorials-hl7</artifactId>
     <name>ipf-tutorials-hl7</name>
     <packaging>jar</packaging>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>ipf-tutorials</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -27,7 +27,19 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-file</artifactId>
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
@@ -55,12 +67,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
     
 </project>

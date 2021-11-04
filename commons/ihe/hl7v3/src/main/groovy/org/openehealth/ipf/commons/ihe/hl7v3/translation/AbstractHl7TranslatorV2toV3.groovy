@@ -218,7 +218,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         }
     }
 
-    void createLanguageCommunicationElement(MarkupBuilder builder, Segment pid) {
+    static void createLanguageCommunicationElement(MarkupBuilder builder, Segment pid) {
         if (pid[15].value) {
             builder.languageCommunication {
                 languageCode(code: pid[15].value)
@@ -237,8 +237,8 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     void translateTelecom(MarkupBuilder builder, Repeatable repeatableXTN, String defaultUse) {
         repeatableXTN.each { telecom ->
-            String use = defaultUse
             String number = telecom[1].value ?: telecom[4].value
+            String use = defaultUse
             if (number) {
                 String schema = 'tel'
 

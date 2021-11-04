@@ -45,24 +45,24 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
     public void onApplicationEvent(AbstractAuthenticationEvent authenticationEvent) {
         delegateListener.onApplicationEvent(authenticationEvent);
 
-        EventOutcomeIndicator outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
+        var outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
                 EventOutcomeIndicator.MajorFailure :
                 EventOutcomeIndicator.Success;
 
-        Object details = authenticationEvent.getAuthentication().getDetails();
+        var details = authenticationEvent.getAuthentication().getDetails();
         if (details instanceof WebAuthenticationDetails) {
-            WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) details;
-            Object principal = authenticationEvent.getAuthentication().getPrincipal();
+            var webAuthenticationDetails = (WebAuthenticationDetails) details;
+            var principal = authenticationEvent.getAuthentication().getPrincipal();
             if (principal instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) principal;
+                var userDetails = (UserDetails) principal;
 
-                UserAuthenticationBuilder builder = new UserAuthenticationBuilder.Login(outcome)
+                var builder = new UserAuthenticationBuilder.Login(outcome)
                                 .setAuditSource(auditContext);
                 if (userDetails.getUsername() != null) {
                     builder.setAuthenticatedParticipant(
                             userDetails.getUsername(),
                             webAuthenticationDetails.getRemoteAddress());
-                };
+                }
                 if (webAuthenticationDetails.getRemoteAddress() != null) {
                     builder.setAuthenticatingSystemParticipant(
                             auditContext.getSendingApplication(),

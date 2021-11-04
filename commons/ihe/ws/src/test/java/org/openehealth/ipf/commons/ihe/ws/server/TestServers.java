@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,9 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Jens Riemschneider
@@ -44,7 +41,7 @@ public class TestServers {
      */
     @Test
     public void testTomcat() throws Exception {
-        checkServer(new TomcatServer(), 9090);
+        checkServer(new TomcatServer(), 9092);
     }
 
     /**
@@ -58,7 +55,7 @@ public class TestServers {
     }
 
     private void checkServer(ServletServer server, int port) throws Exception {
-        URL contextResource = getClass().getResource("/test.xml");
+        var contextResource = getClass().getResource("/test.xml");
 
         server.setServlet(new Servlet());
         server.setPort(port);
@@ -72,11 +69,11 @@ public class TestServers {
 
     private void checkPostRequest(int port) throws Exception {
         HttpClient client = HttpClients.createDefault();
-        HttpPost method = new HttpPost("http://localhost:" + port + "/testContext/testServlet/bla");
+        var method = new HttpPost("http://localhost:" + port + "/testContext/testServlet/bla");
         method.setEntity(new StringEntity("hello world"));
         try {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            HttpResponse response = client.execute(method);
+            var stream = new ByteArrayOutputStream();
+            var response = client.execute(method);
             response.getEntity().writeTo(stream);
             assertEquals(200, response.getStatusLine().getStatusCode());
             assertEquals("hello world", new String(stream.toByteArray()));
@@ -92,7 +89,7 @@ public class TestServers {
 
         @Override
         protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            IOUtils.copy(request.getInputStream(), response.getOutputStream());
+            request.getInputStream().transferTo(response.getOutputStream());
         }
     }
 }

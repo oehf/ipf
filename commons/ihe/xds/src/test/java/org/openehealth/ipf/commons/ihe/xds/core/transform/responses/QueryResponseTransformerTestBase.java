@@ -15,23 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link QueryResponseTransformer}.
@@ -42,9 +35,9 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     private QueryResponse responseLeafClass;    
     private QueryResponse responseObjRef;    
     
-    @Before
-    public void setUp() {        
-        EbXMLFactory factory = createFactory();
+    @BeforeEach
+    public void setUp() {
+        var factory = createFactory();
         transformer = new QueryResponseTransformer(factory);        
 
         responseLeafClass = SampleData.createQueryResponseWithLeafClass();
@@ -53,12 +46,12 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
 
     @Test
     public void testToEbXMLLeafClass() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(responseLeafClass);
+        var ebXML = transformer.toEbXML(responseLeafClass);
         assertNotNull(ebXML);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
 
-        List<EbXMLAssociation> associations = ebXML.getAssociations();
+        var associations = ebXML.getAssociations();
         assertEquals(3, associations.size());
         assertEquals(AssociationType.HAS_MEMBER, associations.get(0).getAssociationType());
         assertEquals("submissionSet01", associations.get(0).getSource());
@@ -71,24 +64,24 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
         assertEquals(AssociationType.HAS_MEMBER, associations.get(2).getAssociationType());
         assertEquals("folder01", associations.get(2).getSource());
         assertEquals("document01", associations.get(2).getTarget());
-        
-        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
+
+        var docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
         assertEquals(1, docEntries.size());
         assertEquals("document01", docEntries.get(0).getId());
         assertEquals("Document 01", docEntries.get(0).getName().getValue());
-        
-        List<EbXMLRegistryPackage> folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
+
+        var folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
         assertEquals(1, folders.size());
         assertEquals("Folder 01", folders.get(0).getName().getValue());
-        
-        List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+
+        var submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         assertEquals(1, submissionSets.size());
         assertEquals("Submission Set 01", submissionSets.get(0).getName().getValue());
     }
     
     @Test
     public void testToEbXMLObjRef() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(responseObjRef);
+        var ebXML = transformer.toEbXML(responseObjRef);
         assertNotNull(ebXML);
         assertEquals(2, ebXML.getReferences().size());
         assertEquals("ref1", ebXML.getReferences().get(0).getId());
@@ -102,7 +95,7 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLQueryResponse result = transformer.toEbXML(new QueryResponse());
+        var result = transformer.toEbXML(new QueryResponse());
         assertNotNull(result);
         assertEquals(0, result.getAssociations().size());
         assertEquals(0, result.getExtrinsicObjects().size());
@@ -114,16 +107,16 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLLeafClass() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(responseLeafClass);
-        QueryResponse result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(responseLeafClass);
+        var result = transformer.fromEbXML(ebXML);
         
         assertEquals(responseLeafClass, result);
     }
     
     @Test
     public void testFromEbXMLObjRef() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(responseObjRef);
-        QueryResponse result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(responseObjRef);
+        var result = transformer.fromEbXML(ebXML);
         
         assertEquals(responseObjRef, result);
     }
@@ -135,7 +128,7 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(new QueryResponse());
+        var ebXML = transformer.toEbXML(new QueryResponse());
         assertEquals(new QueryResponse(), transformer.fromEbXML(ebXML));
     }
 }

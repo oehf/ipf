@@ -44,7 +44,7 @@ public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTr
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
@@ -57,7 +57,7 @@ public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTr
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));

@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
-import org.junit.BeforeClass
+
+import org.junit.jupiter.api.BeforeAll
 
 /**
  * @author Dmytro Rud
@@ -28,7 +29,7 @@ class TestDispatch1 extends TestDispatch {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }

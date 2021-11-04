@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
@@ -50,7 +51,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
-        Set<String> slotNames = Arrays.stream(parameters)
+        var slotNames = Arrays.stream(parameters)
                 .map(QueryParameter::getSlotName)
                 .collect(Collectors.toSet());
         ALLOWED_MULTIPLE_SLOTS.put(queryType, slotNames);
@@ -93,13 +94,37 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         addAllowedMultipleSlots(FETCH,
                 DOC_ENTRY_EVENT_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_MEDICATION_TREATMENT_PLANS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_DISPENSES,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_MEDICATION_ADMINISTRATIONS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_VALIDATION,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_DISPENSE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
     }
 
 
     private static final Map<InteractionId, Set<QueryType>> ALLOWED_QUERY_TYPES;
 
     static {
-        Set<QueryType> storedQueryTypes = EnumSet.of(
+        Set<QueryType> itiStoredQueryTypes = EnumSet.of(
                 FIND_DOCUMENTS,
                 FIND_DOCUMENTS_BY_REFERENCE_ID,
                 FIND_SUBMISSION_SETS,
@@ -115,16 +140,26 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 GET_FOLDERS_FOR_DOCUMENT,
                 GET_RELATED_DOCUMENTS);
 
+        Set<QueryType> pharmStoredQueryTypes = EnumSet.of(
+                FIND_MEDICATION_TREATMENT_PLANS,
+                FIND_PRESCRIPTIONS,
+                FIND_DISPENSES,
+                FIND_MEDICATION_ADMINISTRATIONS,
+                FIND_PRESCRIPTIONS_FOR_VALIDATION,
+                FIND_PRESCRIPTIONS_FOR_DISPENSE,
+                FIND_MEDICATION_LIST);
+
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
-        ALLOWED_QUERY_TYPES.put(ITI_18, storedQueryTypes);
-        ALLOWED_QUERY_TYPES.put(ITI_38, storedQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_18, itiStoredQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_38, itiStoredQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));
         ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
+        ALLOWED_QUERY_TYPES.put(PHARM_1, pharmStoredQueryTypes);
     }
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        boolean requireHomeCommunityId = profile.getInteractionProfile().requiresHomeCommunityId();
+        var homeCommunityIdOptionality = profile.getInteractionProfile().getHomeCommunityIdOptionality();
 
         switch (queryType) {
             case FETCH:
@@ -144,7 +179,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                         new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new HomeCommunityIdValidation(true),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                 };
 
             case FIND_DOCUMENTS:
@@ -233,32 +268,32 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_DOCUMENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
                 };
 
             case GET_DOCUMENTS_AND_ASSOCIATIONS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                         new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
                 };
 
             case GET_FOLDERS_FOR_DOCUMENT:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                 };
 
             case GET_FOLDERS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
                         new StringListValidation(FOLDER_UUID, nopValidator),
                         new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
                 };
@@ -266,14 +301,14 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case GET_ASSOCIATIONS:
             case GET_SUBMISSION_SETS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
                         new StringListValidation(UUID, nopValidator),
                 };
 
             case GET_SUBMISSION_SET_AND_CONTENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                         new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
                         new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
@@ -283,8 +318,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_FOLDER_AND_CONTENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
                         new StringValidation(FOLDER_UUID, nopValidator, true),
                         new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
                         new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
@@ -294,11 +329,48 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
             case GET_RELATED_DOCUMENTS:
                 return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(requireHomeCommunityId),
-                        new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                         new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                         new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                         new AssociationValidation(ASSOCIATION_TYPE),
+                        new DocumentEntryTypeValidation(),
+                };
+
+            case FIND_MEDICATION_TREATMENT_PLANS:
+            case FIND_PRESCRIPTIONS:
+            case FIND_DISPENSES:
+            case FIND_MEDICATION_ADMINISTRATIONS:
+            case FIND_PRESCRIPTIONS_FOR_VALIDATION:
+            case FIND_PRESCRIPTIONS_FOR_DISPENSE:
+                return new QueryParameterValidation[]{
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new ChoiceValidation(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                        new StringListValidation(FOLDER_UUID, nopValidator),
+                        new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
+                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                        new CodeValidation(DOC_ENTRY_EVENT_CODE),
+                        new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
+                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                        new StatusValidation(DOC_ENTRY_STATUS),
+                };
+
+            case FIND_MEDICATION_LIST:
+                return new QueryParameterValidation[]{
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_END_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_END_TO, timeValidator),
+                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                        new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
                 };
         }
@@ -319,18 +391,18 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     UNKNOWN_RETURN_TYPE, request.getReturnType());
         }
 
-        QueryType queryType = QueryType.valueOfId(request.getId());
+        var queryType = QueryType.valueOfId(request.getId());
         metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());
 
-        Set<QueryType> allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
+        var allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
         metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
         new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
                 request.getSlots(),
                 ALLOWED_MULTIPLE_SLOTS.getOrDefault(queryType, Collections.emptySet()));
-        QueryParameterValidation[] validations = getValidators(queryType, profile);
+        var validations = getValidators(queryType, profile);
         if (validations != null) {
-            for (QueryParameterValidation validation : validations) {
+            for (var validation : validations) {
                 validation.validate(request);
             }
         }
@@ -349,7 +421,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
      * Checks that at least one of the given query parameters is provided in the message.
      */
     private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest request, QueryParameter... params) {
-        List<String> slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
+        var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
         slotNames.stream()
                 .map(request::getSlotValues)
                 .filter(slotList -> !slotList.isEmpty())

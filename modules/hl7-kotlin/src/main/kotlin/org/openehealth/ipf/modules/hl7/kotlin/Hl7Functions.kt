@@ -105,9 +105,8 @@ fun newComposite(name: String, message: Message): Composite {
     val context = message.parser.hapiContext
     val c = context.modelClassFactory.getTypeClass(name, message.version) ?: throw HL7Exception("Can't instantiate Type $name")
     val constructor = c.getConstructor(Message::class.java)
-    val composite = constructor.newInstance(message) as Composite
 
-    return composite
+    return constructor.newInstance(message) as Composite
 }
 
 

@@ -18,15 +18,15 @@ package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.parser.PipeParser
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Whether the custom Parser/CustomModelClassFactory are also copied on message-copy
@@ -40,7 +40,7 @@ class CustomMessageCopyTest {
             PixPdqTransactions.ITI21).pipeParser
     private String msg
 
-    @Before
+    @BeforeEach
     void setup() {
         msg = getClass().getResourceAsStream("/qbp.hl7").text
     }

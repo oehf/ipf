@@ -178,7 +178,7 @@ public class DsmlModification {
         }
 
         public static ModificationOperationType fromValue(String v) {
-            for (ModificationOperationType c: ModificationOperationType.values()) {
+            for (var c: ModificationOperationType.values()) {
                 if (c.value.equals(v)) {
                     return c;
                 }

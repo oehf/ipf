@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63
 
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -51,7 +51,7 @@ class TestIti63 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }

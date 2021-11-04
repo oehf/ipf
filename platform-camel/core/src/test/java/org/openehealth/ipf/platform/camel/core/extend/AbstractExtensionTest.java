@@ -19,18 +19,18 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 /**
  * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { 
         "/context-core-extend.xml", 
         "/context-core-extend-support.xml" 
@@ -39,18 +39,18 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public abstract class AbstractExtensionTest {
 
     @Autowired
-    protected CamelContext cc;
+    protected CamelContext camelContext;
     
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:output")
+    @EndpointInject(value="mock:output")
     protected MockEndpoint mockOutput;
     
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         mockOutput.reset();
         mockError.reset();

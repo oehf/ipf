@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRemoveMetadataRequest30;
@@ -31,8 +31,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_REFERENCE_LIST;
 
@@ -45,7 +45,7 @@ public class RemoveMetadataRequestValidatorTest {
     private RemoveMetadata request;
     private RemoveMetadataRequestTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new RemoveMetadataRequestValidator();
         request = SampleData.createRemoveMetadata();
@@ -66,10 +66,10 @@ public class RemoveMetadataRequestValidatorTest {
     @Test
     public void testIssue150() {
         String[] uuids = {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
-        RemoveObjectsRequest request = new RemoveObjectsRequest();
+        var request = new RemoveObjectsRequest();
         request.setObjectRefList(new ObjectRefListType());
-        for (String uuid : uuids) {
-            ObjectRefType reference = new ObjectRefType();
+        for (var uuid : uuids) {
+            var reference = new ObjectRefType();
             reference.setId(uuid);
             request.getObjectRefList().getObjectRef().add(reference);
         }

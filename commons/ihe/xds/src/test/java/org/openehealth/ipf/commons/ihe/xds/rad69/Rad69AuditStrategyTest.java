@@ -16,16 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.xds.rad69;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -43,8 +42,8 @@ public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private void testRequest(boolean serverSide, XdsIRetrieveAuditStrategy30 strategy) {
-        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = getXdsAuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var auditDataset = getXdsAuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -53,9 +52,9 @@ public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
 
         assertCommonXdsAuditAttributes(auditMessage,
                 EventOutcomeIndicator.Success,
-                serverSide ? EventIdCode.Export : EventIdCode.Import,
+                serverSide ? EventIdCode.DICOMInstancesTransferred : EventIdCode.DICOMInstancesAccessed,
                 serverSide ? EventActionCode.Read : EventActionCode.Create,
-                serverSide,
+                !serverSide,
                 true);
 
         assertEquals(3, auditMessage.findParticipantObjectIdentifications(
@@ -69,7 +68,7 @@ public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private XdsNonconstructiveDocumentSetRequestAuditDataset getXdsAuditDataset(XdsIRetrieveAuditStrategy30 strategy) {
-        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
@@ -80,7 +79,7 @@ public class Rad69AuditStrategyTest extends XdsAuditorTestBase {
         auditDataset.getPatientIds().add(PATIENT_IDS[0]);
         auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
 
-        for (int i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) {
             auditDataset.getDocuments().add(
                     new XdsNonconstructiveDocumentSetRequestAuditDataset.Document(
                             DOCUMENT_OIDS[i],

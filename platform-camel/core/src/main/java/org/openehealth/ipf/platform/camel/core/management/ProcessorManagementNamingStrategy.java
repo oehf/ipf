@@ -19,36 +19,36 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.NamedNode;
 import org.apache.camel.Processor;
-import org.apache.camel.management.DefaultManagementNamingStrategy;
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.management.DefaultManagementObjectNameStrategy;
 import org.apache.camel.model.ProcessorDefinitionHelper;
-import org.apache.camel.model.RouteDefinition;
 
 /**
  * @author Reinhard Luft
  */
-public class ProcessorManagementNamingStrategy extends
-        DefaultManagementNamingStrategy {
+public class ProcessorManagementNamingStrategy extends DefaultManagementObjectNameStrategy {
 
     public static final String KEY_ROUTE = "route";
 
+    @Override
     public ObjectName getObjectNameForProcessor(CamelContext context,
-            Processor processor, ProcessorDefinition<?> definition)
+                                                Processor processor,
+                                                NamedNode namedNode)
             throws MalformedObjectNameException {
 
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
         buffer.append(domainName).append(":");
         buffer.append(KEY_CONTEXT + "=").append(getContextId(context)).append(",");
         buffer.append(KEY_TYPE + "=").append(TYPE_PROCESSOR).append(",");
 
-        RouteDefinition route = ProcessorDefinitionHelper.getRoute(definition);
+        var route = ProcessorDefinitionHelper.getRoute(namedNode);
 
         if (route != null) {
-            buffer.append(KEY_ROUTE + "=").append(route.getId()).append(",");
+            buffer.append(KEY_ROUTE + "=").append(ObjectName.quote(route.getId())).append(",");
         }
 
-        buffer.append(KEY_NAME + "=").append(ObjectName.quote(definition.getId()));
+        buffer.append(KEY_NAME + "=").append(ObjectName.quote(namedNode.getId()));
         return createObjectName(buffer);
     }
 

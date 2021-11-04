@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.hl7;
 
-import java.util.Scanner;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.hl7.extend.AbstractExtensionTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertTrue;
+import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -36,15 +36,15 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
     private static String MSH_EXPECTED_1 = "MSH|^~\\&|SAP-ISH|HZL|blah||20040805152637||ADT^A01|123456|T|2.2|||ER";
     private static String MSH_EXPECTED_2 = "MSH|^~\\&|SAP-ISH|HZL|blub||20040805152637||ADT^A01|123456|T|2.2|||ER";
     
-    @EndpointInject(uri="mock:output1")
+    @EndpointInject(value="mock:output1")
     private MockEndpoint mockOutput1;
     
-    @EndpointInject(uri="mock:output2")
+    @EndpointInject(value="mock:output2")
     private MockEndpoint mockOutput2;
     
     private String resource = "message/msg-01.hl7";
     
-    @After
+    @AfterEach
     public void myTearDown() throws Exception {
         mockOutput1.reset();
         mockOutput2.reset();
@@ -52,7 +52,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute1() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput1.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blah");
         mockOutput1.assertIsSatisfied();
@@ -61,7 +61,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute2() throws Exception {
-        String message = inputMessage(resource);
+        var message = inputMessage(resource);
         mockOutput2.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blub");
         mockOutput2.assertIsSatisfied();

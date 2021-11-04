@@ -16,15 +16,16 @@
 
 package org.openehealth.ipf.platform.camel.hl7;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 
-import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*;
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.get;
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.set;
 
 /**
  * This route is the Java version of {@link org.openehealth.ipf.platform.camel.hl7.extend.SampleRouteBuilder}
  * using expressions and predicates defined by {@link org.openehealth.ipf.platform.camel.hl7.HL7v2}.
  */
-public class SampleRouteBuilder2 extends SpringRouteBuilder {
+public class SampleRouteBuilder2 extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {

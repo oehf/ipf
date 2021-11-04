@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -45,18 +44,18 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
     }
 
     protected AdhocQueryResponse processRequest(AdhocQueryRequest body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(body);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
-            QueryResponse errorResponse = new QueryResponse(
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
+            var errorResponse = new QueryResponse(
                     exception,
-                    ErrorCode.REGISTRY_METADATA_ERROR,
+                    ErrorCode.REGISTRY_ERROR,
                     ErrorCode.REGISTRY_ERROR,
                     homeCommunityId);
             errorResponse.getErrors().get(0).setLocation(homeCommunityId);
             return EbXML30Converters.convert(errorResponse);
         }
-        return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);
+        return result.getMessage().getBody(AdhocQueryResponse.class);
     }
 }

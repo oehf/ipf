@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver;
 import org.openehealth.ipf.commons.ihe.core.payload.SpringExpressionResolver;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
@@ -54,13 +55,14 @@ public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
     public ConsumerInPayloadLoggerInterceptor(ExpressionResolver resolver) {
         super();
         addBefore(ConsumerStringProcessingInterceptor.class.getName());
+        addAfter(ConsumerRequestInteractionSetterInterceptor.class.getName());
         setExpressionResolver(resolver);
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
         if (canProcess()) {
-            logPayload(exchange, false);
+            logPayload(exchange, getEndpoint().getInteractionId());
         }
         getWrappedProcessor().process(exchange);
     }
@@ -68,7 +70,7 @@ public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
     public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?,?,?>, ConsumerInPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
-        private boolean locallyEnabled = true;
+        private boolean enabled = true;
 
         public Factory(String fileNamePattern) {
             this(new SpringExpressionResolver(fileNamePattern));
@@ -81,13 +83,13 @@ public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
 
         @Override
         public ConsumerInPayloadLoggerInterceptor getNewInstance() {
-            ConsumerInPayloadLoggerInterceptor interceptor = new ConsumerInPayloadLoggerInterceptor(resolver);
-            interceptor.setLocallyEnabled(locallyEnabled);
+            var interceptor = new ConsumerInPayloadLoggerInterceptor(resolver);
+            interceptor.setEnabled(enabled);
             return interceptor;
         }
 
-        public void setLocallyEnabled(boolean locallyEnabled) {
-            this.locallyEnabled = locallyEnabled;
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
         }
     }
 

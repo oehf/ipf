@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * All possible query types.
  * @author Jens Riemschneider
  * @author Michael Ottati
+ * @author Quentin Ligier
  */
 @XmlType(name = "QueryType")
 @XmlEnum
@@ -63,11 +64,27 @@ public enum QueryType {
     /** Returns all documents with a given relation to a specified entry. */
     @XmlEnumValue("GetRelatedDocuments") GET_RELATED_DOCUMENTS("urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class),
     /** Cross-Community Fetch query (ITI-63). */
-    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class);
+    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class),
+    /** Find planned medication documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindMedicationTreatmentPlans") FIND_MEDICATION_TREATMENT_PLANS("urn:uuid:c85f5ade-81c1-44b6-8f7c-48b9cd6b9489", FindMedicationTreatmentPlansQuery.class),
+    /** Find prescriptions and their related documents (PHARM-1). */
+    @XmlEnumValue("FindPrescriptions") FIND_PRESCRIPTIONS("urn:uuid:0e6095c5-dc3d-47d9-a219-047064086d92", FindPrescriptionsQuery.class),
+    /** Find dispense documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindDispenses") FIND_DISPENSES("urn:uuid:ac79c7c7-f21b-4c88-ab81-57e4889e8758", FindDispensesQuery.class),
+    /** Find administered medication documents and their related documents (PHARM-1). */
+    @XmlEnumValue("FindMedicationAdministrations") FIND_MEDICATION_ADMINISTRATIONS("urn:uuid:fdbe8fb8-7b5c-4470-9383-8abc7135f462", FindMedicationAdministrationsQuery.class),
+    /** Find prescriptions and their related documents containing Prescription Items ready to be validated (PHARM-1). */
+    @XmlEnumValue("FindPrescriptionsForValidation") FIND_PRESCRIPTIONS_FOR_VALIDATION("urn:uuid:c1a43b20-0254-102e-8469-a6af440562e8", FindPrescriptionsForValidationQuery.class),
+    /** Find prescriptions and their related documents containing Prescription Items ready to be dispensed (PHARM-1). */
+    @XmlEnumValue("FindPrescriptionsForDispense") FIND_PRESCRIPTIONS_FOR_DISPENSE("urn:uuid:c875eb9c-0254-102e-8469-a6af440562e8", FindPrescriptionsForDispenseQuery.class),
+    /** Find the medication list to the patient (PHARM-1). */
+    @XmlEnumValue("FindMedicationList") FIND_MEDICATION_LIST("urn:uuid:80ebbd83-53c1-4453-9860-349585962af6", FindMedicationListQuery.class),
+    /** Searches for documents by title (DE:GEMATIK). */
+    @XmlEnumValue("FindDocumentsByTitle") FIND_DOCUMENTS_BY_TITLE("urn:uuid:ab474085-82b5-402d-8115-3f37cb1e2405", FindDocumentsByTitleQuery.class);
 
     private final String id;
-    private final Class<? extends Query> type; 
-    
+    private final Class<? extends Query> type;
+
     QueryType(String id, Class<? extends Query> type) {
         this.id = id;
         this.type = type;
@@ -79,9 +96,9 @@ public enum QueryType {
     public String getId() {
         return id;
     }
-    
+
     /**
-     * @return the class implementing the query. 
+     * @return the class implementing the query.
      */
     public Class<? extends Query> getType() {
         return type;
@@ -98,12 +115,12 @@ public enum QueryType {
             return null;
         }
 
-        for (QueryType type : values()) {
+        for (var type : values()) {
             if (id.equals(type.getId())) {
                 return type;
             }
         }
-        
+
         throw new XDSMetaDataException(ValidationMessage.UNKNOWN_QUERY_TYPE, id);
     }
 }

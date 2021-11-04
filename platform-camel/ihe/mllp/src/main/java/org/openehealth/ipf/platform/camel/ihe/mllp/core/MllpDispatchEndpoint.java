@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.camel.component.mina.MinaEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
@@ -33,7 +33,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
     public MllpDispatchEndpoint(
             MllpDispatchComponent mllpComponent,
-            Mina2Endpoint wrappedEndpoint,
+            MinaEndpoint wrappedEndpoint,
             MllpDispatchEndpointConfiguration config) {
         super(mllpComponent, wrappedEndpoint, config);
     }
@@ -43,7 +43,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
         List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
-        ConsumerDispatchingInterceptor dispatcher = getConfig().getDispatcher();
+        var dispatcher = getConfig().getDispatcher();
         if (dispatcher != null) {
             dispatcher.addTransactionRoutes(getConfig().getRoutes());
         } else {

@@ -16,13 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
+import org.ietf.jgss.Oid;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
 import java.util.Objects;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVERSAL_ID_TYPE_OID;
 
 /**
  * Represents an authority that assigns IDs.
@@ -40,7 +43,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "AssigningAuthority", propOrder = {"universalId", "universalIdType"})
 public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     private static final long serialVersionUID = 5350057820250191032L;
@@ -80,7 +83,18 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public AssigningAuthority(String universalId) {
         this();
         setUniversalId(universalId);
-        setUniversalIdType("ISO");
+        setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
+    }
+    
+    /**
+     * Constructs an assigning authority that complies with the rules of the XDS profile.
+     * @param universalId
+     *          the universal ID (HD.2).
+     */
+    public AssigningAuthority(Oid universalId) {
+        this();
+        setUniversalId(universalId.toString());
+        setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
     }
 
     /**
@@ -120,7 +134,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AssigningAuthority that = (AssigningAuthority) o;
+        var that = (AssigningAuthority) o;
         return Objects.equals(getUniversalId(), that.getUniversalId()) &&
                 Objects.equals(getUniversalIdType(), that.getUniversalIdType());
     }

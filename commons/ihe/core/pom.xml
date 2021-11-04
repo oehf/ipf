@@ -4,12 +4,12 @@
     <artifactId>ipf-commons-ihe-core</artifactId>
     <name>ipf-commons-ihe-core</name>
     <description>Generic IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -17,6 +17,10 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-audit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
         </dependency>
 
         <dependency>
@@ -57,12 +61,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

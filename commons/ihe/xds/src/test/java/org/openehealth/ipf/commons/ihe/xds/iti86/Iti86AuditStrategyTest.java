@@ -16,18 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.xds.iti86;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -45,9 +44,9 @@ public class Iti86AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private void testRequest(boolean serverSide) {
-        Iti86AuditStrategy strategy = new Iti86AuditStrategy(serverSide);
-        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = getXdsAuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti86AuditStrategy(serverSide);
+        var auditDataset = getXdsAuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -66,7 +65,7 @@ public class Iti86AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private XdsNonconstructiveDocumentSetRequestAuditDataset getXdsAuditDataset(Iti86AuditStrategy strategy) {
-        XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);
@@ -77,7 +76,7 @@ public class Iti86AuditStrategyTest extends XdsAuditorTestBase {
         auditDataset.getPatientIds().add(PATIENT_IDS[0]);
         auditDataset.getHumanUsers().add(new HumanUser(USER_ID, USER_NAME, USER_ROLES));
 
-        for (int i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) {
             auditDataset.getDocuments().add(
                     new XdsNonconstructiveDocumentSetRequestAuditDataset.Document(
                             DOCUMENT_OIDS[i],

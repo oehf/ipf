@@ -40,7 +40,7 @@ class Iti83RouteBuilder extends RouteBuilder {
     private Boolean validateIti9Request = false
     private Boolean validateIti9Response = false
 
-    public Iti83RouteBuilder(UriMapper uriMapper, String host, int iti9Port) {
+    Iti83RouteBuilder(UriMapper uriMapper, String host, int iti9Port) {
         super()
         this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper)
         this.responseTranslator = new PixQueryResponseToPixmResponseTranslator(uriMapper)
@@ -57,7 +57,7 @@ class Iti83RouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         from("pixm-iti83:translation?audit=true")
                 .routeId("pixm-adapter")
                 // pass back errors to the endpoint

@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFoldersQueryTransformer;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link GetFoldersQueryTransformer}.
@@ -36,7 +37,7 @@ public class GetFoldersQueryTransformerTest {
     private GetFoldersQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new GetFoldersQueryTransformer();
         query = new GetFoldersQuery();
@@ -80,7 +81,7 @@ public class GetFoldersQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetFoldersQuery result = new GetFoldersQuery();
+        var result = new GetFoldersQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -88,14 +89,14 @@ public class GetFoldersQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetFoldersQuery result = new GetFoldersQuery();
+        var result = new GetFoldersQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetFoldersQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetFoldersQuery result = new GetFoldersQuery();
+        var result = new GetFoldersQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetFoldersQuery(), result);
     }

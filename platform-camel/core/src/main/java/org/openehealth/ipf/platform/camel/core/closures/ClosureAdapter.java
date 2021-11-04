@@ -24,23 +24,23 @@ import org.codehaus.groovy.runtime.InvokerInvocationException;
  * 
  * @author Martin Krasser
  */
-public abstract class ClosureAdapter {
+public abstract class ClosureAdapter<T> {
     
-    private final Closure closure;
+    private final Closure<T> closure;
     
-    public ClosureAdapter(Closure closure) {
+    public ClosureAdapter(Closure<T> closure) {
         this.closure = closure;
     }
     
-    public Closure getClosure() {
+    public Closure<T> getClosure() {
         return closure;
     }
     
-    public Object call(Object... args) {
+    public T call(Object... args) {
         return callClosure(closure, args);
     }
 
-    public static Object callClosure(Closure closure, Object... args) {
+    public static <T> T callClosure(Closure<T> closure, Object... args) {
         try {
             return closure.call(args);
         } catch (InvokerInvocationException e) {

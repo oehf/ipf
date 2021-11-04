@@ -16,29 +16,26 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestDispatch extends XdsStandardTestContainer {
     
     static final String CONTEXT_DESCRIPTOR = "dispatch/dispatch-test-context.xml";
 
-    final String ITI_18_SERVICE_URI = "xds-iti18://localhost:8888/xdsRegistry";
-    final String ITI_42_SERVICE_URI = "xds-iti42://localhost:8888/xdsRegistry";
+    final String ITI_18_SERVICE_URI = "xds-iti18://localhost:%d/xdsRegistry";
+    final String ITI_42_SERVICE_URI = "xds-iti42://localhost:%d/xdsRegistry";
+    final String PHARM_1_SERVICE_URL = "cmpd-pharm1://localhost:%d/xdsRegistry";
 
     public static void main(String... args) {
-        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8889);
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, 8888);
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
@@ -46,10 +43,11 @@ public class TestDispatch extends XdsStandardTestContainer {
 
     @Test
     public void testXdsDispatch() {
-        send(ITI_42_SERVICE_URI, SampleData.createRegisterDocumentSet());
-        send(ITI_18_SERVICE_URI, SampleData.createFindDocumentsQuery());
-        AbstractMockedAuditMessageQueue queue = getAuditSender();
-        List<AuditMessage> messages = queue.getMessages();
-        assertEquals(4, messages.size());
+        send(String.format(ITI_42_SERVICE_URI, getPort()), SampleData.createRegisterDocumentSet());
+        send(String.format(ITI_18_SERVICE_URI, getPort()), SampleData.createFindDocumentsQuery());
+        send(String.format(PHARM_1_SERVICE_URL, getPort()), SampleData.createFindDispensesQuery());
+        var queue = getAuditSender();
+        var messages = queue.getMessages();
+        assertEquals(6, messages.size());
     }
 }

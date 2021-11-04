@@ -37,7 +37,7 @@ public enum EventActionCode implements EnumeratedValueSet<String> {
     Execute("E");
 
     @Getter
-    private String value;
+    private final String value;
 
     EventActionCode(String value) {
         this.value = value;

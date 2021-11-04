@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti81;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti81.FhirAuditEventQueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
@@ -29,7 +29,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.atna.ATNA.Interactions.ITI_81
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti81Component extends FhirComponent<FhirQueryAuditDataset> {
+public class Iti81Component extends FhirComponent<FhirAuditEventQueryAuditDataset> {
 
     public Iti81Component() {
         super(ITI_81);
@@ -40,7 +40,7 @@ public class Iti81Component extends FhirComponent<FhirQueryAuditDataset> {
     }
 
     @Override
-    protected Iti81Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+    protected Iti81Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirAuditEventQueryAuditDataset> config) {
         return new Iti81Endpoint(uri, this, config);
     }
 

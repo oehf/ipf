@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Audit Interceptor for ITI-68. Note that the ParticipantObjectIdentificationType for the document
- * is not populated automatically, because the location of the parametzers depends upon the actual
+ * is not populated automatically, because the location of the parameters depends upon the actual
  * implementation. The AuditDataset is forwarded in the Camel message header "AuditDataset" so that
- * at least {@link Iti68AuditDataset#documentUniqueId} can be set.
+ * at least {@link Iti68AuditDataset#setDocumentUniqueId(String)} can be set.
  *
  * @author Christian Ohr
  * @since 3.6
@@ -61,7 +61,7 @@ class Iti68ConsumerAuditInterceptor
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Iti68AuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
+        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
         determineParticipantsAddresses(exchange, auditDataset);
 
         // Add audit dataset to the exchange headers so that a processing route could add things like
@@ -69,7 +69,7 @@ class Iti68ConsumerAuditInterceptor
         // FHIR/XDS bridges) in the request URI, but there is no definition HOW.
         exchange.getIn().setHeader(AUDIT_DATASET_HEADER, auditDataset);
 
-        boolean failed = false;
+        var failed = false;
         try {
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
@@ -97,9 +97,9 @@ class Iti68ConsumerAuditInterceptor
      */
     private Iti68AuditDataset createAndEnrichAuditDatasetFromRequest(AuditStrategy<Iti68AuditDataset> strategy, Exchange exchange, Object msg) {
         try {
-            Iti68AuditDataset auditDataset = strategy.createAuditDataset();
+            var auditDataset = strategy.createAuditDataset();
 
-            HttpServletRequest request = exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
+            var request = exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(request.getRequestURL().toString());
             auditDataset.setRemoteAddress(request.getRemoteAddr());

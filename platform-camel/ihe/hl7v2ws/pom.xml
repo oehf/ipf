@@ -4,12 +4,12 @@
     <artifactId>ipf-platform-camel-ihe-hl7v2ws</artifactId>
     <name>ipf-platform-camel-ihe-hl7v2ws</name>
     <description>HL7v2 web service IHE components for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel-ihe</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -51,6 +51,11 @@
             <type>test-jar</type>
         </dependency>
         <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-spring</artifactId>
             <scope>test</scope>
@@ -62,9 +67,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-spring-xml</artifactId>
             <scope>test</scope>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
@@ -87,12 +91,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

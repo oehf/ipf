@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Contains information about an error.
@@ -89,10 +90,10 @@ public class ErrorInfo implements Serializable {
             String defaultLocation)
     {
         this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation, null);
-        Throwable t = throwable;
+        var t = throwable;
         while (t != null) {
             if (t instanceof XDSMetaDataException) {
-                XDSMetaDataException metaDataException = (XDSMetaDataException) t;
+                var metaDataException = (XDSMetaDataException) t;
                 this.errorCode = metaDataException.getValidationMessage().getErrorCode();
                 if (this.errorCode == null) {
                     this.errorCode = defaultMetaDataError;
@@ -101,7 +102,7 @@ public class ErrorInfo implements Serializable {
                 return;
             }
             if (t instanceof XdsRuntimeException) {
-                XdsRuntimeException exception = (XdsRuntimeException) t;
+                var exception = (XdsRuntimeException) t;
                 this.errorCode = exception.getErrorCode();
                 this.codeContext = exception.getCodeContext();
                 this.severity = exception.getSeverity();
@@ -186,14 +187,7 @@ public class ErrorInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((codeContext == null) ? 0 : codeContext.hashCode());
-        result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
-        result = prime * result + ((customErrorCode == null) ? 0 : customErrorCode.hashCode());
-        return result;
+        return Objects.hash(codeContext, errorCode, location, severity, customErrorCode);
     }
 
     @Override
@@ -204,33 +198,22 @@ public class ErrorInfo implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ErrorInfo other = (ErrorInfo) obj;
-        if (codeContext == null) {
-            if (other.codeContext != null)
-                return false;
-        } else if (!codeContext.equals(other.codeContext))
+        var other = (ErrorInfo) obj;
+        if (!Objects.equals(codeContext, other.codeContext)) {
             return false;
-        if (errorCode == null) {
-            if (other.errorCode != null)
-                return false;
-        } else if (!errorCode.equals(other.errorCode))
+        }
+        if (!Objects.equals(errorCode, other.errorCode)) {
             return false;
-        if (location == null) {
-            if (other.location != null)
-                return false;
-        } else if (!location.equals(other.location))
+        }
+        if (!Objects.equals(location, other.location)) {
             return false;
-        if (severity == null) {
-            if (other.severity != null)
-                return false;
-        } else if (!severity.equals(other.severity))
+        }
+        if (!Objects.equals(severity, other.severity)) {
             return false;
+        }
         if (customErrorCode == null) {
-            if (other.customErrorCode != null)
-                return false;
-        } else if (!customErrorCode.equals(other.customErrorCode))
-            return false;
-        return true;
+            return other.customErrorCode == null;
+        } else return customErrorCode.equals(other.customErrorCode);
     }    
 
     @Override

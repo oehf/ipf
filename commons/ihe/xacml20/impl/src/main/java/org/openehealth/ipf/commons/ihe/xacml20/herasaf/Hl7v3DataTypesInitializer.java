@@ -21,7 +21,6 @@ import org.herasaf.xacml.core.dataTypeAttribute.DataTypeAttribute;
 import org.herasaf.xacml.core.simplePDP.initializers.jaxb.typeadapter.xacml20.datatypes.AbstractDataTypesJaxbTypeAdapterInitializer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,9 +31,9 @@ public class Hl7v3DataTypesInitializer extends AbstractDataTypesJaxbTypeAdapterI
 
     @Override
     protected Map<String, DataTypeAttribute<?>> createTypeInstances() {
-        List<DataTypeAttribute<?>> instances = createInstances(IiDataTypeAttribute.class, CvDataTypeAttribute.class);
+        var instances = createInstances(IiDataTypeAttribute.class, CvDataTypeAttribute.class);
         Map<String, DataTypeAttribute<?>> instancesMap = new HashMap<>();
-        for (DataTypeAttribute<?> dataTypeAttribute : instances) {
+        for (var dataTypeAttribute : instances) {
             instancesMap.put(dataTypeAttribute.getDatatypeURI(), dataTypeAttribute);
         }
         return instancesMap;

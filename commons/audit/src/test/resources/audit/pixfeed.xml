@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="C" EventDateTime="2020-03-19T12:24:34.434Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110110" codeSystemName="DCM" originalText="Patient Record"/>
+    <EventTypeCode csd-code="ITI-8" codeSystemName="IHE Transactions" originalText="Patient Identity Feed"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="PKL|SAP-ISH" UserIsRequestor="true" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="root|dest" AlternativeUserID="18996" UserIsRequestor="false" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="MPI" AuditSourceID="MPI">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="7627199^^^HZLN&amp;2.16.840.1.113883.3.37.4.1.1.2.411.1&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+    <ParticipantObjectDetail type="MSH-10" value="MTIzNDU2"/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

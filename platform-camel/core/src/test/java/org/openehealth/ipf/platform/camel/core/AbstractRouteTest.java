@@ -19,12 +19,12 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/context-core.xml" })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractRouteTest {
@@ -41,17 +41,17 @@ public abstract class AbstractRouteTest {
     @Autowired
     protected ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri="mock:mock")
+    @EndpointInject(value="mock:mock")
     protected MockEndpoint mock;
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() {
         mock.reset();
     }
 
     protected List<String> sendBodies(String endpointUri, ExchangePattern pattern, String body, int repeats) {
-        ArrayList<String> result = new ArrayList<>(repeats);
-        for (int i = 0; i < repeats; i++) {
+        var result = new ArrayList<String>(repeats);
+        for (var i = 0; i < repeats; i++) {
             result.add((String)producerTemplate.sendBody(endpointUri, pattern, body));
         }
         return result;

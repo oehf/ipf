@@ -84,11 +84,11 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
     public XdsPHIImportBuilder addDocumentIds(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset,
                                               XdsNonconstructiveDocumentSetRequestAuditDataset.Status status,
                                               boolean xcaHomeCommunityId) {
-        String[] documentIds = auditDataset.getDocumentIds(status);
-        String[] homeCommunityIds = auditDataset.getHomeCommunityIds(status);
-        String[] repositoryIds = auditDataset.getRepositoryIds(status);
-        String[] seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
-        String[] studyInstanceIds = auditDataset.getStudyInstanceIds(status);
+        var documentIds = auditDataset.getDocumentIds(status);
+        var homeCommunityIds = auditDataset.getHomeCommunityIds(status);
+        var repositoryIds = auditDataset.getRepositoryIds(status);
+        var seriesInstanceIds = auditDataset.getSeriesInstanceIds(status);
+        var studyInstanceIds = auditDataset.getStudyInstanceIds(status);
         IntStream.range(0, documentIds.length).forEach(i ->
                 addImportedEntity(
                         documentIds[i],
@@ -97,13 +97,5 @@ public class XdsPHIImportBuilder extends PHIImportBuilder<XdsPHIImportBuilder> {
                         documentDetails(repositoryIds[i], homeCommunityIds[i], seriesInstanceIds[i],
                                 studyInstanceIds[i], xcaHomeCommunityId)));
         return self();
-    }
-
-    /**
-     * @return "missing". ITI-43 makes the remote alt user ID mandatory and so does the EVS validator
-     */
-    @Override
-    protected String getRemoteAltUserId() {
-        return getAuditContext().getAuditValueIfMissing();
     }
 }

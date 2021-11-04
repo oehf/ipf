@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T12:16:37.320Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-21" codeSystemName="IHE Transactions" originalText="Patient Demographics Query"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="MESA_DEPARTMENT|MESA_PD_CONSUMER" UserIsRequestor="true" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="PIM|MESA_PD_SUPPLIER" AlternativeUserID="18996" UserIsRequestor="false" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="MPI" AuditSourceID="MPI">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="324406609" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-21" codeSystemName="IHE Transactions" originalText="Patient Demographics Query"/>
+    <ParticipantObjectQuery>TVNIfF5+XCZ8TUVTQV9QRF9DT05TVU1FUnxNRVNBX0RFUEFSVE1FTlR8TUVTQV9QRF9TVVBQTElFUnxQSU18MjAwODEwMzExMTI3MDR8fFFCUF5RMjJeUUJQX1EyMXwzMjQ0MDY2MDl8UHwyLjV8fHxFUg1RUER8SUhFIFBEUSBRdWVyeXw0NzEzfEBQSUQuNS4xXm1laWVyDVJDUHxJfDEwXlJEDQ==</ParticipantObjectQuery>
+    <ParticipantObjectDetail type="MSH-10" value="MzI0NDA2NjA5"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="24^^^MPI&amp;2.16.840.1.113883.3.37.4.1.1.2.1.1&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="78246^^^PKLN&amp;2.16.840.1.113883.3.37.4.1.1.2.511.1&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="27^^^MPI&amp;2.16.840.1.113883.3.37.4.1.1.2.1.1&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="78106^^^PKLN&amp;2.16.840.1.113883.3.37.4.1.1.2.511.1&amp;ISO^PI" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

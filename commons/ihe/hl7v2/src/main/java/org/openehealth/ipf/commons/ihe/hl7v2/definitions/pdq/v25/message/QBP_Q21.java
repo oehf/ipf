@@ -66,6 +66,7 @@ public class QBP_Q21 extends AbstractMessage {
         return s;
     }
 
+    @Override
     public String getVersion() {
         return "2.5";
     }
@@ -97,7 +98,7 @@ public class QBP_Q21 extends AbstractMessage {
      * necessary throws HL7Exception if the repetition requested is more than
      * one greater than the number of existing repetitions.
      */
-    public SFT getSFT(int rep) throws HL7Exception {
+    public SFT getSFT(int rep) {
         return getTyped("SFT", rep, SFT.class);
     }
 

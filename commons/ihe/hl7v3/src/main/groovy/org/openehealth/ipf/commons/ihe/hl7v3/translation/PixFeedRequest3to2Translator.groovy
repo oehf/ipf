@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.dropTimeZone
@@ -211,7 +211,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // PID-7..8
         grp.PID[7][1].value = dropTimeZone(person.birthTime.@value.text())
-        grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        if (person.administrativeGenderCode.@code.text()) {
+            grp.PID[8].value = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        }
 
         if (person.raceCode) {
             for (race in person.raceCode) {

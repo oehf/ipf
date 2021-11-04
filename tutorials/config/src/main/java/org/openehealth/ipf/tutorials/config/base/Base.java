@@ -1,6 +1,6 @@
 package org.openehealth.ipf.tutorials.config.base;
 
-import org.apache.camel.spring.Main;
+import org.apache.camel.main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
  */
 public class Base {
 
-    private static Logger LOG = LoggerFactory.getLogger(Base.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Base.class);
 
     private static String descriptorList = "base-context.xml;extender-context.xml";
 
     public static void main(String... args) {
-        String customContextFiles = "";
-        for (String customContext : args) {
+        var customContextFiles = new StringBuilder();
+        for (var customContext : args) {
             if (Base.class.getClassLoader().getResource(customContext) != null) {
-                customContextFiles += customContext + ";";
+                customContextFiles.append(customContext).append(";");
             } else {
                 LOG.warn("Did not find {} on the classpath.", customContext);
             }

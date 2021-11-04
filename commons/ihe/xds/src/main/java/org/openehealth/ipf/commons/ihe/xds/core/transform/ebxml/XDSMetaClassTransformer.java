@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
@@ -88,8 +87,8 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         if (metaData == null) {
             return null;
         }
-        
-        E ebXML = createEbXMLInstance(metaData.getEntryUuid(), objectLibrary);
+
+        var ebXML = createEbXMLInstance(metaData.getEntryUuid(), objectLibrary);
         
         addAttributes(metaData, ebXML, objectLibrary);        
         addClassifications(metaData, ebXML, objectLibrary);
@@ -101,7 +100,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         }
         
         if (metaData.isLimitedMetadata()) {
-            EbXMLClassification classification = factory.createClassification(objectLibrary);
+            var classification = factory.createClassification(objectLibrary);
             classification.setClassificationNode(limitedMetadataAttributeName);
             ebXML.addClassification(classification, limitedMetadataAttributeName);
         }
@@ -119,8 +118,8 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         if (ebXML == null) {
             return null;
         }
-                
-        C metaData = createMetaClassInstance();
+
+        var metaData = createMetaClassInstance();
         
         addAttributesFromEbXML(metaData, ebXML);        
         addClassificationsFromEbXML(metaData, ebXML);
@@ -132,8 +131,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         }
         
         metaData.setLimitedMetadata(ebXML.getClassifications().stream()
-                .filter(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode()))
-                .findFirst().isPresent());
+                .anyMatch(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode())));
 
         return metaData;
     }
@@ -235,7 +233,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      *          the object library.
      */
     protected void addExternalIdentifiers(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
-        String patientID = Hl7v2Based.render(metaData.getPatientId());
+        var patientID = Hl7v2Based.render(metaData.getPatientId());
         ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);        
         ebXML.addExternalIdentifier(metaData.getUniqueId(), uniqueIdExternalId, uniqueIdLocalizedString);
     }
@@ -248,7 +246,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      *          the ebXML instance containing the external identifiers.
      */
     protected void addExternalIdentifiersFromEbXML(C metaData, E ebXML) {
-        String patientID = ebXML.getExternalIdentifierValue(patientIdExternalId);
+        var patientID = ebXML.getExternalIdentifierValue(patientIdExternalId);
         metaData.setPatientId(Hl7v2Based.parse(patientID, Identifiable.class));
         metaData.setUniqueId(ebXML.getExternalIdentifierValue(uniqueIdExternalId));
     }

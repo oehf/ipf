@@ -23,9 +23,9 @@ import javax.security.auth.callback.PasswordCallback
 /**
  * @author Boris Stanojevic
  */
-public class TestCallbackHandler implements CallbackHandler {
+class TestCallbackHandler implements CallbackHandler {
 
-    public void handle(Callback[] callbacks) {
+    void handle(Callback[] callbacks) {
 
         try {
             for (Callback callback : callbacks){

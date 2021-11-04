@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--bean id="hapiModelExtension"
+        class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean-->
+    
+    <bean id="customModelClassFactory" 
+        class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory">
+    </bean>    
+
+    <bean id="customModelClassFactoryConfigurer" 
+        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
+        <property name="customModelClassFactory" ref="customModelClassFactory" />
+    </bean>
+</beans>

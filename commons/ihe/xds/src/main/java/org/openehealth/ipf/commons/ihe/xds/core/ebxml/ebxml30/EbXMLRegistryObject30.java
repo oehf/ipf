@@ -66,7 +66,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
             classification.setClassificationScheme(scheme);
             classification.setClassifiedObject(registryEntry.getId());
             classification.assignUniqueId();
-            List<ClassificationType> classifications = registryEntry.getClassification();
+            var classifications = registryEntry.getClassification();
             classifications.add(((EbXMLClassification30)classification).getInternal());
         }
     }
@@ -77,25 +77,25 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
         notNull(scheme, "scheme cannot be null");
 
         if (value != null) {
-            ExternalIdentifierType identifier = EbXMLFactory30.RIM_FACTORY.createExternalIdentifierType();
+            var identifier = EbXMLFactory30.RIM_FACTORY.createExternalIdentifierType();
             EbXMLExternalIdentifier externalIdentifier = new EbXMLExternalIdentifier30(identifier);
             
             externalIdentifier.setValue(value);
             externalIdentifier.setIdentificationScheme(scheme);
             externalIdentifier.setRegistryObject(registryEntry.getId());
-            externalIdentifier.setId("urn:uuid:" + UUID.randomUUID().toString());
-                        
-            LocalizedString localized = new LocalizedString(name, null, null);
+            externalIdentifier.setId("urn:uuid:" + UUID.randomUUID());
+
+            var localized = new LocalizedString(name, null, null);
             externalIdentifier.setName(new EbXMLInternationalString30(localized));
-            
-            List<ExternalIdentifierType> externalIdentifiers = registryEntry.getExternalIdentifier();
+
+            var externalIdentifiers = registryEntry.getExternalIdentifier();
             externalIdentifiers.add(identifier);
         }
     }
 
     @Override
     public List<EbXMLClassification> getClassifications() {
-        List<ClassificationType> classifications = registryEntry.getClassification();
+        var classifications = registryEntry.getClassification();
         return classifications.stream()
                 .map(EbXMLClassification30::new)
                 .collect(Collectors.toList());
@@ -113,14 +113,14 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public LocalizedString getDescription() {
-        InternationalStringType description = registryEntry.getDescription();
+        var description = registryEntry.getDescription();
         EbXMLInternationalString encapsulated = new EbXMLInternationalString30(description);
         return encapsulated.getSingleLocalizedString();
     }
 
     @Override
     public String getExternalIdentifierValue(String scheme) {        
-        for (ExternalIdentifierType identifier : registryEntry.getExternalIdentifier()) {
+        for (var identifier : registryEntry.getExternalIdentifier()) {
             if (scheme.equals(identifier.getIdentificationScheme())) {
                 return identifier.getValue();
             }
@@ -131,7 +131,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public List<EbXMLExternalIdentifier> getExternalIdentifiers() {
-        List<ExternalIdentifierType> externalIdentifiers = registryEntry.getExternalIdentifier();
+        var externalIdentifiers = registryEntry.getExternalIdentifier();
         return externalIdentifiers.stream()
                 .map(EbXMLExternalIdentifier30::new)
                 .collect(Collectors.toList());
@@ -159,7 +159,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public Version getVersionInfo() {
-        VersionInfoType versionInfo = registryEntry.getVersionInfo();
+        var versionInfo = registryEntry.getVersionInfo();
         if (versionInfo == null) {
             return null;
         }
@@ -180,7 +180,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public LocalizedString getName() {
-        InternationalStringType name = registryEntry.getName();
+        var name = registryEntry.getName();
         EbXMLInternationalString encapsulated = new EbXMLInternationalString30(name);
         return encapsulated.getSingleLocalizedString();
     }
@@ -192,7 +192,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public EbXMLClassification getSingleClassification(String scheme) {
-        List<EbXMLClassification> filtered = getClassifications(scheme);
+        var filtered = getClassifications(scheme);
         if (filtered.size() == 0) {
             return null;
         }
@@ -201,14 +201,14 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     }
 
     @Override
-    public void setDescription(LocalizedString description) {        
-        EbXMLInternationalString30 encapsulated = new EbXMLInternationalString30(description);
+    public void setDescription(LocalizedString description) {
+        var encapsulated = new EbXMLInternationalString30(description);
         registryEntry.setDescription(encapsulated.getInternal());
     }
 
     @Override
     public void setName(LocalizedString name) {
-        EbXMLInternationalString30 encapsulated = new EbXMLInternationalString30(name);
+        var encapsulated = new EbXMLInternationalString30(name);
         registryEntry.setName(encapsulated.getInternal());
     }
 

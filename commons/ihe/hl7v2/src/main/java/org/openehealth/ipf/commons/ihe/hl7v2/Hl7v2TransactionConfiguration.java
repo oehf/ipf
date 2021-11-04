@@ -204,8 +204,8 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
             boolean[] responseContinuabilityFlags)
     {
         Map<String, Definition> result = new HashMap<>();
-        for (int i = 0; i < allowedMessageTypes.length; ++i) {
-            Definition definition = new Definition(
+        for (var i = 0; i < allowedMessageTypes.length; ++i) {
+            var definition = new Definition(
                     allowedTriggerEvents[i],
                     (auditabilityFlags != null) && auditabilityFlags[i],
                     (responseContinuabilityFlags != null) && responseContinuabilityFlags[i]);
@@ -220,7 +220,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
      */
     public boolean isAuditable(String messageType) {
         try {
-            Definition definition = getDefinitionForMessageType(messageType, true);
+            var definition = getDefinitionForMessageType(messageType, true);
             return definition.auditable;
         } catch (Hl7v2AcceptanceException e) {
             throw new IllegalArgumentException(e);
@@ -239,7 +239,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
      */
     public boolean isContinuable(String messageType) {
         try {
-            Definition definition = getDefinitionForMessageType(messageType, true);
+            var definition = getDefinitionForMessageType(messageType, true);
             return definition.responseContinuable;
         } catch (Hl7v2AcceptanceException e) {
             throw new IllegalArgumentException(e);
@@ -308,7 +308,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
             Message message,
             boolean isRequest) throws Hl7v2AcceptanceException {
         try {
-            Segment msh = (Segment) message.get("MSH");
+            var msh = (Segment) message.get("MSH");
             checkMessageAcceptance(
                     Terser.get(msh, 9, 0, 1, 1),
                     Terser.get(msh, 9, 0, 2, 1),
@@ -342,7 +342,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
     {
         checkMessageVersion(version);
 
-        Definition definition = getDefinitionForMessageType(messageType, isRequest);
+        var definition = getDefinitionForMessageType(messageType, isRequest);
 
         if (! definition.isAllowedTriggerEvent(triggerEvent)) {
             throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent + ", must be one of " +
@@ -352,7 +352,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
         if (!StringUtils.isEmpty(messageStructure)) {
             // This may not work as the custom event map cannot be distinguished from the
             // default one! This needs to be fixed for HAPI 2.1
-            String event = messageType + "_" + triggerEvent;
+            var event = messageType + "_" + triggerEvent;
             String expectedMessageStructure;
             try {
                 expectedMessageStructure = hapiContext.getModelClassFactory().getMessageStructureForEvent(event, Version.versionOf(version));
@@ -369,8 +369,8 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
 
             // the expected structure must be equal to the actual one,
             // but second components may be omitted in acknowledgements
-            boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
-            boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure != null && expectedMessageStructure.startsWith("ACK"));
+            var bothAreEqual = messageStructure.equals(expectedMessageStructure);
+            var bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure != null && expectedMessageStructure.startsWith("ACK"));
             if (!(bothAreEqual || bothAreAcks)) {
                 throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure + 
                         ", must be " + expectedMessageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
@@ -379,7 +379,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
     }
 
     private Definition getDefinitionForMessageType(String messageType, boolean isRequest) throws Hl7v2AcceptanceException {
-        Definition definition = definitions.get(isRequest).get(messageType);
+        var definition = definitions.get(isRequest).get(messageType);
         if (definition == null) {
             definition = definitions.get(isRequest).get("*");
             if (definition == null) {
@@ -391,7 +391,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
     }
 
     private void checkMessageVersion(String version) throws Hl7v2AcceptanceException {
-        Version messageVersion = Version.versionOf(version);
+        var messageVersion = Version.versionOf(version);
         if (! ArrayUtils.contains(hl7Versions, messageVersion)) {
             throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + supportedVersions(hl7Versions),
                     ErrorCode.UNSUPPORTED_VERSION_ID);
@@ -399,8 +399,8 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
     }
 
     private String supportedVersions(Version... hl7versions) {
-        StringBuilder builder = new StringBuilder();
-        for (Version v : hl7versions) {
+        var builder = new StringBuilder();
+        for (var v : hl7versions) {
             builder.append(v.getVersion()).append(' ');
         }
         return builder.toString();
@@ -424,7 +424,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
      * @throws HL7v2Exception if the message type or trigger event is not valid for this transaction
      */
     public <M extends Message> M request(String messageType, String trigger) {
-        Message message = MessageUtils.makeMessage(
+        var message = MessageUtils.makeMessage(
                 getHapiContext(), messageType, trigger, getHl7Versions()[0].getVersion());
         try {
             checkRequestAcceptance(message);

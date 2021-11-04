@@ -58,7 +58,7 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
     }
 
     private static void checkClass(Object x, Class<?> expectedClass) {
-        Class<?> realClass = x.getClass();
+        var realClass = x.getClass();
         if (!expectedClass.isAssignableFrom(realClass)) {
             throw new IllegalStateException("Expected " + expectedClass.getName() + ", got " + realClass.getName());
         }
@@ -73,11 +73,11 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
             checkClass(x, BufferingXmlWriter.class);
             x = MOUT_WRITER_FIELD.get(x);
             checkClass(x, UTF8Writer.class);
-            UTF8Writer writer = (UTF8Writer) x;
+            var writer = (UTF8Writer) x;
             x = MOUT_STREAM_FIELD.get(writer);
             checkClass(x, OutputStream.class);
-            OutputStream os = (OutputStream) x;
-            WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
+            var os = (OutputStream) x;
+            var wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
             message.setContent(OutputStream.class, wrapper);
             MOUT_STREAM_FIELD.set(writer, wrapper);
         } catch (IllegalAccessException e) {
@@ -96,7 +96,7 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
      *      when the stream wrapper instance could not be retrieved.
      */
     public static WrappedOutputStream getStreamWrapper(Message message) {
-        OutputStream outputStream =  message.getContent(OutputStream.class);
+        var outputStream =  message.getContent(OutputStream.class);
         if (outputStream instanceof CacheAndWriteOutputStream) {
             // Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.
             outputStream = ((CacheAndWriteOutputStream) outputStream).getFlowThroughStream();

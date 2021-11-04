@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.core.camel.exception;
 
 import org.apache.camel.Processor;
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.core.support.processor.ExceptionProcessor;
 
 
 /**
  * @author Martin Krasser
  */
-public class ExceptionHandlingRouteBuilder extends SpringRouteBuilder {
+public class ExceptionHandlingRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -41,7 +41,7 @@ public class ExceptionHandlingRouteBuilder extends SpringRouteBuilder {
     }
     
     private Processor exceptionProcessor() {
-        ExceptionProcessor result = new ExceptionProcessor();
+        var result = new ExceptionProcessor();
         result.getExceptions().put("blah", new Exception1());
         result.getExceptions().put("blub", new Exception2());
         result.getExceptions().put("oink", new Exception3());

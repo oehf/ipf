@@ -15,61 +15,168 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import lombok.experimental.Delegate;
-import org.apache.camel.component.mina2.Mina2Consumer;
-import org.apache.camel.impl.DefaultConsumer;
-import org.apache.mina.core.future.CloseFuture;
+import org.apache.camel.*;
+import org.apache.camel.component.mina.MinaConsumer;
+import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.support.DefaultConsumer;
+import org.apache.camel.spi.ExceptionHandler;
+import org.apache.camel.spi.UnitOfWork;
 import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MllpConsumer wraps a Mina2Consumer for having a hook to shutdown some Mina
+ * MllpConsumer wraps a MinaConsumer for having a hook to shutdown some Mina
  * resources when the consumer is closing
  */
 public class MllpConsumer extends DefaultConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpConsumer.class);
 
-    // The reason for this interface is to convince the Delegate annotation to *not* delegate
-    // the stop method. Weird API, really.
-    private interface DoStop {
-        @SuppressWarnings("unused")
-        void stop() throws Exception;
+    @Override
+    public void start() {
+        this.consumer.start();
     }
 
-    @Delegate(excludes = DoStop.class)
-    private final Mina2Consumer consumer;
+    @Override
+    public Processor getProcessor() {
+        return this.consumer.getProcessor();
+    }
 
-    MllpConsumer(Mina2Consumer consumer) {
+    @Override
+    public AsyncProcessor getAsyncProcessor() {
+        return this.consumer.getAsyncProcessor();
+    }
+
+    @Override
+    public boolean isSuspendingOrSuspended() {
+        return this.consumer.isSuspendingOrSuspended();
+    }
+
+    public IoAcceptor getAcceptor() {
+        return this.consumer.getAcceptor();
+    }
+
+    @Override
+    public boolean isSuspending() {
+        return this.consumer.isSuspending();
+    }
+
+    @Override
+    public boolean isStoppingOrStopped() {
+        return this.consumer.isStoppingOrStopped();
+    }
+
+    @Override
+    public boolean isStopping() {
+        return this.consumer.isStopping();
+    }
+
+    @Override
+    public Route getRoute() {
+        return this.consumer.getRoute();
+    }
+
+    @Override
+    public void setRoute(Route route) {
+        this.consumer.setRoute(route);
+    }
+
+    @Override
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.consumer.setExceptionHandler(exceptionHandler);
+    }
+
+    @Override
+    public boolean isStopped() {
+        return this.consumer.isStopped();
+    }
+
+    @Override
+    public boolean isStarting() {
+        return this.consumer.isStarting();
+    }
+
+    @Override
+    public boolean isRunAllowed() {
+        return this.consumer.isRunAllowed();
+    }
+
+    public void setAcceptor(IoAcceptor acceptor) {
+        this.consumer.setAcceptor(acceptor);
+    }
+
+    @Override
+    public void shutdown() {
+        this.consumer.shutdown();
+    }
+
+    @Override
+    public UnitOfWork createUoW(Exchange exchange) throws Exception {
+        return this.consumer.createUoW(exchange);
+    }
+
+    @Override
+    public ServiceStatus getStatus() {
+        return this.consumer.getStatus();
+    }
+
+    @Override
+    public void resume() {
+        this.consumer.resume();
+    }
+
+    @Override
+    public ExceptionHandler getExceptionHandler() {
+        return this.consumer.getExceptionHandler();
+    }
+
+    @Override
+    public boolean isSuspended() {
+        return this.consumer.isSuspended();
+    }
+
+    @Override
+    public boolean isStarted() {
+        return this.consumer.isStarted();
+    }
+
+    @Override
+    public MinaEndpoint getEndpoint() {
+        return this.consumer.getEndpoint();
+    }
+
+    @Override
+    public void doneUoW(Exchange exchange) {
+        this.consumer.doneUoW(exchange);
+    }
+
+    @Override
+    public void suspend() {
+        this.consumer.suspend();
+    }
+
+    private final MinaConsumer consumer;
+
+    MllpConsumer(MinaConsumer consumer) {
         // Everything will be delegated
         super(consumer.getEndpoint(), consumer.getProcessor());
         this.consumer = consumer;
     }
 
     @Override
-    protected void handleException(String message, Throwable t) {
-        super.handleException(message, t);
-    }
-
-    @Override
-    protected void handleException(Throwable t) {
-        super.handleException(t);
-    }
-
-    @Override
-    public void stop() throws Exception {
-        super.stop();
+    public void stop() {
+        this.consumer.stop();
+        // super.stop();
     }
 
     @Override
     protected void doStop() throws Exception {
         super.doStop();
-        IoAcceptor ioAcceptor = getAcceptor();
+        var ioAcceptor = getAcceptor();
         if (ioAcceptor != null) {
-            for (IoSession ss : ioAcceptor.getManagedSessions().values()) {
-                CloseFuture future = ss.closeNow();
+            for (var ss : ioAcceptor.getManagedSessions().values()) {
+                var future = ss.closeNow();
                 if (!future.awaitUninterruptibly(1000)) {
                     LOG.warn("Could not close IoSession, consumer may hang");
                 }

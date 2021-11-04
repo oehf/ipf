@@ -110,7 +110,7 @@ public class ApplicationActivityBuilder<T extends ApplicationActivityBuilder<T>>
     @Override
     public void validate() {
         super.validate();
-        if (getMessage().findActiveParticipants(ap -> ActiveParticipantRoleIdCode.Application.equals(ap)).size() != 1) {
+        if (getMessage().findActiveParticipants(ap -> ap.getRoleIDCodes().contains(ActiveParticipantRoleIdCode.Application)).size() != 1) {
             throw new AuditException("Must have exactly one Application Active Participant");
         }
     }

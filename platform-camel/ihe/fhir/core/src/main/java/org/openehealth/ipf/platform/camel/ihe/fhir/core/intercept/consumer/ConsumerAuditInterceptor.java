@@ -52,15 +52,15 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
+        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
         determineParticipantsAddresses(exchange, auditDataset);
 
-        boolean failed = false;
+        var failed = false;
         try {
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
             if (!failed) {
-                Object result = resultMessage(exchange).getBody();
+                var result = resultMessage(exchange).getBody();
                 failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      */
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset();
+            var auditDataset = strategy.createAuditDataset();
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(exchange.getIn().getHeader(Constants.HTTP_URL, String.class));
 

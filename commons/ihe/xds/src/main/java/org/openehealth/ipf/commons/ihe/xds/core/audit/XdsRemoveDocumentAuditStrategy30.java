@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status.NOT_SUCCESSFUL;
@@ -44,13 +43,13 @@ public abstract class XdsRemoveDocumentAuditStrategy30 extends XdsNonconstructiv
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
         if (pojo instanceof RegistryResponseType) {
-            RegistryResponseType response = (RegistryResponseType) pojo;
+            var response = (RegistryResponseType) pojo;
             if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
                 auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));
             } else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&
                     (response.getRegistryErrorList() != null) &&
                     (response.getRegistryErrorList().getRegistryError() != null)) {
-                for (RegistryError error : response.getRegistryErrorList().getRegistryError()) {
+                for (var error : response.getRegistryErrorList().getRegistryError()) {
                     if (Severity.ERROR.getOpcode30().equals(error.getSeverity())) {
                         auditDataset.getDocuments().stream()
                                 .filter(document -> error.getCodeContext().contains(document.getDocumentUniqueId()))

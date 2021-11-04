@@ -16,8 +16,8 @@
 package org.openehealth.ipf.modules.cda.support;
 
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.CCDA_SCHEMATRON_RULES;
+import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.CCDA_SCHEMATRON_RULES;
 
 /**
  * @author Boris Stanojevic
@@ -44,7 +44,7 @@ public class CCDASchematronValidationTest {
                                                            "HandP 1", "Op Note 1", "Proc Note 1", "Progress Note 1",
                                                            "UD 1", "UD 2"};
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         params = new HashMap<>();
         params.put("phase", "errors");
@@ -53,9 +53,9 @@ public class CCDASchematronValidationTest {
 
     @Test
     public void validateSchemaGoodSamples() throws Exception {
-        for (String ccdaFile: ccdaFiles){
-            String ccdaFilePathFormat = "/ccda/%s.xml";
-            String ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);
+        for (var ccdaFile: ccdaFiles){
+            var ccdaFilePathFormat = "/ccda/%s.xml";
+            var ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);
             Source testXml = new StreamSource(getClass().getResourceAsStream(ccdaFilePath));
             LOG.info("Testing {} ...", ccdaFile);
             schematron.validate(testXml, new SchematronProfile(CCDA_SCHEMATRON_RULES, params));

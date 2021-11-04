@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "AvailabilityStatus")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum AvailabilityStatus {
     /** The entry is approved. */
     @XmlEnumValue("Approved") APPROVED("Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"),
@@ -70,7 +70,7 @@ public enum AvailabilityStatus {
             return null;
         }
         
-        for (AvailabilityStatus status : AvailabilityStatus.values()) {
+        for (var status : AvailabilityStatus.values()) {
             if (opcode.equals(status.getOpcode()) || opcode.equals(status.getQueryOpcode())) {
                 return status;
             }

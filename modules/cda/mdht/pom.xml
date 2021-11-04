@@ -4,12 +4,12 @@
     <artifactId>ipf-modules-cda-mdht</artifactId>
     <name>ipf-modules-cda-mdht</name>
     <description>MDHT-specific CDA support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules-cda</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <properties>
@@ -24,6 +24,10 @@
         <dependency>
             <groupId>org.openehealth.ipf.oht.mdht</groupId>
             <artifactId>ipf-oht-mdht-uml-cda</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>app</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.oht.mdht</groupId>
@@ -53,12 +57,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

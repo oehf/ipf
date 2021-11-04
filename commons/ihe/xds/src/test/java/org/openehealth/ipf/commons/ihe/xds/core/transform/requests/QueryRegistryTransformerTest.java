@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for {@link QueryRegistryTransformer}.
@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 public class QueryRegistryTransformerTest {
     private QueryRegistryTransformer transformer;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new QueryRegistryTransformer();
     }
@@ -63,9 +63,9 @@ public class QueryRegistryTransformerTest {
     }
 
     private void checkForQuery(Query query) {
-        QueryRegistry request = new QueryRegistry(query);
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        QueryRegistry result = transformer.fromEbXML(ebXML);
+        var request = new QueryRegistry(query);
+        var ebXML = transformer.toEbXML(request);
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(request, result);
     }
 }

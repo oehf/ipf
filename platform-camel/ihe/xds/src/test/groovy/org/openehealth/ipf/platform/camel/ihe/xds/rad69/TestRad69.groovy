@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 
 import org.apache.camel.Exchange
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -49,12 +49,12 @@ class TestRad69 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() throws Exception {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createRetrieveImagingDocumentSet()
         doc = request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().get(0)
@@ -97,7 +97,7 @@ class TestRad69 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.eventIdentification, '110106', 'RAD-69', EventActionCode.Read, outcome)
+        checkEvent(message.eventIdentification, '110104', 'RAD-69', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
         checkDestination(message.activeParticipants[1], false, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
@@ -115,7 +115,7 @@ class TestRad69 extends XdsStandardTestContainer {
         assert message.activeParticipants.size() == 2
         assert message.participantObjectIdentifications.size() == 8
         
-        checkEvent(message.eventIdentification, '110107', 'RAD-69', EventActionCode.Create, outcome)
+        checkEvent(message.eventIdentification, '110103', 'RAD-69', EventActionCode.Create, outcome)
         checkSource(message.activeParticipants[0], SERVICE2_ADDR, false)
         checkDestination(message.activeParticipants[1], false, false)
         checkImageDocument(message.participantObjectIdentifications[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')

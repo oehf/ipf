@@ -38,6 +38,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void toEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -45,7 +46,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(DOC_ENTRY_LOGICAL_ID, query.getLogicalUuid());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
@@ -56,6 +57,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
      *          the query. Can be <code>null</code>.
      * @param ebXML ebXML object
      */
+    @Override
     public void fromEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -63,7 +65,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setLogicalUuid(slots.toStringList(DOC_ENTRY_LOGICAL_ID));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

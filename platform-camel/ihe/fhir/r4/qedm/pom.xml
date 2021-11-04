@@ -3,23 +3,19 @@
     <parent>
         <artifactId>ipf-platform-camel-ihe-fhir-r4</artifactId>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-platform-camel-ihe-fhir-r4-qedm</artifactId>
     <name>ipf-platform-camel-ihe-fhir-r4-qedm</name>
     <description>Apache Camel components for QEDM transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-fhir-r4-qedm</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
         </dependency>
 
         <!-- Test dependencies -->
@@ -27,7 +23,6 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-fhir-r4-test</artifactId>
             <version>${project.version}</version>
-            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -46,7 +41,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4</artifactId>
+            <artifactId>camel-http</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -57,6 +52,11 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-xml</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -121,12 +121,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

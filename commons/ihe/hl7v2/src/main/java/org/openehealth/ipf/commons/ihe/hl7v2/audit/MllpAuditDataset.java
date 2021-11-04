@@ -118,6 +118,7 @@ public abstract class MllpAuditDataset extends AuditDataset {
     /**
      * @return The machine name or IP address
      */
+    @Override
     public String getLocalAddress() {
         return localAddress != null ? localAddress : AuditUtils.getLocalIPAddress();
     }

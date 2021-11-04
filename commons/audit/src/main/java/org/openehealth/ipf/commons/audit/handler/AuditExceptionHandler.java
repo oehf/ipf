@@ -29,6 +29,6 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
  */
 public interface AuditExceptionHandler {
 
-    void handleException(AuditContext auditContext, Throwable t, String... auditMessages);
+    void handleException(AuditContext auditContext, Throwable t, String auditMessage);
 
 }

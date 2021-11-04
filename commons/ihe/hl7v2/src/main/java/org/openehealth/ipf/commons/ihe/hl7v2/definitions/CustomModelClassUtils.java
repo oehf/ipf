@@ -16,11 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions;
 
 import java.util.Collections;
-import java.util.Map;
 
 import ca.uhn.hl7v2.Version;
-import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 
 /**
@@ -40,24 +37,15 @@ public final class CustomModelClassUtils {
      * Creates a model class factory for the given transaction and HL7 version.
      */
     public static CustomModelClassFactory createFactory(String transaction, String version) {
-        String packageName = String.format("%s.%s.%s",
+        var packageName = String.format("%s.%s.%s",
                 CustomModelClassUtils.class.getPackage().getName(),
                 transaction,
                 Version.versionOf(version).getPackageVersion());
-        Map<String, String[]> map = Collections.singletonMap(version, new String[]{packageName});
-        CustomModelClassFactory cmcf = new CustomModelClassFactory(map);
+        var map = Collections.singletonMap(version, new String[]{packageName});
+        var cmcf = new CustomModelClassFactory(map);
         cmcf.setEventMapDirectory(CUSTOM_EVENT_MAP_DIRECTORY);
         return cmcf;
     }
 
-    /**
-     * Creates a parser for the given transaction and HL7 version.
-     *
-     * @deprecated the correct parser should be obtained from the {@link ca.uhn.hl7v2.HapiContext}
-     * that has been configured with the correct {@link ca.uhn.hl7v2.parser.ModelClassFactory}.
-     */
-    public static Parser createParser(String transaction, String version) {
-        return new PipeParser(createFactory(transaction, version));
-    }
 
 }

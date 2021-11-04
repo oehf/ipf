@@ -15,17 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link AssociationTransformer}.
@@ -36,9 +32,9 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
     private EbXMLObjectLibrary objectLibrary;
     protected Association association;
     
-    @Before
+    @BeforeEach
     public void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new AssociationTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         objectLibrary.put("id1", new Object());
@@ -55,7 +51,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXML() {
-        EbXMLAssociation ebXML = transformer.toEbXML(association, objectLibrary);
+        var ebXML = transformer.toEbXML(association, objectLibrary);
         assertNotNull(ebXML);
         
         assertEquals(AssociationType.REPLACE, ebXML.getAssociationType());
@@ -63,10 +59,10 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         assertEquals("id2", ebXML.getTarget());
         assertEquals("Original", ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS));
         assertEquals("uuid", ebXML.getId());
-        
-        List<EbXMLClassification> classifications = ebXML.getClassifications(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
+
+        var classifications = ebXML.getClassifications(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         assertEquals(1, classifications.size());
-        EbXMLClassification classification = classifications.get(0);
+        var classification = classifications.get(0);
         assertEquals("uuid", classification.getClassifiedObject());
         assertEquals("code", classification.getNodeRepresentation());
         assertEquals("display", classification.getNameAsInternationalString().getSingleLocalizedString().getValue());
@@ -82,7 +78,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Association(), objectLibrary);
         assertNotNull(ebXML);
         assertNull(ebXML.getAssociationType());
         assertNull(ebXML.getSource());
@@ -95,7 +91,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        EbXMLAssociation ebXML = transformer.toEbXML(association, objectLibrary);
+        var ebXML = transformer.toEbXML(association, objectLibrary);
         assertEquals(association, transformer.fromEbXML(ebXML));
     }
     
@@ -106,7 +102,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Association(), objectLibrary);
         assertEquals(new Association(), transformer.fromEbXML(ebXML));
     }
 

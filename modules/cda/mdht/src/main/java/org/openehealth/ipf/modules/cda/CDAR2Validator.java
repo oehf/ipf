@@ -35,7 +35,7 @@ public class CDAR2Validator implements Validator<ClinicalDocument, Map<Object, O
 
     @Override
     public void validate(ClinicalDocument doc, Map<Object, Object> context) {
-        boolean isValid = CDAUtil.validate(doc, retrieveValidationHandler(context));
+        var isValid = CDAUtil.validate(doc, retrieveValidationHandler(context));
         if (! isValid) {
             throw new ValidationException("Clinical Document not valid!");
         }
@@ -50,7 +50,7 @@ public class CDAR2Validator implements Validator<ClinicalDocument, Map<Object, O
      */
     private ValidationHandler retrieveValidationHandler(Map<Object, Object> context) {
         if (context != null) {
-            ValidationHandler handler = (ValidationHandler) context.get(ValidationHandler.class);
+            var handler = (ValidationHandler) context.get(ValidationHandler.class);
             if (handler != null) {
                 return handler;
             }

@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'
+    xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
-    <diskStore path="target/ehcache-store"/>
+    <cache alias="interactiveContinuationCache">
+        <expiry>
+            <ttl>600</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
 
-    <defaultCache overflowToDisk="true" eternal="false" maxElementsInMemory="1000"/>
+    <cache alias="unsolicitedFragmentationCache">
+        <expiry>
+            <ttl>60</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+        </resources>
+    </cache>
 
-    <cache name="interactiveContinuationCache"
-           timeToLiveSeconds="600"
-           maxElementsInMemory="1"
-           overflowToDisk="true"
-           maxElementsOnDisk="0"
-           eternal="false"
-           diskPersistent="true"
-            />
-
-    <cache name="unsolicitedFragmentationCache"
-           timeToLiveSeconds="60"
-           overflowToDisk="false"
-           maxElementsInMemory="1000"
-           eternal="false"
-           diskPersistent="true"
-            />
-
-</ehcache>
-
+</config>

@@ -33,17 +33,17 @@ public class ProducerStringProcessingInterceptor extends InterceptorSupport<Mllp
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final String charsetName = getEndpoint().getCharsetName();
+        final var charsetName = getEndpoint().getCharsetName();
         exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
 
-        boolean supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
-        int segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
+        var supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
+        var segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
         Message message;
         
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
             message = exchange.getIn();
-            String s = message.getBody(String.class);
+            var s = message.getBody(String.class);
             s = FragmentationUtils.ensureMaximalSegmentsLength(s, segmentFragmentationThreshold);
             message.setBody(s);
         }

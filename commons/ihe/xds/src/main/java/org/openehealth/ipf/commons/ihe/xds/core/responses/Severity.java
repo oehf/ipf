@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "Severity")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum Severity {
     /** An error. */
     @XmlEnumValue("Error") ERROR("urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
@@ -65,7 +65,7 @@ public enum Severity {
      * @return the severity.
      */
     public static Severity valueOfOpcode30(String opcode30) {
-        for (Severity severity : values()) {
+        for (var severity : values()) {
             if (severity.getOpcode30().equals(opcode30)) {
                 return severity;
             }

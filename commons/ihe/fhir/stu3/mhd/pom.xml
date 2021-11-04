@@ -3,16 +3,24 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-stu3</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-commons-ihe-fhir-stu3-mhd</artifactId>
     <name>ipf-commons-ihe-fhir-stu3-mhd</name>
     <description>FHIR-specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
+        <!-- for validation -->
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-r5</artifactId>
+            <version>${hapi-fhir-version}</version>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
@@ -57,13 +65,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

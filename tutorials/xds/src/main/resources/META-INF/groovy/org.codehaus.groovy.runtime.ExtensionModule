@@ -1,0 +1,6 @@
+moduleName=RegRepModelExtension
+moduleVersion=2.5
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses=org.openehealth.ipf.tutorials.xds.RegRepModelExtension
+staticExtensionClasses=
+moduleInitializerClass=org.openehealth.ipf.tutorials.xds.RegRepModelExtensionInitializer

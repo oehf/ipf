@@ -106,7 +106,7 @@ class MessageTracer {
         }
     }
 
-    private Span startSpan(Span span, Span.Kind kind, String name, Message msg) {
+    private static Span startSpan(Span span, Span.Kind kind, String name, Message msg) {
         span.kind(kind)
                 .name(name)
                 .tag(HL7_SENDING_APPLICATION, msg.MSH[3]?.value ?: '')

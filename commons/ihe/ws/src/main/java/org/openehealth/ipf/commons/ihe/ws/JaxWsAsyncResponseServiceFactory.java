@@ -72,8 +72,8 @@ public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDa
                 svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
-            AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                    new AuditResponseInterceptor<>(auditStrategy, auditContext,false, correlator, true);
+            var auditInterceptor =
+                    new AuditResponseInterceptor<>(auditStrategy, auditContext, false, correlator, true);
             svrFactory.getInInterceptors().add(auditInterceptor);
             svrFactory.getInFaultInterceptors().add(auditInterceptor);
         }

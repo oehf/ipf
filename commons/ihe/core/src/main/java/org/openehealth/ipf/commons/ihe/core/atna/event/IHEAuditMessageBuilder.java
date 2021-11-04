@@ -50,6 +50,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     public static final String REPOSITORY_UNIQUE_ID = "Repository Unique Id";
     public static final String STUDY_INSTANCE_UNIQUE_ID = "Study Instance Unique Id";
     public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
+    public static final String DOCUMENT_UNIQUE_ID = "ihe:DocumentUniqueId";
 
     private final AuditContext auditContext;
 
@@ -105,7 +106,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     auditDataset.getSourceUserId() != null ?
                             auditDataset.getSourceUserId() :
                             auditContext.getAuditValueIfMissing(),
-                    getRemoteAltUserId(),
+                    null,
                     auditDataset.getSourceUserName(),
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isSourceUserIsRequestor());
@@ -114,23 +115,15 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     auditDataset.getDestinationUserId() != null ?
                             auditDataset.getDestinationUserId() :
                             auditContext.getAuditValueIfMissing(),
-                    getRemoteAltUserId(),
+                    null,
                     null,
                     getHostFromUrl(auditDataset.getRemoteAddress()),
                     auditDataset.isDestinationUserIsRequestor());
         return self();
     }
 
-    /**
-     * @return the remote AltUserId. Usually null, except for ITI-43 where there is
-     * an error in the spec
-     */
-    protected String getRemoteAltUserId() {
-        return null;
-    }
-
     protected final T addHumanRequestor(AuditDataset auditDataset) {
-        for (AuditDataset.HumanUser humanUser : auditDataset.getHumanUsers()) {
+        for (var humanUser : auditDataset.getHumanUsers()) {
             if (!humanUser.isEmpty()) {
                 delegate.addActiveParticipant(
                         humanUser.getId() != null ?
@@ -163,32 +156,35 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            var type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
             tvp.add(getTypeValuePair(type, homeCommunityId));
         }
         return tvp;
     }
 
-    /**
-     * @deprecated use {@link IHEAuditMessageBuilder#documentDetails(String, String, String, String, boolean)}
-     */
-    public static List<TypeValuePairType> makeDocumentDetail(String repositoryId, String homeCommunityId, String seriesInstanceId, String studyInstanceId, boolean xcaHomeCommunityId) {
-        List<TypeValuePairType> tvp = new ArrayList<>();
-        if (studyInstanceId != null) {
-            tvp.add(new TypeValuePairType(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
+
+    public List<TypeValuePairType> dicomDetails(String repositoryId,
+            String homeCommunityId,
+            String documentInstanceId,
+            String seriesInstanceId,
+            boolean xcaHomeCommunityId) {
+        List<TypeValuePairType> tvp = new ArrayList<>(0);
+        if (documentInstanceId != null) {
+            tvp.add(getTypeValuePair(DOCUMENT_UNIQUE_ID, documentInstanceId));
         }
         if (seriesInstanceId != null) {
-            tvp.add(new TypeValuePairType(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
+            tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
         }
         if (repositoryId != null) {
-            tvp.add(new TypeValuePairType(REPOSITORY_UNIQUE_ID, repositoryId));
+            tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
         }
         if (homeCommunityId != null) {
-            String type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
-            tvp.add(new TypeValuePairType(type, homeCommunityId));
+            var type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
+            tvp.add(getTypeValuePair(type, homeCommunityId));
         }
         return tvp;
     }
+
 
     /**
      * Adds a Participant Object representing a Security Resource involved in the event

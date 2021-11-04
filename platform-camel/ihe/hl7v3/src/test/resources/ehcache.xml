@@ -1,54 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright 2010 the original author or authors.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'
+    xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    <cache alias="hl7v3ContinuationCache">
+        <expiry>
+            <ttl>600</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">100</heap>
+        </resources>
+    </cache>
 
-    <diskStore path="target/ehcache-store"/>
+    <cache alias="hl7v2ContinuationCache">
+        <expiry>
+            <ttl>600</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
+    
+    <cache alias="wsCorrelationCache">
+        <expiry>
+            <ttl>600</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">100</heap>
+        </resources>
+    </cache>
 
-    <defaultCache overflowToDisk="true" eternal="false" maxElementsInMemory="1000"/>
-
-    <cache name="hl7v3ContinuationCache"
-           timeToLiveSeconds="600"
-           maxElementsInMemory="100"
-           overflowToDisk="true"
-           maxElementsOnDisk="0"
-           eternal="false"
-           diskPersistent="true"
-            />
-
-    <!-- for combined ITI-47 + ITI-21 continuation test -->
-    <cache name="hl7v2ContinuationCache"
-           timeToLiveSeconds="600"
-           maxElementsInMemory="1"
-           overflowToDisk="true"
-           maxElementsOnDisk="0"
-           eternal="false"
-           diskPersistent="true"
-            />
-
-    <cache name="wsCorrelationCache"
-           timeToLiveSeconds="600"
-           maxElementsInMemory="100"
-           overflowToDisk="true"
-           maxElementsOnDisk="0"
-           eternal="false"
-           diskPersistent="true"
-            />
-
-</ehcache>
-
+</config>

@@ -16,24 +16,26 @@
 
 package org.openehealth.ipf.platform.camel.core.extend
 
+
+import org.apache.camel.AggregationStrategy
 import org.apache.camel.Exchange
 import org.apache.camel.Expression
-import org.apache.camel.Processor
-import org.apache.camel.builder.*
+import org.apache.camel.builder.DataFormatClause
+import org.apache.camel.builder.ExpressionClause
+import org.apache.camel.builder.NoErrorHandlerBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.DataFormatDefinition
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.model.RouteDefinition
-import org.apache.camel.processor.aggregate.AggregationStrategy
-import org.apache.camel.spi.DataFormat
 import org.openehealth.ipf.commons.core.modules.api.*
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingProcessor
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator
 import org.openehealth.ipf.platform.camel.core.model.*
 import org.openehealth.ipf.platform.camel.core.util.Expressions
 
+import java.lang.reflect.Method
 import java.util.concurrent.ExecutorService
 
 import static org.apache.camel.builder.Builder.body
@@ -46,7 +48,26 @@ import static org.apache.camel.builder.Builder.body
  * @author Martin Krasser
  * @author Jens Riemschneider
  */
+@SuppressWarnings("unused")
 class CoreExtensionModule {
+
+    // Groovy-specific data formats
+
+    static ProcessorDefinition gnode(DataFormatClause self, boolean namespaceAware) {
+        dataFormatFor(self, new DataFormatDefinition(new XmlParserDataFormat(namespaceAware)))
+    }
+
+    static ProcessorDefinition gnode(DataFormatClause self) {
+        gnode(self, true)
+    }
+
+    static ProcessorDefinition gpath(DataFormatClause self, boolean namespaceAware) {
+        dataFormatFor(self, new DataFormatDefinition(new XmlSlurperDataFormat(namespaceAware)))
+    }
+
+    static ProcessorDefinition gpath(DataFormatClause self) {
+        gpath(self, true)
+    }
 
 
     /**
@@ -56,45 +77,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-unhandled
      */
     static RouteDefinition unhandled(RouteDefinition self) {
-        return self.errorHandler(new NoErrorHandlerBuilder())
-    }
-
-
-    /**
-     * Creates a validation workflow where actual validation is delegated to the given 
-     * validator
-     * @param validator
-     *          the processor used for validation
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationprocessor
-     */
-    static ValidationDefinition validation(ProcessorDefinition self, Processor validator) {
-        ValidationDefinition answer = new ValidationDefinition(validator)
-        self.addOutput(answer)
-        return answer
-    }
-
-    /**
-     * Creates a validation workflow where actual validation is done by calling the
-     * given endpoint
-     * @param validationUri
-     *          the URI of the endpoint to call for validation
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationendpoint
-     */
-    static ValidationDefinition validation(ProcessorDefinition self, String validationUri) {
-        ValidationDefinition answer = new ValidationDefinition(validationUri)
-        self.addOutput(answer)
-        return answer
-    }
-
-    /**
-     * Creates a validation workflow where actual validation is delegated to given 
-     * validator logic
-     * @param validatorLogic
-     *          the closure implementing the validation logic
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationclosure
-     */
-    static ValidationDefinition validation(ProcessorDefinition self, Closure validatorLogic) {
-        return validation(self, new DelegatingProcessor(validatorLogic))
+        self.errorHandler(new NoErrorHandlerBuilder())
     }
 
 
@@ -106,7 +89,7 @@ class CoreExtensionModule {
     static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Transmogrifier transmogrifier) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifier)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -118,7 +101,7 @@ class CoreExtensionModule {
     static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, String transmogrifierBeanName) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifierBeanName)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -128,7 +111,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transmogrifyclosure
      */
     static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Closure transmogrifierLogic) {
-        return transmogrify(self, new DelegatingTransmogrifier(transmogrifierLogic))
+        transmogrify(self, new DelegatingTransmogrifier(transmogrifierLogic))
     }
 
     /**
@@ -138,7 +121,7 @@ class CoreExtensionModule {
     static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition((Transmogrifier) null)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -152,7 +135,7 @@ class CoreExtensionModule {
     static ValidatorAdapterDefinition verify(ProcessorDefinition self, Validator validator) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validator)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -162,7 +145,7 @@ class CoreExtensionModule {
     static ValidatorAdapterDefinition verify(ProcessorDefinition self) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition()
         self.addOutput(answer)
-        return answer
+        answer
     }
 
 
@@ -175,7 +158,7 @@ class CoreExtensionModule {
     static ValidatorAdapterDefinition verify(ProcessorDefinition self, String validatorBeanName) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -187,8 +170,8 @@ class CoreExtensionModule {
      *          a closure implementing the validator logic
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-verify
      */
-    static ValidatorAdapterDefinition verify(ProcessorDefinition self, Closure validatorLogic) {
-        return verify(self, new DelegatingValidator(validatorLogic))
+    static ValidatorAdapterDefinition verify(ProcessorDefinition self, Closure<Boolean> validatorLogic) {
+        verify(self, new DelegatingValidator(validatorLogic))
     }
 
     /**
@@ -200,7 +183,7 @@ class CoreExtensionModule {
     static ParserAdapterDefinition parse(ProcessorDefinition self, Parser parser) {
         ParserAdapterDefinition answer = new ParserAdapterDefinition(parser)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -212,7 +195,7 @@ class CoreExtensionModule {
     static ParserAdapterDefinition parse(ProcessorDefinition self, String parserBeanName) {
         ParserAdapterDefinition answer = new ParserAdapterDefinition(parserBeanName)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -224,7 +207,7 @@ class CoreExtensionModule {
     static RendererAdapterDefinition render(ProcessorDefinition self, Renderer renderer) {
         RendererAdapterDefinition answer = new RendererAdapterDefinition(renderer)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -236,7 +219,7 @@ class CoreExtensionModule {
     static RendererAdapterDefinition render(ProcessorDefinition self, String rendererBeanName) {
         RendererAdapterDefinition answer = new RendererAdapterDefinition(rendererBeanName)
         self.addOutput(answer)
-        return answer
+        answer
     }
 
     /**
@@ -246,7 +229,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-mock
      */
     static ProcessorDefinition mock(ProcessorDefinition self, String endpointName) {
-        return self.to("mock:${endpointName}")
+        self.to("mock:${endpointName}")
     }
 
     /**
@@ -254,7 +237,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Exceptionobjectsandmessages 
      */
     static Object exceptionObject(ExpressionClause self) {
-        return self.expression(Expressions.exceptionObjectExpression())
+        self.expression(Expressions.exceptionObjectExpression())
     }
 
     /**
@@ -262,7 +245,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Exceptionobjectsandmessages
      */
     static Object exceptionMessage(ExpressionClause self) {
-        return self.expression(Expressions.exceptionMessageExpression())
+        self.expression(Expressions.exceptionMessageExpression())
     }
 
 
@@ -273,7 +256,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features-direct
      */
     static RouteDefinition direct(RouteBuilder self, String endpointName) {
-        return self.from("direct:${endpointName}")
+        self.from("direct:${endpointName}")
     }
 
     /**
@@ -284,7 +267,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
     static AggregatorAdapter aggregationStrategy(RouteBuilder self, Aggregator aggregator) {
-        return new AggregatorAdapter(aggregator)
+        new AggregatorAdapter(aggregator)
     }
 
 
@@ -295,7 +278,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-UnmarshallingviaParser
      */
     static ProcessorDefinition parse(DataFormatClause self, Parser parser) {
-        return self.processorType.unmarshal(new DataFormatAdapter((Parser) parser))
+        self.processorType.unmarshal(new DataFormatAdapter((Parser) parser))
     }
 
     /**
@@ -305,7 +288,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-UnmarshallingviaParser
      */
     static ProcessorDefinition parse(DataFormatClause self, String parserBeanName) {
-        return self.processorType.unmarshal((DataFormatDefinition) DataFormatAdapterDefinition.forParserBean(parserBeanName))
+        self.processorType.unmarshal((DataFormatDefinition) DataFormatAdapterDefinition.forParserBean(parserBeanName))
     }
 
     /**
@@ -315,7 +298,7 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-MarshallingviaRenderer
      */
     static ProcessorDefinition render(DataFormatClause self, Renderer renderer) {
-        return self.processorType.marshal(new DataFormatAdapter((Renderer) renderer))
+        self.processorType.marshal(new DataFormatAdapter((Renderer) renderer))
     }
 
     /**
@@ -325,17 +308,18 @@ class CoreExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-MarshallingviaRenderer
      */
     static ProcessorDefinition render(DataFormatClause self, String rendererBeanName) {
-        return self.processorType.marshal((DataFormatDefinition) DataFormatAdapterDefinition.forRendererBean(rendererBeanName))
+        self.processorType.marshal((DataFormatDefinition) DataFormatAdapterDefinition.forRendererBean(rendererBeanName))
     }
 
 
-    static ProcessorDefinition dataFormat(DataFormatClause self, DataFormat dataFormat) {
-        if (self.operation == DataFormatClause.Operation.Marshal) {
-            return self.processorType.marshal(dataFormat)
-        } else if (self.operation == DataFormatClause.Operation.Unmarshal) {
-            return self.processorType.unmarshal(dataFormat)
-        } else {
-            throw new IllegalArgumentException("Unknown data format operation: " + self.operation)
+    // DataFormatClause.dataFormat(DataFormatDefinition) is private...
+    static ProcessorDefinition dataFormatFor(DataFormatClause self, DataFormatDefinition format) {
+        try {
+            Method m = self.getClass().getDeclaredMethod("dataFormat", DataFormatDefinition.class)
+            m.setAccessible(true)
+            (ProcessorDefinition) m.invoke(self, format)
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unknown DataFormat operation", e)
         }
     }
 
@@ -365,13 +349,15 @@ class CoreExtensionModule {
         String uuid = UUID.randomUUID().toString()
         String dispatcherEndpointUri = 'direct:multiplast-' + uuid
         routeBuilder.from(dispatcherEndpointUri)
-                .process {
-            int index = it.properties[Exchange.SPLIT_INDEX]
-            it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index]
-        }
-        .recipientList(Builder.header('multiplast.uri'))
+            .process {
+                int index = it.getProperty(Exchange.SPLIT_INDEX)
+                it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index]
+            }
+            .recipientList().header('multiplast.uri')
 
-        def fromNode = routeBuilder.from('direct:split-execution-' + uuid).split(body()).parallelProcessing()
+        def fromNode = routeBuilder.from('direct:split-execution-' + uuid)
+                .split(body())
+                .parallelProcessing()
         if (executorService) {
             fromNode = fromNode.executorService(executorService)
         }
@@ -380,16 +366,16 @@ class CoreExtensionModule {
                 .to(dispatcherEndpointUri)
                 .end()
 
-        return self.process {
+        self.process {
             List bodies = splittingExpression.evaluate(it, List.class)
             List endpointUris = recipientListExpression.evaluate(it, List.class)
             if (bodies.size() != endpointUris.size()) {
-                throw new RuntimeException('lists of bodies and endpoints must be of the same lenght')
+                throw new RuntimeException('lists of bodies and endpoints must be of the same length')
             }
-
             it.in.body = bodies
             it.properties['multiplast.endpointUris'] = endpointUris
-        }.to('direct:split-execution-' + uuid)
+        }
+        .to('direct:split-execution-' + uuid)
     }
 
 

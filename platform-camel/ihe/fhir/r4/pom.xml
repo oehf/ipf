@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
@@ -11,7 +11,7 @@
     <artifactId>ipf-platform-camel-ihe-fhir-r4</artifactId>
     <name>ipf-platform-camel-ihe-fhir-r4</name>
     <description>FHIR Restful IHE components for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <modules>
         <module>pixpdq</module>
@@ -27,16 +27,9 @@
             <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

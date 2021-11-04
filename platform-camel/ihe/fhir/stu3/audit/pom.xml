@@ -3,14 +3,14 @@
     <parent>
         <artifactId>ipf-platform-camel-ihe-fhir-stu3</artifactId>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-platform-camel-ihe-fhir-stu3-audit</artifactId>
     <name>ipf-platform-camel-ihe-fhir-stu3-audit</name>
     <description>Apache Camel components for ATNA transactions</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
 
@@ -22,7 +22,7 @@
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4</artifactId>
+            <artifactId>camel-http</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -57,12 +57,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.support.BatchTransactionResourceProvider;
-import org.openehealth.ipf.commons.ihe.fhir.support.BundleProfileSelector;
 
 /**
  * Standard Configuration for Iti65Component.
@@ -38,7 +38,7 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.DSTU3,
                 BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
-                new Iti65Validator());
+                Iti65Validator::new);
         setStaticConsumerSelector(new BundleProfileSelector(Iti65Constants.ITI65_PROFILE));
     }
 

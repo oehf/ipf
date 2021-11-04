@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XAD;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
 import java.util.Objects;
 
 /**
@@ -34,7 +34,7 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlType(name = "Address", propOrder = {
         "streetAddress", "otherDesignation", "city", "countyParishCode", "stateOrProvince", "country", 
         "zipOrPostalCode"})
@@ -163,7 +163,7 @@ public class Address extends Hl7v2Based<XAD> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address that = (Address) o;
+        var that = (Address) o;
         return Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getCountyParishCode(), that.getCountyParishCode()) &&

@@ -24,7 +24,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValueValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -54,18 +53,18 @@ public class StringListValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> slotValues = request.getSlotValues(param.getSlotName());
-        for (String slotValue : slotValues) {
+        var slotValues = request.getSlotValues(param.getSlotName());
+        for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
-        QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<String> list = slots.toStringList(param);
+        var slots = new QuerySlotHelper(request);
+        var list = slots.toStringList(param);
         
         if (list != null) {
-            for (String value : list) {
+            for (var value : list) {
                 metaDataAssert(value != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 validator.validate(value);
             }

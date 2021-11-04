@@ -42,10 +42,10 @@ public class Iti43Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this, parameters, Iti43Service.class) {
+        return new XdsEndpoint<>(uri, remaining, this, parameters, Iti43Service.class) {
             @Override
             public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>> endpoint,
-                                                                                                                                      JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
+                                                                                                                                                                                        JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
             }

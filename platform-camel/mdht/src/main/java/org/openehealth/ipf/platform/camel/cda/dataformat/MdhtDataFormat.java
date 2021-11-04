@@ -20,18 +20,25 @@ import java.io.OutputStream;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
+import org.apache.camel.spi.DataFormatName;
+import org.apache.camel.spi.annotations.Dataformat;
+import org.apache.camel.support.service.ServiceSupport;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
-public class MdhtDataFormat implements DataFormat {
+@Dataformat("mdht")
+public class MdhtDataFormat extends ServiceSupport implements DataFormat, DataFormatName {
 
-    private final CDAR2Renderer renderer;
-    private final CDAR2Parser parser;
+    private final CDAR2Renderer renderer = new CDAR2Renderer();
+    private final CDAR2Parser parser = new CDAR2Parser();
 
     public MdhtDataFormat() {
-        renderer = new CDAR2Renderer();
-        parser = new CDAR2Parser();
+    }
+
+    @Override
+    public String getDataFormatName() {
+        return "mdht";
     }
 
     @Override
@@ -42,9 +49,15 @@ public class MdhtDataFormat implements DataFormat {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream)
-            throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         return parser.parse(stream, (Object[]) null);
     }
 
+    @Override
+    public void doStart() {
+    }
+
+    @Override
+    public void doStop() {
+    }
 }

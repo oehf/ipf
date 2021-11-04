@@ -16,20 +16,28 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.SOURCE_IDENTIFIER_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Parameters;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.UriType;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import org.hl7.fhir.r4.model.*;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.SOURCE_IDENTIFIER_NAME;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;
 
 /**
  * According to the PIXM specification, this resource provider must handle requests in the form
@@ -43,10 +51,10 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
     /**
      * Handles the PIXm Query
      *
-     * @param resourceId          resource ID, optional
+     * @param resourceId            resource ID, optional
      * @param sourceIdentifierParam Identifier to search for. Should be an {@link Identifier}, but obviously
      *                              non-primitive types are forbidden in GET operations
-     * @param targetSystemParam     target system URI
+     * @param targetSystemParamList target system URIs
      * @return {@link Parameters} containing found identifiers
      */
     @SuppressWarnings("unused")
@@ -54,25 +62,33 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
     public Parameters pixmQuery(
             @IdParam(optional = true) IdType resourceId,
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifierParam,
-            @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
+            @OperationParam(name = TARGET_SYSTEM_NAME) List<UriParam> targetSystemParamList,
             RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Identifier sourceIdentifier = new Identifier();
+        var sourceIdentifier = new Identifier();
 
         if (resourceId == null) {
-            sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
-                    .setValue(sourceIdentifierParam.getValue());
+            if (sourceIdentifierParam != null) {
+                sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
+                        .setValue(sourceIdentifierParam.getValue());
+            } else {
+                throw new ForbiddenOperationException("Either resource ID or sourceIdentifier must be provided");
+            }
         } else {
             sourceIdentifier.setValue(resourceId.getIdPart());
         }
-        UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
 
-        Parameters inParams = new Parameters();
+        var inParams = new Parameters();
         inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);
-        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
 
+        if (targetSystemParamList != null) {
+            for (var targetSystemParam : targetSystemParamList) {
+                var targetUri = new UriType(targetSystemParam.getValue());
+                inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
+            }
+        }
         // Run down the route
         return requestResource(inParams, null, Parameters.class,
                 httpServletRequest, httpServletResponse, requestDetails);

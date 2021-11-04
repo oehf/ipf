@@ -52,8 +52,8 @@ public abstract class ProcessorAdapter extends AdapterSupport implements Process
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Object input = adaptInput(exchange);
-        Object params = adaptParams(exchange);
+        var input = adaptInput(exchange);
+        var params = adaptParams(exchange);
         if (params == null) {
             doProcess(exchange, input, (Object[])null);
         } else if (params.getClass().isArray()) {

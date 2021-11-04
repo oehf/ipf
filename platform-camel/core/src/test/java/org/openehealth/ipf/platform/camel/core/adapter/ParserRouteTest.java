@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.camel.ExchangePattern;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 
+import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.camel.ExchangePattern;
-import org.junit.Test;
-import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -34,28 +33,28 @@ public class ParserRouteTest extends AbstractRouteTest {
 
     @Test
     public void testParser1() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:parser-test",
+        var result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, "input");
         assertEquals("string: input", result);
     }
 
     @Test
     public void testParser2() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:parser-test",
+        var result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new ByteArrayInputStream("input".getBytes()));
         assertEquals("stream: input", result);
     }
 
     @Test
     public void testParser3() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:parser-test",
+        var result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new StringReader("input"));
         assertEquals("reader: input", result);
     }
 
     @Test
     public void testParser4() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:parser-test",
+        var result = (String) producerTemplate.sendBody("direct:parser-test",
                 ExchangePattern.InOut, new StreamSource(new StringReader("input")));
         assertEquals("source: input", result);
     }

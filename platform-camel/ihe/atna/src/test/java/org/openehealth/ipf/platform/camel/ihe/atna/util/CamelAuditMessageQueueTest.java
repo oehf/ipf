@@ -16,11 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.atna.util;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -28,37 +27,37 @@ import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"/context.xml"})
 public class CamelAuditMessageQueueTest {
 
     @Autowired
     private AuditContext auditContext;
 
-    @EndpointInject(uri = "mock:mock")
+    @EndpointInject(value = "mock:mock")
     private MockEndpoint mock;
 
-    @After
+    @AfterEach
     public void tearDown() {
         mock.reset();
     }
 
     @Test
     public void testCamelEndpointAudit() {
-        AuditMessage auditMessage = new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success, null).getMessage();
+        var auditMessage = new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success, null).getMessage();
         auditContext.audit(auditMessage);
 
-        Message message = mock.assertExchangeReceived(0).getIn();
-        AuditMessage body = message.getBody(AuditMessage.class);
-        Object header1 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.address");
-        Object header2 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.port");
+        var message = mock.assertExchangeReceived(0).getIn();
+        var body = message.getBody(AuditMessage.class);
+        var header1 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.address");
+        var header2 = message.getHeader(CamelAuditMessageQueue.HEADER_NAMESPACE + ".destination.port");
 
         assertEquals(EventIdCode.ApplicationActivity, body.getEventIdentification().getEventID());
         assertEquals("0.0.0.0", header1);

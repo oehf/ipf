@@ -4,15 +4,19 @@
     <artifactId>ipf-commons-xml</artifactId>
     <name>ipf-commons-xml</name>
     <description>Generic IPF support for XML validation</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
-    
+
     <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-core</artifactId>
@@ -41,10 +45,11 @@
             <artifactId>groovy-xml</artifactId>
         </dependency>
 
+
         <!-- Dependencies for test -->
         <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -65,13 +70,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

@@ -32,6 +32,12 @@ public interface CodedValueType extends Serializable {
     String getDisplayName();
 
     static CodedValueType of(String code, String codeSystemName, String originalText) {
-        return new CodedValueTypeImpl(code, codeSystemName, originalText);
+        return of(code, codeSystemName, originalText, null);
+    }
+
+    static CodedValueType of(String code, String codeSystemName, String originalText, String displayName) {
+        var c = new CodedValueTypeImpl(code, codeSystemName, originalText);
+        c.setDisplayName(displayName);
+        return c;
     }
 }

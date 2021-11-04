@@ -37,6 +37,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(FindFoldersForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -44,7 +45,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         
         slots.fromPatientIdList(FOLDER_PATIENT_ID, query.getPatientIds());
         
@@ -65,6 +66,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(FindFoldersForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -72,7 +74,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setPatientIds(slots.toPatientIdList(FOLDER_PATIENT_ID));
         
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));

@@ -4,12 +4,12 @@
     <artifactId>ipf-modules-hl7</artifactId>
     <name>ipf-modules-hl7</name>
     <description>HL7 extensions and HL7 DSL support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -24,10 +24,6 @@
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-base</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
@@ -116,12 +112,5 @@
 		</plugins>
 	</build>
 	-->
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

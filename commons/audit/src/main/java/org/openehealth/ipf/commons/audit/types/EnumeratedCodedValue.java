@@ -25,22 +25,27 @@ package org.openehealth.ipf.commons.audit.types;
  */
 public interface EnumeratedCodedValue<T extends CodedValueType> extends EnumeratedValueSet<T>, CodedValueType {
 
+    @Override
     default String getCode() {
         return getValue().getCode();
     }
 
+    @Override
     default String getOriginalText() {
         return getValue().getOriginalText();
     }
 
+    @Override
     default String getCodeSystemName() {
         return getValue().getCodeSystemName();
     }
 
+    @Override
     default String getDisplayName() {
         return getValue().getDisplayName();
     }
 
+    @Override
     default boolean matches(Object code) {
         return getValue().getCode().equals(code);
     }

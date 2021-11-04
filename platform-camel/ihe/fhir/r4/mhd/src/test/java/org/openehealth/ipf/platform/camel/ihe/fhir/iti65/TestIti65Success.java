@@ -17,21 +17,15 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
-import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CapabilityStatement;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
-import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -40,28 +34,28 @@ public class TestIti65Success extends AbstractTestIti65 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
     @Test
     public void testGetConformance() {
-        CapabilityStatement conf = client.capabilities().ofType(CapabilityStatement.class).execute();
-        CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
+        var conf = client.capabilities().ofType(CapabilityStatement.class).execute();
+        var component = conf.getRest().iterator().next();
         assertEquals(CapabilityStatement.SystemRestfulInteraction.TRANSACTION, component.getInteraction().get(0).getCode());
     }
 
     @Test
     public void testSendManualMhd() throws Exception {
 
-        Bundle result = sendManually(provideAndRegister());
+        var result = sendManually(provideAndRegister());
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0);
+        var event = sender.getMessages().get(0);
 
         // Event
         assertEquals(
@@ -75,42 +69,42 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals(FhirEventTypeCode.ProvideDocumentBundle, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
-        ActiveParticipantType source = event.getActiveParticipants().get(0);
+        var source = event.getActiveParticipants().get(0);
         assertTrue(source.isUserIsRequestor());
         assertEquals("127.0.0.1", source.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
 
         // ActiveParticipant Destination
-        ActiveParticipantType destination = event.getActiveParticipants().get(1);
+        var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/", destination.getUserID());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Patient
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentifications().get(0);
+        var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.Person, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patient.getParticipantObjectTypeCodeRole());
         assertEquals(ParticipantObjectIdTypeCode.PatientNumber, patient.getParticipantObjectIDTypeCode());
         assertEquals("Patient/a2", patient.getParticipantObjectID());
 
         // SubmissionSet
-        ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentifications().get(1);
+        var poit = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, poit.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Job, poit.getParticipantObjectTypeCodeRole());
 
         // No real instructions how this should look like, so for now we take the XDS stuff
-        ParticipantObjectIdType poitTypeCode = poit.getParticipantObjectIDTypeCode();
+        var poitTypeCode = poit.getParticipantObjectIDTypeCode();
         assertEquals("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", poitTypeCode.getCode());
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
     }
 
-    @Ignore
+    @Disabled
     public void testSendEndpointMhd() throws Exception {
-        MethodOutcome result = getProducerTemplate().requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
+        var result = producerTemplate.requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

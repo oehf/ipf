@@ -19,14 +19,14 @@
     <parent>
         <artifactId>ipf-tutorials</artifactId>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-tutorials-fhir</artifactId>
     <name>ipf-tutorials-fhir</name>
     <packaging>jar</packaging>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -41,7 +41,6 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-fhir-stu3-test</artifactId>
             <version>${project.version}</version>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
@@ -103,12 +102,5 @@
         </dependency>
 
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

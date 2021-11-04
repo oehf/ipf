@@ -20,9 +20,9 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import org.hl7.fhir.dstu3.model.Identifier
 import org.hl7.fhir.dstu3.model.Parameters
 import org.hl7.fhir.dstu3.model.UriType
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.URN
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
@@ -31,15 +31,17 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 
+import static org.junit.jupiter.api.Assertions.assertEquals
+
 /**
  *
  */
-class PixmRequestToPixQueryTranslatorTest extends Assert {
+class PixmRequestToPixQueryTranslatorTest {
 
     private PixmRequestToPixQueryTranslator translator
     MappingService mappingService
 
-    @Before
+    @BeforeEach
     void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(getClass().getResource('/mapping.map'))
@@ -108,7 +110,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
     }
 
-    @Test(expected = InvalidRequestException)
+    @Test
     void testUnknownURNScheme() {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:isbn:1.2.3.4')
@@ -121,6 +123,6 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         params.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(domainsReturned)
-        translator.translateFhir(params, null)
+        Assertions.assertThrows(InvalidRequestException.class, () -> translator.translateFhir(params, null))
     }
 }

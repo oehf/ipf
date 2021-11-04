@@ -15,18 +15,17 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests passing in global parameters (e.g. services) into a stylesheet. See
@@ -37,13 +36,13 @@ import org.junit.Test;
  * @author Christian Ohr
  * 
  */
-@Ignore
+@Disabled
 public class XslTransmogrifierWithGlobalParameterTest {
 
     private XsltTransmogrifier<String> transformer;
     Map<String, Object> parameters;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         parameters = new HashMap<>();
         parameters.put("service", new XsltTestService());
@@ -58,7 +57,7 @@ public class XslTransmogrifierWithGlobalParameterTest {
     @Test
     public void testConvertString() throws IOException {
         Source content = new StreamSource(getClass().getResourceAsStream("/xslt/parameterExample.xml"));
-        String s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
+        var s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
         assertTrue(s.contains("ein negeR mi tgaz ellezaG tim regeN niE"));
     }
 

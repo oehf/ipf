@@ -19,21 +19,23 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.impl.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertFalse
+import static java.util.concurrent.TimeUnit.MINUTES
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
 
 /**
  * Unit tests for the PDQ transaction aka ITI-22.
  * @author Dmytro Rud
  */
-@Ignore
+@Disabled
 class TestIti22 extends MllpTestContainer {
     
     
@@ -43,7 +45,7 @@ class TestIti22 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -62,11 +64,13 @@ class TestIti22 extends MllpTestContainer {
      * Happy case, audit either enabled or disabled.
      * Expected result: ACK response, two or zero audit items.
      */
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit('QBP^ZV1', "pdq-iti22://localhost:18221?timeout=${TIMEOUT}", 2)
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testHappyCaseAndAudit2() {
         doTestHappyCaseAndAudit('QBP^ZV1^QBP_Q21', "pdq-iti22://localhost:18220?audit=false&timeout=${TIMEOUT}", 0)
     }
@@ -87,23 +91,28 @@ class TestIti22 extends MllpTestContainer {
      * tests and do not pass inacceptable messages to the consumers
      * (it is really a feature, not a bug! ;-)) 
      */
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     public void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.5')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     public void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('QBP^Q21', '2.5')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     public void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('QBP^ZV1', '2.3.1')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     public void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('QBP^ZV1', '3.1415926')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     public void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('QBP^ZV1^QBP_Q26', '2.5')
     }
@@ -133,23 +142,28 @@ class TestIti22 extends MllpTestContainer {
      * on producer side, audit enabled.
      * Expected results: raise of corresponding HL7-related exceptions, no audit.
      */
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testInacceptanceOnProducer1() {
         doTestInacceptanceOnProducer('MDM^T01', '2.5')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testInacceptanceOnProducer2() {
         doTestInacceptanceOnProducer('QBP^K22', '2.5')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testInacceptanceOnProducer3() {
         doTestInacceptanceOnProducer('QBP^ZV1', '2.3.1')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testInacceptanceOnProducer4() {
         doTestInacceptanceOnProducer('QBP^ZV1', '3.1415926')
     }
-    @Test(timeout = 300000L)
+    @Test
+    @Timeout(value = 5L, unit = MINUTES)
     void testInacceptanceOnProducer5() {
         doTestInacceptanceOnProducer('QBP^ZV1^QBP_Q28', '2.5')
     }

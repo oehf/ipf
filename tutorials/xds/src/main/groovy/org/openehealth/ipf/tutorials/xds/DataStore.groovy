@@ -17,21 +17,20 @@ import com.sun.java.util.jar.pack.ConstantPool.Index;
  */
 package org.openehealth.ipf.tutorials.xds
 
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
-
-import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
-
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import javax.activation.DataHandler
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
+
 /**
  * A simple store for meta data and documents.
+ *
  * @author Jens Riemschneider
  */
-public class DataStore {
+class DataStore {
      private final static Logger log = LoggerFactory.getLogger(DataStore.class)
      
      def entries = new CopyOnWriteArrayList()
@@ -120,7 +119,7 @@ public class DataStore {
          key != null ? evalIndex([key], index) : null
      }
      
-     private def getFromIndex(index, key) {
+     private static def getFromIndex(index, key) {
           index.putIfAbsent(key, new CopyOnWriteArrayList())
           index[key]
      }

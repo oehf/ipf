@@ -18,15 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.http.common.HttpOperationFailedException;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -35,7 +31,7 @@ public class TestIti68Error extends AbstractTestIti68 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-68-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
@@ -43,15 +39,15 @@ public class TestIti68Error extends AbstractTestIti68 {
     @Test
     public void testRetrieveDocument() {
         try {
-            getProducerTemplate().requestBody("direct:input", null, byte[].class);
+            producerTemplate.requestBody("direct:input", null, byte[].class);
             fail();
         } catch (CamelExecutionException e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
 
             // Check ATNA Audit
-            AbstractMockedAuditMessageQueue sender = getAuditSender();
+            var sender = getAuditSender();
             assertEquals(1, sender.getMessages().size());
-            AuditMessage event = sender.getMessages().get(0);
+            var event = sender.getMessages().get(0);
             assertEquals(
                     EventOutcomeIndicator.MajorFailure,
                     event.getEventIdentification().getEventOutcomeIndicator());

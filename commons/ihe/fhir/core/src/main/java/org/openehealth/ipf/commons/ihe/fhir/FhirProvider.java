@@ -39,23 +39,10 @@ public abstract class FhirProvider implements Serializable {
     /**
      * Returns the first consumer that is able to handle the provided paylaod
      *
-     * @param payload FHIR payload
+     * @param requestDetails FHIR request
      * @return consumer or {@link Optional#empty()}
      */
-    protected abstract Optional<RequestConsumer> getConsumer(Object payload);
-
-    /**
-     * Returns the (first) configured consumer if its {@link RequestConsumer#test(Object)}
-     * method always returns true.
-     *
-     * @return consumer
-     * @throws IllegalStateException if the consumer is not initialized or did reject
-     *                               being selected.
-     */
-    protected RequestConsumer getConsumer() {
-        return getConsumer(null).orElseThrow(() ->
-                new IllegalStateException("Consumer is not initialized"));
-    }
+    protected abstract Optional<RequestConsumer> getRequestConsumer(RequestDetails requestDetails);
 
     /**
      * Ensures that the provided consumer is considered by this provider
@@ -112,10 +99,10 @@ public abstract class FhirProvider implements Serializable {
         enriched.put(Constants.HTTP_LOCALES, Collections.list(httpServletRequest.getLocales()));
         enriched.put(Constants.HTTP_USER, httpServletRequest.getUserPrincipal());
 
-        Map<String, List<String>> headers = extractHttpHeaders(httpServletRequest);
+        var headers = extractHttpHeaders(httpServletRequest);
         enriched.put(Constants.HTTP_HEADERS, headers);
 
-        String cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
+        var cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
         if (cipherSuite != null) {
             enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute(X509Certificate.class.getName()));
         }
@@ -136,11 +123,11 @@ public abstract class FhirProvider implements Serializable {
      */
     private static Map<String, List<String>> extractHttpHeaders(HttpServletRequest httpServletRequest) {
         Map<String, List<String>> result = new HashMap<>();
-        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
+        var headerNames = httpServletRequest.getHeaderNames();
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                Enumeration<String> headers = httpServletRequest.getHeaders(name);
+                var name = headerNames.nextElement();
+                var headers = httpServletRequest.getHeaders(name);
                 if (headers != null) {
                     List<String> list = new ArrayList<>();
                     while (headers.hasMoreElements()) {

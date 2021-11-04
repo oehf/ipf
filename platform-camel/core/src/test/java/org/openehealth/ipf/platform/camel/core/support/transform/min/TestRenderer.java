@@ -28,18 +28,22 @@ import org.openehealth.ipf.commons.core.modules.api.Renderer;
  */
 public class TestRenderer implements Renderer<String> {
 
+    @Override
     public Result render(String model, Result result, Object... params) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public OutputStream render(String model, OutputStream result, Object... params) throws IOException {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public Writer render(String model, Writer result, Object... params) throws IOException {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public String render(String model, Object... params) {
         return "rendered: " + model;
     }

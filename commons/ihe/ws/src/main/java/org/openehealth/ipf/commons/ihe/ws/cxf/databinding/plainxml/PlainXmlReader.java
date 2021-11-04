@@ -50,7 +50,6 @@ public class PlainXmlReader implements DataReader<XMLStreamReader>{
         return read(reader);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object read(QName elementQName, XMLStreamReader reader, Class type) {
         return read(reader);

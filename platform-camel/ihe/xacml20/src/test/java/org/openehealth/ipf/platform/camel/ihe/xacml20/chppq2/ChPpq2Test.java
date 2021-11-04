@@ -16,28 +16,24 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Dmytro Rud
@@ -45,13 +41,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class ChPpq2Test extends StandardTestContainer {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         startServer(new CXFServlet(), "chppq2-context.xml");
         Xacml20Utils.initializeHerasaf();
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         getAuditSender().clear();
     }
@@ -61,9 +57,9 @@ public class ChPpq2Test extends StandardTestContainer {
     }
 
     private static <T> T loadFile(String fn) throws Exception {
-        InputStream stream = ChPpq2Test.class.getClassLoader().getResourceAsStream("messages/chppq2/" + fn);
-        Unmarshaller unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
-        Object object = unmarshaller.unmarshal(stream);
+        var stream = ChPpq2Test.class.getClassLoader().getResourceAsStream("messages/chppq2/" + fn);
+        var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
+        var object = unmarshaller.unmarshal(stream);
         if (object instanceof JAXBElement) {
             object = ((JAXBElement) object).getValue();
         }
@@ -71,7 +67,7 @@ public class ChPpq2Test extends StandardTestContainer {
     }
 
     private static void checkCodeValueType(CodedValueType value, String[]... allowedCodes) {
-        for (String[] allowed : allowedCodes) {
+        for (var allowed : allowedCodes) {
             if (allowed[0].equals(value.getCode()) && allowed[1].equals(value.getCodeSystemName()) && allowed[2].equals(value.getOriginalText())) {
                 return;
             }
@@ -90,16 +86,16 @@ public class ChPpq2Test extends StandardTestContainer {
     }
 
     private void testQueryPerPatientId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
-        ResponseType response = (ResponseType) send(getUri(suffix), loadFile("query-per-patient-id.xml"), ResponseType.class);
+        var response = (ResponseType) send(getUri(suffix), loadFile("query-per-patient-id.xml"), ResponseType.class);
         assertEquals(statusCode, response.getStatus().getStatusCode().getValue());
 
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (Object object : messages) {
-            AuditMessage message = (AuditMessage) object;
+        for (var object : messages) {
+            var message = (AuditMessage) object;
 
-            EventIdentificationType event = message.getEventIdentification();
+            var event = message.getEventIdentification();
             assertEquals(EventActionCode.Execute, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
             checkCodeValueType(event.getEventID(), new String[]{"110112", "DCM", "Query"});
@@ -116,12 +112,12 @@ public class ChPpq2Test extends StandardTestContainer {
 
             assertEquals(2, message.getParticipantObjectIdentifications().size());
 
-            ParticipantObjectIdentificationType patientParticipant = message.getParticipantObjectIdentifications().get(0);
+            var patientParticipant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.Person, patientParticipant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Patient, patientParticipant.getParticipantObjectTypeCodeRole());
             assertEquals("8901^^^&2.16.756.5.30.1.127.3.10.3&ISO", patientParticipant.getParticipantObjectID());
 
-            ParticipantObjectIdentificationType queryParticipant = message.getParticipantObjectIdentifications().get(1);
+            var queryParticipant = message.getParticipantObjectIdentifications().get(1);
             assertEquals(ParticipantObjectTypeCode.System, queryParticipant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Query, queryParticipant.getParticipantObjectTypeCodeRole());
             assertEquals("ppq-query-id-1", queryParticipant.getParticipantObjectID());
@@ -141,16 +137,16 @@ public class ChPpq2Test extends StandardTestContainer {
     }
 
     private void testQueryPerPolicyId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
-        ResponseType response = (ResponseType) send(getUri(suffix), loadFile("query-per-policy-id.xml"), ResponseType.class);
+        var response = (ResponseType) send(getUri(suffix), loadFile("query-per-policy-id.xml"), ResponseType.class);
         assertEquals(statusCode, response.getStatus().getStatusCode().getValue());
 
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (Object object : messages) {
-            AuditMessage message = (AuditMessage) object;
+        for (var object : messages) {
+            var message = (AuditMessage) object;
 
-            EventIdentificationType event = message.getEventIdentification();
+            var event = message.getEventIdentification();
             assertEquals(EventActionCode.Execute, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
             checkCodeValueType(event.getEventID(), new String[]{"110112", "DCM", "Query"});
@@ -167,7 +163,7 @@ public class ChPpq2Test extends StandardTestContainer {
 
             assertEquals(1, message.getParticipantObjectIdentifications().size());
 
-            ParticipantObjectIdentificationType queryParticipant = message.getParticipantObjectIdentifications().get(0);
+            var queryParticipant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, queryParticipant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Query, queryParticipant.getParticipantObjectTypeCodeRole());
             assertEquals("ppq-query-id-2", queryParticipant.getParticipantObjectID());

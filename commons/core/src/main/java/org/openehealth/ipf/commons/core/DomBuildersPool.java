@@ -32,6 +32,8 @@ import java.util.function.Function;
  *
  * @author Dmytro Rud
  * @since 3.5.1
+ *
+ * TODO shouldn't this be in ipf-commons-xml
  */
 @Slf4j
 public class DomBuildersPool {
@@ -106,9 +108,10 @@ public class DomBuildersPool {
         @Override
         public DocumentBuilder create() {
             try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                var factory = DocumentBuilderFactory.newInstance();
                 factory.setNamespaceAware(true);
-                DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                var documentBuilder = factory.newDocumentBuilder();
                 log.debug("Created a new document builder {}", documentBuilder);
                 return documentBuilder;
             } catch (ParserConfigurationException e) {

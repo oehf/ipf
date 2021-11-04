@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T14:26:55.601Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-78" codeSystemName="IHE Transactions" originalText="Mobile Patient Demographics Query"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="/app-gateway/fhir/Patient/IHERED-2340" UserIsRequestor="true" NetworkAccessPointID="10.205.114.56" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="http://localhost:8087/app-gateway/fhir/Patient/IHERED-2340" AlternativeUserID="9632" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="app-gateway-enterprise-id" AuditSourceID="app-gateway">
+    <AuditSourceTypeCode csd-code="4" codeSystemName="DCM" originalText="Application Server Process or Thread"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="Patient/IHERED-2340" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="MobilePatientDemographicsQuery" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-78" codeSystemName="IHE Transactions" originalText="Mobile Patient Demographics Query"/>
+    <ParticipantObjectQuery>aHR0cDovL3dkZi1sYXAtMTIzNy5pY3cuaW50OjgwODcvYXBwLWdhdGV3YXkvZmhpci9QYXRpZW50L0lIRVJFRC0yMzQwP251bGw=</ParticipantObjectQuery>
+  </ParticipantObjectIdentification>
+</AuditMessage>

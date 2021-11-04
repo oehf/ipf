@@ -17,14 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.ws.handler.MessageContext;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,26 +52,25 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
      * Before calling the base method, determines correlation key  
      * and stores it into message headers. 
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected Exchange process(
             Object body, 
             Map<String, Object> headers,
             ExchangePattern exchangePattern) 
     {
-        final AsynchronyCorrelator correlator = getConsumer().getEndpoint().getCorrelator();
+        final var correlator = getConsumer().getEndpoint().getCorrelator();
 
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        AddressingProperties apropos = (AddressingProperties) messageContext.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
-        String messageId = ((apropos != null) && (apropos.getRelatesTo() != null))
+        var messageContext = new WebServiceContextImpl().getMessageContext();
+        var apropos = (AddressingProperties) messageContext.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
+        var messageId = ((apropos != null) && (apropos.getRelatesTo() != null))
                 ? apropos.getRelatesTo().getValue()
                 : null;
 
         // when no ReplyTo header found -- try alternative keys
         if (messageId == null) {
-            String[] alternativeKeys = getAlternativeResponseKeys(body);
+            var alternativeKeys = getAlternativeResponseKeys(body);
             if (alternativeKeys != null) {
-                for (String key : alternativeKeys) {
+                for (var key : alternativeKeys) {
                     messageId = correlator.getMessageId(key);
                     if (messageId != null) {
                         break;
@@ -84,7 +81,7 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
 
         if (messageId != null) {
             // expose user-defined correlation key as message header
-            String correlationKey = correlator.getCorrelationKey(messageId);
+            var correlationKey = correlator.getCorrelationKey(messageId);
             if (correlationKey != null) {
                 if (headers == null) {
                     // NB: it shouldn't be a non-modifiable singleton map...

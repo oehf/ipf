@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContainerValidator;
@@ -53,8 +52,8 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
         regResponseValidator.validate(response, profile);
         objectContainerValidator.validate(response, profile);
 
-        List<ObjectReference> references = response.getReferences();
-        for (ObjectReference objRef : references) {
+        var references = response.getReferences();
+        for (var objRef : references) {
             metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF);
         }
 
@@ -64,7 +63,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
     }
 
     private void validatePatientIdsAreIdentical(EbXMLObjectContainer container) throws XDSMetaDataException {
-        String patientId = checkForMultiplePatientIds(null, SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
+        var patientId = checkForMultiplePatientIds(null, SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
                 container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE));
 
         patientId = checkForMultiplePatientIds(patientId, DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
@@ -76,7 +75,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
 
     private String checkForMultiplePatientIds(String patientId, String id, List<? extends EbXMLRegistryObject> entries) {
         for (EbXMLRegistryObject entry : entries) {
-            String patientIdEntry = entry.getExternalIdentifierValue(id);
+            var patientIdEntry = entry.getExternalIdentifierValue(id);
             patientId = patientId == null ? patientIdEntry : patientId;
             metaDataAssert(patientId.equals(patientIdEntry), RESULT_NOT_SINGLE_PATIENT);
         }

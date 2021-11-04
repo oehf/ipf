@@ -42,7 +42,7 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, parameters, Iti55DeferredResponseService.class) {
+        return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti55DeferredResponseService.class) {
             @Override
             public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
                                                                                                             JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {

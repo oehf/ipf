@@ -59,7 +59,7 @@ public class ProducerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
     @Override
     public void process(Exchange exchange) throws Exception {
         if (canProcess()) {
-            logPayload(exchange, false);
+            logPayload(exchange, getEndpoint().getInteractionId());
         }
         getWrappedProcessor().process(exchange);
     }
@@ -67,7 +67,7 @@ public class ProducerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
     public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?,?,?>, ProducerOutPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
-        private boolean locallyEnabled = true;
+        private boolean enabled = true;
 
         public Factory(String fileNamePattern) {
             this(new SpringExpressionResolver(fileNamePattern));
@@ -80,13 +80,13 @@ public class ProducerOutPayloadLoggerInterceptor extends InterceptorSupport<Mllp
 
         @Override
         public ProducerOutPayloadLoggerInterceptor getNewInstance() {
-            ProducerOutPayloadLoggerInterceptor interceptor = new ProducerOutPayloadLoggerInterceptor(resolver);
-            interceptor.setLocallyEnabled(locallyEnabled);
+            var interceptor = new ProducerOutPayloadLoggerInterceptor(resolver);
+            interceptor.setEnabled(enabled);
             return interceptor;
         }
 
-        public void setLocallyEnabled(boolean locallyEnabled) {
-            this.locallyEnabled = locallyEnabled;
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
         }
     }
 }

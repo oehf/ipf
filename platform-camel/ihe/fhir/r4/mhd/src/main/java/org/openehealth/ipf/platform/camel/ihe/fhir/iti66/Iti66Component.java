@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
+import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66Options;
+import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66OptionsProvider;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentWithOptions;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryInteractions.ITI_66;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryDocumentManifestInteractions.ITI_66;
 
 /**
  * Component for MHD Retrieve Document Manifest (ITI-66)
@@ -29,15 +31,14 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryInteractions.ITI
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti66Component extends FhirComponent<FhirQueryAuditDataset> {
-
+public class Iti66Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Iti66Options, Iti66OptionsProvider> {
 
     public Iti66Component() {
-        super(ITI_66);
+        super(ITI_66, Iti66OptionsProvider::new);
     }
 
     public Iti66Component(CamelContext context) {
-        super(context, ITI_66);
+        super(context, ITI_66, Iti66OptionsProvider::new);
     }
 
     @Override

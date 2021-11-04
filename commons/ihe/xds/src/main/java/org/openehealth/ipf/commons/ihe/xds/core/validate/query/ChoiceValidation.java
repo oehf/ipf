@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,34 +33,38 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 /**
  * Query parameter validation to ensure that only one of the given parameters is specified.
  * Also has the "either ... or ... " check to avoid the case that all parameters haven't a
- * value set.
+ * value set if it's not marked as optional.
  * @author Jens Riemschneider
  */
 public class ChoiceValidation implements QueryParameterValidation {
     private final QueryParameter[] params;
+    private final boolean optional;
 
     /**
      * Constructs a validation object.
      * @param params
      *          parameters to validate.
+     * @param optional
+     *          whether all parameters are optional ({@code true}) or one parameter must be specified ({@code false}).
      */
-    public ChoiceValidation(QueryParameter... params) {
+    public ChoiceValidation(boolean optional, QueryParameter... params) {
         notNull(params, "params cannot be null");        
         this.params = params;
+        this.optional = optional;
     }
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        List<String> paramSlotNames = Arrays.stream(params)
+        var paramSlotNames = Arrays.stream(params)
                 .map(QueryParameter::getSlotName)
                 .collect(Collectors.toList());
 
-        long count = paramSlotNames.stream()
+        var count = paramSlotNames.stream()
                 .map(request::getSingleSlotValue)
                 .filter(Objects::nonNull)
                 .count();
 
-        if (count == 0L) {
+        if (!this.optional && count == 0L) {
             throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, "one of " + paramSlotNames);
         }
         if (count > 1L) {

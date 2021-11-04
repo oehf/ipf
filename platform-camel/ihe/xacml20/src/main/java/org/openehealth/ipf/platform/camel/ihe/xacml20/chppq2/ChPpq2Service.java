@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq2.ChPpq2PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
@@ -33,15 +32,15 @@ public class ChPpq2Service extends AbstractWebService implements ChPpq2PortType 
 
     @Override
     public ResponseType policyQuery(XACMLPolicyQueryType request) {
-        Exchange result = process(request);
-        Exception exception = Exchanges.extractException(result);
+        var result = process(request);
+        var exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
-            ResponseType response = Xacml20Utils.createXacmlQueryResponse("urn:oasis:names:tc:SAML:2.0:status:Responder");
+            var response = Xacml20Utils.createXacmlQueryResponse("urn:oasis:names:tc:SAML:2.0:status:Responder");
             response.getStatus().setStatusMessage(exception.getMessage());
             return response;
         }
-        return Exchanges.resultMessage(result).getBody(ResponseType.class);
+        return result.getMessage().getBody(ResponseType.class);
     }
 
 }

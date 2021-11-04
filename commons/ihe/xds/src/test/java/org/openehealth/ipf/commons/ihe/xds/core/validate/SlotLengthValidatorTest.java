@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Validates slot lengths.
@@ -39,7 +40,7 @@ public class SlotLengthValidatorTest {
 
     @Test
     public void testValidateTooLong30() throws XDSMetaDataException {
-        for (int idx = 0; idx < 7; ++idx) {
+        for (var idx = 0; idx < 7; ++idx) {
             try {
                 new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory30, SLOT_VALUE_30, idx));
                 fail("Expected exception: " + XDSMetaDataException.class + ", index=" + idx);
@@ -50,35 +51,35 @@ public class SlotLengthValidatorTest {
     }
 
     private EbXMLObjectContainer createContainer(EbXMLFactory factory, String slotValue, int incorrectIdx) {
-        String[] values = new String[7];
-        for (int idx = 0; idx < 7; ++idx) {
+        var values = new String[7];
+        for (var idx = 0; idx < 7; ++idx) {
             values[idx] = idx == incorrectIdx ? slotValue + "!" : slotValue;
         }
 
         EbXMLObjectContainer container = factory.createSubmitObjectsRequest();
-        EbXMLObjectLibrary objectLibrary = container.getObjectLibrary();
+        var objectLibrary = container.getObjectLibrary();
 
-        EbXMLClassification classification1 = factory.createClassification(objectLibrary);
+        var classification1 = factory.createClassification(objectLibrary);
         classification1.addSlot("slot", values[0]);
 
-        EbXMLClassification classification2 = factory.createClassification(objectLibrary);
+        var classification2 = factory.createClassification(objectLibrary);
         classification2.addSlot("slot", values[1]);
 
-        EbXMLClassification classification3 = factory.createClassification(objectLibrary);
+        var classification3 = factory.createClassification(objectLibrary);
         classification3.addSlot("slot1", values[2]);
 
-        EbXMLClassification classification4 = factory.createClassification(objectLibrary);
+        var classification4 = factory.createClassification(objectLibrary);
         classification3.addSlot("slot2", values[3]);
 
-        EbXMLAssociation association = factory.createAssociation("assoc", objectLibrary);
+        var association = factory.createAssociation("assoc", objectLibrary);
         association.addSlot("slot", values[4]);
         association.addClassification(classification1, "scheme");
 
-        EbXMLExtrinsicObject extrinsic = factory.createExtrinsic("ex", objectLibrary);
+        var extrinsic = factory.createExtrinsic("ex", objectLibrary);
         extrinsic.addSlot("slot", values[5]);
         extrinsic.addClassification(classification2, "scheme");
 
-        EbXMLRegistryPackage regPackage = factory.createRegistryPackage("reg", objectLibrary);
+        var regPackage = factory.createRegistryPackage("reg", objectLibrary);
         regPackage.addSlot("slot", values[6]);
         regPackage.addClassification(classification3, "scheme");
 

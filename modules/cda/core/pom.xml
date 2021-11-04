@@ -4,12 +4,12 @@
     <artifactId>ipf-modules-cda-core</artifactId>
     <name>ipf-modules-cda-core</name>
     <description>Generic CDA support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules-cda</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <properties>
@@ -27,13 +27,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

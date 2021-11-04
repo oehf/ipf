@@ -41,7 +41,7 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this, parameters) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
-                Hl7v3ContinuationAwareEndpoint continuationAwareEndpoint = (Hl7v3ContinuationAwareEndpoint) endpoint;
+                var continuationAwareEndpoint = (Hl7v3ContinuationAwareEndpoint) endpoint;
                 return continuationAwareEndpoint.isSupportContinuation() ?
                         new Pcc1ContinuationAwareService(continuationAwareEndpoint) :
                         new Pcc1Service();

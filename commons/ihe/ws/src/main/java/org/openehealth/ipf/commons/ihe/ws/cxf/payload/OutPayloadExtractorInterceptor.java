@@ -52,14 +52,14 @@ public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mes
             return;
         }
 
-        WrappedOutputStream wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
+        var wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
         if (! Boolean.FALSE.equals(message.getContextualProperty(PAYLOAD_COLLECTING_DEACTIVATION_ENABLED))) {
             wrapper.deactivate();
         }
 
-        String soapEnvelope = wrapper.getCollectedPayload();
-        String payload = SoapUtils.extractSoapBody(soapEnvelope);
-        StringPayloadHolder payloadHolder = new StringPayloadHolder();
+        var soapEnvelope = wrapper.getCollectedPayload();
+        var payload = SoapUtils.extractSoapBody(soapEnvelope);
+        var payloadHolder = new StringPayloadHolder();
         payloadHolder.put(SOAP_BODY, payload);
         message.setContent(StringPayloadHolder.class, payloadHolder);
     }

@@ -15,24 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import static org.junit.Assert.assertTrue;
-
-import java.net.URL;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.spi.TransactedPolicy;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.easymock.EasyMock;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.SimpleTransactionStatus;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for handling of HL7v2 exceptions from within transactional contexts.
@@ -54,19 +52,19 @@ public class TransactedRouteTest extends StandardTestContainer {
     private static PlatformTransactionManager txManager;
 
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass () throws Exception {
         txManager = EasyMock.createMock(PlatformTransactionManager.class);
         transactionPolicy.setPropagationBehaviorName("PROPAGATION_REQUIRES_NEW");
         transactionPolicy.setTransactionManager(txManager);
-        final URL resource = ClassLoader.getSystemResource("transacted-test-context.xml");
+        final var resource = ClassLoader.getSystemResource("transacted-test-context.xml");
         startServer(new CXFServlet(), "transacted-test-context.xml");
-        getCamelContext().addRoutes(new TestRoutes(transactionPolicy));
+        camelContext.addRoutes(new TestRoutes(transactionPolicy));
     }
     
     @Test
     public void testNonTransactedRoute () throws Exception {
-        final String response = sendRequest(
+        final var response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
         assertTrue(response.contains("MSA|AR"));        
@@ -83,7 +81,7 @@ public class TransactedRouteTest extends StandardTestContainer {
                 
         EasyMock.replay(txManager);
 
-        final String response = sendRequest(
+        final var response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/transacted", WAN_REQUEST);
         EasyMock.verify(txManager);
         assertTrue(response.contains("testexception"));        
@@ -92,10 +90,10 @@ public class TransactedRouteTest extends StandardTestContainer {
     
     public String sendRequest(final String url, final String body) {
         final Exchange exchange = new DefaultExchange(
-                getCamelContext(), ExchangePattern.InOut);
+                camelContext, ExchangePattern.InOut);
         exchange.getIn().setBody(body);
-        final Exchange response = getProducerTemplate().send(url, exchange);
-        return response.getOut().getBody(String.class);
+        final var response = producerTemplate.send(url, exchange);
+        return response.getMessage().getBody(String.class);
     }
     
     private static class TestRoutes extends RouteBuilder {

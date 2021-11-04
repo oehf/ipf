@@ -24,6 +24,7 @@ import org.apache.camel.builder.RouteBuilder;
 public class CamelEndpointSenderRoute extends RouteBuilder {
 
 
+    @Override
     public void configure() {
         from("direct:input").to("mock:mock");
     }

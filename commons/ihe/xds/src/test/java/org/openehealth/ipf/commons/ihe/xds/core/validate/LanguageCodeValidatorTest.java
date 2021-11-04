@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for {@link LanguageCodeValidator}.

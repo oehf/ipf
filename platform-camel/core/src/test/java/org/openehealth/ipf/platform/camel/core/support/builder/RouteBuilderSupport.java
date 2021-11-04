@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.support.builder;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.core.builder.RouteHelper;
 
 /**
  * @author Martin Krasser
  */
-public abstract class RouteBuilderSupport extends SpringRouteBuilder {
+public abstract class RouteBuilderSupport extends RouteBuilder {
 
     protected RouteHelper helper;
     

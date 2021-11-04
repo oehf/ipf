@@ -79,7 +79,7 @@ public class AddRequest
      */
     public List<DsmlAttr> getAttr() {
         if (attr == null) {
-            attr = new ArrayList<DsmlAttr>();
+            attr = new ArrayList<>();
         }
         return this.attr;
     }

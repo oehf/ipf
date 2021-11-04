@@ -134,7 +134,7 @@ public class UserAuthenticationBuilder extends BaseAuditMessageBuilder<UserAuthe
     @Override
     public void validate() {
         super.validate();
-        int participants = getMessage().getActiveParticipants().size();
+        var participants = getMessage().getActiveParticipants().size();
         if (participants < 1 || participants > 2) {
             throw new AuditException("Must have one or two ActiveParticipants");
         }

@@ -270,7 +270,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Extensions")
     public JAXBElement<ExtensionsType> createExtensions(ExtensionsType value) {
-        return new JAXBElement<ExtensionsType>(_Extensions_QNAME, ExtensionsType.class, null, value);
+        return new JAXBElement<>(_Extensions_QNAME, ExtensionsType.class, null, value);
     }
 
     /**
@@ -279,7 +279,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Status")
     public JAXBElement<StatusType> createStatus(StatusType value) {
-        return new JAXBElement<StatusType>(_Status_QNAME, StatusType.class, null, value);
+        return new JAXBElement<>(_Status_QNAME, StatusType.class, null, value);
     }
 
     /**
@@ -288,7 +288,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "StatusCode")
     public JAXBElement<StatusCodeType> createStatusCode(StatusCodeType value) {
-        return new JAXBElement<StatusCodeType>(_StatusCode_QNAME, StatusCodeType.class, null, value);
+        return new JAXBElement<>(_StatusCode_QNAME, StatusCodeType.class, null, value);
     }
 
     /**
@@ -297,7 +297,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "StatusMessage")
     public JAXBElement<String> createStatusMessage(String value) {
-        return new JAXBElement<String>(_StatusMessage_QNAME, String.class, null, value);
+        return new JAXBElement<>(_StatusMessage_QNAME, String.class, null, value);
     }
 
     /**
@@ -306,7 +306,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "StatusDetail")
     public JAXBElement<StatusDetailType> createStatusDetail(StatusDetailType value) {
-        return new JAXBElement<StatusDetailType>(_StatusDetail_QNAME, StatusDetailType.class, null, value);
+        return new JAXBElement<>(_StatusDetail_QNAME, StatusDetailType.class, null, value);
     }
 
     /**
@@ -315,7 +315,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "AssertionIDRequest")
     public JAXBElement<AssertionIDRequestType> createAssertionIDRequest(AssertionIDRequestType value) {
-        return new JAXBElement<AssertionIDRequestType>(_AssertionIDRequest_QNAME, AssertionIDRequestType.class, null, value);
+        return new JAXBElement<>(_AssertionIDRequest_QNAME, AssertionIDRequestType.class, null, value);
     }
 
     /**
@@ -324,7 +324,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "SubjectQuery")
     public JAXBElement<SubjectQueryAbstractType> createSubjectQuery(SubjectQueryAbstractType value) {
-        return new JAXBElement<SubjectQueryAbstractType>(_SubjectQuery_QNAME, SubjectQueryAbstractType.class, null, value);
+        return new JAXBElement<>(_SubjectQuery_QNAME, SubjectQueryAbstractType.class, null, value);
     }
 
     /**
@@ -333,7 +333,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "AuthnQuery")
     public JAXBElement<AuthnQueryType> createAuthnQuery(AuthnQueryType value) {
-        return new JAXBElement<AuthnQueryType>(_AuthnQuery_QNAME, AuthnQueryType.class, null, value);
+        return new JAXBElement<>(_AuthnQuery_QNAME, AuthnQueryType.class, null, value);
     }
 
     /**
@@ -342,7 +342,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "RequestedAuthnContext")
     public JAXBElement<RequestedAuthnContextType> createRequestedAuthnContext(RequestedAuthnContextType value) {
-        return new JAXBElement<RequestedAuthnContextType>(_RequestedAuthnContext_QNAME, RequestedAuthnContextType.class, null, value);
+        return new JAXBElement<>(_RequestedAuthnContext_QNAME, RequestedAuthnContextType.class, null, value);
     }
 
     /**
@@ -351,7 +351,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "AttributeQuery")
     public JAXBElement<AttributeQueryType> createAttributeQuery(AttributeQueryType value) {
-        return new JAXBElement<AttributeQueryType>(_AttributeQuery_QNAME, AttributeQueryType.class, null, value);
+        return new JAXBElement<>(_AttributeQuery_QNAME, AttributeQueryType.class, null, value);
     }
 
     /**
@@ -360,7 +360,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "AuthzDecisionQuery")
     public JAXBElement<AuthzDecisionQueryType> createAuthzDecisionQuery(AuthzDecisionQueryType value) {
-        return new JAXBElement<AuthzDecisionQueryType>(_AuthzDecisionQuery_QNAME, AuthzDecisionQueryType.class, null, value);
+        return new JAXBElement<>(_AuthzDecisionQuery_QNAME, AuthzDecisionQueryType.class, null, value);
     }
 
     /**
@@ -369,7 +369,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "AuthnRequest")
     public JAXBElement<AuthnRequestType> createAuthnRequest(AuthnRequestType value) {
-        return new JAXBElement<AuthnRequestType>(_AuthnRequest_QNAME, AuthnRequestType.class, null, value);
+        return new JAXBElement<>(_AuthnRequest_QNAME, AuthnRequestType.class, null, value);
     }
 
     /**
@@ -378,7 +378,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "NameIDPolicy")
     public JAXBElement<NameIDPolicyType> createNameIDPolicy(NameIDPolicyType value) {
-        return new JAXBElement<NameIDPolicyType>(_NameIDPolicy_QNAME, NameIDPolicyType.class, null, value);
+        return new JAXBElement<>(_NameIDPolicy_QNAME, NameIDPolicyType.class, null, value);
     }
 
     /**
@@ -387,7 +387,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Scoping")
     public JAXBElement<ScopingType> createScoping(ScopingType value) {
-        return new JAXBElement<ScopingType>(_Scoping_QNAME, ScopingType.class, null, value);
+        return new JAXBElement<>(_Scoping_QNAME, ScopingType.class, null, value);
     }
 
     /**
@@ -396,7 +396,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "RequesterID")
     public JAXBElement<String> createRequesterID(String value) {
-        return new JAXBElement<String>(_RequesterID_QNAME, String.class, null, value);
+        return new JAXBElement<>(_RequesterID_QNAME, String.class, null, value);
     }
 
     /**
@@ -405,7 +405,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "IDPList")
     public JAXBElement<IDPListType> createIDPList(IDPListType value) {
-        return new JAXBElement<IDPListType>(_IDPList_QNAME, IDPListType.class, null, value);
+        return new JAXBElement<>(_IDPList_QNAME, IDPListType.class, null, value);
     }
 
     /**
@@ -414,7 +414,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "IDPEntry")
     public JAXBElement<IDPEntryType> createIDPEntry(IDPEntryType value) {
-        return new JAXBElement<IDPEntryType>(_IDPEntry_QNAME, IDPEntryType.class, null, value);
+        return new JAXBElement<>(_IDPEntry_QNAME, IDPEntryType.class, null, value);
     }
 
     /**
@@ -423,7 +423,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "GetComplete")
     public JAXBElement<String> createGetComplete(String value) {
-        return new JAXBElement<String>(_GetComplete_QNAME, String.class, null, value);
+        return new JAXBElement<>(_GetComplete_QNAME, String.class, null, value);
     }
 
     /**
@@ -432,7 +432,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Response")
     public JAXBElement<ResponseType> createResponse(ResponseType value) {
-        return new JAXBElement<ResponseType>(_Response_QNAME, ResponseType.class, null, value);
+        return new JAXBElement<>(_Response_QNAME, ResponseType.class, null, value);
     }
 
     /**
@@ -441,7 +441,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "ArtifactResolve")
     public JAXBElement<ArtifactResolveType> createArtifactResolve(ArtifactResolveType value) {
-        return new JAXBElement<ArtifactResolveType>(_ArtifactResolve_QNAME, ArtifactResolveType.class, null, value);
+        return new JAXBElement<>(_ArtifactResolve_QNAME, ArtifactResolveType.class, null, value);
     }
 
     /**
@@ -450,7 +450,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Artifact")
     public JAXBElement<String> createArtifact(String value) {
-        return new JAXBElement<String>(_Artifact_QNAME, String.class, null, value);
+        return new JAXBElement<>(_Artifact_QNAME, String.class, null, value);
     }
 
     /**
@@ -459,7 +459,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "ArtifactResponse")
     public JAXBElement<ArtifactResponseType> createArtifactResponse(ArtifactResponseType value) {
-        return new JAXBElement<ArtifactResponseType>(_ArtifactResponse_QNAME, ArtifactResponseType.class, null, value);
+        return new JAXBElement<>(_ArtifactResponse_QNAME, ArtifactResponseType.class, null, value);
     }
 
     /**
@@ -468,7 +468,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "ManageNameIDRequest")
     public JAXBElement<ManageNameIDRequestType> createManageNameIDRequest(ManageNameIDRequestType value) {
-        return new JAXBElement<ManageNameIDRequestType>(_ManageNameIDRequest_QNAME, ManageNameIDRequestType.class, null, value);
+        return new JAXBElement<>(_ManageNameIDRequest_QNAME, ManageNameIDRequestType.class, null, value);
     }
 
     /**
@@ -477,7 +477,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "NewID")
     public JAXBElement<String> createNewID(String value) {
-        return new JAXBElement<String>(_NewID_QNAME, String.class, null, value);
+        return new JAXBElement<>(_NewID_QNAME, String.class, null, value);
     }
 
     /**
@@ -486,7 +486,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "NewEncryptedID")
     public JAXBElement<EncryptedElementType> createNewEncryptedID(EncryptedElementType value) {
-        return new JAXBElement<EncryptedElementType>(_NewEncryptedID_QNAME, EncryptedElementType.class, null, value);
+        return new JAXBElement<>(_NewEncryptedID_QNAME, EncryptedElementType.class, null, value);
     }
 
     /**
@@ -495,7 +495,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "Terminate")
     public JAXBElement<TerminateType> createTerminate(TerminateType value) {
-        return new JAXBElement<TerminateType>(_Terminate_QNAME, TerminateType.class, null, value);
+        return new JAXBElement<>(_Terminate_QNAME, TerminateType.class, null, value);
     }
 
     /**
@@ -504,7 +504,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "ManageNameIDResponse")
     public JAXBElement<StatusResponseType> createManageNameIDResponse(StatusResponseType value) {
-        return new JAXBElement<StatusResponseType>(_ManageNameIDResponse_QNAME, StatusResponseType.class, null, value);
+        return new JAXBElement<>(_ManageNameIDResponse_QNAME, StatusResponseType.class, null, value);
     }
 
     /**
@@ -513,7 +513,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "LogoutRequest")
     public JAXBElement<LogoutRequestType> createLogoutRequest(LogoutRequestType value) {
-        return new JAXBElement<LogoutRequestType>(_LogoutRequest_QNAME, LogoutRequestType.class, null, value);
+        return new JAXBElement<>(_LogoutRequest_QNAME, LogoutRequestType.class, null, value);
     }
 
     /**
@@ -522,7 +522,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "SessionIndex")
     public JAXBElement<String> createSessionIndex(String value) {
-        return new JAXBElement<String>(_SessionIndex_QNAME, String.class, null, value);
+        return new JAXBElement<>(_SessionIndex_QNAME, String.class, null, value);
     }
 
     /**
@@ -531,7 +531,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "LogoutResponse")
     public JAXBElement<StatusResponseType> createLogoutResponse(StatusResponseType value) {
-        return new JAXBElement<StatusResponseType>(_LogoutResponse_QNAME, StatusResponseType.class, null, value);
+        return new JAXBElement<>(_LogoutResponse_QNAME, StatusResponseType.class, null, value);
     }
 
     /**
@@ -540,7 +540,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "NameIDMappingRequest")
     public JAXBElement<NameIDMappingRequestType> createNameIDMappingRequest(NameIDMappingRequestType value) {
-        return new JAXBElement<NameIDMappingRequestType>(_NameIDMappingRequest_QNAME, NameIDMappingRequestType.class, null, value);
+        return new JAXBElement<>(_NameIDMappingRequest_QNAME, NameIDMappingRequestType.class, null, value);
     }
 
     /**
@@ -549,7 +549,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", name = "NameIDMappingResponse")
     public JAXBElement<NameIDMappingResponseType> createNameIDMappingResponse(NameIDMappingResponseType value) {
-        return new JAXBElement<NameIDMappingResponseType>(_NameIDMappingResponse_QNAME, NameIDMappingResponseType.class, null, value);
+        return new JAXBElement<>(_NameIDMappingResponse_QNAME, NameIDMappingResponseType.class, null, value);
     }
 
 }

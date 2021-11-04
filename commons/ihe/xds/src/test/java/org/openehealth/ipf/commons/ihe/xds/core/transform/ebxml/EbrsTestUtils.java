@@ -15,19 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
 import ca.uhn.hl7v2.model.v25.datatype.XPN;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test framework methods for ebXML related classes.
@@ -54,9 +51,9 @@ public abstract class EbrsTestUtils {
             EbXMLRegistryObject regEntry, 
             String expectedValue, 
             String expectedName) {
-        
-        int found = 0; 
-        for (EbXMLExternalIdentifier identifier : regEntry.getExternalIdentifiers()) {
+
+        var found = 0;
+        for (var identifier : regEntry.getExternalIdentifiers()) {
             if (identifier.getIdentificationScheme().equals(scheme)) {
                 ++found;
                 assertEquals(expectedValue, identifier.getValue());
@@ -85,10 +82,10 @@ public abstract class EbrsTestUtils {
      * @return the classification that matched the assertion.
      */
     public static EbXMLClassification assertClassification(String scheme, EbXMLRegistryObject regEntry, int occurrence, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
-        List<EbXMLClassification> filtered = regEntry.getClassifications(scheme);
-        assertTrue("Not enough classification matching the scheme: " + scheme, filtered.size() > occurrence);
+        var filtered = regEntry.getClassifications(scheme);
+        assertTrue(filtered.size() > occurrence, "Not enough classification matching the scheme: " + scheme);
 
-        EbXMLClassification classification = filtered.get(occurrence);
+        var classification = filtered.get(occurrence);
         assertSame(regEntry.getId(), classification.getClassifiedObject());
         assertEquals(expectedNodeRepresentation, classification.getNodeRepresentation());
         if (expectedLocalizedIdxName > 0) {
@@ -110,12 +107,12 @@ public abstract class EbrsTestUtils {
      *          the expected values of the slot.
      */
     public static void assertSlot(String slotName, List<EbXMLSlot> slots, String... expectedSlotValues) {
-        int found = 0;
-        for (EbXMLSlot slot : slots) {
+        var found = 0;
+        for (var slot : slots) {
             if (slot.getName().equals(slotName)) {
-                List<String> values = slot.getValueList();
-                for (String expectedValue : expectedSlotValues) {
-                    assertTrue("Not found: " + expectedValue + ", was: " + values, values.contains(expectedValue));
+                var values = slot.getValueList();
+                for (var expectedValue : expectedSlotValues) {
+                    assertTrue(values.contains(expectedValue), "Not found: " + expectedValue + ", was: " + values);
                 }
                 assertEquals(values.size(), expectedSlotValues.length);
                 ++found;
@@ -145,7 +142,7 @@ public abstract class EbrsTestUtils {
      * @return the new person instance.
      */
     public static Person createPerson(int idx) {
-        Person person = new Person();
+        var person = new Person();
         person.setId(createIdentifiable(idx));
         person.setName(createName(idx));
         return person;
@@ -159,7 +156,7 @@ public abstract class EbrsTestUtils {
      * @return the new organization instance.
      */
     public static Organization createOrganization(int idx) {
-        Organization organization = new Organization();
+        var organization = new Organization();
         organization.setAssigningAuthority(createAssigningAuthority(idx));
         organization.setIdNumber("id " + idx);
         organization.setOrganizationName("orgName " + idx);

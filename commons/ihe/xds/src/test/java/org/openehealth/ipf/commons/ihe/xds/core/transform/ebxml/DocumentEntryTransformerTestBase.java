@@ -15,20 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Tests for {@link DocumentEntryTransformer}.
@@ -48,35 +42,35 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         this.homeAware = homeAware;
     }
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new DocumentEntryTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
-        
-        Author author1 = new Author();
+
+        var author1 = new Author();
         author1.setAuthorPerson(createPerson(1));
         author1.getAuthorInstitution().add(new Organization("inst1"));
         author1.getAuthorInstitution().add(new Organization("inst2"));
         author1.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
-        author1.getAuthorRole().add(new Identifiable("role2", null));
+        author1.getAuthorRole().add(new Identifiable("role2"));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
-        author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
+        author1.getAuthorSpecialty().add(new Identifiable("spec2"));
         author1.getAuthorTelecom().add(new Telecom(null, null, 7771L, null));
         author1.getAuthorTelecom().add(new Telecom(null, null, 7772L, null));
 
-        Author author2 = new Author();
+        var author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
         author2.getAuthorInstitution().add(new Organization("inst3"));
         author2.getAuthorInstitution().add(new Organization("inst4"));
-        author2.getAuthorRole().add(new Identifiable("role3", null));
+        author2.getAuthorRole().add(new Identifiable("role3"));
         author2.getAuthorRole().add(new Identifiable("role4", new AssigningAuthority("2.3.6", "ISO")));
-        author2.getAuthorSpecialty().add(new Identifiable("spec3", null));
+        author2.getAuthorSpecialty().add(new Identifiable("spec3"));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", new AssigningAuthority("2.3.8", "ISO")));
         author2.getAuthorTelecom().add(new Telecom(null, null, 7773L, null));
         author2.getAuthorTelecom().add(new Telecom(null, null, 7774L, null));
 
-        Address address = new Address();
+        var address = new Address();
         address.setCity("city");
         address.setCountry("country");
         address.setCountyParishCode("countyParishCode");
@@ -84,8 +78,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         address.setStateOrProvince("stateOrProvince");
         address.setStreetAddress("streetAddress");
         address.setZipOrPostalCode("zipOrPostalCode");
-        
-        PatientInfo sourcePatientInfo = new PatientInfo();
+
+        var sourcePatientInfo = new PatientInfo();
         sourcePatientInfo.getAddresses().add(address);
         sourcePatientInfo.setDateOfBirth("19800102");
         sourcePatientInfo.setGender("F");
@@ -140,7 +134,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
     @Test
     public void testToEbXML() {
-        EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);        
+        var ebXML = transformer.toEbXML(documentEntry, objectLibrary);
         assertNotNull(ebXML);
         
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
@@ -153,8 +147,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
-        
-        List<EbXMLSlot> slots = ebXML.getSlots();
+
+        var slots = ebXML.getSlots();
         assertSlot(SLOT_NAME_CREATION_TIME, slots, "20150206");
         assertSlot(SLOT_NAME_HASH, slots, "hash");
         assertSlot(SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
@@ -177,7 +171,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "ref-id-12^^^DEFG&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession");
         assertSlot(SLOT_NAME_DOCUMENT_AVAILABILITY, slots, "urn:ihe:iti:2010:DocumentAvailability:Online");
 
-        EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        var classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1^^^&2.3.1&ISO", "role2");
@@ -238,7 +232,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
    
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
+        var ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -255,8 +249,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
     @Test
     public void testFromEbXML() {
-        EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
-        DocumentEntry result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(documentEntry, objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
 
         assertNotNull(result);
         assertEquals(documentEntry, result);
@@ -269,10 +263,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
-        DocumentEntry result = transformer.fromEbXML(ebXML);
-        
-        DocumentEntry expected = new DocumentEntry();
+        var ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);
+        var result = transformer.fromEbXML(ebXML);
+
+        var expected = new DocumentEntry();
         expected.setMimeType("application/octet-stream");
         assertEquals(expected, result);
     }

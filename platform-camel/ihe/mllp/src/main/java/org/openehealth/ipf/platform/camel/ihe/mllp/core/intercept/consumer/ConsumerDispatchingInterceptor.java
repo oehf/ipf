@@ -21,11 +21,9 @@ import ca.uhn.hl7v2.preparser.PreParser;
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelException;
 import org.apache.camel.Exchange;
-import org.apache.camel.Route;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.StartupListener;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpConsumer;
@@ -54,7 +52,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final List<String> routeIds = new ArrayList<>();
-    private Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
+    private final Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
 
 
     /**
@@ -106,7 +104,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
         camelContext.getRoutes().stream()
                 .filter(route -> route.getEndpoint() instanceof MllpTransactionEndpoint)
                 .forEach(route -> {
-                    MllpTransactionEndpoint<?> endpoint = (MllpTransactionEndpoint<?>) route.getEndpoint();
+                    var endpoint = (MllpTransactionEndpoint<?>) route.getEndpoint();
                     if (endpoint.getDispatcher() == this) {
                         addTransactionRoutes(route.getId());
                     }
@@ -114,12 +112,12 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     }
 
     private boolean addTargets(CamelContext camelContext) throws CamelException {
-        for (String routeId : routeIds) {
+        for (var routeId : routeIds) {
             try {
-                Route route = camelContext.getRoute(routeId);
+                var route = camelContext.getRoute(routeId);
                 if (route != null) {
-                    MllpConsumer consumer = (MllpConsumer) route.getConsumer();
-                    Interceptor interceptor = (Interceptor) consumer.getProcessor();
+                    var consumer = (MllpConsumer) route.getConsumer();
+                    var interceptor = (Interceptor) consumer.getProcessor();
                     while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
                         interceptor = (Interceptor) interceptor.getWrappedProcessor();
                     }
@@ -139,18 +137,18 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     public void process(Exchange exchange) throws Exception {
 
         // determine attributes of the message
-        String message = exchange.getIn().getBody(String.class);
-        String[] fields = PreParser.getFields(message, "MSH-9-1", "MSH-9-2", "MSH-9-3", "MSH-12");
-        String messageType = fields[0];
-        String triggerEvent = fields[1];
-        String messageStructure = fields[2];
-        String version = fields[3];
+        var message = exchange.getIn().getBody(String.class);
+        var fields = PreParser.getFields(message, "MSH-9-1", "MSH-9-2", "MSH-9-3", "MSH-12");
+        var messageType = fields[0];
+        var triggerEvent = fields[1];
+        var messageStructure = fields[2];
+        var version = fields[3];
 
         // check who can accept the message
-        boolean found = false;
-        for (String routeId : routeIds) {
-            Interceptor<? extends MllpEndpoint> interceptor = map.get(routeId);
-            Hl7v2TransactionConfiguration config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+        var found = false;
+        for (var routeId : routeIds) {
+            var interceptor = map.get(routeId);
+            var config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
             try {
                 config.checkMessageAcceptance(messageType, triggerEvent, messageStructure, version, true);
 
@@ -167,7 +165,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
         if (!found) {
             LOG.debug("Nobody can process message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}'",
                     messageType, triggerEvent, messageStructure, version);
-            HL7Exception exception = new HL7Exception(
+            var exception = new HL7Exception(
                     "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);
             resultMessage(exchange).setBody(getEndpoint().getNakFactory().createDefaultNak(exception).encode());
         }

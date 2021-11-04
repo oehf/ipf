@@ -37,7 +37,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
         return new Coding(
                 code: codedValueType.code,
                 display: codedValueType.originalText,
-                system: codedValueType.codeSystemName.mapAtnaCodingSystem())
+                system: codedValueType.codeSystemName.map('atnaCodingSystem'))
     }
 
     /**
@@ -83,7 +83,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
     static AuditEvent.AuditEventAgentComponent participant(ActiveParticipantType atna) {
         AuditEvent.AuditEventAgentComponent fhir = new AuditEvent.AuditEventAgentComponent(new BooleanType(atna.userIsRequestor))
         atna.roleIDCodes.each { fhir.addRole(codeableConcept(it)) }
-        fhir.userId = new Identifier(value: atna.userID)
+        fhir.who = new Reference(identifier: new Identifier(value: atna.userID))
         fhir.altId = atna.alternativeUserID
         fhir.name = atna.userName
         if (atna.networkAccessPointID) {
@@ -97,8 +97,8 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
     static AuditEvent.AuditEventEntityComponent participantObject(ParticipantObjectIdentificationType atna) {
         AuditEvent.AuditEventEntityComponent fhir = new AuditEvent.AuditEventEntityComponent()
         fhir.what = new Reference().setIdentifier(new Identifier(
-                value: atna.participantObjectID
-                /*type: codeableConcept(atna.participantObjectIDTypeCode)*/))
+                value: atna.participantObjectID,
+                type: codeableConcept(atna.participantObjectIDTypeCode)))
         fhir.type = codingEnum(new AuditEntityTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode.value)))
         fhir.role = codingEnum(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole.value)))
         atna.participantObjectDetails.each {

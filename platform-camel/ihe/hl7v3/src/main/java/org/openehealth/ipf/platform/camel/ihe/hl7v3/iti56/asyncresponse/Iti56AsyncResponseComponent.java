@@ -34,7 +34,7 @@ public class Iti56AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
         super(ITI_56_ASYNC_RESPONSE);
     }
 
-    @SuppressWarnings("rawtypes") // Required because of base class
+    // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti56AsyncResponseService.class);

@@ -22,7 +22,11 @@ http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
 ">
 
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+    <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
+    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
+            <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
+        <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
+    </bean>
 
     <bean id="hl7v3ContinuationStorage"
           class="org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage">

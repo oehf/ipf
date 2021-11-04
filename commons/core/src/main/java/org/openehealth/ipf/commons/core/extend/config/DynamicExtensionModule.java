@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.core.extend.config;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import org.codehaus.groovy.runtime.m12n.SimpleExtensionModule;
  */
 class DynamicExtensionModule extends SimpleExtensionModule {
 
-    private DynamicExtension extension;
+    private final DynamicExtension extension;
 
     private DynamicExtensionModule(DynamicExtension extension) {
         super(extension.getModuleName(), extension.getModuleVersion());
@@ -38,25 +37,23 @@ class DynamicExtensionModule extends SimpleExtensionModule {
 
     @Override
     public List<Class> getInstanceMethodsExtensionClasses() {
-        return extension.isStatic() ? Collections.<Class>emptyList() : classList(extension);
+        return extension.isStatic() ? Collections.emptyList() : classList(extension);
     }
 
     @Override
     public List<Class> getStaticMethodsExtensionClasses() {
-        return extension.isStatic() ? classList(extension) : Collections.<Class>emptyList();
+        return extension.isStatic() ? classList(extension) : Collections.emptyList();
     }
 
     private static List<Class> classList(Object o) {
-        List<Class> l = new ArrayList<>(1);
-        l.add(o.getClass());
-        return Collections.unmodifiableList(l);
+        return List.of(o.getClass());
     }
 
     public static DynamicExtensionModule newModule(final DynamicExtension extension) {
-        String name = extension.getModuleName();
+        var name = extension.getModuleName();
         if (name == null)
             throw new RuntimeException("Module name is null");
-        String version = extension.getModuleVersion();
+        var version = extension.getModuleVersion();
         if (version == null)
             throw new RuntimeException("Module version is null");
 

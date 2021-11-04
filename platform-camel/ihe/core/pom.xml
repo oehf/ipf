@@ -19,14 +19,14 @@
     <parent>
         <artifactId>ipf-platform-camel-ihe</artifactId>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-platform-camel-ihe-core</artifactId>
     <name>ipf-platform-camel-ihe-core</name>
     <description>Generic IHE support for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-support</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -43,12 +43,5 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

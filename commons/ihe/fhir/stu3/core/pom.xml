@@ -3,14 +3,14 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-stu3</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
     <name>ipf-commons-ihe-fhir-stu3-core</name>
     <description>FHIR IHE support for STU3</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -26,8 +26,8 @@
             <artifactId>ipf-commons-ihe-fhir-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
@@ -54,13 +54,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

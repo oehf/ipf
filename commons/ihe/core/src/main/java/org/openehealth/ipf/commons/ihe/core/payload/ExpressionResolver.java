@@ -25,7 +25,7 @@ public interface ExpressionResolver {
      * Resolves the {@link PayloadLoggingContext} to obtain a path
      * for payload logging
      *
-     * @param context
+     * @param context PayloadLoggingContext
      * @return a path for payload logging
      */
     String resolveExpression(PayloadLoggingContext context);

@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import lombok.experimental.UtilityClass;
 
@@ -30,9 +30,9 @@ public class JsonUtils {
     /**
      * Creates and returns an ObjectMapper instance suitable for the simplified XDS data model.
      */
-    public static ObjectMapper createObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JodaModule());
+    public ObjectMapper createObjectMapper() {
+        var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerModule(new JaxbAnnotationModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return objectMapper;

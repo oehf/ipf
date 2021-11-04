@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xua
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import org.apache.cxf.binding.soap.Soap11
 import org.apache.cxf.binding.soap.Soap12
 import org.apache.cxf.binding.soap.SoapMessage
@@ -48,15 +49,15 @@ class BasicXuaProcessor implements XuaProcessor {
      */
     static final String XUA_SAML_ASSERTION = AbstractAuditInterceptor.class.getName() + '.XUA_SAML_ASSERTION'
 
-    static final String WSSE_NS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-    static final String SAML20_NS = "urn:oasis:names:tc:SAML:2.0:assertion";
+    static final String WSSE_NS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    static final String SAML20_NS = "urn:oasis:names:tc:SAML:2.0:assertion"
 
     static final String SWISS_USER_ROLE_OID = '2.16.756.5.30.1.127.3.10.6'
 
-    static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = 'urn:oasis:names:tc:xspa:1.0:subject:purposeofuse';
-    static final String SUBJECT_NAME_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xspa:1.0:subject:subject-id';
-    static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xacml:2.0:subject:role';
-    static final String PATIENT_ID_ATTRIBUTE_NAME     = 'urn:oasis:names:tc:xacml:2.0:resource:resource-id';
+    static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = 'urn:oasis:names:tc:xspa:1.0:subject:purposeofuse'
+    static final String SUBJECT_NAME_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xspa:1.0:subject:subject-id'
+    static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xacml:2.0:subject:role'
+    static final String PATIENT_ID_ATTRIBUTE_NAME     = 'urn:oasis:names:tc:xacml:2.0:resource:resource-id'
 
 
     @Override

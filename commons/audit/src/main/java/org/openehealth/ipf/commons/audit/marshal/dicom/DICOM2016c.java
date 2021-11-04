@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.audit.marshal.dicom;
 import org.jdom2.Element;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
+import static org.openehealth.ipf.commons.audit.XMLNames.*;
+
 /**
  * CP 1362: Correct AuditSourceIdentification in DICOM audit message
  * http://dicom.nema.org/Dicom/News/January2016/docs/cpack86/cp1362.pdf
@@ -31,11 +33,11 @@ public class DICOM2016c extends DICOM2016a {
 
     @Override
     protected Element auditSourceType(AuditSource auditSourceType) {
-        Element element = new Element("AuditSourceTypeCode");
-        element.setAttribute("code", auditSourceType.getCode());
-        conditionallyAddAttribute(element, "codeSystemName", auditSourceType.getCodeSystemName());
-        conditionallyAddAttribute(element, "displayName", auditSourceType.getDisplayName());
-        conditionallyAddAttribute(element, "originalText", auditSourceType.getOriginalText());
+        var element = new Element(AUDIT_SOURCE_TYPE_CODE);
+        element.setAttribute(CODE, auditSourceType.getCode());
+        conditionallyAddAttribute(element, CODE_SYSTEM_NAME, auditSourceType.getCodeSystemName());
+        conditionallyAddAttribute(element, DISPLAY_NAME, auditSourceType.getDisplayName());
+        conditionallyAddAttribute(element, ORIGINAL_TEXT, auditSourceType.getOriginalText());
         return element;
     }
 }

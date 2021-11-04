@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import ca.uhn.hl7v2.model.v25.datatype.CX;
-import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 
@@ -34,10 +32,10 @@ public class CXiValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
-        ReferenceId referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.class);
+        var referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.class);
         metaDataAssert(referenceId != null, CX_NEEDS_ID);
 
-        CX cx = referenceId.getHapiObject();
+        var cx = referenceId.getHapiObject();
 
         // prohibited fields
         metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CXI_TOO_MANY_COMPONENTS);
@@ -52,11 +50,11 @@ public class CXiValidator implements ValueValidator {
         metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
         metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CXI_NEEDS_ID_TYPE_CODE, hl7CX);
 
-        HD assigningAuthority = cx.getCx4_AssigningAuthority();
+        var assigningAuthority = cx.getCx4_AssigningAuthority();
         if (! isEmptyField(assigningAuthority)) {
-            boolean cx41filled = isNotEmpty(assigningAuthority.getHd1_NamespaceID().getValue());
-            boolean cx42filled = isNotEmpty(assigningAuthority.getHd2_UniversalID().getValue());
-            boolean cx43filled = isNotEmpty(assigningAuthority.getHd3_UniversalIDType().getValue());
+            var cx41filled = isNotEmpty(assigningAuthority.getHd1_NamespaceID().getValue());
+            var cx42filled = isNotEmpty(assigningAuthority.getHd2_UniversalID().getValue());
+            var cx43filled = isNotEmpty(assigningAuthority.getHd3_UniversalIDType().getValue());
             metaDataAssert(cx41filled || (cx42filled && cx43filled), CXI_INCOMPLETE_ASSIGNING_AUTHORITY);
         }
     }

@@ -32,28 +32,28 @@ class MdmTestRouteBuilder extends RouteBuilder {
         // fictive route to test producer-side acceptance checking
         from('mdm://0.0.0.0:19084?audit=false')
                 .process {
-            resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-            resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
-        }
+                    resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
+                    resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
+                }
 
         // route with normal exception
         from('mdm://0.0.0.0:19085?audit=false')
                 .onException(Exception.class)
-                .maximumRedeliveries(0)
-                .end()
+                    .maximumRedeliveries(0)
+                    .end()
                 .process { throw new Exception('Why do you cry, Willy?') }
 
         // route with runtime exception
         from('mdm://0.0.0.0:19086?audit=false')
                 .onException(Exception.class)
-                .maximumRedeliveries(0)
-                .end()
+                    .maximumRedeliveries(0)
+                    .end()
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         from('mdm://0.0.0.0:19087?audit=false&'+
                 'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=SSLv3,TLSv1&' +
-                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+                'sslProtocols=TLSv1.2,TLSv1.3&' +
+                'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
                 .transform(ack())
 
         from('mdm://0.0.0.0:19088?audit=false&'+

@@ -41,9 +41,9 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
         Row(String rootElementName, String xsdPath, String schematronPath) {
             this.rootElementName = rootElementName;
             if (DEFAULT_XSD.equals(xsdPath)) {
-                int pos1 = rootElementName.indexOf('_');
-                int pos2 = rootElementName.indexOf('_', pos1 + 1);
-                String documentName = (pos2 > 0) ? rootElementName.substring(0, pos2) : rootElementName;
+                var pos1 = rootElementName.indexOf('_');
+                var pos2 = rootElementName.indexOf('_', pos1 + 1);
+                var documentName = (pos2 > 0) ? rootElementName.substring(0, pos2) : rootElementName;
                 this.xsdPath = HL7V3_SCHEMAS_PATH + documentName + ".xsd";
             } else {
                 this.xsdPath = xsdPath.startsWith("/") ? xsdPath : HL7V3_SCHEMAS_PATH + xsdPath;
@@ -58,7 +58,7 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
 
     public Hl7v3ValidationProfile(Row... rows) {
         map = new HashMap<>(rows.length);
-        for (Row row : rows) {
+        for (var row : rows) {
             map.put(row.rootElementName, row);
         }
     }
@@ -81,7 +81,7 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
 
     @Override
     public Map<String, Object> getCustomSchematronParameters(String rootElementName) {
-        String phase = map.get(rootElementName).getSchematronPhase();
+        var phase = map.get(rootElementName).getSchematronPhase();
         return (phase != null) ? Collections.singletonMap("phase", phase) : null;
     }
 

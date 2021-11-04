@@ -20,13 +20,16 @@ import brave.SpanCustomizer
 import brave.Tracing
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import zipkin2.Span
 import zipkin2.reporter.Reporter
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * @author Christian Ohr
@@ -37,7 +40,7 @@ class MessageTracerTest {
 
     @Test
     void traceMessage() {
-        MockReporter reporter = new MockReporter();
+        MockReporter reporter = new MockReporter()
         Tracing tracing = Tracing.newBuilder()
                 .localServiceName('MessageTracerTest')
                 .spanReporter(reporter)
@@ -73,11 +76,11 @@ class MessageTracerTest {
 
     private static final class MockReporter implements Reporter<zipkin2.Span> {
 
-        private List<zipkin2.Span> spans = new ArrayList<>();
+        private List<zipkin2.Span> spans = new ArrayList<>()
 
         @Override
         void report(zipkin2.Span span) {
-            spans.add(span);
+            spans.add(span)
         }
 
         List<zipkin2.Span> getSpans() {

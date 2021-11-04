@@ -36,6 +36,7 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
         super(false);
     }
 
+    @Override
     protected AuditMessage makeAuditMessage(AuditContext auditContext,
                                             Iti59AuditDataset auditDataset,
                                             Iti59AuditDataset.RequestItem requestItem) {

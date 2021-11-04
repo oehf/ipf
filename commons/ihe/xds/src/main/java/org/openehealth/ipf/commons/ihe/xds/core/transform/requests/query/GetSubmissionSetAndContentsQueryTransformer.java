@@ -44,7 +44,7 @@ public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodes
         }
 
         super.toEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
@@ -56,7 +56,7 @@ public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodes
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

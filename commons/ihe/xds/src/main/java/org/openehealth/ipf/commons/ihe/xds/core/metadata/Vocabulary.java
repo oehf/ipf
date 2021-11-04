@@ -23,26 +23,6 @@ public abstract class Vocabulary {
     private Vocabulary() {
         throw new UnsupportedOperationException("Cannot be instantiated");
     }
-    
-    /**
-     * XDSDocumentEntry objectType for Stable Document Entries
-     * @deprecated use {@link DocumentEntryType#STABLE}.
-     */
-    @Deprecated
-    public static final String STABLE_DOC_ENTRY = DocumentEntryType.STABLE.getUuid();
-    /**
-     * XDSDocumentEntry classification node.
-     * @deprecated by IHE CP-ITI-544.  Please use {@link #STABLE_DOC_ENTRY} instead.
-     */
-    @Deprecated
-    public static final String DOC_ENTRY_CLASS_NODE = STABLE_DOC_ENTRY;
-    /**
-     * XDSDocumentEntry objectType for On-Demand Document Entries
-     * @deprecated use {@link DocumentEntryType#ON_DEMAND}.
-     */
-    @Deprecated
-    public static final String ON_DEMAND_DOC_ENTRY = DocumentEntryType.ON_DEMAND.getUuid();
-
 
     public enum DisplayNameUsage {REQUIRED, OPTIONAL}
     public enum NodeRepresentationUsage {REQUIRED, PROHIBITED}

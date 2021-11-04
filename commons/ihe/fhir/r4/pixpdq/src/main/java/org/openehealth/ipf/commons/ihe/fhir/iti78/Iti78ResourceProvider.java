@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
- * Resource Provider for PDQm (ITI-78) for DSTU2
+ * Resource Provider for PDQm (ITI-78) for R4
  *
  * @author Christian Ohr
  * @since 3.6
@@ -86,7 +86,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Iti78SearchParameters searchParameters = Iti78SearchParameters.builder()
+        var searchParameters = Iti78SearchParameters.builder()
                 .identifiers(identifiers)
                 .active(active)
                 .family(family)

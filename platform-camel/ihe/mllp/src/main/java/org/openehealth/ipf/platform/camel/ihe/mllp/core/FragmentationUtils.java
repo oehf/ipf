@@ -32,9 +32,9 @@ public class FragmentationUtils {
      */
     public static List<String> splitString(String s, char c) {
         List<String> result = new ArrayList<>();
-        int startPos = 0;
+        var startPos = 0;
         while (true) {
-            int pos = s.indexOf(c, startPos);
+            var pos = s.indexOf(c, startPos);
             if (pos == -1) {
                 break;
             }
@@ -42,7 +42,7 @@ public class FragmentationUtils {
             startPos = pos + 1;
         }
         if (startPos != s.length()) {
-            result.add(s.substring(startPos, s.length()));
+            result.add(s.substring(startPos));
         }
         return result;
     }
@@ -70,11 +70,11 @@ public class FragmentationUtils {
         if (maxLength <= 4) {
             throw new IllegalArgumentException("maximal length must be greater than 4");
         }
-        List<String> segments = splitString(message, '\r');
+        var segments = splitString(message, '\r');
 
         // check whether we have to do anything
-        boolean needProcess = false;
-        for (String segment : segments) {
+        var needProcess = false;
+        for (var segment : segments) {
             if (segment.length() > maxLength) {
                 needProcess = true;
                 break;
@@ -85,10 +85,10 @@ public class FragmentationUtils {
         }
 
         // process segments
-        StringBuilder sb = new StringBuilder();
-        String prefix = "ADD" + message.charAt(3);
-        int restLength = maxLength - prefix.length();
-        for (String segment : segments) {
+        var sb = new StringBuilder();
+        var prefix = "ADD" + message.charAt(3);
+        var restLength = maxLength - prefix.length();
+        for (var segment : segments) {
             // short segment
             if (segment.length() <= maxLength) {
                 sb.append(segment).append('\r');
@@ -96,12 +96,12 @@ public class FragmentationUtils {
             }
 
             // first part of the long segment
-            sb.append(segment.substring(0, maxLength)).append('\r');
+            sb.append(segment, 0, maxLength).append('\r');
             // parts 2..n-1 of the long segment
             int startPos;
             for (startPos = maxLength; startPos + restLength <= segment.length(); startPos += restLength) {
                 sb.append(prefix)
-                  .append(segment.substring(startPos, startPos + restLength))
+                  .append(segment, startPos, startPos + restLength)
                   .append('\r');
             }
             // part n of the long segment
@@ -117,10 +117,10 @@ public class FragmentationUtils {
      * Appends a split segment to the given StringBuilder.
      */
     public static void appendSplitSegment(StringBuilder sb, List<String> fields, char fieldSeparator) {
-        for (String field : fields) {
+        for (var field : fields) {
             sb.append(field).append(fieldSeparator);
         }
-        for (int len = sb.length(); sb.charAt(--len) == fieldSeparator; ) {
+        for (var len = sb.length(); sb.charAt(--len) == fieldSeparator; ) {
             sb.setLength(len);
         }
         sb.append('\r');
@@ -131,7 +131,7 @@ public class FragmentationUtils {
      * Appends segments from startIndex to endIndex-1 to the given StringBuilder.
      */
     public static void appendSegments(StringBuilder sb, List<String> segments, int startIndex, int endIndex) {
-        for (int i = startIndex; i < endIndex; ++i) {
+        for (var i = startIndex; i < endIndex; ++i) {
             sb.append(segments.get(i)).append('\r');
         }
     }
@@ -141,7 +141,7 @@ public class FragmentationUtils {
      * Joins segments from startIndex to endIndex-1.
      */
     public static CharSequence joinSegments(List<String> segments, int startIndex, int endIndex) {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         appendSegments(sb, segments, startIndex, endIndex);
         return sb;
     }
@@ -151,8 +151,8 @@ public class FragmentationUtils {
      * Creates a single key string from the given key pieces.
      */
     public static String keyString(String... pieces) {
-        StringBuilder sb = new StringBuilder(pieces[0]);
-        for (int i = 1; i < pieces.length; ++i) {
+        var sb = new StringBuilder(pieces[0]);
+        for (var i = 1; i < pieces.length; ++i) {
             sb.append('\0').append(pieces[i]);
         }
         return sb.toString();

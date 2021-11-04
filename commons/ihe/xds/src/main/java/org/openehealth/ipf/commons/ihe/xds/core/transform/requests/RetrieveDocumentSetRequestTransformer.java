@@ -49,7 +49,7 @@ public class RetrieveDocumentSetRequestTransformer {
             return null;
         }
 
-        EbXMLNonconstructiveDocumentSetRequest ebXML = factory.createRetrieveDocumentSetRequest();
+        var ebXML = factory.createRetrieveDocumentSetRequest();
         ebXML.setDocuments(request.getDocuments());
         return ebXML;
     }
@@ -65,7 +65,7 @@ public class RetrieveDocumentSetRequestTransformer {
             return null;
         }
 
-        RetrieveDocumentSet request = new RetrieveDocumentSet();
+        var request = new RetrieveDocumentSet();
         request.getDocuments().addAll(ebXML.getDocuments());
         return request;
     }

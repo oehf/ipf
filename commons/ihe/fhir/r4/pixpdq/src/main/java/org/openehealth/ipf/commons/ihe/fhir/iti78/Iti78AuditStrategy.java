@@ -53,9 +53,9 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        FhirQueryAuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+        var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         if (request instanceof IdType) {
-            IdType idType = (IdType) request;
+            var idType = (IdType) request;
             dataset.getPatientIds().add(idType.getValue());
         }
         return dataset;
@@ -63,7 +63,7 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
+        var result = super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         if (auditContext.isIncludeParticipantsFromResponse()) {
             // NOT in CX format....
             /*

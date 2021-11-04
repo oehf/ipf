@@ -19,11 +19,13 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Consumer interface of FHIR requests. Plain providers or resource providers forward the
@@ -48,7 +50,7 @@ import java.util.Map;
  * @since 3.1
  */
 
-public interface RequestConsumer {
+public interface RequestConsumer extends Predicate<RequestDetails> {
 
     /**
      * @return the FhirContext used by this consumer
@@ -58,10 +60,11 @@ public interface RequestConsumer {
     /**
      * Returns true if this RequestConsumer can handle the provided FHIR payload
      *
-     * @param payload FHIR payload
-     * @return true if this RequestConsumer can handle the provided FHIR payload, false otherwise
+     * @param requestDetails FHIR requestDetails
+     * @return true if this RequestConsumer can handle the provided FHIR request, false otherwise
      */
-    default boolean test(Object payload) {
+    @Override
+    default boolean test(RequestDetails requestDetails) {
         return true;
     }
 

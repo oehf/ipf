@@ -73,14 +73,14 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
 
             if (returnError) throw new InternalErrorException("Something went wrong");
 
-            Bundle requestBundle = exchange.getIn().getBody(Bundle.class);
+            var requestBundle = exchange.getIn().getBody(Bundle.class);
 
-            Bundle responseBundle = new Bundle()
+            var responseBundle = new Bundle()
                     .setType(Bundle.BundleType.TRANSACTIONRESPONSE)
                     .setTotal(requestBundle.getTotal());
 
-            for (Bundle.BundleEntryComponent requestEntry : requestBundle.getEntry()) {
-                Bundle.BundleEntryResponseComponent response = new Bundle.BundleEntryResponseComponent()
+            for (var requestEntry : requestBundle.getEntry()) {
+                var response = new Bundle.BundleEntryResponseComponent()
                         .setStatus("201 Created")
                         .setLastModified(new Date())
                         .setLocation(requestEntry.getResource().getClass().getSimpleName() + "/" + 4711);

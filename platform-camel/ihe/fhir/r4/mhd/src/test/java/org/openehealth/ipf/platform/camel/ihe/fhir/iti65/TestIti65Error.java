@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import javax.servlet.ServletException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -30,18 +29,21 @@ public class TestIti65Error extends AbstractTestIti65 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-65-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InternalErrorException.class)
-    public void testSendManuallyReturningError() throws Exception {
-        try {
-            sendManually(provideAndRegister());
-        } catch (InternalErrorException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
-        }
+    @Test
+    public void testSendManuallyReturningError() {
+        Assertions.assertThrows(InternalErrorException.class, () -> {
+            try {
+                sendManually(provideAndRegister());
+            } catch (InternalErrorException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
+            }
+        });
+
 
     }
 

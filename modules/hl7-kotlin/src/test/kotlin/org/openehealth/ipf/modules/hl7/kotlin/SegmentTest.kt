@@ -24,8 +24,8 @@ import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v22.segment.NK1
 import ca.uhn.hl7v2.parser.EncodingCharacters
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 /**
  * @author Christian Ohr

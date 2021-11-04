@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.ResourceType;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -33,7 +33,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-78-paging.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
@@ -43,7 +43,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
     @Test
     public void testSendManualPdqmWithCount() {
 
-        Bundle page1 = sendManuallyWithCount(familyParameters(), 2);
+        var page1 = sendManuallyWithCount(familyParameters(), 2);
 
         assertEquals(Bundle.BundleType.SEARCHSET, page1.getType());
         assertEquals(ResourceType.Bundle, page1.getResourceType());
@@ -51,12 +51,11 @@ public class TestIti78Paging extends AbstractTestIti78 {
         assertEquals(3, page1.getTotal());
         assertEquals(2, page1.getEntry().size());
 
-        Bundle page2 = nextPage(page1);
+        var page2 = nextPage(page1);
         assertEquals(Bundle.BundleType.SEARCHSET, page2.getType());
         assertEquals(ResourceType.Bundle, page2.getResourceType());
         assertTrue(page2.hasEntry());
         assertEquals(3, page2.getTotal());
         assertEquals(1, page2.getEntry().size());
-
     }
 }

@@ -37,7 +37,7 @@ public enum Hl7v3ParticipantObjectIdTypeCode implements ParticipantObjectIdType,
     QueryExistingData("PCC-1", "Query Existing Data");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private final ParticipantObjectIdType value;
 
     Hl7v3ParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

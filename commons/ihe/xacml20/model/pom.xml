@@ -4,19 +4,38 @@
     <artifactId>ipf-commons-ihe-xacml20-model</artifactId>
     <name>ipf-commons-ihe-xacml20-model</name>
     <description>Support for XACML 2.0-based integration profiles: data types</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe-xacml20</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>${jaxb-plugin-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-jxc</artifactId>
+                        <version>${jaxb-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-runtime</artifactId>
+                        <version>${jaxb-version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>process-classes</phase>
@@ -27,7 +46,7 @@
                 </executions>
                 <configuration>
                     <sources>
-                        <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/Dummy.java</source>
+                        <source>src/main/java/org/openehealth/ipf/commons/ihe/xacml20/model/CodeFirstSchema.java</source>
                     </sources>
                     <clearOutputDir>false</clearOutputDir>
                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
@@ -49,12 +68,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

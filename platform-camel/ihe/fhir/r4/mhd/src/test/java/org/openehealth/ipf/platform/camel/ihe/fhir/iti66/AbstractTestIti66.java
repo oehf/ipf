@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 abstract class AbstractTestIti66 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor) {
-        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.R4);
+        var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
@@ -41,14 +41,27 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
                 .systemAndIdentifier("urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1", "1");
     }
 
+    protected ICriterion<?> statusParameter() {
+        return new TokenClientParam("status").exactly().code("active");
+    }
+
     protected ICriterion<?> manifestPatientReferenceParameter() {
         return new ReferenceClientParam("patient").hasId("http://fhirserver.org/Patient/1");
     }
 
-    protected Bundle sendManually(ICriterion<?> requestData) {
-        return client.search()
-                .forResource(DocumentManifest.class)
-                .where(requestData)
+    protected Bundle sendManually(ICriterion<?>... requestData) {
+        var query = client.search()
+                .forResource(DocumentManifest.class);
+
+        if (requestData != null && requestData.length > 0) {
+            query = query.where(requestData[0]);
+            if (requestData.length > 1) {
+                for (int i = 1; i < requestData.length; i++) {
+                    query = query.and(requestData[i]);
+                }
+            }
+        }
+        return query
                 .returnBundle(Bundle.class)
                 .encodedXml()
                 .execute();

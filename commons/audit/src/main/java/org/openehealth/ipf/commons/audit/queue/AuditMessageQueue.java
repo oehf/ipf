@@ -27,11 +27,15 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
  */
 public interface AuditMessageQueue {
 
+    String X_IPF_ATNA_TIMESTAMP = "X_IPF_ATNA_Timestamp";
+    String X_IPF_ATNA_HOSTNAME = "X_IPF_ATNA_Hostname";
+    String X_IPF_ATNA_PROCESSID = "X_IPF_ATNA_ProcessID";
+    String X_IPF_ATNA_APPLICATION = "X_IPF_ATNA_Application";
+
     /**
      *
-     * @param auditContext
-     * @param auditMessages
-     * @throws Exception
+     * @param auditContext IPF audit context
+     * @param auditMessages one or more audit message instances
      */
     void audit(AuditContext auditContext, AuditMessage... auditMessages);
 

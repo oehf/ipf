@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.audit.marshal.dicom;
 import org.jdom2.Element;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
+import static org.openehealth.ipf.commons.audit.XMLNames.AUDIT_SOURCE_TYPE_CODE;
+
 /**
  * CP 1638: Unify encoding of code values in DICOM audit message
  * http://dicom.nema.org/Dicom/News/November2016/docs/cpack90/cp1638.pdf
@@ -29,7 +31,7 @@ public class DICOM2017c extends DICOM2016c {
 
     @Override
     protected Element auditSourceType(AuditSource auditSourceType) {
-        return codedValueType("AuditSourceTypeCode", auditSourceType);
+        return codedValueType(AUDIT_SOURCE_TYPE_CODE, auditSourceType);
     }
 
 }

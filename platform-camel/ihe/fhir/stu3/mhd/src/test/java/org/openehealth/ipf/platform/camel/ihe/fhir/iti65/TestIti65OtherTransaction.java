@@ -16,14 +16,12 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test for sending a different transaction request that is handled by
@@ -33,7 +31,7 @@ public class TestIti65OtherTransaction extends AbstractTestIti65 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }

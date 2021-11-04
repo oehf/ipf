@@ -49,6 +49,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -56,7 +57,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromStringList(uuidParam, query.getUuids());
 
         toEbXML(query, slots);
@@ -71,14 +72,15 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
-   public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
+   @Override
+public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+       var slots = new QuerySlotHelper(ebXML);
         query.setUuids(slots.toStringList(uuidParam));
 
         fromEbXML(query, slots);

@@ -6,12 +6,12 @@
     <name>ipf-tutorials</name>
     <packaging>pom</packaging>
     <description>IPF Tutorials</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -34,9 +34,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <!-- 
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <!--
                 This scope is only needed to run load tests
                 (using JUnit test classes) as normal Java
                 programs. Otherwise set scope to 'test'.

@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.camel.ExchangePattern;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -29,7 +29,7 @@ public class RendererRouteTest extends AbstractRouteTest {
 
     @Test
     public void testRenderer() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:renderer-test",
+        var result = (String) producerTemplate.sendBody("direct:renderer-test",
                 ExchangePattern.InOut, "input");
         assertEquals("rendered: input", result);
     }

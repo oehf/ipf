@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T14:17:28.705Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-47" codeSystemName="IHE Transactions" originalText="Patient Demographics Query"/>
+    <EventOutcomeDescription/>
+  </EventIdentification>
+  <ActiveParticipant UserID="unknown" UserIsRequestor="true" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="https://localhost:8444/mpi/ws/iti47Service" AlternativeUserID="14756" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="EHR_2019" AuditSourceID="EHR_2019">
+    <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="35423@1.2.840.114350.1.13.0.1.7.1.1" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-47" codeSystemName="IHE Transactions" originalText="Patient Demographics Query"/>
+    <ParticipantObjectQuery>PHF1ZXJ5QnlQYXJhbWV0ZXI+CiAgPHF1ZXJ5SWQgZXh0ZW5zaW9uPSIxODQwOTk3MDg0IiByb290PSIxLjIuODQwLjExNDM1MC4xLjEzLjI4LjEuMTguNS45OTkiIC8+CiAgPHN0YXR1c0NvZGUgY29kZT0ibmV3IiAvPgogIDxyZXNwb25zZU1vZGFsaXR5Q29kZSBjb2RlPSJSIiAvPgogIDxyZXNwb25zZVByaW9yaXR5Q29kZSBjb2RlPSJJIiAvPgogIDxwYXJhbWV0ZXJMaXN0PgogICAgPGxpdmluZ1N1YmplY3ROYW1lPgogICAgICA8dmFsdWU+CiAgICAgICAgPGZhbWlseT5YUElEPC9mYW1pbHk+CiAgICAgIDwvdmFsdWU+CiAgICAgIDxzZW1hbnRpY3NUZXh0PkxpdmluZ1N1YmplY3QubmFtZTwvc2VtYW50aWNzVGV4dD4KICAgIDwvbGl2aW5nU3ViamVjdE5hbWU+CiAgPC9wYXJhbWV0ZXJMaXN0Pgo8L3F1ZXJ5QnlQYXJhbWV0ZXI+</ParticipantObjectQuery>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHERED-2340^^^IHERED&amp;1.3.6.1.4.1.21367.13.20.1000&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEGREEN-2340^^^IHEGREEN&amp;1.3.6.1.4.1.21367.13.20.2000&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEBLUE-2340^^^IHEBLUE&amp;1.3.6.1.4.1.21367.13.20.3000&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEBLUE-2342^^^IHEBLUE&amp;1.3.6.1.4.1.21367.13.20.3000&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEFACILITY-2340^^^IHEFACILITY&amp;1.3.6.1.4.1.21367.3000.1.6&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="IHEFACILITY-2342^^^IHEFACILITY&amp;1.3.6.1.4.1.21367.3000.1.6&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+</AuditMessage>

@@ -36,7 +36,7 @@ public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
@@ -45,14 +45,15 @@ public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends
     }
 
 
+    @Override
     public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
+        var slots = new QuerySlotHelper(ebXML);
+        var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));

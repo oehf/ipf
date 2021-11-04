@@ -48,7 +48,7 @@
     <ipf:globalContext id="globalContext"/>
 
     <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="jmxAgent" createConnector="false"/>
+        <camel:jmxAgent id="jmxAgent"/>
         <camel:route>
             <camel:from uri="xds-iti42:xds-iti42?features=#policyFeature&amp;audit=false"/>
             <camel:to uri="log:worked"/>

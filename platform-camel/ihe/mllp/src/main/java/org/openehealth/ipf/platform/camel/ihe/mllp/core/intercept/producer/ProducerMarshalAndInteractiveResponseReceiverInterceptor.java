@@ -31,8 +31,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
@@ -60,7 +58,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
     @Override
     public void process(Exchange exchange) throws Exception {
         Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
-        Message request = exchange.getIn().getBody(Message.class);
+        var request = exchange.getIn().getBody(Message.class);
         
         Terser requestTerser = null;
         String responseString = null;
@@ -71,7 +69,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         //     1. It must be allowed for the endpoint.
         //     2. It must be allowed for the given request message type.
         //     3. The user must not have already filled the DSC segment.
-        boolean supportContinuations = false;
+        var supportContinuations = false;
         if (getEndpoint().isSupportInteractiveContinuation()) {
             requestTerser = new Terser(request);
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
@@ -81,9 +79,9 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         }
         
         // communication with optional continuation handling
-        boolean mustSend = true;
-        int fragmentsCount = 0;
-        int recordsCount = 0;
+        var mustSend = true;
+        var fragmentsCount = 0;
+        var recordsCount = 0;
         String continuationPointer; 
         while (mustSend) {
             mustSend = false;
@@ -95,11 +93,11 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
 
             // continuations handling 
             if (supportContinuations) {
-                List<String> segments = splitString(responseString, '\r');
+                var segments = splitString(responseString, '\r');
 
                 // analyse whether this fragment is a positive response
-                boolean positiveResponse = false;
-                for (String segment : segments) {
+                var positiveResponse = false;
+                for (var segment : segments) {
                     if (segment.startsWith("MSA")) {
                         positiveResponse = (segment.length() >= 7) && (segment.charAt(5) == 'A');
                         break;
@@ -115,7 +113,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
 
                 // analyse whether we should request the next fragment   
                 if (segments.get(segments.size() - 1).startsWith("DSC")) {
-                    List<String> dscFields = splitString(segments.get(segments.size() - 1), responseString.charAt(3));
+                    var dscFields = splitString(segments.get(segments.size() - 1), responseString.charAt(3));
                     
                     if ((dscFields.size() >= 3)
                             && "I".equals(dscFields.get(2))
@@ -135,9 +133,9 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
                 //      - header segments from the first one,
                 //      - data records from all
                 //      - footer segments from the last one
-                int startDataSegmentIndex = -1;
-                int startFooterSegmentIndex = segments.size();
-                for (int i = 1; i < segments.size(); ++i) {
+                var startDataSegmentIndex = -1;
+                var startFooterSegmentIndex = segments.size();
+                for (var i = 1; i < segments.size(); ++i) {
                     if(config.isDataStartSegment(segments, i)) {
                         ++recordsCount;
                         if (startDataSegmentIndex == -1) {
@@ -173,7 +171,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
             // All errors will be ignored
             if (getEndpoint().isAutoCancel()) {
                 try {
-                    String cancel = createCancelMessage(request, config.getParser());
+                    var cancel = createCancelMessage(request, config.getParser());
                     exchange.getIn().setBody(cancel);
                     getWrappedProcessor().process(exchange);
                 } catch (Exception e) {
@@ -183,10 +181,10 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         }
 
         // unmarshal and return
-        Message rsp = config.getParser().parse(responseString);
+        var rsp = config.getParser().parse(responseString);
         if (recordsCount != 0) {
-            Terser responseTerser = new Terser(rsp);
-            String recordsCountString = Integer.toString(recordsCount);
+            var responseTerser = new Terser(rsp);
+            var recordsCountString = Integer.toString(recordsCount);
             responseTerser.set("QAK-4", recordsCountString);
             responseTerser.set("QAK-5", recordsCountString);
             responseTerser.set("QAK-6", "0");
@@ -203,7 +201,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
      * a <tt>QCN^J01</tt> message will be created.
      * See paragraph 5.6.3 in HL7 v2.5 specification.
      */
-    private static String createCancelMessage(Message request, Parser parser) throws HL7Exception {
+    public static String createCancelMessage(Message request, Parser parser) throws HL7Exception {
         return (request.getVersion().charAt(2) < '4') ?
             createCnqMessage(request, parser) :
             createQcnJ01Message(request, parser);
@@ -214,15 +212,15 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         Message cancel = new QCN_J01();
 
         // ===== Segment MSH =====
-        Segment requestMsh = (Segment) request.get("MSH");
-        Segment cancelMsh = (Segment) cancel.get("MSH");
+        var requestMsh = (Segment) request.get("MSH");
+        var cancelMsh = (Segment) cancel.get("MSH");
 
         Terser.set(cancelMsh, 1, 0, 1, 1, Terser.get(requestMsh, 1, 0, 1, 1));
         Terser.set(cancelMsh, 2, 0, 1, 1, Terser.get(requestMsh, 2, 0, 1, 1));
 
         // sender & receiver
-        for (int field = 3; field <= 6; ++field) {
-            for (int component = 1; component <= 3; ++component) {
+        for (var field = 3; field <= 6; ++field) {
+            for (var component = 1; component <= 3; ++component) {
                Terser.set(cancelMsh,  field, 0, component, 1,
                Terser.get(requestMsh, field, 0, component, 1));
             }
@@ -235,20 +233,20 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         Terser.set(cancelMsh, 11, 0, 1, 1, "P");
 
         // version
-        for (int component = 1; component <= 3; ++component) {
+        for (var component = 1; component <= 3; ++component) {
            Terser.set(cancelMsh,  12, 0, component, 1,
            Terser.get(requestMsh, 12, 0, component, 1));
         }
 
         // ===== Segment QID =====
-        Segment requestQpd = (Segment) request.get("QPD");
-        Segment cancelQid = (Segment) cancel.get("QID");
+        var requestQpd = (Segment) request.get("QPD");
+        var cancelQid = (Segment) cancel.get("QID");
 
         // query tag: QPD-2 --> QID-1
         Terser.set(cancelQid, 1, 0, 1, 1, Terser.get(requestQpd, 2, 0, 1, 1));
 
         // message query name: QPD-1 --> QID-2, 6 components
-        for (int component = 1; component <= 6; ++component) {
+        for (var component = 1; component <= 6; ++component) {
             Terser.set(cancelQid,  2, 0, component, 1,
             Terser.get(requestQpd, 1, 0, component, 1));
         }
@@ -259,8 +257,8 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
 
 
     private static String createCnqMessage(Message request, Parser parser) throws HL7Exception {
-        Message cancel = parser.parse(parser.encode(request));
-        Segment cancelMsh = (Segment) cancel.get("MSH");
+        var cancel = parser.parse(parser.encode(request));
+        var cancelMsh = (Segment) cancel.get("MSH");
 
         Terser.set(cancelMsh,  7, 0, 1, 1, MessageUtils.hl7Now());
         Terser.set(cancelMsh,  9, 0, 2, 1, "CNQ");

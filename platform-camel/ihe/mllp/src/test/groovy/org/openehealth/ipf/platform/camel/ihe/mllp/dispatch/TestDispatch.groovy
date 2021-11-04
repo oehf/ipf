@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
-import org.apache.camel.impl.DefaultExchange
-import org.junit.Test
+import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 /**

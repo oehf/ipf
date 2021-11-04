@@ -36,6 +36,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -43,8 +44,8 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
+        var slots = new QuerySlotHelper(ebXML);
+
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
         slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, toHL7(query.getCreationTime().getFrom()));
@@ -74,6 +75,7 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -81,8 +83,8 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
+        var slots = new QuerySlotHelper(ebXML);
+
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));

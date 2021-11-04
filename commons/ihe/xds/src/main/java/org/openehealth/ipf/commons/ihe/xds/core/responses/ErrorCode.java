@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "ErrorCode")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum ErrorCode {
 
     /* ----- codes from IHE ITI TF, Revision 7.0, Vol. 3, Table 4.1-11 ----- */
@@ -224,7 +224,7 @@ public enum ErrorCode {
             return null;
         }
         
-        for (ErrorCode code : values()) {
+        for (var code : values()) {
             if (opcode.equals(code.getOpcode())) {
                 return code;
             }

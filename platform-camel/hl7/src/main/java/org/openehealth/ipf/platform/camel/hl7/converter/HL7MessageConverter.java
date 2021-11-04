@@ -77,12 +77,12 @@ public class HL7MessageConverter implements MessageConverter {
     @Override
     public Object fromMessage(Message message) throws JMSException, MessageConversionException {
         if (message instanceof ObjectMessage) {
-            ca.uhn.hl7v2.model.Message msg = (ca.uhn.hl7v2.model.Message) ((ObjectMessage) message).getObject();
+            var msg = (ca.uhn.hl7v2.model.Message) ((ObjectMessage) message).getObject();
             msg.setParser(hapiContext.getGenericParser());
             return msg;
         }
         if (message instanceof TextMessage) {
-            String msg = ((TextMessage) message).getText();
+            var msg = ((TextMessage) message).getText();
             try {
                 return hapiContext.getGenericParser().parse(msg);
             } catch (HL7Exception e) {

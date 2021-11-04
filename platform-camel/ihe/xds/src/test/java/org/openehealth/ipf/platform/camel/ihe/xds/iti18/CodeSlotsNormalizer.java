@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class CodeSlotsNormalizer {
     private static List<String> getSlotValues(SlotType1 slot) {
         List<String> result = new ArrayList<>();
         if ((slot != null) && (slot.getValueList() != null)) {
-            for (String values : slot.getValueList().getValue()) {
+            for (var values : slot.getValueList().getValue()) {
                 result.addAll(QuerySlotHelper.decodeStringList(values));
             }
         }
@@ -50,15 +49,15 @@ public class CodeSlotsNormalizer {
      *      created by adding a suffix "Scheme" to this value.
      */
     public static void normalizeCodeSlots(AdhocQueryRequest adhocQueryRequest, String codeSlotName) {
-        final String schemeSlotName = codeSlotName + "Scheme";
+        final var schemeSlotName = codeSlotName + "Scheme";
 
         List<SlotType1> codeSlots = new ArrayList<>();
         List<SlotType1> schemeSlots = new ArrayList<>();
 
         // collect code and code scheme slots, remove the latter from the query
-        Iterator<SlotType1> iterator = adhocQueryRequest.getAdhocQuery().getSlot().iterator();
+        var iterator = adhocQueryRequest.getAdhocQuery().getSlot().iterator();
         while (iterator.hasNext()) {
-            SlotType1 slot = iterator.next();
+            var slot = iterator.next();
             if (codeSlotName.equals(slot.getName())) {
                 codeSlots.add(slot);
             }
@@ -79,12 +78,12 @@ public class CodeSlotsNormalizer {
         }
 
         // combine slots pairwise
-        for (int i = 0; i < codeSlots.size(); ++i) {
-            SlotType1 codeSlot = codeSlots.get(i);
-            SlotType1 schemeSlot = schemeSlots.get(i);
+        for (var i = 0; i < codeSlots.size(); ++i) {
+            var codeSlot = codeSlots.get(i);
+            var schemeSlot = schemeSlots.get(i);
 
-            List<String> codeValues = getSlotValues(codeSlot);
-            List<String> schemeValues = getSlotValues(schemeSlot);
+            var codeValues = getSlotValues(codeSlot);
+            var schemeValues = getSlotValues(schemeSlot);
 
             // check equality of value counts
             if (codeValues.size() != schemeValues.size()) {
@@ -98,8 +97,8 @@ public class CodeSlotsNormalizer {
             }
 
             // create lists of HL7 v2 code representations
-            StringBuilder sb = new StringBuilder("(");
-            for (int j = 0; j < codeValues.size(); ++j) {
+            var sb = new StringBuilder("(");
+            for (var j = 0; j < codeValues.size(); ++j) {
                 sb.append('\'')
                   .append(codeValues.get(j).replace("'", "''"))
                   .append("^^")

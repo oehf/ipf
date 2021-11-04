@@ -1,0 +1,88 @@
+/*
+ * Copyright 2018 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package org.openehealth.ipf.platform.camel.ihe.fhir.test;
+
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.EncodingEnum;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import org.hl7.fhir.dstu3.model.CapabilityStatement;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ *
+ */
+public class FhirTestContainer extends StandardTestContainer {
+
+    protected static IGenericClient client;
+    protected static FhirContext context;
+
+    protected static IGenericClient startClient(String base) {
+        context = FhirContext.forDstu3();
+        context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
+        client = context.newRestfulGenericClient(base);
+        return client;
+    }
+
+    public void assertConformance(String type) {
+        var conf = client.capabilities().ofType(CapabilityStatement.class).execute();
+        assertEquals(1, conf.getRest().size());
+        var component = conf.getRest().iterator().next();
+        assertTrue(component.getResource().stream()
+                .map(CapabilityStatement.CapabilityStatementRestResourceComponent::getType)
+                .anyMatch(type::equals));
+    }
+
+    protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {
+        // Check ATNA Audit
+        var sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        var event = sender.getMessages().get(0);
+        assertEquals(
+                EventOutcomeIndicator.MajorFailure,
+                event.getEventIdentification().getEventOutcomeIndicator());
+        assertAndRethrowException(e, issueType);
+    }
+
+    protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
+        // Hmm, I wonder if this could not be done automatically...
+        var parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
+        var oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
+        assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
+        assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
+
+        // Check ATNA Audit
+        var sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        var event = sender.getMessages().get(0);
+        assertEquals(EventOutcomeIndicator.MajorFailure,
+                event.getEventIdentification().getEventOutcomeIndicator());
+
+        throw e;
+    }
+
+    // For quickly checking output
+    protected void printAsXML(IBaseResource resource) {
+        System.out.println(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
+    }
+}

@@ -38,7 +38,7 @@ public class ConsumerTracingInterceptor extends InterceptorSupport<HL7v2Endpoint
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Message msg = exchange.getIn().getMandatoryBody(Message.class);
+        var msg = exchange.getIn().getMandatoryBody(Message.class);
         messageTracer.receiveMessage(msg, getEndpoint().getEndpointUri(), (message, span) ->
                 getWrappedProcessor().process(exchange));
     }

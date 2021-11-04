@@ -30,7 +30,7 @@ public interface Registry {
      * 
      * @since 2.5
      */
-    public Object bean(String name);
+    Object bean(String name);
 
     /**
      * @param requiredType bean type
@@ -38,7 +38,7 @@ public interface Registry {
      * 
      * @since 2.5
      */
-    public <T> T bean(Class<T> requiredType);
+    <T> T bean(Class<T> requiredType);
     
     /**
      * @param requiredType bean type
@@ -46,6 +46,6 @@ public interface Registry {
      * 
      * @since 2.5
      */
-    public <T> Map<String, T> beans(Class <T> requiredType);
+    <T> Map<String, T> beans(Class<T> requiredType);
     
 }

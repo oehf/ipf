@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.dstu3.model.DocumentManifest;
-import org.hl7.fhir.dstu3.model.Reference;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 /**
@@ -38,7 +37,7 @@ public class Iti65AuditDataset extends FhirAuditDataset {
 
 
     public void enrichDatasetFromDocumentManifest(DocumentManifest documentManifest) {
-        Reference reference = documentManifest.getSubject();
+        var reference = documentManifest.getSubject();
         getPatientIds().add(reference.getResource() != null ?
                 reference.getResource().getIdElement().getValue() :
                 reference.getReference());

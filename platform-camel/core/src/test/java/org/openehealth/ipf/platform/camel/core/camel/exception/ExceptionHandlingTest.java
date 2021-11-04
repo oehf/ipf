@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.core.camel.exception;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.camel.TestSupport;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -33,19 +33,19 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = {"/context-camel-exception.xml"})
 public class ExceptionHandlingTest extends TestSupport {
 
-    @EndpointInject(uri="mock:success")
+    @EndpointInject(value="mock:success")
     private MockEndpoint success;
     
-    @EndpointInject(uri="mock:error1")
+    @EndpointInject(value="mock:error1")
     private MockEndpoint error1;
     
-    @EndpointInject(uri="mock:error2")
+    @EndpointInject(value="mock:error2")
     private MockEndpoint error2;
     
-    @EndpointInject(uri="mock:error3")
+    @EndpointInject(value="mock:error3")
     private MockEndpoint error3;
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         success.reset();
         error1.reset();

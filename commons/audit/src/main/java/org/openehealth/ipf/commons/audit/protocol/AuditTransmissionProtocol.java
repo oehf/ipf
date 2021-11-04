@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 
 /**
  * Implementations of this interface transmit the serialized {@link org.openehealth.ipf.commons.audit.model.AuditMessage AuditMessage}
@@ -29,7 +30,7 @@ public interface AuditTransmissionProtocol {
 
     String JAVAX_NET_DEBUG = "javax.net.debug";
     String JAVAX_NET_SSL_TRUSTSTORE = "javax.net.ssl.trustStore";
-    String JAVAX_NET_SSL_TRUSTSTORE_TYPE = "javax.net.ssl.trustStoretype";
+    String JAVAX_NET_SSL_TRUSTSTORE_TYPE = "javax.net.ssl.trustStoreType";
     String JAVAX_NET_SSL_TRUSTSTORE_PASSWORD = "javax.net.ssl.trustStorePassword";
     String JAVAX_NET_SSL_KEYSTORE = "javax.net.ssl.keyStore";
     String JAVAX_NET_SSL_KEYSTORE_TYPE = "javax.net.ssl.keyStoreType";
@@ -37,17 +38,30 @@ public interface AuditTransmissionProtocol {
     String HTTPS_CIPHERSUITES = "https.ciphersuites";
     String JDK_TLS_CLIENT_PROTOCOLS = "jdk.tls.client.protocols";
 
+
     /**
      * Transmits the message
      *
      * @param auditContext audit context that e.g. contains the destination
-     * @param auditMessages audit message strings
+     * @param auditMessage audit message
      * @throws Exception thrown if sending the messages has failed
      */
-    void send(AuditContext auditContext, String... auditMessages) throws Exception;
+    default void send(AuditContext auditContext, String auditMessage) throws Exception {
+        send(auditContext, auditContext.getAuditMetadataProvider(), auditMessage);
+    }
 
     /**
-     * May be imüplemented to clean up instances on shut down
+     * Transmits the message
+     *
+     * @param auditContext audit context that e.g. contains the destination
+     * @param auditMetadataProvider dedicated (message-specific) audit metadata
+     * @param auditMessage audit message strings
+     * @throws Exception thrown if sending the messages has failed
+     */
+    void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception;
+
+    /**
+     * May be implemented to clean up instances on shut down
      */
     void shutdown();
 

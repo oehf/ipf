@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.springframework.test.context.ContextConfiguration;
-import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Christian Ohr
@@ -37,7 +38,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private String cdaExample = "/message/SampleCDADocument.xml";
     private String ccdExample = "/message/SampleCCDDocument.xml";
 
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
     
@@ -64,7 +65,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testMarshalCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        ClinicalDocument message = inputMessage(file);
+        var message = inputMessage(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, message);
         mockOutput.assertIsSatisfied();
@@ -74,7 +75,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testUnmarshalCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();
@@ -84,7 +85,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     private void testValidateCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();

@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-import org.openehealth.ipf.platform.camel.core.process.splitter.SplitIndex;
-import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 /**
@@ -28,34 +28,34 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
 public class SplitIndexTest {
     @Test
     public void testValueOf() {
-        SplitIndex index = SplitIndex.valueOf(14, true);
+        var index = SplitIndex.valueOf(14, true);
         assertEquals(14, index.getIndex());
         assertEquals(true, index.isLast());
     }
     
     @Test
     public void testEquals() {
-        SplitIndex index1a = SplitIndex.valueOf(4, false);
-        SplitIndex index1b = SplitIndex.valueOf(4, false);
-        SplitIndex index2 = SplitIndex.valueOf(5, false);
-        SplitIndex index3 = SplitIndex.valueOf(4, true);
+        var index1a = SplitIndex.valueOf(4, false);
+        var index1b = SplitIndex.valueOf(4, false);
+        var index2 = SplitIndex.valueOf(5, false);
+        var index3 = SplitIndex.valueOf(4, true);
         
-        assertTrue("Should be equal", index1a.equals(index1b));
-        assertFalse("Should not be equal", index1a.equals(index2));
-        assertFalse("Should not be equal", index1a.equals(index3));
+        assertTrue(index1a.equals(index1b), "Should be equal");
+        assertFalse(index1a.equals(index2), "Should not be equal");
+        assertFalse(index1a.equals(index3), "Should not be equal");
         
-        assertFalse("Null is never equal", index1a.equals(null));
-        assertFalse("Unrelated class is never equal", index1a.equals(this));
+        assertFalse(index1a.equals(null), "Null is never equal");
+        assertFalse(index1a.equals(this), "Unrelated class is never equal");
         
-        assertTrue("Same instances should be equal", index1a.equals(index1a));
+        assertTrue(index1a.equals(index1a), "Same instances should be equal");
     }
     
     @Test
     public void testHashCode() {
-        SplitIndex index1a = SplitIndex.valueOf(4, false);
-        SplitIndex index1b = SplitIndex.valueOf(4, false);
-        SplitIndex index2 = SplitIndex.valueOf(5, false);
-        SplitIndex index3 = SplitIndex.valueOf(4, true);
+        var index1a = SplitIndex.valueOf(4, false);
+        var index1b = SplitIndex.valueOf(4, false);
+        var index2 = SplitIndex.valueOf(5, false);
+        var index3 = SplitIndex.valueOf(4, true);
         
         assertEquals(index1a.hashCode(), index1b.hashCode());
         
@@ -66,10 +66,10 @@ public class SplitIndexTest {
     
     @Test
     public void testToString() {
-        SplitIndex index = SplitIndex.valueOf(14, true);
-        String str = index.toString();
-        assertTrue("Class name missing", str.contains(Splitter.class.getName()));
-        assertTrue("index missing", str.contains("14"));
-        assertTrue("last flag missing", str.contains("true"));
+        var index = SplitIndex.valueOf(14, true);
+        var str = index.toString();
+        assertTrue(str.contains(Splitter.class.getName()), "Class name missing");
+        assertTrue(str.contains("14"), "index missing");
+        assertTrue(str.contains("true"), "last flag missing");
     }
 }

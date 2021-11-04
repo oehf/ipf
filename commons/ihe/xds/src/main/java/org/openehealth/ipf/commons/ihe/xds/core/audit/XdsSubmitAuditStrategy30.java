@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,13 +41,13 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
     }
 
     protected static void enrichDatasetFromSubmitObjectsRequest(XdsSubmitAuditDataset auditDataset, EbXMLSubmitObjectsRequest ebXML) {
-        List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        var submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         auditDataset.setHomeCommunityId(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
 
         submissionSets.forEach(submissionSet -> {
-            String patientId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
+            var patientId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
             auditDataset.getPatientIds().add(patientId);
-            String uniqueId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+            var uniqueId = submissionSet.getExternalIdentifierValue(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
             auditDataset.setSubmissionSetUuid(uniqueId);
             if(auditDataset.getHomeCommunityId() == null) {
                 auditDataset.setHomeCommunityId(submissionSet.getHome());
@@ -60,7 +58,7 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof SubmitObjectsRequest) {
-            SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
+            var submitObjectsRequest = (SubmitObjectsRequest) pojo;
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
         }

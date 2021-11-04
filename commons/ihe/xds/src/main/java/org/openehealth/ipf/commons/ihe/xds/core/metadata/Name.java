@@ -21,11 +21,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.util.Objects;
 
 /**
@@ -40,11 +40,11 @@ import java.util.Objects;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType()
 @XmlJavaTypeAdapter(value = NameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "type")
 public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
@@ -74,6 +74,20 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
         }
         throw new ExceptionInInitializerError("Unknown name type " + type);
     }
+    
+    /**
+     * Copy all name properties from the given name to this object.
+     * 
+     * @param name
+     */
+    protected void copyFrom(Name name) {
+        setDegree(name.getDegree());
+        setFamilyName(name.getFamilyName());
+        setGivenName(name.getGivenName());
+        setPrefix(name.getPrefix());
+        setSecondAndFurtherGivenNames(name.getSecondAndFurtherGivenNames());
+        setSuffix(name.getSuffix());
+    }
 
 
     @XmlElement(name = "family")
@@ -97,8 +111,8 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Name)) return false;
-        Name<?> that = (Name<?>) o;
+        if (!(o instanceof Name)) return false;
+        var that = (Name<?>) o;
         return Objects.equals(getFamilyName(), that.getFamilyName()) &&
                 Objects.equals(getGivenName(), that.getGivenName()) &&
                 Objects.equals(getSecondAndFurtherGivenNames(), that.getSecondAndFurtherGivenNames()) &&

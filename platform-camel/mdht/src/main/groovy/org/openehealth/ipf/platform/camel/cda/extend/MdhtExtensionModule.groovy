@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.cda.extend
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.modules.cda.CDAR2Validator
-import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormat
+import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormatDefinition
 import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument
@@ -31,20 +31,21 @@ import static org.apache.camel.builder.Builder.bodyAs
  * @DSL
  * @author Christian Ohr
  */
-public class MdhtExtensionModule {
+class MdhtExtensionModule {
+
      /**
       * Defines marshalling between a standard CDA document and a ClinicalDocument object 
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
-     public static ProcessorDefinition mdht(DataFormatClause self) {
-         MdhtDataFormat dataFormat = new MdhtDataFormat()
-         return CoreExtensionModule.dataFormat(self, dataFormat)
+     static ProcessorDefinition mdht(DataFormatClause self) {
+         MdhtDataFormatDefinition dataFormat = new MdhtDataFormatDefinition()
+         return CoreExtensionModule.dataFormatFor(self, dataFormat)
      }         
  
      /**
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
-     public static ValidatorAdapterDefinition mdht(ValidatorAdapterDefinition self) {
+     static ValidatorAdapterDefinition mdht(ValidatorAdapterDefinition self) {
          self.validator = new CDAR2Validator()
          return (ValidatorAdapterDefinition)self.input(bodyAs(ClinicalDocument.class))
      }

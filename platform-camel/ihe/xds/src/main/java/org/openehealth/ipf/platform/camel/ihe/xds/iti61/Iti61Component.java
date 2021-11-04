@@ -43,10 +43,10 @@ public class Iti61Component extends XdsComponent<XdsSubmitAuditDataset> {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this, parameters, Iti61Service.class) {
+        return new XdsEndpoint<>(uri, remaining, this, parameters, Iti61Service.class) {
             @Override
             public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
-                                                                                                           JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+                                                                                                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
             }

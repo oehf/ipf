@@ -17,7 +17,12 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.chpidd;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AuthRequest;
+
+import java.util.Objects;
 
 
 /**
@@ -51,6 +56,18 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AuthRequest;
  *           &lt;/restriction&gt;
  *         &lt;/simpleType&gt;
  *       &lt;/attribute&gt;
+ *       &lt;xsd:attribute name="pageNumber" use="optional" default="1"&gt;
+ *         &lt;xsd:simpleType&gt;
+ *           &lt;xsd:restriction base="xsd:unsignedInt"/&gt;
+ *         &lt;/xsd:simpleType&gt;
+ *       &lt;/xsd:attribute&gt;
+ *       &lt;xsd:attribute name="pageSize" use="optional" default="1000"&gt;
+ *         &lt;xsd:simpleType&gt;
+ *           &lt;xsd:restriction base="xsd:unsignedInt"&gt;
+ *             &lt;xsd:maxInclusive value="5000"/&gt;
+ *           &lt;/xsd:restriction&gt;
+ *         &lt;/xsd:simpleType&gt;
+ *       &lt;/xsd:attribute&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -74,6 +91,11 @@ public class DownloadRequest {
     protected XMLGregorianCalendar toDate;
     @XmlAttribute(name = "filterMyTransactions")
     protected Boolean filterMyTransactions;
+
+    @XmlAttribute(name = "pageNumber")
+    @Getter @Setter protected int pageNumber;
+    @XmlAttribute(name = "pageSize")
+    @Getter @Setter protected int pageSize;
 
     /**
      * Gets the value of the authRequest property.
@@ -180,11 +202,7 @@ public class DownloadRequest {
      *     
      */
     public boolean isFilterMyTransactions() {
-        if (filterMyTransactions == null) {
-            return true;
-        } else {
-            return filterMyTransactions;
-        }
+        return Objects.requireNonNullElse(filterMyTransactions, true);
     }
 
     /**

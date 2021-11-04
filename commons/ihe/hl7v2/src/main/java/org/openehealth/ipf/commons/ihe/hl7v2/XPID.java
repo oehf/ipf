@@ -40,8 +40,8 @@ public class XPID implements IntegrationProfile {
     public enum Interactions implements Hl7v2InteractionId<Iti64AuditDataset> {
         ITI_64(ITI_64_CONFIGURATION, ITI_64_NAK_FACTORY);
 
-        @Getter private Hl7v2TransactionConfiguration<Iti64AuditDataset> hl7v2TransactionConfiguration;
-        @Getter private NakFactory<Iti64AuditDataset> nakFactory;
+        @Getter private final Hl7v2TransactionConfiguration<Iti64AuditDataset> hl7v2TransactionConfiguration;
+        @Getter private final NakFactory<Iti64AuditDataset> nakFactory;
     }
 
     @Override

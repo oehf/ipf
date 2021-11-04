@@ -23,9 +23,11 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.util.List;
@@ -35,6 +37,8 @@ import java.util.Set;
  *
  */
 @Builder
+@ToString
+@AllArgsConstructor
 public class Iti81SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private DateRangeParam interval;
@@ -48,12 +52,13 @@ public class Iti81SearchParameters implements FhirSearchParameters {
     @Getter @Setter private StringAndListParam user;
     @Getter @Setter private TokenAndListParam subtype;
     @Getter @Setter private TokenAndListParam outcome;
+    @Getter @Setter private TokenAndListParam altid;
 
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 
     @Getter
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {

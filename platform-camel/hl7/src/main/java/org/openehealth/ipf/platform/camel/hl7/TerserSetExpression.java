@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.hl7;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
@@ -40,7 +39,7 @@ public class TerserSetExpression implements Expression {
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
         try {
-            Message msg = HL7v2.bodyMessage(exchange);
+            var msg = HL7v2.bodyMessage(exchange);
             new Terser(msg).set(spec, value.evaluate(exchange, String.class));
             return (T)msg;
         } catch (HL7Exception e) {

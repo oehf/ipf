@@ -40,12 +40,14 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class AuditMessage implements Serializable, Validateable {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private EventIdentificationType eventIdentification;
 
     private List<ActiveParticipantType> activeParticipants;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private AuditSourceIdentificationType auditSourceIdentification;
     private List<ParticipantObjectIdentificationType> participantObjectIdentifications;
 
@@ -89,19 +91,22 @@ public class AuditMessage implements Serializable, Validateable {
         if (auditSourceIdentification == null) {
             throw new AuditException("The event must be have an audit source");
         }
-        if (getActiveParticipants().isEmpty()) {
+        if (activeParticipants == null || activeParticipants.isEmpty()) {
             throw new AuditException("The event must have one or more active participants");
         }
 
         eventIdentification.validate();
         auditSourceIdentification.validate();
         activeParticipants.forEach(ActiveParticipantType::validate);
-        participantObjectIdentifications.forEach(ParticipantObjectIdentificationType::validate);
+        if (participantObjectIdentifications != null) {
+            participantObjectIdentifications.forEach(ParticipantObjectIdentificationType::validate);
+        }
     }
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         return Current.toString(this, true);
     }

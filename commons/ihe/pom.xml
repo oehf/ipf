@@ -5,12 +5,12 @@
     <name>ipf-commons-ihe</name>
     <packaging>pom</packaging>
     <description>Container module for IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
      
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <modules>
@@ -25,12 +25,5 @@
         <module>hpd</module>
         <module>xacml20</module>
     </modules>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -31,7 +31,7 @@ public class XsltTransmogrifierTest {
 
     private XsltTransmogrifier<String> transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         transformer = new XsltTransmogrifier<>(String.class);
     }
@@ -39,7 +39,7 @@ public class XsltTransmogrifierTest {
     @Test
     public void testConvertString() throws IOException {
         Source source = new StreamSource(getClass().getResourceAsStream("/xslt/createPatient.xml"));
-        String result = transformer.zap(source, "/xslt/createPatient.xslt");
+        var result = transformer.zap(source, "/xslt/createPatient.xslt");
         assertNotNull(result);
     }
 

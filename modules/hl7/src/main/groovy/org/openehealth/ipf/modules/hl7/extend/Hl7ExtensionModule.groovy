@@ -156,38 +156,6 @@ class Hl7ExtensionModule {
     static Message respond(AbstractMessage delegate, String eventType, String triggerEvent) {
         MessageUtils.response(delegate, eventType, triggerEvent)
     }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-     * @deprecated use {@link AbstractMessage#generateACK()}
-     */
-    static Message ack(AbstractMessage delegate) {
-        delegate.generateACK()
-    }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-     * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
-     */
-    static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
-        delegate.generateACK(ackTypeCode, new HL7Exception(cause))
-    }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-     * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
-     */
-    static Message nak(AbstractMessage delegate, HL7Exception e, AcknowledgmentCode ackTypeCode) {
-        delegate.generateACK(ackTypeCode, e)
-    }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-     * @deprecated use {@link Message#printStructure()}
-     */
-    static Message dump(Message delegate) {
-        delegate.printStructure()
-    }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI

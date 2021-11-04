@@ -42,7 +42,7 @@ public class XCF implements XdsIntegrationProfile {
         ITI_63(ITI_63_WS_CONFIG),
         ITI_63_ASYNC_RESPONSE(ITI63_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -56,8 +56,8 @@ public class XCF implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean requiresHomeCommunityId() {
-        return true;
+    public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+        return HomeCommunityIdOptionality.ALWAYS;
     }
 
     @Override

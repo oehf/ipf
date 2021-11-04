@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openehealth.ipf.boot</groupId>
         <artifactId>ipf-spring-boot</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>ipf-spring-boot-starter</artifactId>
@@ -23,7 +23,7 @@
             <optional>true</optional>
         </dependency>
 		<dependency>
-			<groupId>org.apache.camel</groupId>
+			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
             <exclusions>
                 <exclusion>
@@ -45,12 +45,5 @@
         </dependency>
 
 	</dependencies>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

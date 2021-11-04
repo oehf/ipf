@@ -24,6 +24,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti18.Iti18TestRouteBuilder">
     </bean>
 
+    <bean id="faultMessageOutInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.FaultMessageOutInterceptor">
+        <constructor-arg name="faultMessage" value="Something went wrong!"/>
+    </bean>
+
     <bean id="loggingFeature" class="org.apache.cxf.ext.logging.LoggingFeature" />
     <bean id="policyFeature" class="org.apache.cxf.ws.policy.WSPolicyFeature" />
     <bean id="gzipFeature" class="org.apache.cxf.transport.common.gzip.GZIPFeature" />

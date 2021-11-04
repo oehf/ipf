@@ -15,19 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ebxml30;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
 
 import javax.activation.DataHandler;
+
+import static org.junit.jupiter.api.Assertions.*;
  
 /**
  * Tests for {@link RetrieveDocumentSetResponseTransformer}.
@@ -39,7 +37,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
     private DataHandler dataHandler1;
     private DataHandler dataHandler2;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
@@ -51,13 +49,13 @@ public class RetrieveDocumentSetResponseTransformerTest {
     
     @Test
     public void testToEbXML() {
-        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
         assertNotNull(ebXML);
         
         assertEquals(2, ebXML.getDocuments().size());
-        
-        RetrievedDocument doc = ebXML.getDocuments().get(0);        
-        DocumentReference requestData = doc.getRequestData();
+
+        var doc = ebXML.getDocuments().get(0);
+        var requestData = doc.getRequestData();
         assertEquals("doc1", requestData.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.3", requestData.getHomeCommunityId());
         assertEquals("repo1", requestData.getRepositoryUniqueId());
@@ -82,7 +80,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
 
      @Test
      public void testToEbXMLEmpty() {
-         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
+         var ebXML = transformer.toEbXML(new RetrievedDocumentSet());
          assertNotNull(ebXML);
          assertEquals(0, ebXML.getDocuments().size());
      }
@@ -91,8 +89,8 @@ public class RetrieveDocumentSetResponseTransformerTest {
      
      @Test
      public void testFromEbXML() {
-         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
-         RetrievedDocumentSet result = transformer.fromEbXML(ebXML);
+         var ebXML = transformer.toEbXML(response);
+         var result = transformer.fromEbXML(ebXML);
          assertEquals(response, result);
      }
      
@@ -103,8 +101,8 @@ public class RetrieveDocumentSetResponseTransformerTest {
 
      @Test
      public void testFromEbXMLEmpty() {
-         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
-         RetrievedDocumentSet result = transformer.fromEbXML(ebXML);
+         var ebXML = transformer.toEbXML(new RetrievedDocumentSet());
+         var result = transformer.fromEbXML(ebXML);
          assertEquals(new RetrievedDocumentSet(), result);
      }
 }

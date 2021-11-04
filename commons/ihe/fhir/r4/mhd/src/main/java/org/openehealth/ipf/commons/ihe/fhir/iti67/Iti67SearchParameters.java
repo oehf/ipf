@@ -19,9 +19,16 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.r4.model.Practitioner;
@@ -37,6 +44,7 @@ import java.util.Set;
  */
 @Builder
 @ToString
+@AllArgsConstructor
 public class Iti67SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private ReferenceParam patientReference;
@@ -44,6 +52,7 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private DateRangeParam date;
     @Getter @Setter private StringParam authorFamilyName;
     @Getter @Setter private StringParam authorGivenName;
+    @Getter @Setter private TokenParam identifier;
     @Getter @Setter private TokenOrListParam status;
     @Getter @Setter private TokenOrListParam category;
     @Getter @Setter private TokenOrListParam type;
@@ -53,13 +62,16 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam event;
     @Getter @Setter private TokenOrListParam securityLabel;
     @Getter @Setter private TokenOrListParam format;
-    @Getter @Setter private ReferenceOrListParam related;
+
+    // This is normally a ReferenceParameter but we assume that we are chaining this
+    // with identifier
+    @Getter @Setter private TokenOrListParam related;
     @Getter @Setter private TokenParam _id;
 
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 
-    @Getter private FhirContext fhirContext;
+    @Getter private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {
@@ -74,8 +86,8 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     public Iti67SearchParameters setAuthor(ReferenceAndListParam author) {
         if (author != null) {
             author.getValuesAsQueryTokens().forEach(param -> {
-                ReferenceParam ref = param.getValuesAsQueryTokens().get(0);
-                String authorChain = ref.getChain();
+                var ref = param.getValuesAsQueryTokens().get(0);
+                var authorChain = ref.getChain();
                 if (Practitioner.SP_FAMILY.equals(authorChain)) {
                     setAuthorFamilyName(ref.toStringParam(getFhirContext()));
                 } else if (Practitioner.SP_GIVEN.equals(authorChain)) {

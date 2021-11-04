@@ -28,7 +28,7 @@ import java.util.Comparator;
  */
 public class OperationOutcomeOperations implements IBaseOperationOutcomeOperations {
 
-    public static OperationOutcomeOperations INSTANCE = new OperationOutcomeOperations();
+    public static final OperationOutcomeOperations INSTANCE = new OperationOutcomeOperations();
 
     @Override
     public boolean hasIssue(IBaseOperationOutcome operationOutcome) {

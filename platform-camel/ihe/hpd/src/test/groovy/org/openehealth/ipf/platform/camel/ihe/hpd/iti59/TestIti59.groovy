@@ -15,24 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
 
-import org.apache.commons.io.IOUtils
+
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.commons.audit.codes.EventActionCode
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole
-import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.hpd.HPD
-import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode
-import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
-import javax.xml.bind.JAXB
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBElement
-import java.nio.charset.StandardCharsets
 
 /**
  * @author Dmytro Rud
@@ -49,7 +42,7 @@ class TestIti59 extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }

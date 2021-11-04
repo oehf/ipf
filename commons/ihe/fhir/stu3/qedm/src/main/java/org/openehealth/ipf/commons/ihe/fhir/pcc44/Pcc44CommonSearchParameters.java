@@ -34,15 +34,15 @@ import java.util.Set;
 @AllArgsConstructor
 abstract class Pcc44CommonSearchParameters implements FhirSearchParameters {
 
-    @Getter private ReferenceParam patientReference;
-    @Getter private TokenParam _id;
+    @Getter private final ReferenceParam patientReference;
+    @Getter private final TokenParam _id;
 
-    @Getter private SortSpec sortSpec;
-    @Getter private Set<Include> includeSpec;
-    @Getter private Set<Include> revIncludeSpec;
+    @Getter private final SortSpec sortSpec;
+    @Getter private final Set<Include> includeSpec;
+    @Getter private final Set<Include> revIncludeSpec;
 
     @Getter
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     @Override
     public List<TokenParam> getPatientIdParam() {

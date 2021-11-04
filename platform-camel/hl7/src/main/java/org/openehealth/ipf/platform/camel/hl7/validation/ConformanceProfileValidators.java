@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.Severity;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.validation.MessageRule;
-import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -58,7 +57,7 @@ public final class ConformanceProfileValidators {
     static {
         FALLBACK_HAPI_CONTEXT = new DefaultHapiContext();
         FALLBACK_HAPI_CONTEXT.setProfileStore(new GazelleProfileStore());
-        FALLBACK_HAPI_CONTEXT.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
+        FALLBACK_HAPI_CONTEXT.setValidationContext(ValidationContextFactory.noValidation());
         FALLBACK_HAPI_CONTEXT.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
     }
 
@@ -74,7 +73,7 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final ConformanceProfile conformanceProfile) {
         return new Processor() {
 
-            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(conformanceProfile);
+            private final CachingGazelleProfileRule rule = new CachingGazelleProfileRule(conformanceProfile);
 
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -95,7 +94,7 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final HL7v2Transactions iheTransaction) {
         return new Processor() {
 
-            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(iheTransaction);
+            private final CachingGazelleProfileRule rule = new CachingGazelleProfileRule(iheTransaction);
 
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -113,7 +112,7 @@ public final class ConformanceProfileValidators {
     private static void throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException... exceptions) {
         List<ca.uhn.hl7v2.validation.ValidationException> fatalExceptions = new ArrayList<>();
         if (exceptions != null) {
-            for (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
+            for (var exception : exceptions) {
                 if (exception.getSeverity().equals(Severity.ERROR)) {
                     fatalExceptions.add(exception);
                 }
@@ -133,13 +132,13 @@ public final class ConformanceProfileValidators {
      * @throws HL7Exception
      */
     private static Message bodyMessage(Exchange exchange) throws HL7Exception {
-        Object body = exchange.getIn().getBody();
+        var body = exchange.getIn().getBody();
         Message message;
 
         if (body instanceof Message) {
             message = (Message) body;
         } else if (body instanceof String) {
-            HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
+            var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
             context = context != null ? context : FALLBACK_HAPI_CONTEXT;
             message = new GenericParser(context).parse((String) body);
         } else {

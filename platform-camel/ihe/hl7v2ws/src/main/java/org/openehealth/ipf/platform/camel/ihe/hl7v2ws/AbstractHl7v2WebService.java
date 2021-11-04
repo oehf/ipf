@@ -72,19 +72,19 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         // parse request
         Message msg;
         try {
-            msg = config.getParser().parse(trimToEmpty(request).replaceAll("\n", "\r\n"));
+            msg = config.getParser().parse(trimToEmpty(request).replace("\n", "\r\n"));
             config.checkRequestAcceptance(msg);
         } catch (HL7Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);
             return render(nakFactory.createDefaultNak(e));
         }
 
-        Message originalRequest = MessageUtils.copy(msg);
+        var originalRequest = MessageUtils.copy(msg);
 
         // play the route, handle its outcomes and check response acceptance
         try {
-            Exchange exchange = super.process(msg);
-            Exception exception = Exchanges.extractException(exchange);
+            var exchange = super.process(msg);
+            var exception = Exchanges.extractException(exchange);
             if (exception != null) {
                 throw exception;
             }

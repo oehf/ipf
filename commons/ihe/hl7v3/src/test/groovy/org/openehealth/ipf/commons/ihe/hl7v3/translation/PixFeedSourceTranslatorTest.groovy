@@ -16,22 +16,21 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.commons.ihe.hl7v2.PIX
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * @author Boris Stanojevic
  */
 class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
 		PixFeedRequest2to3Translator translator = new PixFeedRequest2to3Translator()
 		translator.providerOrganizationIdRoot = '2.16.840.1.113883.3.37.4.1.1.2.1.1'

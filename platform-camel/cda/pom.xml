@@ -4,12 +4,12 @@
     <artifactId>ipf-platform-camel-cda</artifactId>
     <name>ipf-platform-camel-cda</name>
     <description>CDA support fro Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <properties>
@@ -22,16 +22,22 @@
             <artifactId>ipf-platform-camel-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-cda-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mock</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-xml</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -57,12 +63,5 @@
             </resource>
         </resources>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

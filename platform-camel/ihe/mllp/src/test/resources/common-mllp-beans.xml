@@ -42,4 +42,28 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>
 
+    <!-- ============ Payload Logging Interceptors ============= -->
+
+    <bean id="logFileNamePrefix" class="java.lang.String">
+        <constructor-arg value="./target/[processId]/[date('yyyyMMdd-HH00')]/[interactionId]-[sequenceId]" />
+        <!--constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[interactionId]-[sequenceId]" /-->
+        <!--<constructor-arg value="c:/iti21-logs/[processId]/[sequenceId]" />-->
+    </bean>
+
+    <bean id="serverInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor$Factory">
+        <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
+    </bean>
+
+    <bean id="serverOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor$Factory">
+        <constructor-arg value="#{@logFileNamePrefix}-server-out.txt" />
+    </bean>
+
+    <bean id="clientInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor$Factory">
+        <constructor-arg value="#{@logFileNamePrefix}-client-in.txt" />
+    </bean>
+
+    <bean id="clientOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor$Factory">
+        <constructor-arg value="#{@logFileNamePrefix}-client-out.txt" />
+    </bean>
+
 </beans>

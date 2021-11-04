@@ -19,14 +19,14 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.impl.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.Test
+import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertFalse
 
 /**
  * Unit tests for the PIX Update Notification transaction a.k.a. ITI-10.
@@ -40,7 +40,7 @@ class TestIti10 extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -164,7 +164,7 @@ class TestIti10 extends MllpTestContainer {
             }
             ex = e
         }
-        assertFalse("Expected HL7Exception but got ${ex} with cause ${ex.cause}", failed)
+        assertFalse(failed, "Expected HL7Exception but got ${ex} with cause ${ex.cause}")
         assertEquals(0, auditSender.messages.size())
     }
 

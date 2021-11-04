@@ -18,8 +18,8 @@ package org.openehealth.ipf.modules.hl7.kotlin
 
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 /**
  * @author Christian Ohr

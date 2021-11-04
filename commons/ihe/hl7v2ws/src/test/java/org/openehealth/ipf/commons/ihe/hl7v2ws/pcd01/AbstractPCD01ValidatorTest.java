@@ -23,7 +23,7 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.validation.Validator;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 
@@ -44,7 +44,7 @@ public abstract class AbstractPCD01ValidatorTest {
         return hapiContext.getPipeParser();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws HL7Exception {
         maximumMessage = load(getParser(), "pcd01/valid-pcd01-MaximumRequest2.hl7");
     }
@@ -54,7 +54,7 @@ public abstract class AbstractPCD01ValidatorTest {
     }
 
     protected <T extends AbstractMessage> void validate(Message message) throws HL7Exception {
-        SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(hapiContext);
+        var handler = new SimpleValidationExceptionHandler(hapiContext);
         getValidator().validate(message, handler);
         if (handler.hasFailed()) throw new HL7Exception("Validation has failed", handler.getExceptions().get(0));
     }

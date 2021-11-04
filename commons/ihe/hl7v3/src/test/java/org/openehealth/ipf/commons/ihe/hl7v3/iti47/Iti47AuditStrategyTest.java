@@ -16,16 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v3.iti47;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.hl7v3.atna.HL7v3AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -43,9 +41,9 @@ public class Iti47AuditStrategyTest extends HL7v3AuditorTestBase<Iti47AuditStrat
     }
 
     private void testRequest(boolean serverSide) {
-        Iti47AuditStrategy strategy = new Iti47AuditStrategy(serverSide);
-        Hl7v3AuditDataset auditDataset = getHl7v3AuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti47AuditStrategy(serverSide);
+        var auditDataset = getHl7v3AuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -59,7 +57,7 @@ public class Iti47AuditStrategyTest extends HL7v3AuditorTestBase<Iti47AuditStrat
 
     @Override
     protected Hl7v3AuditDataset getHl7v3AuditDataset(Iti47AuditStrategy strategy) {
-        Hl7v3AuditDataset auditDataset = super.getHl7v3AuditDataset(strategy);
+        var auditDataset = super.getHl7v3AuditDataset(strategy);
         auditDataset.setRequestPayload(QUERY_PAYLOAD);
         return auditDataset;
     }

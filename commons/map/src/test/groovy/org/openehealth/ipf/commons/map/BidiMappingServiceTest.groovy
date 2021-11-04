@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.map
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 /**
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class BidiMappingServiceTest {
+class BidiMappingServiceTest {
 	
     BidiMappingService mappingService
 
-    @Before
+    @BeforeEach
     void setUp() {
         mappingService = new BidiMappingService()
     }

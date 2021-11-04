@@ -28,7 +28,9 @@ import java.util.Map;
  *
  * @author Christian Ohr
  * @since 3.6
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory} instead
  */
+@Deprecated
 public class BatchTransactionClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
 
     private static final BatchTransactionClientRequestFactory INSTANCE = new BatchTransactionClientRequestFactory();

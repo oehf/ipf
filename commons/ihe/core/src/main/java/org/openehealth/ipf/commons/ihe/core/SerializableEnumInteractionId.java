@@ -43,11 +43,11 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
     }
 
     private static <E extends Enum<E> & InteractionId> E getInteractionId(String interaction) {
-        int lastIndex = interaction.lastIndexOf('$');
-        Class<E> enumType = null;
+        var lastIndex = interaction.lastIndexOf('$');
+        Class<E> enumType;
         try {
             enumType = (Class<E>) Class.forName(interaction.substring(0, lastIndex));
-            String enumValue = interaction.substring(lastIndex + 1);
+            var enumValue = interaction.substring(lastIndex + 1);
             return Enum.valueOf(enumType, enumValue);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException(e);

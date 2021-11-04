@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Test
+
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
@@ -28,7 +29,7 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
  */
 class PdqTranslatorTest extends Hl7TranslationTestContainer {
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(),
@@ -50,7 +51,7 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
         doTestV2toV3ResponseTranslation('PDQ_unused_global_namespace_issue', 21, PDQV3.Interactions.ITI_47)
     }
      
-    @Test @Ignore
+    @Test @Disabled
     void testResponseWithPid4() {
         doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, PDQV3.Interactions.ITI_47)
     }

@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter.support;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -33,17 +33,17 @@ import org.junit.Test;
 public class TextFileIteratorTest {
     private File file; 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         file = File.createTempFile("TextFileIteratorTest", "txt");
-        
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+        var writer = new BufferedWriter(new FileWriter(file));
         writer.write("a,b,17,4\n");            
         writer.write("c,d,e,dotter");            
         writer.close();
     }
     
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         assertTrue(file.delete());      // If this fails the last test did not
                                         // close the FileReader in the 
@@ -52,7 +52,7 @@ public class TextFileIteratorTest {
     
     @Test
     public void testSimpleIteration() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         assertTrue(iterator.hasNext());
         assertEquals("a,b,17,4", iterator.next());
         assertTrue(iterator.hasNext());
@@ -62,7 +62,7 @@ public class TextFileIteratorTest {
 
     @Test
     public void testLineSplitLogic() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(
+        var iterator = new TextFileIterator(
                 file.getAbsolutePath(),
                 new SplitStringLineSplitterLogic(","));
         
@@ -87,22 +87,22 @@ public class TextFileIteratorTest {
 
     @Test
     public void testHugeFile() throws Exception {
-        final int NUMBER_OF_LINES = 10000;
-        
-        File hugeFile = File.createTempFile("testHugeFile", "txt");
+        final var NUMBER_OF_LINES = 10000;
+
+        var hugeFile = File.createTempFile("testHugeFile", "txt");
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(hugeFile));
-            for (int idx = 1; idx <= NUMBER_OF_LINES; ++idx) {
+            var writer = new BufferedWriter(new FileWriter(hugeFile));
+            for (var idx = 1; idx <= NUMBER_OF_LINES; ++idx) {
                 writer.write("Line " + idx + "\n");            
             }
             writer.close();
             
             System.out.println("Test file written");
-            
-            TextFileIterator iterator = new TextFileIterator(hugeFile.getAbsolutePath());
-            int idx = 1;
+
+            var iterator = new TextFileIterator(hugeFile.getAbsolutePath());
+            var idx = 1;
             while (iterator.hasNext()) {
-                String line = iterator.next();
+                var line = iterator.next();
                 assertEquals("Line " + idx, line);
                 ++idx;
             }
@@ -112,27 +112,27 @@ public class TextFileIteratorTest {
         }
     }
     
-    @Test(expected=UnsupportedOperationException.class)
+    @Test
     public void testRemoveNotSupported() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         try {
-            iterator.remove();
+            assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
         }
         finally {
             assertTrue(iterator.isClosed());
         }
     }    
     
-    @Test(expected=FileNotFoundException.class)
-    public void testFileNotFound() throws Exception {
-        new TextFileIterator("isnotthere");
+    @Test
+    public void testFileNotFound() {
+        assertThrows(FileNotFoundException.class, () -> new TextFileIterator("isnotthere"));
     }
     
-    @Test(expected=IllegalStateException.class)
+    @Test
     public void testSafeAbortOfIteration() throws Exception {
-        TextFileIterator iterator = new TextFileIterator(file.getAbsolutePath());
+        var iterator = new TextFileIterator(file.getAbsolutePath());
         iterator.close();
-        iterator.next();
+        assertThrows(IllegalStateException.class, () -> iterator.next());
     }
 }
 

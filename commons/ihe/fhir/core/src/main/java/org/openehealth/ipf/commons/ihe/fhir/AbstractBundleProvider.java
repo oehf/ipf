@@ -30,8 +30,8 @@ import java.util.Map;
 public abstract class AbstractBundleProvider implements IBundleProvider {
 
     private final RequestConsumer consumer;
-    private Object payload;
-    private Map<String, Object> headers;
+    private final Object payload;
+    private final Map<String, Object> headers;
 
     public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
         this.consumer = consumer;

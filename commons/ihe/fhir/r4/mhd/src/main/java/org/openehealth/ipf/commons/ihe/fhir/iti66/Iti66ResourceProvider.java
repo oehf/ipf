@@ -45,6 +45,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = DocumentManifest.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentManifest.SP_CREATED) DateRangeParam created,
             @OptionalParam(name = DocumentManifest.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
+            @OptionalParam(name = DocumentManifest.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_SOURCE) TokenOrListParam source,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
@@ -57,11 +58,12 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
 
-        Iti66SearchParameters searchParameters = Iti66SearchParameters.builder()
+        var searchParameters = Iti66SearchParameters.builder()
                 .created(created)
                 .type(type)
                 .source(source)
                 .status(status)
+                .identifier(identifier)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)
@@ -70,7 +72,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         searchParameters.setAuthor(author);
 
-        String chain = patient.getChain();
+        var chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
             searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
         } else if (chain == null || chain.isEmpty()) {

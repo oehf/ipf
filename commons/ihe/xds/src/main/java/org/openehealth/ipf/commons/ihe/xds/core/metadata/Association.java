@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Represents an XDS association.
@@ -51,17 +53,32 @@ public class Association implements Serializable, ExtraMetadataHolder {
 
     private static final long serialVersionUID = -4556980177483609469L;
 
-    private String targetUuid;
-    private String sourceUuid;
-    private AssociationType associationType;
-    private AssociationLabel label;
-    private String entryUuid;
-    private Code docCode;
-    private String previousVersion;
-    private AvailabilityStatus originalStatus;
-    private AvailabilityStatus newStatus;
-    private Boolean associationPropagation;
-    private AvailabilityStatus availabilityStatus;
+    @Getter @Setter private String targetUuid;
+    @Getter @Setter private String sourceUuid;
+    @Getter @Setter private AssociationType associationType;
+    @Getter @Setter private AssociationLabel label;
+    @Getter @Setter private String entryUuid;
+    @Getter @Setter private Code docCode;
+    @Getter @Setter private String previousVersion;
+    /**
+     * @return original status slot value
+     * @param originalStatus
+     *           value of originalStatus in update availabilityStatus
+     */
+    @Getter @Setter private AvailabilityStatus originalStatus;
+    /**
+     * @return new status slot value
+     * @param newStatus value of newStatus in update availabilityStatus
+     */
+    @Getter @Setter private AvailabilityStatus newStatus;
+    @Getter @Setter private Boolean associationPropagation;
+    /**
+    *
+    * @return availabilityStatus value in XDS metadata update association
+    * @param availabilityStatus
+    *           value of availabilityStatus in XDS metadata update association
+    */
+    @Getter @Setter private AvailabilityStatus availabilityStatus;
 
     @XmlJavaTypeAdapter(StringMapAdapter.class)
     @XmlElement(name = "extraMetadata", type = StringMap.class)
@@ -89,176 +106,9 @@ public class Association implements Serializable, ExtraMetadataHolder {
         this.sourceUuid = sourceUuid;
         this.targetUuid = targetUuid;
     }
-
-    /**
-     * @return the UUID of the target object.
-     */
-    public String getTargetUuid() {
-        return targetUuid;
-    }
-
-    /**
-     * @param targetUuid
-     *          the UUID of the target object.
-     */
-    public void setTargetUuid(String targetUuid) {
-        this.targetUuid = targetUuid;
-    }
-
-    /**
-     * @return the UUID of the source object.
-     */
-    public String getSourceUuid() {
-        return sourceUuid;
-    }
-
-    /**
-     * @param sourceUuid
-     *          the UUID of the source object.
-     */
-    public void setSourceUuid(String sourceUuid) {
-        this.sourceUuid = sourceUuid;
-    }
-
-    /**
-     * @return the type of this association.
-     */
-    public AssociationType getAssociationType() {
-        return associationType;
-    }
-
-    /**
-     * @param associationType
-     *          the type of this association.
-     */
-    public void setAssociationType(AssociationType associationType) {
-        this.associationType = associationType;
-    }
-
-    /**
-     * @return the label of the association.
-     */
-    public AssociationLabel getLabel() {
-        return label;
-    }
-
-    /**
-     * @param label
-     *          the label of the association.
-     */
-    public void setLabel(AssociationLabel label) {
-        this.label = label;
-    }
-
-    /**
-     * @return UUID of this association entry.
-     */
-    public String getEntryUuid() {
-        return entryUuid;
-    }
-
-    /**
-     * @param entryUuid
-     *          UUID of this association entry.
-     */
-    public void setEntryUuid(String entryUuid) {
-        this.entryUuid = entryUuid;
-    }
-
-    /**
-     * @return code describing the association (e.g. the type of transformation,
-     *          reason for replacement).
-     */
-    public Code getDocCode() {
-        return docCode;
-    }
-
-    /**
-     * @param docCode
-     *          code describing the association (e.g. the type of transformation,
-     *          reason for replacement).
-     */
-    public void setDocCode(Code docCode) {
-        this.docCode = docCode;
-    }
-
-    /**
-     *
-     * @return previous version slot value
-     */
-    public String getPreviousVersion() {
-        return previousVersion;
-    }
-
-    /**
-     *
-     * @param previousVersion
-     *          value of previous version in XDS metadata update association
-     */
-    public void setPreviousVersion(String previousVersion) {
-        this.previousVersion = previousVersion;
-    }
-
-    /**
-     * @return original status slot value
-     */
-    public AvailabilityStatus getOriginalStatus() {
-        return originalStatus;
-    }
-
-    /**
-     * @param originalStatus
-     *           value of originalStatus in update availabilityStatus
-     */
-    public void setOriginalStatus(AvailabilityStatus originalStatus) {
-        this.originalStatus = originalStatus;
-    }
-
-    /**
-     * @return new status slot value
-     */
-    public AvailabilityStatus getNewStatus() {
-        return newStatus;
-    }
-
-    /**
-     * @param newStatus
-     *           value of newStatus in update availabilityStatus
-     */
-    public void setNewStatus(AvailabilityStatus newStatus) {
-        this.newStatus = newStatus;
-    }
-
-    /**
-     * @return associationPropagation annotation value
-     */
-    public Boolean getAssociationPropagation() {
-        return associationPropagation;
-    }
-
-    /**
-     * @param associationPropagation
-     *           value of associationPropagation annotation
-     */
-    public void setAssociationPropagation(Boolean associationPropagation) {
-        this.associationPropagation = associationPropagation;
-    }
-
-    /**
-     *
-     * @return availabilityStatus value in XDS metadata update association
-     */
-    public AvailabilityStatus getAvailabilityStatus() {
-        return availabilityStatus;
-    }
-
-    /**
-     *
-     * @param availabilityStatus
-     *           value of availabilityStatus in XDS metadata update association
-     */
-    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
+    
+    public void assignEntryUuid() {
+        this.entryUuid = new URN(UUID.randomUUID()).toString();
     }
 
 }

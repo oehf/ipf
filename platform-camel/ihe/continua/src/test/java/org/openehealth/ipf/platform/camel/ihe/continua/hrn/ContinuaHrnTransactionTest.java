@@ -15,22 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import java.io.InputStream;
-import javax.activation.DataHandler;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
@@ -38,7 +27,13 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
-import static org.junit.Assert.assertEquals;
+import javax.activation.DataHandler;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the Continua HRN transaction.
@@ -55,21 +50,21 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws JAXBException {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
         jaxbContext = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30");
     }
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         initRequest();
     }
 
     @Test
     public void happyCase() throws Exception {
-        String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
-        Response response = (Response) send(uri, hrnRequest, Response.class);
+        var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
+        var response = (Response) send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
 
@@ -79,21 +74,21 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
      */
     @Test
     public void testDomInputDatatype() throws Exception {
-        String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
+        var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
 
         // prepare request, delete original document contents
-        ProvideAndRegisterDocumentSet request = EbXML30Converters.convert(hrnRequest);
+        var request = EbXML30Converters.convert(hrnRequest);
         assertEquals(1, request.getDocuments().size());
-        Document xdsDocument = request.getDocuments().get(0);
+        var xdsDocument = request.getDocuments().get(0);
         xdsDocument.removeContent(DataHandler.class);
         assertEquals(0, xdsDocument.getContentsCount());
 
         // read in CCD file as DOM tree and make it the new document contents
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/SampleCCDDocument.xml");
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        var stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/SampleCCDDocument.xml");
+        var factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        org.w3c.dom.Document domDocument = builder.parse(stream);
+        var builder = factory.newDocumentBuilder();
+        var domDocument = builder.parse(stream);
         xdsDocument.setContent(org.w3c.dom.Document.class, domDocument);
 
         // create data handler from DOM tree
@@ -102,7 +97,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         assertEquals(3, xdsDocument.getContentsCount());
 
         // send the resulting request
-        Response response = (Response) send(uri, hrnRequest, Response.class);
+        var response = (Response) send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
 
@@ -112,18 +107,18 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
      */
     @Test
     public void testMdhtInputDatatype() throws Exception {
-        String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
+        var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
 
         // prepare request, delete original document contents
-        ProvideAndRegisterDocumentSet request = EbXML30Converters.convert(hrnRequest);
+        var request = EbXML30Converters.convert(hrnRequest);
         assertEquals(1, request.getDocuments().size());
-        Document xdsDocument = request.getDocuments().get(0);
+        var xdsDocument = request.getDocuments().get(0);
         xdsDocument.removeContent(DataHandler.class);
         assertEquals(0, xdsDocument.getContentsCount());
 
         // read in CCD file as MDHT and make it the new document contents
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/SampleCCDDocument.xml");
-        ClinicalDocument mdhtDocument = new CDAR2Parser().parse(stream);
+        var stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/SampleCCDDocument.xml");
+        var mdhtDocument = new CDAR2Parser().parse(stream);
         xdsDocument.setContent(ClinicalDocument.class, mdhtDocument);
 
         // create data handler from MDHT document
@@ -132,15 +127,15 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         assertEquals(3, xdsDocument.getContentsCount());
 
         // send the resulting request
-        Response response = (Response) send(uri, hrnRequest, Response.class);
+        var response = (Response) send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
     
     
     @SuppressWarnings("unchecked")
     private void initRequest() throws Exception {
-        Unmarshaller u = jaxbContext.createUnmarshaller();
-        InputStream is = getClass().getClassLoader().getResourceAsStream(
+        var u = jaxbContext.createUnmarshaller();
+        var is = getClass().getClassLoader().getResourceAsStream(
             "continua-hrn/ProvideAndRegisterDocumentSet.xml");
         hrnRequest = ((JAXBElement<ProvideAndRegisterDocumentSetRequestType>) u.unmarshal(is)).getValue();
     }

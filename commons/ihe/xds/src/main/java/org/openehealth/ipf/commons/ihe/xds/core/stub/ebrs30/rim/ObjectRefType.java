@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 
 /**
@@ -56,11 +57,7 @@ public class ObjectRefType
      *     
      */
     public boolean isCreateReplica() {
-        if (createReplica == null) {
-            return false;
-        } else {
-            return createReplica;
-        }
+        return Objects.requireNonNullElse(createReplica, false);
     }
 
     /**

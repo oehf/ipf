@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.core.modules.api;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
 /**
@@ -28,7 +28,7 @@ public class ValidationExceptionTest {
     @Test
     public void testMessages() {
         String s;
-        String message = "exception message 12345";
+        var message = "exception message 12345";
         Throwable[] causes;
 
         // ----------------- 

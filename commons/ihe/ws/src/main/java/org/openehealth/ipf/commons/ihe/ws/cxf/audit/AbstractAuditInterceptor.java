@@ -24,7 +24,6 @@ import org.apache.cxf.security.transport.TLSSessionInfo;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
-import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.config.Lookup;
@@ -35,10 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
@@ -141,7 +137,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             boolean isInbound,
             boolean inverseWsaDirection,
             WsAuditDataset auditDataset) {
-        AddressingProperties wsaProperties = (AddressingProperties) message.get(isInbound ?
+        var wsaProperties = (AddressingProperties) message.get(isInbound ?
                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND :
                 JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
 
@@ -150,7 +146,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             if (inverseWsaDirection) {
                 address = wsaProperties.getTo();
             } else {
-                EndpointReferenceType replyTo = wsaProperties.getReplyTo();
+                var replyTo = wsaProperties.getReplyTo();
                 if (replyTo != null) {
                     address = replyTo.getAddress();
                 }
@@ -189,7 +185,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     protected static void extractAddressesFromServletRequest(
             SoapMessage message,
             WsAuditDataset auditDataset) {
-        HttpServletRequest request =
+        var request =
                 (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
         auditDataset.setRemoteAddress(request.getRemoteAddr());
         auditDataset.setLocalAddress(request.getServerName()); // #238
@@ -202,16 +198,16 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     protected static void extractClientCertificateCommonName(
             SoapMessage message,
             WsAuditDataset auditDataset) {
-        TLSSessionInfo request = message.get(TLSSessionInfo.class);
+        var request = message.get(TLSSessionInfo.class);
         if (request != null) {
-            Certificate[] certificates = request.getPeerCertificates();
+            var certificates = request.getPeerCertificates();
             if (certificates != null && certificates.length > 0) {
                 try {
-                    X509Certificate certificate = (X509Certificate) certificates[0];
-                    Principal principal = certificate.getSubjectDN();
-                    String dn = principal.getName();
-                    LdapName ldapDN = new LdapName(dn);
-                    for (Rdn rdn : ldapDN.getRdns()) {
+                    var certificate = (X509Certificate) certificates[0];
+                    var principal = certificate.getSubjectDN();
+                    var dn = principal.getName();
+                    var ldapDN = new LdapName(dn);
+                    for (var rdn : ldapDN.getRdns()) {
                         if (rdn.getType().equalsIgnoreCase("CN")) {
                             auditDataset.setSourceUserName((String) rdn.getValue());
                             break;

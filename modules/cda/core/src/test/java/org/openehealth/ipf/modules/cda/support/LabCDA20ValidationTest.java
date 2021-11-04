@@ -15,21 +15,21 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.openehealth.ipf.modules.cda.CDAR2Constants;
+import org.openehealth.ipf.modules.cda.constants.CDAR2Constants;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Validates the LabCDA 2.0 schematron rule set.
@@ -46,7 +46,7 @@ public class LabCDA20ValidationTest {
     private static final String sample = "/IHE_LabReport_20070816.xml";
     private static final String sample_errored = "/IHE_LabReport_20070816_Errored.xml";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new XsdValidator();
         schematron = new SchematronValidator();

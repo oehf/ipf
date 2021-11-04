@@ -16,17 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.URN;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -48,7 +45,7 @@ public class UUIDValidatorTest {
 
     @Test
     public void testGetAsUUID() throws URISyntaxException {
-        UUID random = UUID.randomUUID();
+        var random = UUID.randomUUID();
         assertEquals(random, validator.getAsUUID("urn:uuid:" + random.toString()).get());
         assertEquals(random, validator.getAsUUID(new URI("urn", "uuid", random.toString())).get());
         assertEquals(random, validator.getAsUUID(new URN(random)).get());

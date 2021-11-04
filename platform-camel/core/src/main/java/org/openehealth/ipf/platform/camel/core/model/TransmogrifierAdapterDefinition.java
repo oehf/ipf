@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
-import static org.apache.camel.builder.Builder.bodyAs;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.openehealth.ipf.commons.xml.SchematronTransmogrifier;
 import org.openehealth.ipf.commons.xml.XqjTransmogrifier;
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier;
-import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.transform.stream.StreamSource;
+
+import static org.apache.camel.builder.Builder.bodyAs;
 
 /**
  * @author Martin Krasser
@@ -38,14 +39,14 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
     @XmlTransient
-    private Transmogrifier transmogrifier;
+    private Transmogrifier<?, ?> transmogrifier;
     @XmlAttribute
     private String transmogrifierBean;
 
     public TransmogrifierAdapterDefinition() {
     }
 
-    public TransmogrifierAdapterDefinition(Transmogrifier transmogrifier) {
+    public TransmogrifierAdapterDefinition(Transmogrifier<?, ?> transmogrifier) {
         this.transmogrifier = transmogrifier;
         params().headers();
     }
@@ -124,13 +125,11 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 
-    
-    @Override
-    protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
-        if (transmogrifierBean != null) {
-            transmogrifier = routeContext.lookup(transmogrifierBean, Transmogrifier.class);
-        }
-        return new TransmogrifierAdapter(transmogrifier);
+    public Transmogrifier<?, ?> getTransmogrifier() {
+        return transmogrifier;
     }
 
+    public String getTransmogrifierBean() {
+        return transmogrifierBean;
+    }
 }

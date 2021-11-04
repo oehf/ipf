@@ -19,18 +19,17 @@ import ca.uhn.hl7v2.model.Message
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
-import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.spi.Synchronization
-import org.junit.After
-import org.junit.AfterClass
+import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Generic Unit Test container for MLLP components.
@@ -39,10 +38,10 @@ import static org.junit.Assert.*
  */
 class MllpTestContainer {
 
-    static ProducerTemplate producerTemplate
-    static CamelContext camelContext
-    static AbstractMockedAuditMessageQueue auditSender
-    static ClassPathXmlApplicationContext appContext
+    protected static ProducerTemplate producerTemplate
+    protected static CamelContext camelContext
+    protected static AbstractMockedAuditMessageQueue auditSender
+    protected static ClassPathXmlApplicationContext appContext
 
     static String TIMEOUT = '15000'
     
@@ -64,14 +63,14 @@ class MllpTestContainer {
         }
     }
     
-    @After
+    @AfterEach
     void tearDown() {
         auditSender?.clear()
     }
     
-    @AfterClass
+    @AfterAll
     static void tearDownAfterClass() {
-        appContext?.destroy()
+        appContext?.close()
     }
     
     
@@ -109,9 +108,9 @@ class MllpTestContainer {
         assertEquals(messageType, msg.MSH[9][1].value)
         assertEquals(triggerEvent, msg.MSH[9][2].value)
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
-        assertFalse("ERR segment must be present", msg.ERR.empty)
-        assertFalse("QAK segment must be present", msg.QAK.empty)
-        assertFalse("QPD segment must be present", msg.QPD.empty)
+        assertFalse(msg.ERR.empty, "ERR segment must be present")
+        assertFalse(msg.QAK.empty, "QAK segment must be present")
+        assertFalse(msg.QPD.empty, "QPD segment must be present")
     }
     
     /**
@@ -126,7 +125,7 @@ class MllpTestContainer {
         if (result.exception) {
             throw result.exception
         }
-        def response = Exchanges.resultMessage(result)
+        def response = result.getMessage()
         response.getBody(Message.class)
     }
 

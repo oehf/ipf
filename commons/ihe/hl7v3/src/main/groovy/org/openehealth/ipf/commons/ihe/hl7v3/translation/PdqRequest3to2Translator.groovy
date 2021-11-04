@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
@@ -148,7 +148,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
     }
 
-    protected void addNameParameters(nameValues, queryParams) {
+    protected static void addNameParameters(nameValues, queryParams) {
         nameValues.each {
             boolean needWildcard = (it.@use == 'SRCH')
             def usableGivenNames = it.given.findAll { it.@qualifier.text() in ['', 'CL', 'IN'] }
@@ -160,14 +160,14 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
     }
 
-    protected void addOtherParameters(parameterList, queryParams) {
-        queryParams.add([
-                '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text(),
-                '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
-        ])
+    protected static void addOtherParameters(parameterList, queryParams) {
+        queryParams.add(['@PID.7': parameterList.livingSubjectBirthTime.value.@value.text()])
+        if (parameterList.livingSubjectAdministrativeGender.value.@code.text()) {
+            queryParams.add(['@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')])
+        }
     }
 
-    protected void addAddressParameters(addressValues, queryParams) {
+    protected static void addAddressParameters(addressValues, queryParams) {
         addressValues.each {
             queryParams.add([
                     '@PID.11.1': it.streetAddressLine.text(),

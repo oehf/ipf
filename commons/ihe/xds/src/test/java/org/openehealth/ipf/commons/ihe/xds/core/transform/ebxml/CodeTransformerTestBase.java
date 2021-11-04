@@ -15,20 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link CodeTransformer}. 
@@ -39,13 +35,13 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     private Code code;
     private EbXMLObjectLibrary objectLibrary;
     
-    @Before
+    @BeforeEach
     public final void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new CodeTransformer(factory);
-        objectLibrary = factory.createObjectLibrary(); 
-        
-        LocalizedString displayName = new LocalizedString();
+        objectLibrary = factory.createObjectLibrary();
+
+        var displayName = new LocalizedString();
         displayName.setCharset("charset");
         displayName.setLang("lang");
         displayName.setValue("value");
@@ -58,22 +54,22 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXML() {
-        EbXMLClassification ebXML = transformer.toEbXML(code, objectLibrary);
+        var ebXML = transformer.toEbXML(code, objectLibrary);
         
         assertNotNull(ebXML);
         assertEquals("code", ebXML.getNodeRepresentation());
-        
-        List<EbXMLSlot> slots = ebXML.getSlots();
+
+        var slots = ebXML.getSlots();
         assertEquals(1, slots.size());
-        
-        EbXMLSlot slot = slots.get(0);
+
+        var slot = slots.get(0);
         assertEquals(Vocabulary.SLOT_NAME_CODING_SCHEME, slot.getName());        
         assertEquals(Collections.singletonList("schemeName"), slot.getValueList());
-        
-        List<LocalizedString> localizedStrings = ebXML.getNameAsInternationalString().getLocalizedStrings();
+
+        var localizedStrings = ebXML.getNameAsInternationalString().getLocalizedStrings();
         assertEquals(1, localizedStrings.size());
-        
-        LocalizedString localized = localizedStrings.get(0);
+
+        var localized = localizedStrings.get(0);
         assertEquals("charset", localized.getCharset());
         assertEquals("lang", localized.getLang());
         assertEquals("value", localized.getValue());
@@ -86,7 +82,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLClassification ebXML = transformer.toEbXML(new Code(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Code(), objectLibrary);
         assertNotNull(ebXML);
         
         assertNull(ebXML.getNodeRepresentation());
@@ -97,7 +93,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        EbXMLClassification ebXML = transformer.toEbXML(code, objectLibrary);
+        var ebXML = transformer.toEbXML(code, objectLibrary);
         assertEquals(code, transformer.fromEbXML(ebXML));
     }
     
@@ -108,7 +104,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXmlEmpty() {
-        EbXMLClassification ebXML = transformer.toEbXML(new Code(), objectLibrary);
+        var ebXML = transformer.toEbXML(new Code(), objectLibrary);
         assertEquals(new Code(), transformer.fromEbXML(ebXML));
     }
 }

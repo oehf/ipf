@@ -43,11 +43,11 @@ public class Iti51Component extends XdsComponent<XdsQueryAuditDataset> {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this, parameters, Iti51Service.class) {
+        return new XdsEndpoint<>(uri, remaining, this, parameters, Iti51Service.class) {
 
             @Override
             public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint,
-                                                                                                          JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
+                                                                                                                                JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }

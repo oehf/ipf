@@ -28,8 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 
 /**
  * The ebXML 3.0 version of the {@link EbXMLRetrieveDocumentSetResponse}.
@@ -56,13 +54,13 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     @Override
     public List<RetrievedDocument> getDocuments() {
         List<RetrievedDocument> docs = new ArrayList<>();
-        for (DocumentResponse documentResponse : response.getDocumentResponse()) {
-            DocumentReference requestData = new DocumentReference();
+        for (var documentResponse : response.getDocumentResponse()) {
+            var requestData = new DocumentReference();
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
             requestData.setHomeCommunityId(documentResponse.getHomeCommunityId());
             requestData.setRepositoryUniqueId(documentResponse.getRepositoryUniqueId());
 
-            RetrievedDocument doc = new RetrievedDocument();
+            var doc = new RetrievedDocument();
             doc.setDataHandler(documentResponse.getDocument());
             doc.setRequestData(requestData);
             doc.setNewRepositoryUniqueId(documentResponse.getNewRepositoryUniqueId());
@@ -82,8 +80,8 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     public void setDocuments(List<RetrievedDocument> documents) {
         response.getDocumentResponse().clear();
         if (documents != null) {
-            for (RetrievedDocument doc : documents) {
-                DocumentResponse documentResponse = new DocumentResponse();
+            for (var doc : documents) {
+                var documentResponse = new DocumentResponse();
                 documentResponse.setDocument(doc.getDataHandler());
                 documentResponse.setNewRepositoryUniqueId(doc.getNewRepositoryUniqueId());
                 documentResponse.setNewDocumentUniqueId(doc.getNewDocumentUniqueId());
@@ -92,7 +90,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
                 } else if (doc.getDataHandler() != null) {
                     documentResponse.setMimeType(doc.getDataHandler().getContentType());
                 }
-                DocumentReference requestData = doc.getRequestData();
+                var requestData = doc.getRequestData();
                 if (requestData != null) {
                     documentResponse.setDocumentUniqueId(requestData.getDocumentUniqueId());
                     documentResponse.setHomeCommunityId(requestData.getHomeCommunityId());
@@ -121,7 +119,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
 
     @Override
     public List<EbXMLRegistryError> getErrors() {
-        RegistryErrorList list = response.getRegistryResponse().getRegistryErrorList();
+        var list = response.getRegistryResponse().getRegistryErrorList();
         if (list == null) {
             return Collections.emptyList();
         }
@@ -133,9 +131,9 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
 
     @Override
     public void setErrors(List<EbXMLRegistryError> errors) {
-        RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
+        var value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         response.getRegistryResponse().setRegistryErrorList(value);
-        List<RegistryError> list = value.getRegistryError();
+        var list = value.getRegistryError();
         list.addAll(errors.stream()
                 .map(error -> ((EbXMLRegistryError30) error).getInternal())
                 .collect(Collectors.toList()));

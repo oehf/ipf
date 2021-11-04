@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.core.payload;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Evaluation context of expressions for payload log file names. Expression or templating engines being
- * used should be able to call
+ * Evaluation context of expressions for payload log file names.
  *
  * @author Dmytro Rud
  */
@@ -30,21 +31,24 @@ public class PayloadLoggingContext {
     private static final String PROCESS_ID;
 
     static {
-        RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
+        var mx = ManagementFactory.getRuntimeMXBean();
         PROCESS_ID = mx.getName().replace("@", "-");
     }
 
-    private final String sequenceId;
+    @Getter @Setter private static String applicationId = "ipf";
+    @Getter private final String sequenceId;
     private final Date currentDate;
+    @Getter private final String interactionId;
 
     /**
      * Initializes this context with a sequence ID
      *
      * @param sequenceId sequence ID
      */
-    public PayloadLoggingContext(Long sequenceId) {
+    public PayloadLoggingContext(Long sequenceId, String interactionId) {
         this.sequenceId = String.format("%012d", sequenceId);
         this.currentDate = new Date();
+        this.interactionId = interactionId;
     }
 
     /**
@@ -55,13 +59,6 @@ public class PayloadLoggingContext {
     }
 
     /**
-     * @return the sequence ID
-     */
-    public String getSequenceId() {
-        return sequenceId;
-    }
-
-    /**
      * @param formatSpecification date format specification
      * @return the current date/time of this context
      * @see SimpleDateFormat
@@ -69,4 +66,5 @@ public class PayloadLoggingContext {
     public String date(String formatSpecification) {
         return new SimpleDateFormat(formatSpecification).format(currentDate);
     }
+
 }

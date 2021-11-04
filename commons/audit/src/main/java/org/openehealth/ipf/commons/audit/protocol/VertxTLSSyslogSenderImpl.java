@@ -19,169 +19,136 @@ package org.openehealth.ipf.commons.audit.protocol;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.buffer.impl.BufferImpl;
-import io.vertx.core.net.*;
-import lombok.Setter;
-import org.openehealth.ipf.commons.audit.AuditContext;
+import io.vertx.core.net.NetClientOptions;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.VertxTlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 /**
- * NIO implemention of a TLS Syslog sender by using an embedded Vert.x instance.
+ * NIO implementation of a TLS Syslog sender by using an embedded Vert.x instance.
  *
  * @author Christian Ohr
  * @since 3.5
+ *
+ * @deprecated
  */
-public class VertxTLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
+@Deprecated
+public class VertxTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<String, VertxTLSSyslogSenderImpl.VertxDestination> {
 
     private static final Logger LOG = LoggerFactory.getLogger(VertxTLSSyslogSenderImpl.class);
 
-    private volatile AtomicReference<String> writeHandlerId = new AtomicReference<>();
     private final Vertx vertx;
 
-    @Setter
-    private boolean trustAll;
-
-
     public VertxTLSSyslogSenderImpl() {
-        this(Vertx.vertx());
+        this(VertxTlsParameters.getDefault());
+    }
+
+    public VertxTLSSyslogSenderImpl(TlsParameters tlsParameters) {
+        this(Vertx.vertx(), tlsParameters);
     }
 
     public VertxTLSSyslogSenderImpl(Vertx vertx) {
-        super(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
+        this(vertx, VertxTlsParameters.getDefault());
+    }
+
+    public VertxTLSSyslogSenderImpl(Vertx vertx, TlsParameters tlsParameters) {
+        super(tlsParameters);
         this.vertx = vertx;
     }
 
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) {
-        if (auditMessages != null) {
-            for (String auditMessage : auditMessages) {
-
-                // Could use a Vertx codec for this
-                byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
-                LOG.debug("Auditing to {}:{}",
-                        auditContext.getAuditRepositoryHostName(),
-                        auditContext.getAuditRepositoryPort());
-                if (LOG.isTraceEnabled()) {
-                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
-                }
-                Buffer buffer = new BufferImpl()
-                        .appendBytes(syslogFrame)
-                        .appendBytes(msgBytes);
-
-                // The net socket has registered itself on the Vertx EventBus
-                vertx.eventBus().send(ensureEstablishedConnection(auditContext), buffer);
-            }
-        }
+    protected VertxDestination makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
+        return new VertxTLSSyslogSenderImpl.VertxDestination(vertx, (VertxTlsParameters) tlsParameters, host, port);
     }
 
     @Override
     public String getTransportName() {
-        return "NIO-TLS";
+        return AuditTransmissionChannel.VERTX_TLS.getProtocolName();
     }
 
-    @Override
-    public void shutdown() {
-        vertx.close();
-    }
+    public static class VertxDestination implements NioTLSSyslogSenderImpl.Destination<String> {
 
-    private String ensureEstablishedConnection(AuditContext auditContext) {
-        if (writeHandlerId.get() == null) {
-            CountDownLatch latch = new CountDownLatch(1);
-            NetClientOptions options = new NetClientOptions()
-                    .setConnectTimeout(1000)
-                    .setReconnectAttempts(5)
-                    .setReconnectInterval(1000)
-                    .setSsl(true);
+        private final Vertx vertx;
+        private final VertxTlsParameters tlsParameters;
+        private final String host;
+        private final int port;
+        private final AtomicReference<String> writeHandlerId = new AtomicReference<>();
 
-            if (trustAll) {
-                options.setTrustAll(true);
-            } else {
-                initializeTLSParameters(options);
+        public VertxDestination(Vertx vertx, VertxTlsParameters tlsParameters, String host, int port) {
+            this.vertx = vertx;
+            this.tlsParameters = tlsParameters;
+            this.host = host;
+            this.port = port;
+        }
+
+        @Override
+        public void write(byte[] bytes) {
+            Buffer buffer = new BufferImpl();
+            buffer.appendBytes(bytes);
+            vertx.eventBus().send(getHandle(), buffer);
+        }
+
+        @Override
+        public void shutdown() {
+            vertx.close();
+        }
+
+        @Override
+        public String getHandle() {
+            if (writeHandlerId.get() == null) {
+                var latch = new CountDownLatch(1);
+                var options = new NetClientOptions()
+                        .setConnectTimeout(1000)
+                        .setReconnectAttempts(5)
+                        .setReconnectInterval(1000)
+                        .setSsl(true);
+
+                tlsParameters.initNetClientOptions(options);
+
+                var client = vertx.createNetClient(options);
+                client.connect(
+                        port,
+                        host,
+                        event -> {
+                            LOG.info("Attempt to connect to {}:{}, : {}",
+                                    host,
+                                    port,
+                                    event.succeeded());
+                            if (event.succeeded()) {
+                                var socket = event.result();
+                                socket
+                                        .exceptionHandler(exceptionEvent -> {
+                                            LOG.info("Audit Connection caught exception", exceptionEvent);
+                                            writeHandlerId.set(null);
+                                            client.close();
+                                        })
+                                        .closeHandler(closeEvent -> {
+                                            LOG.info("Audit Connection closed");
+                                            writeHandlerId.set(null);
+                                            client.close();
+                                        });
+                                writeHandlerId.compareAndSet(null, socket.writeHandlerID());
+                                latch.countDown();
+                            }
+                        });
+
+                // Ensure that connection is established before returning
+                try {
+                    latch.await(5000, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    throw new AuditException(String.format("Could not establish TLS connection to %s:%d",
+                            host,
+                            port));
+                }
             }
-
-            NetClient client = vertx.createNetClient(options);
-            InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
-            client.connect(
-                    auditContext.getAuditRepositoryPort(),
-                    inetAddress.getHostAddress(),
-                    event -> {
-                        LOG.info("Attempt to connect to {}:{} ({}), : {}",
-                                auditContext.getAuditRepositoryHostName(),
-                                auditContext.getAuditRepositoryPort(),
-                                inetAddress.getHostAddress(),
-                                event.succeeded());
-                        if (event.succeeded()) {
-                            NetSocket socket = event.result();
-                            socket
-                                    .exceptionHandler(exceptionEvent -> {
-                                        LOG.info("Audit Connection caught exception", exceptionEvent);
-                                        writeHandlerId.set(null);
-                                        client.close();
-                                    })
-                                    .closeHandler(closeEvent -> {
-                                        LOG.info("Audit Connection closed");
-                                        writeHandlerId.set(null);
-                                        client.close();
-                                    });
-                            writeHandlerId.compareAndSet(null, socket.writeHandlerID());
-                            latch.countDown();
-                        }
-                    });
-
-            // Ensure that connection is established before returning
-            try {
-                latch.await(5000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                throw new AuditException(String.format("Could not establish TLS connection to %s:%d (%s)",
-                        auditContext.getAuditRepositoryHostName(),
-                        auditContext.getAuditRepositoryPort(),
-                        inetAddress.getHostAddress()));
-            }
+            return writeHandlerId.get();
         }
-        return writeHandlerId.get();
+
     }
-
-    private void initializeTLSParameters(NetClientOptions options) {
-        String keyStoreType = System.getProperty(JAVAX_NET_SSL_KEYSTORE_TYPE, KeyStore.getDefaultType());
-        if ("JKS".equalsIgnoreCase(keyStoreType)) {
-            options.setKeyStoreOptions(new JksOptions()
-                    .setPath(System.getProperty(JAVAX_NET_SSL_KEYSTORE))
-                    .setPassword(System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD)));
-        } else {
-            options.setPfxKeyCertOptions(new PfxOptions()
-                    .setPath(System.getProperty(JAVAX_NET_SSL_KEYSTORE))
-                    .setPassword(System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD)));
-        }
-        String trustStoreType = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_TYPE, KeyStore.getDefaultType());
-        if ("JKS".equalsIgnoreCase(trustStoreType)) {
-            options.setTrustStoreOptions(new JksOptions()
-                    .setPath(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE))
-                    .setPassword(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD)));
-        } else {
-            options.setPfxTrustOptions(new PfxOptions()
-                    .setPath(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE))
-                    .setPassword(System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD)));
-        }
-        String allowedProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
-        Stream.of(allowedProtocols.split("\\s*,\\s*"))
-                .forEach(options::addEnabledSecureTransportProtocol);
-
-        String allowedCiphers = System.getProperty(HTTPS_CIPHERSUITES);
-        if (allowedCiphers != null) {
-            Stream.of(allowedCiphers.split("\\s*,\\s*"))
-                    .forEach(options::addEnabledCipherSuite);
-        }
-    }
-
 }

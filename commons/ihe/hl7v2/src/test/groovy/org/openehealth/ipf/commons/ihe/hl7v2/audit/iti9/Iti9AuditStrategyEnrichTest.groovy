@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti9
 
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.Parser
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.DefaultAuditContext
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset
@@ -38,7 +38,7 @@ class Iti9AuditStrategyEnrichTest {
     private String msg
     private AuditContext auditContext
 
-    @Before
+    @BeforeEach
     void setup() {
         msg = getClass().getResourceAsStream("/rsp.hl7").text
         auditContext = new DefaultAuditContext()

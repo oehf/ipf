@@ -29,51 +29,42 @@ class Iti8TestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
 
         // normal processing without auditing
-        from('xds-iti8://0.0.0.0:18081?audit=false')
+        from('xds-iti8://0.0.0.0:18081?audit=false&interceptorFactories=#serverInLogger,#serverOutLogger')
                 .transform(ack())
         
         // normal processing with auditing
-        from('pix-iti8://0.0.0.0:18082')
+        from('pix-iti8://0.0.0.0:18082?interceptorFactories=#serverInLogger,#serverOutLogger')
                 .transform(ack())
 
         // normal processing with tracing
-        from('pix-iti8://0.0.0.0:18083?interceptorFactories=#consumerTracingInterceptor')
+        from('pix-iti8://0.0.0.0:18083?interceptorFactories=#consumerTracingInterceptor,#serverInLogger,#serverOutLogger')
                 .transform(ack())
 
         // fictive route to test producer-side acceptance checking
-        from('pix-iti8://0.0.0.0:18084')
+        from('pix-iti8://0.0.0.0:18084?interceptorFactories=#serverInLogger,#serverOutLogger')
                 .process {
                     resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
                     resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
                 }
         
         // route with normal exception
-        from('xds-iti8://0.0.0.0:18085')
+        from('xds-iti8://0.0.0.0:18085?interceptorFactories=#serverInLogger,#serverOutLogger')
                 .onException(Exception.class)
                     .maximumRedeliveries(0)
                     .end()
                 .process { throw new Exception('Why do you cry, Willy?') }
         
         // route with runtime exception
-        from('pix-iti8://0.0.0.0:18086')
+        from('pix-iti8://0.0.0.0:18086?interceptorFactories=#serverInLogger,#serverOutLogger')
                 .onException(Exception.class)
                     .maximumRedeliveries(0)
                     .end()
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
-        
-        from('xds-iti8://0.0.0.0:18087?audit=false&'+
-                'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=SSLv3,TLSv1&' +
-                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
-                .transform(ack())
-
-        from('xds-iti8://0.0.0.0:18088?audit=false&'+
-                'sslContextParameters=#sslContextParameters')
-                .transform(ack())
 
         from('xds-iti8://0.0.0.0:18089?audit=false&'+
                 'codec=#alternativeCodec&' +
-                'consumer.exceptionHandler=#iti8MllpExceptionHandler')
+                'exceptionHandler=#iti8MllpExceptionHandler' +
+                '&interceptorFactories=#serverInLogger,#serverOutLogger')
                 .transform(ack())
 
     }

@@ -29,12 +29,9 @@ public class ConstantTransformer implements Processor {
         this.constant = constant;
     }
     
-    public void process(Exchange exchange) throws Exception {
-        if (exchange.getPattern().isOutCapable()) {
-            exchange.getOut().setBody(constant);
-        } else {
-            exchange.getIn().setBody(constant);
-        }
+    @Override
+    public void process(Exchange exchange) {
+        exchange.getMessage().setBody(constant);
     }
 
 }

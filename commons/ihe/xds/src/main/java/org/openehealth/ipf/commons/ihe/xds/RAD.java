@@ -47,7 +47,7 @@ public class RAD implements XdsIntegrationProfile {
         RAD_75(RAD_75_WS_CONFIG),
         RAD_75_ASYNC_RESPONSE(RAD_75_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -61,8 +61,8 @@ public class RAD implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean requiresHomeCommunityId() {
-        return false;
+    public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+        return HomeCommunityIdOptionality.NEVER;
     }
 
     @Override

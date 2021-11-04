@@ -43,7 +43,7 @@ public class XCDR implements XdsIntegrationProfile {
 		ITI_80(ITI_80_WS_CONFIG);
 
 		@Getter
-		private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+		private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {
@@ -57,8 +57,8 @@ public class XCDR implements XdsIntegrationProfile {
 	}
 
 	@Override
-	public boolean requiresHomeCommunityId() {
-		return true;
+	public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+		return HomeCommunityIdOptionality.ALWAYS;
 	}
 
 	@Override

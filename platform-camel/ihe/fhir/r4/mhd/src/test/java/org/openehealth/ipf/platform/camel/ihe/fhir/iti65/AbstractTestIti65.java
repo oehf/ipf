@@ -17,12 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.utilities.xhtml.NodeType;
-import org.hl7.fhir.utilities.xhtml.XhtmlNode;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
@@ -30,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -44,18 +41,18 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     private static final String MANIFEST_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bd";
 
     public static void startServer(String contextDescriptor) {
-        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.R4);
+        var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
     protected Bundle provideAndRegister() throws Exception {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile(Iti65Constants.ITI65_PROFILE);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 
-        DocumentManifest manifest = new DocumentManifest();
+        var manifest = new DocumentManifest();
         manifest.setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
                 .setCreated(new Date())
                 .setDescription("description")
@@ -75,13 +72,17 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         // Reference
 
-        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
 
-        Date timestamp = new DateTime()
-                .withDate(2013, 7, 1)
-                .withTime(13, 11, 33, 0)
-                .withZone(DateTimeZone.UTC).toDate();
-        DocumentReference reference = new DocumentReference();
+        var instant = ZonedDateTime.of(
+                LocalDate.of(2013, 7, 1),
+                LocalTime.of(13, 11, 13),
+                ZoneId.of("UTC")
+        ).toInstant();
+
+        var timestamp = Date.from(instant);
+
+        var reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 
         reference.setMasterIdentifier(
@@ -119,7 +120,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         // Binary
 
-        Binary binary = new Binary().setContentType("text/plain");
+        var binary = new Binary().setContentType("text/plain");
         binary.setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);
         bundle.addEntry()
@@ -133,7 +134,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected Bundle thisSucks() {
-        Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
+        var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile("http://thissucks.com");
         return bundle;
     }

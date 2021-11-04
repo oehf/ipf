@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants
  * Entry point for command line execution.
  * @author Christian Ohr
  */
-public class Client {
+class Client {
       
     /**
      * Standard main.
@@ -37,7 +37,7 @@ public class Client {
      * @throws Exception
      *          any problem that occurred.
      */
-    public static void main(String[] args) {
+    static void main(String[] args) {
         FhirContext context = FhirContext.forDstu2Hl7Org()
 
         Parameters inParams = new Parameters()

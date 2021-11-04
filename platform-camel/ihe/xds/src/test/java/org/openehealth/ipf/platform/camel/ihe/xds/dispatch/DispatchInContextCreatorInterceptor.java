@@ -21,9 +21,11 @@ import org.apache.cxf.jaxws.handler.logical.LogicalMessageContextImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.apache.cxf.ws.addressing.AddressingProperties;
+import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 
-import javax.xml.ws.handler.MessageContext;
+import java.util.Map;
 
 /**
  * @author Dmytro Rud
@@ -33,15 +35,22 @@ public class DispatchInContextCreatorInterceptor extends AbstractPhaseIntercepto
     public DispatchInContextCreatorInterceptor() {
         super(Phase.UNMARSHAL);
         addBefore(AuditInRequestInterceptor.class.getName());
-   }
+    }
+    
+    public static String extractWsaAction(Map<String, Object> map) {
+        var inProps = (AddressingProperties) map.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
+        if (inProps != null) {
+            return inProps.getAction().getValue();
+        }
+        return null;
+    }
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
+        var messageContext = new WebServiceContextImpl().getMessageContext();
         if (messageContext == null) {
             messageContext = new LogicalMessageContextImpl(message);
             WebServiceContextImpl.setMessageContext(messageContext);
         }
-        messageContext.put(MessageContext.WSDL_OPERATION, message.get(MessageContext.WSDL_OPERATION));
     }
 }

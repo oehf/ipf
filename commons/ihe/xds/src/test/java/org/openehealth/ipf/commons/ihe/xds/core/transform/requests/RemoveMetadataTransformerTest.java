@@ -15,13 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
 
-import static org.junit.Assert.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
 
 /**
  * Tests for {@link RemoveMetadataRequestTransformer}.
@@ -32,7 +39,7 @@ public class RemoveMetadataTransformerTest {
     private RemoveMetadata request;
 
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {        
         transformer = new RemoveMetadataRequestTransformer();
         request = SampleData.createRemoveMetadata();
@@ -40,7 +47,7 @@ public class RemoveMetadataTransformerTest {
 
     @Test
     public void testToEbXML() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(2, ebXML.getReferences().size());
         assertEquals("1.2.3", ebXML.getReferences().get(0).getHome());
@@ -56,7 +63,7 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLRemoveMetadataRequest result = transformer.toEbXML(new RemoveMetadata());
+        var result = transformer.toEbXML(new RemoveMetadata());
         assertNotNull(result);
         assertNotNull(result.getReferences());
         assertEquals(0, result.getReferences().size());
@@ -64,8 +71,8 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testFromEbXML() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
-        RemoveMetadata result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(request);
+        var result = transformer.fromEbXML(ebXML);
         
         assertEquals(request.toString(), result.toString());
     }
@@ -77,7 +84,19 @@ public class RemoveMetadataTransformerTest {
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(new RemoveMetadata());
+        var ebXML = transformer.toEbXML(new RemoveMetadata());
         assertEquals(new RemoveMetadata(), transformer.fromEbXML(ebXML));
+    }
+    
+    @Test
+    public void verifyEbXmlSerialization() throws JAXBException {
+        var ebXML = transformer.toEbXML(SampleData.createRemoveMetadata());
+        JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(ebXML.getInternal(), writer);
+        new RemoveMetadataRequestValidator().validate(ebXML, ITI_62);
+        assertFalse(writer.toString().contains("AdhocQuery"), "AdhocQuery is not expected in ITI-62 request");
     }
 }

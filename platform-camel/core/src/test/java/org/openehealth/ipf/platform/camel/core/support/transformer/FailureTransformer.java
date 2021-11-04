@@ -33,12 +33,12 @@ public class FailureTransformer implements Processor {
         this.error = error;
     }
     
+    @Override
     public void process(Exchange exchange) throws Exception {
         if (error) {
             throw new RuntimeException("failed");
         } else {
-            exchange.getOut().setBody("failed");
-            exchange.getOut().setFault(true);
+            exchange.getMessage().setBody("failed");
         }
     }
 

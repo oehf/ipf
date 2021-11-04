@@ -23,35 +23,35 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <camel:camelContext id="camelContext" >
-    <camel:routeBuilder ref="route"/>
-  </camel:camelContext>
+    <camel:camelContext id="camelContext">
+        <camel:routeBuilder ref="route"/>
+    </camel:camelContext>
 
-  <bean id="route" 
-      class="org.openehealth.ipf.platform.camel.core.config.Route" />
-  
-  <bean id="route1" 
-      class="org.openehealth.ipf.platform.camel.core.config.Route1" />
-  
-  <bean id="route2" 
-      class="org.openehealth.ipf.platform.camel.core.config.Route2" />
+    <bean id="route"
+          class="org.openehealth.ipf.platform.camel.core.config.Route"/>
 
-  <bean id="configurerRB"
-        class="org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer">
-    <property name="camelContext" ref="camelContext" />
-  </bean>
-  
-  <bean id="configurerDSL" 
-        class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer">
-  </bean>
-  
-  <bean id="postProcessor"
-        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
-    <property name="springConfigurers" >
-      <list>
-        <ref bean="configurerRB" />
-        <ref bean="configurerDSL" />                
-      </list>
-    </property>
-  </bean>   
+    <bean id="route1"
+          class="org.openehealth.ipf.platform.camel.core.config.Route1"/>
+
+    <bean id="route2"
+          class="org.openehealth.ipf.platform.camel.core.config.Route2"/>
+
+    <bean id="configurerRB"
+          class="org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer">
+        <property name="camelContext" ref="camelContext"/>
+    </bean>
+
+    <bean id="configurerDSL"
+          class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer">
+    </bean>
+
+    <bean id="postProcessor"
+          class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
+        <property name="springConfigurers">
+            <list>
+                <ref bean="configurerRB"/>
+                <ref bean="configurerDSL"/>
+            </list>
+        </property>
+    </bean>
 </beans>

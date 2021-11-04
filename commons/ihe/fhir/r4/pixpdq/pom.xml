@@ -3,14 +3,14 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-r4</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-commons-ihe-fhir-r4-pixpdq</artifactId>
     <name>ipf-commons-ihe-fhir-r4-pixpdq</name>
     <description>FHIR-specific IHE support</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <dependencies>
         <dependency>
@@ -34,10 +34,6 @@
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
@@ -63,13 +59,5 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

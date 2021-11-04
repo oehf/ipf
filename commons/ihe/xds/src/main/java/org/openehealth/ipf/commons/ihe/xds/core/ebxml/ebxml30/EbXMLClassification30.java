@@ -114,6 +114,6 @@ public class EbXMLClassification30 implements EbXMLClassification {
 
     @Override
     public void assignUniqueId() {
-        classification.setId("urn:uuid:" + UUID.randomUUID().toString());
+        classification.setId("urn:uuid:" + UUID.randomUUID());
     }
 }

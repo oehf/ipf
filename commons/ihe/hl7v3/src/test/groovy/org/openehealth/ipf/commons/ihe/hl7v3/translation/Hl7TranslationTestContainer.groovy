@@ -18,9 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import org.apache.commons.io.IOUtils
-import org.custommonkey.xmlunit.DetailedDiff
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId
@@ -28,6 +25,9 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.modules.hl7.validation.Validator
+import org.xmlunit.builder.DiffBuilder
+import org.xmlunit.builder.Input
+import org.xmlunit.diff.Diff
 
 import java.nio.charset.StandardCharsets
 
@@ -56,19 +56,13 @@ class Hl7TranslationTestContainer {
             Hl7TranslatorV2toV3 v2tov3Translator,
             HapiContext context) {
         Hl7TranslationTestContainer.transactionName = transactionName
-        
-        XMLUnit.setCompareUnmatched(true)
-        XMLUnit.setIgnoreAttributeOrder(true)
-        XMLUnit.setIgnoreComments(true)
-        XMLUnit.setIgnoreWhitespace(true)
-        //XMLUnit.setTransformerFactory("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl")
 
         Hl7TranslationTestContainer.v3tov2Translator = v3tov2Translator
         Hl7TranslationTestContainer.v2tov3Translator = v2tov3Translator
         Hl7TranslationTestContainer.context = context
 
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(getClass().getResource('/META-INF/map/hl7-v2-v3-translation.map'))
+        mappingService.setMappingScript(Hl7TranslationTestContainer.class.getResource('/META-INF/map/hl7-v2-v3-translation.map'))
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
@@ -123,11 +117,13 @@ class Hl7TranslationTestContainer {
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request, 'UTF-8')
         V3_VALIDATOR.validate(translatedV3response, v3Id.responseValidationProfile)
 
-        Diff diff = new Diff(expectedV3response, translatedV3response)
-        DetailedDiff detDiff = new DetailedDiff(diff)
-        List differences = detDiff.getAllDifferences()
-        assert differences.size() == 1
-        assert differences[0].toString().contains('creationTime')
+        Diff diff = DiffBuilder
+                .compare(Input.fromString(expectedV3response))
+                .withTest(translatedV3response)
+                .normalizeWhitespace()
+                .build()
+        assert diff.differences.size() == 1
+        assert diff.toString().contains('creationTime')
     }
     
     void doTestV2toV3RequestTranslation(String fn, int v2index, Hl7v3InteractionId v3Id) {
@@ -139,11 +135,13 @@ class Hl7TranslationTestContainer {
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         V3_VALIDATOR.validate(translatedV3response, v3Id.requestValidationProfile)
 
-        Diff diff = new Diff(expectedV3response, translatedV3response)
-        DetailedDiff detDiff = new DetailedDiff(diff)
-        List differences = detDiff.getAllDifferences()
-        assert differences.size() == 1
-        assert differences[0].toString().contains('creationTime')
+        Diff diff = DiffBuilder
+                .compare(Input.fromString(expectedV3response))
+                .withTest(translatedV3response)
+                .normalizeWhitespace()
+                .build()
+        assert diff.differences.size() == 1
+        assert diff.toString().contains('creationTime')
     }
 
 }

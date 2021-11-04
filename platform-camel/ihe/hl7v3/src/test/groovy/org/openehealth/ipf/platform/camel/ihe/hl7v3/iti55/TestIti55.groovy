@@ -17,11 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
 import org.apache.camel.Exchange
 import org.apache.camel.component.mock.MockEndpoint
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -73,12 +73,12 @@ class TestIti55 extends HL7v3StandardTestContainer {
     final long MOCK_WAIT_TIME = 30000L
 
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     public void setUp(){
         allResponsesMockEndpoint      = camelContext.getEndpoint('mock:response')
         asyncResponsesMockEndpoint    = camelContext.getEndpoint('mock:asyncResponse')
@@ -217,7 +217,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = '< some ill-formed XML !'
         Exchanges.resultMessage(producerTemplate.send(
-                "http4://localhost:${port}/iti55service",
+                "http://localhost:${port}/iti55service",
                 requestExchange))
         assert MyRejectionHandlingStrategy.count == 1
     }

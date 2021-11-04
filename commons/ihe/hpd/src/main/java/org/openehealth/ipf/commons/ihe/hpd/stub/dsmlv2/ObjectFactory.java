@@ -313,7 +313,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "batchResponse")
     public JAXBElement<BatchResponse> createBatchResponse(BatchResponse value) {
-        return new JAXBElement<BatchResponse>(_BatchResponse_QNAME, BatchResponse.class, null, value);
+        return new JAXBElement<>(_BatchResponse_QNAME, BatchResponse.class, null, value);
     }
 
     /**
@@ -322,7 +322,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "batchRequest")
     public JAXBElement<BatchRequest> createBatchRequest(BatchRequest value) {
-        return new JAXBElement<BatchRequest>(_BatchRequest_QNAME, BatchRequest.class, null, value);
+        return new JAXBElement<>(_BatchRequest_QNAME, BatchRequest.class, null, value);
     }
 
     /**
@@ -331,7 +331,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "and", scope = FilterSet.class)
     public JAXBElement<FilterSet> createFilterSetAnd(FilterSet value) {
-        return new JAXBElement<FilterSet>(_FilterSetAnd_QNAME, FilterSet.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetAnd_QNAME, FilterSet.class, FilterSet.class, value);
     }
 
     /**
@@ -340,7 +340,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "not", scope = FilterSet.class)
     public JAXBElement<Filter> createFilterSetNot(Filter value) {
-        return new JAXBElement<Filter>(_FilterSetNot_QNAME, Filter.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetNot_QNAME, Filter.class, FilterSet.class, value);
     }
 
     /**
@@ -349,7 +349,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "or", scope = FilterSet.class)
     public JAXBElement<FilterSet> createFilterSetOr(FilterSet value) {
-        return new JAXBElement<FilterSet>(_FilterSetOr_QNAME, FilterSet.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetOr_QNAME, FilterSet.class, FilterSet.class, value);
     }
 
     /**
@@ -358,7 +358,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "extensibleMatch", scope = FilterSet.class)
     public JAXBElement<MatchingRuleAssertion> createFilterSetExtensibleMatch(MatchingRuleAssertion value) {
-        return new JAXBElement<MatchingRuleAssertion>(_FilterSetExtensibleMatch_QNAME, MatchingRuleAssertion.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetExtensibleMatch_QNAME, MatchingRuleAssertion.class, FilterSet.class, value);
     }
 
     /**
@@ -367,7 +367,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "greaterOrEqual", scope = FilterSet.class)
     public JAXBElement<AttributeValueAssertion> createFilterSetGreaterOrEqual(AttributeValueAssertion value) {
-        return new JAXBElement<AttributeValueAssertion>(_FilterSetGreaterOrEqual_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetGreaterOrEqual_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
     }
 
     /**
@@ -376,7 +376,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "equalityMatch", scope = FilterSet.class)
     public JAXBElement<AttributeValueAssertion> createFilterSetEqualityMatch(AttributeValueAssertion value) {
-        return new JAXBElement<AttributeValueAssertion>(_FilterSetEqualityMatch_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetEqualityMatch_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
     }
 
     /**
@@ -385,7 +385,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "substrings", scope = FilterSet.class)
     public JAXBElement<SubstringFilter> createFilterSetSubstrings(SubstringFilter value) {
-        return new JAXBElement<SubstringFilter>(_FilterSetSubstrings_QNAME, SubstringFilter.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetSubstrings_QNAME, SubstringFilter.class, FilterSet.class, value);
     }
 
     /**
@@ -394,7 +394,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "present", scope = FilterSet.class)
     public JAXBElement<AttributeDescription> createFilterSetPresent(AttributeDescription value) {
-        return new JAXBElement<AttributeDescription>(_FilterSetPresent_QNAME, AttributeDescription.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetPresent_QNAME, AttributeDescription.class, FilterSet.class, value);
     }
 
     /**
@@ -403,7 +403,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "lessOrEqual", scope = FilterSet.class)
     public JAXBElement<AttributeValueAssertion> createFilterSetLessOrEqual(AttributeValueAssertion value) {
-        return new JAXBElement<AttributeValueAssertion>(_FilterSetLessOrEqual_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetLessOrEqual_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
     }
 
     /**
@@ -412,7 +412,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "approxMatch", scope = FilterSet.class)
     public JAXBElement<AttributeValueAssertion> createFilterSetApproxMatch(AttributeValueAssertion value) {
-        return new JAXBElement<AttributeValueAssertion>(_FilterSetApproxMatch_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
+        return new JAXBElement<>(_FilterSetApproxMatch_QNAME, AttributeValueAssertion.class, FilterSet.class, value);
     }
 
     /**
@@ -421,7 +421,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "searchResponse", scope = BatchResponse.class)
     public JAXBElement<SearchResponse> createBatchResponseSearchResponse(SearchResponse value) {
-        return new JAXBElement<SearchResponse>(_BatchResponseSearchResponse_QNAME, SearchResponse.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseSearchResponse_QNAME, SearchResponse.class, BatchResponse.class, value);
     }
 
     /**
@@ -430,7 +430,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "modifyResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseModifyResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseModifyResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseModifyResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -439,7 +439,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "addResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseAddResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseAddResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseAddResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -448,7 +448,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "authResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseAuthResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseAuthResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseAuthResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -457,7 +457,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "compareResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseCompareResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseCompareResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseCompareResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -466,7 +466,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "extendedResponse", scope = BatchResponse.class)
     public JAXBElement<ExtendedResponse> createBatchResponseExtendedResponse(ExtendedResponse value) {
-        return new JAXBElement<ExtendedResponse>(_BatchResponseExtendedResponse_QNAME, ExtendedResponse.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseExtendedResponse_QNAME, ExtendedResponse.class, BatchResponse.class, value);
     }
 
     /**
@@ -475,7 +475,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "delResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseDelResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseDelResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseDelResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -484,7 +484,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "modDNResponse", scope = BatchResponse.class)
     public JAXBElement<LDAPResult> createBatchResponseModDNResponse(LDAPResult value) {
-        return new JAXBElement<LDAPResult>(_BatchResponseModDNResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseModDNResponse_QNAME, LDAPResult.class, BatchResponse.class, value);
     }
 
     /**
@@ -493,7 +493,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:DSML:2:0:core", name = "errorResponse", scope = BatchResponse.class)
     public JAXBElement<ErrorResponse> createBatchResponseErrorResponse(ErrorResponse value) {
-        return new JAXBElement<ErrorResponse>(_BatchResponseErrorResponse_QNAME, ErrorResponse.class, BatchResponse.class, value);
+        return new JAXBElement<>(_BatchResponseErrorResponse_QNAME, ErrorResponse.class, BatchResponse.class, value);
     }
 
     public DsmlValue createDsmlValue() {

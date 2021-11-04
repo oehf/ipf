@@ -15,24 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
+import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest
-
 /**
  * @author Jens Riemschneider
  */
-class Iti18TestRouteBuilder extends SpringRouteBuilder {
+class Iti18TestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
-        from('xds-iti18:xds-iti18-service1')
+        from('xds-iti18:xds-iti18-service1?outFaultInterceptors=#faultMessageOutInterceptor')
             .id('service1route')
             .process(iti18RequestValidator())
             .process { checkValue(it, 'service 1') }

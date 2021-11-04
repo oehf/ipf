@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 import groovy.lang.Closure;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
@@ -95,9 +95,9 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      */
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-        Object newInput = adaptAggregationInput(newExchange);
-        Object oldInput = adaptInput(oldExchange);
-        Object params = adaptParams(oldExchange);
+        var newInput = adaptAggregationInput(newExchange);
+        var oldInput = adaptInput(oldExchange);
+        var params = adaptParams(oldExchange);
         if (params == null) {
             doAggregate(oldExchange, oldInput, newInput, (Object[])null);
         } else if (params.getClass().isArray()) {

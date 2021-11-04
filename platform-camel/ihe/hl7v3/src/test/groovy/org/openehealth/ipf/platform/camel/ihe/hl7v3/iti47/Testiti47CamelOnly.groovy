@@ -19,9 +19,8 @@ import ca.uhn.hl7v2.parser.DefaultModelClassFactory
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import org.apache.camel.Exchange
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Assert
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
@@ -30,13 +29,14 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import static org.easymock.EasyMock.*
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class Testiti47CamelOnly extends HL7v3StandardTestContainer {
 
     private static String requestMessage, responseMessage
 
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.setMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
@@ -58,7 +58,7 @@ class Testiti47CamelOnly extends HL7v3StandardTestContainer {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service"
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage())
         String response = Exchanges.resultMessage(responseExchange).getBody(String.class)
-        Assert.assertTrue(response.contains("<typeCode code=\"AA\"/>"))
+        assertTrue(response.contains("<typeCode code=\"AA\"/>"))
     }
 
 

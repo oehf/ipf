@@ -15,20 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CODING_SCHEME;
-
-import java.io.ByteArrayOutputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -36,9 +25,16 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDoc
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.ByteArrayOutputStream;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
 
 /**
  * Tests the display name validation for XDS.b. 
@@ -51,9 +47,9 @@ public class ClassificationDisplayNameValidatorTest {
 
     private EbXMLExtrinsicObject extrinsicObject;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXMLObject = createProvideAndRegisterDocumentSetRequest();
+        var ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
     }
 
@@ -73,22 +69,23 @@ public class ClassificationDisplayNameValidatorTest {
         doValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, OPTIONAL);
     }
 
-    @Test(expected = XDSMetaDataException.class)
+    @Test
     public void testValidateClassificationNameRequiredButNotAvailable() throws XDSMetaDataException {
         clearNameInFirstClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
-        doValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, REQUIRED);
+        Assertions.assertThrows(XDSMetaDataException.class,
+                () -> doValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, REQUIRED));
     }
     
     
     @Test
     public void testEventCodeClassificationNameExists() throws XDSMetaDataException {
-        ClassificationValidation validator = buildEventListValidator();
+        var validator = buildEventListValidator();
         validator.validate(extrinsicObject);
     }
     
     
     private void doValidation(String classScheme, DisplayNameUsage displayNameUsage){
-        ClassificationValidation validator = new ClassificationValidation(classScheme, 1, 1, displayNameUsage,
+        var validator = new ClassificationValidation(classScheme, 1, 1, displayNameUsage,
                 Vocabulary.NodeRepresentationUsage.REQUIRED, NO_SLOT_VALUE_VALIDATION);
         validator.validate(extrinsicObject);
     }
@@ -98,7 +95,7 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     private ClassificationValidation buildEventListValidator(){
-        SlotValueValidation [] eventCodeListValidator =
+        var eventCodeListValidator =
                 new SlotValueValidation [] {new SlotValueValidation(SLOT_NAME_CODING_SCHEME, new NopValidator())};
         return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 1, 1,
                 OPTIONAL, Vocabulary.NodeRepresentationUsage.REQUIRED, eventCodeListValidator);
@@ -107,8 +104,8 @@ public class ClassificationDisplayNameValidatorTest {
     
     private EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest() {
         EbXMLFactory factory = new EbXMLFactory30();
-        ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
-        ProvideAndRegisterDocumentSetTransformer transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
+        var request = SampleData.createProvideAndRegisterDocumentSet();
+        var transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
         return transformer.toEbXML(request);
     }
     /**
@@ -118,10 +115,10 @@ public class ClassificationDisplayNameValidatorTest {
     @SuppressWarnings("unused")
     private void marshalEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
         try {
-            JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
-            Marshaller marshaller = context.createMarshaller();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType) ebXML.getInternal();
+            var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+            var marshaller = context.createMarshaller();
+            var outputStream = new ByteArrayOutputStream();
+            var request = (ProvideAndRegisterDocumentSetRequestType) ebXML.getInternal();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(request.getSubmitObjectsRequest(), outputStream);
             // System.out.println(new String(outputStream.toByteArray()));

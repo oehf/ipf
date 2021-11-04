@@ -80,7 +80,7 @@ public class AudienceRestrictionType
      */
     public List<String> getAudience() {
         if (audience == null) {
-            audience = new ArrayList<String>();
+            audience = new ArrayList<>();
         }
         return this.audience;
     }

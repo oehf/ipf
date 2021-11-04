@@ -50,7 +50,7 @@ public class XCA implements XdsIntegrationProfile {
         ITI_39_ASYNC_RESPONSE(ITI_39_ASYNC_RESPONSE_WS_CONFIG);
 
         @Getter
-        private WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -64,8 +64,8 @@ public class XCA implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean requiresHomeCommunityId() {
-        return true;
+    public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
+        return HomeCommunityIdOptionality.ON_MISSING_PATIENT_ID;
     }
 
     @Override

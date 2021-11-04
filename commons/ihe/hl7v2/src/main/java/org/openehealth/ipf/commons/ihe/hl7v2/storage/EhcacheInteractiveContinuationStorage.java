@@ -16,11 +16,10 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
 import ca.uhn.hl7v2.model.Message;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.cache.Cache;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -37,10 +36,10 @@ import static java.util.Objects.requireNonNull;
 public class EhcacheInteractiveContinuationStorage implements InteractiveContinuationStorage {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(EhcacheInteractiveContinuationStorage.class);
-    private final Ehcache ehcache;
+    private final Cache<String, InteractiveContinuationChain> ehcache;
 
 
-    public EhcacheInteractiveContinuationStorage(Ehcache ehcache) {
+    public EhcacheInteractiveContinuationStorage(Cache<String, InteractiveContinuationChain> ehcache) {
         requireNonNull(ehcache);
         this.ehcache = ehcache;
     }
@@ -48,14 +47,11 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
 
     @Override
     public void put(String continuationPointer, String chainId, Message fragment) {
-        InteractiveContinuationChain chain;
-        Element element = ehcache.get(chainId);
-        if (element != null) {
-            chain = (InteractiveContinuationChain) element.getObjectValue();
-        } else {
+        var chain = ehcache.get(chainId);
+        if (chain == null) {
             LOG.debug("Create chain for storage key {}", chainId);
             chain = new InteractiveContinuationChain();
-            ehcache.put(new Element(chainId, chain));
+            ehcache.put(chainId, chain);
         }
         chain.put(continuationPointer, fragment);
     }
@@ -66,9 +62,8 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
             String continuationPointer,
             String chainId)
     {
-        Element element = ehcache.get(chainId);
-        if (element != null) {
-            InteractiveContinuationChain chain = (InteractiveContinuationChain) element.getObjectValue();
+        var chain = ehcache.get(chainId);
+        if (chain != null) {
             return chain.get(continuationPointer);
         }
         return null;
@@ -90,7 +85,7 @@ public class EhcacheInteractiveContinuationStorage implements InteractiveContinu
      */
     private static class InteractiveContinuationChain implements Serializable {
         private final Map<String, Message> responseMessages =
-            Collections.synchronizedMap(new HashMap<String, Message>());
+            Collections.synchronizedMap(new HashMap<>());
 
         public void put(String continuationPointer, Message message) {
             responseMessages.put(continuationPointer, message);

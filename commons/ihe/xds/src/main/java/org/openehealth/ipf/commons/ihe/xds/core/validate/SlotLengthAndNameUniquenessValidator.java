@@ -15,21 +15,24 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 import static org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding.isExtraMetadataSlotName;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DUPLICATE_SLOT_NAME;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SLOT_NAME;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SLOT_VALUE_TOO_LONG;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_QUERY_SLOT_NAME;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates lengths of ebXML slot values and uniqueness of slot names.
@@ -62,7 +65,7 @@ public class SlotLengthAndNameUniquenessValidator {
 
     private void validateSlotLists(List<? extends EbXMLSlotList> slotListContainers) throws XDSMetaDataException {
         for (EbXMLSlotList slotList : slotListContainers) {
-            doValidateSlots(slotList.getSlots(), false, null);
+            doValidateSlots(slotList.getSlots(), false, emptySet());
         }
     }
 
@@ -84,10 +87,10 @@ public class SlotLengthAndNameUniquenessValidator {
             List<? extends EbXMLSlot> slots,
             boolean queryMode,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {
-        HashSet<String> names = new HashSet<>();
+        var names = new HashSet<String>();
         for (EbXMLSlot slot : slots) {
             // validate format and uniqueness of slot names
-            String name = slot.getName();
+            var name = slot.getName();
             metaDataAssert(StringUtils.isNotEmpty(name), MISSING_SLOT_NAME);
 
             if (queryMode) {

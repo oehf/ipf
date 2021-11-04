@@ -39,7 +39,7 @@ public class QED implements IntegrationProfile {
     public enum Interactions implements Hl7v3InteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration> {
         PCC_1(PCC1_WS_CONFIG);
 
-        @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
+        @Getter private final Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -77,5 +77,6 @@ public class QED implements IntegrationProfile {
             PCC_1_REQUEST_VALIDATION_PROFILE,
             PCC_1_RESPONSE_VALIDATION_PROFILE,
             "QUPC_IN043100UV01",
-            "QUPC_IN043200UV01");
+            "QUPC_IN043200UV01",
+            true);
 }

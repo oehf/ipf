@@ -15,19 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link RetrieveImagingDocumentSetRequestTransformer}.
@@ -38,7 +34,7 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
     private RetrieveImagingDocumentSetRequestTransformer transformer;
     private RetrieveImagingDocumentSet request;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
@@ -48,7 +44,7 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
 
     @Test
     public void testToEbXML() {
-        EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
+        var ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         
         assertEquals(2, ebXML.getRetrieveStudies().size());
@@ -57,10 +53,10 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
         assertEquals(2, ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().size());
         assertEquals("urn:oid:1.2.1", ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getSeriesInstanceUID());
 
-        List<DocumentReference> documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
+        var documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
         assertEquals(2, documents.size());
 
-        DocumentReference doc = documents.get(0);
+        var doc = documents.get(0);
         assertEquals("doc1", doc.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.3", doc.getHomeCommunityId());
         assertEquals("repo1", doc.getRepositoryUniqueId());
@@ -70,9 +66,9 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
         assertEquals("urn:oid:1.2.4", doc.getHomeCommunityId());
         assertEquals("repo2", doc.getRepositoryUniqueId());
 
-        List<String> transferSyntaxUIds = ebXML.getTransferSyntaxUIDList();
-        assertEquals("1.2.840.10008.1.2.4.64", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"));
-        assertEquals("1.2.840.10008.1.2.4.70", true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"));
+        var transferSyntaxUIds = ebXML.getTransferSyntaxUIDList();
+        assertEquals(true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.64"), "1.2.840.10008.1.2.4.64");
+        assertEquals(true, transferSyntaxUIds.contains("1.2.840.10008.1.2.4.70"), "1.2.840.10008.1.2.4.70");
      }
     
      @Test
@@ -82,15 +78,15 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
 
      @Test
      public void testToEbXMLEmpty() {
-         EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveImagingDocumentSet());
+         var ebXML = transformer.toEbXML(new RetrieveImagingDocumentSet());
          assertNotNull(ebXML);
          assertEquals(0, ebXML.getRetrieveStudies().size());
      }
 
      @Test
      public void testFromEbXML() {
-         EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
-         RetrieveImagingDocumentSet result = transformer.fromEbXML(ebXML);
+         var ebXML = transformer.toEbXML(request);
+         var result = transformer.fromEbXML(ebXML);
          assertEquals(request, result);
      }
      
@@ -101,8 +97,8 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
 
      @Test
      public void testFromEbXMLEmpty() {
-         EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveImagingDocumentSet());
-         RetrieveImagingDocumentSet result = transformer.fromEbXML(ebXML);
+         var ebXML = transformer.toEbXML(new RetrieveImagingDocumentSet());
+         var result = transformer.fromEbXML(ebXML);
          assertEquals(new RetrieveImagingDocumentSet(), result);
      }
 }

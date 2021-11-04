@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
-import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.EventId;
@@ -33,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -64,14 +62,14 @@ public class AuditorTestBase {
     protected DefaultAuditContext auditContext;
     protected RecordingAuditMessageQueue recorder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         auditContext = new DefaultAuditContext();
         recorder = new RecordingAuditMessageQueue();
         auditContext.setAuditMessageQueue(recorder);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         recorder.clear();
     }
@@ -89,11 +87,11 @@ public class AuditorTestBase {
         assertEquals(eventActionCode, auditMessage.getEventIdentification().getEventActionCode());
         assertEquals(eventId, auditMessage.getEventIdentification().getEventID());
 
-        ActiveParticipantType human = auditMessage.getActiveParticipants().stream()
+        var human = auditMessage.getActiveParticipants().stream()
                 .filter(apt -> apt.getUserName() != null)
                 .findFirst().orElse(null);
 
-        ActiveParticipantType source = auditMessage.getActiveParticipants().stream()
+        var source = auditMessage.getActiveParticipants().stream()
                 .filter(apt -> ActiveParticipantRoleIdCode.Source == apt.getRoleIDCodes().get(0))
                 .findFirst().orElseThrow(() -> new AssertionError("Expected source participant"));
 
@@ -103,7 +101,7 @@ public class AuditorTestBase {
             assertNotNull(source.getAlternativeUserID());
         }
 
-        ActiveParticipantType destination = auditMessage.getActiveParticipants().stream()
+        var destination = auditMessage.getActiveParticipants().stream()
                 .filter(apt -> ActiveParticipantRoleIdCode.Destination == apt.getRoleIDCodes().get(0))
                 .findFirst().orElseThrow(() -> new AssertionError("Expected destination active participant"));
         assertFalse(destination.isUserIsRequestor());
@@ -113,7 +111,7 @@ public class AuditorTestBase {
         }
 
         if (requiresPatient) {
-            ParticipantObjectIdentificationType patient = auditMessage.getParticipantObjectIdentifications().stream()
+            var patient = auditMessage.getParticipantObjectIdentifications().stream()
                     .filter(poi -> ParticipantObjectIdTypeCode.PatientNumber == poi.getParticipantObjectIDTypeCode())
                     .findFirst().orElseThrow(() -> new AssertionError("Expected patient participant object"));
 

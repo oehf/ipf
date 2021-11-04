@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.ServletException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -30,19 +32,20 @@ public class TestIti66Error extends AbstractTestIti66 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InternalErrorException.class)
+    @Test
     public void testSendManuallyReturningError() {
-        try {
-            sendManually(manifestPatientIdentifierParameter());
-        } catch (InternalErrorException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
-        }
-
+        assertThrows(InternalErrorException.class, ()->{
+            try {
+                sendManually(manifestPatientIdentifierParameter());
+            } catch (InternalErrorException e) {
+                assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
+            }
+        });
     }
 
 }

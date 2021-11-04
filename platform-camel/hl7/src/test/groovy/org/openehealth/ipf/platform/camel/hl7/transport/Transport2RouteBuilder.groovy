@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.transport
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
 
 /**
  * @author Martin Krasser
  */
-class Transport2RouteBuilder extends SpringRouteBuilder {
+class Transport2RouteBuilder extends RouteBuilder {
     
     void configure() {
 
-        from('mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
+        from('mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
             .unmarshal().hl7()
-            .process { Thread.sleep(50) } // simulate some processing effort
-            .ack()
+            .delay(50) // simulate some processing effort
+            .transform(HL7v2.ack())
 
     }
     

@@ -36,7 +36,7 @@ public class InterceptorFactorySupport<E extends Endpoint, T extends Interceptor
     @Override
     public T getNewInstance() {
         try {
-            return clazz.newInstance();
+            return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Could not create interceptor instance of class " + clazz.getName(), e);
         }

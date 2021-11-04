@@ -15,19 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link EbXML30Converters}.
@@ -36,57 +27,57 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 public class TestEbXML30Converters {
     @Test
     public void testConvertProvideAndRegisterDocumentSet() {
-        ProvideAndRegisterDocumentSet org = SampleData.createProvideAndRegisterDocumentSet();
-        ProvideAndRegisterDocumentSetRequestType converted = EbXML30Converters.convert(org);
-        ProvideAndRegisterDocumentSet copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createProvideAndRegisterDocumentSet();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertRegisterDocumentSet() {
-        RegisterDocumentSet org = SampleData.createRegisterDocumentSet();
-        SubmitObjectsRequest converted = EbXML30Converters.convert(org);
-        RegisterDocumentSet copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createRegisterDocumentSet();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertResponse() {
-        Response org = SampleData.createResponse();
-        RegistryResponseType converted = EbXML30Converters.convert(org);
-        Response copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createResponse();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertQueryRegistry() {
-        QueryRegistry org = SampleData.createFindDocumentsQuery();
-        AdhocQueryRequest converted = EbXML30Converters.convert(org);
-        QueryRegistry copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createFindDocumentsQuery();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertQueryResponse() {
-        QueryResponse org = SampleData.createQueryResponseWithLeafClass();
-        AdhocQueryResponse converted = EbXML30Converters.convert(org);
-        QueryResponse copy = EbXML30Converters.convertToQueryResponse(converted);
+        var org = SampleData.createQueryResponseWithLeafClass();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convertToQueryResponse(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertRetrieveDocumentSet() {
-        RetrieveDocumentSet org = SampleData.createRetrieveDocumentSet();
-        RetrieveDocumentSetRequestType converted = EbXML30Converters.convert(org);
-        RetrieveDocumentSet copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createRetrieveDocumentSet();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 
     @Test
     public void testConvertRetrieveImagingDocumentSet() {
-        RetrieveImagingDocumentSet org = SampleData.createRetrieveImagingDocumentSet();
-        RetrieveImagingDocumentSetRequestType converted = EbXML30Converters.convert(org);
-        RetrieveImagingDocumentSet copy = EbXML30Converters.convert(converted);
+        var org = SampleData.createRetrieveImagingDocumentSet();
+        var converted = EbXML30Converters.convert(org);
+        var copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 }

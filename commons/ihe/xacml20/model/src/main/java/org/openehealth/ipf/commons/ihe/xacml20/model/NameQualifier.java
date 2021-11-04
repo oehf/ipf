@@ -26,17 +26,19 @@ import javax.xml.bind.annotation.XmlType;
  */
 @AllArgsConstructor
 @XmlType(name = "NameQualifier", namespace = "http://www.openehealth.org/ipf/ppq")
-@XmlEnum(String.class)
+@XmlEnum()
 public enum NameQualifier {
     PATIENT("urn:e-health-suisse:2015:epr-spid"),
     PROFESSIONAL("urn:gs1:gln"),
     REPRESENTATIVE("urn:e-health-suisse:representative-id"),
-    ;
+    TECHNICAL_USER("urn:e-health-suisse:technical-user-id"),
+    POLICY_ADMIN("urn:e-health-suisse:policy-administrator-id"),
+    DOCUMENT_ADMIN("urn:e-health-suisse:document-administrator-id");
 
     @Getter private final String qualifier;
 
     public static NameQualifier fromCode(String code) {
-        for (NameQualifier nameQualifier : values()) {
+        for (var nameQualifier : values()) {
             if (nameQualifier.qualifier.equals(code)) {
                 return nameQualifier;
             }

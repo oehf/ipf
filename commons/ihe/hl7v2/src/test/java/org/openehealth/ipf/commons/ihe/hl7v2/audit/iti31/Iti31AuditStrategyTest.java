@@ -16,15 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.Hl7v2AuditorTestBase;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -62,9 +61,9 @@ public class Iti31AuditStrategyTest extends Hl7v2AuditorTestBase {
     }
 
     private void testRequest(boolean serverSide, EventActionCode eventActionCode) {
-        Iti31AuditStrategy strategy = new Iti31AuditStrategy(serverSide);
-        FeedAuditDataset auditDataset = getHl7v2AuditDataset(strategy, eventActionCode);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti31AuditStrategy(serverSide);
+        var auditDataset = getHl7v2AuditDataset(strategy, eventActionCode);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -77,7 +76,7 @@ public class Iti31AuditStrategyTest extends Hl7v2AuditorTestBase {
     }
 
     private FeedAuditDataset getHl7v2AuditDataset(Iti31AuditStrategy strategy, EventActionCode eventActionCode) {
-        FeedAuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

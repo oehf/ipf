@@ -15,26 +15,27 @@
  */
 package org.openehealth.ipf.tutorials.config.base.route;
 
-import static org.junit.Assert.*;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.nio.charset.Charset;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Boris Stanojevic
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/base-context.xml",
         "/extender-context.xml",
         "/extension-context.xml",
@@ -44,12 +45,12 @@ public class SampleRouteBuilderTest {
     @Autowired
     ProducerTemplate producerTemplate;
     
-    @EndpointInject(uri = "mock:file")
+    @EndpointInject(value = "mock:file")
     MockEndpoint mockFile;
     
-    private final String JETTY_URI = "http4://0.0.0.0:8800";
+    private final String JETTY_URI = "http://0.0.0.0:8800";
     
-    @Before
+    @BeforeEach
     public void setUp(){
         mockFile.reset();
     }
@@ -57,8 +58,8 @@ public class SampleRouteBuilderTest {
     @Test
     public void testReverse() throws Exception {
         mockFile.expectedMessageCount(1);
-        String request = "BLAH";
-        String response = producerTemplate.requestBody(JETTY_URI + "/reverse", request, String.class);
+        var request = "BLAH";
+        var response = producerTemplate.requestBody(JETTY_URI + "/reverse", request, String.class);
         assertEquals("reversed response: HALB", response);
         mockFile.assertIsSatisfied();
         assertEquals(request, mockFile.getExchanges().get(0).getIn().getBody(String.class));
@@ -66,9 +67,9 @@ public class SampleRouteBuilderTest {
 
     @Test
     public void testMap() throws Exception {
-        mockFile.expectedMessageCount(1);        
-        String hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
-        String response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
+        mockFile.expectedMessageCount(1);
+        var hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
+        var response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
         assertTrue(response.contains("Nachname||W|||Blahplatz"));
         mockFile.assertIsSatisfied();
     }
@@ -79,7 +80,7 @@ public class SampleRouteBuilderTest {
             producerTemplate.requestBody(JETTY_URI + "/map", "BLAH");
         } catch (Exception e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
-            String response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
+            var response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
             assertTrue(response.startsWith("Message encoding is not recognized"));
             assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());            
         }

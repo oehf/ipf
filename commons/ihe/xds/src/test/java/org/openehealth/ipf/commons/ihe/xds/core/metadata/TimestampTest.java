@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.Precision;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
 import org.openehealth.ipf.commons.xml.XmlUtils;
-import org.w3c.dom.Element;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -41,7 +41,7 @@ public class TimestampTest {
 
     @Test
     public void testRendering1() {
-        Timestamp ts = Timestamp.fromHL7("20150102030405.777+0200");
+        var ts = Timestamp.fromHL7("20150102030405.777+0200");
         assertEquals(Timestamp.Precision.SECOND, ts.getPrecision());
 
         check(ts, Timestamp.Precision.SECOND, "20150102010405");
@@ -54,7 +54,7 @@ public class TimestampTest {
 
     @Test
     public void testRendering2() {
-        Timestamp ts = Timestamp.fromHL7("2015");
+        var ts = Timestamp.fromHL7("2015");
         assertEquals(Timestamp.Precision.YEAR, ts.getPrecision());
 
         check(ts, Timestamp.Precision.SECOND, "20150101000000");
@@ -74,7 +74,7 @@ public class TimestampTest {
 
     private static void expectFailure(String s) {
         try {
-            Timestamp ts = Timestamp.fromHL7(s);
+            var ts = Timestamp.fromHL7(s);
             fail("This line must be not reachable");
         } catch (Exception e) {
             // ok
@@ -100,7 +100,7 @@ public class TimestampTest {
 
     @Test
     public void testEquivalence() {
-        Timestamp ts1 = Timestamp.fromHL7("20150102100405.777+0800");
+        var ts1 = Timestamp.fromHL7("20150102100405.777+0800");
 
         ts1.setPrecision(Timestamp.Precision.YEAR);
         assertEquals(ts1, Timestamp.fromHL7("2015"));
@@ -129,14 +129,14 @@ public class TimestampTest {
 
     @Test
     public void testNullValues2() {
-        Timestamp ts1 = Timestamp.fromHL7("20151201");
+        var ts1 = Timestamp.fromHL7("20151201");
         assertEquals(Timestamp.Precision.DAY, ts1.getPrecision());
 
         ts1.setPrecision(null);
         assertEquals(Timestamp.Precision.SECOND, ts1.getPrecision());
         assertEquals("20151201000000", Timestamp.toHL7(ts1));
 
-        Timestamp ts2 = Timestamp.fromHL7("20151201000000");
+        var ts2 = Timestamp.fromHL7("20151201000000");
         assertEquals(ts1, ts2);
 
         assertNotEquals(ts1.hashCode(), ts2.hashCode());
@@ -144,26 +144,35 @@ public class TimestampTest {
 
     @Test
     public void testXml() throws Exception {
-        QueryRegistry queryRegistry = SampleData.createFetchQuery();
-        FetchQuery query = (FetchQuery) queryRegistry.getQuery();
+        var queryRegistry = SampleData.createFetchQuery();
+        var query = (FetchQuery) queryRegistry.getQuery();
         assertEquals(Timestamp.Precision.YEAR, query.getCreationTime().getFrom().getPrecision());
         query.getCreationTime().getFrom().setPrecision(null);
 
-        Element element = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().createElement("dummy");
-        JAXBContext jaxbContext = JAXBContext.newInstance(QueryRegistry.class);
+        var element = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().createElement("dummy");
+        var jaxbContext = JAXBContext.newInstance(QueryRegistry.class);
         jaxbContext.createMarshaller().marshal(query, element);
 
-        String s = new String(XmlUtils.serialize(element.getFirstChild()));
+        var s = new String(XmlUtils.serialize(element.getFirstChild()));
         assertTrue(s.contains("<xds:from dateTime=\"1980-01-01T00:00:00Z\"/>"));
         assertTrue(s.contains("<xds:to dateTime=\"1981-01-01T00:00:00Z\" precision=\"YEAR\"/>"));
 
         s = s.replace("precision=\"YEAR\"", "precision=\"some garbage\"");
 
-        ByteArrayInputStream stream = new ByteArrayInputStream(s.getBytes());
+        var stream = new ByteArrayInputStream(s.getBytes());
 
-        FetchQuery query1 = (FetchQuery) jaxbContext.createUnmarshaller().unmarshal(stream);
+        var query1 = (FetchQuery) jaxbContext.createUnmarshaller().unmarshal(stream);
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getFrom().getPrecision());
         assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getTo().getPrecision());
+    }
+    
+    @Test
+    public void timestampNow() {
+        Timestamp now = Timestamp.now();
+        assertEquals(Precision.SECOND, now.getPrecision());
+        String hl7FromNow = now.toHL7();
+        assertTrue(hl7FromNow.startsWith("20"));
+        assertTrue(hl7FromNow.matches("\\d+"));
     }
 
 }

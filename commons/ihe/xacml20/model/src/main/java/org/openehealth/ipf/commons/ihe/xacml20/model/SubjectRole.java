@@ -34,7 +34,6 @@ public enum SubjectRole {
     PROFESSIONAL  (new CE("HCP",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Healthcare Professional")),
     ASSISTANT     (new CE("ASS",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Assistant")),
     REPRESENTATIVE(new CE("REP",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Representative")),
-    ADMINISTRATOR (new CE("ADM",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Administrator")),       // obsolete
     DOCUMENT_ADMIN(new CE("DADM", CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Document Administrator")),
     POLICY_ADMIN  (new CE("PADM", CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Policy Administrator")),
     TECHNICAL_USER(new CE("TCU",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Technical User")),
@@ -43,7 +42,7 @@ public enum SubjectRole {
     @Getter private final CE code;
 
     public static SubjectRole fromCode(CE code) {
-        for (SubjectRole subjectRole : values()) {
+        for (var subjectRole : values()) {
             if (subjectRole.code.equals(code)) {
                 return subjectRole;
             }

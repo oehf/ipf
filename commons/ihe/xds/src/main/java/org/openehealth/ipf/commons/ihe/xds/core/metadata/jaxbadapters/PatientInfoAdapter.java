@@ -28,31 +28,31 @@ import java.util.ListIterator;
 public class PatientInfoAdapter extends XmlAdapter<PatientInfoXml, PatientInfo> {
 
     @Override
-    public PatientInfoXml marshal(PatientInfo patientInfo) throws Exception {
+    public PatientInfoXml marshal(PatientInfo patientInfo) {
         if (patientInfo == null) {
             return null;
         }
 
-        PatientInfoXml xml = new PatientInfoXml();
+        var xml = new PatientInfoXml();
         marshalList(patientInfo.getIds(), xml.getIds());
         marshalList(patientInfo.getNames(), xml.getNames());
         xml.setDateOfBirth(patientInfo.getDateOfBirth());
         xml.setGender(patientInfo.getGender());
         marshalList(patientInfo.getAddresses(), xml.getAddresses());
         patientInfo.getCustomFieldIds().forEach(fieldId -> {
-            List<String> target = xml.getOther().computeIfAbsent(fieldId, dummy -> new ArrayList<>());
+            var target = xml.getOther().computeIfAbsent(fieldId, dummy -> new ArrayList<>());
             marshalList(patientInfo.getHl7FieldIterator(fieldId), target);
         });
         return xml;
     }
 
     @Override
-    public PatientInfo unmarshal(PatientInfoXml xml) throws Exception {
+    public PatientInfo unmarshal(PatientInfoXml xml) {
         if (xml == null) {
             return null;
         }
 
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         unmarshalList(xml.getIds(), patientInfo.getIds());
         unmarshalList(xml.getNames(), patientInfo.getNames());
         patientInfo.setDateOfBirth(xml.getDateOfBirth());
@@ -69,7 +69,7 @@ public class PatientInfoAdapter extends XmlAdapter<PatientInfoXml, PatientInfo> 
     }
 
     private static <T> void unmarshalList(List<T> source, ListIterator<T> target) {
-        for (int i = source.size() - 1; i >= 0; --i) {
+        for (var i = source.size() - 1; i >= 0; --i) {
             target.add(source.get(i));
         }
     }

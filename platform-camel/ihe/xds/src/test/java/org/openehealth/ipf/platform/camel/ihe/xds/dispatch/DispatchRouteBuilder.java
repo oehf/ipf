@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Expression;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -28,42 +26,48 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import java.util.Map;
+
 /**
  * @author Dmytro Rud
  */
 public class DispatchRouteBuilder extends RouteBuilder {
+
+    private static final String ACTION_PROPERTY = "action";
+
     @Override
     public void configure() throws Exception {
         from("cxf:bean:xdsRegistryEndpoint")
-            .choice()
-                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("DocumentRegistry_RegistryStoredQuery"))
+                .process(exchange -> {
+                    exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor
+                            .extractWsaAction(exchange.getProperty(CxfConstants.JAXWS_CONTEXT, Map.class)));
+                }).choice()
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegistryStoredQuery"))
                     .to("direct:handle-iti18")
-                .when(header(CxfConstants.OPERATION_NAME).isEqualTo("DocumentRegistry_RegisterDocumentSet-b"))
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegisterDocumentSet-b"))
                     .to("direct:handle-iti42")
+                .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments"))
+                    .to("direct:handle-pharm1")
                 .otherwise()
                     .to("direct:unsupportedOperation");
 
         from("direct:handle-iti18")
                 .process(XdsCamelValidators.iti18RequestValidator())
-                .transform(new Expression() {
-                    @Override
-                    public <T> T evaluate(Exchange exchange, Class<T> type) {
-                        return (T) SampleData.createQueryResponseWithObjRef();
-                    }
-                })
+                .setBody(constant(SampleData.createQueryResponseWithObjRef()))
                 .convertBodyTo(AdhocQueryResponse.class)
                 .process(XdsCamelValidators.iti18ResponseValidator());
 
         from("direct:handle-iti42")
                 .process(XdsCamelValidators.iti42RequestValidator())
-                .transform(new Expression() {
-                    @Override
-                    public <T> T evaluate(Exchange exchange, Class<T> type) {
-                        return (T) SampleData.createResponse();
-                    }
-                })
+                .setBody(constant(SampleData.createResponse()))
                 .convertBodyTo(RegistryResponseType.class)
                 .process(XdsCamelValidators.iti42ResponseValidator());
+
+        from("direct:handle-pharm1")
+                .process(XdsCamelValidators.pharm1RequestValidator())
+                .setBody(constant(SampleData.createQueryResponseWithObjRef()))
+                .convertBodyTo(AdhocQueryResponse.class)
+                .process(XdsCamelValidators.pharm1ResponseValidator());
 
         from("direct:unsupportedOperation")
                 .throwException(new SOAPFaultException(SOAPFactory.newInstance().createFault(

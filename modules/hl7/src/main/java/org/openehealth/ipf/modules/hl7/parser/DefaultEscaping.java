@@ -14,7 +14,7 @@ public class DefaultEscaping extends ca.uhn.hl7v2.parser.DefaultEscaping {
 
     @Override
     public String escape(String text, EncodingCharacters encChars) {
-        String fixed = text.replace("\r", "\\X000d\\");
+        var fixed = text.replace("\r", "\\X000d\\");
         return super.escape(fixed, encChars);
     }
 

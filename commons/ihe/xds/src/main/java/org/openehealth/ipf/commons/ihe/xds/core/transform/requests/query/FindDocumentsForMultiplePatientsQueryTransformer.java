@@ -34,20 +34,21 @@ public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQ
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         slots.fromPatientIdList(DOC_ENTRY_PATIENT_ID, query.getPatientIds());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
     }
 
 
+    @Override
     public void fromEbXML(FindDocumentsForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
 
         super.fromEbXML(query, ebXML);
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         query.setPatientIds(slots.toPatientIdList(DOC_ENTRY_PATIENT_ID));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));

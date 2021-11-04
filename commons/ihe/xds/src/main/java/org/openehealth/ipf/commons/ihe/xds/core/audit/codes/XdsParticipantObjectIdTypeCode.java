@@ -31,10 +31,11 @@ public enum XdsParticipantObjectIdTypeCode implements ParticipantObjectIdType, E
     RegistryStoredQuery("ITI-18", "Registry Stored Query"),
     CrossGatewayQuery("ITI-38", "Cross Gateway Query"),
     MultiPatientStoredQuery("ITI-51", "Multi-Patient Stored Query"),
-    CrossCommunityFetch("ITI-63", "XCF Fetch");
+    CrossCommunityFetch("ITI-63", "XCF Fetch"),
+    QueryPharmacyDocuments("PHARM-1", "Query Pharmacy Documents");
 
     @Getter
-    private ParticipantObjectIdType value;
+    private final ParticipantObjectIdType value;
 
     XdsParticipantObjectIdTypeCode(String code, String displayName) {
         this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);

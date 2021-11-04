@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
 
 import org.openehealth.ipf.commons.ihe.fhir.AbstractResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
 
 import java.util.Arrays;
@@ -48,14 +49,15 @@ public enum Pcc44Options implements FhirTransactionOptions {
             ProcedureResourceProvider.class,
             EncounterResourceProvider.class);
 
-    private List<Class<? extends AbstractResourceProvider>> resourceProviders;
+    private final List<Class<? extends FhirProvider>> resourceProviders;
 
+    @SafeVarargs
     Pcc44Options(Class<? extends AbstractResourceProvider>... resourceProviders) {
         this.resourceProviders = Arrays.asList(resourceProviders);
     }
 
     @Override
-    public List<Class<? extends AbstractResourceProvider>> getSupportedThings() {
+    public List<Class<? extends FhirProvider>> getSupportedThings() {
         return resourceProviders;
     }
 

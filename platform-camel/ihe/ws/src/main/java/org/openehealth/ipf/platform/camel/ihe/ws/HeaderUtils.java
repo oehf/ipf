@@ -86,13 +86,13 @@ abstract public class HeaderUtils {
             boolean needCreateWhenNotExist, 
             Supplier<T> defaultValueFactory)
     {
-        WrappedMessageContext wrappedContext = (WrappedMessageContext) messageContext;
-        Map<String, Object> headersContainer = useInputMessage
+        var wrappedContext = (WrappedMessageContext) messageContext;
+        var headersContainer = useInputMessage
             ? wrappedContext.getWrappedMap()
             : wrappedContext.getWrappedMessage().getExchange().getOutMessage();
-        
-        T headers = (T) headersContainer.get(key);
-        if ((headers == null) && needCreateWhenNotExist) {
+
+        var headers = (T) headersContainer.get(key);
+        if (headers == null && needCreateWhenNotExist && defaultValueFactory != null) {
             headers = defaultValueFactory.get();
             headersContainer.put(key, headers);
         }
@@ -116,11 +116,11 @@ abstract public class HeaderUtils {
             Map<String, Object> messageContext, 
             Message message) 
     {
-        HashMap<QName, Header> userHeaders = new HashMap<>();
+        var userHeaders = new HashMap<QName, Header>();
         List<Header> soapHeaders = getHeaders(
                 messageContext, Header.HEADER_LIST, true, false, null);
         if (soapHeaders != null) {
-            for (Header soapHeader : soapHeaders) {
+            for (var soapHeader : soapHeaders) {
                 userHeaders.put(soapHeader.getName(), soapHeader);
             }
         }
@@ -151,7 +151,7 @@ abstract public class HeaderUtils {
             boolean isRequest) 
     {
         Collection<Header> userHeaders = null;
-        Object o = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
+        var o = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
         if (o instanceof Collection) {
             userHeaders = (Collection<Header>) o;
         } else if (o instanceof Map) {
@@ -186,7 +186,7 @@ abstract public class HeaderUtils {
         Map<String, List<String>> httpHeaders = getHeaders(
                 messageContext, PROTOCOL_HEADERS, true, false, null);
         if (httpHeaders != null) {
-            for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
+            for (var entry : httpHeaders.entrySet()) {
                 userHeaders.put(entry.getKey(), entry.getValue().get(0));
             }
         }
@@ -221,7 +221,7 @@ abstract public class HeaderUtils {
         if ((headers != null) && ! headers.isEmpty()) {
             Map<String, List<String>> httpHeaders = getHeaders(
                     messageContext, PROTOCOL_HEADERS, isRequest, true, HashMap::new);
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
+            for (var entry : headers.entrySet()) {
                 httpHeaders.put(entry.getKey(), Collections.singletonList(entry.getValue()));
             }
         }

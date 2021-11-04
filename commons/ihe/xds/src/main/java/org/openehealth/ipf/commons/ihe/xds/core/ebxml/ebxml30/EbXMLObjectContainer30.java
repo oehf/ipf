@@ -43,8 +43,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
      * Fills the object Library based on the contents.
      */
     protected void fillObjectLibrary() {
-        for (JAXBElement<? extends IdentifiableType> obj : getContents()) {
-            String id = obj.getValue().getId();
+        for (var obj : getContents()) {
+            var id = obj.getValue().getId();
             if (id != null) {
                 objectLibrary.put(id, obj.getValue());
             }
@@ -64,7 +64,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public void addAssociation(EbXMLAssociation association) {
         if (association != null) {
-            AssociationType1 internal = ((EbXMLAssociation30)association).getInternal();
+            var internal = ((EbXMLAssociation30)association).getInternal();
             getContents().add(EbXMLFactory30.RIM_FACTORY.createAssociation(internal));
         }        
     }
@@ -72,7 +72,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public void addExtrinsicObject(EbXMLExtrinsicObject extrinsic) {
         if (extrinsic != null) {
-            ExtrinsicObjectType internal = ((EbXMLExtrinsicObject30)extrinsic).getInternal();
+            var internal = ((EbXMLExtrinsicObject30)extrinsic).getInternal();
             getContents().add(EbXMLFactory30.RIM_FACTORY.createExtrinsicObject(internal));
         }        
     }
@@ -80,7 +80,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public void addRegistryPackage(EbXMLRegistryPackage regPackage) {
         if (regPackage != null) {
-            RegistryPackageType internal = ((EbXMLRegistryPackage30)regPackage).getInternal();
+            var internal = ((EbXMLRegistryPackage30)regPackage).getInternal();
             getContents().add(EbXMLFactory30.RIM_FACTORY.createRegistryPackage(internal));
         }        
     }
@@ -88,8 +88,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public List<EbXMLAssociation> getAssociations() {
         List<EbXMLAssociation> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            AssociationType1 association = cast(identifiable, AssociationType1.class);            
+        for (var identifiable : getContents()) {
+            var association = cast(identifiable, AssociationType1.class);
             if (association != null) {
                 results.add(new EbXMLAssociation30(association, objectLibrary));
             }
@@ -101,8 +101,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public List<EbXMLClassification> getClassifications() {
         List<EbXMLClassification> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            ClassificationType classification = cast(identifiable, ClassificationType.class);            
+        for (var identifiable : getContents()) {
+            var classification = cast(identifiable, ClassificationType.class);
             if (classification != null) {
                 results.add(new EbXMLClassification30(classification));
             }
@@ -116,10 +116,10 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
         noNullElements(objectTypes, "objectTypes cannot be null or contain null elements");
 
         List<EbXMLExtrinsicObject> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            ExtrinsicObjectType extrinsic = cast(identifiable, ExtrinsicObjectType.class);            
+        for (var identifiable : getContents()) {
+            var extrinsic = cast(identifiable, ExtrinsicObjectType.class);
             if (extrinsic != null) {
-                for (String objectType : objectTypes) {
+                for (var objectType : objectTypes) {
                     if (objectType.equals(extrinsic.getObjectType())) {
                         results.add(new EbXMLExtrinsicObject30(extrinsic, objectLibrary));
                         break;
@@ -134,8 +134,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public List<EbXMLExtrinsicObject> getExtrinsicObjects() {
         List<EbXMLExtrinsicObject> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            ExtrinsicObjectType extrinsic = cast(identifiable, ExtrinsicObjectType.class);            
+        for (var identifiable : getContents()) {
+            var extrinsic = cast(identifiable, ExtrinsicObjectType.class);
             if (extrinsic != null) {
                 results.add(new EbXMLExtrinsicObject30(extrinsic, objectLibrary));
             }
@@ -147,12 +147,12 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public List<EbXMLRegistryPackage> getRegistryPackages(String classificationNode) {
         notNull(classificationNode, "classificationNode cannot be null");
-    
-        Set<String> acceptedIds = getAcceptedIds(classificationNode);
+
+        var acceptedIds = getAcceptedIds(classificationNode);
         
         List<EbXMLRegistryPackage> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            RegistryPackageType regPackage = cast(identifiable, RegistryPackageType.class);            
+        for (var identifiable : getContents()) {
+            var regPackage = cast(identifiable, RegistryPackageType.class);
             if (matchesFilter(regPackage, acceptedIds, classificationNode)) {
                 results.add(new EbXMLRegistryPackage30(regPackage, objectLibrary));
             }
@@ -164,8 +164,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public List<EbXMLRegistryPackage> getRegistryPackages() {
         List<EbXMLRegistryPackage> results = new ArrayList<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            RegistryPackageType regPackage = cast(identifiable, RegistryPackageType.class);            
+        for (var identifiable : getContents()) {
+            var regPackage = cast(identifiable, RegistryPackageType.class);
             if (regPackage != null) {
                 results.add(new EbXMLRegistryPackage30(regPackage, objectLibrary));
             }
@@ -177,7 +177,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     @Override
     public void addClassification(EbXMLClassification classification) {
         if (classification != null) {
-            ClassificationType internal = ((EbXMLClassification30)classification).getInternal();
+            var internal = ((EbXMLClassification30)classification).getInternal();
             getContents().add(EbXMLFactory30.RIM_FACTORY.createClassification(internal));
         }
     }
@@ -188,12 +188,12 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     }
 
     private boolean hasClassificationNode(RegistryPackageType regPackage, String classificationNode) {
-        String id = regPackage.getId();
+        var id = regPackage.getId();
         if (id == null) {
             return false;
         }
         
-        for (ClassificationType classification : regPackage.getClassification()) {
+        for (var classification : regPackage.getClassification()) {
             if (classificationNode.equals(classification.getClassificationNode()) 
                     && id.equals(classification.getClassifiedObject())) {
                 return true;
@@ -204,8 +204,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     private Set<String> getAcceptedIds(String classificationNode) {
         Set<String> acceptedIds = new HashSet<>();
-        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
-            ClassificationType classification = cast(identifiable, ClassificationType.class);
+        for (var identifiable : getContents()) {
+            var classification = cast(identifiable, ClassificationType.class);
             if (classification != null && classificationNode.equals(classification.getClassificationNode())) {
                 acceptedIds.add(classification.getClassifiedObject());
             }

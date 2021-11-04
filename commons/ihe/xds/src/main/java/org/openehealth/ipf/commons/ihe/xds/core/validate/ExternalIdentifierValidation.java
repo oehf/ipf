@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 public class ExternalIdentifierValidation implements RegistryObjectValidator {
     private final String scheme;
     private final ValueValidator validator;
+    private final boolean required;
 
     /**
      * Constructs a validation.
@@ -34,17 +35,22 @@ public class ExternalIdentifierValidation implements RegistryObjectValidator {
      *          the scheme of the external identifier to validate.
      * @param validator
      *          the validator to call for the value of the external identifier.
+     * @param required
+     *          whether the identifier is required or optional.
      */
-    public ExternalIdentifierValidation(String scheme, ValueValidator validator) {
+    public ExternalIdentifierValidation(String scheme, ValueValidator validator, boolean required) {
         this.scheme = scheme;
         this.validator = validator;
+        this.required = required;
     }
 
     @Override
     public void validate(EbXMLRegistryObject obj) throws XDSMetaDataException {
-        String value = obj.getExternalIdentifierValue(scheme);
-        metaDataAssert(value != null, MISSING_EXTERNAL_IDENTIFIER, scheme);
-        
-        validator.validate(value);
+        var value = obj.getExternalIdentifierValue(scheme);
+        if (value == null) {
+            metaDataAssert(!required, MISSING_EXTERNAL_IDENTIFIER, scheme);
+        } else {
+            validator.validate(value);
+        }
     }
 }

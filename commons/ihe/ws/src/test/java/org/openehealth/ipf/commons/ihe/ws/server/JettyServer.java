@@ -23,8 +23,6 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 
-import java.util.Map;
-
 /**
  * A servlet server based on Jetty.
  * <p>
@@ -37,25 +35,25 @@ public class JettyServer extends ServletServer {
     @Override
     public void start() {
         server = new Server();
-        ServerConnector connector = isSecure()
+        var connector = isSecure()
                 ? new ServerConnector(server, createSecureContextFactory())
                 : new ServerConnector(server);
 
         server.addConnector(connector);
         connector.setPort(getPort());
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        var context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         context.setResourceBase("/");
-        ContextLoaderListener listener = new ContextLoaderListener();
+        var listener = new ContextLoaderListener();
 
         context.getInitParams().put("contextConfigLocation", getContextResource());
         context.addEventListener(listener);
 
         context.setContextPath(getContextPath());
-        ServletHolder holder = new ServletHolder(getServlet());
+        var holder = new ServletHolder(getServlet());
         holder.setName(getServletName());
         context.addServlet(holder, getServletPath());
 
-        for (Map.Entry<String, String> parameters : getInitParameters().entrySet()) {
+        for (var parameters : getInitParameters().entrySet()) {
             holder.setInitParameter(parameters.getKey(), parameters.getValue());
         }
         
@@ -69,7 +67,7 @@ public class JettyServer extends ServletServer {
     }
 
     private SslContextFactory createSecureContextFactory() {
-        SslContextFactory sslContextFactory = new SslContextFactory();
+        var sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
         sslContextFactory.setTrustStorePath(getTruststoreFile());

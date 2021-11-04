@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import java.io.InputStream;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.io.InputStream;
 
 /**
  * @author Christian Ohr
@@ -31,7 +31,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     private String cdaExample = "/message/SampleCDADocument.xml";
     private String ccdExample = "/message/SampleCCDDocument.xml";
 
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(value="mock:error")
     protected MockEndpoint mockError;
     
     @Test
@@ -49,7 +49,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     private void testValidateCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
         mockError.reset();
-        InputStream stream = inputStream(file);
+        var stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         mockError.expectedMessageCount(0);
         producerTemplate.sendBody(endpoint, stream);

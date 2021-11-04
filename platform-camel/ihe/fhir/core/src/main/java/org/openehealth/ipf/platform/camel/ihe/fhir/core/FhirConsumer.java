@@ -19,14 +19,14 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.support.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
@@ -50,7 +50,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_O
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
         implements SuspendableService, RequestConsumer {
 
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
@@ -58,8 +58,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     @Override
-    public boolean test(Object payload) {
-        return getEndpoint().getConsumerSelector().test(payload);
+    public boolean test(RequestDetails requestDetails) {
+        return getEndpoint().getConsumerSelector().test(requestDetails);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     @Override
     public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
-        return (List<R>) handleInRoute(payload, headers, List.class);
+        return handleInRoute(payload, headers, List.class);
     }
 
     @Override
@@ -139,9 +139,9 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     @Override
     public int handleSizeRequest(Object payload, Map<String, Object> headers) {
-        Exchange exchange = runRoute(payload, headers);
-        Message resultMessage = Exchanges.resultMessage(exchange);
-        Integer size = resultMessage.getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
+        var exchange = runRoute(payload, headers);
+        var resultMessage = Exchanges.resultMessage(exchange);
+        var size = resultMessage.getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
         if (size == null) {
             throw new InternalErrorException("Server did not obtain result size");
         }
@@ -162,10 +162,10 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @return request result, type-converted into the required result class
      */
     protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
-        Exchange exchange = runRoute(payload, headers);
-        Message resultMessage = Exchanges.resultMessage(exchange);
+        var exchange = runRoute(payload, headers);
+        var resultMessage = Exchanges.resultMessage(exchange);
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
-            List<T> singletonList = (List<T>)resultMessage.getBody();
+            var singletonList = (List<T>)resultMessage.getBody();
             if (singletonList.isEmpty() && payload instanceof IIdType) {
                 throw new ResourceNotFoundException((IIdType)payload);
             }
@@ -175,7 +175,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     protected Exchange runRoute(Object payload, Map<String, Object> headers) {
-        Exchange exchange = getEndpoint().createExchange();
+        var exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {
             exchange.getIn().getHeaders().putAll(headers);
@@ -199,7 +199,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         // If the exchange has failed, throw the exception back into the servlet
         // TODO care about auditing?
         if (exchange.isFailed()) {
-            BaseServerResponseException e = exchange.getException(BaseServerResponseException.class);
+            var e = exchange.getException(BaseServerResponseException.class);
             throw (e != null) ? e : new InternalErrorException("Unexpected server error", exchange.getException());
         }
         return exchange;

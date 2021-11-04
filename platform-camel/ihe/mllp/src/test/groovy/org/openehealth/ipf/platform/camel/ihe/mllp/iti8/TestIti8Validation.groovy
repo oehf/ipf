@@ -17,20 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.apache.camel.Exchange
 import org.apache.camel.spi.Synchronization
-import org.junit.Ignore
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.*
-
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Unit test for validation DSL extensions.
@@ -46,7 +43,7 @@ class TestIti8Validation extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -59,7 +56,7 @@ class TestIti8Validation extends MllpTestContainer {
         assertACK(msg)
     }
 
-    @Ignore
+    @Disabled
     void testConcurrentMessages() {
         File f = File.createTempFile("tmp", "tmp")
         Writer w = new BufferedWriter(new FileWriter(f))

@@ -20,7 +20,6 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.TypeConverter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.NonReadingAttachmentMarshaller;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
@@ -32,6 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -60,7 +60,7 @@ public abstract class XdsRenderingUtils {
 
         /* --------- REQUESTS --------- */
 
-        // ITI-18, 38, 51, 63
+        // ITI-18, 38, 51, 63, PHARM-1
         TYPES_CORRESPONDENCE.put(QueryRegistry.class, AdhocQueryRequest.class);
 
         // ITI-41
@@ -83,7 +83,7 @@ public abstract class XdsRenderingUtils {
 
         /* --------- RESPONSES --------- */
 
-        // ITI-18, 38, 51, 63
+        // ITI-18, 38, 51, 63, PHARM-1
         TYPES_CORRESPONDENCE.put(QueryResponse.class, AdhocQueryResponse.class);
 
         // ITI-41, 42, 57, 61, 62, 86
@@ -179,7 +179,7 @@ public abstract class XdsRenderingUtils {
      */
     public static String doRender(Exchange exchange, Object body) {
         if (TYPES_CORRESPONDENCE.containsKey(body.getClass())) {
-            TypeConverter converter = exchange.getContext().getTypeConverter();
+            var converter = exchange.getContext().getTypeConverter();
             body = converter.convertTo(TYPES_CORRESPONDENCE.get(body.getClass()), exchange, body);
         }
         return renderEbxml(body);
@@ -195,8 +195,8 @@ public abstract class XdsRenderingUtils {
      */
     public static String renderEbxml(Object ebXml) {
         try {
-            StringWriter writer = new StringWriter();
-            Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
+            var writer = new StringWriter();
+            var marshaller = JAXB_CONTEXT.createMarshaller();
             marshaller.setAttachmentMarshaller(new NonReadingAttachmentMarshaller());
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(ebXml, writer);

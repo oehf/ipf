@@ -19,16 +19,16 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import org.easymock.EasyMock;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -40,14 +40,14 @@ public class EagerBundleProviderTest {
     private AbstractBundleProvider bundleProvider;
     private List<IBaseResource> response;
 
-    @Before
+    @BeforeEach
     public void setup() {
         requestConsumer = EasyMock.createMock(RequestConsumer.class);
         response = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (var i = 0; i < MAX_SIZE; i++) {
             response.add(new Patient().setId(Integer.toString(i)));
         }
-        Object payload = new Object();
+        var payload = new Object();
         Map<String, Object> headers = new HashMap<>();
         bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers);
     }
@@ -64,8 +64,8 @@ public class EagerBundleProviderTest {
     public void testGetResources() {
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
         EasyMock.replay(requestConsumer);
-        List<IBaseResource> result = bundleProvider.getResources(10, 30);
-        Assert.assertEquals(response.subList(10, 30), result);
+        var result = bundleProvider.getResources(10, 30);
+        Assertions.assertEquals(response.subList(10, 30), result);
         EasyMock.verify(requestConsumer);
     }
 }

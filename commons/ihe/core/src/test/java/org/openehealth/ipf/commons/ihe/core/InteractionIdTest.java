@@ -17,20 +17,14 @@ package org.openehealth.ipf.commons.ihe.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.config.SimpleRegistry;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyIntegrationProfile.Interactions.Interaction1;
 import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyIntegrationProfile.Interactions.Interaction2;
 
@@ -55,14 +49,14 @@ public class InteractionIdTest {
     @Test
     public void testReconstruct() throws IOException, ClassNotFoundException {
 
-        MyIntegrationProfile.Interactions original = Interaction1;
+        var original = Interaction1;
         SerializableEnumInteractionId<?> serializableEnumInteractionId = SerializableEnumInteractionId.create(original);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        var baos = new ByteArrayOutputStream();
+        var oos = new ObjectOutputStream(baos);
         oos.writeObject(serializableEnumInteractionId);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        ObjectInputStream ois = new ObjectInputStream(bais);
+        var bais = new ByteArrayInputStream(baos.toByteArray());
+        var ois = new ObjectInputStream(bais);
         SerializableEnumInteractionId<?> deserialized = (SerializableEnumInteractionId<?>) ois.readObject();
 
         assertSame(original, deserialized.getInteractionId());

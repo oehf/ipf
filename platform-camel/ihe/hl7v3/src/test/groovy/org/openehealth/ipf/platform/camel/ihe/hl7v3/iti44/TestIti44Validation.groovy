@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
-import org.junit.Test
+
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator

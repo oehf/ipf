@@ -27,13 +27,7 @@ public abstract class OrderedConfigurer<T, R extends Registry> implements Config
 
     @Override
     public int compareTo(OrderedConfigurer<T, R> configurer) {
-        if (configurer.getOrder() < getOrder()) {
-            return 1;
-        } else if (configurer.getOrder() > getOrder()) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(getOrder(), configurer.getOrder());
     }
 
     public int getOrder() {

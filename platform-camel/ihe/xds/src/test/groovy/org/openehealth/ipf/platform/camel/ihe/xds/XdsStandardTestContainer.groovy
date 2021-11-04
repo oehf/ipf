@@ -143,10 +143,10 @@ class XdsStandardTestContainer extends StandardTestContainer {
     void checkImageDocument(ParticipantObjectIdentificationType doc, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
         assert doc.participantObjectTypeCode == ParticipantObjectTypeCode.System
         assert doc.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Report
-        checkCode(doc.participantObjectIDTypeCode, '9', 'RFC-3881')
-        assert doc.participantObjectID == docUniqueId
+        checkCode(doc.participantObjectIDTypeCode, '110180', 'DCM')
+        assert doc.participantObjectID == studyId
 
-        checkParticipantObjectDetail(doc.participantObjectDetails[0], IHEAuditMessageBuilder.STUDY_INSTANCE_UNIQUE_ID, studyId)
+        checkParticipantObjectDetail(doc.participantObjectDetails[0], IHEAuditMessageBuilder.DOCUMENT_UNIQUE_ID, docUniqueId)
         checkParticipantObjectDetail(doc.participantObjectDetails[1], IHEAuditMessageBuilder.SERIES_INSTANCE_UNIQUE_ID, seriesId)
         checkParticipantObjectDetail(doc.participantObjectDetails[2], IHEAuditMessageBuilder.REPOSITORY_UNIQUE_ID, repoId)
         checkParticipantObjectDetail(doc.participantObjectDetails[3], IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, homeId)

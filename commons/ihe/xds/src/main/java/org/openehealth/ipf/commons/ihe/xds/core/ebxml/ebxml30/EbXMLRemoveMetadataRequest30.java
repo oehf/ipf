@@ -48,15 +48,15 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest 
 
     @Override
     public void setReferences(List<ObjectReference> references) {
-        ObjectRefListType list = removeObjectsRequest.getObjectRefList();
+        var list = removeObjectsRequest.getObjectRefList();
         if (list != null) {
             list.getObjectRef().clear();
         } else {
             removeObjectsRequest.setObjectRefList(new ObjectRefListType());
         }
         if (references != null) {
-            for (ObjectReference reference : references) {
-                ObjectRefType referenceType = new ObjectRefType();
+            for (var reference : references) {
+                var referenceType = new ObjectRefType();
                 referenceType.setHome(reference.getHome());
                 referenceType.setId(reference.getId());
                 removeObjectsRequest.getObjectRefList().getObjectRef().add(referenceType);
@@ -66,13 +66,13 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest 
 
     @Override
     public List<ObjectReference> getReferences() {
-        ObjectRefListType list = removeObjectsRequest.getObjectRefList();
+        var list = removeObjectsRequest.getObjectRefList();
         if (list == null) {
             return Collections.emptyList();
         }
         List<ObjectReference> objectReferenceList = new ArrayList<>();
-        for (ObjectRefType objRefType: list.getObjectRef()){
-            ObjectReference ref = new ObjectReference(objRefType.getId(), objRefType.getHome());
+        for (var objRefType: list.getObjectRef()){
+            var ref = new ObjectReference(objRefType.getId(), objRefType.getHome());
             objectReferenceList.add(ref);
         }
         return objectReferenceList;
@@ -95,16 +95,6 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest 
     @Delegate
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(getAdhocQuery().getSlot());
-    }
-
-    @Override
-    public void setSql(String sql) {
-        //noop
-    }
-
-    @Override
-    public String getSql() {
-        return null;
     }
 
     @Override

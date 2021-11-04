@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
@@ -79,7 +79,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
    }
 
 
-    protected Map getStatusInformation(Message rsp, GPathResult xml) {
+    protected static Map getStatusInformation(Message rsp, GPathResult xml) {
         def errorText      = ''
         def errorCode      = ''
         def errorLocations = []

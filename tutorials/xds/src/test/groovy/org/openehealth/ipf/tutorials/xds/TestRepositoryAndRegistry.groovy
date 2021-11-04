@@ -17,22 +17,24 @@ package org.openehealth.ipf.tutorials.xds
 
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static org.junit.Assert.assertEquals
+
 import javax.activation.DataHandler
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
+
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * Tests against the registry/repository.
@@ -44,7 +46,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
     def ITI42 = "xds-iti42://localhost:${port}/xds-iti42"
     def ITI43 = "xds-iti43://localhost:${port}/xds-iti43"
 
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), 'context.xml', false)
     }
@@ -54,13 +56,14 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
+        docEntry.extraMetadata = ['urn:abc': ['ddd']]
         patientId.id = UUID.randomUUID().toString()
         docEntry.uniqueId = '4.3.2.1'
         docEntry.hash = ContentUtils.sha1(provide.documents[0].getContent(DataHandler))
         docEntry.size = ContentUtils.size(provide.documents[0].getContent(DataHandler))
 
         def response = send(ITI41, provide, Response.class)
-        assertEquals(response.toString(), Status.SUCCESS, response.status)
+        assertEquals(Status.SUCCESS, response.status, response.toString())
 
         def query = new FindDocumentsQuery()
         query.patientId = docEntry.patientId
@@ -68,9 +71,10 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def queryReg = new QueryRegistry(query)
         queryReg.returnType = QueryReturnType.LEAF_CLASS
         def queryResponse = send(ITI18, queryReg, QueryResponse.class)
-        assertEquals(queryResponse.toString(), Status.SUCCESS, queryResponse.status)
+        assertEquals(Status.SUCCESS, queryResponse.status, queryResponse.toString())
         assertEquals(1, queryResponse.documentEntries.size())
         assertEquals(docEntry.uniqueId, queryResponse.documentEntries[0].uniqueId)
+        assertEquals(docEntry.extraMetadata, queryResponse.documentEntries[0].extraMetadata)
     }
 
     @Test
@@ -82,7 +86,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         docEntry.uniqueId = '1.2.3.4'
 
         def response = send(ITI42, register, Response.class)
-        assertEquals(response.toString(), Status.SUCCESS, response.status)
+        assertEquals(Status.SUCCESS, response.status, response.toString())
 
         def query = new FindDocumentsQuery()
         query.patientId = docEntry.patientId
@@ -90,7 +94,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def queryReg = new QueryRegistry(query)
         queryReg.returnType = QueryReturnType.LEAF_CLASS
         def queryResponse = send(ITI18, queryReg, QueryResponse.class)
-        assertEquals(queryResponse.toString(), Status.SUCCESS, queryResponse.status)
+        assertEquals(Status.SUCCESS, queryResponse.status, queryResponse.toString())
         assertEquals(1, queryResponse.documentEntries.size())
         assertEquals(docEntry.uniqueId, queryResponse.documentEntries[0].uniqueId)
     }
@@ -105,7 +109,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         patientId.id = UUID.randomUUID().toString()
 
         def response = send(ITI41, provide, Response.class)
-        assertEquals(response.toString(), Status.SUCCESS, response.status)
+        assertEquals(Status.SUCCESS, response.status, response.toString())
 
         def retrieve = new RetrieveDocumentSet()
         def doc1 = new DocumentReference()
@@ -114,7 +118,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         retrieve.documents.add(doc1)
         retrieve.documents.add(doc1)
         def retrieveResponse = send(ITI43, retrieve, RetrievedDocumentSet.class)
-        assertEquals(retrieveResponse.toString(), Status.SUCCESS, retrieveResponse.status)
+        assertEquals(Status.SUCCESS, retrieveResponse.status, retrieveResponse.toString())
 
         def attachments = retrieveResponse.documents[0].dataHandler.dataSource.attachments
         assertEquals(2, retrieveResponse.documents.size())

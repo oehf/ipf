@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
 import org.apache.camel.ExchangePattern
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.BeforeClass
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runners.MethodSorters
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit
  * @author Dmytro Rud
  */
 @DirtiesContext
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName)
 class TestIti56 extends HL7v3StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti56/iti-56.xml'
@@ -52,7 +52,7 @@ class TestIti56 extends HL7v3StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }

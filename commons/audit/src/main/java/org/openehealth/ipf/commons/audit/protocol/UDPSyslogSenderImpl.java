@@ -17,13 +17,13 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -45,38 +45,38 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     private static final int MAX_DATAGRAM_PACKET_SIZE = 65479;
 
     public UDPSyslogSenderImpl() {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId());
+        super();
     }
 
-    public UDPSyslogSenderImpl(String sendingHost, String sendingProcess) {
-        super(sendingHost, sendingProcess);
+    @SuppressWarnings("unused")
+    public UDPSyslogSenderImpl(TlsParameters tlsParameters) {
+        super();
     }
 
     @Override
     public String getTransportName() {
-        return "UDP";
+        return AuditTransmissionChannel.UDP.getProtocolName();
     }
 
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) throws Exception {
-        if (auditMessages != null) {
-            try (DatagramSocket socket = new DatagramSocket()) {
-                for (String auditMessage : auditMessages) {
-                    byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                    InetAddress inetAddress = auditContext.getAuditRepositoryAddress();
-                    LOG.debug("Auditing to {}:{} ({})",
-                            auditContext.getAuditRepositoryHostName(),
-                            auditContext.getAuditRepositoryPort(),
-                            inetAddress.getHostAddress());
-                    if (LOG.isTraceEnabled()) {
-                        LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
-                    }
-                    DatagramPacket packet = new DatagramPacket(
-                            msgBytes,
-                            Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
-                            inetAddress,
-                            auditContext.getAuditRepositoryPort());
-                    socket.send(packet);
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
+        if (auditMessage != null) {
+            try (var socket = new DatagramSocket()) {
+                var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+                var inetAddress = auditContext.getAuditRepositoryAddress();
+                LOG.debug("Auditing {} bytes to {}:{} ({})",
+                        msgBytes.length,
+                        auditContext.getAuditRepositoryHostName(),
+                        auditContext.getAuditRepositoryPort(),
+                        inetAddress.getHostAddress());
+                var packet = new DatagramPacket(
+                        msgBytes,
+                        Math.min(MAX_DATAGRAM_PACKET_SIZE, msgBytes.length),
+                        inetAddress,
+                        auditContext.getAuditRepositoryPort());
+                socket.send(packet);
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
                 }
             }
         }
@@ -84,6 +84,5 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     @Override
     public void shutdown() {
-
     }
 }

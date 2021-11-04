@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -45,12 +45,12 @@ class TestIti41SslContextParameters extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, true)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createProvideAndRegisterDocumentSet()
         docEntry = request.documents[0].documentEntry

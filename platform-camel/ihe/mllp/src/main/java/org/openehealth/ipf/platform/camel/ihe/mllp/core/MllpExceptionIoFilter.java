@@ -18,9 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelException;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.mina2.Mina2Consumer;
+import org.apache.camel.component.mina.MinaConsumer;
 import org.apache.mina.core.filterchain.IoFilterAdapter;
-import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +27,15 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLException;
 
 import static java.util.concurrent.TimeUnit.*;
-import static org.apache.camel.component.mina2.Mina2Constants.MINA_CLOSE_SESSION_WHEN_COMPLETE;
-import static org.apache.camel.component.mina2.Mina2PayloadHelper.getIn;
-import static org.apache.camel.component.mina2.Mina2PayloadHelper.getOut;
+import static org.apache.camel.component.mina.MinaConstants.MINA_CLOSE_SESSION_WHEN_COMPLETE;
+import static org.apache.camel.component.mina.MinaPayloadHelper.getIn;
+import static org.apache.camel.component.mina.MinaPayloadHelper.getOut;
 
 /**
  * This {@link IoFilterAdapter} is used to catch all exceptions occurred inside the {@link MllpConsumer} filterChain,
  * before the message reaches the CamelRoute, and send appropriate response created by defined exceptionHandler
  * either over RouteBuilder exception handling using "consumer.bridgeErrorHandler=true" or directly by
- * "consumer.exceptionHandler=#myExceptionHandlerBean"
+ * "exceptionHandler=#myExceptionHandlerBean"
  *
  * @author Boris Stanojevic
  *
@@ -45,19 +44,19 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpExceptionIoFilter.class);
 
-    private final Mina2Consumer mina2Consumer;
+    private final MinaConsumer minaConsumer;
 
-    public MllpExceptionIoFilter(Mina2Consumer mina2Consumer) {
-        this.mina2Consumer = mina2Consumer;
+    public MllpExceptionIoFilter(MinaConsumer minaConsumer) {
+        this.minaConsumer = minaConsumer;
     }
 
     @Override
-    public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) throws Exception {
+    public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) {
         if (!session.isClosing()) {
             if (sendResponse(cause)) {
                 Exception exception = new CamelException(cause.getMessage());
-                Exchange exchange = createExchange(exception);
-                mina2Consumer.getExceptionHandler().handleException("", exchange, exception);
+                var exchange = createExchange(exception);
+                minaConsumer.getExceptionHandler().handleException("", exchange, exception);
                 sendResponse(session, exchange);
             } else {
                 session.closeNow();
@@ -67,11 +66,11 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
     }
 
     private void sendResponse(IoSession session, Exchange exchange) {
-        boolean disconnect = mina2Consumer.getEndpoint().getConfiguration().isDisconnect();
-        Object response = exchange.hasOut()? getOut(mina2Consumer.getEndpoint(), exchange):
-                                             getIn(mina2Consumer.getEndpoint(), exchange);
+        var disconnect = minaConsumer.getEndpoint().getConfiguration().isDisconnect();
+        var response = exchange.hasOut()? getOut(minaConsumer.getEndpoint(), exchange):
+                                             getIn(minaConsumer.getEndpoint(), exchange);
         if (response != null) {
-            WriteFuture future = session.write(response);
+            var future = session.write(response);
             LOG.trace("Waiting for write to complete for body: {} using session: {}", response, session);
             if (!future.awaitUninterruptibly(10, SECONDS)) {
                 LOG.warn("Cannot write body: " + response + " using session: " + session);
@@ -82,18 +81,18 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
         }
 
         // should session be closed after complete?
-        Boolean close = (Boolean)session.getAttribute(MINA_CLOSE_SESSION_WHEN_COMPLETE);
+        var close = (Boolean)session.getAttribute(MINA_CLOSE_SESSION_WHEN_COMPLETE);
         if (close != null) {
             disconnect = close;
         }
         if (disconnect) {
-            LOG.debug("Closing session when complete at address: {}", mina2Consumer.getAcceptor().getLocalAddress());
+            LOG.debug("Closing session when complete at address: {}", minaConsumer.getAcceptor().getLocalAddress());
             session.closeNow();
         }
     }
 
     private Exchange createExchange(Throwable cause){
-        Exchange exchange = mina2Consumer.getEndpoint().createExchange();
+        var exchange = minaConsumer.getEndpoint().createExchange();
         exchange.setException(cause);
         return exchange;
     }

@@ -40,12 +40,6 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
     @Getter private final boolean autoCancel;
 
-    /**
-     * @deprecated
-     */
-    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, Map<String, Object> parameters) throws Exception {
-        this(component, UNKNOWN_URI, parameters);
-    }
 
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);

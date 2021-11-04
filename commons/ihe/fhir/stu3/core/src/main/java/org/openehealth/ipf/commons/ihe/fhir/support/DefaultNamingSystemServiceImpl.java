@@ -35,7 +35,7 @@ import java.net.URL;
  */
 public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceImpl {
 
-    private FhirContext fhirContext;
+    private final FhirContext fhirContext;
 
     public DefaultNamingSystemServiceImpl(FhirContext fhirContext) {
         super();
@@ -48,8 +48,10 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
     }
 
     public void setNamingSystemsFromXml(URL... urls) throws IOException {
-        for (URL url : urls) {
-            addNamingSystemsFromXml(new BufferedReader(new InputStreamReader(url.openStream())));
+        for (var url : urls) {
+            try (var xmlReader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                addNamingSystemsFromXml(xmlReader);
+            }
         }
     }
 
@@ -59,8 +61,10 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
     }
 
     public void setNamingSystemsFromJson(URL... urls) throws IOException {
-        for (URL url : urls) {
-            addNamingSystemsFromJson(new BufferedReader(new InputStreamReader(url.openStream())));
+        for (var url : urls) {
+            try (var jsonReader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                addNamingSystemsFromJson(jsonReader);
+            }
         }
     }
 

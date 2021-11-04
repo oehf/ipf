@@ -16,6 +16,7 @@ import javax.activation.DataHandler;
 import javax.xml.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -108,11 +109,7 @@ public class ExtrinsicObjectType
      *     
      */
     public String getMimeType() {
-        if (mimeType == null) {
-            return "application/octet-stream";
-        } else {
-            return mimeType;
-        }
+        return Objects.requireNonNullElse(mimeType, "application/octet-stream");
     }
 
     /**
@@ -136,11 +133,7 @@ public class ExtrinsicObjectType
      *     
      */
     public boolean isIsOpaque() {
-        if (isOpaque == null) {
-            return false;
-        } else {
-            return isOpaque;
-        }
+        return Objects.requireNonNullElse(isOpaque, false);
     }
 
     /**

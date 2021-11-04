@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.xml;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 import org.slf4j.Logger;
@@ -49,8 +48,8 @@ public class LSResourceResolverImpl implements LSResourceResolver {
 
         LSInput lsInput = null;
         try {
-            URL resource = new URL(systemId);
-            InputStream is = resource.openStream();
+            var resource = new URL(systemId);
+            var is = resource.openStream();
             lsInput = new LSInputImpl(is);
         } catch (IOException e) {
             LOG.debug("Referenced external file {} could not be found. Falling back to "

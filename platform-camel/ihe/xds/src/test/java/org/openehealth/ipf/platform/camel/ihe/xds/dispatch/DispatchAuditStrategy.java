@@ -37,10 +37,10 @@ import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti80.Iti80ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 
-import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,57 +54,44 @@ import java.util.Map;
 @Slf4j
 public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
 
-    private final Map<QName, XdsAuditStrategy<? extends XdsAuditDataset>> map;
+    private final Map<String, XdsAuditStrategy<? extends XdsAuditDataset>> MAP;
 
-    public DispatchAuditStrategy(Map<QName, XdsAuditStrategy<? extends XdsAuditDataset>> additionalMappings) {
+    public DispatchAuditStrategy(Map<String, XdsAuditStrategy<T>> additionalMappings) {
         super(true);
-        map = new HashMap<>();
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegistryStoredQuery"),
-                new Iti18AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayQuery"),
-                new Iti38AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayRetrieve"),
-                new Iti39ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_ProvideAndRegisterDocumentSet-b"),
-                new Iti41ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterDocumentSet-b"),
-                new Iti42ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_RetrieveDocumentSet"),
-                new Iti43ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_MultiPatientStoredQuery"),
-                new Iti51AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_UpdateDocumentSet"),
-                new Iti57ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterOnDemandDocumentEntry"),
-                new Iti61ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_DeleteDocumentSet"),
-                new Iti62AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayFetch"),
-                new Iti63AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_CrossGatewayDocumentProvide"),
-                new Iti80ServerAuditStrategy());
-        map.put(new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_RemoveDocuments"),
-                new Iti86AuditStrategy(true));
-        map.put(new QName("urn:ihe:iti:rmu:2018", "UpdateResponder_RestrictedUpdateDocumentSet"),
-                new Iti92ServerAuditStrategy());
-        map.put(new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_RetrieveImagingDocumentSet"),
-                new Rad69ServerAuditStrategy());
-        map.put(new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet"),
-                new Rad75ServerAuditStrategy());
+
+        MAP = new HashMap<>();
+        MAP.put("urn:ihe:iti:2007:RegistryStoredQuery",                    new Iti18AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2007:CrossGatewayQuery",                      new Iti38AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2007:CrossGatewayRetrieve",                   new Iti39ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b",        new Iti41ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2007:RegisterDocumentSet-b",                  new Iti42ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2007:RetrieveDocumentSet",                    new Iti43ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2009:MultiPatientStoredQuery",                new Iti51AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2010:UpdateDocumentSet",                      new Iti57ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2010:RegisterOnDemandDocumentEntry",          new Iti61ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2010:DeleteDocumentSet",                      new Iti62AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2011:CrossGatewayFetch",                      new Iti63AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2015:CrossGatewayDocumentProvide",            new Iti80ServerAuditStrategy());
+        MAP.put("urn:ihe:iti:2017:RemoveDocuments",                        new Iti86AuditStrategy(true));
+        MAP.put("urn:ihe:iti:2018:RestrictedUpdateDocumentSet",            new Iti92ServerAuditStrategy());
+        MAP.put("urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments",          new Pharm1AuditStrategy(true));
+        MAP.put("urn:ihe:rad:2009:RetrieveImagingDocumentSet",             new Rad69ServerAuditStrategy());
+        MAP.put("urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSet", new Rad75ServerAuditStrategy());
+
         if (additionalMappings != null) {
-            map.putAll(additionalMappings);
+            MAP.putAll(additionalMappings);
         }
     }
 
     @Override
     public T createAuditDataset() {
-        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
-        return (strategy != null) ? (T)strategy.createAuditDataset() : null;
+        var strategy = getAuditStrategy();
+        return (strategy != null) ? strategy.createAuditDataset() : null;
     }
 
     @Override
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters ) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         }
@@ -113,7 +100,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
         }
@@ -122,7 +109,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public void doAudit(AuditContext auditContext, T auditDataset) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditContext, auditDataset);
         }
@@ -130,31 +117,33 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
-        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
+        var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.makeAuditMessage(auditContext, auditDataset) : null;
     }
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
+        var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.getEventOutcomeIndicator(response) : null;
     }
 
-    private XdsAuditStrategy<? extends XdsAuditDataset> getAuditStrategy() {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
+    private XdsAuditStrategy<T> getAuditStrategy() {
+        var messageContext = new WebServiceContextImpl().getMessageContext();
         if ("GET".equals(messageContext.get(MessageContext.HTTP_REQUEST_METHOD))) {
+            log.debug("Cannot serve HTTP method GET");
             return null;
         }
-        if (! messageContext.containsKey(MessageContext.WSDL_OPERATION)) {
+        String action = DispatchInContextCreatorInterceptor.extractWsaAction(messageContext);
+        if (action == null) {
+            log.debug("Cannot determine WS-Addressing action");
             return null;
         }
 
-        QName operationName = (QName) messageContext.get(MessageContext.WSDL_OPERATION);
-        XdsAuditStrategy<? extends XdsAuditDataset> auditStrategy = map.get(operationName);
+        XdsAuditStrategy<T> auditStrategy = (XdsAuditStrategy<T>) MAP.get(action);
         if (auditStrategy == null) {
-            log.debug("No strategy could be found for operation {}", operationName);
+            log.debug("No strategy could be found for action {}", action);
         } else {
-            log.debug("Found strategy {} for operation {}", auditStrategy.getClass().getCanonicalName(), operationName);
+            log.debug("Found strategy {} for action {}", auditStrategy.getClass().getCanonicalName(), action);
         }
         return auditStrategy;
     } 

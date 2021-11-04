@@ -73,6 +73,7 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -80,7 +81,7 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
 
         super.toEbXML(query,  ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromCode(formatCodeParam, query.getFormatCodes());
         slots.fromCode(confCodeParam, query.getConfidentialityCodes());
@@ -97,6 +98,7 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -104,7 +106,7 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         
         query.setFormatCodes(slots.toCodeList(formatCodeParam));
         query.setConfidentialityCodes(slots.toCodeQueryList(confCodeParam, confCodeSchemeParam));

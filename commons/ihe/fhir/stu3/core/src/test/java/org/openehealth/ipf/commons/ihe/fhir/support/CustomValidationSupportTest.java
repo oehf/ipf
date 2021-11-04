@@ -19,10 +19,11 @@ package org.openehealth.ipf.commons.ihe.fhir.support;
 import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.StructureDefinition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
@@ -30,11 +31,12 @@ import static org.junit.Assert.assertNotNull;
 public class CustomValidationSupportTest {
 
     private static final FhirContext FHIR_CONTEXT = FhirContext.forDstu3();
+
     @Test
     public void testFindStructureDefinition() {
-        CustomValidationSupport customValidationSupport = new CustomValidationSupport();
+        var customValidationSupport = new CustomValidationSupport(FHIR_CONTEXT);
         customValidationSupport.setPrefix("profiles/MHD-");
-        StructureDefinition definition = customValidationSupport.fetchResource(FHIR_CONTEXT, StructureDefinition.class,
+        var definition = customValidationSupport.fetchResource(StructureDefinition.class,
                 CustomValidationSupport.HTTP_HL7_ORG_FHIR_STRUCTURE_DEFINITION + "DocumentReference");
         assertNotNull(definition);
         assertEquals(DocumentReference.class.getSimpleName(), definition.getType());

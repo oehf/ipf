@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import ca.uhn.hl7v2.HL7Exception
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
-import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.support.DefaultExchange
 import org.apache.camel.spi.ExceptionHandler
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.springframework.beans.factory.annotation.Autowired

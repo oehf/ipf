@@ -17,7 +17,8 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -54,7 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Christian Ohr
  * @since 3.5
  */
-public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
+public class TLSSyslogSenderImpl extends RFC5425Protocol implements AuditTransmissionProtocol {
 
     private static final Logger LOG = LoggerFactory.getLogger(TLSSyslogSenderImpl.class);
     private static final int MIN_SO_TIMEOUT = 1;
@@ -72,79 +71,41 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     public TLSSyslogSenderImpl(SocketTestPolicy socketTestPolicy) {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketTestPolicy);
+        super();
+        this.socketFactory = SSLSocketFactory.getDefault();
+        this.socketTestPolicy = socketTestPolicy;
+    }
+
+    public TLSSyslogSenderImpl(TlsParameters tlsParameters) {
+        this(tlsParameters.getSSLSocketFactory(), SocketTestPolicy.TEST_BEFORE_WRITE);
     }
 
     /**
-     * @param socketFactory SSL socket factory to be used for creating the TCP
-     *                      socket.
-     */
-    public TLSSyslogSenderImpl(SSLSocketFactory socketFactory) {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketFactory,
-                SocketTestPolicy.TEST_BEFORE_WRITE);
-    }
-
-    /**
-     * 
      * @param socketFactory    SSL socket factory to be used for creating the TCP
      *                         socket.
      * @param socketTestPolicy Determining if and when to test the socket for a
      *                         connection close/reset
      */
     public TLSSyslogSenderImpl(SSLSocketFactory socketFactory, SocketTestPolicy socketTestPolicy) {
-        this(AuditUtils.getLocalHostName(), AuditUtils.getProcessId(), socketFactory, socketTestPolicy);
-    }
-
-    /**
-     * @param sendingHost    value of the SYSLOG header "HOSTNAME"
-     * @param sendingProcess value of the SYSLOG header "APP-NAME"
-     */
-    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess) {
-        this(sendingHost, sendingProcess, SocketTestPolicy.TEST_BEFORE_WRITE);
-    }
-
-    /**
-     * @param sendingHost      value of the SYSLOG header "HOSTNAME"
-     * @param sendingProcess   value of the SYSLOG header "APP-NAME"
-     * @param socketTestPolicy Determining if and when to test the socket for a
-     *                         connection close/reset
-     */
-    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SocketTestPolicy socketTestPolicy) {
-        super(sendingHost, sendingProcess);
-        this.socketFactory = SSLSocketFactory.getDefault();
+        super();
+        this.socketFactory = socketFactory;
         this.socketTestPolicy = socketTestPolicy;
     }
 
     /**
-     * @param sendingHost    value of the SYSLOG header "HOSTNAME"
-     * @param sendingProcess value of the SYSLOG header "APP-NAME"
-     * @param socketFactory  SSL socket factory to be used for creating the TCP
-     *                       socket.
-     */
-    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SSLSocketFactory socketFactory) {
-        super(sendingHost, sendingProcess);
-        this.socketFactory = Objects.requireNonNull(socketFactory);
-        this.socketTestPolicy = SocketTestPolicy.TEST_BEFORE_WRITE;
-    }
-
-    /**
-     * @param sendingHost      value of the SYSLOG header "HOSTNAME"
-     * @param sendingProcess   value of the SYSLOG header "APP-NAME"
-     * @param socketFactory    SSL socket factory to be used for creating the TCP
+     * @param tlsParameters    TlsParameters to be used for creating the TCP
      *                         socket.
      * @param socketTestPolicy Determining if and when to test the socket for a
      *                         connection close/reset
      */
-    public TLSSyslogSenderImpl(String sendingHost, String sendingProcess, SSLSocketFactory socketFactory,
-            SocketTestPolicy socketTestPolicy) {
-        super(sendingHost, sendingProcess);
-        this.socketFactory = Objects.requireNonNull(socketFactory);
-        this.socketTestPolicy = socketTestPolicy;
+    public TLSSyslogSenderImpl(TlsParameters tlsParameters, SocketTestPolicy socketTestPolicy) {
+        this(tlsParameters.getSSLSocketFactory(), socketTestPolicy);
     }
+
 
     @Override
     public String getTransportName() {
-        return "TLS";
+        return AuditTransmissionChannel.TLS.getProtocolName();
     }
 
     private Socket getSocket(AuditContext auditContext) {
@@ -154,30 +115,30 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     }
 
     @Override
-    public void send(AuditContext auditContext, String... auditMessages) throws Exception {
-        if (auditMessages != null) {
-            for (String auditMessage : auditMessages) {
-                byte[] msgBytes = getTransportPayload(auditContext.getSendingApplication(), auditMessage);
-                byte[] syslogFrame = String.format("%d ", msgBytes.length).getBytes();
-                LOG.debug("Auditing to {}:{}", auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
+    public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) throws Exception {
+        if (auditMessage != null) {
+            var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
+            LOG.debug("Auditing {} bytes to {}:{}",
+                    msgBytes.length,
+                    auditContext.getAuditRepositoryHostName(),
+                    auditContext.getAuditRepositoryPort());
+            try {
+                doSend(auditContext, msgBytes);
                 if (LOG.isTraceEnabled()) {
                     LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
                 }
+            } catch (SocketException | SocketTimeoutException e) {
                 try {
-                    doSend(auditContext, syslogFrame, msgBytes);
-                } catch (SocketException | SocketTimeoutException e) {
-                    try {
-                        LOG.info("Failed to use existing TLS socket. Will create a new connection and retry.");
-                        closeSocket(socket.get());
-                        socket.set(null);
-                        doSend(auditContext, syslogFrame, msgBytes);
-                    } catch (Exception exception) {
-                        LOG.error("Failed to audit using new TLS socket, giving up - this audit message will be lost.");
-                        closeSocket(socket.get());
-                        socket.set(null);
-                        // re-throw the exception so caller knows what happened
-                        throw exception;
-                    }
+                    LOG.info("Failed to use existing TLS socket. Will create a new connection and retry.");
+                    closeSocket(socket.get());
+                    socket.set(null);
+                    doSend(auditContext, msgBytes);
+                } catch (Exception exception) {
+                    LOG.error("Failed to audit using new TLS socket, giving up - this audit message will be lost.");
+                    closeSocket(socket.get());
+                    socket.set(null);
+                    // re-throw the exception so caller knows what happened
+                    throw exception;
                 }
             }
         }
@@ -191,9 +152,9 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
     }
 
-    private synchronized void doSend(AuditContext auditContext, byte[] syslogFrame, byte[] msgBytes)
+    private synchronized void doSend(AuditContext auditContext, byte[] msgBytes)
             throws IOException {
-        final Socket socket = getSocket(auditContext);
+        final var socket = getSocket(auditContext);
 
         if (socketTestPolicy.isBeforeWrite()) {
             LOG.trace("Testing whether socket connection is alive and well before attempting to write");
@@ -206,13 +167,10 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         }
 
         LOG.trace("Now writing out ATNA record");
-
-        OutputStream out = socket.getOutputStream();
-        out.write(syslogFrame);
+        var out = socket.getOutputStream();
         out.write(msgBytes);
         out.flush();
-
-        LOG.debug("ATNA record has been written ({} bytes)", syslogFrame.length + msgBytes.length);
+        LOG.trace("ATNA record has been written ({} bytes)", msgBytes.length);
 
         if (socketTestPolicy.isAfterWrite()) {
             LOG.trace(
@@ -228,7 +186,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     private Socket getTLSSocket(AuditContext auditContext) {
         final SSLSocket socket;
-        InetAddress auditRepositoryAddress = auditContext.getAuditRepositoryAddress();
+        var auditRepositoryAddress = auditContext.getAuditRepositoryAddress();
         try {
             socket = (SSLSocket) socketFactory.createSocket(
                     auditRepositoryAddress,
@@ -261,9 +219,9 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * BEWARE: If your implementation specify any socket test policy other than
      * {@link SocketTestPolicy#DONT_TEST_POLICY}, then {@code SO_TIMEOUT} will be
      * set to 1 ms regardless of the value your implementation might set.
-     * 
+     *
      * @param socket Socket to configure
-     * @throws SocketException
+     * @throws SocketException if setting keep alive failed
      */
     protected void setSocketOptions(final Socket socket) throws SocketException {
         Objects.requireNonNull(socket);
@@ -282,7 +240,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * <dt>IOException</dt>
      * <dd>We assume the connection is dead</dd>
      * </dl>
-     * 
+     *
      * @param socket The socket (connection) under test
      * @return {@code true} if the connection is alive, {@code false} otherwise
      */
@@ -290,7 +248,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
         boolean isAlive;
         try {
             if (socket.getSoTimeout() > 0) {
-                final int nextByte = socket.getInputStream().read();
+                final var nextByte = socket.getInputStream().read();
                 if (nextByte > -1) {
                     LOG.warn(
                             "Socket test was able to read a byte from the socket other than the 'stream closed' value of -1. "
@@ -317,7 +275,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
 
     /**
      * Closes socket if it is not null and has not been closed yet.
-     * 
+     *
      * @param socket Socket to close.
      */
     private void closeSocket(final Socket socket) {
@@ -335,7 +293,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
     /**
      * Enum to control the level of paranoia when it comes to trusting the socket
      * connection. The more paranoid the more overhead is incurred.
-     * 
+     *
      * @author taastrad
      */
     public enum SocketTestPolicy {
@@ -367,7 +325,7 @@ public class TLSSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
      * We use exceptions for control flow. Which is an anti pattern. In places where
      * we raise the exception we can at least make sure the overhead of creating the
      * exception is minimal by not populating the stacktrace.
-     * 
+     *
      * @author taastrad
      */
     private static class FastSocketException extends SocketException {

@@ -31,7 +31,7 @@ public class XdsAuditorTestBase extends AuditorTestBase {
     protected static final String[] REPOSITORY_OIDS = {"2.1.1", "2.1.2", "2.1.3"};
     protected static final String[] HOME_COMMUNITY_IDS = {"3.1.1", "3.1.2", "3.1.3"};
     protected static final String[] OBJECT_UUIDS = {"objectUuid1", "objectUuid2", "objectUuid3"};
-    protected static final String[] STUDY_INSTANCE_UUIDS = {"study-instance_uuid-1", "study-instance_uuid-1", "study-instance_uuid-2"};
+    protected static final String[] STUDY_INSTANCE_UUIDS = {"study-instance_uuid-1", "study-instance_uuid-2", "study-instance_uuid-3"};
     protected static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid-11", "series-instance_uuid-12", "series-instance_uuid-21"};
 
     protected void assertCommonXdsAuditAttributes(AuditMessage auditMessage,

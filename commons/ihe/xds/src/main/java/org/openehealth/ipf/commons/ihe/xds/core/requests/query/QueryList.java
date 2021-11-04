@@ -87,7 +87,7 @@ public class QueryList<T> implements Serializable {
     public QueryList(QueryList<T> other) {
         notNull(other, "other cannot be null");
         noNullElements(other.getOuterList(), "other.getOuterList() cannot contain null elements");
-        for (List<T> innerList : other.getOuterList()) {
+        for (var innerList : other.getOuterList()) {
             noNullElements(innerList, "innerList cannot contain null elements");
             outerList.add(new ArrayList<>(innerList));
         }

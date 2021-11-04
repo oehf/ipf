@@ -20,8 +20,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
 import static org.apache.commons.lang3.StringUtils.*;
 
-import ca.uhn.hl7v2.model.v25.datatype.HD;
-import ca.uhn.hl7v2.model.v25.datatype.XON;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 
@@ -35,15 +33,15 @@ public class XONValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7XON) throws XDSMetaDataException {
-        Organization organization = Hl7v2Based.parse(hl7XON, Organization.class);
+        var organization = Hl7v2Based.parse(hl7XON, Organization.class);
         metaDataAssert(organization != null, ORGANIZATION_NAME_MISSING, hl7XON);
 
-        XON xon = organization.getHapiObject();
+        var xon = organization.getHapiObject();
         metaDataAssert(isNotEmpty(xon.getXon1_OrganizationName().getValue()), ORGANIZATION_NAME_MISSING, hl7XON);
 
-        HD hd = xon.getXon6_AssigningAuthority();
+        var hd = xon.getXon6_AssigningAuthority();
         if (isEmptyField(hd)) {
-            String idNumber = xon.getXon10_OrganizationIdentifier().getValue();
+            var idNumber = xon.getXon10_OrganizationIdentifier().getValue();
             if (isNotEmpty(idNumber)) {
                 OID_VALIDATOR.validate(idNumber);
             }

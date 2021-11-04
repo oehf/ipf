@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBElement;
@@ -82,7 +81,7 @@ abstract public class ChPpq1AuditStrategy extends AuditStrategySupport<ChPpqAudi
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(Object responseObject) {
-        EprPolicyRepositoryResponse response = (EprPolicyRepositoryResponse) responseObject;
+        var response = (EprPolicyRepositoryResponse) responseObject;
         return StatusCode.SUCCESS.equals(response.getStatus()) ? EventOutcomeIndicator.Success : EventOutcomeIndicator.SeriousFailure;
     }
 
@@ -94,7 +93,7 @@ abstract public class ChPpq1AuditStrategy extends AuditStrategySupport<ChPpqAudi
      * @return The patient's EPR-SPID as stated in the payload (policy set)
      */
     private String extractPatientIdFromPolicy(Stream<Evaluatable> policyOrPolicySets) {
-        final Set<String> eprSpids = policyOrPolicySets
+        final var eprSpids = policyOrPolicySets
             .flatMap(evaluatable -> evaluatable.getTarget().getResources().getResources().stream())
             .flatMap(resourceType -> resourceType.getResourceMatches().stream())
             .filter(

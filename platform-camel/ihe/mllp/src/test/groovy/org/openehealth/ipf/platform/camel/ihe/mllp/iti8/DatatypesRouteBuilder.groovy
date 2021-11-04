@@ -25,8 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
 import java.nio.ByteBuffer
 
-import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
 

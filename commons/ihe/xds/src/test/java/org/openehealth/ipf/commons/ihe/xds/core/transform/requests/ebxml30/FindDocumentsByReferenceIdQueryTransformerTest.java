@@ -15,21 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsByReferenceIdQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsByReferenceIdQueryTransformer;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link FindDocumentsByReferenceIdQueryTransformer}.
@@ -40,7 +39,7 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
     private FindDocumentsByReferenceIdQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new FindDocumentsByReferenceIdQueryTransformer();
         query = (FindDocumentsByReferenceIdQuery) SampleData.createFindDocumentsByReferenceIdQuery().getQuery();
@@ -56,7 +55,7 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
         assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 
-        List<EbXMLSlot> referenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName());
+        var referenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName());
         assertEquals(2, referenceIdSlots.size());
         assertEquals(Arrays.asList(
                 "('ref-id-11^^^&1.1.1.1&ISO^urn:ihe:iti:xds:2013:uniqueId')",
@@ -84,21 +83,21 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindDocumentsByReferenceIdQuery result = new FindDocumentsByReferenceIdQuery();
+        var result = new FindDocumentsByReferenceIdQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(query, result);
     }
 
     @Test
     public void testFromEbXMLNull() {
-        FindDocumentsByReferenceIdQuery result = new FindDocumentsByReferenceIdQuery();
+        var result = new FindDocumentsByReferenceIdQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new FindDocumentsByReferenceIdQuery(), result);
     }
 
     @Test
     public void testFromEbXMLEmpty() {
-        FindDocumentsByReferenceIdQuery result = new FindDocumentsByReferenceIdQuery();
+        var result = new FindDocumentsByReferenceIdQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new FindDocumentsByReferenceIdQuery(), result);
     }

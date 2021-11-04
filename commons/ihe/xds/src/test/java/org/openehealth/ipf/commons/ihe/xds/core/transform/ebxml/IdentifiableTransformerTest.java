@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for transformation between HL7 v2 and {@link Identifiable}.
@@ -30,9 +30,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 public class IdentifiableTransformerTest {
     private Identifiable identifiable;
     
-    @Before
+    @BeforeEach
     public void setUp() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
+        var assigningAuthority = new AssigningAuthority();
         assigningAuthority.setUniversalId("uni");
         assigningAuthority.setUniversalIdType("uniType");
         
@@ -43,7 +43,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testToEbXML21SourcePatient() {
-        String result = Hl7v2Based.render(identifiable);
+        var result = Hl7v2Based.render(identifiable);
         assertNotNull(result);
         
         assertEquals("21\\T\\3^^^&uni&uniType", result);
@@ -56,19 +56,19 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatientEmpty() {
-        String result = Hl7v2Based.render(new Identifiable());
+        var result = Hl7v2Based.render(new Identifiable());
         assertNull(result);
     }
 
     @Test
     public void testFromEbXML21SourcePatient() {
-        String ebXML = Hl7v2Based.render(identifiable);
-        Identifiable result = Hl7v2Based.parse(ebXML, Identifiable.class);
+        var ebXML = Hl7v2Based.render(identifiable);
+        var result = Hl7v2Based.parse(ebXML, Identifiable.class);
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
-        
-        AssigningAuthority assigningAuthority = result.getAssigningAuthority();
+
+        var assigningAuthority = result.getAssigningAuthority();
         assertEquals("uni", assigningAuthority.getUniversalId());
         assertEquals("uniType", assigningAuthority.getUniversalIdType());
     }
@@ -80,7 +80,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        Identifiable result = Hl7v2Based.parse("", Identifiable.class);
+        var result = Hl7v2Based.parse("", Identifiable.class);
         assertNull(result);
     }
 }

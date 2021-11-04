@@ -44,7 +44,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return a stream of {@link NamingSystem} instances that match the provided {@link Predicate}
      */
-    Stream<NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
+    Stream<? extends NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
 
     /**
      * Returns the first {@link NamingSystem} instances that match the provided {@link Predicate}
@@ -53,7 +53,7 @@ public interface NamingSystemService {
      * @param predicate predicate selecting a naming system
      * @return {@link NamingSystem} instance that match the provided {@link Predicate}
      */
-    default Optional<NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
+    default Optional<? extends NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
         return findNamingSystems(id, predicate).findFirst();
     }
 
@@ -65,7 +65,7 @@ public interface NamingSystemService {
      * @param value value
      * @return {@link NamingSystem} instance that match the provided type and value
      */
-    default Optional<NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
+    default Optional<? extends NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
         return findFirstNamingSystem(id, allOf(
                 byTypeAndValue(type, value),
                 byStatus(Enumerations.PublicationStatus.ACTIVE)));
@@ -73,14 +73,17 @@ public interface NamingSystemService {
 
     // Predicates
 
+    @SafeVarargs
     static Predicate<NamingSystem> allOf(Predicate<NamingSystem>... predicates) {
         return combine(Predicate::and, predicates);
     }
 
+    @SafeVarargs
     static Predicate<NamingSystem> anyOf(Predicate<NamingSystem>... predicates) {
         return combine(Predicate::or, predicates);
     }
 
+    @SafeVarargs
     static Predicate<NamingSystem> combine(BinaryOperator<Predicate<NamingSystem>> op, Predicate<NamingSystem>... predicates) {
         return predicates != null ?
                 Stream.of(predicates).reduce(op).orElse(namingSystem -> false) :

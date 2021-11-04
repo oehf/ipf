@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -27,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for marshalling and unmarshalling of extra metadata in the simplified XDS data model.
@@ -48,17 +47,17 @@ public class ExtraMetadataMarshalingTest {
         extraMetaData.put(KEY_1, VALUES_1);
         extraMetaData.put(KEY_2, VALUES_2);
 
-        DocumentEntry original = new DocumentEntry();
+        var original = new DocumentEntry();
         original.setExtraMetadata(extraMetaData);
 
-        JAXBContext context = JAXBContext.newInstance(DocumentEntry.class);
-        StringWriter writer = new StringWriter();
-        Marshaller marshaller = context.createMarshaller();
+        var context = JAXBContext.newInstance(DocumentEntry.class);
+        var writer = new StringWriter();
+        var marshaller = context.createMarshaller();
         marshaller.setProperty("jaxb.formatted.output", true);
         marshaller.marshal(original, writer);
-        String s = writer.toString();
+        var s = writer.toString();
 
-        DocumentEntry result = (DocumentEntry) context.createUnmarshaller().unmarshal(new StringReader(s));
+        var result = (DocumentEntry) context.createUnmarshaller().unmarshal(new StringReader(s));
 
         assertEquals(2, result.getExtraMetadata().size());
         assertEquals(extraMetaData, result.getExtraMetadata());

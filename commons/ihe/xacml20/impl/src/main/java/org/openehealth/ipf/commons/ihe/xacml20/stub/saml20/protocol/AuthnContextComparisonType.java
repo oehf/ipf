@@ -61,7 +61,7 @@ public enum AuthnContextComparisonType {
     }
 
     public static AuthnContextComparisonType fromValue(String v) {
-        for (AuthnContextComparisonType c: AuthnContextComparisonType.values()) {
+        for (var c: AuthnContextComparisonType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

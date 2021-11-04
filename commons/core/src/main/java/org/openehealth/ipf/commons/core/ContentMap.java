@@ -26,10 +26,12 @@ import java.util.Map;
 /**
  * Content map based on Spring type conversion framework.
  * @author Dmytro Rud
+ *
+ * TODO this is only used in ipf-commons-ihe-xds
  */
 @XmlTransient
 public class ContentMap {
-    private static transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
 
     // synchronized manually
     private transient final Map<Class<?>, Object> map = new HashMap<>();
@@ -50,7 +52,7 @@ public class ContentMap {
      */
     @SuppressWarnings("unchecked")
     public <T> T getContent(Class<T> targetType) {
-        T result = (T) map.get(targetType);
+        var result = (T) map.get(targetType);
         if (result != null) {
             LOG.debug("Return existing content of type {}", targetType);
             return result;
@@ -63,11 +65,11 @@ public class ContentMap {
 
         synchronized (map) {
             // TODO: optimise conversion using some sophisticated iteration ordering ???
-            for (Class<?> sourceType : map.keySet()) {
-                if (conversionService.canConvert(sourceType, targetType)) {
-                    result = conversionService.convert(map.get(sourceType), targetType);
+            for (var sourceTypeEntry : map.entrySet()) {
+                if (conversionService.canConvert(sourceTypeEntry.getKey(), targetType)) {
+                    result = conversionService.convert(sourceTypeEntry.getValue(), targetType);
                     if (result != null) {
-                        LOG.debug("Successfully generated {} from {}", targetType, sourceType);
+                        LOG.debug("Successfully generated {} from {}", targetType, sourceTypeEntry.getKey());
                         setContent(targetType, result);
                         return result;
                     }

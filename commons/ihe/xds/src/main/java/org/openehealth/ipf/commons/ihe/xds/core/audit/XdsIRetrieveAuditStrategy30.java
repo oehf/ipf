@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Document;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,16 +35,16 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof RetrieveImagingDocumentSetRequestType) {
-            RetrieveImagingDocumentSetRequestType request = (RetrieveImagingDocumentSetRequestType) pojo;
-            List<RetrieveImagingDocumentSetRequestType.StudyRequest> requestedStudies = request.getStudyRequest();
+            var request = (RetrieveImagingDocumentSetRequestType) pojo;
+            var requestedStudies = request.getStudyRequest();
             if (requestedStudies != null) {
-                for (RetrieveImagingDocumentSetRequestType.StudyRequest studyRequest : requestedStudies) {
-                    List<RetrieveImagingDocumentSetRequestType.SeriesRequest> requestedSeries = studyRequest.getSeriesRequest();
+                for (var studyRequest : requestedStudies) {
+                    var requestedSeries = studyRequest.getSeriesRequest();
                     if (requestedSeries != null) {
-                        for (RetrieveImagingDocumentSetRequestType.SeriesRequest seriesRequest : requestedSeries) {
-                            List<RetrieveDocumentSetRequestType.DocumentRequest> requestedDocuments = seriesRequest.getDocumentRequests();
+                        for (var seriesRequest : requestedSeries) {
+                            var requestedDocuments = seriesRequest.getDocumentRequests();
                             if (requestedDocuments != null) {
-                                for (RetrieveDocumentSetRequestType.DocumentRequest document : requestedDocuments) {
+                                for (var document : requestedDocuments) {
                                     auditDataset.getDocuments().add(new Document(
                                             document.getDocumentUniqueId(),
                                             document.getRepositoryUniqueId(),

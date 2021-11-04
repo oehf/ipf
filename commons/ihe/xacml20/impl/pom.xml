@@ -4,12 +4,12 @@
     <artifactId>ipf-commons-ihe-xacml20-impl</artifactId>
     <name>ipf-commons-ihe-xacml20-impl</name>
     <description>Support for XACML 2.0-based integration profiles: implementation</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe-xacml20</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -59,12 +59,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

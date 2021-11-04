@@ -1,0 +1,88 @@
+/*
+ * Mapping definitions
+ * 
+ * Always are in the following Groovy syntax:
+ * 
+ * <pre>
+ * mappings = {
+ *   mappingKey1(['oid of key code system','oid of value code system'],
+ *      key1  : 'value1',
+ *      key2  : 'value2',
+ *      (ELSE): Closure or Value
+ *   )
+ *   mappingKey2(
+ *      ...
+ *   )
+ *   ...
+ *   
+ * }
+ * <pre>
+ * 
+ * The list of OIDs is optional. The ELSE element can be either a Closure or a normal Object,
+ * which is converted to a String. The closure takes the key as only parameter, so that 
+ * <pre>
+ * ...
+ * (ELSE) : { it }
+ * ...
+ * </pre>
+ * will return that key, and thus an unknown key is mapped to itself.
+ * 
+ */
+mappings = {
+
+    'hl7v2v3-interactionId-eventStructure'(['2.16.840.1.113883.5.4', '2.16.840.1.113883.12.76'],
+        'PRPA_IN201301UV02': 'A01~ADT_A01',
+        'PRPA_IN201302UV02': 'A08~ADT_A01',
+        'PRPA_IN201304UV02': 'A40~ADT_A39'
+    )
+
+    'hl7v2v3-bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
+		'M' : 'M',
+ 		'F' : 'F',
+ 		'' : '',
+ 		(ELSE) : { 'O' },
+ 		({'UN'}) : (ELSE)
+    )
+
+    // patient marital status v3 -> v2
+    'hl7v2v3-patient-maritalStatus'(
+        'D': 'D',               // divorced
+        'L': 'A',               // legally separated
+        'M': 'M',               // married
+        'S': 'S',               // never married AKA single
+        'W': 'W',               // widowed
+        'I': 'I',               // interlocuraty
+        'A': 'N',               // annulled
+        'T': 'P',               // domestic partner
+        'P': 'O',               // polygamic
+        (ELSE) : { it }         // unknown stuff
+    )
+
+    // v3: 2.16.840.1.113883.5.1100
+    'hl7v2v3-error-codes'(
+        '101' : 'SYN105',
+        '102' : 'SYN102',
+        '103' : 'SYN103',
+        '200' : 'NS200',
+        '201' : 'NS200',
+        '202' : 'NS202',
+        '203' : 'NS203',
+        (ELSE) : { it }
+    )
+
+    'hl7v2v3_familyNameType-familyNameQualifier' (
+        'B'    : 'BR',
+        (ELSE) : ''
+    )
+
+    'hl7v2v3_nameTypeCode-nameUse' (
+        'A'    : 'P',
+        'S'    : 'P',
+        'M'    : 'BR',
+        'B'    : 'BR',
+        'L'    : 'L',
+        'T'    : 'I',
+        (ELSE) : 'L'
+    )
+
+}

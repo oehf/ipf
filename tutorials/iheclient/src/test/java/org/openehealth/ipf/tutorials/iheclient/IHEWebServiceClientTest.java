@@ -15,21 +15,20 @@
  */
 package org.openehealth.ipf.tutorials.iheclient;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.Assert.assertNotNull;
+import java.nio.charset.Charset;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:context.xml")
 public class IHEWebServiceClientTest {
 
@@ -44,11 +43,11 @@ public class IHEWebServiceClientTest {
         assertNotNull(iheClient.getCamelContext());
     }
 
-    @Ignore
+    @Disabled
     public void testIti47() throws Exception {
-        InputStream in = getClass().getResourceAsStream("/example-messages/PDQv3.xml");
-        String request = IOUtils.toString(in, Charset.defaultCharset());
-        String result = iheClient.iti47PatientDemographicsQuery(request, "localhost", 8080, "pix-xref-mgr/ws/iti47Service?secure=true", false);
+        var in = getClass().getResourceAsStream("/example-messages/PDQv3.xml");
+        var request = IOUtils.toString(in, Charset.defaultCharset());
+        var result = iheClient.iti47PatientDemographicsQuery(request, "localhost", 8080, "pix-xref-mgr/ws/iti47Service?secure=true", false);
         System.out.println(result);
     }
 

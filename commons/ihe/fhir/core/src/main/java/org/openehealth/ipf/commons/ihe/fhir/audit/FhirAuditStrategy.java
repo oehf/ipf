@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
  */
 public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends AbstractFhirAuditStrategy<T, IBaseOperationOutcome> {
 
-    private IBaseOperationOutcomeOperations operations;
+    private final IBaseOperationOutcomeOperations operations;
 
     public FhirAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations) {
         super(serverSide);
@@ -36,7 +36,7 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
         if (!operations.hasIssue(response)) {
             return EventOutcomeIndicator.Success;
         }
-        String severity = operations.getWorstIssueSeverity(response);
+        var severity = operations.getWorstIssueSeverity(response);
         switch (severity) {
             case "fatal":
             case "error":

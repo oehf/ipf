@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.camel.ExchangePattern;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -29,28 +29,28 @@ public class DataFormatExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testUnmarshalObject() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:external1",
+        var result = (String) producerTemplate.sendBody("direct:external1",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
     public void testMarshalObject() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:internal1",
+        var result = (String) producerTemplate.sendBody("direct:internal1",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }
 
     @Test
     public void testUnmarshalBean() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:external2",
+        var result = (String) producerTemplate.sendBody("direct:external2",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
     public void testMarshalBean() throws Exception {
-        String result = (String) producerTemplate.sendBody("direct:internal2",
+        var result = (String) producerTemplate.sendBody("direct:internal2",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }

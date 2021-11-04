@@ -25,6 +25,7 @@ import org.springframework.core.io.ClassPathResource
  * @author Jens Riemschneider
  */
 class Server {
+
     private static final int SYSLOG_PORT = 514
 
     /**
@@ -34,7 +35,7 @@ class Server {
      * @throws Exception
      *          any problem that occurred.
      */
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ClassPathResource contextResource = new ClassPathResource('context.xml')
 
         CXFServlet servlet = new CXFServlet()
@@ -45,7 +46,7 @@ class Server {
         servletServer.contextPath = ''
         servletServer.servletPath = '/*'
         servletServer.servlet = servlet
-        servletServer.secure = args.length == 1 && args[0].equals('secure')
+        servletServer.secure = args.length == 1 && args[0] == 'secure'
         servletServer.keystoreFile = 'keystore'
         servletServer.keystorePass = 'changeit'
         servletServer.truststoreFile = 'keystore'

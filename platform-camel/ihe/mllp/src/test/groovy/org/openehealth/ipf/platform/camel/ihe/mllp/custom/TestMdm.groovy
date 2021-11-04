@@ -20,13 +20,14 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.impl.DefaultExchange
-import org.junit.BeforeClass
-import org.junit.Test
+import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
@@ -40,7 +41,7 @@ class TestMdm extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
@@ -197,17 +198,16 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&audit=false'
+        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
     
-    @Test(expected=CamelExchangeException.class)
+    @Test
     void testUnsecureProducer() {
         final String body = getMessageString('MDM^T01', '2.5')
         def endpointUri = 'mdm://localhost:19087?audit=false'
-        send(endpointUri, body)
-        fail()
+        assertThrows(CamelExchangeException.class, ()->send(endpointUri, body));
     }
 
     @Test
@@ -218,11 +218,10 @@ class TestMdm extends MllpTestContainer {
         assertACK(msg)
     }
 
-    @Test(expected=CamelExchangeException.class)
+    @Test
     void testSecureEndpointWithCamelJsseConfigClientFails() {
         final String body = getMessageString('MDM^T01', '2.5')
         def endpointUri = 'mdm://localhost:19088?audit=false'
-        send(endpointUri, body)
-        fail()
+        assertThrows(CamelExchangeException.class, ()-> send(endpointUri, body));
     }
 }

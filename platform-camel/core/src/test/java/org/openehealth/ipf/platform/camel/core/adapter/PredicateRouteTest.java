@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 
 

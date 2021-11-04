@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti86
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -47,14 +47,14 @@ class TestIti86 extends XdsStandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT)
     }
     
-    @BeforeClass
+    @BeforeAll
     static void classSetUp() throws Exception {
         System.setProperty(PayloadLoggerBase.PROPERTY_CONSOLE, 'true')
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
-    @Before
+    @BeforeEach
     void setUp() {
         request = SampleData.createRemoveDocuments()
     }

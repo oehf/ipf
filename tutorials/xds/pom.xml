@@ -4,12 +4,12 @@
     <artifactId>ipf-tutorials-xds</artifactId>
     <name>ipf-tutorials-xds</name>
     <packaging>jar</packaging>
-    <url>${site.url}/${project.artifactId}</url>
+
      
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>ipf-tutorials</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -73,6 +73,10 @@
             <artifactId>camel-spring</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-coyote</artifactId>
             <scope>compile</scope>
@@ -86,10 +90,6 @@
             <groupId>javax.security.auth.message</groupId>
             <artifactId>javax.security.auth.message-api</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-javamail_1.4_spec</artifactId>
         </dependency>
 
         <!-- Dependencies for test -->
@@ -124,12 +124,5 @@
             </plugin>
         </plugins>
     </build>
-    
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
     
 </project>

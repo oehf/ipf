@@ -16,15 +16,14 @@
 package org.openehealth.ipf.commons.ihe.core.payload;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -45,6 +44,7 @@ import static java.util.Objects.requireNonNull;
  * number and the host name, e.g. <tt>"12345-myhostname"</tt>.</li>
  * <li><tt>date('format_spec')</tt>&nbsp;&mdash; current date and time, formatted
  * using {@link java.text.SimpleDateFormat} according to the given specification.</li>
+ * <li><tt>interactionId</tt>&nbsp;&mdash; ID of the interaction where the message participates.</li>
  * </ul>
  * <br>
  * Example of a file name pattern:<br>
@@ -83,7 +83,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     private boolean enabled = true;
 
     private int errorCountLimit = -1;
-    private AtomicInteger errorCount = new AtomicInteger(0);
+    private final AtomicInteger errorCount = new AtomicInteger(0);
 
     private ExpressionResolver resolver;
 
@@ -104,27 +104,24 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
             if (LOG.isDebugEnabled()) {
-                String output = Stream.of(payloadPieces).collect(Collectors.joining());
+                var output = String.join("", payloadPieces);
                 LOG.debug(output);
             }
         } else {
             // compute the file path and write payload pieces into this file
-            String path = resolver.resolveExpression(context);
-            Writer writer = null;
-            try {
-                FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-                writer = (charsetName != null) ?
-                        new OutputStreamWriter(outputStream, charsetName) :
-                        new OutputStreamWriter(outputStream);
-                for (String payloadPiece : payloadPieces) {
+            var path = resolver.resolveExpression(context);
+            try (var outputStream = FileUtils.openOutputStream(new File(path), true);
+                 var writer = (charsetName != null) ?
+                         new OutputStreamWriter(outputStream, charsetName) :
+                         new OutputStreamWriter(outputStream))
+            {
+                for (var payloadPiece : payloadPieces) {
                     writer.write(payloadPiece);
                 }
                 errorCount.set(0);
             } catch (IOException e) {
                 errorCount.incrementAndGet();
                 LOG.warn("Cannot write into " + path, e);
-            } finally {
-                IOUtils.closeQuietly(writer);
             }
         }
     }
@@ -158,42 +155,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    /**
-     * @return <code>true</code> if this logging interceptor instance is enabled.
-     * @deprecated use {@link #isEnabled()}
-     */
-    @Deprecated
-    public boolean isLocallyEnabled() {
-        return isEnabled();
-    }
-
-    /**
-     * @param locallyEnabled <code>true</code> when this logging interceptor instance should be enabled.
-     * @deprecated use {@link #setEnabled(boolean)}
-     */
-    @Deprecated
-    public void setLocallyEnabled(boolean locallyEnabled) {
-        setEnabled(locallyEnabled);
-    }
-
-    /**
-     * @return <code>true</code> when logging interceptors are generally enabled.
-     * @see #isEnabled()
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static boolean isGloballyEnabled() {
-        return !Boolean.getBoolean(PROPERTY_DISABLED);
-    }
-
-    /**
-     * @param globallyEnabled <code>true</code> when logging interceptors shall be generally enabled.
-     * @see #setLocallyEnabled(boolean)
-     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
-     */
-    public static void setGloballyEnabled(boolean globallyEnabled) {
-        System.setProperty(PROPERTY_DISABLED, Boolean.toString(!globallyEnabled));
     }
 
     /**

@@ -19,9 +19,9 @@ package org.openehealth.ipf.modules.hl7.kotlin.validation.model
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.validation.ValidationException
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.modules.hl7.kotlin.loadHl7
 import kotlin.test.assertEquals
 

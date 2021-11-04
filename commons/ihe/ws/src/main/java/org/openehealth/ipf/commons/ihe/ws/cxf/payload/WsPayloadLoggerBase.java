@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
@@ -52,11 +53,12 @@ public class WsPayloadLoggerBase
             message.getExchange().put(SEQUENCE_ID_PROPERTY_NAME, sequenceId);
         }
 
-        WsPayloadLoggingContext spelContext = new WsPayloadLoggingContext(
+        var spelContext = new WsPayloadLoggingContext(
                 sequenceId,
+                getInteractionId(message),
                 Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE)));
 
-        boolean isOutbound = MessageUtils.isOutbound(message);
+        var isOutbound = MessageUtils.isOutbound(message);
 
         doLogPayload(
                 spelContext,
@@ -74,18 +76,18 @@ public class WsPayloadLoggerBase
      * @return message's HTTP headers as a String.
      */
     private static String getHeadersPayload(Message message) {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-        Object encoding = message.get(Message.ENCODING);
+        var encoding = message.get(Message.ENCODING);
         if (encoding != null) {
             sb.append("Character set: ").append(encoding).append('\n');
         }
         sb.append('\n');
 
-        Map<String, List<String>> httpHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
+        var httpHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
         if (httpHeaders != null) {
-            for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
-                for (String header : entry.getValue()) {
+            for (var entry : httpHeaders.entrySet()) {
+                for (var header : entry.getValue()) {
                     sb.append(entry.getKey()).append(": ").append(header).append('\n');
                 }
             }
@@ -97,7 +99,7 @@ public class WsPayloadLoggerBase
 
 
     private static String getInboundMetadataPayload(Message message) {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         if (Boolean.TRUE.equals(message.get(Message.REQUESTOR_ROLE))) {
             sb.append("HTTP response code: ").append(message.get(Message.RESPONSE_CODE)).append('\n');
@@ -114,19 +116,19 @@ public class WsPayloadLoggerBase
 
 
     private static String getInboundBodyPayload(Message message) {
-        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        var payloadHolder = message.getContent(StringPayloadHolder.class);
         return (payloadHolder != null) ? payloadHolder.get(HTTP) : "";
     }
 
 
     private static String getOutboundMetadataPayload(Message message) {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-        Object endpointAddress = message.get(Message.ENDPOINT_ADDRESS);
+        var endpointAddress = message.get(Message.ENDPOINT_ADDRESS);
         if (endpointAddress != null) {
             sb.append("Target endpoint: ").append(endpointAddress).append('\n');
         } else {
-            HttpServletResponse response =
+            var response =
                     (HttpServletResponse) message.get(AbstractHTTPDestination.HTTP_RESPONSE);
             sb.append("HTTP response code: ")
                     .append((response != null) ? response.getStatus() : "unknown")
@@ -138,11 +140,16 @@ public class WsPayloadLoggerBase
 
 
     private static String getOutboundBodyPayload(Message message) {
-        WrappedOutputStream wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
+        var wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
         wrapper.deactivate();
         return wrapper.getCollectedPayload();
     }
 
+    private static String getInteractionId(Message message) {
+        var seiClass = (Class<?>) message.getContextualProperty(ReflectionServiceFactoryBean.ENDPOINT_CLASS);
+        var name = seiClass.getSimpleName();
+        return name.endsWith("PortType") ? name.substring(0, name.length() - 8) : name;
+    }
 
     /**
      * SPEL evaluation context for patterns of file names where WS-based payload should be saved.
@@ -150,8 +157,8 @@ public class WsPayloadLoggerBase
     static class WsPayloadLoggingContext extends PayloadLoggingContext {
         private final boolean partialResponse;
 
-        WsPayloadLoggingContext(long sequenceId, boolean partialResponse) {
-            super(sequenceId);
+        WsPayloadLoggingContext(long sequenceId, String interactionId, boolean partialResponse) {
+            super(sequenceId, interactionId);
             this.partialResponse = partialResponse;
         }
 

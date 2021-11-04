@@ -42,7 +42,7 @@ public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTra
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdEndpoint<Iti59AuditDataset>(uri, remaining, this, parameters, Iti59Service.class) {
+        return new HpdEndpoint<>(uri, remaining, this, parameters, Iti59Service.class) {
             @Override
             public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);

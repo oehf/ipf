@@ -21,9 +21,9 @@ import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Parameters
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
@@ -34,11 +34,12 @@ import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import java.nio.charset.Charset
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  *
  */
-class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
+class PixQueryResponseToPixmResponseTranslatorTest {
 
     private static final HapiContext PIX_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
             CustomModelClassUtils.createFactory("pix", "2.5"),
@@ -47,7 +48,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     private PixQueryResponseToPixmResponseTranslator translator
     MappingService mappingService
 
-    @Before
+    @BeforeEach
     void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(getClass().getClassLoader().getResource('mapping.map'))
@@ -85,10 +86,12 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         assertEquals(0, parameters.parameter.size())
     }
 
-    @Test(expected = ResourceNotFoundException.class)
+    @Test
     void testTranslateErrorResponseCase3() {
         RSP_K23 message = loadMessage('err-1_Response')
-        translator.translateToFhir(message, new HashMap<String, Object>())
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                       () -> translator.translateToFhir(message, new HashMap<String, Object>()))
+
     }
 
     @Test

@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
-import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
@@ -32,11 +31,12 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobileDocumentReferenceQuery("ITI-67", "Mobile Document Reference Query"),
     MobileDocumentRetrieval("ITI-68", "Mobile Document Retrieval"),
     MobilePatientDemographicsQuery("ITI-78", "Mobile Patient Demographics Query"),
+    RetrieveATNAAuditEvent("ITI-81", "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query"),
     MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
 
     @Getter
-    private EventType value;
+    private final EventType value;
 
     FhirEventTypeCode(String code, String displayName) {
         this.value = EventType.of(code, "IHE Transactions", displayName);

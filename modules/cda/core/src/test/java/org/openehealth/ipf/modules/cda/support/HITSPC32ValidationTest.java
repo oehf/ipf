@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
@@ -26,7 +26,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.*;
+import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.*;
 
 /**
  * Validates the HITSP C37 schematron rule set.
@@ -42,7 +42,7 @@ public class HITSPC32ValidationTest {
 
 	private static final String sample_c32 = "/MU_Rev3_HITSP_C32C83_4Sections_RobustEntries_NoErrors.xml";
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 		params = new HashMap<>();

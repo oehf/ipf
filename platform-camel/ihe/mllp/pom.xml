@@ -4,12 +4,12 @@
     <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
     <name>ipf-platform-camel-ihe-mllp</name>
     <description>MLLP IHE components for Apache Camel</description>
-    <url>${site.url}/${project.artifactId}</url>
+
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel-ihe</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -48,29 +48,38 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina2</artifactId>
+            <artifactId>camel-mina</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
+            <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <optional>true</optional>
         </dependency>
 
         <!-- dependencies for test -->
-        <!--
+
         <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mock</artifactId>
             <scope>test</scope>
         </dependency>
-        -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-xml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-management</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -85,7 +94,11 @@
         </dependency>
 
         <!-- Tracing -->
-
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.zipkin.brave</groupId>
             <artifactId>brave</artifactId>
@@ -118,12 +131,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public class LocalizedStringAdapter extends XmlAdapter<String, LocalizedString> {
     @Override
-    public String marshal(LocalizedString v) throws Exception {
+    public String marshal(LocalizedString v) {
         return (v != null) ? v.getValue() : null;
     }
 
     @Override
-    public LocalizedString unmarshal(String v) throws Exception {
+    public LocalizedString unmarshal(String v) {
         return new LocalizedString(v);
     }
 }

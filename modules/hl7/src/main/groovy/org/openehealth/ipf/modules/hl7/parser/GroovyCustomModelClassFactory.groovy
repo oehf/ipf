@@ -68,19 +68,23 @@ class GroovyCustomModelClassFactory extends CustomModelClassFactory {
             throw new HL7Exception("HL7 version $version is not supported",
                     ErrorCode.UNSUPPORTED_VERSION_ID)
         }
-        def classLoaded = null
-        def fullyQualifiedName = null
+        Class classLoaded = null
+        String fullyQualifiedName = null
         customModelClasses[version]?.find {
             try {
-                def path = it.replaceAll('\\.', '/')
-                def sep = path.endsWith('/') ? '' : '/'
+                String path = it.replaceAll('\\.', '/')
+                String sep = path.endsWith('/') ? '' : '/'
                 fullyQualifiedName = "/${path}${sep}${subpackage}/${name}.groovy"
+                LOGGER.debug("Reading file {} from classpath", fullyQualifiedName)
                 String script = getClass().getResourceAsStream(fullyQualifiedName)?.text
+                LOGGER.debug("Read file {} from classpath", script)
                 GroovyCodeSource gcs = new GroovyCodeSource(script, fullyQualifiedName, ".")
                 classLoaded = loader.parseClass(gcs, cacheSources)
                 LOGGER.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
+                return true
             } catch (Exception e) {
-                LOGGER.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
+                LOGGER.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName, e)
+                return false
             }
         }
         return classLoaded

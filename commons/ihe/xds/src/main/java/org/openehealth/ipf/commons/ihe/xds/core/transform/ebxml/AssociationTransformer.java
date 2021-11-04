@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
@@ -58,27 +57,27 @@ public class AssociationTransformer {
         if (association == null) {
             return null;
         }
-        
-        EbXMLAssociation result = factory.createAssociation(association.getEntryUuid(), objectLibrary);
+
+        var result = factory.createAssociation(association.getEntryUuid(), objectLibrary);
         result.setAssociationType(association.getAssociationType());
         result.setSource(association.getSourceUuid());
         result.setTarget(association.getTargetUuid());
 
-        String label = AssociationLabel.toOpcode(association.getLabel());
+        var label = AssociationLabel.toOpcode(association.getLabel());
         result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
 
-        String previousVersion = association.getPreviousVersion();
+        var previousVersion = association.getPreviousVersion();
         result.addSlot(Vocabulary.SLOT_NAME_PREVIOUS_VERSION, previousVersion);
 
-        AvailabilityStatus originalStatus = association.getOriginalStatus();
+        var originalStatus = association.getOriginalStatus();
         result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, AvailabilityStatus.toQueryOpcode(originalStatus));
 
-        AvailabilityStatus newStatus = association.getNewStatus();
+        var newStatus = association.getNewStatus();
         result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, AvailabilityStatus.toQueryOpcode(newStatus));
 
         result.setAssociationPropagation(association.getAssociationPropagation());
 
-        EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
+        var contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
         result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
 
         result.setExtraMetadata(association.getExtraMetadata());
@@ -98,27 +97,27 @@ public class AssociationTransformer {
         if (association == null) {
             return null;
         }
-        Association result = new Association();
+        var result = new Association();
         result.setAssociationType(association.getAssociationType());
         result.setTargetUuid(association.getTarget());
         result.setSourceUuid(association.getSource());
         result.setEntryUuid(association.getId());
 
-        String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
+        var label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
         result.setLabel(AssociationLabel.fromOpcode(label));
 
-        String previousVersion = association.getSingleSlotValue(Vocabulary.SLOT_NAME_PREVIOUS_VERSION);
+        var previousVersion = association.getSingleSlotValue(Vocabulary.SLOT_NAME_PREVIOUS_VERSION);
         result.setPreviousVersion(previousVersion);
 
-        String originalStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ORIGINAL_STATUS);
+        var originalStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ORIGINAL_STATUS);
         result.setOriginalStatus(AvailabilityStatus.valueOfOpcode(originalStatus));
 
-        String newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
+        var newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
         result.setNewStatus(AvailabilityStatus.valueOfOpcode(newStatus));
 
         result.setAssociationPropagation(association.getAssociationPropagation());
 
-        EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
+        var docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         result.setDocCode(codeTransformer.fromEbXML(docCode));
 
         result.setExtraMetadata(association.getExtraMetadata());

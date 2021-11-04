@@ -63,7 +63,7 @@ class CamelOnlyRouteBuilder extends RouteBuilder {
         requireNonNull(expectedClass)
         return new Processor() {
             @Override
-            public void process(Exchange exchange) throws Exception {
+            void process(Exchange exchange) throws Exception {
                 Class<?> actualClass = exchange.getIn().getBody().getClass()
                 if (!expectedClass.equals(actualClass)) {
                     throw new RuntimeException("Wrong body class: expected " +

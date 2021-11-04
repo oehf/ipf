@@ -15,18 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for {@link ResponseTransformer}.
@@ -36,9 +35,9 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     private ResponseTransformer transformer;
     private Response response;
 
-    @Before
+    @BeforeEach
     public void baseSetUp() {
-        EbXMLFactory factory = createFactory();
+        var factory = createFactory();
         transformer = new ResponseTransformer(factory);
         
         response = SampleData.createResponse();
@@ -46,13 +45,13 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXMLRegistryResponse() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
+        var ebXML = transformer.toEbXML(response);
 
         assertEquals(Status.FAILURE, ebXML.getStatus());
-        List<EbXMLRegistryError> errors = ebXML.getErrors();
+        var errors = ebXML.getErrors();
         assertEquals(3, errors.size());
 
-        EbXMLRegistryError error = errors.get(0);
+        var error = errors.get(0);
         assertEquals("context1", error.getCodeContext());
         assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(), error.getErrorCode());
         assertEquals(Severity.ERROR, error.getSeverity());
@@ -73,7 +72,7 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXMLRegistryResponseEmpty() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(new Response());
+        var ebXML = transformer.toEbXML(new Response());
         assertNull(ebXML.getStatus());
         assertEquals(0, ebXML.getErrors().size());
     }
@@ -81,15 +80,15 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
-        Response result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(response);
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(response, result);
     }
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRegistryResponse ebXML = transformer.toEbXML(new Response());
-        Response result = transformer.fromEbXML(ebXML);
+        var ebXML = transformer.toEbXML(new Response());
+        var result = transformer.fromEbXML(ebXML);
         assertEquals(new Response(), result);
     }
 }

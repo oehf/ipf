@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.http4.HttpMethods;
+import org.apache.camel.component.http.HttpMethods;
 import org.apache.camel.support.ExpressionAdapter;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
@@ -54,7 +54,7 @@ public class Iti68TestRouteBuilder extends RouteBuilder {
 
         from("direct:input")
                 .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
-                .toF("http4:localhost:%d", StandardTestContainer.DEMO_APP_PORT);
+                .toF("http:localhost:%d", StandardTestContainer.DEMO_APP_PORT);
 
         from("mhd-iti68:download?audit=true")
                 .errorHandler(noErrorHandler())
@@ -66,7 +66,7 @@ public class Iti68TestRouteBuilder extends RouteBuilder {
 
         @Override
         public Object evaluate(Exchange exchange) {
-            Iti68AuditDataset auditDataset = exchange.getIn().getHeader(AuditInterceptor.AUDIT_DATASET_HEADER, Iti68AuditDataset.class);
+            var auditDataset = exchange.getIn().getHeader(AuditInterceptor.AUDIT_DATASET_HEADER, Iti68AuditDataset.class);
             auditDataset.setDocumentUniqueId(DOCUMENT_UNIQUE_ID);
             auditDataset.setHomeCommunityId(HOME_COMMUNITY_ID);
             auditDataset.setRepositoryUniqueId(REPOSITORY_ID);

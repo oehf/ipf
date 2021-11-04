@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
@@ -30,9 +29,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDoc
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link FindDocumentsQueryTransformer} and {@link FindDocumentsForMultiplePatientsQueryTransformer}
@@ -46,7 +44,7 @@ public class FindDocumentsQueryTransformerTest {
     private FindDocumentsQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new FindDocumentsQueryTransformer<>();
         query = (FindDocumentsQuery)SampleData.createFindDocumentsQuery().getQuery();
@@ -105,7 +103,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()));
 
-        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
+        var slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code9^^scheme9')"), slots.get(1).getValueList());
@@ -156,7 +154,7 @@ public class FindDocumentsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        FindDocumentsQuery result = new FindDocumentsQuery();
+        var result = new FindDocumentsQuery();
         transformer.fromEbXML(result, ebXML);
         assertEquals(query, result);
     }
@@ -164,35 +162,35 @@ public class FindDocumentsQueryTransformerTest {
     @Test
     public void testFromEbXML_MPQ() {
         multiplePatientsQueryTransformer.toEbXML(multiplePatientsQuery,ebXML);
-        FindDocumentsForMultiplePatientsQuery mpResult = new FindDocumentsForMultiplePatientsQuery();
+        var mpResult = new FindDocumentsForMultiplePatientsQuery();
         multiplePatientsQueryTransformer.fromEbXML(mpResult,ebXML);
         assertEquals(multiplePatientsQuery,mpResult);
     }
     
     @Test
     public void testFromEbXMLNull() {
-        FindDocumentsQuery result = new FindDocumentsQuery();
+        var result = new FindDocumentsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new FindDocumentsQuery(), result);
     }
 
     @Test
     public void testFromEbXMLNull_MPQ() {
-        FindDocumentsForMultiplePatientsQuery result = new FindDocumentsForMultiplePatientsQuery();
+        var result = new FindDocumentsForMultiplePatientsQuery();
         multiplePatientsQueryTransformer.fromEbXML(result, null);
         assertEquals(new FindDocumentsForMultiplePatientsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        FindDocumentsQuery result = new FindDocumentsQuery();
+        var result = new FindDocumentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new FindDocumentsQuery(), result);
     }
 
     @Test
     public void testFromEbXMLEmpty_MPQ() {
-        FindDocumentsForMultiplePatientsQuery result = new FindDocumentsForMultiplePatientsQuery();
+        var result = new FindDocumentsForMultiplePatientsQuery();
         multiplePatientsQueryTransformer.fromEbXML(result, ebXML);
         assertEquals(new FindDocumentsForMultiplePatientsQuery(), result);
     }

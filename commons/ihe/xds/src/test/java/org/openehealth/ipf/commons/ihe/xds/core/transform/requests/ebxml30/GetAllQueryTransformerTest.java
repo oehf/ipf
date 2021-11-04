@@ -15,16 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
@@ -32,6 +25,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetAllQueryTransformer;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link GetAllQueryTransformer}.
@@ -42,13 +40,13 @@ public class GetAllQueryTransformerTest {
     private GetAllQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new GetAllQueryTransformer();
         query = new GetAllQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
-        QueryList<Code> confidentialityCodes = new QueryList<>();
+        var confidentialityCodes = new QueryList<Code>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -72,8 +70,8 @@ public class GetAllQueryTransformerTest {
 
         assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.PATIENT_ID.getSlotName()));
-        
-        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
+
+        var slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code12^^scheme12')"), slots.get(1).getValueList());
@@ -113,7 +111,7 @@ public class GetAllQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetAllQuery result = new GetAllQuery();
+        var result = new GetAllQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -121,14 +119,14 @@ public class GetAllQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetAllQuery result = new GetAllQuery();
+        var result = new GetAllQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetAllQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetAllQuery result = new GetAllQuery();
+        var result = new GetAllQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetAllQuery(), result);
     }

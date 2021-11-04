@@ -2,18 +2,15 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf</artifactId>
-    <version>3.7-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.7-SNAPSHOT</version>
+        <version>4.3-SNAPSHOT</version>
         <relativePath>dependencies</relativePath>
     </parent>
-
-    <url>${site.url}</url>
 
     <description>IPF - eHealth Integration on steroids</description>
 
@@ -30,75 +27,42 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-report-plugin-version>2.20</surefire-report-plugin-version>
+        <surefire-plugin-version>3.0.0-M5</surefire-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
-        <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>3.0.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-
-        <github.global.server>github</github.global.server>
-        <site.path>${project.version}</site.path>
-        <site.url>http://oehf.github.io/ipf</site.url>
-        <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
-        <site.directory>${user.home}/sites/ipf</site.directory>
-        <site.scm.directory>${user.home}/sites/scm/ipf</site.scm.directory>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
 
         <!-- Plugin version properties -->
-        <antrun-plugin-version>1.8</antrun-plugin-version>
-        <assembly-plugin-version>2.6</assembly-plugin-version>
-        <build-helper-version>1.11</build-helper-version>
-        <compiler-plugin-version>3.8.0</compiler-plugin-version>
-        <eclipse-plugin-version>2.10</eclipse-plugin-version>
-        <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
-        <github-site-version>0.12</github-site-version>
-        <gmavenplus-plugin-version>1.6</gmavenplus-plugin-version>
+        <assembly-plugin-version>3.3.0</assembly-plugin-version>
+        <build-helper-version>3.2.0</build-helper-version>
+        <compiler-plugin-version>3.8.1</compiler-plugin-version>
+        <enforcer-plugin-version>3.0.0</enforcer-plugin-version>
+        <gmavenplus-plugin-version>1.12.1</gmavenplus-plugin-version>
 
-        <groovy-eclipse-batch-version>2.5.8-02</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>3.4.0-01</groovy-eclipse-compiler-version>
-
-        <jar-plugin-version>3.1.0</jar-plugin-version>
-        <javadoc-plugin-version>3.0.1</javadoc-plugin-version>
-        <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
-        <lombok-plugin-version>1.18.8.1</lombok-plugin-version>
-        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
+        <jar-plugin-version>3.2.0</jar-plugin-version>
+        <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
+        <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
+        <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
+        <nexus-staging-plugin-version>1.6.8</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
-        <resources-plugin-version>3.1.0</resources-plugin-version>
-        <sources-plugin-version>3.0.1</sources-plugin-version>
-        <site-plugin-version>3.4</site-plugin-version>
+        <resources-plugin-version>3.2.0</resources-plugin-version>
+        <sources-plugin-version>3.2.1</sources-plugin-version>
+        <site-plugin-version>3.9.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.15.10</activemq-version>
-        <commons-beanutils-version>1.9.4</commons-beanutils-version>
-        <commons-codec-version>1.13</commons-codec-version>
-        <commons-dbcp2-version>2.7.0</commons-dbcp2-version>
-        <commons-io-version>2.6</commons-io-version>
-        <commons-lang3-version>3.9</commons-lang3-version>
-        <easymock-version>3.4</easymock-version>
-        <ehcache-version>2.10.1</ehcache-version>
-        <findbugs-version>3.0.1</findbugs-version>
-        <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
-        <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
-        <guava-version>28.1-jre</guava-version>
-        <httpclient4-version>4.5.10</httpclient4-version>
-        <jackson-version>2.10.0</jackson-version>
-        <jaspic-api-version>1.1</jaspic-api-version>
-        <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jetty-version>9.4.19.v20190610</jetty-version>
-        <joda-time-version>2.9.9</joda-time-version>
-        <junit-version>4.12</junit-version>
-        <log4j-version>2.12.1</log4j-version>
-        <lombok-version>1.18.10</lombok-version>
-        <quartz-version>2.2.3</quartz-version>
+        <easymock-version>4.3</easymock-version>
+        <findbugs-version>3.0.2</findbugs-version>
+        <guava-version>30.1.1-jre</guava-version>
+        <jaspic-api-version>1.1.1</jaspic-api-version>
+        <mockserver-version>5.11.2</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.45</tomcat-version>
-        <woodstox-version>5.1.0</woodstox-version>
-        <xbean-spring-version>4.14</xbean-spring-version>
-        <xmlunit-version>1.6</xmlunit-version>
+        <tomcat-version>9.0.54</tomcat-version>
+        <xbean-spring-version>4.19</xbean-spring-version>
+        <xmlunit-version>2.8.2</xmlunit-version>
     </properties>
 
     <scm>
@@ -136,7 +100,7 @@
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                                    <stubsOutputDirectory>${output-folder}/generated-stubs</stubsOutputDirectory>
                                     <targetBytecode>${maven.compiler.target}</targetBytecode>
                                 </configuration>
                             </execution>
@@ -180,156 +144,6 @@
                 </dependency>
             </dependencies>
         </profile>
-
-        <profile>
-            <id>groovy</id>
-            <activation>
-                <file>
-                    <exists>src/main/groovy</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/main/groovy</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>add-test-source</id>
-                                <phase>generate-test-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/groovy</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${compiler-plugin-version}</version>
-                        <configuration>
-                            <compilerId>groovy-eclipse-compiler</compilerId>
-                            <source>${maven.compiler.source}</source>
-                            <target>${maven.compiler.target}</target>
-                            <fork>true</fork>
-                            <verbose>false</verbose>
-                            <compilerArguments>
-                                <javaAgentClass>lombok.launch.Agent</javaAgentClass>
-                            </compilerArguments>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.codehaus.groovy</groupId>
-                                <artifactId>groovy-eclipse-compiler</artifactId>
-                                <version>${groovy-eclipse-compiler-version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok-version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.codehaus.groovy</groupId>
-                                <artifactId>groovy-eclipse-batch</artifactId>
-                                <version>${groovy-eclipse-batch-version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>test-groovy</id>
-            <activation>
-                <file>
-                    <exists>src/test/groovy</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/main/groovy</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>add-test-source</id>
-                                <phase>generate-test-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/groovy</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${compiler-plugin-version}</version>
-                        <configuration>
-                            <compilerId>groovy-eclipse-compiler</compilerId>
-                            <source>${maven.compiler.source}</source>
-                            <target>${maven.compiler.target}</target>
-                            <fork>true</fork>
-                            <verbose>false</verbose>
-                            <!--<compilerArgument>indy</compilerArgument>-->
-                            <compilerArguments>
-                                <javaAgentClass>lombok.launch.Agent</javaAgentClass>
-                            </compilerArguments>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.codehaus.groovy</groupId>
-                                <artifactId>groovy-eclipse-compiler</artifactId>
-                                <version>${groovy-eclipse-compiler-version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok-version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.codehaus.groovy</groupId>
-                                <artifactId>groovy-eclipse-batch</artifactId>
-                                <version>${groovy-eclipse-batch-version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <dependencyManagement>
@@ -340,100 +154,16 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
-                <version>${log4j-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${commons-beanutils-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-dbcp2</artifactId>
-                <version>${commons-dbcp2-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient4-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache</artifactId>
-                <version>${ehcache-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-test</artifactId>
                 <version>${groovy-version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jetty</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-codec</groupId>
-                        <artifactId>commons-codec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-core</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -444,111 +174,7 @@
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-jms</artifactId>
                     </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-core</artifactId>
-                    </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-camel</artifactId>
-                <version>${activemq-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-kahadb-store</artifactId>
-                <version>${activemq-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-client</artifactId>
-                <version>${activemq-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jms_1.1_spec</artifactId>
-                <version>${geronimo-spec-jms-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${javax-validation-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${quartz-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>c3p0</groupId>
-                        <artifactId>c3p0</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-client</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-jmx</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlets</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-http</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-util</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-continuation</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-io</artifactId>
-                <version>${jetty-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${servlet-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.xbean</groupId>
@@ -592,27 +218,18 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>xmlunit</groupId>
-                <artifactId>xmlunit</artifactId>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-core</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok-version}</version>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-placeholders</artifactId>
+                <version>${xmlunit-version}</version>
+                <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom2</artifactId>
-                <version>${jdom-version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>net.java.quickcheck</groupId>
                 <artifactId>quickcheck</artifactId>
@@ -630,19 +247,15 @@
                 <version>${guava-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.woodstox</groupId>
-                <artifactId>woodstox-core</artifactId>
-                <version>${woodstox-version}</version>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${mockserver-version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-jaxb-annotations</artifactId>
-                <version>${jackson-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-joda</artifactId>
-                <version>${jackson-version}</version>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-client-java</artifactId>
+                <version>${mockserver-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -657,8 +270,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -674,108 +287,17 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${antrun-plugin-version}</version>
-                    <executions>
-                        <execution>
-                            <id>antrun</id>
-                            <phase>site</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <target>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
-                                        <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://netdna.bootstrapcd</replacetoken>
-                                        <replacevalue>https://netdna.bootstrapcd</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
-                                        <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
-                                        <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
-                                        <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>http://ajax.googleapis</replacetoken>
-                                        <replacevalue>https://ajax.googleapis</replacevalue>
-                                    </replace>
-                                    <replace dir="target/site" summary="true">
-                                        <include name="*.html" />
-                                        <replacetoken>\t</replacetoken>
-                                        <replacevalue />
-                                    </replace>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <!-- reporting plugins -->
                 <!-- Configure Maven site plugin for Reflow skin and Markdown support -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${site-plugin-version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.wagon</groupId>
-                            <artifactId>wagon-scm</artifactId>
-                            <version>3.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-manager-plexus</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-provider-gitexe</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.scm</groupId>
-                            <artifactId>maven-scm-api</artifactId>
-                            <version>1.9.5</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-module-markdown</artifactId>
-                            <version>1.6</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>lt.velykis.maven.skins</groupId>
-                            <artifactId>reflow-velocity-tools</artifactId>
-                            <version>1.1.1</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.velocity</groupId>
-                            <artifactId>velocity</artifactId>
-                            <version>1.7</version>
-                        </dependency>
-                    </dependencies>
                     <configuration>
                         <generateReports>true</generateReports>
                         <inputEncoding>UTF-8</inputEncoding>
                         <outputEncoding>UTF-8</outputEncoding>
                         <relativizeDecorationLinks>false</relativizeDecorationLinks>
-                        <!-- Site deployment done using GitHub site plugin -->
                         <skip>false</skip>
                         <skipDeploy>true</skipDeploy>
                     </configuration>
@@ -783,9 +305,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire-report-plugin-version}</version>
+                    <version>${surefire-plugin-version}</version>
                     <configuration>
-                        <argLine>-Xms64m -Xmx512m</argLine>
+                        <argLine>-Xms64m -Xmx1024m</argLine>
+                        <systemPropertyVariables>
+                            <jdk.security.allowNonCaAnchor>true</jdk.security.allowNonCaAnchor>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -795,18 +320,19 @@
                     <inherited>false</inherited>
                     <configuration>
                         <links>
-                            <link>http://docs.oracle.com/javase/8/docs/api/</link>
-                            <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
-                            <link>http://hapifhir.io/apidocs/</link>
-                            <link>http://cxf.apache.org/javadoc/latest/</link>
-                            <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                            <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                            <link>http://docs.spring.io/spring/docs/4.3.x/javadoc-api/</link>
+                            <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                            <link>https://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-base/</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-server</link>
+                            <link>https://cxf.apache.org/javadoc/latest/</link>
+                            <link>https://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
+                            <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
+                            <link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
                         </links>
-                        <source>1.8</source>
+                        <source>11</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                        <additionalJOption>-J-Xmx512m</additionalJOption>
+                        <additionalJOption>-J-Xmx1024m</additionalJOption>
                         <doclint>none</doclint>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
@@ -922,36 +448,98 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${jar-plugin-version}</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${enforcer-plugin-version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-versions</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <banDuplicatePomDependencyVersions />
+                                    <bannedDependencies>
+                                        <searchTransitive>true</searchTransitive>
+                                        <excludes>
+                                            <exclude>commons-logging:commons-logging</exclude>
+                                            <exclude>log4j:log4j</exclude>
+                                        </excludes>
+                                    </bannedDependencies>
+                                    <requireJavaVersion>
+                                        <message>Requires at least Java 11</message>
+                                        <version>[11,)</version>
+                                    </requireJavaVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-eclipse-plugin</artifactId>
-                    <version>${eclipse-plugin-version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>${jaxb-plugin-version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>sun.jdk</groupId>
-                            <artifactId>tools</artifactId>
-                            <version>1.8</version>
-                            <scope>system</scope>
-                            <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                        </dependency>
-                    </dependencies>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-package-maven-plugin</artifactId>
+                    <version>${camel-version}</version>
+                    <executions>
+                        <execution>
+                            <id>generate</id>
+                            <goals>
+                                <goal>generate-component</goal>
+                            </goals>
+                            <phase>process-classes</phase>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build-helper-version}</version>
+                    <executions>
+                        <execution>
+                            <id>generate-sources</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>src/generated/java</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>generate-resources</id>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>add-resource</goal>
+                            </goals>
+                            <configuration>
+                                <resources>
+                                    <resource>
+                                        <directory>src/generated/resources</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
+                <!--
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-version}</version>
+                </plugin>
+                -->
                 <plugin>
                     <groupId>org.projectlombok</groupId>
                     <artifactId>lombok-maven-plugin</artifactId>
@@ -960,14 +548,53 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- When using IntelliJ Idea, make sure to install the gmavenplus
+                 plugin, which adds the groovy source dirs to the build and
+                 removes the generated stubs from the build -->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>compileTests</goal>
+                            <goal>removeStubs</goal>
+                            <goal>removeTestStubs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <parallelParsing>true</parallelParsing>
+                    <targetBytecode>11</targetBytecode>
+                    <parameters>true</parameters>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>${groovy-version}</version>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>11</release>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -994,60 +621,6 @@
                             <goal>jar-no-fork</goal>
                             <goal>test-jar-no-fork</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Configure Maven site plugin to perform stage -->
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>antrun</id>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css</replacetoken>
-                                    <replacevalue>./css/bootstrap-responsive.min.css</replacevalue>
-                                </replace>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://netdna.bootstrapcd</replacetoken>
-                                    <replacevalue>https://netdna.bootstrapcd</replacevalue>
-                                </replace>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacetoken>
-                                    <replacevalue>https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css</replacevalue>
-                                </replace>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://yandex.st/highlightjs/7.5/styles/github.min.css</replacetoken>
-                                    <replacevalue>https://yandex.st/highlightjs/7.5/styles/github.min.css</replacevalue>
-                                </replace>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://yandex.st/highlightjs/7.5/highlight.min.js</replacetoken>
-                                    <replacevalue>https://yandex.st/highlightjs/7.5/highlight.min.js</replacevalue>
-                                </replace>
-
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>http://ajax.googleapis</replacetoken>
-                                    <replacevalue>https://ajax.googleapis</replacevalue>
-                                </replace>
-                                <replace dir="target/site" summary="true">
-                                    <include name="*.html" />
-                                    <replacetoken>\t</replacetoken>
-                                    <replacevalue>
-                                    </replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -1107,42 +680,6 @@
             </plugin>
             -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>${eclipse-plugin-version}</version>
-                <configuration>
-                    <projectnatures>
-                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
-                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
-                    </projectnatures>
-                    <downloadSources>true</downloadSources>
-                    <ajdtVersion>none</ajdtVersion>
-                    <classpathContainers>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>${nexus-staging-plugin-version}</version>
@@ -1181,28 +718,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
 
         </plugins>
         <resources>
@@ -1214,12 +729,6 @@
                 <!-- in src/main/groovy to the Eclipse build path. -->
                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
                 <directory>src/main/groovy</directory>
-            </resource>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>META-INF/**/*</include>
-                </includes>
             </resource>
         </resources>
         <testResources>
@@ -1251,7 +760,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${surefire-report-plugin-version}</version>
+                <version>2.20</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1276,11 +785,11 @@
                         <reports>
                             <report>index</report>
                             <report>summary</report>
-                            <report>project-team</report>
+                            <report>team</report>
                             <report>modules</report>
                             <!-- <report>dependencies</report> -->
-                            <report>license</report>
-                            <report>mailing-list</report>
+                            <report>licenses</report>
+                            <report>mailing-lists</report>
                             <report>scm</report>
                         </reports>
                     </reportSet>
@@ -1312,37 +821,5 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>bintray</id>
-            <name>Groovy Bintray</name>
-            <url>https://dl.bintray.com/groovy/maven</url>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>https://jcenter.bintray.com/</url>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <url>${site.deploy.url}</url>
-        </site>
-    </distributionManagement>
 
 </project>

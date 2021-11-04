@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import static org.junit.Assert.*;
-
-import java.util.ListIterator;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for patient ID list transformation in SourcePatientInfo.
@@ -32,17 +30,17 @@ public class SourcePatientIdentifierPIDTransformerTest {
 
     @Test
     public void testToHL7() {
-        PatientInfo patientInfo = new PatientInfo();
-        Identifiable id1 = new Identifiable();
+        var patientInfo = new PatientInfo();
+        var id1 = new Identifiable();
         id1.setId("id1");
-        AssigningAuthority assigningAuthority1 = new AssigningAuthority();
+        var assigningAuthority1 = new AssigningAuthority();
         assigningAuthority1.setUniversalId("1.1.1.1");
         assigningAuthority1.setUniversalIdType("ISO");
         id1.setAssigningAuthority(assigningAuthority1);
-        
-        Identifiable id2 = new Identifiable();
+
+        var id2 = new Identifiable();
         id2.setId("id2");
-        AssigningAuthority assigningAuthority2 = new AssigningAuthority();
+        var assigningAuthority2 = new AssigningAuthority();
         assigningAuthority2.setUniversalId("2.2.2.2");
         assigningAuthority2.setUniversalIdType("ISO");
         id2.setAssigningAuthority(assigningAuthority2);
@@ -50,7 +48,7 @@ public class SourcePatientIdentifierPIDTransformerTest {
         patientInfo.getIds().add(id1);
         patientInfo.getIds().add(id2);
 
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-3");
+        var iterator = patientInfo.getHl7FieldIterator("PID-3");
         assertEquals("id2^^^&2.2.2.2&ISO", iterator.next());
         assertEquals("id1^^^&1.1.1.1&ISO", iterator.next());
         assertFalse(iterator.hasNext());
@@ -58,10 +56,10 @@ public class SourcePatientIdentifierPIDTransformerTest {
 
     @Test
     public void testToHL7EmptyIds() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getIds().add(new Identifiable());
         patientInfo.getIds().add(new Identifiable());
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-3");
+        var iterator = patientInfo.getHl7FieldIterator("PID-3");
         assertEquals("", iterator.next());
         assertEquals("", iterator.next());
         assertFalse(iterator.hasNext());
@@ -69,21 +67,21 @@ public class SourcePatientIdentifierPIDTransformerTest {
 
     @Test
     public void testToHL7NoIds() {
-        PatientInfo patientInfo = new PatientInfo();
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-3");
+        var patientInfo = new PatientInfo();
+        var iterator = patientInfo.getHl7FieldIterator("PID-3");
         assertFalse(iterator.hasNext());
     }
 
     @Test
     public void testFromHL7() {
-        PatientInfo patientInfo = new PatientInfo();
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-3");
+        var patientInfo = new PatientInfo();
+        var iterator = patientInfo.getHl7FieldIterator("PID-3");
         iterator.add("id1^^^&1.1.1.1&ISO");
         iterator.add("id2^^^&2.2.2.2&ISO");
 
-        ListIterator<Identifiable> ids = patientInfo.getIds();
-        Identifiable id0 = ids.next();
-        Identifiable id1 = ids.next();
+        var ids = patientInfo.getIds();
+        var id0 = ids.next();
+        var id1 = ids.next();
         assertFalse(ids.hasNext());
         
         assertEquals("id1", id0.getId());
@@ -97,14 +95,14 @@ public class SourcePatientIdentifierPIDTransformerTest {
     
     @Test
     public void testFromHL7OneEmptyId() {
-        PatientInfo patientInfo = new PatientInfo();
-        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-3");
+        var patientInfo = new PatientInfo();
+        var iterator = patientInfo.getHl7FieldIterator("PID-3");
         iterator.add("^^^");
         iterator.add("id2^^^&2.2.2.2&ISO");
 
-        ListIterator<Identifiable> ids = patientInfo.getIds();
+        var ids = patientInfo.getIds();
         assertNull(ids.next());
-        Identifiable id0 = ids.next();
+        var id0 = ids.next();
         assertFalse(ids.hasNext());
         
         assertEquals("id2", id0.getId());
@@ -114,18 +112,18 @@ public class SourcePatientIdentifierPIDTransformerTest {
     
     @Test
     public void testFromHL7Empty() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-3").add("");
-        ListIterator<Identifiable> ids = patientInfo.getIds();
+        var ids = patientInfo.getIds();
         assertNull(ids.next());
         assertFalse(ids.hasNext());
     }
 
     @Test
     public void testFromHL7Null() {
-        PatientInfo patientInfo = new PatientInfo();
+        var patientInfo = new PatientInfo();
         patientInfo.getHl7FieldIterator("PID-3").add(null);
-        ListIterator<Identifiable> ids = patientInfo.getIds();
+        var ids = patientInfo.getIds();
         assertNull(ids.next());
         assertFalse(ids.hasNext());
     }

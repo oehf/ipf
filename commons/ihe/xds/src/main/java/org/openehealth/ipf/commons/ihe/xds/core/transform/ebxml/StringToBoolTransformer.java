@@ -46,9 +46,9 @@ public class StringToBoolTransformer {
         if (StringUtils.isBlank(slotValue)){
             return null;
         }
-        if (YES.equals(slotValue.trim().toLowerCase())){
+        if (YES.equalsIgnoreCase(slotValue.trim())){
             return Boolean.TRUE;
-        } else if (NO.equals(slotValue.trim().toLowerCase())) {
+        } else if (NO.equalsIgnoreCase(slotValue.trim())) {
             return Boolean.FALSE;
         }
         return null;

@@ -17,11 +17,12 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.apache.camel.Consumer;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.support.DefaultEndpoint;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
@@ -71,9 +72,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
      *
      * @param consumer FhirConsumer
-     * @throws Exception if resource provider could not be registered
      */
-    public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
+    public void connect(FhirConsumer<AuditDatasetType> consumer) {
         for (FhirProvider provider : getResourceProviders()) {
             // Make consumer known to provider
             provider.setConsumer(consumer);
@@ -162,7 +162,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     // Private stuff
 
     private List<? extends FhirProvider> getResourceProviders() {
-        List<? extends FhirProvider> providers = config.getResourceProvider();
+        var providers = config.getResourceProvider();
         if (providers == null || providers.isEmpty()) {
             providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
@@ -177,8 +177,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return factory;
     }
 
-    public Predicate<Object> getConsumerSelector() {
-        Predicate<Object> consumerSelector = config.getConsumerSelector();
+    public Predicate<RequestDetails> getConsumerSelector() {
+        var consumerSelector = config.getConsumerSelector();
         if (consumerSelector == null) {
             consumerSelector = fhirComponent.getFhirTransactionConfiguration().getStaticConsumerSelector();
         }

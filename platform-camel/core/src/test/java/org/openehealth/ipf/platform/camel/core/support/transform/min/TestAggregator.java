@@ -24,9 +24,10 @@ import org.openehealth.ipf.commons.core.modules.api.Aggregator;
  */
 public class TestAggregator implements Aggregator<String, String> {
 
+    @Override
     public String zap(Collection<String> object, Object... params) {
-        StringBuilder buffer = new StringBuilder();
-        for (String s : object) {
+        var buffer = new StringBuilder();
+        for (var s : object) {
             buffer.append(":").append(s);
         }
         if (buffer.length() > 0) {

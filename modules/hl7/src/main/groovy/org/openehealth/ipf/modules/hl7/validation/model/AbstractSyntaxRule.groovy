@@ -169,7 +169,7 @@ class AbstractSyntaxRule extends AbstractMessageRule {
         container.setChild(pos, p)
     }
 
-    private def usage(min, max) {
+    private static def usage(min, max) {
         return min == 0 ?
                 (max == 0 ? 'X' : 'O') :
                 'R'

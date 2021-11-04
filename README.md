@@ -1,6 +1,6 @@
 # Open eHealth Integration Platform
 
-[![Build Status](https://travis-ci.org/oehf/ipf.svg?branch=master)](https://travis-ci.org/oehf/ipf)
+![Build Status](https://github.com/oehf/ipf/actions/workflows/build.yml/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openehealth.ipf/ipf/badge.svg)](http://mvnrepository.com/artifact/org.openehealth.ipf)
 
 ## IPF Overview
@@ -21,7 +21,7 @@ creation, parsing, rendering, navigation and modification.
 The IPF documentation is available via [Github Pages](http://oehf.github.io/ipf-docs). This is a revamp of the existing
 documentation that is still [available here](http://oehf.github.io/ipf), with some content yet to be written.
 
-There's also a somewhat outdated [Introductory article](https://architects.dzone.com/articles/introduction-open-ehealth).
+There's also a somewhat outdated [Introductory article](https://dzone.com/articles/introduction-open-ehealth).
 
 ## Mailing Lists
 

@@ -16,14 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.DataTypeException;
-import ca.uhn.hl7v2.model.primitive.CommonTS;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateTimeAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -31,6 +27,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -43,6 +42,8 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Timestamp", propOrder = {"dateTime", "precision"})
 public class Timestamp implements Serializable {
+    private static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+
     private static final long serialVersionUID = 4324651691599629794L;
 
     @XmlEnum
@@ -53,12 +54,12 @@ public class Timestamp implements Serializable {
 
     private static final Map<Precision, DateTimeFormatter> FORMATTERS = new EnumMap<>(Precision.class);
     static {
-        FORMATTERS.put(Precision.YEAR,   DateTimeFormat.forPattern("yyyy"));
-        FORMATTERS.put(Precision.MONTH,  DateTimeFormat.forPattern("yyyyMM"));
-        FORMATTERS.put(Precision.DAY,    DateTimeFormat.forPattern("yyyyMMdd"));
-        FORMATTERS.put(Precision.HOUR,   DateTimeFormat.forPattern("yyyyMMddHH"));
-        FORMATTERS.put(Precision.MINUTE, DateTimeFormat.forPattern("yyyyMMddHHmm"));
-        FORMATTERS.put(Precision.SECOND, DateTimeFormat.forPattern("yyyyMMddHHmmss"));
+        FORMATTERS.put(Precision.YEAR,   DateTimeFormatter.ofPattern("yyyy"));
+        FORMATTERS.put(Precision.MONTH,  DateTimeFormatter.ofPattern("yyyyMM"));
+        FORMATTERS.put(Precision.DAY,    DateTimeFormatter.ofPattern("yyyyMMdd"));
+        FORMATTERS.put(Precision.HOUR,   DateTimeFormatter.ofPattern("yyyyMMddHH"));
+        FORMATTERS.put(Precision.MINUTE, DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+        FORMATTERS.put(Precision.SECOND, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
     }
 
     /**
@@ -66,7 +67,7 @@ public class Timestamp implements Serializable {
      */
     @XmlAttribute
     @XmlJavaTypeAdapter(value = DateTimeAdapter.class)
-    @Getter private DateTime dateTime;
+    @Getter private ZonedDateTime dateTime;
 
     /**
      * Precision of the timestamp (smallest present element, e.g. YEAR for "1980").
@@ -81,7 +82,7 @@ public class Timestamp implements Serializable {
     /**
      * Initializes a {@link Timestamp} object with the given datetime and precision.
      */
-    public Timestamp(DateTime dateTime, Precision precision) {
+    public Timestamp(ZonedDateTime dateTime, Precision precision) {
         setDateTime(dateTime);
         setPrecision(precision);
     }
@@ -99,8 +100,8 @@ public class Timestamp implements Serializable {
             return null;
         }
 
-        int pos = Math.max(s.indexOf('-'), s.indexOf('+'));
-        int len = (pos >= 0) ? pos : s.length();
+        var pos = Math.max(s.indexOf('-'), s.indexOf('+'));
+        var len = (pos >= 0) ? pos : s.length();
 
         // determine precision
         Precision precision;
@@ -118,25 +119,9 @@ public class Timestamp implements Serializable {
             precision = Precision.YEAR;
         }
 
-        // default time zone is UTC
-        if (pos < 0) {
-            s += "+0000";
-        }
-
         // parse timestamp
         try {
-            CommonTS ts = new CommonTS(s);
-            DateTime dateTime = new DateTime(
-                    ts.getYear(),
-                    (ts.getMonth() == 0) ? 1 : ts.getMonth(),
-                    (ts.getDay() == 0) ? 1 : ts.getDay(),
-                    ts.getHour(),
-                    ts.getMinute(),
-                    ts.getSecond(),
-                    DateTimeZone.forOffsetHoursMinutes(
-                            ts.getGMTOffset() / 100,
-                            ts.getGMTOffset() % 100));
-            return new Timestamp(dateTime.toDateTime(DateTimeZone.UTC), precision);
+            return new Timestamp(HL7DTM.toZonedDateTime(s), precision);
         } catch (DataTypeException e) {
             throw new XDSMetaDataException(ValidationMessage.INVALID_TIME, s);
         }
@@ -153,18 +138,25 @@ public class Timestamp implements Serializable {
         return (timestamp != null) ? timestamp.toHL7() : null;
     }
 
-    private String toHL7() {
-        return FORMATTERS.get(getPrecision()).print(getDateTime().toDateTime(DateTimeZone.UTC));
+    public String toHL7() {
+        return FORMATTERS.get(getPrecision()).format(getDateTime());
     }
 
-    public void setDateTime(DateTime dateTime) {
-        this.dateTime = (dateTime != null) ? dateTime.toDateTime(DateTimeZone.UTC) : null;
+    public void setDateTime(ZonedDateTime dateTime) {
+        this.dateTime = (dateTime != null) ? dateTime.withZoneSameInstant(UTC_ZONE_ID) : null;
     }
 
     public Precision getPrecision() {
         return (precision != null) ? precision : Precision.SECOND;
     }
-
+    
+    /**
+     * 
+     * @return a {@link Timestamp} with the current date-time in second precision.
+     */
+    public static Timestamp now() {
+        return new Timestamp(ZonedDateTime.now(), Precision.SECOND);
+    }
 
     /**
      * Two HL7 timestamps are equal when they have the same values in the relevant fields
@@ -175,7 +167,7 @@ public class Timestamp implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Timestamp timestamp = (Timestamp) o;
+        var timestamp = (Timestamp) o;
         return StringUtils.equals(toHL7(this), toHL7(timestamp));
     }
 

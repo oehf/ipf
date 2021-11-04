@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.*;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -106,9 +105,9 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
      */
     @Override
     public T zap(Source source, Object... params) {
-        ResultHolder<T> accessor = ResultHolderFactory.create(outputFormat);
-        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat.getClass() + " is not supported");
-        Result result = accessor.createResult();
+        var accessor = ResultHolderFactory.create(outputFormat);
+        if (accessor == null) throw new IllegalArgumentException("Format " + outputFormat + " is not supported");
+        var result = accessor.createResult();
         doZap(source, result, params);
         return accessor.getResult();
     }
@@ -118,8 +117,8 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
             throw new IllegalArgumentException("Expected XSL location in first parameter");
         }
         try {
-            Templates template = resource(params);
-            Transformer transformer = template.newTransformer();
+            var template = resource(params);
+            var transformer = template.newTransformer();
             transformer.setURIResolver(resolver);
             setXsltParameters(transformer, staticParams);
             setXsltParameters(transformer, resourceParameters(params));
@@ -137,7 +136,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
         if (param == null) {
             return;
         }
-        for (Entry<String, Object> entry : param.entrySet()) {
+        for (var entry : param.entrySet()) {
             LOG.debug("Add new parameter for transformer: {}", entry.getKey());
             transformer.setParameter(entry.getKey(), entry.getValue());
         }

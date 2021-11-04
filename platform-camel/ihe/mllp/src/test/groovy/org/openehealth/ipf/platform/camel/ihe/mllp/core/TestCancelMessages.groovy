@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.parser.PipeParser
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor.createCancelMessage
 

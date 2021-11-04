@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAssociationsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetAssociationsQueryTransformer;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link GetAssociationsQueryTransformer}.
@@ -36,7 +37,7 @@ public class GetAssociationsQueryTransformerTest {
     private GetAssociationsQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new GetAssociationsQueryTransformer();
         query = new GetAssociationsQuery();
@@ -76,7 +77,7 @@ public class GetAssociationsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -84,14 +85,14 @@ public class GetAssociationsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetAssociationsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetAssociationsQuery result = new GetAssociationsQuery();
+        var result = new GetAssociationsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetAssociationsQuery(), result);
     }

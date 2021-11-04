@@ -1,0 +1,19 @@
+<AuditMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<EventIdentification EventActionCode="C" EventDateTime="2020-04-08T15:44:24.580Z" EventOutcomeIndicator="0">
+		<EventID csd-code="110110" originalText="Patient Record" codeSystemName="DCM"/>
+		<EventTypeCode csd-code="ITI-44" originalText="Patient Identity Feed" codeSystemName="IHE Transactions"/>
+	</EventIdentification>
+	<ActiveParticipant UserID="" UserIsRequestor="true" AlternativeUserID="10232" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+		<RoleIDCode csd-code="110153" originalText="Source" codeSystemName="DCM"/>
+	</ActiveParticipant>
+	<ActiveParticipant UserID="http://127.0.0.1:8080/mpi/ws/iti44Service" UserIsRequestor="false" NetworkAccessPointID="127.0.0.1" NetworkAccessPointTypeCode="2">
+		<RoleIDCode csd-code="110152" originalText="Destination" codeSystemName="DCM"/>
+	</ActiveParticipant>
+    <AuditSourceIdentification AuditEnterpriseSiteID="EHR_2017" AuditSourceID="EHR_2017">
+        <AuditSourceTypeCode csd-code="9" codeSystemName="DCM" originalText="Other" />
+    </AuditSourceIdentification>
+	<ParticipantObjectIdentification ParticipantObjectID="PIX^^^&amp;1.3.6.1.4.1.21367.2011.2.5.5488&amp;ISO" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+		<ParticipantObjectIDTypeCode csd-code="2" originalText="Patient Number" codeSystemName="RFC-3881"/>
+		<ParticipantObjectDetail type="II" value="YTc1Y2Q5YzctNTE5YS00OWM2LTk0YzMtMTcxMjZlNjE4NTIwQDEuMi40MTAuMTAwMTEwLjEw"/>
+	</ParticipantObjectIdentification>
+</AuditMessage>

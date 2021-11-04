@@ -15,13 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
@@ -32,6 +27,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetRelatedDocumentsQueryTransformer;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Tests for {@link GetDocumentsQueryTransformer}.
  * @author Jens Riemschneider
@@ -41,7 +41,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
     private GetRelatedDocumentsQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new GetRelatedDocumentsQueryTransformer();
         query = new GetRelatedDocumentsQuery();
@@ -94,7 +94,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, ebXML);
         
         assertEquals(query, result);
@@ -102,14 +102,14 @@ public class GetRelatedDocumentsQueryTransformerTest {
     
     @Test
     public void testFromEbXMLNull() {
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, null);        
         assertEquals(new GetRelatedDocumentsQuery(), result);
     }
         
     @Test
     public void testFromEbXMLEmpty() {
-        GetRelatedDocumentsQuery result = new GetRelatedDocumentsQuery();
+        var result = new GetRelatedDocumentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new GetRelatedDocumentsQuery(), result);
     }

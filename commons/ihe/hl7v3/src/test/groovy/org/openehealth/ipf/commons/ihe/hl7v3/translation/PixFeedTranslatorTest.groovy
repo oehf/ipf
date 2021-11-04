@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*
-import org.openehealth.ipf.commons.ihe.hl7v2.PIX
+
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
@@ -27,7 +28,7 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
  */
 class PixFeedTranslatorTest extends Hl7TranslationTestContainer {
  
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         doSetUp('pixfeed',
                 new PixFeedRequest3to2Translator(),

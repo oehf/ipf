@@ -1,13 +1,13 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import javax.activation.DataHandler;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NonReadingAttachmentMarshallerTest {
-    private NonReadingAttachmentMarshaller classUnderTest = new NonReadingAttachmentMarshaller();
+    private final NonReadingAttachmentMarshaller classUnderTest = new NonReadingAttachmentMarshaller();
 
     @Test
     public void mtomAttachmentWithoutName() {

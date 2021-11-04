@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.model.Message
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
@@ -50,7 +50,7 @@ class TestIti21Continuations extends MllpTestContainer {
         init(CONTEXT_DESCRIPTOR, true)
     }
 
-    @BeforeClass
+    @BeforeAll
     static void setUpClass() {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, false)
@@ -89,7 +89,7 @@ class TestIti21Continuations extends MllpTestContainer {
         
         // check whether "autoCancel" parameter works
         EhcacheInteractiveContinuationStorage storage = appContext.getBean('interactiveContinuationStorage')
-        assert storage.ehcache.size == 0
+        assert storage.ehcache.iterator().hasNext() == false
     }
     
     @Test

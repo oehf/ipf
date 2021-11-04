@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link RecipientTransformer}.
@@ -29,18 +29,18 @@ public class RecipientTransformerTest {
     private RecipientTransformer transformer;
     private Recipient recipient;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         transformer = new RecipientTransformer();
 
-        AssigningAuthority assigningAuthority1 = new AssigningAuthority("uni1", "uniType1");
-        Organization organization = new Organization("orgName", "orgId", assigningAuthority1);
-        
-        AssigningAuthority assigningAuthority2 = new AssigningAuthority("uni2", "uniType2");
-        Identifiable id = new Identifiable("personId", assigningAuthority2);        
+        var assigningAuthority1 = new AssigningAuthority("uni1", "uniType1");
+        var organization = new Organization("orgName", "orgId", assigningAuthority1);
+
+        var assigningAuthority2 = new AssigningAuthority("uni2", "uniType2");
+        var id = new Identifiable("personId", assigningAuthority2);
         Name name = new XpnName("familyName", "givenName", "second", "suffix", "prefix", "degree");
-        Person person = new Person(id, name);
-        Telecom telecom = new Telecom(41L, 162L, 7773L, null);
+        var person = new Person(id, name);
+        var telecom = new Telecom(41L, 162L, 7773L, null);
 
         recipient = new Recipient();
         recipient.setOrganization(organization);
@@ -50,7 +50,7 @@ public class RecipientTransformerTest {
     
     @Test
     public void testToEbXML() {
-        String ebXML = transformer.toEbXML(recipient);
+        var ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
         assertEquals("orgName^^^^^&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^&uni2&uniType2|^PRN^PH^^41^162^7773",
@@ -60,7 +60,7 @@ public class RecipientTransformerTest {
     @Test
     public void testToEbXMLNoPerson() {
         recipient.setPerson(null);
-        String ebXML = transformer.toEbXML(recipient);
+        var ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
         assertEquals("orgName^^^^^&uni1&uniType1^^^^orgId||^PRN^PH^^41^162^7773", ebXML);
@@ -69,7 +69,7 @@ public class RecipientTransformerTest {
     @Test
     public void testToEbXMLNoOrganization() {
         recipient.setOrganization(null);
-        String ebXML = transformer.toEbXML(recipient);
+        var ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
         assertEquals("|personId^familyName^givenName^second^suffix^prefix^degree^^&uni2&uniType2|^PRN^PH^^41^162^7773",
@@ -79,7 +79,7 @@ public class RecipientTransformerTest {
     @Test
     public void testToEbXMLNoTelecom() {
         recipient.setTelecom(null);
-        String ebXML = transformer.toEbXML(recipient);
+        var ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
 
         assertEquals("orgName^^^^^&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^&uni2&uniType2",

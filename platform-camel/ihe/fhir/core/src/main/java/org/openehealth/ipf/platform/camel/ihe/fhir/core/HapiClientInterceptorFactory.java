@@ -33,14 +33,4 @@ public interface HapiClientInterceptorFactory {
      */
     IClientInterceptor newInstance(FhirEndpoint endpoint, Exchange exchange);
 
-    /**
-     * For backwards-compatibility only
-     *
-     * @param endpoint endpoint
-     * @return client interceptor
-     * @deprecated use {@link #newInstance(FhirEndpoint, Exchange)}
-     */
-    default IClientInterceptor newInstance(FhirEndpoint endpoint) {
-        return newInstance(endpoint, null);
-    }
 }

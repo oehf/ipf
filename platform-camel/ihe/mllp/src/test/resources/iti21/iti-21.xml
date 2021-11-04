@@ -40,6 +40,12 @@ http://www.springframework.org/schema/util/spring-util.xsd">
         <property name="charset" value="utf-8"/>
     </bean>
 
+    <bean id="dummyInterceptor"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor$Factory"/>
+
+    <bean id="authenticationInterceptor"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
+
     <bean id="sslContext" class="javax.net.ssl.SSLContext"
           factory-bean="sslContextFactory"
           factory-method="newInstance" />
@@ -52,47 +58,14 @@ http://www.springframework.org/schema/util/spring-util.xsd">
         <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
     </bean>
 
-    <bean id="sslContextWithoutKeyStore" class="javax.net.ssl.SSLContext"
-          factory-bean="sslContextWithoutKeyStoreFactory"
+    <bean id="keyStore" class="java.security.KeyStore"
+          factory-bean="keyStoreFactory"
           factory-method="newInstance" />
-
-    <bean id="sslContextWithoutKeyStoreFactory" class="org.apache.mina.filter.ssl.SslContextFactory">
-        <property name="keyManagerFactoryAlgorithmUseDefault" value="false" />
-        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
-        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
-    </bean>
 
     <bean id="keyStoreFactory" class="org.apache.mina.filter.ssl.KeyStoreFactory">
         <property name="dataUrl" value="iti21/keystore"/>
         <property name="password" value="changeit"/>
     </bean>
-
-    <bean id="keyStore" class="java.security.KeyStore"
-          factory-bean="keyStoreFactory"
-          factory-method="newInstance" />
-
-    <bean id="sslContextOther" class="org.apache.mina.filter.ssl.SslContextFactory">
-        <property name="keyManagerFactoryAlgorithm" value="SunX509"/>
-        <property name="keyManagerFactoryKeyStore" ref="keyStoreOther"/>
-        <property name="keyManagerFactoryKeyStorePassword" value="boguspw"/>
-        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
-        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
-    </bean>
-
-    <bean id="keyStoreOtherFactory" class="org.apache.mina.filter.ssl.KeyStoreFactory">
-        <property name="dataUrl" value="iti21/bogus.cert"/>
-        <property name="password" value="boguspw"/>
-    </bean>
-
-    <bean id="keyStoreOther" class="java.security.KeyStore"
-          factory-bean="keyStoreOtherFactory"
-          factory-method="newInstance" />
-
-    <bean id="dummyInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor$Factory"/>
-
-    <bean id="authenticationInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
 
     <!--
     <bean id="sendTracingData"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuditMessage>
+  <EventIdentification EventActionCode="E" EventDateTime="2020-03-19T14:33:48.493Z" EventOutcomeIndicator="0">
+    <EventID csd-code="110112" codeSystemName="DCM" originalText="Query"/>
+    <EventTypeCode csd-code="ITI-83" codeSystemName="IHE Transactions" originalText="Mobile Patient Identifier Cross-reference Query"/>
+  </EventIdentification>
+  <ActiveParticipant UserID="/app-gateway/fhir/Patient/$ihe-pix" UserIsRequestor="true" NetworkAccessPointID="10.205.114.56" NetworkAccessPointTypeCode="2">
+    <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID"/>
+  </ActiveParticipant>
+  <ActiveParticipant UserID="http://localhost:8087/app-gateway/fhir/Patient/$ihe-pix" AlternativeUserID="9632" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+    <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID"/>
+  </ActiveParticipant>
+  <AuditSourceIdentification AuditEnterpriseSiteID="app-gateway-enterprise-id" AuditSourceID="app-gateway">
+    <AuditSourceTypeCode csd-code="4" codeSystemName="DCM" originalText="Application Server Process or Thread"/>
+  </AuditSourceIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="urn:oid:1.3.6.1.4.1.21367.13.20.3000|IHEBLUE-2340" ParticipantObjectTypeCode="1" ParticipantObjectTypeCodeRole="1">
+    <ParticipantObjectIDTypeCode csd-code="2" codeSystemName="RFC-3881" originalText="Patient Number"/>
+  </ParticipantObjectIdentification>
+  <ParticipantObjectIdentification ParticipantObjectID="PIXmQuery" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+    <ParticipantObjectIDTypeCode csd-code="ITI-83" codeSystemName="IHE Transactions" originalText="Mobile Patient Identifier Cross-reference Query"/>
+    <ParticipantObjectQuery>aHR0cDovL3dkZi1sYXAtMTIzNy5pY3cuaW50OjgwODcvYXBwLWdhdGV3YXkvZmhpci9QYXRpZW50LyRpaGUtcGl4P3NvdXJjZUlkZW50aWZpZXI9dXJuOm9pZDoxLjMuNi4xLjQuMS4yMTM2Ny4xMy4yMC4zMDAwfElIRUJMVUUtMjM0MCZ0YXJnZXRTeXN0ZW09dXJuOm9pZDoxLjMuNi4xLjQuMS4yMTM2Ny4xMy4yMC4yMDAwJl9mb3JtYXQ9eG1s</ParticipantObjectQuery>
+  </ParticipantObjectIdentification>
+</AuditMessage>

@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.HTTP;
@@ -100,8 +101,8 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
      */
     public ServerFactoryBean createServerFactory(Class<?> serviceImplClass) {
         try {
-            return createServerFactory(serviceImplClass.newInstance());
-        } catch (InstantiationException | IllegalAccessException e) {
+            return createServerFactory(serviceImplClass.getConstructor().newInstance());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -130,7 +131,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
     }
 
     private void configureBinding(ServerFactoryBean svrFactory) {
-        SoapBindingConfiguration bindingConfig = new SoapBindingConfiguration();
+        var bindingConfig = new SoapBindingConfiguration();
         bindingConfig.setBindingName(wsTransactionConfiguration.getBindingName());
         svrFactory.setBindingConfig(bindingConfig);
     }
@@ -147,7 +148,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
         if (rejectionHandlingStrategy != null) {
             svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(HTTP));
 
-            RejectionHandlerInterceptor rejectionHandlerInterceptor =
+            var rejectionHandlerInterceptor =
                     new RejectionHandlerInterceptor(rejectionHandlingStrategy);
 
             svrFactory.getOutInterceptors().add(rejectionHandlerInterceptor);

@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
-import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.cxf.ws.security.trust.STSClient;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
@@ -33,17 +31,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPFaultException;
-import java.net.URL;
-import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
-@Ignore
+@Disabled
 public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
@@ -55,35 +53,36 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
                 "http://localhost:" + getPort() + "/xds-iti42",
                 null, null,
                 null, null, null, null, null);
-        Iti42PortType client = (Iti42PortType) clientFactory.getClient();
+        var client = (Iti42PortType) clientFactory.getClient();
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
-            Assert.fail("This line must be not reachable");
+            fail("This line must be not reachable");
         } catch (SOAPFaultException ex) {
-            Assert.assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
+            assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
         }
     }
 
+    @Disabled("fails with java 9")
     @Test
     public void testFeatureEndpointWithPolicy() {
-        SpringBusFactory bf = new SpringBusFactory();
-        Bus bus = bf.createBus("feature-test-resources/client-context.xml");
+        var bf = new SpringBusFactory();
+        var bus = bf.createBus("feature-test-resources/client-context.xml");
         SpringBusFactory.setDefaultBus(bus);
         SpringBusFactory.setThreadDefaultBus(bus);
 
-        Iti42PortType client =
+        var client =
                 getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + getPort() + "/xds-iti42");
 
-        Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
+        var requestContext = ((BindingProvider) client).getRequestContext();
         //STSClient stsClient = (STSClient) requestContext.get(SecurityConstants.STS_CLIENT);
-        STSClient stsClient = (STSClient) requestContext.get("ws-security.sts.client");
+        var stsClient = (STSClient) requestContext.get("ws-security.sts.client");
         stsClient.setWsdlLocation("http://localhost:" + getPort() + "/X509?wsdl");
 
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
         } catch (SOAPFaultException ex) {
             //ex.printStackTrace();
-            Assert.fail();
+            fail();
         } finally {
             SpringBusFactory.setThreadDefaultBus(null);
             SpringBusFactory.setDefaultBus(null);
@@ -91,12 +90,12 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
     }
 
     private Iti42PortType getClient(String wsdlLocation, String serviceURL) {
-        URL wsdlURL = getClass().getClassLoader().getResource(wsdlLocation);
-        Service service = Service.create(wsdlURL, ITI_42.getWsTransactionConfiguration().getServiceName());
-        Iti42PortType client = (Iti42PortType) service.getPort(ITI_42.getWsTransactionConfiguration().getSei());
+        var wsdlURL = getClass().getClassLoader().getResource(wsdlLocation);
+        var service = Service.create(wsdlURL, ITI_42.getWsTransactionConfiguration().getServiceName());
+        var client = (Iti42PortType) service.getPort(ITI_42.getWsTransactionConfiguration().getSei());
 
-        BindingProvider bindingProvider = (BindingProvider) client;
-        Map<String, Object> reqContext = bindingProvider.getRequestContext();
+        var bindingProvider = (BindingProvider) client;
+        var reqContext = bindingProvider.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceURL);
         return client;
     }

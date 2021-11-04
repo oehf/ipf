@@ -17,43 +17,42 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import javax.servlet.ServletException;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  */
+@Disabled
 public class TestIti78SecureSuccess extends AbstractTestIti78 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-78-secure.xml";
 
-    @BeforeClass
-    public static void setUpClass() throws ServletException {
+    @BeforeAll
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, true);
     }
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
     @Test
     public void testSendEndpointPdqmString() {
-        Bundle result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit
-        AbstractMockedAuditMessageQueue sender = getAuditSender();
+        var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 

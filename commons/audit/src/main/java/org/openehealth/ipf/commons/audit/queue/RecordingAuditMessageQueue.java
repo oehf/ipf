@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQueue {
 
-    private List<AuditMessage> messages = new CopyOnWriteArrayList<>();
+    private final List<AuditMessage> messages = new CopyOnWriteArrayList<>();
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
@@ -39,6 +39,7 @@ public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQue
     }
 
 
+    @Override
     public List<AuditMessage> getMessages() {
         return Collections.unmodifiableList(messages);
     }
@@ -50,6 +51,7 @@ public class RecordingAuditMessageQueue implements AbstractMockedAuditMessageQue
     /**
      * Clears the message list
      */
+    @Override
     public void clear() {
         messages.clear();
     }

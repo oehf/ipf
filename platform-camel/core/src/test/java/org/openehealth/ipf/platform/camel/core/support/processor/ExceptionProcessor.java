@@ -36,8 +36,9 @@ public class ExceptionProcessor  implements Processor {
         return exceptions;
     }
     
+    @Override
     public void process(Exchange exchange) throws Exception {
-        Exception e = exceptions.get(exchange.getIn().getBody());
+        var e = exceptions.get(exchange.getIn().getBody());
         if (e != null) {
             throw e;
         }

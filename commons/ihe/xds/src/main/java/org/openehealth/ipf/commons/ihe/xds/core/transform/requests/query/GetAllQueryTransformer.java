@@ -37,6 +37,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void toEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -44,7 +45,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
 
         super.toEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
 
         slots.fromString(PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
@@ -69,6 +70,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
+    @Override
     public void fromEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -76,8 +78,8 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
 
         super.fromEbXML(query, ebXML);
 
-        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        String patientId = slots.toString(PATIENT_ID);
+        var slots = new QuerySlotHelper(ebXML);
+        var patientId = slots.toString(PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
 
         query.setStatusDocuments(slots.toStatus(DOC_ENTRY_STATUS));

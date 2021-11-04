@@ -27,9 +27,13 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
     <!-- ========== Configuration of Caches and Storages ========== -->
-
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
-
+    
+    <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
+    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
+            <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
+        <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
+    </bean>
+    
     <bean id="interactiveContinuationStorage"
           class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage">
         <constructor-arg>
@@ -47,31 +51,5 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
             </bean>
         </constructor-arg>
     </bean>
-
-
-    <!-- ============ Payload Logging Interceptors ============= -->
-
-    <bean id="logFileNamePrefix" class="java.lang.String">
-        <constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]" />
-        <!--<constructor-arg value="c:/iti21-logs/[processId]/[sequenceId]" />-->
-    </bean>
-
-    <bean id="serverInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor$Factory">
-        <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
-        <property name="locallyEnabled" value="true" />
-    </bean>
-
-    <bean id="serverOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor$Factory">
-        <constructor-arg value="#{@logFileNamePrefix}-server-out.txt" />
-    </bean>
-
-    <bean id="clientInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor$Factory">
-        <constructor-arg value="#{@logFileNamePrefix}-client-in.txt" />
-    </bean>
-
-    <bean id="clientOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor$Factory">
-        <constructor-arg value="#{@logFileNamePrefix}-client-out.txt" />
-    </bean>
-
 
 </beans>

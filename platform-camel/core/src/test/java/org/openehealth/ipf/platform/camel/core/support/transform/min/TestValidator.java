@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  */
 public class TestValidator implements Validator<String, String> {
 
+    @Override
     public void validate(String message, String profile) {
         if (!message.equals(profile)) {
             throw new ValidationException("bullshit");

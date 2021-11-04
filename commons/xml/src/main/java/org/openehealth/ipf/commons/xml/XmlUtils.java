@@ -15,19 +15,21 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -35,13 +37,12 @@ import java.util.regex.Pattern;
  *
  * @author Dmytro Rud
  */
-@Slf4j
 abstract public class XmlUtils {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
             "(?:<\\?xml.+?\\?>)?" +                              // optional prolog
-                    "(?:\\s*<\\!--.*?-->)*" +                              // optional comments
-                    "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
+                    "(?:\\s*<!--.*?-->)*" +                              // optional comments
+                    "\\s*<(?:[\\w.-]+?:)?([\\w.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
             Pattern.DOTALL
     );
 
@@ -74,7 +75,7 @@ abstract public class XmlUtils {
         if (s == null) {
             return null;
         }
-        Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(s);
+        var matcher = ROOT_ELEMENT_PATTERN.matcher(s);
         return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
     }
 
@@ -88,10 +89,10 @@ abstract public class XmlUtils {
      */
     public static String renderJaxb(JAXBContext jaxbContext, Object object, Boolean prettyPrint) {
         try {
-            Marshaller marshaller = jaxbContext.createMarshaller();
+            var marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint);
-            StringWriter writer = new StringWriter();
+            var writer = new StringWriter();
             marshaller.marshal(object, writer);
             return writer.toString();
         } catch (Exception e) {
@@ -108,13 +109,13 @@ abstract public class XmlUtils {
      */
     public static byte[] serialize(Node inputNode) throws Exception {
         // Initialize sources and targets
-        ByteArrayOutputStream serializerOutput = new ByteArrayOutputStream();
+        var serializerOutput = new ByteArrayOutputStream();
         Source sourceObject = new DOMSource(inputNode);
         Result targetObject = new StreamResult(serializerOutput);
 
 
-        TransformerFactory serializerFactory = TransformerFactory.newInstance();
-        Transformer serializer = serializerFactory.newTransformer();
+        var serializerFactory = TransformerFactory.newInstance();
+        var serializer = serializerFactory.newTransformer();
         serializer.setOutputProperty(OutputKeys.INDENT, "yes");
         serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         serializer.transform(sourceObject, targetObject);

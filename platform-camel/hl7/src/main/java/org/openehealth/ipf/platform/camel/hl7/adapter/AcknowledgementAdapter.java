@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
-import org.apache.camel.util.ObjectHelper;
+import org.apache.camel.RuntimeCamelException;
 
 /**
  *
@@ -29,23 +29,23 @@ public class AcknowledgementAdapter extends HapiAdapter {
 
     @Override
     protected Message doProcessMessage(Message message, Throwable t, Object... inputParams) {
-        AcknowledgmentCode acknowledgementCode = inputParams != null && inputParams.length > 0 ?
+        var acknowledgementCode = inputParams != null && inputParams.length > 0 ?
                 (AcknowledgmentCode) inputParams[0] :
                 AcknowledgmentCode.AA;
-        String errorMessage = inputParams != null && inputParams.length > 1 ?
+        var errorMessage = inputParams != null && inputParams.length > 1 ?
                 inputParams[1].toString() :
                 "Error while processing HL7 message";
-        ErrorCode errorCode = inputParams != null && inputParams.length > 2 ?
+        var errorCode = inputParams != null && inputParams.length > 2 ?
                 (ErrorCode) inputParams[2] :
                 ErrorCode.APPLICATION_INTERNAL_ERROR;
         try {
-            HL7Exception hl7e = generateHL7Exception(t, acknowledgementCode, errorMessage, errorCode);
+            var hl7e = generateHL7Exception(t, acknowledgementCode, errorMessage, errorCode);
             if (t != null && acknowledgementCode == null) {
                 acknowledgementCode = AcknowledgmentCode.AE;
             }
             return message.generateACK(acknowledgementCode == null ? AcknowledgmentCode.AA : acknowledgementCode, hl7e);
         } catch (Exception e) {
-            throw ObjectHelper.wrapRuntimeCamelException(e);
+            throw RuntimeCamelException.wrapRuntimeCamelException(e);
         }
 
     }

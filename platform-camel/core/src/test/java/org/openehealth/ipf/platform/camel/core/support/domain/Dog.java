@@ -32,7 +32,7 @@ public class Dog extends Animal {
         if (!(obj instanceof Dog)) {
             return false;
         }
-        Dog that = (Dog)obj;
+        var that = (Dog)obj;
         return getName().equals(that.getName());
     }
 

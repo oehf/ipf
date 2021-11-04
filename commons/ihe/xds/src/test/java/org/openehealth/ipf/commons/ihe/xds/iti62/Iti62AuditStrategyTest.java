@@ -16,18 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.xds.iti62;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventIdCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -45,9 +44,9 @@ public class Iti62AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private void testRequest(boolean serverSide) {
-        Iti62AuditStrategy strategy = new Iti62AuditStrategy(serverSide);
-        XdsRemoveMetadataAuditDataset auditDataset = getXdsAuditDataset(strategy);
-        AuditMessage auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
+        var strategy = new Iti62AuditStrategy(serverSide);
+        var auditDataset = getXdsAuditDataset(strategy);
+        var auditMessage = makeAuditMessage(strategy, auditContext, auditDataset);
 
         assertNotNull(auditMessage);
         auditMessage.validate();
@@ -66,7 +65,7 @@ public class Iti62AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private XdsRemoveMetadataAuditDataset getXdsAuditDataset(Iti62AuditStrategy strategy) {
-        XdsRemoveMetadataAuditDataset auditDataset = strategy.createAuditDataset();
+        var auditDataset = strategy.createAuditDataset();
         auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
         // auditDataset.setLocalAddress(SERVER_URI);
         auditDataset.setRemoteAddress(CLIENT_IP_ADDRESS);

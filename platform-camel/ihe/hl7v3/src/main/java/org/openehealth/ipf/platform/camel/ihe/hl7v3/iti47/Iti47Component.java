@@ -42,7 +42,7 @@ public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTrans
 
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
-                Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
+                var endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
                 return endpoint2.isSupportContinuation() ?
                         new Iti47ContinuationAwareService(endpoint2) :
                         new Iti47Service();

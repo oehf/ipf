@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.correlation;
 
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+
+import javax.cache.Cache;
 
 import java.io.Serializable;
 
@@ -35,19 +35,19 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     private static final String ALTERNATIVE_KEY_SUFFIX      = ".alternativeKey";
     private static final String ALTERNATIVE_KEYS_SUFFIX     = ".alternativeKeys";
 
-    private final Ehcache ehcache;
+    private final Cache<String, Serializable> ehcache;
 
-    public EhcacheAsynchronyCorrelator(Ehcache ehcache) {
+    public EhcacheAsynchronyCorrelator(Cache<String, Serializable> ehcache) {
         this.ehcache = requireNonNull(ehcache, "ehcache instance");
     }
 
     private void put(String key, String suffix, Serializable value) {
-        ehcache.put(new Element(key + suffix, value));
+        ehcache.put(key + suffix, value);
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends Serializable> T get(String key, String suffix) {
-        Element element = ehcache.get(key + suffix);
-        return (element != null) ? (T) element.getObjectValue() : null;
+        return (T) ehcache.get(key + suffix);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     @Override
     public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
         requireNonNull(alternativeKeys, "alternative keys should be not null");
-        for (String key : alternativeKeys) {
+        for (var key : alternativeKeys) {
             put(key, ALTERNATIVE_KEY_SUFFIX, messageId);
         }
         put(messageId, ALTERNATIVE_KEYS_SUFFIX, alternativeKeys);
@@ -98,13 +98,14 @@ public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset
     public boolean delete(String messageId) {
         String[] alternativeKeys = get(messageId, ALTERNATIVE_KEYS_SUFFIX);
         if (alternativeKeys != null) {
-            for (String key : alternativeKeys) {
+            for (var key : alternativeKeys) {
                 ehcache.remove(key + ALTERNATIVE_KEY_SUFFIX);
             }
         }
         ehcache.remove(messageId + ALTERNATIVE_KEYS_SUFFIX);
         ehcache.remove(messageId + CORRELATION_KEY_SUFFIX);
         ehcache.remove(messageId + AUDIT_DATASET_SUFFIX);
-        return ehcache.remove(messageId + SERVICE_ENDPOINT_URI_SUFFIX);
+        ehcache.remove(messageId + SERVICE_ENDPOINT_URI_SUFFIX);
+        return true;
     }
 }
