@@ -111,7 +111,7 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
 
             // Configure the client.
             var loop = LoopResources.create("event-loop", 1, workerThreads, true);
-            var sslContext = NettyUtils.initSslContext(tlsParameters, true);
+            var sslContext = NettyUtils.initSslContext(tlsParameters, false);
             this.tcpClient = TcpClient.create()
                     .host(host)
                     .port(port)

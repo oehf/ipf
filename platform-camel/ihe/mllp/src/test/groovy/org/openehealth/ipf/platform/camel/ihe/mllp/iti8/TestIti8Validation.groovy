@@ -17,12 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.apache.camel.Exchange
 import org.apache.camel.spi.Synchronization
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.test.context.ContextConfiguration
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -33,20 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue
  * Unit test for validation DSL extensions.
  * @author Dmytro Rud
  */
-class TestIti8Validation extends MllpTestContainer {
+@ContextConfiguration('/iti8/iti-8-validation.xml')
+class TestIti8Validation extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti8Validation)
-
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-validation.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
     
     @Test
     void testHappyCase() {

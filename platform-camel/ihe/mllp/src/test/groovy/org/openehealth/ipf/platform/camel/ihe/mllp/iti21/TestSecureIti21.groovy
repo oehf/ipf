@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
-import org.apache.camel.CamelExchangeException
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import java.util.concurrent.TimeUnit
 
@@ -31,20 +29,10 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@Timeout(value = 5L, unit = TimeUnit.MINUTES)
-class TestSecureIti21 extends MllpTestContainer {
+@Timeout(value = 1L, unit = TimeUnit.MINUTES)
+@ContextConfiguration('/iti21/iti-21-secure.xml')
+class TestSecureIti21 extends AbstractMllpTest {
 
-
-    def static CONTEXT_DESCRIPTOR = 'iti21/iti-21-secure.xml'
-
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
@@ -66,9 +54,14 @@ class TestSecureIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContextParameters=#iti21SslContextParametersWithoutKeystore&timeout=${TIMEOUT}", 2)
     }
 
+    @Test
+    void testHappyCaseAndAuditSecureTls13() {
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContextParameters=#iti21SslContextTls13Parameters&timeout=${TIMEOUT}", 2)
+    }
+
     // Client without certificates (empty key store in SSL context) should fail
     // when trying to access an endpoint with clientAuth=MUST, but should have
-    // success when accessing an endpoint with clientAuth=WANT.
+    // success when accessing an endpoint with clientAuth=NONE.
     @Test
     void testFailAuditSecureWant() {
         assertThrows(Exception.class, ()->
@@ -90,10 +83,10 @@ class TestSecureIti21 extends MllpTestContainer {
     void testSSLFailureWithIncompatibleCiphers() {
         try {
             send("pdq-iti21://localhost:18218?secure=true&sslContextParameters=#iti21SslContextOtherCiphersParameters&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
+            fail()
         } catch (Exception ignored) {
         }
-
+        Thread.sleep(100) // wait a bit until the server has recorded the audit
         def messages = auditSender.messages
         assertEquals(2, messages.size())
         messages.any {it.eventIdentification.eventID == EventIdCode.SecurityAlert}

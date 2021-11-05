@@ -24,14 +24,15 @@ import org.apache.camel.component.netty.NettyEndpoint;
 import org.apache.camel.component.netty.NettyEndpointConfigurer;
 import org.apache.camel.spi.PropertyConfigurer;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.ssl.CamelTlsParameters;
+import org.openehealth.ipf.platform.camel.ihe.core.ssl.StaticSSLContextParameters;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,31 +110,21 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         if (!nettyParameters.containsKey("requestTimeout")) {
             nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 30000L));
         }
-        nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, false));
-        nettyParameters.put("ssl", nettyParameters.containsKey("sslContextParameters") || nettyParameters.containsKey("tlsParameters"));
-
+        if (!nettyParameters.containsKey("ssl")) {
+            nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, nettyParameters.containsKey("sslContextParameters")));
+        }
+        if (nettyParameters.containsKey("sslContext")) {
+            nettyParameters.put("sslContextParameters", new StaticSSLContextParameters(getAndRemoveParameter(parameters, "sslContext", SSLContext.class)));
+        }
         var nettyConfiguration = super.parseConfiguration(configuration, remaining, nettyParameters);
 
         // Postprocess the configuration
         var charset = getCharset(nettyConfiguration);
         nettyConfiguration.setEncoding(charset.name());
 
-        if (nettyConfiguration.isSsl() && nettyConfiguration.getSslContextParameters() == null) {
-            var tlsParameters = getAndRemoveOrResolveReferenceParameter(nettyParameters, "tlsParameters", CamelTlsParameters.class);
-            if (tlsParameters == null) {
-                var map = getCamelContext().getRegistry().findByTypeWithName(CamelTlsParameters.class);
-                if (map.size() == 1) {
-                    var entry = map.entrySet().iterator().next();
-                    tlsParameters = entry.getValue();
-                    LOG.debug("Setting up CamelTlsParameters from bean with name {}", entry.getKey());
-                } else if (map.size() > 1) {
-                    throw new AmbiguousBeanException(CamelTlsParameters.class);
-                } else {
-                    tlsParameters = CamelTlsParameters.SYSTEM;
-                    LOG.debug("Setting up default CamelTlsParameters from system properties");
-                }
-            }
-            nettyConfiguration.setSslContextParameters(tlsParameters.getSSLContextParameters());
+        if (nettyConfiguration.isSsl() && nettyConfiguration.getSslContextParameters() == null ) {
+            nettyConfiguration.setSslContextParameters(CamelTlsParameters.SYSTEM.getSSLContextParameters());
+            // nettyConfiguration.setSslContextParameters(new StaticSSLContextParameters());
         }
 
         return nettyConfiguration;

@@ -21,10 +21,12 @@ import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.spi.Synchronization
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.AfterAll
+import org.apache.camel.test.spring.junit5.CamelSpringTest
 import org.junit.jupiter.api.AfterEach
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.support.ClassPathXmlApplicationContext
+import org.springframework.test.annotation.DirtiesContext
 
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
@@ -36,33 +38,23 @@ import static org.junit.jupiter.api.Assertions.*
  * 
  * @author Dmytro Rud
  */
-class MllpTestContainer {
 
-    protected static ProducerTemplate producerTemplate
-    protected static CamelContext camelContext
-    protected static AbstractMockedAuditMessageQueue auditSender
-    protected static ClassPathXmlApplicationContext appContext
+@CamelSpringTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+abstract class AbstractMllpTest {
+
+    @Autowired
+    protected CamelContext camelContext
+
+    @Autowired
+    protected ProducerTemplate producerTemplate
+
+    @Autowired
+    protected AbstractMockedAuditMessageQueue auditSender
 
     static String TIMEOUT = '15000'
-    
-    /**
-     * Initializes a test on the basis of a Spring descriptor.
-     */
-    static void init(String descriptorFile, boolean standalone) {
-        appContext = new ClassPathXmlApplicationContext(descriptorFile)
-        producerTemplate = appContext.getBean('template', ProducerTemplate.class)
-        camelContext = appContext.getBean('camelContext', CamelContext.class)
-        // shorten timeout on shutdown
-        camelContext.shutdownStrategy.timeout = 20L
-        camelContext.shutdownStrategy.timeUnit = TimeUnit.SECONDS
 
-        auditSender = appContext.getBean('mockedSender', AbstractMockedAuditMessageQueue.class)
 
-        if (standalone) {
-            Thread.currentThread().join()
-        }
-    }
-    
     @AfterEach
     void tearDown() {
         auditSender?.clear()
@@ -111,7 +103,7 @@ class MllpTestContainer {
     /**
      * Sends a request into the route.
      */
-    static Message send(String endpoint, Object body, Map<String, Object> headers = null) {
+    Message send(String endpoint, Object body, Map<String, Object> headers = null) {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
         if (headers) exchange.in.headers.putAll(headers)
@@ -127,7 +119,7 @@ class MllpTestContainer {
     /**
      * Sends a request into the route.
      */
-    static Future<Exchange> sendAsync(String endpoint, Object body, Synchronization s) {
+    Future<Exchange> sendAsync(String endpoint, Object body, Synchronization s) {
         def inExchange = new DefaultExchange(camelContext)
         inExchange.in.body = body
         producerTemplate.asyncCallback(endpoint, inExchange, s)

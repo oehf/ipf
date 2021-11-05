@@ -32,13 +32,13 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-            resource="some-keystore"
+            resource="keystore.p12"
             password="changeit"
             type="JKS"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-            resource="some-keystore"
+            resource="keystore.p12"
             password="changeit"
             type="JKS"/>
         </camel:trustManagers>

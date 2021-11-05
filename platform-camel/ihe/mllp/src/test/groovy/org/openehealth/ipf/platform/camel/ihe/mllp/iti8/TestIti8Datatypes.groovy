@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import java.nio.ByteBuffer
 
@@ -29,20 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue
  * Unit test for datatypes handling.
  * @author Dmytro Rud
  */
-class TestIti8Datatypes extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-datatypes.xml'
-
-    static String TIMEOUT = '30000'
-    
-    def static main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti8/iti-8-datatypes.xml')
+class TestIti8Datatypes extends AbstractMllpTest {
     
     /**
      * Checks whether various request data types are being handled properly.

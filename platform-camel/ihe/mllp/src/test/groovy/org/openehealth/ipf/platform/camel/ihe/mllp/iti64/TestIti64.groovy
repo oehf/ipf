@@ -20,10 +20,10 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -32,18 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse
  * Unit tests for the Notify XAD-PID Link Change transaction a.k.a. ITI-64.
  * @author Boris Stanojevic
  */
-class TestIti64 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti64/iti-64.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti64/iti-64.xml')
+class TestIti64 extends AbstractMllpTest {
     
     static String getMessageString(msh9, msh12) {
         def s = 'MSH|^~\\&|REPOSITORY|ENT|RSP1P8|GOOD HEALTH HOSPITAL|200701051530|' +

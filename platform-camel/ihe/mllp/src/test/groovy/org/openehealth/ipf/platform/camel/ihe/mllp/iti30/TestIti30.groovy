@@ -20,28 +20,18 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Unit tests for the PAM "Patient Identity Management" transaction ITI-30.
  */
-class TestIti30 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti30/iti-30.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti30/iti-30.xml')
+class TestIti30 extends AbstractMllpTest {
     
     // -----------------------------------
     // Test program:

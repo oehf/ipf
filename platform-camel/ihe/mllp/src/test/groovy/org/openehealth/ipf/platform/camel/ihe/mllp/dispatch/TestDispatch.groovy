@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import static org.junit.jupiter.api.Assertions.assertEquals
@@ -26,7 +27,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 /**
  * @author Dmytro Rud
  */
-abstract class TestDispatch extends MllpTestContainer {
+abstract class TestDispatch extends AbstractMllpTest {
 
     static final String ITI_8_REQUEST =
         'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|dummy|dummy|20081204114742||ADT^A01|123456|T|2.3.1|||ER\n' +

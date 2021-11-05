@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
@@ -27,18 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
  * @author Dmytro Rud
  */
-class TestSecureIti8 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-secure.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti8/iti-8-secure.xml')
+class TestSecureIti8 extends AbstractMllpTest {
 
     @Disabled
     void testSecureEndpoint() {

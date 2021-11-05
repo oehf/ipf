@@ -47,15 +47,16 @@ public class DefaultCamelTlsParameters extends CustomTlsParameters implements Ca
         keyStoreParameters.setType(keyStoreType);
         var keyManagers = new KeyManagersParameters();
         keyManagers.setKeyStore(keyStoreParameters);
+        keyManagers.setKeyPassword(keyStorePassword);
         sslContextParameters.setKeyManagers(keyManagers);
 
         var trustStoreParameters = new KeyStoreParameters();
-        keyStoreParameters.setResource(trustStoreFile);
-        keyStoreParameters.setPassword(trustStorePassword);
-        keyStoreParameters.setType(trustStoreType);
-        var trustManagersParameters = new TrustManagersParameters();
-        trustManagersParameters.setKeyStore(trustStoreParameters);
-        sslContextParameters.setTrustManagers(trustManagersParameters);
+        trustStoreParameters.setResource(trustStoreFile);
+        trustStoreParameters.setPassword(trustStorePassword);
+        trustStoreParameters.setType(trustStoreType);
+        var trustManagers = new TrustManagersParameters();
+        trustManagers.setKeyStore(trustStoreParameters);
+        sslContextParameters.setTrustManagers(trustManagers);
 
         sslContextParameters.setProvider(provider);
         sslContextParameters.setSecureSocketProtocol(tlsProtocol);
@@ -66,21 +67,25 @@ public class DefaultCamelTlsParameters extends CustomTlsParameters implements Ca
             sslContextParameters.setSessionTimeout(Integer.toString(sessionTimeout));
         }
 
-        if (enabledCipherSuites != null) {
+        var sslContextServerParameters = new SSLContextServerParameters();
+        sslContextServerParameters.setClientAuthentication(clientAuthentication);
+        if (enabledServerCipherSuites != null) {
             var cipherSuitesParameters = new CipherSuitesParameters();
-            cipherSuitesParameters.setCipherSuite(Arrays.asList(split(enabledCipherSuites)));
-            sslContextParameters.setCipherSuites(cipherSuitesParameters);
+            cipherSuitesParameters.setCipherSuite(Arrays.asList(split(enabledServerCipherSuites)));
+            sslContextServerParameters.setCipherSuites(cipherSuitesParameters);
         }
+        sslContextParameters.setServerParameters(sslContextServerParameters);
 
-        if (clientAuthentication != null) {
-            var sslContextServerParameters = new SSLContextServerParameters();
-            sslContextServerParameters.setClientAuthentication(clientAuthentication);
-        }
-
+        var sslContextClientParameters = new SSLContextClientParameters();
         if (sniHostnames != null && !sniHostnames.isEmpty()) {
-            var sslContextClientParameters = new SSLContextClientParameters();
             sslContextClientParameters.addAllSniHostNames(getSniHostnames());
         }
+        if (enabledServerCipherSuites != null) {
+            var cipherSuitesParameters = new CipherSuitesParameters();
+            cipherSuitesParameters.setCipherSuite(Arrays.asList(split(enabledServerCipherSuites)));
+            sslContextClientParameters.setCipherSuites(cipherSuitesParameters);
+        }
+        sslContextParameters.setClientParameters(sslContextClientParameters);
 
         var secureSocketProtocolsParameters = new SecureSocketProtocolsParameters();
         secureSocketProtocolsParameters.setSecureSocketProtocol(Arrays.asList(split(tlsProtocol)));

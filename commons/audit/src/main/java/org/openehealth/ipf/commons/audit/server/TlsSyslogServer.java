@@ -55,7 +55,7 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
 
     @Override
     public TlsSyslogServer doStart(String host, int port) {
-        var sslContext = NettyUtils.initSslContext(tlsParameters, false);
+        var sslContext = NettyUtils.initSslContext(tlsParameters, true);
         channel = TcpServer.create()
                 .host(host)
                 .port(port)

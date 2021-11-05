@@ -27,12 +27,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="some-keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="some-keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="REQUIRE"/>

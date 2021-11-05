@@ -19,12 +19,12 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util.xsd
 http://camel.apache.org/schema/spring
-http://camel.apache.org/schema/spring/camel-spring.xsd">
+http://camel.apache.org/schema/spring/camel-spring.xsd ">
 
     <import resource="classpath:common-mllp-beans.xml"/>
 
     <bean id="routeBuilder"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21TestRouteBuilder">
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21TestDefaultSecureRouteBuilder">
     </bean>
 
     <bean id="hapiContext" class="ca.uhn.hl7v2.DefaultHapiContext">
@@ -39,35 +39,4 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         </constructor-arg>
     </bean>
 
-    <bean id="dummyInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor$Factory"/>
-
-    <bean id="authenticationInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
-
-    <camel:sslContextParameters id="sslContextParameters">
-        <camel:secureSocketProtocols>
-            <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
-        </camel:secureSocketProtocols>
-        <camel:keyManagers keyPassword="changeit">
-            <camel:keyStore type="PKCS12" password="changeit" resource="keystore.p12"/>
-        </camel:keyManagers>
-        <camel:trustManagers>
-            <camel:keyStore type="PKCS12" password="changeit" resource="keystore.p12"/>
-        </camel:trustManagers>
-        <camel:clientParameters>
-            <camel:cipherSuitesFilter>
-                <camel:include>.*_RSA_WITH_AES_.*</camel:include>
-                <camel:exclude>.*_DH_anon_.*</camel:exclude>
-            </camel:cipherSuitesFilter>
-        </camel:clientParameters>
-    </camel:sslContextParameters>
-
-    <!--
-    <bean id="sendTracingData"
-          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor$Factory"/>
-
-    <bean id="receiveTracingData"
-          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTracingInterceptor$Factory"/>
-    -->
 </beans>

@@ -20,12 +20,11 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import static java.util.concurrent.TimeUnit.MINUTES
 import static org.junit.jupiter.api.Assertions.assertEquals
@@ -35,19 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse
  * Unit tests for the PDQ transaction aka ITI-22.
  * @author Dmytro Rud
  */
-class TestIti22 extends MllpTestContainer {
-    
-    
-    def static CONTEXT_DESCRIPTOR = 'iti22/iti-22.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti22/iti-22.xml')
+class TestIti22 extends AbstractMllpTest {
     
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|'+

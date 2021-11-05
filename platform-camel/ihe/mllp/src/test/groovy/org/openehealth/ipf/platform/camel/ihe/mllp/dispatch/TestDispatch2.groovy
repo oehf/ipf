@@ -16,23 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
 
-import org.junit.jupiter.api.BeforeAll
+import org.springframework.test.context.ContextConfiguration
 
 /**
  * @author Dmytro Rud
  */
+@ContextConfiguration('/dispatch/dispatch2.xml')
 class TestDispatch2 extends TestDispatch {
-    static final String CONTEXT_DESCRIPTOR = 'dispatch/dispatch2.xml'
-
-
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
 
     @Override
     protected String getDispatcherPort() {

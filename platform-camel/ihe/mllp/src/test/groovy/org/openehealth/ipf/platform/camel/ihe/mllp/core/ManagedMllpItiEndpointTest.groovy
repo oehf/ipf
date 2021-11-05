@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
-import org.junit.jupiter.api.BeforeAll
+import org.apache.camel.test.spring.junit5.DisableJmx
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiComponent
+import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ContextConfiguration
 
 import javax.management.MBeanServer
 import javax.management.ObjectInstance
@@ -26,19 +28,9 @@ import javax.management.ObjectName
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 
-
-class ManagedMllpItiEndpointTest extends MllpTestContainer {
-
-    def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
-
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/core/some-mllp-iti-context.xml')
+@DisableJmx(false)
+class ManagedMllpItiEndpointTest extends AbstractMllpTest {
 
     @Test
     void initContext() throws Exception {
@@ -78,7 +70,8 @@ class ManagedMllpItiEndpointTest extends MllpTestContainer {
         on
     }
 
-    private static MBeanServer getMBeanServer() {
-        return camelContext.getManagementStrategy().getManagementAgent().getMBeanServer()
+    private MBeanServer getMBeanServer() {
+        def strategy = camelContext.getManagementStrategy()
+        return strategy.getManagementAgent().getMBeanServer()
     }
 }

@@ -25,8 +25,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 http://openehealth.org/schema/ipf-commons-core
 http://openehealth.org/schema/ipf-commons-core.xsd">
 
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="false"/>
+    <camel:camelContext id="camelContext" useMDCLogging="false">
+        <camel:jmxAgent id="agent" />
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
 

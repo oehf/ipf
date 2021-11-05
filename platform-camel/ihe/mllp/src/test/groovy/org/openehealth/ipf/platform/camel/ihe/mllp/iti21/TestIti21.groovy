@@ -25,15 +25,15 @@ import org.apache.camel.Predicate
 import org.apache.camel.Processor
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.util.concurrent.TimeUnit
+import org.springframework.test.context.ContextConfiguration
 
 import static org.junit.jupiter.api.Assertions.*
 
@@ -41,22 +41,10 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@TestMethodOrder(MethodOrderer.MethodName)
-@Timeout(value = 5L, unit = TimeUnit.MINUTES)
-class TestIti21 extends MllpTestContainer {
+@ContextConfiguration('/iti21/iti-21.xml')
+class TestIti21 extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
-
-    def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
-
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +

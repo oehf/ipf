@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.model.Message
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
 
 import static java.lang.String.format
 import static java.lang.System.currentTimeMillis
@@ -29,10 +29,12 @@ import static java.lang.System.currentTimeMillis
  * Tests for HL7 continuations, see Section 2.10.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-class TestIti21Continuations extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti21/iti-21-continuations.xml'
-    
+@ContextConfiguration('/iti21/iti-21-continuations.xml')
+class TestIti21Continuations extends AbstractMllpTest {
+
+    @Autowired
+    private EhcacheInteractiveContinuationStorage storage
+
     final String REQUEST_MESSAGE =
         'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
         '20081031112704||QBP^Q22^QBP_Q21|324406609|P|2.5|||ER\r' +
@@ -44,17 +46,6 @@ class TestIti21Continuations extends MllpTestContainer {
     final String CANCEL_MESSAGE =
             "MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|||QCN^J01|11311110c2|P|2.5\r" +
             "QID|%s|IHE PDQ Query\n"
-    
-    static void main(args) {
-        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
-        init(CONTEXT_DESCRIPTOR, false)
-    }
     
     static String endpointUri(
         int port,
@@ -76,7 +67,6 @@ class TestIti21Continuations extends MllpTestContainer {
                           "#${isServerSide ? 'server' : 'client'}OutLogger"
     }
     
-    
     @Test
     void testHappyCaseAndAudit() {
         Message msg = send(endpointUri(28210, true, true, true, true, false),
@@ -86,9 +76,7 @@ class TestIti21Continuations extends MllpTestContainer {
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
-        
-        // check whether "autoCancel" parameter works
-        EhcacheInteractiveContinuationStorage storage = appContext.getBean('interactiveContinuationStorage')
+
         assert storage.ehcache.iterator().hasNext() == false
     }
     

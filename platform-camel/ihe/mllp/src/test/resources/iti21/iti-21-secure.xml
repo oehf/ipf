@@ -45,12 +45,29 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
+                    password="changeit"/>
+        </camel:trustManagers>
+        <camel:serverParameters clientAuthentication="NONE"/>
+    </camel:sslContextParameters>
+
+    <camel:sslContextParameters id="iti21SslContextTls13Parameters">
+        <camel:secureSocketProtocols>
+            <camel:secureSocketProtocol>TLSv1.3</camel:secureSocketProtocol>
+        </camel:secureSocketProtocols>
+        <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
+            <camel:keyStore
+                    resource="keystore.p12"
+                    password="changeit"/>
+        </camel:keyManagers>
+        <camel:trustManagers>
+            <camel:keyStore
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="NONE"/>
@@ -62,12 +79,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="REQUIRE"/>
@@ -83,12 +100,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:cipherSuites>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="NONE"/>
@@ -103,12 +120,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:cipherSuites>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="NONE"/>
@@ -122,7 +139,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:secureSocketProtocols>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="NONE"/>
@@ -134,12 +151,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
-                    resource="iti21/bogus.cert"
+                    resource="bogus"
                     password="boguspw"/>
         </camel:keyManagers>
         <camel:trustManagers>
             <camel:keyStore
-                    resource="keystore"
+                    resource="keystore.p12"
                     password="changeit"/>
         </camel:trustManagers>
         <camel:serverParameters clientAuthentication="NONE"/>

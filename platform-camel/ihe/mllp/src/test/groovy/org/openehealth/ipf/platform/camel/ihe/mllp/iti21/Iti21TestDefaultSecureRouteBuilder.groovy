@@ -22,7 +22,7 @@ import org.apache.camel.builder.RouteBuilder
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class Iti21TestSecureRouteBuilder extends RouteBuilder {
+class Iti21TestDefaultSecureRouteBuilder extends RouteBuilder {
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^K22^RSP_K21|356757|P|2.5
 MSA|AA|1305506339
@@ -36,16 +36,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
      
      void configure() throws Exception {
 
-         from('pdq-iti21://0.0.0.0:18211?secure=true&sslContextParameters=#iti21SslContextRequireParameters')
-             .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18215?secure=true&sslContextParameters=#iti21SslContextParameters')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18216?secure=true&sslContextParameters=#iti21SslContextTls13Parameters')
-                 .transform(constant(rsp))
-
-         from('pdq-iti21://0.0.0.0:18218?secure=true&sslContextParameters=#iti21SslContextCiphersParameters')
+         from('pdq-iti21://0.0.0.0:18217?secure=true')
                  .transform(constant(rsp))
 
      }
