@@ -53,7 +53,7 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
 
     @Override
     public List<RetrieveStudy> getRetrieveStudies() {
-        List<RetrieveStudy> retrieveStudies = new ArrayList<>();
+        var retrieveStudies = new ArrayList<RetrieveStudy>();
         for (var studyRequest : request.getStudyRequest())
         {
             var retrieveStudy = new RetrieveStudy();

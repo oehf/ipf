@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Validates a {@link EbXMLSubmitObjectsRequest} request.
@@ -49,7 +48,7 @@ public class ProvideAndRegisterDocumentSetRequestValidator implements Validator<
     private void validateDocuments(EbXMLProvideAndRegisterDocumentSetRequest request) {
         var documents = request.getDocuments();
 
-        Set<String> docEntryIds = new HashSet<>();
+        var docEntryIds = new HashSet<String>();
         for (var docEntry : request.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
             var docId = docEntry.getId();
             if (docId != null) {

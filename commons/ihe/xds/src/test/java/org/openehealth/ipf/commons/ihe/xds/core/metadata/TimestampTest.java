@@ -168,9 +168,9 @@ public class TimestampTest {
     
     @Test
     public void timestampNow() {
-        Timestamp now = Timestamp.now();
+        var now = Timestamp.now();
         assertEquals(Precision.SECOND, now.getPrecision());
-        String hl7FromNow = now.toHL7();
+        var hl7FromNow = now.toHL7();
         assertTrue(hl7FromNow.startsWith("20"));
         assertTrue(hl7FromNow.matches("\\d+"));
     }

@@ -16,8 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.Endpoint;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -25,7 +23,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @since 3.1
  */
-public class InterceptorFactorySupport<E extends Endpoint, T extends Interceptor<E>> implements InterceptorFactory<E, T> {
+public class InterceptorFactorySupport<T extends Interceptor> implements InterceptorFactory {
 
     protected final Class<T> clazz;
 

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceInterceptorUtils;
 
 
@@ -25,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceIntercep
  * Consumer-side interceptor for request message acceptance checking.
  * @author Dmytro Rud
  */
-public class ConsumerRequestAcceptanceInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerRequestAcceptanceInterceptor extends InterceptorSupport {
 
     @Override
     public void process(Exchange exchange) throws Exception {

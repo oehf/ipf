@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
  *  
  * @author Dmytro Rud
  */
-public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ProducerAdaptingInterceptor extends InterceptorSupport {
 
     private final String charsetName;
 
@@ -72,7 +72,7 @@ public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
         var msg = Hl7v2MarshalUtils.extractHapiMessage(
                 exchange.getIn(),
                 characterSet(exchange),
-                getEndpoint().getHl7v2TransactionConfiguration().getParser());
+                getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser());
         
         if (msg == null) {
             throw new Hl7v2AdaptingException("Cannot create HL7v2 message from the given " +

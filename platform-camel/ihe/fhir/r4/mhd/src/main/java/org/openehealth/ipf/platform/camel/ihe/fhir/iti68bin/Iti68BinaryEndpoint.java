@@ -98,7 +98,7 @@ public class Iti68BinaryEndpoint extends ServletEndpoint
 
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         if (isAudit()) {
             initialChain.add(new Iti68BinaryConsumerAuditInterceptor(getAuditContext()));
         }

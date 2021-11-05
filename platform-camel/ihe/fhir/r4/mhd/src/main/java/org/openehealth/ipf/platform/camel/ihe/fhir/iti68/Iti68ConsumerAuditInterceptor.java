@@ -39,8 +39,8 @@ import javax.servlet.http.HttpServletRequest;
  * @since 3.6
  */
 class Iti68ConsumerAuditInterceptor
-        extends InterceptorSupport<Iti68Endpoint>
-        implements AuditInterceptor<Iti68AuditDataset, Iti68Endpoint> {
+        extends InterceptorSupport
+        implements AuditInterceptor<Iti68AuditDataset> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Iti68ConsumerAuditInterceptor.class);
 
@@ -52,7 +52,7 @@ class Iti68ConsumerAuditInterceptor
 
     @Override
     public AuditStrategy<Iti68AuditDataset> getAuditStrategy() {
-        return getEndpoint().getServerAuditStrategy();
+        return getEndpoint(Iti68Endpoint.class).getServerAuditStrategy();
     }
 
     @Override

@@ -72,7 +72,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
 
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         initialChain.add(new ConsumerRequestInteractionSetterInterceptor());
         initialChain.add(new ConsumerStringProcessingInterceptor());
         if (isSupportUnsolicitedFragmentation()) {
@@ -97,7 +97,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
 
     @Override
     public List<Interceptor> createInitialProducerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         initialChain.add(new ProducerStringProcessingInterceptor());
         if (isSupportUnsolicitedFragmentation()) {
             initialChain.add(new ProducerRequestFragmenterInterceptor());

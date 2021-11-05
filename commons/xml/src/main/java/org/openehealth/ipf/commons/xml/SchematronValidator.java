@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
 
 import javax.xml.transform.Source;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Validation wrapper around the {@link SchematronTransmogrifier}. The
@@ -42,7 +41,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
     @Override
     public void validate(Source message, SchematronProfile profile) {
         var svrl = schematronTransmogrifier.zap(message, profile);
-        List<ValidationException> exceptions = new ArrayList<>();
+        var exceptions = new ArrayList<ValidationException>();
         svrl.getActivePatternAndFiredRuleAndFailedAssert().stream()
                 .filter(FailedAssert.class::isInstance)
                 .forEach(o -> {

@@ -49,7 +49,7 @@ public class LazyBundleProviderTest {
             response.add(new Patient().setId(Integer.toString(i)));
         }
         var payload = new Object();
-        Map<String, Object> headers = new HashMap<>();
+        var headers = new HashMap<String, Object>();
         bundleProvider = new LazyBundleProvider(requestConsumer, true, payload, headers);
     }
 

@@ -9,7 +9,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
@@ -50,7 +49,7 @@ public class Iti18AuditStrategyTest extends XdsAuditorTestBase {
         }
         var strategy = new Iti18AuditStrategy(serverSide);
         var auditDataset = getXdsAuditDataset(strategy);
-        EbXMLAdhocQueryRequest ebXmlQueryRequest = new QueryRegistryTransformer().toEbXML(new QueryRegistry(query));
+        var ebXmlQueryRequest = new QueryRegistryTransformer().toEbXML(new QueryRegistry(query));
         strategy.enrichAuditDatasetFromRequest(auditDataset, ebXmlQueryRequest.getInternal(), null);
         var auditMessages = makeAuditMessages(strategy, auditContext, auditDataset);
 

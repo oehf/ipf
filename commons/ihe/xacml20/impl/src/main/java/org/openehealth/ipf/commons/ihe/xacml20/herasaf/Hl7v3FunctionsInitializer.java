@@ -33,7 +33,7 @@ public class Hl7v3FunctionsInitializer extends AbstractFunctionsJaxbTypeAdapterI
     protected Map<String, Function> createTypeInstances() {
         var functions = createInstances(IiEqualFunction.class, CvEqualFunction.class);
 
-        Map<String, Function> instancesMap = new HashMap<>();
+        var instancesMap = new HashMap<String, Function>();
         for (var function : functions) {
             instancesMap.put(function.toString(), function);
         }

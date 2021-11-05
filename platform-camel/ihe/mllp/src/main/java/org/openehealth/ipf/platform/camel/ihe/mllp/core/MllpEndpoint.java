@@ -28,9 +28,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.netty.NettyConfiguration;
-import org.apache.camel.component.netty.NettyConsumer;
 import org.apache.camel.component.netty.NettyEndpoint;
-import org.apache.camel.component.netty.NettyProducer;
 import org.apache.camel.support.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -100,8 +98,7 @@ public abstract class MllpEndpoint<
      */
     @Override
     public Producer doCreateProducer() throws Exception {
-        var producer = (NettyProducer) wrappedEndpoint.createProducer();
-        return producer;
+        return wrappedEndpoint.createProducer();
     }
 
     /**
@@ -112,27 +109,8 @@ public abstract class MllpEndpoint<
      */
     @Override
     public Consumer doCreateConsumer(Processor processor) throws Exception {
-        var consumer = (NettyConsumer) wrappedEndpoint.createConsumer(processor);
-        return new MllpConsumer(consumer);
+        return wrappedEndpoint.createConsumer(processor);
     }
-
-/*
-    private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
-
-        @Override
-        public void run(IoSession session, String message) {
-            if (config.isAudit()) {
-                var hostAddress = session.getRemoteAddress().toString();
-                var auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
-                        config.getAuditContext(), message, hostAddress);
-                config.getAuditContext().audit(auditMessage);
-            }
-        }
-    }
-
- */
-
-// ----- getters -----
 
     /**
      * Returns transaction configuration.

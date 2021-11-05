@@ -24,7 +24,6 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,7 +42,7 @@ public class ExtraMetadataMarshalingTest {
 
     @Test
     public void testDocumentEntryUnMarshalling() throws Exception {
-        Map<String, List<String>> extraMetaData = new HashMap<>();
+        var extraMetaData = new HashMap<String, List<String>>();
         extraMetaData.put(KEY_1, VALUES_1);
         extraMetaData.put(KEY_2, VALUES_2);
 

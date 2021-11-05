@@ -21,6 +21,7 @@ import org.apache.camel.component.netty.NettyConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpAuditInterceptorSupport;
 
 import java.net.InetSocketAddress;
@@ -40,7 +41,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
 
     @Override
     public AuditStrategy<AuditDatasetType> getAuditStrategy() {
-        return getEndpoint().getServerAuditStrategy();
+        return getEndpoint(AuditableEndpoint.class).getServerAuditStrategy();
     }
 
     @Override

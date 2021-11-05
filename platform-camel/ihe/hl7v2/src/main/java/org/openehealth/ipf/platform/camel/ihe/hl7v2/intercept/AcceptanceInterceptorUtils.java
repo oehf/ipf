@@ -37,11 +37,11 @@ public class AcceptanceInterceptorUtils {
      * Checks acceptance of the input message and calls the route.
      */
     public static void processRequest(
-            InterceptorSupport<HL7v2Endpoint> interceptor,
+            InterceptorSupport interceptor,
             Exchange exchange) throws Exception
     {
         // check input message
-        var config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+        var config = interceptor.getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration();
         config.checkRequestAcceptance(exchange.getIn().getBody(Message.class));
         
         // run the route
@@ -53,14 +53,14 @@ public class AcceptanceInterceptorUtils {
      * Calls the route and checks acceptance of the output message.
      */
     public static void processResponse(
-            InterceptorSupport<HL7v2Endpoint> interceptor,
+            InterceptorSupport interceptor,
             Exchange exchange) throws Exception 
     {
         // run the route
         interceptor.getWrappedProcessor().process(exchange);
 
         // check output message
-        var config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+        var config = interceptor.getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration();
         config.checkResponseAcceptance(Exchanges.resultMessage(exchange).getBody(Message.class));
     }
 }

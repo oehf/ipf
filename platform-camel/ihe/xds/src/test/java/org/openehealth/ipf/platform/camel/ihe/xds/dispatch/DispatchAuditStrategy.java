@@ -133,13 +133,13 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
             log.debug("Cannot serve HTTP method GET");
             return null;
         }
-        String action = DispatchInContextCreatorInterceptor.extractWsaAction(messageContext);
+        var action = DispatchInContextCreatorInterceptor.extractWsaAction(messageContext);
         if (action == null) {
             log.debug("Cannot determine WS-Addressing action");
             return null;
         }
 
-        XdsAuditStrategy<T> auditStrategy = (XdsAuditStrategy<T>) MAP.get(action);
+        var auditStrategy = (XdsAuditStrategy<T>) MAP.get(action);
         if (auditStrategy == null) {
             log.debug("No strategy could be found for action {}", action);
         } else {

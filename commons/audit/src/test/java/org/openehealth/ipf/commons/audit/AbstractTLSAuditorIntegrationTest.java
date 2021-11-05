@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -57,11 +56,11 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         var consumer = SyslogEventCollector.newInstance()
                 .withExpectation(count)
                 .withDelay(100); // even if handling takes artificially long, we're done fast enough
-        ExecutorService executor = Executors.newFixedThreadPool(threads);
+        var executor = Executors.newFixedThreadPool(threads);
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
-            boolean completed = consumer.await(15, TimeUnit.SECONDS);
+            var completed = consumer.await(15, TimeUnit.SECONDS);
             assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         } finally {
             executor.shutdownNow();

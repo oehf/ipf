@@ -41,8 +41,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Christian Ohr
  */
-public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpAuditDataset> extends InterceptorSupport<MllpTransactionEndpoint<AuditDatasetType>>
-        implements AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> {
+public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpAuditDataset> extends InterceptorSupport
+        implements AuditInterceptor<AuditDatasetType> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpAuditInterceptorSupport.class);
     private final AuditContext auditContext;
@@ -136,7 +136,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             var terser = new Terser(message);
             return (!ArrayUtils.contains(message.getNames(), "DSC") ||
                     !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
-                    getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
+                    getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
             LOG.warn("Exception when determining message auditability, no audit will be performed", e);
             return false;

@@ -41,7 +41,7 @@ import static org.apache.commons.lang3.Validate.*;
  *
  * @author Dmytro Rud
  */
-public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends TransactionConfiguration<T> {
+public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDataset> extends TransactionConfiguration<AuditDatasetType> {
 
     private static class Definition {
         private final Set<String> triggerEvents;
@@ -105,8 +105,8 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<AuditDatasetType> clientAuditStrategy,
+            AuditStrategy<AuditDatasetType> serverAuditStrategy,
             Version[] hl7Versions,
             String sendingApplication,
             String sendingFacility,
@@ -173,8 +173,8 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<AuditDatasetType> clientAuditStrategy,
+            AuditStrategy<AuditDatasetType> serverAuditStrategy,
             Version hl7Version,
             String sendingApplication,
             String sendingFacility,
@@ -203,7 +203,7 @@ public class Hl7v2TransactionConfiguration<T extends MllpAuditDataset> extends T
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags)
     {
-        Map<String, Definition> result = new HashMap<>();
+        var result = new HashMap<String, Definition>();
         for (var i = 0; i < allowedMessageTypes.length; ++i) {
             var definition = new Definition(
                     allowedTriggerEvents[i],

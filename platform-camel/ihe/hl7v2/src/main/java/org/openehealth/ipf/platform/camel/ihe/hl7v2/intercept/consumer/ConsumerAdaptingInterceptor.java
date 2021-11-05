@@ -40,7 +40,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerAdaptingInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
     public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
@@ -88,7 +88,7 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
             }
         } catch (Exception e) {
             LOG.warn("Message processing failed", e);
-            resultMessage(exchange).setBody(getEndpoint().getNakFactory().createNak(originalMessage, e));
+            resultMessage(exchange).setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, e));
         }
 
         var m = Exchanges.resultMessage(exchange);
@@ -101,11 +101,11 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
         var msg = Hl7v2MarshalUtils.extractHapiMessage(
                 m,
                 characterSet(exchange),
-                getEndpoint().getHl7v2TransactionConfiguration().getParser());
+                getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Throwable)) {
-           msg = getEndpoint().getNakFactory().createNak(originalMessage, (Throwable) body);
+           msg = getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, (Throwable) body);
         }
         
         // no known data type --> determine user's intention on the basis of a header 
@@ -136,13 +136,13 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
 
         Message ack;
         if ((header == AcknowledgmentCode.AA) || (header == AcknowledgmentCode.CA)) {
-            ack = getEndpoint().getNakFactory().createAck(
+            ack = getEndpoint(HL7v2Endpoint.class).getNakFactory().createAck(
                     originalMessage);
         } else {
             var exception = new HL7Exception(
                     "HL7v2 processing failed",
-                    getEndpoint().getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
-            ack = getEndpoint().getNakFactory().createNak(
+                    getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
+            ack = getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(
                     originalMessage,
                     exception, 
                     (AcknowledgmentCode) header);

@@ -46,7 +46,7 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    default List<Interceptor<?>> getAdditionalConsumerInterceptors() {
+    default List<Interceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -68,7 +68,7 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    default List<Interceptor<?>> getAdditionalProducerInterceptors() {
+    default List<Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 }

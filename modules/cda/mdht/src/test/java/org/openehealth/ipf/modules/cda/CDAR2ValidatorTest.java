@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -45,7 +44,7 @@ public class CDAR2ValidatorTest {
     @BeforeEach
     public void setUp() throws Exception {
         validator = new CDAR2Validator();
-        Map<Object, Object> context = new HashMap<>();
+        var context = new HashMap<Object, Object>();
         context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
         CDAR2Utils.initCCD();
         CDAR2Utils.initHITSPC32();

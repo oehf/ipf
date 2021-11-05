@@ -27,7 +27,7 @@ public class DICOMAuditParserTest {
 
         var parser = new DICOMAuditParser();
         var files = getAllFilesFromResource("audit");
-        for (Path file : files) {
+        for (var file : files) {
             LOG.debug("Parsing {}", file);
             var read = Files.readString(file, StandardCharsets.UTF_8);
             var auditMessage = parser.parse(read, true);

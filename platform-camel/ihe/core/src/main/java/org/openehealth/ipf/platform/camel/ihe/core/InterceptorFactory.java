@@ -16,8 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.Endpoint;
-
 import java.io.Serializable;
 
 /**
@@ -25,12 +23,12 @@ import java.io.Serializable;
  *
  * @since 3.1
  */
-public interface InterceptorFactory<E extends Endpoint, T extends Interceptor<E>> extends Serializable {
+public interface InterceptorFactory extends Serializable {
 
     /**
      * Returns a new instance of an Interceptor
      *
      * @return new instance of an Interceptor
      */
-    T getNewInstance();
+    Interceptor getNewInstance();
 }

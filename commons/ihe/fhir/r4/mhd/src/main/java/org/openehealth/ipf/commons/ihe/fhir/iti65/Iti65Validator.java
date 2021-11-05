@@ -53,7 +53,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -173,9 +172,9 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         }
 
 
-        Set<String> patientReferences = new HashSet<>();
-        Set<String> expectedBinaryFullUrls = new HashSet<>();
-        Set<String> expectedReferenceFullUrls = new HashSet<>();
+        var patientReferences = new HashSet<String>();
+        var expectedBinaryFullUrls = new HashSet<String>();
+        var expectedReferenceFullUrls = new HashSet<String>();
         entries.values().stream()
                 .flatMap(Collection::stream)
                 .map(Bundle.BundleEntryComponent::getResource)

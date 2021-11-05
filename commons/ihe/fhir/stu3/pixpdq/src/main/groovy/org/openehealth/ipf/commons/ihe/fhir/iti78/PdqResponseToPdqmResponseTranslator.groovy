@@ -99,7 +99,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @return Patient resource list
      */
     protected List<PdqPatient> handleRegularSearchResponse(responseCollection) {
-        List<PdqPatient> resultList = new ArrayList<>()
+        def resultList = new ArrayList<PdqPatient>()
         if (responseCollection) {
             for (response in responseCollection) {
                 PdqPatient patient = pidToPatient(response)

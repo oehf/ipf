@@ -54,21 +54,21 @@ public class PixV3QueryRequestTransformer {
         }
 
         // Prepare query with fixed values
-        final PRPAIN201309UV02Type query = new PRPAIN201309UV02Type();
+        final var query = new PRPAIN201309UV02Type();
         query.setITSVersion("XML_1.0");
         query.setInteractionId(new II("2.16.840.1.113883.1.18", "PRPA_IN201309UV02"));
         query.setProcessingCode(new CS("P", null, null));
         query.setProcessingModeCode(new CS("T", null, null));
         query.setAcceptAckCode(new CS("AL", null, null));
 
-        final PRPAIN201309UV02QUQIMT021001UV01ControlActProcess controlActProcess =
+        final var controlActProcess =
                 new PRPAIN201309UV02QUQIMT021001UV01ControlActProcess();
         controlActProcess.setClassCode(ActClassControlAct.CACT);
         controlActProcess.setMoodCode(XActMoodIntentEvent.EVN);
         controlActProcess.setCode(new CD("PRPA_TE201309UV02", null, null));
         query.setControlActProcess(controlActProcess);
 
-        final PRPAMT201307UV02QueryByParameter queryByParameter = new PRPAMT201307UV02QueryByParameter();
+        final var queryByParameter = new PRPAMT201307UV02QueryByParameter();
         queryByParameter.setStatusCode(new CS("new", null, null));
         queryByParameter.setResponsePriorityCode(new CS("I", null, null));
         queryByParameter.setParameterList(new PRPAMT201307UV02ParameterList());
@@ -81,13 +81,13 @@ public class PixV3QueryRequestTransformer {
         query.setReceiver(List.of(this.toReceiver(simpleQuery.getReceiver())));
         query.setSender(this.toSender(simpleQuery.getSender()));
         queryByParameter.setQueryId(simpleQuery.getQueryId());
-        final PRPAMT201307UV02PatientIdentifier patientIdentifier = new PRPAMT201307UV02PatientIdentifier();
+        final var patientIdentifier = new PRPAMT201307UV02PatientIdentifier();
         patientIdentifier.setValue(List.of(simpleQuery.getQueryPatientId()));
         patientIdentifier.setSemanticsText(new ST());
         patientIdentifier.getSemanticsText().mixed = List.of("Patient.id");
         queryByParameter.getParameterList().setPatientIdentifier(List.of(patientIdentifier));
-        for (final String dataSourceOid : simpleQuery.getDataSourceOids()) {
-            final PRPAMT201307UV02DataSource dataSource = new PRPAMT201307UV02DataSource();
+        for (final var dataSourceOid : simpleQuery.getDataSourceOids()) {
+            final var dataSource = new PRPAMT201307UV02DataSource();
             dataSource.setValue(List.of(new II(dataSourceOid, null)));
             dataSource.setSemanticsText(new ST());
             dataSource.getSemanticsText().mixed = List.of("DataSource.id");
@@ -109,7 +109,7 @@ public class PixV3QueryRequestTransformer {
             return null;
         }
 
-        final PixV3QueryRequest simpleQuery = new PixV3QueryRequest();
+        final var simpleQuery = new PixV3QueryRequest();
         simpleQuery.setMessageId(query.getId());
         simpleQuery.setSender(this.fromSender(query.getSender()));
         if (!query.getReceiver().isEmpty()) {
@@ -129,25 +129,25 @@ public class PixV3QueryRequestTransformer {
         if (query.getControlActProcess() == null) {
             return simpleQuery;
         }
-        final PRPAIN201309UV02QUQIMT021001UV01ControlActProcess controlActProcess = query.getControlActProcess();
+        final var controlActProcess = query.getControlActProcess();
 
         if (controlActProcess.getQueryByParameter() == null) {
             return simpleQuery;
         }
-        final PRPAMT201307UV02QueryByParameter queryByParameter = controlActProcess.getQueryByParameter();
+        final var queryByParameter = controlActProcess.getQueryByParameter();
         simpleQuery.setQueryId(queryByParameter.getQueryId());
 
         if (queryByParameter.getParameterList() == null) {
             return simpleQuery;
         }
-        final PRPAMT201307UV02ParameterList parameterList = queryByParameter.getParameterList();
+        final var parameterList = queryByParameter.getParameterList();
         if (!parameterList.getPatientIdentifier().isEmpty()) {
-            final List<II> patientIds = parameterList.getPatientIdentifier().get(0).getValue();
+            final var patientIds = parameterList.getPatientIdentifier().get(0).getValue();
             if (!patientIds.isEmpty()) {
                 simpleQuery.setQueryPatientId(patientIds.get(0));
             }
         }
-        for (final PRPAMT201307UV02DataSource dataSource : parameterList.getDataSource()) {
+        for (final var dataSource : parameterList.getDataSource()) {
             if (!dataSource.getValue().isEmpty()) {
                 simpleQuery.getDataSourceOids().add(dataSource.getValue().get(0).getRoot());
             }
@@ -160,10 +160,10 @@ public class PixV3QueryRequestTransformer {
         if (simpleDevice == null) {
             return null;
         }
-        final MCCIMT000100UV01Receiver receiver = new MCCIMT000100UV01Receiver();
+        final var receiver = new MCCIMT000100UV01Receiver();
         receiver.setTypeCode(CommunicationFunctionType.RCV);
         receiver.setTelecom(simpleDevice.getTelecom());
-        final MCCIMT000100UV01Device device = new MCCIMT000100UV01Device();
+        final var device = new MCCIMT000100UV01Device();
         device.setClassCode(EntityClassDevice.DEV);
         device.setDeterminerCode(EntityDeterminer.INSTANCE);
         device.getId().addAll(simpleDevice.getIds());
@@ -180,10 +180,10 @@ public class PixV3QueryRequestTransformer {
         if (simpleDevice == null) {
             return null;
         }
-        final MCCIMT000100UV01Sender sender = new MCCIMT000100UV01Sender();
+        final var sender = new MCCIMT000100UV01Sender();
         sender.setTypeCode(CommunicationFunctionType.SND);
         sender.setTelecom(simpleDevice.getTelecom());
-        final MCCIMT000100UV01Device device = new MCCIMT000100UV01Device();
+        final var device = new MCCIMT000100UV01Device();
         device.setClassCode(EntityClassDevice.DEV);
         device.setDeterminerCode(EntityDeterminer.INSTANCE);
         device.getId().addAll(simpleDevice.getIds());
@@ -200,9 +200,9 @@ public class PixV3QueryRequestTransformer {
         if (receiver == null) {
             return null;
         }
-        final Device simpleDevice = new Device();
+        final var simpleDevice = new Device();
         simpleDevice.setTelecom(receiver.getTelecom());
-        final MCCIMT000100UV01Device device = receiver.getDevice();
+        final var device = receiver.getDevice();
         if (device != null) {
             simpleDevice.getIds().addAll(device.getId());
             simpleDevice.getNames().addAll(device.getName());
@@ -218,9 +218,9 @@ public class PixV3QueryRequestTransformer {
         if (sender == null) {
             return null;
         }
-        final Device simpleDevice = new Device();
+        final var simpleDevice = new Device();
         simpleDevice.setTelecom(sender.getTelecom());
-        final MCCIMT000100UV01Device device = sender.getDevice();
+        final var device = sender.getDevice();
         if (device != null) {
             simpleDevice.getIds().addAll(device.getId());
             simpleDevice.getNames().addAll(device.getName());

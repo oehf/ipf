@@ -32,13 +32,13 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
     
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        var threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
+        var threshold = getEndpoint(MllpTransactionEndpoint.class).getUnsolicitedFragmentationThreshold();
         if (threshold < 3) {
             getWrappedProcessor().process(exchange);
             return;
@@ -120,7 +120,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
                 var responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                var responseTerser = new Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
+                var responseTerser = new Terser(getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().getParser().parse(responseString));
 
                 var messageType = responseTerser.get("MSH-9-1");
                 var acknowledgementCode = responseTerser.get("MSA-1");

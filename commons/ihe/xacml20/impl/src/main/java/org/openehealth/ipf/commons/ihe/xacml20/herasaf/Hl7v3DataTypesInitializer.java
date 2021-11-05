@@ -32,7 +32,7 @@ public class Hl7v3DataTypesInitializer extends AbstractDataTypesJaxbTypeAdapterI
     @Override
     protected Map<String, DataTypeAttribute<?>> createTypeInstances() {
         var instances = createInstances(IiDataTypeAttribute.class, CvDataTypeAttribute.class);
-        Map<String, DataTypeAttribute<?>> instancesMap = new HashMap<>();
+        var instancesMap = new HashMap<String, DataTypeAttribute<?>>();
         for (var dataTypeAttribute : instances) {
             instancesMap.put(dataTypeAttribute.getDatatypeURI(), dataTypeAttribute);
         }

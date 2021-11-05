@@ -65,7 +65,7 @@ public class RemoveMetadataRequestValidatorTest {
 
     @Test
     public void testIssue150() {
-        String[] uuids = {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
+        var uuids = new String[]{UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
         var request = new RemoveObjectsRequest();
         request.setObjectRefList(new ObjectRefListType());
         for (var uuid : uuids) {

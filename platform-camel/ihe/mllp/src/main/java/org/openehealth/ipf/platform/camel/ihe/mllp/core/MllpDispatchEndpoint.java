@@ -40,7 +40,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
         var dispatcher = getConfig().getDispatcher();

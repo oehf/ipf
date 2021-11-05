@@ -28,7 +28,7 @@ import java.util.List;
 public class CodeSlotsNormalizer {
 
     private static List<String> getSlotValues(SlotType1 slot) {
-        List<String> result = new ArrayList<>();
+        var result = new ArrayList<String>();
         if ((slot != null) && (slot.getValueList() != null)) {
             for (var values : slot.getValueList().getValue()) {
                 result.addAll(QuerySlotHelper.decodeStringList(values));
@@ -51,8 +51,8 @@ public class CodeSlotsNormalizer {
     public static void normalizeCodeSlots(AdhocQueryRequest adhocQueryRequest, String codeSlotName) {
         final var schemeSlotName = codeSlotName + "Scheme";
 
-        List<SlotType1> codeSlots = new ArrayList<>();
-        List<SlotType1> schemeSlots = new ArrayList<>();
+        var codeSlots = new ArrayList<SlotType1>();
+        var schemeSlots = new ArrayList<SlotType1>();
 
         // collect code and code scheme slots, remove the latter from the query
         var iterator = adhocQueryRequest.getAdhocQuery().getSlot().iterator();

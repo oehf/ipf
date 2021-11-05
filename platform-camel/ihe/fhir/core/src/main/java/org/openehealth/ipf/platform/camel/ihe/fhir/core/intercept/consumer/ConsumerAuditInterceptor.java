@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +38,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  * @since 3.1
  */
 public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
-        extends InterceptorSupport<FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>>
-        implements AuditInterceptor<AuditDatasetType, FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>> {
+        extends InterceptorSupport
+        implements AuditInterceptor<AuditDatasetType> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
 
@@ -87,7 +86,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public AuditStrategy<AuditDatasetType> getAuditStrategy() {
-        return getEndpoint().getServerAuditStrategy();
+        return getEndpoint(FhirEndpoint.class).getServerAuditStrategy();
     }
 
     /**

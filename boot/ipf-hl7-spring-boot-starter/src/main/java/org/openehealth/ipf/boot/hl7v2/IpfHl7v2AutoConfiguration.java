@@ -50,7 +50,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
@@ -71,7 +70,7 @@ public class IpfHl7v2AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(HL7MLLPNettyDecoderFactory.class)
     HL7MLLPNettyDecoderFactory hl7decoder(IpfHl7v2ConfigurationProperties config) {
-        HL7MLLPNettyDecoderFactory decoder = new HL7MLLPNettyDecoderFactory();
+        var decoder = new HL7MLLPNettyDecoderFactory();
         if (config.getCharset() != null) {
             decoder.setCharset(config.getCharset());
         }
@@ -82,7 +81,7 @@ public class IpfHl7v2AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(HL7MLLPNettyEncoderFactory.class)
     HL7MLLPNettyEncoderFactory hl7encoder(IpfHl7v2ConfigurationProperties config) {
-        HL7MLLPNettyEncoderFactory encoder = new HL7MLLPNettyEncoderFactory();
+        var encoder = new HL7MLLPNettyEncoderFactory();
         if (config.getCharset() != null) {
             encoder.setCharset(config.getCharset());
         }
@@ -93,7 +92,7 @@ public class IpfHl7v2AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CustomModelClassFactory.class)
     public CustomModelClassFactory mllpModelClassFactory() {
-        Map<String, String[]> eventMap = new HashMap<>();
+        var eventMap = new HashMap<String, String[]>();
         eventMap.put("2.3.1", new String[] {
                 IPF_HL7_DEFINITIONS_PREFIX + "pix.v231"
         });

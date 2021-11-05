@@ -107,7 +107,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      */
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         if (isAudit()) {
             initialChain.add(new ConsumerAuditInterceptor<>(getAuditContext()));
         }
@@ -122,7 +122,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      */
     @Override
     public List<Interceptor> createInitialProducerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         if (isAudit()) {
             initialChain.add(new ProducerAuditInterceptor<>(getAuditContext()));
         }

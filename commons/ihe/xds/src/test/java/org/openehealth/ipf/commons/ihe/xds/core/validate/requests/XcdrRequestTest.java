@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
@@ -50,7 +49,7 @@ public class XcdrRequestTest {
 
     @Test
     public void testPatientIdValidationXcdr() {
-        ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
+        var request = SampleData.createProvideAndRegisterDocumentSet();
         EbXMLProvideAndRegisterDocumentSetRequest ebXml;
 
         // correct patient ID --> both ITI-41 and ITI-80 are happy
@@ -59,7 +58,7 @@ public class XcdrRequestTest {
         validator.validate(ebXml, ITI_80);
 
         // incomplete patient ID --> both ITI-41 and ITI-80 validations fail
-        Identifiable wrongPatientId = new Identifiable("orphan");
+        var wrongPatientId = new Identifiable("orphan");
         request.getSubmissionSet().setPatientId(wrongPatientId);
         request.getDocuments().forEach(document -> document.getDocumentEntry().setPatientId(wrongPatientId));
         request.getFolders().forEach(folder -> folder.setPatientId(wrongPatientId));

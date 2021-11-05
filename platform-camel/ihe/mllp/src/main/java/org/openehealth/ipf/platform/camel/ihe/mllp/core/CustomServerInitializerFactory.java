@@ -27,14 +27,10 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 import org.apache.camel.component.netty.ssl.SSLEngineFactory;
 import org.apache.camel.support.jsse.ClientAuthentication;
-import org.apache.camel.support.jsse.SSLContextParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-import java.util.List;
 
 /**
  * This is mostly a copy of {@link org.apache.camel.component.netty.DefaultServerInitializerFactory} with the exception
@@ -68,17 +64,17 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
     @Override
     protected void initChannel(Channel ch) {
         // create a new pipeline
-        ChannelPipeline channelPipeline = ch.pipeline();
+        var channelPipeline = ch.pipeline();
 
-        SslHandler sslHandler = configureServerSSLOnDemand();
+        var sslHandler = configureServerSSLOnDemand();
         if (sslHandler != null) {
             LOG.debug("Server SSL handler configured and added as an interceptor against the ChannelPipeline: {}", sslHandler);
             addToPipeline("ssl", channelPipeline, sslHandler);
         }
 
-        List<ChannelHandler> encoders = consumer.getConfiguration().getEncoders();
-        for (int i = 0; i < encoders.size(); i++) {
-            ChannelHandler encoder = encoders.get(i);
+        var encoders = consumer.getConfiguration().getEncoders();
+        for (var i = 0; i < encoders.size(); i++) {
+            var encoder = encoders.get(i);
             if (encoder instanceof ChannelHandlerFactory) {
                 // use the factory to create a new instance of the channel as it may not be shareable
                 encoder = ((ChannelHandlerFactory) encoder).newChannelHandler();
@@ -86,9 +82,9 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             addToPipeline("encoder-" + i, channelPipeline, encoder);
         }
 
-        List<ChannelHandler> decoders = consumer.getConfiguration().getDecoders();
-        for (int i = 0; i < decoders.size(); i++) {
-            ChannelHandler decoder = decoders.get(i);
+        var decoders = consumer.getConfiguration().getDecoders();
+        for (var i = 0; i < decoders.size(); i++) {
+            var decoder = decoders.get(i);
             if (decoder instanceof ChannelHandlerFactory) {
                 // use the factory to create a new instance of the channel as it may not be shareable
                 decoder = ((ChannelHandlerFactory) decoder).newChannelHandler();
@@ -98,7 +94,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
 
         if (consumer.getConfiguration().isUsingExecutorService()) {
             // Just use EventExecutorGroup from the Netty Component
-            EventExecutorGroup applicationExecutor = consumer.getEndpoint().getComponent().getExecutorService();
+            var applicationExecutor = consumer.getEndpoint().getComponent().getExecutorService();
             addToPipeline("handler", channelPipeline, applicationExecutor, new ServerChannelHandler(consumer));
         } else {
             // still use the worker event loop group here
@@ -166,14 +162,14 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             return null;
         }
         if (sslContext != null) {
-            SSLEngine engine = sslContext.createSSLEngine();
+            var engine = sslContext.createSSLEngine();
             engine.setUseClientMode(consumer.getConfiguration().isClientMode());
 
-            SSLContextParameters sslContextParameters = consumer.getConfiguration().getSslContextParameters();
+            var sslContextParameters = consumer.getConfiguration().getSslContextParameters();
             if (sslContextParameters != null && sslContextParameters.getServerParameters() != null) {
-                String clientAuthentication = sslContextParameters.getServerParameters().getClientAuthentication();
+                var clientAuthentication = sslContextParameters.getServerParameters().getClientAuthentication();
                 if (clientAuthentication != null) {
-                    ClientAuthentication clientAuthValue = ClientAuthentication.valueOf(clientAuthentication);
+                    var clientAuthValue = ClientAuthentication.valueOf(clientAuthentication);
                     switch (clientAuthValue) {
                         case NONE:
                             engine.setWantClientAuth(false);
@@ -192,7 +188,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             engine.setNeedClientAuth(engine.getNeedClientAuth() || consumer.getConfiguration().isNeedClientAuth());
 
             if (consumer.getConfiguration().isHostnameVerification()) {
-                SSLParameters sslParams = engine.getSSLParameters();
+                var sslParams = engine.getSSLParameters();
                 sslParams.setEndpointIdentificationAlgorithm("HTTPS");
                 engine.setSSLParameters(sslParams);
             }

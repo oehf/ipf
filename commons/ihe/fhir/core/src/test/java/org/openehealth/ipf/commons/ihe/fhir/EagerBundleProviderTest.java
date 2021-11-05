@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,7 +47,7 @@ public class EagerBundleProviderTest {
             response.add(new Patient().setId(Integer.toString(i)));
         }
         var payload = new Object();
-        Map<String, Object> headers = new HashMap<>();
+        var headers = new HashMap<String, Object>();
         bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers);
     }
 

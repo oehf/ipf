@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
@@ -53,7 +52,7 @@ public class IpfAutoConfiguration {
     @ConditionalOnMissingBean(SpringConfigurationPostProcessor.class)
     public SpringConfigurationPostProcessor postProcessor(CustomMappingsConfigurer customMappingsConfigurer) {
         var processor = new SpringConfigurationPostProcessor();
-        List<OrderedConfigurer> list = new ArrayList<>();
+        var list = new ArrayList<OrderedConfigurer>();
         if (customMappingsConfigurer != null) list.add(customMappingsConfigurer);
         processor.setSpringConfigurers(list);
         return processor;

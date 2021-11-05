@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import groovy.lang.GroovySystem;
 import groovy.lang.MetaMethod;
@@ -55,7 +54,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
         if (extension != null) {
             LOG.info("Registering new extension module {} defined in class {}",
                     extension.getModuleName(), extension.getClass());
-            ExtensionModule module = DynamicExtensionModule.newModule(extension);
+            var module = DynamicExtensionModule.newModule(extension);
             addExtensionMethods(module);
         }
     }
@@ -63,12 +62,12 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     public static void addExtensionMethods(ExtensionModule module) {
         var metaClassRegistry = GroovySystem.getMetaClassRegistry();
         ((MetaClassRegistryImpl) metaClassRegistry).getModuleRegistry().addModule(module);
-        Map<CachedClass, List<MetaMethod>> classMap = new HashMap<>();
+        var classMap = new HashMap<CachedClass, List<MetaMethod>>();
         for (var metaMethod : module.getMetaMethods()){
             if (classMap.containsKey(metaMethod.getDeclaringClass())){
                 classMap.get(metaMethod.getDeclaringClass()).add(metaMethod);
             } else {
-                List<MetaMethod> methodList = new ArrayList<>();
+                var methodList = new ArrayList<MetaMethod>();
                 methodList.add(metaMethod);
                 classMap.put(metaMethod.getDeclaringClass(), methodList);
             }

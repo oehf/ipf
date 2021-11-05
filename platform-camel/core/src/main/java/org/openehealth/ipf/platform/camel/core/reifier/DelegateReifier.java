@@ -22,7 +22,6 @@ import org.apache.camel.reifier.ProcessorReifier;
 import org.openehealth.ipf.platform.camel.core.model.DelegateDefinition;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An {@link ProcessorReifier} that combines the {@link Processor} created by
@@ -46,7 +45,7 @@ public abstract class DelegateReifier<T extends DelegateDefinition> extends Proc
         var delegate = doCreateDelegate();
         var next = createChildProcessor(false);
 
-        List<Processor> processors = new ArrayList<>();
+        var processors = new ArrayList<Processor>();
         processors.add(delegate);
         if (next != null) {
             processors.add(next);

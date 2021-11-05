@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.model.v25.message.QCN_J01;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
@@ -33,7 +32,9 @@ import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.appendSegments;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.splitString;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.uniqueId;
 
 /**
  * Producer-side Hl7 marshalling/unmarshalling interceptor 
@@ -43,7 +44,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
@@ -57,7 +58,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
+        var config = getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration();
         var request = exchange.getIn().getBody(Message.class);
         
         Terser requestTerser = null;
@@ -70,7 +71,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         //     2. It must be allowed for the given request message type.
         //     3. The user must not have already filled the DSC segment.
         var supportContinuations = false;
-        if (getEndpoint().isSupportInteractiveContinuation()) {
+        if (getEndpoint(MllpTransactionEndpoint.class).isSupportInteractiveContinuation()) {
             requestTerser = new Terser(request);
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
@@ -169,7 +170,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
 
             // prepare and send automatic cancel request, if necessary.
             // All errors will be ignored
-            if (getEndpoint().isAutoCancel()) {
+            if (getEndpoint(MllpTransactionEndpoint.class).isAutoCancel()) {
                 try {
                     var cancel = createCancelMessage(request, config.getParser());
                     exchange.getIn().setBody(cancel);

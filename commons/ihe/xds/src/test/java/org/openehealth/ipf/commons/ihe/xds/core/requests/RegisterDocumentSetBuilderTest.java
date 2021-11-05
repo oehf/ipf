@@ -4,10 +4,7 @@ import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
 import java.util.List;
 
@@ -17,22 +14,22 @@ public class RegisterDocumentSetBuilderTest {
 
     @Test
     public void supportiveBuilder() throws GSSException {
-        Identifiable patientID = new Identifiable("id3", new Oid("1.3"));
-        SubmissionSet submissionSet = SampleData.createSubmissionSet(patientID);
+        var patientID = new Identifiable("id3", new Oid("1.3"));
+        var submissionSet = SampleData.createSubmissionSet(patientID);
         submissionSet.setEntryUuid(null);
         submissionSet.setUniqueId(null);
         submissionSet.setSubmissionTime((String) null);
-        DocumentEntry document = SampleData.createDocumentEntry(patientID);
+        var document = SampleData.createDocumentEntry(patientID);
         document.setEntryUuid(null);
         document.setUniqueId(null);
-        Folder folder1 = SampleData.createFolder(patientID);
+        var folder1 = SampleData.createFolder(patientID);
         folder1.setEntryUuid(null);
         folder1.setUniqueId(null);
-        Folder folder2 = SampleData.createFolder(patientID);
+        var folder2 = SampleData.createFolder(patientID);
         folder2.setEntryUuid("lol");
         folder2.setUniqueId("2.999.2.3.4");
-        
-        RegisterDocumentSet registerDocuments = RegisterDocumentSet.supportiveBuilderWith(submissionSet)
+
+        var registerDocuments = RegisterDocumentSet.supportiveBuilderWith(submissionSet)
                 .withDocument(document).withFolders(List.of(folder1, folder2)).build();
         assertEquals(3, registerDocuments.getAssociations().size(), "Expecting 3 Association to be created");
         assertEquals(2, registerDocuments.getFolders().size());
@@ -50,15 +47,15 @@ public class RegisterDocumentSetBuilderTest {
     
     @Test
     public void basicBuilder() throws GSSException {
-        Identifiable patientID = new Identifiable("id3", new Oid("1.3"));
-        SubmissionSet submissionSet = SampleData.createSubmissionSet(patientID);
+        var patientID = new Identifiable("id3", new Oid("1.3"));
+        var submissionSet = SampleData.createSubmissionSet(patientID);
         submissionSet.setEntryUuid(null);
         submissionSet.setUniqueId(null);
-        DocumentEntry document = SampleData.createDocumentEntry(patientID);
+        var document = SampleData.createDocumentEntry(patientID);
         document.setEntryUuid(null);
         document.setUniqueId(null);
 
-        RegisterDocumentSet registerDocuments = RegisterDocumentSet.builderWith(submissionSet)
+        var registerDocuments = RegisterDocumentSet.builderWith(submissionSet)
                 .withDocument(document).build();
         
         assertEquals(0, registerDocuments.getAssociations().size());

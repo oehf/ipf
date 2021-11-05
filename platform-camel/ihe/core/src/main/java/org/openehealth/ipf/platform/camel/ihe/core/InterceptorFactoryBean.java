@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.Endpoint;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
@@ -24,8 +23,8 @@ import org.springframework.beans.factory.FactoryBean;
  *
  * @since 3.1
  */
-public class InterceptorFactoryBean<E extends Endpoint, T extends Interceptor<E>>
-        extends InterceptorFactorySupport<E, T> implements FactoryBean<T> {
+public class InterceptorFactoryBean<T extends Interceptor>
+        extends InterceptorFactorySupport<T> implements FactoryBean<T> {
 
     public InterceptorFactoryBean(Class<T> clazz) {
         super(clazz);

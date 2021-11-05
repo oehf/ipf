@@ -182,7 +182,7 @@ abstract public class HeaderUtils {
             Map<String, Object> messageContext, 
             Message message) 
     {
-        Map<String, String> userHeaders = new HashMap<>();
+        var userHeaders = new HashMap<String, String>();
         Map<String, List<String>> httpHeaders = getHeaders(
                 messageContext, PROTOCOL_HEADERS, true, false, null);
         if (httpHeaders != null) {

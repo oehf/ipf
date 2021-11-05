@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 
 import java.net.InetSocketAddress;
 
@@ -31,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
  * processing an exchange.
  */
-public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport {
 
     private final AuditContext auditContext;
 

@@ -63,7 +63,7 @@ public abstract class XdsHl7v2Renderer {
             Class<? extends Hl7v2Based> xdsClass,
             int... fieldNumbers)
     {
-        Collection<Integer> collection = new HashSet<>(fieldNumbers.length);
+        var collection = new HashSet<Integer>(fieldNumbers.length);
         for (var number : fieldNumbers) {
             collection.add(number - 1);
         }

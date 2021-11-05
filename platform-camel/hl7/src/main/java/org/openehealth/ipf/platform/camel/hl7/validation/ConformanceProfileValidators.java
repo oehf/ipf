@@ -34,7 +34,6 @@ import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -110,7 +109,7 @@ public final class ConformanceProfileValidators {
     }
 
     private static void throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException... exceptions) {
-        List<ca.uhn.hl7v2.validation.ValidationException> fatalExceptions = new ArrayList<>();
+        var fatalExceptions = new ArrayList<ca.uhn.hl7v2.validation.ValidationException>();
         if (exceptions != null) {
             for (var exception : exceptions) {
                 if (exception.getSeverity().equals(Severity.ERROR)) {

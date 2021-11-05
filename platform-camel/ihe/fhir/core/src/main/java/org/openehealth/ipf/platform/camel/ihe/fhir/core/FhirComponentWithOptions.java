@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -55,7 +54,7 @@ public abstract class FhirComponentWithOptions<AuditDatasetType extends FhirAudi
         FhirTransactionOptionsProvider<AuditDatasetType, O> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", FhirTransactionOptionsProvider.class, optionsProviderSupplier.get());
         var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
-        List<O> itiOptions = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());
+        var itiOptions = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());
         if (itiOptions.isEmpty()) {
             throw new IllegalArgumentException("Options parameter for " + getInteractionId() + " is invalid");
         }

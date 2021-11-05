@@ -29,7 +29,6 @@ import java.util.Set;
  */
 public interface Iti78Constants {
 
-
     Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
             IAnyResource.SP_RES_ID,
             Patient.SP_IDENTIFIER,

@@ -70,7 +70,7 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest 
         if (list == null) {
             return Collections.emptyList();
         }
-        List<ObjectReference> objectReferenceList = new ArrayList<>();
+        var objectReferenceList = new ArrayList<ObjectReference>();
         for (var objRefType: list.getObjectRef()){
             var ref = new ObjectReference(objRefType.getId(), objRefType.getHome());
             objectReferenceList.add(ref);

@@ -67,7 +67,7 @@ public class DefaultCamelTlsParameters extends CustomTlsParameters implements Ca
         }
 
         if (enabledCipherSuites != null) {
-            CipherSuitesParameters cipherSuitesParameters = new CipherSuitesParameters();
+            var cipherSuitesParameters = new CipherSuitesParameters();
             cipherSuitesParameters.setCipherSuite(Arrays.asList(split(enabledCipherSuites)));
             sslContextParameters.setCipherSuites(cipherSuitesParameters);
         }

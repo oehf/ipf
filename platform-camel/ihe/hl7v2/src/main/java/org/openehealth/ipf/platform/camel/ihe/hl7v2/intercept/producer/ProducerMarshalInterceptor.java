@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
  * Producer-side Hl7 marshalling/unmarshalling interceptor.
  * @author Dmytro Rud
  */
-public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ProducerMarshalInterceptor extends InterceptorSupport {
 
     /**
      * Marshals the request, sends it to the route, and unmarshals the response. 
@@ -43,6 +43,6 @@ public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
         // unmarshal
         message = Exchanges.resultMessage(exchange);
         var responseString = message.getBody(String.class);
-        message.setBody(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
+        message.setBody(getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser().parse(responseString));
     }
 }

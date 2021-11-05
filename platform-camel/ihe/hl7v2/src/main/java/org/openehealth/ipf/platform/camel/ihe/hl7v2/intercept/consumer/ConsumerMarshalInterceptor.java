@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerMarshalInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerMarshalInterceptor.class);
 
 
@@ -49,7 +48,7 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
     @Override
     public void process(Exchange exchange) throws Exception {
         Message originalMessage = null;
-        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var parser = getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser();
 
         var inMessage = exchange.getIn();
         var originalString = inMessage.getBody(String.class);
@@ -61,7 +60,7 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
         } catch (HL7Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
-            var nak = getEndpoint().getNakFactory().createDefaultNak(e);
+            var nak = getEndpoint(HL7v2Endpoint.class).getNakFactory().createDefaultNak(e);
             resultMessage(exchange).setBody(nak);
         }
 
@@ -87,7 +86,7 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
                 // With Netty, we treat unhandlable response types like other errors
                 LOG.error("Message processing failed", e);
                 resultMessage(exchange).setBody(
-                        getEndpoint().getNakFactory().createNak(originalMessage, e));
+                        getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, e));
             }
         }
         

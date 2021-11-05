@@ -140,7 +140,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             // in a separate thread: run the route, send its result synchronously
             // to the deferred response URI, ignore all errors and ACKs
             var mdcContextMap = MDC.getCopyOfContextMap();
-            Runnable processRouteAndNotifyTask = () -> {
+            var processRouteAndNotifyTask = (Runnable) () -> {
                 try {
                     MDC.setContextMap(mdcContextMap);
 

@@ -190,16 +190,16 @@ public class Ebrs30MarshalingTest {
 
         var unmarshalled = unmarshaller.unmarshal(file);
         var original = (SubmitObjectsRequest) unmarshalled;
-        int numberOfSlotsInFirstDoc = new EbXMLSubmitObjectsRequest30(original).getExtrinsicObjects().get(0).getSlots()
+        var numberOfSlotsInFirstDoc = new EbXMLSubmitObjectsRequest30(original).getExtrinsicObjects().get(0).getSlots()
                 .size();
 
         var marshaller = context.createMarshaller();
         marshaller.setListener(new XdsJaxbDataBinding().getMarshallerListener());
-        StringWriter writer = new StringWriter();
+        var writer = new StringWriter();
         marshaller.marshal(original, writer);
 
         var unmarshalledSecond = (SubmitObjectsRequest) unmarshaller.unmarshal(new StringReader(writer.toString()));
-        int numberOfSlotsInSecondDoc = new EbXMLSubmitObjectsRequest30(unmarshalledSecond).getExtrinsicObjects().get(0)
+        var numberOfSlotsInSecondDoc = new EbXMLSubmitObjectsRequest30(unmarshalledSecond).getExtrinsicObjects().get(0)
                 .getSlots().size();
 
         assertEquals(numberOfSlotsInFirstDoc, numberOfSlotsInSecondDoc,

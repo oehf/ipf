@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -51,7 +50,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapStringParameter() throws IOException {
-        Map<String, Object> dynamicParams = new HashMap<>();
+        var dynamicParams = new HashMap<String, Object>();
         dynamicParams.put("language", "English");
         var params = new Object[]{"/xquery/string-q2.xq", dynamicParams};
         var zapResult1 = transformer.zap(source("/xquery/string.xml"), params);
@@ -70,7 +69,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapLocalFunction() throws IOException {
-        Map<String, Object> dynamicEvalParams = new HashMap<>();
+        var dynamicEvalParams = new HashMap<String, Object>();
         dynamicEvalParams.put("language", "Bulgarian");
         dynamicEvalParams.put("author_name", "John");
         var params = new Object[]{"/xquery/string-q3.xq", dynamicEvalParams};
@@ -92,7 +91,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapParametrisedConstructor() throws IOException {
-        Map<String, Object> configParams = new HashMap<>();
+        var configParams = new HashMap<String, Object>();
         configParams.put(FeatureKeys.PRE_EVALUATE_DOC_FUNCTION, Boolean.TRUE);
         var localTransformer = new XqjTransmogrifier<>(String.class, configParams);
         var zapResult = localTransformer.zap(source("/xquery/string.xml"), "/xquery/string-q5.xq");

@@ -54,8 +54,8 @@ public class AuditRecordServer {
         if (args.length < 2) {
             LOG.error("Usage: AuditRecordServer <TLS-Port> <UDP-Port> (-1 for not launching channel, 0 for using a random port)");
         } else {
-            final Optional<SyslogServer<?>> tlsSyslogServer = getSyslogServer("TLS", TlsSyslogServer::new, Integer.parseInt(args[0]));
-            final Optional<SyslogServer<?>> udpSyslogServer = getSyslogServer("UDP", UdpSyslogServer::new, Integer.parseInt(args[1]));
+            final var tlsSyslogServer = getSyslogServer("TLS", TlsSyslogServer::new, Integer.parseInt(args[0]));
+            final var udpSyslogServer = getSyslogServer("UDP", UdpSyslogServer::new, Integer.parseInt(args[1]));
             LOG.info("Waiting for requests...");
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 tlsSyslogServer.ifPresent(SyslogServer::stop);

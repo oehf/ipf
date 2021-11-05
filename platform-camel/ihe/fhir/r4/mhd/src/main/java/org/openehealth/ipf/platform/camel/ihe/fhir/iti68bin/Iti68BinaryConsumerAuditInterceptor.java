@@ -38,8 +38,8 @@ import javax.servlet.http.HttpServletRequest;
  * @since 3.7
  */
 class Iti68BinaryConsumerAuditInterceptor
-        extends InterceptorSupport<Iti68BinaryEndpoint>
-        implements AuditInterceptor<FhirAuditDataset, Iti68BinaryEndpoint> {
+        extends InterceptorSupport
+        implements AuditInterceptor<FhirAuditDataset> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Iti68BinaryConsumerAuditInterceptor.class);
 
@@ -51,7 +51,7 @@ class Iti68BinaryConsumerAuditInterceptor
 
     @Override
     public AuditStrategy<FhirAuditDataset> getAuditStrategy() {
-        return getEndpoint().getServerAuditStrategy();
+        return getEndpoint(Iti68BinaryEndpoint.class).getServerAuditStrategy();
     }
 
     @Override

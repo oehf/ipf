@@ -87,7 +87,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLAssociation> getAssociations() {
-        List<EbXMLAssociation> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLAssociation>();
         for (var identifiable : getContents()) {
             var association = cast(identifiable, AssociationType1.class);
             if (association != null) {
@@ -100,7 +100,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLClassification> getClassifications() {
-        List<EbXMLClassification> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLClassification>();
         for (var identifiable : getContents()) {
             var classification = cast(identifiable, ClassificationType.class);
             if (classification != null) {
@@ -115,7 +115,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     public List<EbXMLExtrinsicObject> getExtrinsicObjects(String... objectTypes) {
         noNullElements(objectTypes, "objectTypes cannot be null or contain null elements");
 
-        List<EbXMLExtrinsicObject> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLExtrinsicObject>();
         for (var identifiable : getContents()) {
             var extrinsic = cast(identifiable, ExtrinsicObjectType.class);
             if (extrinsic != null) {
@@ -133,7 +133,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLExtrinsicObject> getExtrinsicObjects() {
-        List<EbXMLExtrinsicObject> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLExtrinsicObject>();
         for (var identifiable : getContents()) {
             var extrinsic = cast(identifiable, ExtrinsicObjectType.class);
             if (extrinsic != null) {
@@ -150,7 +150,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
         var acceptedIds = getAcceptedIds(classificationNode);
         
-        List<EbXMLRegistryPackage> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLRegistryPackage>();
         for (var identifiable : getContents()) {
             var regPackage = cast(identifiable, RegistryPackageType.class);
             if (matchesFilter(regPackage, acceptedIds, classificationNode)) {
@@ -163,7 +163,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLRegistryPackage> getRegistryPackages() {
-        List<EbXMLRegistryPackage> results = new ArrayList<>();
+        var results = new ArrayList<EbXMLRegistryPackage>();
         for (var identifiable : getContents()) {
             var regPackage = cast(identifiable, RegistryPackageType.class);
             if (regPackage != null) {
@@ -203,7 +203,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     }
 
     private Set<String> getAcceptedIds(String classificationNode) {
-        Set<String> acceptedIds = new HashSet<>();
+        var acceptedIds = new HashSet<String>();
         for (var identifiable : getContents()) {
             var classification = cast(identifiable, ClassificationType.class);
             if (classification != null && classificationNode.equals(classification.getClassificationNode())) {

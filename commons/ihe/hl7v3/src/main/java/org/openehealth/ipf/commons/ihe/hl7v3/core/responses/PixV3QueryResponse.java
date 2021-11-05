@@ -113,7 +113,7 @@ public class PixV3QueryResponse extends PixV3QueryRequest {
      */
     public static PixV3QueryResponse fromQuery(final PixV3QueryRequest query) {
         Objects.requireNonNull(query);
-        final PixV3QueryResponse response = new PixV3QueryResponse();
+        final var response = new PixV3QueryResponse();
         response.setQueryPatientId(query.getQueryPatientId());
         response.getDataSourceOids().addAll(query.getDataSourceOids());
         response.setSender(query.getReceiver()); // Receiver and sender are inverted in the response

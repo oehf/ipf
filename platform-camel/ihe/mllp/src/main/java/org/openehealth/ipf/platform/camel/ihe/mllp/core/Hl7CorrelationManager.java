@@ -37,7 +37,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     @Override
     public String getRequestCorrelationId(Object request) {
         try {
-            Message message = request instanceof Message ? (Message) request : parser.parse(request.toString());
+            var message = request instanceof Message ? (Message) request : parser.parse(request.toString());
             return new Terser(message).get("/MSH-10");
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
@@ -47,7 +47,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     @Override
     public String getResponseCorrelationId(Object response) {
         try {
-            Message message = response instanceof Message ? (Message) response : parser.parse(response.toString());
+            var message = response instanceof Message ? (Message) response : parser.parse(response.toString());
             return new Terser(message).get("/MSA-2");
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);

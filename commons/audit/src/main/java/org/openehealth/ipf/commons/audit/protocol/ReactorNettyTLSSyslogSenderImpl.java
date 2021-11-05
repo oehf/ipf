@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.audit.protocol;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
-import io.netty.handler.ssl.SslContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.openehealth.ipf.commons.audit.TlsParameters;
@@ -111,8 +110,8 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
             this.port = port;
 
             // Configure the client.
-            LoopResources loop = LoopResources.create("event-loop", 1, workerThreads, true);
-            SslContext sslContext = NettyUtils.initSslContext(tlsParameters, true);
+            var loop = LoopResources.create("event-loop", 1, workerThreads, true);
+            var sslContext = NettyUtils.initSslContext(tlsParameters, true);
             this.tcpClient = TcpClient.create()
                     .host(host)
                     .port(port)
