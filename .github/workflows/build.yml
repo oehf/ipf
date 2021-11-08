@@ -1,0 +1,41 @@
+name: Build IPF with Maven
+
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  MAVEN_OPTS: -Xmx2048m
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 8 ]
+    name: Java ${{ matrix.java }} build
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml
+
+#   Publish somewhere
+#   Maybe in a separate action file
+#   for publishing/releasing: https://github.com/marketplace/actions/action-maven-publish
+#   see https://github.com/organizations/oehf/settings/secrets/actions
+      - name: Deploy to Sonatype Snapshot Repo
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          nexus_username: ${{ secrets.nexus_username }}
+          nexus_password: ${{ secrets.nexus_password }}
