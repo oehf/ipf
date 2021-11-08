@@ -19,10 +19,8 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.CamelExchangeException
-import org.apache.camel.Exchange
-import org.apache.camel.Predicate
-import org.apache.camel.Processor
+import io.netty.handler.timeout.ReadTimeoutException
+import org.apache.camel.*
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.Disabled
@@ -35,6 +33,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.test.context.ContextConfiguration
 
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+
 import static org.junit.jupiter.api.Assertions.*
 
 /**
@@ -45,6 +48,9 @@ import static org.junit.jupiter.api.Assertions.*
 class TestIti21 extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
+
+    @EndpointInject("mock:trace")
+    private MockEndpoint mockEndpoint
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
@@ -87,6 +93,24 @@ class TestIti21 extends AbstractMllpTest {
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
+    def doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+        assertRSP(msg)
+        assertEquals(timeoutString, msg.QAK[1].value)
+    }
+
+    def doTestWaitAndAssertTimeout(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        try {
+            def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+            fail("Assuming timeout after $timeout ms")
+        } catch (ReadTimeoutException ignored) {
+        }
+    }
+
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
@@ -102,15 +126,14 @@ class TestIti21 extends AbstractMllpTest {
         HapiContext hapiContext = appContext.getBean(HapiContext.class)
         Message qbp = hapiContext.getPipeParser().parse(msg)
         Map<String, Object> headers = [
-                (Constants.TRACE_ID) : 'trace_id',
-                (Constants.SPAN_ID) : 'span_id',
-                (Constants.PARENT_SPAN_ID) : 'parent_span_id',
-                (Constants.SAMPLED) : '1',
-                (Constants.FLAGS) : '1'
+                (Constants.TRACE_ID)      : 'trace_id',
+                (Constants.SPAN_ID)       : 'span_id',
+                (Constants.PARENT_SPAN_ID): 'parent_span_id',
+                (Constants.SAMPLED)       : '1',
+                (Constants.FLAGS)         : '1'
         ]
 
         // Expect that the headers being sent arrive at the mock endpoint
-        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace")
         mockEndpoint.expectedMessageCount(1)
         mockEndpoint.expectedMessagesMatches(new Predicate() {
             @Override
@@ -159,6 +182,36 @@ class TestIti21 extends AbstractMllpTest {
     @Test
     void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('QBP^Q22^QBP_Q26', '2.5')
+    }
+
+    @Test
+    void testTestTimeoutHandling() {
+        // Timeout after 500ms, but response takes 1000ms => Exception
+        doTestWaitAndAssertTimeout("pdq-iti21://localhost:18220?producerPoolMaxActive=1&timeout=500", 1000)
+        // Long timeout, response takes 1500ms => check that response is not from previous request, that is handled by now
+        doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?producerPoolMaxActive=1&timeout=5000", 1500)
+    }
+
+    @Test
+    void testStressTestWithDefaultSetup() {
+        Random random = new Random(System.currentTimeMillis())
+        int messages = 100
+        ExecutorService executorService = Executors.newFixedThreadPool(10)
+        CountDownLatch latch = new CountDownLatch(messages)
+        try {
+            for (int i = 0; i < messages; i++) {
+                int delay = random.nextInt(messages)
+                executorService.submit(() -> {
+                    doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?timeout=10000", delay)
+                    latch.countDown()
+                })
+            }
+            assertTrue(latch.await(10, TimeUnit.SECONDS), () -> 'Responses not arrived: ' + latch.count)
+        } finally {
+            executorService.shutdownNow()
+            executorService.awaitTermination(5, TimeUnit.SECONDS)
+        }
+
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
