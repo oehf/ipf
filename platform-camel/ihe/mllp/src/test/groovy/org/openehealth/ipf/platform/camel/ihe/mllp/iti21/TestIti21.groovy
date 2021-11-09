@@ -48,13 +48,15 @@ import static org.junit.jupiter.api.Assertions.*
 class TestIti21 extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
+    private Random random = new Random(System.currentTimeMillis())
 
     @EndpointInject("mock:trace")
     private MockEndpoint mockEndpoint
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
+        def msgId = UUID.randomUUID().toString()
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
-                "20081031112704||${msh9}|324406609|P|${msh12}|||ER|||||\n"
+                "20081031112704||${msh9}|${msgId}|P|${msh12}|||ER|||||\n"
         if (needQpd) {
             s += 'QPD|IHE PDQ Query|1402274727|@PID.3.1^12345678~@PID.3.2.1^BLABLA~@PID.3.4.2^1.2.3.4~@PID.3.4.3^KRYSO|||||\n'
         }
@@ -83,7 +85,7 @@ class TestIti21 extends AbstractMllpTest {
 
         def messages = auditSender.messages
         assertEquals(2, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        messages.any {it.eventIdentification.eventID == EventIdCode.SecurityAlert}
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -193,16 +195,23 @@ class TestIti21 extends AbstractMllpTest {
     }
 
     @Test
-    void testStressTestWithDefaultSetup() {
-        Random random = new Random(System.currentTimeMillis())
-        int messages = 100
-        ExecutorService executorService = Executors.newFixedThreadPool(10)
+    void stressTestWithDefaultSetup() {
+        stressTest(200, 20, "pdq-iti21://localhost:18220?timeout=10000")
+    }
+
+    @Test
+    void stressTestWithoutProducerPoolSetup() {
+        stressTest(50, 10, "pdq-iti21://localhost:18220?producerPoolEnabled=false&timeout=10000&correlationManager=#hl7CorrelationManager")
+    }
+
+    private void stressTest(int messages, int threads, String endpoint) {
+        ExecutorService executorService = Executors.newFixedThreadPool(threads)
         CountDownLatch latch = new CountDownLatch(messages)
         try {
             for (int i = 0; i < messages; i++) {
                 int delay = random.nextInt(messages)
                 executorService.submit(() -> {
-                    doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?timeout=10000", delay)
+                    doTestWaitAndAssertCorrectResponse(endpoint, delay)
                     latch.countDown()
                 })
             }

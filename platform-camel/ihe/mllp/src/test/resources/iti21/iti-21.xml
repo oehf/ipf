@@ -63,6 +63,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         </camel:clientParameters>
     </camel:sslContextParameters>
 
+    <bean id="hl7CorrelationManager" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7CorrelationManager">
+        <constructor-arg ref="hapiContext"/>
+    </bean>
+
     <!--
     <bean id="sendTracingData"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor$Factory"/>

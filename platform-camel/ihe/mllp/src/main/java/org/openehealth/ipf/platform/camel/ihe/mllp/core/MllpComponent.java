@@ -114,7 +114,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, nettyParameters.containsKey("sslContextParameters")));
         }
         if (nettyParameters.containsKey("sslContext")) {
-            nettyParameters.put("sslContextParameters", new StaticSSLContextParameters(getAndRemoveParameter(parameters, "sslContext", SSLContext.class)));
+            nettyParameters.put("sslContextParameters", new StaticSSLContextParameters(getAndRemoveOrResolveReferenceParameter(parameters, "sslContext", SSLContext.class)));
         }
         var nettyConfiguration = super.parseConfiguration(configuration, remaining, nettyParameters);
 

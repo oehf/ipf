@@ -50,6 +50,11 @@ class TestSecureIti21 extends AbstractMllpTest {
     }
 
     @Test
+    void testHappyCaseAndAuditSecureWithSslContext() {
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#iti21SslContext&timeout=${TIMEOUT}", 2)
+    }
+
+    @Test
     void testServerDoesNotNeedToAcceptCertificate() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContextParameters=#iti21SslContextParametersWithoutKeystore&timeout=${TIMEOUT}", 2)
     }

@@ -56,6 +56,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
         <camel:serverParameters clientAuthentication="NONE"/>
     </camel:sslContextParameters>
 
+    <bean id="iti21SslContext" factory-bean="iti21SslContextParameters" factory-method="createSSLContext">
+        <constructor-arg ref="camelContext"/>
+    </bean>
+
+
     <camel:sslContextParameters id="iti21SslContextTls13Parameters">
         <camel:secureSocketProtocols>
             <camel:secureSocketProtocol>TLSv1.3</camel:secureSocketProtocol>

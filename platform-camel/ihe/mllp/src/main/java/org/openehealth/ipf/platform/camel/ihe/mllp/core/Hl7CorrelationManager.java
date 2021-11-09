@@ -22,11 +22,15 @@ import ca.uhn.hl7v2.parser.PipeParser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.component.netty.TimeoutCorrelationManagerSupport;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Correlation Manager used when duplexing message over a single connection
  */
 public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Hl7CorrelationManager.class);
 
     private PipeParser parser;
 
@@ -38,7 +42,9 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     public String getRequestCorrelationId(Object request) {
         try {
             var message = request instanceof Message ? (Message) request : parser.parse(request.toString());
-            return new Terser(message).get("/MSH-10");
+            var msgId = new Terser(message).get("/MSH-10");
+            LOG.debug("Recorded qequest with msg id {}", msgId);
+            return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
         }
@@ -48,7 +54,9 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     public String getResponseCorrelationId(Object response) {
         try {
             var message = response instanceof Message ? (Message) response : parser.parse(response.toString());
-            return new Terser(message).get("/MSA-2");
+            var msgId = new Terser(message).get("/MSA-2");
+            LOG.debug("Recorded response with msg id {}", msgId);
+            return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
         }
