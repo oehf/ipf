@@ -72,7 +72,7 @@ class TestIti21Continuations extends AbstractMllpTest {
         Message msg = send(endpointUri(28210, true, true, true, true, false),
                            format(REQUEST_MESSAGE, currentTimeMillis()))
         assert 4 == msg.QUERY_RESPONSEReps
-        assert 2 == auditSender.messages.size()
+        assertAuditEvents { it.messages.size() == 2 }
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
@@ -85,7 +85,7 @@ class TestIti21Continuations extends AbstractMllpTest {
         def msg = send(endpointUri(28211, true, false, false, false, false),
                        format(REQUEST_MESSAGE, currentTimeMillis()))
         assert 4 == msg.QUERY_RESPONSEReps
-        assert 2 == auditSender.messages.size()
+        assertAuditEvents { it.messages.size() == 2 }
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
@@ -103,7 +103,7 @@ class TestIti21Continuations extends AbstractMllpTest {
             Message msg = send("pdq-iti21://localhost:28210", requestMsg)
             --hitsLeft
             assert 1 == msg.QUERY_RESPONSEReps
-            assert 2 == auditSender.messages.size()
+            assertAuditEvents { it.messages.size() == 2 }
             assert '4' == msg.QAK[4].value
             assert '1' == msg.QAK[5].value
             assert "${hitsLeft}" == msg.QAK[6].value

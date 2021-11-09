@@ -53,7 +53,7 @@ class TestIti10 extends AbstractMllpTest {
         final String body = getMessageString10('ADT^A31^ADT_A05', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
 
     /**
@@ -106,7 +106,7 @@ class TestIti10 extends AbstractMllpTest {
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -155,7 +155,7 @@ class TestIti10 extends AbstractMllpTest {
             ex = e
         }
         assertFalse(failed, "Expected HL7Exception but got ${ex} with cause ${ex.cause}")
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 
 }

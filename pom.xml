@@ -54,6 +54,7 @@
         <site-plugin-version>3.9.1</site-plugin-version>
 
         <!-- Dependency version properties -->
+        <awaitility-version>4.1.1</awaitility-version>
         <easymock-version>4.3</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>30.1.1-jre</guava-version>
@@ -157,6 +158,12 @@
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

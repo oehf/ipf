@@ -90,7 +90,7 @@ class TestIti8 extends AbstractMllpTest {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
     
     /**
@@ -139,7 +139,7 @@ class TestIti8 extends AbstractMllpTest {
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -184,7 +184,7 @@ class TestIti8 extends AbstractMllpTest {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
 

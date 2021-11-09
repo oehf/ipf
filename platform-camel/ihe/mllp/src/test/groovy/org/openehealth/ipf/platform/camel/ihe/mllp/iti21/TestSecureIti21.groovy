@@ -91,10 +91,11 @@ class TestSecureIti21 extends AbstractMllpTest {
             fail()
         } catch (Exception ignored) {
         }
-        Thread.sleep(100) // wait a bit until the server has recorded the audit
-        def messages = auditSender.messages
-        assertEquals(2, messages.size())
-        messages.any {it.eventIdentification.eventID == EventIdCode.SecurityAlert}
+        assertAuditEvents {
+            it.messages.any {
+                EventIdCode.SecurityAlert == it.eventIdentification.eventID
+            }
+        }
     }
 
     @Test
@@ -104,10 +105,10 @@ class TestSecureIti21 extends AbstractMllpTest {
         )
     }
 
-    def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
+    def doTestHappyCaseAndAudit(String endpointUri, int minExpectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertTrue(expectedAuditItemsCount <= auditSender.messages.size())
+        assertAuditEvents { minExpectedAuditItemsCount <= it.messages.size() }
     }
 }

@@ -73,7 +73,7 @@ class TestSecureIti21Default extends AbstractMllpTest {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() >= expectedAuditItemsCount }
     }
 
 }

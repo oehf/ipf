@@ -63,7 +63,7 @@ class TestIti9 extends AbstractMllpTest {
         final String body = getMessageString('QBP^Q23', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
     
     /**
@@ -112,7 +112,7 @@ class TestIti9 extends AbstractMllpTest {
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -156,7 +156,7 @@ class TestIti9 extends AbstractMllpTest {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -168,7 +168,7 @@ class TestIti9 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q23', '2.5')
         def endpointUri = "pix-iti9://localhost:18093?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K23')
     }
     
@@ -180,7 +180,7 @@ class TestIti9 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q23', '2.5')
         def endpointUri = "pix-iti9://localhost:18094?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K23')
     }
 }

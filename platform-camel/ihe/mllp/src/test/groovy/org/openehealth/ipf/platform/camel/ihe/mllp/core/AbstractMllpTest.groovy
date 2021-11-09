@@ -22,20 +22,21 @@ import org.apache.camel.ProducerTemplate
 import org.apache.camel.spi.Synchronization
 import org.apache.camel.support.DefaultExchange
 import org.apache.camel.test.spring.junit5.CamelSpringTest
+import org.awaitility.Awaitility
 import org.junit.jupiter.api.AfterEach
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.support.ClassPathXmlApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
+import java.util.function.Predicate
 
 import static org.junit.jupiter.api.Assertions.*
 
 /**
  * Generic Unit Test container for MLLP components.
- * 
+ *
  * @author Dmytro Rud
  */
 
@@ -50,17 +51,15 @@ abstract class AbstractMllpTest {
     protected ProducerTemplate producerTemplate
 
     @Autowired
-    protected AbstractMockedAuditMessageQueue auditSender
+    AbstractMockedAuditMessageQueue auditSender
 
     static String TIMEOUT = '15000'
-
 
     @AfterEach
     void tearDown() {
         auditSender?.clear()
     }
-    
-    
+
     /**
      * Checks whether the message represents a (positive) ACK.
      */
@@ -68,8 +67,8 @@ abstract class AbstractMllpTest {
         assertEquals('ACK', msg.MSH[9][1].value)
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
-    
-    
+
+
     /**
      * Checks whether the message represents a positive ReSPonse.
      */
@@ -87,7 +86,7 @@ abstract class AbstractMllpTest {
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
         assertFalse(msg.ERR.empty)
     }
-    
+
     /**
      * Checks whether the message represents a NAK with segments QPD and QAK.
      */
@@ -99,7 +98,13 @@ abstract class AbstractMllpTest {
         assertFalse(msg.QAK.empty, "QAK segment must be present")
         assertFalse(msg.QPD.empty, "QPD segment must be present")
     }
-    
+
+    void assertAuditEvents(Predicate<AbstractMockedAuditMessageQueue> check, long maxWait = 100) {
+        Awaitility.await()
+                .pollDelay(maxWait >> 2, TimeUnit.MILLISECONDS)
+                .atMost(maxWait, TimeUnit.MILLISECONDS)
+                .until { check.test(auditSender) }
+    }
     /**
      * Sends a request into the route.
      */
@@ -124,8 +129,8 @@ abstract class AbstractMllpTest {
         inExchange.in.body = body
         producerTemplate.asyncCallback(endpoint, inExchange, s)
     }
-    
-    
+
+
     /**
      * Returns a sample HL7 message as String. 
      */
@@ -136,7 +141,7 @@ abstract class AbstractMllpTest {
                 msh12 +
                 '|||ER\n' +
                 'EVN|A01|20081204114742\n'
-        if(needPid) {
+        if (needPid) {
             s = s + 'PID|1||001^^^XREF2005~002^^^HIMSS2005||Multiple^Christof^Maria^Prof.^^^L|Eisner^^^^^^B|' +
                     '19530429|M|||Bahnhofstr. 1^^Testort^^01234^DE^H|||||||AccNr01^^^ANICPA|' +
                     '111-222-333|\n'
@@ -155,7 +160,7 @@ abstract class AbstractMllpTest {
                 msh12 +
                 '|||ER\n' +
                 'EVN|A31|20081204114742\n'
-        if(needPid) {
+        if (needPid) {
             s = s + 'PID|||001^^^XREF2005&1.2.3&ISO~002^^^HIMSS2005&1.2.3&ISO||Multiple^Christof^Maria^Prof.^^^L||\n'
         }
         s = s + 'PV1||N|\n'

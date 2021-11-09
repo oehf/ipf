@@ -80,19 +80,20 @@ class TestIti21 extends AbstractMllpTest {
         try {
             send("pdq-iti21://localhost:18211?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (CamelExchangeException expected) {
+        } catch (CamelExchangeException ignored) {
         }
-
-        def messages = auditSender.messages
-        assertEquals(2, messages.size())
-        messages.any {it.eventIdentification.eventID == EventIdCode.SecurityAlert}
+        assertAuditEvents() {
+            it.messages.any {
+                it.eventIdentification.eventID == EventIdCode.SecurityAlert
+            }
+        }
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { expectedAuditItemsCount <= it.messages.size() }
     }
 
     def doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
@@ -116,10 +117,11 @@ class TestIti21 extends AbstractMllpTest {
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-        def messages = auditSender.messages
-        assertEquals(3, messages.size())
-        LOG.warn("{}", messages)
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        assertAuditEvents {
+            it.messages.any {
+                EventIdCode.SecurityAlert == it.eventIdentification.eventID
+            }
+        }
     }
 
     @Disabled
@@ -239,7 +241,7 @@ class TestIti21 extends AbstractMllpTest {
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents{ it.messages.empty }
     }
 
     /**
@@ -286,7 +288,7 @@ class TestIti21 extends AbstractMllpTest {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents{ it.messages.empty }
     }
 
     /**
@@ -297,7 +299,7 @@ class TestIti21 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18213?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents{ it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -309,7 +311,7 @@ class TestIti21 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18219?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents{ it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -322,7 +324,7 @@ class TestIti21 extends AbstractMllpTest {
                         'QID|dummy|gummy||\n'
         def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents{ it.messages.empty }
         assertACK(msg)
     }
 }
