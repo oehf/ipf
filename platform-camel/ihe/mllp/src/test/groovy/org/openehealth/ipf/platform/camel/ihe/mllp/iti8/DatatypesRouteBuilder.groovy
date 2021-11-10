@@ -27,7 +27,6 @@ import java.nio.ByteBuffer
 
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
 
 /**
@@ -84,14 +83,14 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new PipeParser().encode(x)
              assertTrue(x instanceof String)
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
              
          // HAPI Message
          case 1:
              assertTrue(x instanceof Message)
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
 
          // InputStream
@@ -100,7 +99,7 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new ByteArrayInputStream(x.getBytes())
              assertTrue(x instanceof InputStream)
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
 
          // NIO ByteBuffer
@@ -109,7 +108,7 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = ByteBuffer.wrap(x)
              assertTrue(x instanceof ByteBuffer)
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
              
          // byte[]
@@ -117,7 +116,7 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new PipeParser().encode(x).getBytes()
              assertTrue(x instanceof byte[])
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
              
          // Known data type (a String), header set to "ERROR" (and should be ignored)
@@ -125,22 +124,22 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new PipeParser().encode(x)
              assertTrue(x instanceof String)
              assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AE)
              break
              
          // Unsupported data type, header set to "OK"
          case 6:
              x = Math.PI
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AA)
              break
              
          // Null body, header set to "OK"
          case 7:
-             resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
+             exchange.message.body = null
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AA)
              break
 
              
@@ -150,28 +149,28 @@ class DatatypesRouteBuilder extends RouteBuilder {
          case 8:
              x = Math.PI
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = null
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, null)
              break
 
          // Unsupported data type, header set to garbage
          case 9:
              x = Math.PI
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = "The world is not enough"
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, 'The world is not enough')
              break
              
          // Null body, header not set 
          case 10:
-             resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = null
+             exchange.message.body = null
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, null)
              break
 
          // Null body, header set to garbage 
          case 11:
-             resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = "But it is such a perfect place to start"
+             exchange.message.body = null
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, 'But it is such a perfect place to start')
              break
 
              
@@ -181,14 +180,14 @@ class DatatypesRouteBuilder extends RouteBuilder {
          case 12:
              x = Math.PI
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AE)
              break
 
          // Null body, header set to "FAILURE"
          case 13:
-             resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
+             exchange.message.body = null
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AE)
              break
          
          // Exception as data, header not set
@@ -196,7 +195,7 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new Exception('Vorbei sind die Ferien')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
+             exchange.message.body = x
              break
              
          // Exception thrown, header not set
@@ -211,8 +210,8 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new Exception('Die Zeit ist vergangen')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
-             resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
+             exchange.message.body = x
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AA)
              break
              
          // Exception thrown, header set to "OK" (and should be ignored)
@@ -220,7 +219,7 @@ class DatatypesRouteBuilder extends RouteBuilder {
              x = new Exception('So schnell, wie der Wind')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
+             exchange.message.setHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AcknowledgmentCode.AA)
              throw x
 
          }

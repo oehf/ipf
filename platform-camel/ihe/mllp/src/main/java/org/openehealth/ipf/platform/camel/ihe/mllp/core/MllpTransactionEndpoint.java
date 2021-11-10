@@ -78,7 +78,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         if (isSupportUnsolicitedFragmentation()) {
             initialChain.add(new ConsumerRequestDefragmenterInterceptor());
         }
-        initialChain.add(new ConsumerMarshalInterceptor());
+        initialChain.add(new ConsumerMarshalInterceptor(getConfig().isCopyOriginalMessage()));
         initialChain.add(new ConsumerRequestAcceptanceInterceptor());
         if (isSupportInteractiveContinuation()) {
             initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
@@ -103,8 +103,8 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
             initialChain.add(new ProducerRequestFragmenterInterceptor());
         }
         initialChain.add(isSupportInteractiveContinuation()
-                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
-                : new ProducerMarshalInterceptor());
+                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(getCharsetName())
+                : new ProducerMarshalInterceptor(getCharsetName()));
         initialChain.add(new ProducerResponseAcceptanceInterceptor());
         if (isAudit()) {
             initialChain.add(new ProducerAuditInterceptor<AuditDatasetType>(getAuditContext()));

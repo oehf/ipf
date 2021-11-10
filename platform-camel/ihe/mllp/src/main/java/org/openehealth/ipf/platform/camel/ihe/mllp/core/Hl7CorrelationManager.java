@@ -41,9 +41,9 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     @Override
     public String getRequestCorrelationId(Object request) {
         try {
-            var message = request instanceof Message ? (Message) request : parser.parse(request.toString());
+            Message message = getMessage(request);
             var msgId = new Terser(message).get("/MSH-10");
-            LOG.debug("Recorded qequest with msg id {}", msgId);
+            LOG.debug("Recorded request with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
@@ -53,12 +53,23 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
     @Override
     public String getResponseCorrelationId(Object response) {
         try {
-            var message = response instanceof Message ? (Message) response : parser.parse(response.toString());
+            Message message = getMessage(response);
             var msgId = new Terser(message).get("/MSA-2");
             LOG.debug("Recorded response with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
         }
+    }
+
+    private Message getMessage(Object request) throws HL7Exception {
+        Message message;
+        if (request instanceof Message) {
+            message = (Message) request;
+        } else if (request instanceof byte[]) {
+            message = parser.parse(new String((byte[]) request));
+        } else {
+            message = parser.parse(request.toString());
+        } return message;
     }
 }

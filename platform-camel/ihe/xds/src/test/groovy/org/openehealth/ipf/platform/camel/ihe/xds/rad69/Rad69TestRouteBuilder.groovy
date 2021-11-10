@@ -16,16 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69
 
 import org.apache.camel.builder.RouteBuilder
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 
 import javax.activation.DataHandler
+
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad69RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad69ResponseValidator
 
 /**
  * @author Clay Sebourn
@@ -64,6 +65,6 @@ public class Rad69TestRouteBuilder extends RouteBuilder {
             response.documents.add(doc2)
         }
         
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

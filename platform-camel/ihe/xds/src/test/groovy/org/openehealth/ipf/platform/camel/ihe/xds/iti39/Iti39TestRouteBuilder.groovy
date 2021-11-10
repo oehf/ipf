@@ -22,16 +22,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
 
 import javax.activation.DataHandler
-
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti39RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti39ResponseValidator
 
 /**
  * Test routes for ITI-39.
@@ -111,7 +110,7 @@ class Iti39TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = Exchanges.resultMessage(it)
+                Message message = it.message
                 message.body = createRetrievedDocumentSet()
                 message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
@@ -126,7 +125,7 @@ class Iti39TestRouteBuilder extends RouteBuilder {
             .process {
                 RetrievedDocumentSet response = createRetrievedDocumentSet()
                 response.documents[1].requestData.documentUniqueId = 'WRONG'
-                Exchanges.resultMessage(it).body = response
+                it.message.body = response
             }
     }
 

@@ -82,7 +82,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
 
                 // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
                 Terser.set((Segment)ack.get("MSH"), 9, 0, 3, 1, "ACK");
-                Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
+                exchange.getMessage().setBody(parser.encode(ack));
             } else {
                 getWrappedProcessor().process(exchange);
             }

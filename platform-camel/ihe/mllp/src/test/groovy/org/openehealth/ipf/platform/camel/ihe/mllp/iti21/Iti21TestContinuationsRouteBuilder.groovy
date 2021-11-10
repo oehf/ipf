@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import org.apache.camel.builder.RouteBuilder
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
@@ -129,7 +128,7 @@ class Iti21TestContinuationsRouteBuilder extends RouteBuilder {
             .process(validatingProcessor())
             .process {
                 def dsc = it.in.body.DSC[1].value ?: ''
-                resultMessage(it).body = CHAIN_1[dsc]
+                it.message.body = CHAIN_1[dsc]
             }
 
     }

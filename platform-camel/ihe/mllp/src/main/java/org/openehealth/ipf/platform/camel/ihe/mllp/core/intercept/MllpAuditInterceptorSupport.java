@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Common audit interceptor support for both consumer and producer side of MLLP endpoints
@@ -68,7 +67,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            var result = resultMessage(exchange).getBody(Message.class);
+            var result = exchange.getMessage().getBody(Message.class);
             enrichAuditDatasetFromResponse(auditDataset, result);
             failed = !AuditUtils.isPositiveAck(result);
         } catch (Exception e) {

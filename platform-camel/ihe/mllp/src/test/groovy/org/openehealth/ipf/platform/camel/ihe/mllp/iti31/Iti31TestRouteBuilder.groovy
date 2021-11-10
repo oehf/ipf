@@ -17,9 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti31
 
 import org.apache.camel.builder.RouteBuilder
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
-
 
 /**
  * Camel route for generic unit tests.
@@ -36,8 +34,8 @@ class Iti31TestRouteBuilder extends RouteBuilder {
         // fictive route to test producer-side acceptance checking
         from('pam-iti31://0.0.0.0:18101')
                 .process {
-            resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-            resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
+            it.message.body.MSH[9][1] = 'DOES NOT MATTER'
+            it.message.body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
         }
 
         // route with runtime exception

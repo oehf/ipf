@@ -23,9 +23,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuer
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18ResponseValidator
 
 import java.util.function.Function
 
@@ -65,11 +66,11 @@ class Iti18TestRouteBuilder extends RouteBuilder {
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        resultMessage(it).body = response
+                        it.message.body = response
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .process { resultMessage(it).body = new QueryResponse(FAILURE) }
+                    .process { it.message.body = new QueryResponse(FAILURE) }
 
         from('xds-iti18:featuresTest?features=#policyFeature,#gzipFeature')
             .process(iti18RequestValidator())
@@ -82,6 +83,6 @@ class Iti18TestRouteBuilder extends RouteBuilder {
         def query = exchange.in.getBody(QueryRegistry.class).query
         def value = query.authorPersons[0]        
         def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
-        resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

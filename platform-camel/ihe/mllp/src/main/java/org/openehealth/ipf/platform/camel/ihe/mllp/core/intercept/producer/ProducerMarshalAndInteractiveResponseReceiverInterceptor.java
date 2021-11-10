@@ -23,8 +23,8 @@ import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
@@ -45,11 +45,14 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
-    public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
+    private final String charsetName;
+
+    public ProducerMarshalAndInteractiveResponseReceiverInterceptor(String charsetName) {
         super();
         setId(ProducerMarshalInterceptor.class.getName());
+        this.charsetName = charsetName;
     }
 
 
@@ -86,11 +89,17 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
         String continuationPointer; 
         while (mustSend) {
             mustSend = false;
-    
+
+
             // marshal, send and wait for response
-            exchange.getIn().setBody(request.toString());
+            exchange.getIn().setBody(Hl7v2MarshalUtils.convertBodyToByteArray(
+                    request,
+                    exchange.getProperty(Exchange.CHARSET_NAME, charsetName, String.class)));
+
             getWrappedProcessor().process(exchange);
-            responseString = Exchanges.resultMessage(exchange).getBody(String.class);
+
+            responseString = Hl7v2MarshalUtils.convertBodyToString(
+                    exchange.getMessage(), charsetName, false);
 
             // continuations handling 
             if (supportContinuations) {
@@ -190,7 +199,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
             responseTerser.set("QAK-5", recordsCountString);
             responseTerser.set("QAK-6", "0");
         }
-        Exchanges.resultMessage(exchange).setBody(rsp);
+        exchange.getMessage().setBody(rsp);
     }
 
 

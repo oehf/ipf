@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
@@ -165,7 +164,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
-        def resultMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE1_URI, requestExchange))
+        def resultMessage = producerTemplate.send(SERVICE1_URI, requestExchange).message
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti55TestRouteBuilder.ASYNC_DELAY)
         
@@ -194,7 +193,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
     void testNakGeneration() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
-        def responseMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE2_URI, requestExchange))
+        def responseMessage = producerTemplate.send(SERVICE2_URI, requestExchange).message
         def response = Hl7v3Utils.slurp(responseMessage.body) 
 
         assert response.acknowledgement.typeCode.@code == 'AE'
@@ -216,9 +215,9 @@ class TestIti55 extends HL7v3StandardTestContainer {
     void testRejectionHandling() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = '< some ill-formed XML !'
-        Exchanges.resultMessage(producerTemplate.send(
+        producerTemplate.send(
                 "http://localhost:${port}/iti55service",
-                requestExchange))
+                requestExchange)
         assert MyRejectionHandlingStrategy.count == 1
     }
 }

@@ -21,7 +21,6 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
@@ -119,7 +118,7 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport {
         var ackTerser = new Terser(ack);
         ackTerser.set("MSA-1", "CA");
         ackTerser.set("MSA-2", requestTerser.get("MSH-10"));
-        Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
+        exchange.getMessage().setBody(parser.encode(ack));
     }
     
 }

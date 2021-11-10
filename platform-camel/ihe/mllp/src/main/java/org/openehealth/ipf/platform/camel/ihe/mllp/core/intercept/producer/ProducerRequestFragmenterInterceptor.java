@@ -18,14 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.appendSplitSegment;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.splitString;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.uniqueId;
 
 /**
  * A producer-side interceptor which implements non-interactive request 
@@ -119,7 +120,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
 
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
-                var responseString = Exchanges.resultMessage(exchange).getBody(String.class);
+                var responseString = exchange.getMessage().getBody(String.class);
                 var responseTerser = new Terser(getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().getParser().parse(responseString));
 
                 var messageType = responseTerser.get("MSH-9-1");

@@ -15,22 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.headers.Header
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
-
-import javax.xml.namespace.QName
-import javax.activation.DataHandler
-import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_SUCCESS
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
+
+import javax.activation.DataHandler
+import javax.xml.namespace.QName
+
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41ResponseValidator
 
@@ -55,7 +54,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
             .process {
                 boolean hasExtraMetadata = it.in.getHeader(XdsJaxbDataBinding.SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.class)
                 def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
-                Exchanges.resultMessage(it).body = response
+                it.message.body = response
             }
 
         // route which ends with a SOAP Fault
@@ -106,6 +105,6 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
         }
 
         def response = new Response(status)
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

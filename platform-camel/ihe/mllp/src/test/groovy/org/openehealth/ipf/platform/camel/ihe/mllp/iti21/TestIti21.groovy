@@ -16,25 +16,22 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.HapiContext
-import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import io.netty.handler.timeout.ReadTimeoutException
 import org.apache.camel.*
+import org.apache.camel.component.hl7.HL7Charset
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.test.context.ContextConfiguration
 
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -47,7 +44,6 @@ import static org.junit.jupiter.api.Assertions.*
 @ContextConfiguration('/iti21/iti-21.xml')
 class TestIti21 extends AbstractMllpTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
     private Random random = new Random(System.currentTimeMillis())
 
     @EndpointInject("mock:trace")
@@ -62,6 +58,18 @@ class TestIti21 extends AbstractMllpTest {
         }
         s += 'RCP|I|10^RD|||||\n'
         return s
+    }
+
+    static byte[] getMessageByteArray(String msh9, String msh12, boolean needQpd = true, Charset charset = StandardCharsets.UTF_8) {
+        def msgId = UUID.randomUUID().toString()
+        def msh18 = HL7Charset.getHL7Charset(charset.name()).getHL7CharsetName()
+        def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
+                "20081031112704||${msh9}|${msgId}|P|${msh12}|||ER|||${msh18}||\n"
+        if (needQpd) {
+            s += 'QPD|IHE PDQ Query|10|@PID.5.1^ÄÖÜè|||||\n'
+        }
+        s += 'RCP|I|10^RD|||||\n'
+        return s.getBytes(charset)
     }
 
     @Test
@@ -127,8 +135,7 @@ class TestIti21 extends AbstractMllpTest {
     @Disabled
     void testSendAndReceiveTracingInformation() {
         String msg = getMessageString('QBP^Q22', '2.5')
-        HapiContext hapiContext = appContext.getBean(HapiContext.class)
-        Message qbp = hapiContext.getPipeParser().parse(msg)
+        var qbp = hapiContext.getPipeParser().parse(msg)
         Map<String, Object> headers = [
                 (Constants.TRACE_ID)      : 'trace_id',
                 (Constants.SPAN_ID)       : 'span_id',
@@ -150,7 +157,7 @@ class TestIti21 extends AbstractMllpTest {
                 return true
             }
         })
-        Message response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
+        var response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
         mockEndpoint.assertIsSatisfied(2000)
     }
 
@@ -197,6 +204,18 @@ class TestIti21 extends AbstractMllpTest {
     }
 
     @Test
+    void testHappyCaseWithCustomCharset() {
+        var body = getMessageByteArray('QBP^Q22', '2.5')
+        def msg = send("pdq-iti21://localhost:18220", body)
+        assertRSP(msg)
+        assertAuditEvents {
+            it.messages.every {
+                new String(it.participantObjectIdentifications[0].participantObjectQuery).contains("ÄÖÜè");
+            }
+        }
+    }
+
+    @Test
     void stressTestWithDefaultSetup() {
         stressTest(200, 20, "pdq-iti21://localhost:18220?timeout=10000")
     }
@@ -207,8 +226,8 @@ class TestIti21 extends AbstractMllpTest {
     }
 
     private void stressTest(int messages, int threads, String endpoint) {
-        ExecutorService executorService = Executors.newFixedThreadPool(threads)
-        CountDownLatch latch = new CountDownLatch(messages)
+        def executorService = Executors.newFixedThreadPool(threads)
+        def latch = new CountDownLatch(messages)
         try {
             for (int i = 0; i < messages; i++) {
                 int delay = random.nextInt(messages)
@@ -238,7 +257,7 @@ class TestIti21 extends AbstractMllpTest {
         exchange.in.body = body
 
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertAuditEvents{ it.messages.empty }

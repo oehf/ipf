@@ -37,11 +37,13 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final int interactiveContinuationDefaultThreshold;
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
     @Getter private final boolean autoCancel;
-
+    @Getter private final boolean copyOriginalMessage;
 
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);
 
+        copyOriginalMessage = component.getAndRemoveParameter(
+                parameters, "copyOriginalMessage", boolean.class, true);
         supportUnsolicitedFragmentation = component.getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);
         unsolicitedFragmentationThreshold = component.getAndRemoveParameter(

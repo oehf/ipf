@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
 /**
@@ -59,7 +58,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
             if (!failed) {
-                var result = resultMessage(exchange).getBody();
+                var result = exchange.getMessage().getBody();
                 failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
             }
         } catch (Exception e) {

@@ -24,7 +24,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
 
@@ -86,7 +85,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
         var result = executableClient.execute();
-        var resultMessage = Exchanges.resultMessage(exchange);
+        var resultMessage = exchange.getMessage();
         resultMessage.setBody(result);
     }
 

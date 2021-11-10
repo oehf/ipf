@@ -35,6 +35,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
         <property name="charset" value="iso-8859-1"/>
+        <property name="produceString" value="false" />
     </bean>
 
     <bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">

@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
 /**
@@ -59,7 +58,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            var result = resultMessage(exchange).getBody(IBaseResource.class);
+            var result = exchange.getMessage().getBody(IBaseResource.class);
             failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
         } catch (Exception e) {
             // FHIR exception or unexpected exception

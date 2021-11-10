@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 
@@ -61,6 +60,6 @@ public class AcceptanceInterceptorUtils {
 
         // check output message
         var config = interceptor.getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration();
-        config.checkResponseAcceptance(Exchanges.resultMessage(exchange).getBody(Message.class));
+        config.checkResponseAcceptance(exchange.getMessage().getBody(Message.class));
     }
 }

@@ -78,8 +78,7 @@ abstract public class AbstractWebService {
         }
 
         // handle resulting message and headers
-        var resultMessage = Exchanges.resultMessage(exchange);
-        processUserDefinedOutgoingHeaders(messageContext, resultMessage, false);
+        processUserDefinedOutgoingHeaders(messageContext, exchange.getMessage(), false);
 
         // set response encoding based on Camel exchange property
         var responseEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);

@@ -22,7 +22,6 @@ import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.springframework.test.context.ContextConfiguration
 
@@ -106,7 +105,7 @@ class TestMdm extends AbstractMllpTest {
         exchange.in.body = body
 
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertAuditEvents { it.messages.empty }

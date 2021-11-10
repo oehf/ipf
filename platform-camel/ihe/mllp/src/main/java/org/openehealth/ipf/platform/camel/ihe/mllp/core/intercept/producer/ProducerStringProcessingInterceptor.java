@@ -25,6 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 /**
  * Producer-side MLLP interceptor that sets character encoding configured
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
+ *
  * @author Dmytro Rud
  */
 public class ProducerStringProcessingInterceptor extends InterceptorSupport {
@@ -32,7 +33,9 @@ public class ProducerStringProcessingInterceptor extends InterceptorSupport {
     @Override
     public void process(Exchange exchange) throws Exception {
         final var charsetName = getEndpoint(MllpEndpoint.class).getCharsetName();
-        exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        if (charsetName != null) {
+            exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        }
 
         var supportSegmentFragmentation = getEndpoint(MllpEndpoint.class).isSupportSegmentFragmentation();
         var segmentFragmentationThreshold = getEndpoint(MllpEndpoint.class).getSegmentFragmentationThreshold();

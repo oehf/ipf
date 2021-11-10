@@ -21,18 +21,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51ResponseValidator
 
 import java.util.function.Function
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery
-
 /**
  * @author Jens Riemschneider
  * @author Michael Ottati
@@ -57,11 +54,11 @@ class Iti51TestRouteBuilder extends RouteBuilder {
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        resultMessage(it).body = response
+                        it.message.body = response
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .process { resultMessage(it).body = new QueryResponse(FAILURE) }
+                    .process { it.message.body = new QueryResponse(FAILURE) }
    }
 
     def checkValue(exchange, expected) {
@@ -77,6 +74,6 @@ class Iti51TestRouteBuilder extends RouteBuilder {
                     new Identifiable("id4", new AssigningAuthority("1.4")))
         }
 
-        resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

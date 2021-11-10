@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import static org.easymock.EasyMock.*
@@ -57,7 +56,7 @@ class Testiti47CamelOnly extends HL7v3StandardTestContainer {
     void testCamelOnly() {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service"
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage())
-        String response = Exchanges.resultMessage(responseExchange).getBody(String.class)
+        String response = responseExchange.getMessage().getBody(String.class)
         assertTrue(response.contains("<typeCode code=\"AA\"/>"))
     }
 

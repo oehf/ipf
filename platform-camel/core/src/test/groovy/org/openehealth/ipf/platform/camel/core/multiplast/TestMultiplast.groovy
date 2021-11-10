@@ -22,7 +22,6 @@ import org.apache.camel.ProducerTemplate
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.springframework.context.ApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
@@ -62,9 +61,9 @@ class TestMultiplast {
         // normal parallel processing
         long startTimestamp = System.currentTimeMillis()
         resultExchange = send('abc, def, ghi', [netty(10000), netty(10001), netty(10002)].join(';'))
-        assert Exchanges.resultMessage(resultExchange).body.contains('123')
-        assert Exchanges.resultMessage(resultExchange).body.contains('456')
-        assert Exchanges.resultMessage(resultExchange).body.contains('789')
+        assert resultExchange.message.body.contains('123')
+        assert resultExchange.message.body.contains('456')
+        assert resultExchange.message.body.contains('789')
 
         // different lengths of bodies' and recipients' lists -- should fail
         resultExchange = send('abc, def, ghi', [netty(10000), netty(10001)].join(';'))

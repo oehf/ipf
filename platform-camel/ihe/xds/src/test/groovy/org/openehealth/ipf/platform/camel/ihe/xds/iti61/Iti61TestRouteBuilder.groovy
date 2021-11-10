@@ -19,7 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti61
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti61RequestValidator
@@ -41,6 +41,6 @@ public class Iti61TestRouteBuilder extends RouteBuilder {
     void checkValue(exchange, expected) {
         def value = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        
         def response = new Response(expected == value ? SUCCESS : FAILURE)
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

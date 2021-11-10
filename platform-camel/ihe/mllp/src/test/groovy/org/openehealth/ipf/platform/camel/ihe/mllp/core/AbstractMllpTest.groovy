@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
+
 import ca.uhn.hl7v2.model.Message
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange

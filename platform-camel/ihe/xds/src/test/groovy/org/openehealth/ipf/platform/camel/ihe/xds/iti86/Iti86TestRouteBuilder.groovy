@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti86RequestValidator
@@ -58,6 +57,6 @@ public class Iti86TestRouteBuilder extends RouteBuilder {
                 response.errors << new ErrorInfo(ErrorCode.DOCUMENT_UNIQUE_ID_ERROR, "foobar ${request.documents[2].documentUniqueId} blabla", Severity.ERROR, null, null)
                 break
         }
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

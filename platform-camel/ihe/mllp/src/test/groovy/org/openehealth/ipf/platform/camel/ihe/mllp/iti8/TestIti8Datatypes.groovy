@@ -109,7 +109,6 @@ class TestIti8Datatypes extends AbstractMllpTest {
         }
         
         // 9-12 should throw exceptions
-        def exceptionsCount = 0
         for(int i = 8; i <= 11; ++i) {
             def msg = send(endpointUri, body)
             assertNAK(msg)

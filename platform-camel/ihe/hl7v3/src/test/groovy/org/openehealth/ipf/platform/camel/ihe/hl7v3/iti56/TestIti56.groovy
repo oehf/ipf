@@ -23,7 +23,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.springframework.test.annotation.DirtiesContext
@@ -132,7 +131,7 @@ class TestIti56 extends HL7v3StandardTestContainer {
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
-        def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
+        def resultMessage = producerTemplate.send(endpointUri, requestExchange).message
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti55TestRouteBuilder.ASYNC_DELAY)
     }

@@ -38,8 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
  * <p>
@@ -166,7 +164,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport
                     messageType, triggerEvent, messageStructure, version);
             var exception = new HL7Exception(
                     "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);
-            resultMessage(exchange).setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createDefaultNak(exception).encode());
+            exchange.getMessage().setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createDefaultNak(exception).encode());
         }
     }
 

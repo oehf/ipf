@@ -141,7 +141,7 @@ public abstract class AbstractWsProducer<
             // (async responses are handled in the service instance derived from
             // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
             if (replyToUri == null) {
-                var responseMessage = Exchanges.resultMessage(exchange);
+                var responseMessage = exchange.getMessage();
                 responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
                 var responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
                 processIncomingHeaders(responseContext, responseMessage);

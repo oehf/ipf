@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
@@ -114,7 +113,7 @@ class TestIti63 extends XdsStandardTestContainer {
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
-        def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
+        def resultMessage = producerTemplate.send(endpointUri, requestExchange).message
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti38TestRouteBuilder.ASYNC_DELAY)
         

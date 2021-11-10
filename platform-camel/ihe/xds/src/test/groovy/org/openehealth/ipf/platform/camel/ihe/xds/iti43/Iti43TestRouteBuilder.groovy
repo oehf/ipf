@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 
 import javax.activation.DataHandler
+
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti43RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti43ResponseValidator
 
 /**
  * @author Jens Riemschneider
@@ -61,7 +62,7 @@ class Iti43TestRouteBuilder extends RouteBuilder {
             doc2.mimeType = 'application/octet-cream'
             response.documents.add(doc2)
         }
-        
-        Exchanges.resultMessage(exchange).body = response
+
+        exchange.message.body = response
     }
 }

@@ -26,7 +26,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpAuditInter
 
 import java.net.InetSocketAddress;
 
-
 /**
  * Consumer-side ATNA auditing Camel interceptor.
  *

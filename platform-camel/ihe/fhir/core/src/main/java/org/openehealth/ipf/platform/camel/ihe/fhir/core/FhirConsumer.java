@@ -30,9 +30,11 @@ import org.apache.camel.support.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
-import org.openehealth.ipf.commons.ihe.fhir.*;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.EagerBundleProvider;
+import org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider;
+import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.List;
 import java.util.Map;
@@ -140,7 +142,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     @Override
     public int handleSizeRequest(Object payload, Map<String, Object> headers) {
         var exchange = runRoute(payload, headers);
-        var resultMessage = Exchanges.resultMessage(exchange);
+        var resultMessage = exchange.getMessage();
         var size = resultMessage.getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
         if (size == null) {
             throw new InternalErrorException("Server did not obtain result size");
@@ -163,7 +165,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
         var exchange = runRoute(payload, headers);
-        var resultMessage = Exchanges.resultMessage(exchange);
+        var resultMessage = exchange.getMessage();
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
             var singletonList = (List<T>)resultMessage.getBody();
             if (singletonList.isEmpty() && payload instanceof IIdType) {

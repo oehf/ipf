@@ -21,11 +21,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti62RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti62ResponseValidator
 
@@ -59,6 +57,6 @@ public class Iti62TestRouteBuilder extends RouteBuilder {
             errorInfo.setSeverity(Severity.ERROR)
             response.errors.add(errorInfo)
         }
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

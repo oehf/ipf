@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -136,7 +135,7 @@ class TestIti8 extends AbstractMllpTest {
         exchange.in.body = body
         
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertAuditEvents { it.messages.empty }

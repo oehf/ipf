@@ -82,7 +82,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
          // wait "QPD-2" seconds and properly respond with a valid answer
          from('pdq-iti21://0.0.0.0:18220')
                  .process {
-                     int wait = Long.parseLong(it.in.body.QPD[2].value)
+                     long wait = Long.parseLong(it.in.body.QPD[2].value)
                      LOG.debug("Waiting $wait ms")
                      Thread.sleep(wait)
                  }
@@ -91,6 +91,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                      response.QPD = it.QPD
                      response.QAK[1] = response.QPD[2].value
                      response.MSA[1] = 'AA'
+                     response.MSH[18] = it.MSH[18]
                      LOG.debug("Now responding after waiting ${response.QAK[1].value} ms")
                      response
                  }
