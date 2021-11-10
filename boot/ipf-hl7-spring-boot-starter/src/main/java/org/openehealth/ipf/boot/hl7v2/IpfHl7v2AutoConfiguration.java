@@ -31,7 +31,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory;
 import org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory;
 import org.apache.camel.component.netty.NettyCamelStateCorrelationManager;
-import org.apache.camel.component.netty.TimeoutCorrelationManagerSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
@@ -53,7 +52,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -79,6 +77,7 @@ public class IpfHl7v2AutoConfiguration {
         if (config.getCharset() != null) {
             decoder.setCharset(config.getCharset());
         }
+        decoder.setProduceString(false);
         decoder.setConvertLFtoCR(config.isConvertLinefeed());
         return decoder;
     }
