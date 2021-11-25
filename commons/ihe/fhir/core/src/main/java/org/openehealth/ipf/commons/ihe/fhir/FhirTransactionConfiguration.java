@@ -44,7 +44,9 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     private final Supplier<FhirContext> fhirContextProvider;
     private final List<? extends FhirProvider> staticResourceProviders;
     private final ClientRequestFactory<?> staticClientRequestFactory;
-    private final FhirTransactionValidator fhirValidator;
+    private final Supplier<FhirTransactionValidator> fhirValidatorSupplier;
+
+    private transient FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
     private Predicate<RequestDetails> staticConsumerSelector = o -> true;
 
@@ -77,7 +79,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         this.fhirContextProvider = () -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContext) : null;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(fhirContext) : null;
     }
 
     public FhirTransactionConfiguration(
@@ -109,7 +111,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         this.fhirContextProvider = () -> initializeFhirContext(fhirVersion);
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidator = fhirValidator != null ? fhirValidator.apply(fhirContextProvider.get()) : null;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(fhirContextProvider.get()) : null;
     }
 
 
@@ -152,7 +154,12 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return fhirVersion;
     }
 
-    public FhirTransactionValidator getFhirValidator() {
+    public synchronized FhirTransactionValidator getFhirValidator() {
+        if (fhirValidator == null) {
+            if (fhirValidatorSupplier != null) {
+                fhirValidator = fhirValidatorSupplier.get();
+            }
+        }
         return fhirValidator;
     }
 
@@ -169,7 +176,5 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     public boolean supportsLazyLoading() {
         return supportsLazyLoading;
     }
-
-
 
 }
