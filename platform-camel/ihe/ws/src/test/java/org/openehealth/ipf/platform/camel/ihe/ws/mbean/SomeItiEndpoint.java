@@ -20,6 +20,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
@@ -42,9 +43,10 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransa
             InterceptorProvider interceptorProvider,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties) {
+            Map<String, Object> properties,
+            HTTPClientPolicy httpClientPolicy) {
         super(endpointUri, address, someItiComponent, auditContext,
-                interceptorProvider, features, schemaLocations, properties, null);
+                interceptorProvider, features, schemaLocations, properties, httpClientPolicy, null);
     }
 
     @Override

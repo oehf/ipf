@@ -50,7 +50,8 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
     @Override

@@ -21,6 +21,7 @@ import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
@@ -88,8 +89,11 @@ abstract public class AbstractWsComponent<
     }
 
     protected Map<String, Object> getProperties(Map<String, Object> parameters) {
-        var mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
-        return (mapList != null && mapList.size() == 1) ? mapList.get(0) : null;
+        return resolveAndRemoveReferenceParameter(parameters, "properties", Map.class);
+    }
+
+    protected HTTPClientPolicy getHttpClientPolicy(Map<String, Object> parameters) {
+        return resolveAndRemoveReferenceParameter(parameters, "httpClientPolicy", HTTPClientPolicy.class);
     }
 
     @Override

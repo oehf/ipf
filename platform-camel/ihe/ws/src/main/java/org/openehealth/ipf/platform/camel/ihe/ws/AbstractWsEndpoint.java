@@ -26,6 +26,7 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -124,6 +125,7 @@ public abstract class AbstractWsEndpoint<
     private HostnameVerifier hostnameVerifier;
     private String username;
     private String password;
+    private HTTPClientPolicy httpClientPolicy;
 
 
     protected AbstractWsEndpoint(
@@ -138,6 +140,7 @@ public abstract class AbstractWsEndpoint<
                 component.getFeatures(parameters),
                 component.getSchemaLocations(parameters),
                 component.getProperties(parameters),
+                component.getHttpClientPolicy(parameters),
                 serviceClass);
     }
 
@@ -160,7 +163,9 @@ public abstract class AbstractWsEndpoint<
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
-            Class<? extends AbstractWebService> serviceClass) {
+            HTTPClientPolicy httpClientPolicy,
+            Class<? extends AbstractWebService> serviceClass
+            ) {
         super(endpointUri, component);
         this.auditContext = auditContext;
         this.address = address;
@@ -169,6 +174,7 @@ public abstract class AbstractWsEndpoint<
         this.schemaLocations = schemaLocations;
         this.properties = properties;
         this.serviceClass = serviceClass;
+        this.httpClientPolicy = httpClientPolicy;
         configure();
     }
 
@@ -401,6 +407,14 @@ public abstract class AbstractWsEndpoint<
      */
     public Map<String, Object> getProperties() {
         return properties;
+    }
+
+    public void setHttpClientPolicy(HTTPClientPolicy httpClientPolicy) {
+        this.httpClientPolicy = httpClientPolicy;
+    }
+
+    public HTTPClientPolicy getHttpClientPolicy() {
+        return httpClientPolicy;
     }
 
     @SuppressWarnings("unchecked")

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
@@ -62,10 +63,11 @@ public class Hl7v3ClientFactory extends JaxWsRequestClientFactory<Hl7v3AuditData
             List<AbstractFeature> features,
             Map<String, Object> properties,
             AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
-            WsSecurityInformation securityInformation)
+            WsSecurityInformation securityInformation,
+            HTTPClientPolicy httpClientPolicy)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
-                customInterceptors, features, properties, correlator, securityInformation);
+                customInterceptors, features, properties, correlator, securityInformation, httpClientPolicy);
     }
 
     @Override

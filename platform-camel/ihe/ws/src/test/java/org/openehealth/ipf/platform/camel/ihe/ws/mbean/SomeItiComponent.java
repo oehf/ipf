@@ -61,7 +61,8 @@ public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTran
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                getHttpClientPolicy(parameters));
     }
 
 }

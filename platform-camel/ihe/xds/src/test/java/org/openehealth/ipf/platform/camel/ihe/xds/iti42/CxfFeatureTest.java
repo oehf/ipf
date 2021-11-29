@@ -52,7 +52,7 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + getPort() + "/xds-iti42",
                 null, null,
-                null, null, null, null, null);
+                null, null, null, null, null, null);
         var client = (Iti42PortType) clientFactory.getClient();
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());

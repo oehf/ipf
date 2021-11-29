@@ -97,7 +97,8 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getFeatures(),
                 getProperties(),
                 null,
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
 

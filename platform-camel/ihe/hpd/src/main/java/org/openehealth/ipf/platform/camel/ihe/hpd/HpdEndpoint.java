@@ -48,7 +48,8 @@ public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
     @Override

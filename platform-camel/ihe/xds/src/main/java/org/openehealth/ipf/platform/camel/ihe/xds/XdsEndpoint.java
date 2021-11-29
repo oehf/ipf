@@ -51,7 +51,8 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
 

@@ -28,6 +28,7 @@ import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -69,6 +70,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     protected final AuditContext auditContext;
     protected final AsynchronyCorrelator<AuditDatasetType> correlator;
     protected final WsSecurityInformation securityInformation;
+    protected final HTTPClientPolicy httpClientPolicy;
 
     /**
      * Constructs the factory.
@@ -88,7 +90,8 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             List<AbstractFeature> features,
             Map<String, Object> properties,
             AsynchronyCorrelator<AuditDatasetType> correlator,
-            WsSecurityInformation securityInformation)
+            WsSecurityInformation securityInformation,
+            HTTPClientPolicy httpClientPolicy)
     {
         requireNonNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
@@ -100,6 +103,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         this.properties = properties;
         this.correlator = correlator;
         this.securityInformation = securityInformation;
+        this.httpClientPolicy = httpClientPolicy;
 
         int poolSize = Integer.getInteger(POOL_SIZE_PROPERTY, -1);
         clientPool = new ConcurrentPool<>(new ConcurrentLinkedQueueCollection<>(), new PortFactory(),
@@ -225,6 +229,9 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             configureProperties(client);
             if (securityInformation != null) {
                 securityInformation.configureHttpConduit((HTTPConduit) client.getConduit());
+            }
+            if (httpClientPolicy != null) {
+                ((HTTPConduit) client.getConduit()).setClient(httpClientPolicy);
             }
             LOG.debug("Created client stub {} for {}", port, wsTransactionConfiguration.getServiceName());
             return port;

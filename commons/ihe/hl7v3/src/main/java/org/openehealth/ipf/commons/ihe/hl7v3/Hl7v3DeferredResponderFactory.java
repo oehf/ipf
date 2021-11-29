@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
@@ -44,10 +45,11 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3Audit
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            WsSecurityInformation securityInformation)
+            WsSecurityInformation securityInformation,
+            HTTPClientPolicy httpClientPolicy)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,
-                customInterceptors, features, properties, null, securityInformation);
+                customInterceptors, features, properties, null, securityInformation, httpClientPolicy);
     }
 
 

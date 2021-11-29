@@ -116,7 +116,7 @@ public class CxfEndpointTest {
         JaxWsClientFactory<? extends XdsAuditDataset> clientFactory = new JaxWsRequestClientFactory<>(
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + port + "/iti-42",
-                null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null);
 
         var client = (Iti42PortType) clientFactory.getClient();
         var request = SampleData.createRegisterDocumentSet();

@@ -171,7 +171,8 @@ public class Hl7v3ContinuationAwareEndpoint
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
 

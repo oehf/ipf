@@ -57,7 +57,8 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getCustomInterceptors(),
                 getFeatures(),
                 getProperties(),
-                getSecurityInformation());
+                getSecurityInformation(),
+                getHttpClientPolicy());
     }
 
 
