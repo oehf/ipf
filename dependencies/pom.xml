@@ -10,24 +10,24 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <brave-version>5.13.3</brave-version>
-        <camel-version>3.11.3</camel-version>
+        <camel-version>3.11.4</camel-version>
         <cxf-version>3.4.5</cxf-version>
         <commons-io-version>2.11.0</commons-io-version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
         <groovy-version>3.0.9</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>5.5.1</hapi-fhir-version>
-        <herasaf-version>1.0.4.RELEASE</herasaf-version>
+        <hapi-fhir-version>5.6.0</hapi-fhir-version>
+        <herasaf-version>2.0.2</herasaf-version>
         <ipf-gazelle-version>2.0.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.5</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
-        <mina-version>2.1.4</mina-version>
+        <mina-version>2.1.5</mina-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.5</ph-commons-version>
-        <saxon-he-version>10.5</saxon-he-version>
+        <saxon-he-version>10.6</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>2.5.5</spring-boot-version>
+        <spring-boot-version>2.5.7</spring-boot-version>
         <vertx-version>3.9.8</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.3</xmlsec-version>
@@ -164,12 +164,6 @@
                 <groupId>org.herasaf.xacml.core</groupId>
                 <artifactId>herasaf-xacml-core</artifactId>
                 <version>${herasaf-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind</groupId>
-                        <artifactId>jaxb-impl</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
