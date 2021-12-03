@@ -15,7 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import static java.util.Objects.requireNonNull;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
+
 import com.ctc.wstx.exc.WstxEOFException;
+import java.util.UUID;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
@@ -35,14 +42,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.soap.SOAPFaultException;
-import java.util.UUID;
-
-import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
 
 /**
  * Camel producer used to make calls to a Web Service.
@@ -85,16 +84,13 @@ public abstract class AbstractWsProducer<
     @Override
     public void process(Exchange exchange) throws Exception {
         var body = exchange.getIn().getMandatoryBody(requestClass);
-        Object client = null;
-        BindingProvider bindingProvider = null;
+        final BindingProvider bindingProvider = (BindingProvider) clientFactory.getClient();
+        final OutType result;
         String replyToUri = null;
-        OutType result = null;
 
         try {
             // prepare
-            client = clientFactory.getClient();
-            configureClient(client);
-            bindingProvider = (BindingProvider) client;
+            configureClient(bindingProvider);
             var requestContext = (WrappedMessageContext) bindingProvider.getRequestContext();
             cleanRequestContext(requestContext);
 
@@ -139,7 +135,23 @@ public abstract class AbstractWsProducer<
             exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
 
             // normalize response type when called via reflection or similar non-type-safe mechanisms
-            result = responseClass.cast(callService(client, body));
+            result = responseClass.cast(callService(bindingProvider, body));
+
+            // for synchronous interaction (replyToUri == null): handle response.
+            // (async responses are handled in the service instance derived from
+            // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
+            if (replyToUri == null) {
+                var responseMessage = Exchanges.resultMessage(exchange);
+                responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+                var responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
+                processIncomingHeaders(responseContext, responseMessage);
+                enrichResponseMessage(responseMessage, responseContext);
+
+                // set Camel exchange property based on response encoding
+                exchange.setProperty(Exchange.CHARSET_NAME,
+                    responseContext.get(org.apache.cxf.message.Message.ENCODING));
+                responseMessage.setBody(result, responseClass);
+            }
         } catch (SOAPFaultException fault) {
             // handle http://www.w3.org/TR/2006/NOTE-soap11-ror-httpbinding-20060321/
             // see also: https://issues.apache.org/jira/browse/CXF-3768
@@ -149,23 +161,7 @@ public abstract class AbstractWsProducer<
                 throw fault;
             }
         } finally {
-            clientFactory.restoreClient(client);
-        }
-
-        // for synchronous interaction (replyToUri == null): handle response.
-        // (async responses are handled in the service instance derived from 
-        // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
-        if (replyToUri == null) {
-            var responseMessage = Exchanges.resultMessage(exchange);
-            responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-            var responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
-            processIncomingHeaders(responseContext, responseMessage);
-            enrichResponseMessage(responseMessage, responseContext);
-
-            // set Camel exchange property based on response encoding
-            exchange.setProperty(Exchange.CHARSET_NAME,
-                    responseContext.get(org.apache.cxf.message.Message.ENCODING));
-            responseMessage.setBody(result, responseClass);
+            clientFactory.restoreClient(bindingProvider);
         }
     }
 
