@@ -21,7 +21,6 @@ import ca.uhn.fhir.rest.api.RequestTypeEnum;
 import ca.uhn.fhir.rest.client.apache.ApacheHttpClient;
 import ca.uhn.fhir.rest.client.api.Header;
 import ca.uhn.fhir.rest.client.api.IHttpClient;
-import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -33,8 +32,12 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -44,21 +47,19 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Christian Ohr
  */
-public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
+public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulClientFactory<HttpClientBuilder> {
 
     private HttpClient httpClient;
     private HttpHost proxy;
-    private FhirSecurityInformation securityInformation;
-    private final HttpClientBuilder httpClientBuilder;
 
     public SslAwareApacheRestfulClientFactory(FhirContext theFhirContext) {
-        this(theFhirContext, null);
+        super(theFhirContext);
     }
 
     public SslAwareApacheRestfulClientFactory(FhirContext fhirContext, HttpClientBuilder httpClientBuilder) {
-        super(fhirContext);
-        this.httpClientBuilder = httpClientBuilder;
+        super(fhirContext, httpClientBuilder);
     }
+
     @Override
     protected IHttpClient getHttpClient(String theServerBase) {
         return new ApacheHttpClient(getNativeHttpClient(), new StringBuilder(theServerBase), null, null, null, null);
@@ -91,10 +92,6 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
         proxy = host != null ? new HttpHost(host, port, "http") : null;
     }
 
-    public void setSecurityInformation(FhirSecurityInformation securityInformation) {
-        this.securityInformation = securityInformation;
-    }
-
     /**
      * Possibility to customize the HttpClientBuilder. The default implementation of this method
      * does nothing.
@@ -105,41 +102,27 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
         return httpClientBuilder;
     }
 
-    /**
-     * Possibility to instantiate a subclassed HttpClientBuilder for building HttpClients. This can be useful
-     * if e.g. created HttpClients need to be instrumented or specially configured.
-     *
-     * The default implementation uses (if present) {@link #httpClientBuilder} or else calls {@link HttpClients#custom()}.
-     *
-     * @return HttpClientBuilder instance
-     */
+    @Override
     protected HttpClientBuilder newHttpClientBuilder() {
-        return httpClientBuilder != null ? httpClientBuilder : HttpClients.custom();
+        return HttpClients.custom();
     }
 
     protected synchronized HttpClient getNativeHttpClient() {
         if (httpClient == null) {
-
-            // @formatter:off
+            var connectionManager = new PoolingHttpClientConnectionManager(5000L, TimeUnit.MILLISECONDS);
+            connectionManager.setMaxTotal(getPoolMaxTotal());
+            connectionManager.setDefaultMaxPerRoute(getPoolMaxPerRoute());
             var defaultRequestConfig = RequestConfig.custom()
-                    .setConnectTimeout(getConnectTimeout())
                     .setSocketTimeout(getSocketTimeout())
+                    .setConnectTimeout(getConnectTimeout())
                     .setConnectionRequestTimeout(getConnectionRequestTimeout())
                     .setProxy(proxy)
-                    .setStaleConnectionCheckEnabled(true)
                     .build();
-
-            var builder = newHttpClientBuilder()
+            HttpClientBuilder builder = httpClientBuilder()
                     .useSystemProperties()
+                    .setConnectionManager(connectionManager)
                     .setDefaultRequestConfig(defaultRequestConfig)
-                    .setMaxConnTotal(getPoolMaxTotal())
-                    .setMaxConnPerRoute(getPoolMaxPerRoute())
-                    .setConnectionTimeToLive(5, TimeUnit.SECONDS)
                     .disableCookieManagement();
-
-            if (securityInformation != null) {
-                securityInformation.configureHttpClientBuilder(builder);
-            }
 
             // Need to authenticate against proxy
             if (proxy != null && StringUtils.isNotBlank(getProxyUsername()) && StringUtils.isNotBlank(getProxyPassword())) {
@@ -151,10 +134,42 @@ public class SslAwareApacheRestfulClientFactory extends RestfulClientFactory {
             }
 
             // Chance to override or instrument
-
             httpClient = customizeHttpClientBuilder(builder).build();
         }
 
         return httpClient;
+    }
+
+    @Override
+    public FhirSecurityInformation<HttpClientBuilder> initializeSecurityInformation(boolean enabled, SSLContext sslContext, HostnameVerifier hostnameVerifier, String userName, String password) {
+        var securityInformation = new ApacheFhirSecurityInformation(enabled, sslContext, hostnameVerifier, userName, password);
+        setSecurityInformation(securityInformation);
+        return securityInformation;
+    }
+
+    static class ApacheFhirSecurityInformation extends FhirSecurityInformation<HttpClientBuilder> {
+
+        public ApacheFhirSecurityInformation(boolean secure, SSLContext sslContext, HostnameVerifier hostnameVerifier, String username, String password) {
+            super(secure, sslContext, hostnameVerifier, username, password);
+        }
+
+        @Override
+        public void configureHttpClientBuilder(HttpClientBuilder builder)  {
+            if (isSecure()) {
+                if (getSslContext() == null) {
+                    try {
+                        builder.setSSLContext(SSLContext.getDefault());
+                    } catch (NoSuchAlgorithmException e) {
+                        // Should never happen
+                        throw new RuntimeException("Could not create SSL Context", e);
+                    }
+                } else {
+                    builder.setSSLContext(getSslContext());
+                }
+                if (getHostnameVerifier() != null) {
+                    builder.setSSLHostnameVerifier(getHostnameVerifier());
+                }
+            }
+        }
     }
 }

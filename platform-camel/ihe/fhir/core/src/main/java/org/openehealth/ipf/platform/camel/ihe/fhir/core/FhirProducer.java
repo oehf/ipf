@@ -23,7 +23,6 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -35,7 +34,6 @@ import java.util.Map;
  */
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
-
     public FhirProducer(Endpoint endpoint) {
         super(endpoint);
     }
@@ -46,9 +44,6 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         var config = getEndpoint().getInterceptableConfiguration();
 
         var securityInformation = config.getSecurityInformation();
-        if (clientFactory instanceof SslAwareApacheRestfulClientFactory) {
-            ((SslAwareApacheRestfulClientFactory) clientFactory).setSecurityInformation(securityInformation);
-        }
 
         // For the producer, the path is supposed to be the server URL
         var path = config.getPath();

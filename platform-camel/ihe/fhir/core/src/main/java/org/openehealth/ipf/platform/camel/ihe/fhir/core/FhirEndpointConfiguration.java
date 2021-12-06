@@ -29,6 +29,7 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
@@ -93,7 +94,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private final boolean lazyLoadBundles;
 
     @Getter
-    private final FhirSecurityInformation securityInformation;
+    private final FhirSecurityInformation<?> securityInformation;
 
     @Getter
     private final Predicate<RequestDetails> consumerSelector;
@@ -109,7 +110,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         this.path = path;
-
 
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
@@ -175,14 +175,29 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 throw new AmbiguousBeanException(SSLContextParameters.class);
             }
         }
-        this.securityInformation = new FhirSecurityInformation(
-                secure,
-                sslContextParameters != null ?
-                        sslContextParameters.createSSLContext(component.getCamelContext()) :
-                        null,
-                hostnameVerifier,
-                username,
-                password);
+
+        if (context.getRestfulClientFactory() instanceof SslAwareAbstractRestfulClientFactory) {
+            var sslAwareRestfulClientFactory = (SslAwareAbstractRestfulClientFactory<?>) context.getRestfulClientFactory();
+            if (sslAwareRestfulClientFactory.getSecurityInformation() == null) {
+                this.securityInformation = sslAwareRestfulClientFactory.initializeSecurityInformation(
+                        secure,
+                        sslContextParameters != null ?
+                                sslContextParameters.createSSLContext(component.getCamelContext()) :
+                                null,
+                        hostnameVerifier,
+                        username,
+                        password);
+            } else {
+                this.securityInformation = sslAwareRestfulClientFactory.getSecurityInformation();
+            }
+        } else {
+            this.securityInformation = null;
+            if (secure) {
+                throw new IllegalArgumentException("When using TLS, FhirContext must use a IRestfulClientFactory that is a subclass of "
+                        + "SslAwareAbstractRestfulClientFactory, but is : " + context.getRestfulClientFactory().getClass().getName());
+            }
+        }
+
     }
 
     public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters, String key, Class<T> type) {

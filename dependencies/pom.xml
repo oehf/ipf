@@ -23,6 +23,7 @@
         <jaxb-version>2.3.5</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <mina-version>2.1.5</mina-version>
+        <methanol-version>1.6.0</methanol-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.6</saxon-he-version>
@@ -215,6 +216,11 @@
                 <groupId>io.zipkin.brave</groupId>
                 <artifactId>brave-instrumentation-servlet</artifactId>
                 <version>${brave-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.mizosoft.methanol</groupId>
+                <artifactId>methanol</artifactId>
+                <version>${methanol-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>

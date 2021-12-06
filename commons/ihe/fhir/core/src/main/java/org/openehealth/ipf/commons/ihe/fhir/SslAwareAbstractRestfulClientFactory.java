@@ -18,8 +18,10 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
-import org.apache.http.impl.client.HttpClients;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 
 /**
  * Apache HttpClient RestfulClientFactory that is aware of SSL context parameters.
@@ -57,11 +59,17 @@ public abstract class SslAwareAbstractRestfulClientFactory<T> extends RestfulCli
         return httpClientBuilder;
     }
 
+    public FhirSecurityInformation<T> getSecurityInformation() {
+        return securityInformation;
+    }
+
+    public abstract FhirSecurityInformation<T> initializeSecurityInformation(boolean enabled, SSLContext sslContext, HostnameVerifier hostnameVerifier, String userName, String password);
+
     /**
      * Possibility to instantiate a subclassed builder for building Http Clients. This can be useful
      * if e.g. created Http Clients need to be instrumented or specially configured.
      *
-     * The default implementation uses (if present) {@link #httpClientBuilder} or else calls {@link HttpClients#custom()}.
+     * The default implementation uses (if present) {@link #httpClientBuilder} or else calls {@link #newHttpClientBuilder()}.
      *
      * @return HttpClientBuilder instance
      */

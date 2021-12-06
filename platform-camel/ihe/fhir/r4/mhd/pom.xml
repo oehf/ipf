@@ -108,6 +108,11 @@
             <artifactId>jetty-io</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.mizosoft.methanol</groupId>
+            <artifactId>methanol</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

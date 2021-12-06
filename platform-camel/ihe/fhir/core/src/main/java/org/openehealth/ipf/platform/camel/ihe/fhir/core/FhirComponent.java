@@ -74,7 +74,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     }
 
     /**
-     * Initializes a default FHIR context for this component. ONly called if the endpoint does
+     * Initializes a default FHIR context for this component. Only called if the endpoint does
      * not define its own.
      *
      * @return initialized default FHIR context

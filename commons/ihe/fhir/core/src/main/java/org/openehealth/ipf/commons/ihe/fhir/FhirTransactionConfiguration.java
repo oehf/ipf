@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -36,9 +35,6 @@ import java.util.function.Supplier;
  * @since 3.2
  */
 public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
-
-    // Avoid recreating the same FhirContext instances
-    private static final ConcurrentHashMap<FhirVersionEnum, FhirContext> fhirContexts = new ConcurrentHashMap<>();
 
     private final FhirVersionEnum fhirVersion;
     private final Supplier<FhirContext> fhirContextProvider;
@@ -79,7 +75,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         this.fhirContextProvider = () -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(fhirContext) : null;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
     }
 
     public FhirTransactionConfiguration(
@@ -108,12 +104,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;
-        this.fhirContextProvider = () -> initializeFhirContext(fhirVersion);
+        this.fhirContextProvider = fhirContextProvider();
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
-        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(fhirContextProvider.get()) : null;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
     }
-
 
     public List<? extends FhirProvider> getStaticResourceProvider() {
         return staticResourceProviders;
@@ -132,7 +127,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     }
 
     /**
-     * Initializes the FHIR context by setting a SSL-aware REST client factory. Note that this method
+     * Initializes the FHIR context. Note that this method
      * is only called when the endpoint does not configure its custom (pre-initialized) FhirContext
      *
      * @return the initialized FhirContext
@@ -141,13 +136,17 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return fhirContextProvider.get();
     }
 
-    private static FhirContext initializeFhirContext(FhirVersionEnum fhirVersion) {
-        return fhirContexts.computeIfAbsent(fhirVersion, fhirVersionEnum -> {
-            var fhirContext = new FhirContext(fhirVersionEnum);
+    /**
+     * Returns a default supplier of a FhirContext with the configure FHIR version
+     *
+     * @return the initialized FhirContext
+     */
+    private Supplier<FhirContext> fhirContextProvider() {
+        return () -> {
+            var fhirContext = FhirContext.forCached(fhirVersion);
             fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
             return fhirContext;
-        });
-
+        };
     }
 
     public FhirVersionEnum getFhirVersion() {

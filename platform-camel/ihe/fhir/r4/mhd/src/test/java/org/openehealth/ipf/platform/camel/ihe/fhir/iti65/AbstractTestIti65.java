@@ -17,9 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
@@ -43,7 +45,16 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
-        startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
+
+        var loggingInterceptor = new LoggingInterceptor();
+        loggingInterceptor.setLogRequestSummary(false);
+        loggingInterceptor.setLogRequestBody(true);
+        loggingInterceptor.setLogResponseBody(true);
+        startClient(String.format("http://localhost:%d/", DEMO_APP_PORT), fhirContext -> {
+            var clientFactory = new SslAwareMethanolRestfulClientFactory(fhirContext);
+            clientFactory.setAsync(true);
+            fhirContext.setRestfulClientFactory(clientFactory);
+        }).registerInterceptor(loggingInterceptor);
     }
 
     protected Bundle provideAndRegister() throws Exception {

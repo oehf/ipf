@@ -26,6 +26,8 @@ import org.hl7.fhir.r4.model.OperationOutcome;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
+import java.util.function.Consumer;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +40,12 @@ public class FhirTestContainer extends StandardTestContainer {
     protected static FhirContext context;
 
     protected static IGenericClient startClient(String base) {
+        return startClient(base, fhirContext -> {});
+    }
+
+    protected static IGenericClient startClient(String base, Consumer<FhirContext> fhirContextCustomizer) {
         context = FhirContext.forR4();
+        fhirContextCustomizer.accept(context);
         context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
         client = context.newRestfulGenericClient(base);
         return client;
