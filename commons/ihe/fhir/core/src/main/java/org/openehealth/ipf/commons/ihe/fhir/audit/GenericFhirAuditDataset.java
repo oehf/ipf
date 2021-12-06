@@ -21,6 +21,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.instance.model.api.IIdType;
 
+import java.util.Map;
+
 /**
  * Audit dataset that supports generic FHIR transactions (general REST API) for which there
  * is no explicit ATNA record format defined. This may include all operation types.
@@ -49,6 +51,14 @@ public class GenericFhirAuditDataset extends FhirAuditDataset {
     @Getter
     @Setter
     private String queryString;
+
+    @Getter
+    @Setter
+    private String operationName;
+
+    @Getter
+    @Setter
+    private Map<String, Object> operationParameters;
 
     public GenericFhirAuditDataset(boolean serverSide) {
         super(serverSide);

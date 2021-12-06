@@ -84,6 +84,20 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         }
         auditDataset.setOperation(operation);
 
+        // Extract operation name
+        if (requestDetails != null) {
+            if (requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE ||
+                    requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_TYPE ||
+                    requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_SERVER) {
+                auditDataset.setOperationName(requestDetails.getOperation());
+            }
+
+            // set resource ID with extended-instance-operations
+            if (requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE) {
+                auditDataset.setResourceId(requestDetails.getId());
+            }
+        }
+
 
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (request instanceof IDomainResource) {
@@ -107,6 +121,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                 }
             }
         }
+
         return auditDataset;
     }
 
