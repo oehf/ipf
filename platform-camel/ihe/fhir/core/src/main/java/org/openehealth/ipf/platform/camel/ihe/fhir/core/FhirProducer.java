@@ -47,8 +47,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
 
         // For the producer, the path is supposed to be the server URL
         var path = config.getPath();
-
-        path = (config.getSecurityInformation().isSecure() ? "https://" : "http://") + path;
+        path = (securityInformation != null && securityInformation.isSecure() ? "https://" : "http://") + path;
         var client = clientFactory.newGenericClient(path);
 
         if (securityInformation != null && securityInformation.getUsername() != null) {

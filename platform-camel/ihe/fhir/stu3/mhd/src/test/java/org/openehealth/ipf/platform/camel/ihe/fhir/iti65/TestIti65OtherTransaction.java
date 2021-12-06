@@ -20,7 +20,7 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -42,7 +42,7 @@ public class TestIti65OtherTransaction extends AbstractTestIti65 {
             sendManually(thisSucks());
             fail("expected UnprocessableEntityException");
         } catch (UnprocessableEntityException e) {
-            assertEquals("HTTP 422 Unprocessable Entity: This sucks", e.getMessage());
+            assertTrue(e.getMessage().endsWith("This sucks"));
         }
 
     }

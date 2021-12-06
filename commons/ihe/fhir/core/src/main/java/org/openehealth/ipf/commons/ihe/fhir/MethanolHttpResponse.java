@@ -76,7 +76,9 @@ public class MethanolHttpResponse extends BaseHttpResponse {
 
     @Override
     public Reader createReader() {
-        return new InputStreamReader(response.body());
+        return responseBuffered ?
+                new InputStreamReader(new ByteArrayInputStream(responseBuffer)) :
+                new InputStreamReader(response.body());
     }
 
     @Override
