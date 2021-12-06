@@ -71,7 +71,7 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_EVENT) TokenOrListParam event,
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
-            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "identifier"}) ReferenceOrListParam related,
+            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "", DocumentReference.SP_IDENTIFIER }) ReferenceOrListParam related,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -88,6 +88,18 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
                     .forEach(relatedTokenParam::addOr);
         }
 
+        ReferenceOrListParam relatedParam = new ReferenceOrListParam();
+        TokenOrListParam relatedIdParam = new TokenOrListParam();
+        if (related != null) {
+            related.getValuesAsQueryTokens().stream()
+                    .filter(referenceParam -> !DocumentReference.SP_IDENTIFIER.equals(referenceParam.getChain()))
+                    .forEach(relatedParam::addOr);
+            related.getValuesAsQueryTokens().stream()
+                    .filter(referenceParam -> DocumentReference.SP_IDENTIFIER.equals(referenceParam.getChain()))
+                    .map(referenceParam -> referenceParam.toTokenParam(getFhirContext()))
+                    .forEach(relatedIdParam::addOr);
+        }
+
         var searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
@@ -100,7 +112,8 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabel)
                 .format(format)
-                .related(relatedTokenParam)
+                .related(relatedParam)
+                .relatedId(relatedIdParam)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)

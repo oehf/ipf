@@ -67,6 +67,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     private static final String STU3_INDEXED = "indexed";
     private static final String STU3_CLASS = "class";
     private static final String STU3_RELATED_ID = "related-id";
+    private static final String STU3_RELATED_REF = "related-ref";
     private static final String STU3_SECURITY_LABEL = "securitylabel";
 
     @SuppressWarnings("unused")
@@ -88,8 +89,9 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = STU3_SECURITY_LABEL) TokenOrListParam label,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
-            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "identifier"}) ReferenceOrListParam related,
-            @OptionalParam(name = STU3_RELATED_ID) TokenOrListParam relatedId,
+            @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "", DocumentReference.SP_IDENTIFIER }) ReferenceOrListParam related,
+            @OptionalParam(name = STU3_RELATED_ID) TokenOrListParam relatedId, // -> related.identifier
+            @OptionalParam(name = STU3_RELATED_REF) ReferenceOrListParam relatedRef,  // -> related
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -103,13 +105,22 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         var categoryParam = category != null ? category : class_;
         var securityLabelParam = securityLabel != null ? securityLabel : label;
 
-        var relatedTokenParam = related != null ?
-                new TokenOrListParam() :
-                relatedId;
-        if (related != null) {
+        // Handle "related" parameters
+
+        ReferenceOrListParam relatedParam = new ReferenceOrListParam();
+        TokenOrListParam relatedIdParam = new TokenOrListParam();
+        if (relatedRef != null) {
+            relatedParam = relatedRef;
+        } else if (relatedId != null) {
+            relatedIdParam = relatedId;
+        } else if (related != null) {
             related.getValuesAsQueryTokens().stream()
+                    .filter(referenceParam -> !DocumentReference.SP_IDENTIFIER.equals(referenceParam.getChain()))
+                    .forEach(relatedParam::addOr);
+            related.getValuesAsQueryTokens().stream()
+                    .filter(referenceParam -> DocumentReference.SP_IDENTIFIER.equals(referenceParam.getChain()))
                     .map(referenceParam -> referenceParam.toTokenParam(getFhirContext()))
-                    .forEach(relatedTokenParam::addOr);
+                    .forEach(relatedIdParam::addOr);
         }
 
         var searchParameters = Iti67SearchParameters.builder()
@@ -124,7 +135,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabelParam)
                 .format(format)
-                .related(relatedTokenParam)
+                .related(relatedParam)
+                .relatedId(relatedIdParam)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)

@@ -21,6 +21,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceOrListParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -28,7 +29,6 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.r4.model.Practitioner;
@@ -63,15 +63,15 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam securityLabel;
     @Getter @Setter private TokenOrListParam format;
 
-    // This is normally a ReferenceParameter but we assume that we are chaining this
-    // with identifier
-    @Getter @Setter private TokenOrListParam related;
+    @Getter @Setter private ReferenceOrListParam related;
+    @Getter @Setter private TokenOrListParam relatedId;
     @Getter @Setter private TokenParam _id;
 
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 
     @Getter private final FhirContext fhirContext;
+
 
     @Override
     public List<TokenParam> getPatientIdParam() {
