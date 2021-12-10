@@ -33,6 +33,7 @@
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.2.3</xmlsec-version>
         <woodstox-version>6.2.6</woodstox-version>
+        <jdom-version>2.0.6.1</jdom-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -69,6 +70,11 @@
                 <version>${camel-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                 <groupId>org.jdom</groupId>
+                 <artifactId>jdom2</artifactId>
+                 <version>${jdom-version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.woodstox</groupId>
