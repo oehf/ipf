@@ -79,7 +79,7 @@ class TestIti9QueryStream extends MllpTestContainer {
                             response = inputStream.read() // read second end byte
                             if (response == 13) {
                                 LOG.debug(s.toString().replaceAll('\r', '\n'))
-                                s.setLength(0)
+                                s = new StringBuilder()
                                 latch.countDown()
                             }
                         } else {

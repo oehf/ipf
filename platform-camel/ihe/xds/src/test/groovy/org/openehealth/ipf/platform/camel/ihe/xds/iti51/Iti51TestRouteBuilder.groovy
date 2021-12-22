@@ -29,6 +29,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51ResponseValidator
+
+import java.util.function.Function
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery
 
 /**
@@ -51,7 +53,7 @@ class Iti51TestRouteBuilder extends RouteBuilder {
             .convertBodyTo(QueryRegistry.class)
             .choice()
                 // Return an object reference for a find documents query
-                .when { it.in.body.query instanceof FindDocumentsForMultiplePatientsQuery }
+                .when().body({ body -> body.query instanceof FindDocumentsForMultiplePatientsQuery } as Function )
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))

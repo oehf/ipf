@@ -16,7 +16,6 @@
 package org.openehealth.ipf.tutorials.xds
 
 
-import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
@@ -58,8 +57,8 @@ class Iti4142RouteBuilder extends RouteBuilder {
             .logExchange(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
             // Validate and convert the request
             .process(iti41RequestValidator())
-            .transform ({exchange, type ->
-                [ 'req': exchange.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]} as Expression)
+            .transform().exchange ({exchange ->
+                [ 'req': exchange.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]} as Function)
             // Make the dataHandlers re-readable
             .to('direct:makeDocsReReadable')
             // Further validation based on the registry content
@@ -82,8 +81,8 @@ class Iti4142RouteBuilder extends RouteBuilder {
             .logExchange(log) { 'received iti42: ' + it.in.getBody(RegisterDocumentSet.class) }
             // Validate and convert the request
             .process(iti42RequestValidator())
-            .transform ( {exchange, type ->
-                [ 'req': exchange.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]} as Expression
+            .transform().exchange ( {exchange ->
+                [ 'req': exchange.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]} as Function
             )
             // Further validation based on the registry content
             .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHash')
@@ -112,7 +111,7 @@ class Iti4142RouteBuilder extends RouteBuilder {
         // they are only referenced or contained in the request itself. Also check
         // for a patient ID that we shouldn't store documents for.
         from('direct:checkPatientIds')
-            .choice().when { it.in.body.req.submissionSet.patientId.id == '1111111' }
+            .choice().when().body({ body -> body.req.submissionSet.patientId.id == '1111111' } as Function)
                 .fail(UNKNOWN_PATIENT_ID)
                 .otherwise()
             .end()
@@ -127,16 +126,16 @@ class Iti4142RouteBuilder extends RouteBuilder {
         from('direct:checkHashAndSize')
             .splitEntries { it.req.documents }
             .choice()
-                .when {
-                    def hash = it.in.body.entry.documentEntry.hash
-                    hash != null && hash != ContentUtils.sha1(it.in.body.entry.getContent(DataHandler))
-                }.fail(INCORRECT_HASH)
+                .when().body({ body ->
+                    def hash = body.entry.documentEntry.hash
+                    hash != null && hash != ContentUtils.sha1(body.entry.getContent(DataHandler))
+                } as Function).fail(INCORRECT_HASH)
             .end()
             .choice()
-                .when {
-                    def size = it.in.body.entry.documentEntry.size
-                    size != null && size != ContentUtils.size(it.in.body.entry.getContent(DataHandler))
-                }.fail(INCORRECT_SIZE)
+            .when().body({ body ->
+                    def size = body.entry.documentEntry.size
+                    size != null && size != ContentUtils.size(body.entry.getContent(DataHandler))
+                } as Function).fail(INCORRECT_SIZE)
             .end()
 
         // Resubmitted documents must have the same hash code as the version already in the store
@@ -201,7 +200,7 @@ class Iti4142RouteBuilder extends RouteBuilder {
         // Replace associations must deprecate the replaced document and copy   
         // the new document into all folders of the original one
         from('direct:checkReplace')
-            .choice().when { it.in.body.entry.associationType.isReplace() }
+            .choice().when().body({ body -> body.entry.associationType.isReplace() } as Function )
                 .multicast().to('direct:copyFolderMembership', 'direct:deprecateTargetDocs').end()
                 .otherwise()
             .end()

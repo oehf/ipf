@@ -16,7 +16,6 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Exchange
-import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.processor.aggregate.AbstractListAggregationStrategy
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
@@ -25,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.util.function.Function
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti43RequestValidator
 
@@ -46,14 +47,14 @@ class Iti43RouteBuilder extends RouteBuilder {
     		.process(iti43RequestValidator())
     		.convertBodyTo(RetrieveDocumentSet.class)
     		// Retrieve each requested document and aggregate them in a list
-    		.split ({exchange, type -> exchange.in.body.documents } as Expression)
+    		.split().body({ body -> body.documents } as Function)
                 .aggregationStrategy(new RetrievedDocumentAggregator())
     		    .retrieve()
                 .end()
             // Create success response
-            .transform ({exchange, type ->
-                new RetrievedDocumentSet(Status.SUCCESS, exchange.in.body)
-            } as Expression)
+            .transform().body({ body -> 
+                new RetrievedDocumentSet(Status.SUCCESS, body)
+            } as Function)
 
 	}
 

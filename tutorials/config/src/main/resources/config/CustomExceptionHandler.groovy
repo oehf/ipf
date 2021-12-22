@@ -16,6 +16,7 @@
 package config
 
 import ca.uhn.hl7v2.HL7Exception
+import java.util.function.Function
 import org.apache.camel.Exchange
 import org.apache.camel.Expression
 import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
@@ -33,9 +34,9 @@ class CustomExceptionHandler extends CustomRouteBuilder {
           .handled(true)
           .transform().exceptionMessage()
           .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-          .setHeader(Exchange.FILE_NAME, {exhg, type ->
+          .setHeader(Exchange.FILE_NAME).exchange({exhg ->
               "error-${System.currentTimeMillis()}.txt"
-           } as Expression)
+           } as Function)
           .to('file:target/hl7-error')
     }
 }

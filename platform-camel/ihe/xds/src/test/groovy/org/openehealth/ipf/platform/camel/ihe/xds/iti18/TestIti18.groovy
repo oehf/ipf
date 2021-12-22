@@ -110,7 +110,7 @@ class TestIti18 extends XdsStandardTestContainer {
 
     @Test
     void testCustomizedSoapFault() {
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
+        HttpClients.createDefault().withCloseable { client -> 
             // Provoking an error by sending a GET
             HttpGet httpPost = new HttpGet("http://localhost:${port}/xds-iti18-service1");
             CloseableHttpResponse response = client.execute(httpPost);

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
@@ -29,6 +28,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti18ResponseValidator
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+
+import java.util.function.Function
 
 /**
  * Route builder for ITI-18.
@@ -59,32 +60,32 @@ class Iti18RouteBuilder extends RouteBuilder {
         from('xds-iti18:xds-iti18')
             .logExchange(log) { 'received iti18: ' + it.in.getBody(QueryRegistry.class) }
             .process(iti18RequestValidator())
-            .transform ({exchange, type ->
+            .transform().exchange({exchange ->
                 [ 'req': exchange.in.getBody(QueryRegistry.class), 'resp': new QueryResponse(SUCCESS) ]
-            } as Expression)
+            } as Function)
             // Dispatch to the correct query implementation
             .choice()
-                .when { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
-                .when { queryType(it) == FIND_SUBMISSION_SETS }.to('direct:findSets')
-                .when { queryType(it) == FIND_FOLDERS }.to('direct:findFolders')
-                .when { queryType(it) == GET_SUBMISSION_SET_AND_CONTENTS }.to('direct:getSetAndContents')
-                .when { queryType(it) == GET_DOCUMENTS }.to('direct:getDocs')
-                .when { queryType(it) == GET_FOLDER_AND_CONTENTS }.to('direct:getFolderAndContents')
-                .when { queryType(it) == GET_FOLDERS }.to('direct:getFolders')
-                .when { queryType(it) == GET_SUBMISSION_SETS }.to('direct:getSets')
-                .when { queryType(it) == GET_ASSOCIATIONS }.to('direct:getAssocs')                
-                .when { queryType(it) == GET_DOCUMENTS_AND_ASSOCIATIONS }.to('direct:getDocsAndAssocs')
-                .when { queryType(it) == GET_FOLDERS_FOR_DOCUMENT }.to('direct:getFoldersForDoc')
-                .when { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')                
+                .when().exchange { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
+                .when().exchange { queryType(it) == FIND_SUBMISSION_SETS }.to('direct:findSets')
+                .when().exchange { queryType(it) == FIND_FOLDERS }.to('direct:findFolders')
+                .when().exchange { queryType(it) == GET_SUBMISSION_SET_AND_CONTENTS }.to('direct:getSetAndContents')
+                .when().exchange { queryType(it) == GET_DOCUMENTS }.to('direct:getDocs')
+                .when().exchange { queryType(it) == GET_FOLDER_AND_CONTENTS }.to('direct:getFolderAndContents')
+                .when().exchange { queryType(it) == GET_FOLDERS }.to('direct:getFolders')
+                .when().exchange { queryType(it) == GET_SUBMISSION_SETS }.to('direct:getSets')
+                .when().exchange { queryType(it) == GET_ASSOCIATIONS }.to('direct:getAssocs')                
+                .when().exchange { queryType(it) == GET_DOCUMENTS_AND_ASSOCIATIONS }.to('direct:getDocsAndAssocs')
+                .when().exchange { queryType(it) == GET_FOLDERS_FOR_DOCUMENT }.to('direct:getFoldersForDoc')
+                .when().exchange { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')                
                 .otherwise().fail(ValidationMessage.UNKNOWN_QUERY_TYPE)
             .end()
             // Convert to object references if requested
             .choice()
-                .when { it.in.body.req.returnType == QueryReturnType.OBJECT_REF }
+                .when().body({body -> body.req.returnType == QueryReturnType.OBJECT_REF } as Function )
                     .to('direct:convertToObjRefs')
                 .otherwise()
             .end()
-            .transform ({exchange, type -> exchange.in.body.resp } as Expression)
+            .transform().body({body -> body.resp } as Function)
             .process(iti18ResponseValidator())     // This includes the check for RESULT_NOT_SINGLE_PATIENT
             .logExchange(log) { 'response iti18: ' + it.in.body }
 

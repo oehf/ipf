@@ -27,6 +27,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
+import java.util.function.Function
+
 /**
  * Test routes for PHARM-1.
  * @author Jens Riemschneider
@@ -56,13 +58,13 @@ class Pharm1TestRouteBuilder extends RouteBuilder {
             .convertBodyTo(QueryRegistry.class)
             .choice()
                 // Return an object reference for a find dispenses query or a find medication list query
-                .when { it.in.body.query instanceof FindDispensesQuery }
+                .when().body( { body -> body.query instanceof FindDispensesQuery } as Function )
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
                         resultMessage(it).body = response
                     }
-                .when { it.in.body.query instanceof FindMedicationListQuery }
+                .when().body( { body -> body.query instanceof FindMedicationListQuery } as Function )
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))

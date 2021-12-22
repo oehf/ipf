@@ -18,9 +18,10 @@ package org.openehealth.ipf.tutorials.hl7.route
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.HapiContext
 import org.apache.camel.Exchange
-import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.hl7.HL7DataFormat
+
+import java.util.function.Function
 
 import static org.apache.camel.component.hl7.HL7.messageConforms
 
@@ -51,9 +52,9 @@ class SampleRouteBuilder extends RouteBuilder {
                     msg.PID[8] = msg.PID[8].mapGender()                 // map gender
                     msg
                 }
-                .setHeader(Exchange.FILE_NAME, {exchange, type ->
+                .setHeader(Exchange.FILE_NAME).exchange({exchange ->
                         exchange.in.body.MSH[4].value + '.hl7'
-                } as Expression)
+                } as Function)
                 .convertBodyTo(String)
                 .to('file:target/output')
 

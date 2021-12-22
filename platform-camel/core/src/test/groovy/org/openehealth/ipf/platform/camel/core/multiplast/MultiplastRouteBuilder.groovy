@@ -26,7 +26,7 @@ class MultiplastRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
 
-        ThreadPoolExecutor privilegedThreadPool = new PrivilegedTestExecutorService(3,
+        ThreadPoolExecutor privilegedThreadPool = new ThreadPoolExecutor(3,
                 3, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(),
                 Executors.defaultThreadFactory())

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend
 
+import java.util.function.Function
 import org.apache.camel.builder.RouteBuilder
 
 /**
@@ -42,10 +43,10 @@ class SampleRouteBuilder extends RouteBuilder {
                 // routing decisions based in the MSH[5]
                 // field value of the HL7 message (using
                 // the HAPI DSL)
-                .when { it.in.body.MSH[5].value == 'blah' }
+                .when().body({it.MSH[5].value == 'blah' } as Function)
                     .marshal().hl7() // adapter -> string
                     .to('mock:output1')
-                .when { it.in.body.MSH[5].value == 'blub' }
+                .when().body({it.MSH[5].value == 'blub' } as Function)
                     .marshal().hl7() // adapter -> string
                     .to('mock:output2')
     }

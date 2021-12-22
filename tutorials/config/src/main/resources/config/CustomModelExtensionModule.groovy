@@ -15,6 +15,7 @@
  */
 package config
 
+import java.util.function.Function
 import org.apache.camel.Expression
 import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.commons.core.extend.config.DynamicExtension
@@ -25,9 +26,9 @@ import org.openehealth.ipf.commons.core.extend.config.DynamicExtension
 class CustomModelExtensionModule implements DynamicExtension {
 
     static ProcessorDefinition setDestinationHeader(ProcessorDefinition delegate) {
-        delegate.setHeader('destination', { exchange, type ->
+        delegate.setHeader('destination').exchange({ exchange ->
             "transmogrified-${System.currentTimeMillis()}.html"
-        } as Expression)
+        } as Function)
     }
 
     @Override
