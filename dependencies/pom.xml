@@ -9,9 +9,9 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <brave-version>5.13.3</brave-version>
+        <brave-version>5.13.5</brave-version>
         <camel-version>3.11.4</camel-version>
-        <cxf-version>3.4.5</cxf-version>
+        <cxf-version>3.5.0</cxf-version>
         <commons-io-version>2.11.0</commons-io-version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
         <groovy-version>3.0.9</groovy-version>
@@ -28,12 +28,11 @@
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.6</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>2.5.7</spring-boot-version>
+        <spring-boot-version>2.6.2</spring-boot-version>
         <vertx-version>3.9.8</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.2.3</xmlsec-version>
-        <woodstox-version>6.2.6</woodstox-version>
-        <jdom-version>2.0.6.1</jdom-version>
+        <xmlsec-version>2.3.0</xmlsec-version>
+        <woodstox-version>6.2.7</woodstox-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -70,11 +69,6 @@
                 <version>${camel-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                 <groupId>org.jdom</groupId>
-                 <artifactId>jdom2</artifactId>
-                 <version>${jdom-version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.woodstox</groupId>
