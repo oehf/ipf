@@ -72,4 +72,17 @@ public class ObjectFactory {
     public JAXBElement<ProvideAndRegisterDocumentSetRequestType> createProvideAndRegisterDocumentSetRequest(ProvideAndRegisterDocumentSetRequestType value) {
         return new JAXBElement<>(_ProvideAndRegisterDocumentSetRequest_QNAME, ProvideAndRegisterDocumentSetRequestType.class, null, value);
     }
+
+    public RetrieveDocumentSetRequestType createRetrieveDocumentSetRequest() {
+        return new RetrieveDocumentSetRequestType();
+    }
+
+    public RetrieveDocumentSetResponseType createRetrieveDocumentSetResponse() {
+        return new RetrieveDocumentSetResponseType();
+    }
+
+    public RemoveDocumentsRequestType createRemoveDocumentsRequest() {
+        return new RemoveDocumentsRequestType();
+    }
+
 }

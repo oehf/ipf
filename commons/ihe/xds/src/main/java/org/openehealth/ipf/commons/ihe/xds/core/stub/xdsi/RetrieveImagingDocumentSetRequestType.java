@@ -296,7 +296,8 @@ public class RetrieveImagingDocumentSetRequestType {
         @XmlAttribute(name = "seriesInstanceUID", required = true)
         protected String seriesInstanceUID;
 
-        @XmlElement(name = "DocumentRequest", required = true)
+
+        @XmlElement(name = "DocumentRequest", required = true, namespace = "urn:ihe:iti:xds-b:2007")
         private List<RetrieveDocumentSetRequestType.DocumentRequest> documentRequest;
 
         /**
