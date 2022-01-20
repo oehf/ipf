@@ -35,6 +35,8 @@ import javax.net.ssl.SSLContext;
 /**
  * This is mostly a copy of {@link org.apache.camel.component.netty.DefaultServerInitializerFactory} with the exception
  * that SSL Decoding errors are handled with ATNA audit
+ *
+ * @see AuditAwareSslHandler
  */
 class CustomServerInitializerFactory extends ServerInitializerFactory {
 

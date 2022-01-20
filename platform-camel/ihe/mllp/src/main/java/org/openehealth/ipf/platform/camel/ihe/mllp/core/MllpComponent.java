@@ -98,7 +98,8 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         nettyParameters.put("sync", true);
         nettyParameters.put("lazyChannelCreation", true);
         nettyParameters.put("transferExchange", false);
-        nettyParameters.put("serverInitializerFactory", new CustomServerInitializerFactory(getAndRemoveParameter(parameters, MLLP_ENDPOINT_CONFIG, MllpEndpointConfiguration.class)));
+        nettyParameters.put("serverInitializerFactory",
+                new CustomServerInitializerFactory(getAndRemoveParameter(parameters, MLLP_ENDPOINT_CONFIG, MllpEndpointConfiguration.class)));
 
         if (!nettyParameters.containsKey("decoders")) {
             nettyParameters.put("decoders", DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME);

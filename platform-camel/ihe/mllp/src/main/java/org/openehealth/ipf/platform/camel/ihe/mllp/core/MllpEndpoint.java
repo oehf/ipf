@@ -200,11 +200,9 @@ public abstract class MllpEndpoint<
     }
 
     private String[] toStringArray(List<?> list) {
-        final var result = new String[list.size()];
-        for (var i = 0; i < list.size(); i++) {
-            result[i] = list.get(i).getClass().getCanonicalName();
-        }
-        return result;
+        return list.stream()
+                .map(o -> o.getClass().getCanonicalName())
+                .toArray(String[]::new);
     }
 
 

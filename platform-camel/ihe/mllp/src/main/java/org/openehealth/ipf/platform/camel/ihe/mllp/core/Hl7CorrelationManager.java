@@ -26,7 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Correlation Manager used when duplexing message over a single connection
+ * Correlation Manager used when duplexing message over a single Netty connection.
+ * Requests and responses are correlated based on MSH-10 and MSA-2 message identifiers
  */
 public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
 
