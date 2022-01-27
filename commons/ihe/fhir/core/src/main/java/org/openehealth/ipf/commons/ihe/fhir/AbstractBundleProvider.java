@@ -81,10 +81,13 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends IBaseResource> void sortIfApplicable(List<T> resources) {
         if (sort && headers.containsKey(FHIR_REQUEST_PARAMETERS)) {
-            var searchParameters = (FhirSearchParameters<T>) headers.get(FHIR_REQUEST_PARAMETERS);
-            searchParameters.sort(resources);
+            var searchParameters =  headers.get(FHIR_REQUEST_PARAMETERS);
+            if (searchParameters instanceof FhirSearchAndSortParameters) {
+                ((FhirSearchAndSortParameters<T>)searchParameters).sort(resources);
+            }
         }
     }
 
