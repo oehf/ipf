@@ -56,7 +56,7 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
         var query = (String) parameters.get(HTTP_QUERY);
         dataset.setQueryString(URLDecoder.decode(String.format("%s?%s", url, query), StandardCharsets.UTF_8));
 
-        var searchParameter = (FhirSearchParameters<?>) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+        var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
         if (searchParameter != null) {
             var tokenParams = searchParameter.getPatientIdParam();
             if (tokenParams != null) {

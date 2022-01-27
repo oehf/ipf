@@ -110,7 +110,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
             var query = (String) parameters.get(HTTP_QUERY);
             auditDataset.setQueryString(query);
 
-            var searchParameter = (FhirSearchParameters<?>) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+            var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
             if (searchParameter != null) {
                 var tokenParams = searchParameter.getPatientIdParam();
                 if (tokenParams != null) {
