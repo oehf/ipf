@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 
 import java.util.List;
@@ -33,11 +32,11 @@ import java.util.Set;
  */
 public interface FhirSearchParameters {
 
-    SortSpec getSortSpec();
-
     Set<Include> getIncludeSpec();
 
     List<TokenParam> getPatientIdParam();
 
     FhirContext getFhirContext();
+
+
 }

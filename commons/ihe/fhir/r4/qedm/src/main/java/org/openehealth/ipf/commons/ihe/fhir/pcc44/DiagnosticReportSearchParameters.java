@@ -27,8 +27,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.DiagnosticReport;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
@@ -36,7 +43,7 @@ import java.util.Set;
  */
 
 @ToString
-public class DiagnosticReportSearchParameters extends Pcc44CommonSearchParameters {
+public class DiagnosticReportSearchParameters extends Pcc44CommonSearchParameters<DiagnosticReport> {
 
     @Getter @Setter
     private TokenOrListParam category;
@@ -59,4 +66,22 @@ public class DiagnosticReportSearchParameters extends Pcc44CommonSearchParameter
         this.code = code;
         this.date = date;
     }
+
+    @Override
+    protected Optional<Comparator<DiagnosticReport>> comparatorFor(String paramName) {
+        if (DiagnosticReport.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_EFFECTIVE));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<DiagnosticReport> CP_EFFECTIVE = nullsLast(comparing(diagnosticReport -> {
+        if (!diagnosticReport.hasEffective()) return null;
+        var effective = diagnosticReport.getEffective();
+        if (effective instanceof DateTimeType) {
+            return diagnosticReport.getEffectiveDateTimeType().getValueAsString();
+        } else {
+            return diagnosticReport.getEffectivePeriod().getStartElement().getValueAsString();
+        }
+    }));
 }

@@ -28,10 +28,11 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.Practitioner;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.util.Collections;

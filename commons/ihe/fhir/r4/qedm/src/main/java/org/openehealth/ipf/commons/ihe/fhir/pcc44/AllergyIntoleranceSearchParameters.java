@@ -23,15 +23,21 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.AllergyIntolerance;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class AllergyIntoleranceSearchParameters extends Pcc44CommonSearchParameters {
+public class AllergyIntoleranceSearchParameters extends Pcc44CommonSearchParameters<AllergyIntolerance> {
 
     @Builder
     public AllergyIntoleranceSearchParameters(ReferenceParam patientReference,
@@ -41,5 +47,15 @@ public class AllergyIntoleranceSearchParameters extends Pcc44CommonSearchParamet
                                               Set<Include> revIncludeSpec,
                                               FhirContext fhirContext) {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
+    }
+
+    @Override
+    protected Optional<Comparator<AllergyIntolerance>> comparatorFor(String paramName) {
+        if (AllergyIntolerance.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(comparing(AllergyIntolerance::getRecordedDate)));
+        } else if (AllergyIntolerance.SP_LAST_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(comparing(AllergyIntolerance::getLastOccurrence)));
+        }
+        return Optional.empty();
     }
 }

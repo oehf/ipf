@@ -23,15 +23,21 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.MedicationRequest;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class MedicationRequestSearchParameters extends Pcc44CommonSearchParameters {
+public class MedicationRequestSearchParameters extends Pcc44CommonSearchParameters<MedicationRequest> {
 
     @Builder
     MedicationRequestSearchParameters(ReferenceParam patientReference,
@@ -41,5 +47,13 @@ public class MedicationRequestSearchParameters extends Pcc44CommonSearchParamete
                                              Set<Include> revIncludeSpec,
                                              FhirContext fhirContext) {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
+    }
+
+    @Override
+    protected Optional<Comparator<MedicationRequest>> comparatorFor(String paramName) {
+        switch (paramName) {
+            case MedicationRequest.SP_AUTHOREDON: return Optional.of(nullsLast(comparing(MedicationRequest::getAuthoredOn)));
+        }
+        return Optional.empty();
     }
 }

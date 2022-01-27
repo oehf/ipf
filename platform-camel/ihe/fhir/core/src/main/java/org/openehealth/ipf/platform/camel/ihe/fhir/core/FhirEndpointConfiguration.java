@@ -56,6 +56,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     static final String LAZY_LOAD_BUNDLES = "lazyLoadBundles";
     static final String CACHE_BUNDLES = "cacheBundles";
     static final String CONSUMER_SELECTOR = "consumerSelector";
+    static final String SORT = "sort";
 
     @Getter
     private final String path;
@@ -92,6 +93,15 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @Getter
     @UriParam
     private final boolean lazyLoadBundles;
+
+    /**
+     * If this is true, sorting is executed in the BundleProvider if _sort parameters are provided. The sorting logic is expected to
+     * be implemented in {@link org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters} implementations. If this is false,
+     * the Camel route is expected to return sorted results if the query has requested this.
+     */
+    @Getter
+    @UriParam
+    private final boolean sort;
 
     @Getter
     private final FhirSecurityInformation<?> securityInformation;
@@ -155,6 +165,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
         cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
+        sort = component.getAndRemoveParameter(parameters, SORT, Boolean.class, false);
         consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class);
 
         // Security stuff

@@ -29,10 +29,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import org.hl7.fhir.r4.model.AuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @since 3.6
@@ -40,7 +46,7 @@ import java.util.Set;
 @Builder
 @ToString
 @AllArgsConstructor
-public class Iti81SearchParameters implements FhirSearchParameters {
+public class Iti81SearchParameters extends FhirSearchAndSortParameters<AuditEvent> {
 
     @Getter @Setter private DateRangeParam interval;
     @Getter @Setter private StringAndListParam address;
@@ -65,4 +71,23 @@ public class Iti81SearchParameters implements FhirSearchParameters {
     public List<TokenParam> getPatientIdParam() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Optional<Comparator<AuditEvent>> comparatorFor(String paramName) {
+        if (AuditEvent.SP_DATE.equals(paramName)) {
+            return Optional.of(CP_DATE);
+        } else if (AuditEvent.SP_ADDRESS.equals(paramName)) {
+            return Optional.of(CP_ADDRESS);
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<AuditEvent> CP_DATE = nullsLast(comparing(AuditEvent::getRecorded));
+    private static final Comparator<AuditEvent> CP_ADDRESS = nullsLast(comparing(auditEvent -> {
+        if (!auditEvent.hasAgent()) return null;
+        var agent = auditEvent.getAgentFirstRep();
+        if (!agent.hasNetwork()) return null;
+        return agent.getNetwork().getAddressElement().getValueNotNull();
+    }));
+
 }

@@ -26,8 +26,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.Encounter;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
@@ -35,7 +41,7 @@ import java.util.Set;
  */
 
 @ToString
-public class EncounterSearchParameters extends Pcc44CommonSearchParameters {
+public class EncounterSearchParameters extends Pcc44CommonSearchParameters<Encounter> {
 
     @Getter @Setter
     private DateRangeParam date;
@@ -51,4 +57,17 @@ public class EncounterSearchParameters extends Pcc44CommonSearchParameters {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
         this.date = date;
     }
+
+    @Override
+    protected Optional<Comparator<Encounter>> comparatorFor(String paramName) {
+        if (Encounter.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_PERIOD));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<Encounter> CP_PERIOD = nullsLast(comparing(encounter -> {
+        if (!encounter.hasPeriod()) return null;
+        return encounter.getPeriod().getStart();
+    }));
 }

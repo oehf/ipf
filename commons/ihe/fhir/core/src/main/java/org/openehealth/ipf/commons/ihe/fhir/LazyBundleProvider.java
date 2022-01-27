@@ -66,14 +66,29 @@ public class LazyBundleProvider extends AbstractBundleProvider {
      * @param headers      incoming headers
      */
     public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, Object payload, Map<String, Object> headers) {
-        super(consumer, payload, headers);
+        this(consumer, cacheResults, false, payload, headers);
+    }
+
+    /**
+     * Initializes a lazy bundle provider
+     *
+     * @param consumer     FHIR consumer that uses ths provider
+     * @param cacheResults cache results. So far, only the result set size is cached
+     * @param sort         sort results
+     * @param payload      incoming payload
+     * @param headers      incoming headers
+     */
+    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, boolean sort, Object payload, Map<String, Object> headers) {
+        super(consumer, sort, payload, headers);
         this.cacheResults = cacheResults;
     }
 
     @Override
     public List<IBaseResource> getResources(int fromIndex, int toIndex) {
         if (!cacheResults) {
-            return getPartialResult(fromIndex, toIndex);
+            var result = getPartialResult(fromIndex, toIndex);
+            sortIfApplicable(result);
+            return result;
         }
         LOG.debug("Cached results contain the following ranges: {}. Requesting resources from index {} to {}", resultRanges, fromIndex, toIndex);
         var wanted = Range.closedOpen(fromIndex, toIndex);
@@ -124,6 +139,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
                 cachedResults.set(fromIndex + i, resources.get(i));
             }
         }
+        sortIfApplicable(cachedResults);
     }
 
     private static class ResultRanges {

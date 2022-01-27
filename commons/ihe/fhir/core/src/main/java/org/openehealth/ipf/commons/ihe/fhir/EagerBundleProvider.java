@@ -33,7 +33,11 @@ public class EagerBundleProvider extends AbstractBundleProvider {
     private transient List<IBaseResource> resources;
 
     public EagerBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
-        super(consumer, payload, headers);
+        this(consumer, false, payload, headers);
+    }
+
+    public EagerBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers) {
+        super(consumer, sort, payload, headers);
     }
 
     @Override
@@ -53,6 +57,7 @@ public class EagerBundleProvider extends AbstractBundleProvider {
     private List<IBaseResource> fetchResources() {
         if (resources == null) {
             resources = obtainResources(getPayload(), getHeaders());
+            sortIfApplicable(resources);
         }
         return resources;
     }

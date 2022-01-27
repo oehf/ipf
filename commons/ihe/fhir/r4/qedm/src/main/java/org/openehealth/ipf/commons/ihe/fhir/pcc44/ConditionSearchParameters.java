@@ -27,15 +27,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.Condition;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class ConditionSearchParameters extends Pcc44CommonSearchParameters {
+public class ConditionSearchParameters extends Pcc44CommonSearchParameters<Condition> {
 
     @Getter @Setter
     private TokenAndListParam category;
@@ -54,5 +60,13 @@ public class ConditionSearchParameters extends Pcc44CommonSearchParameters {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
         this.category = category;
         this.clinicalStatus = clinicalStatus;
+    }
+
+    @Override
+    protected Optional<Comparator<Condition>> comparatorFor(String paramName) {
+        if (Condition.SP_RECORDED_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(comparing(Condition::getRecordedDate)));
+        }
+        return Optional.empty();
     }
 }

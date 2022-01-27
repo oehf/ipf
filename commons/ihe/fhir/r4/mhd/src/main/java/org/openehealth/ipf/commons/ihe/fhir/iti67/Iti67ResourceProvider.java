@@ -64,7 +64,7 @@ import java.util.Set;
  */
 public class Iti67ResourceProvider extends AbstractPlainProvider {
 
-    private static final String STU3_INDEXED = "indexed";
+    static final String STU3_INDEXED = "indexed";
     private static final String STU3_CLASS = "class";
     private static final String STU3_RELATED_ID = "related-id";
     private static final String STU3_RELATED_REF = "related-ref";

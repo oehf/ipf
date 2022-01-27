@@ -54,11 +54,13 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
                 .execute();
     }
 
-    protected Bundle sendManuallyWithCount(ICriterion<?> requestData, int count) {
+    protected Bundle sendManuallyWithCountAndOrder(ICriterion<?> requestData, int count) {
         return client.search()
                 .forResource(PdqPatient.class)
                 .where(requestData)
                 .count(count)
+                .sort().ascending(PdqPatient.FAMILY)
+                .sort().ascending(PdqPatient.GIVEN)
                 .returnBundle(Bundle.class)
                 .encodedXml()
                 .execute();
@@ -67,12 +69,14 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     protected Bundle nextPage(Bundle bundle) {
         return client.loadPage()
                 .next(bundle)
+                .preferResponseType(PdqPatient.class)
                 .execute();
     }
 
     protected Bundle previousPage(Bundle bundle) {
         return client.loadPage()
                 .previous(bundle)
+                .preferResponseType(PdqPatient.class)
                 .execute();
     }
 

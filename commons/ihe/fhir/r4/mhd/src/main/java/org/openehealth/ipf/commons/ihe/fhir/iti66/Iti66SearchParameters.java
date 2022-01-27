@@ -30,12 +30,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DocumentManifest;
 import org.hl7.fhir.r4.model.Practitioner;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import org.hl7.fhir.r4.model.PractitionerRole;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @since 3.6
@@ -43,7 +50,7 @@ import java.util.Set;
 @Builder
 @ToString
 @AllArgsConstructor
-public class Iti66SearchParameters implements FhirSearchParameters {
+public class Iti66SearchParameters extends FhirSearchAndSortParameters<DocumentManifest> {
 
     @Getter @Setter private DateRangeParam created;
     @Getter @Setter private StringParam authorFamilyName;
@@ -86,4 +93,34 @@ public class Iti66SearchParameters implements FhirSearchParameters {
         }
         return this;
     }
+
+    @Override
+    public Optional<Comparator<DocumentManifest>> comparatorFor(String paramName) {
+        if (DocumentManifest.SP_CREATED.equals(paramName)) {
+            return Optional.of(CP_CREATED);
+        } else if (DocumentManifest.SP_AUTHOR.equals(paramName)) {
+            return Optional.of(CP_AUTHOR);
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<DocumentManifest> CP_CREATED = nullsLast(comparing(DocumentManifest::getCreated));
+
+    private static final Comparator<DocumentManifest> CP_AUTHOR = nullsLast(comparing(documentManifest -> {
+        if (!documentManifest.hasAuthor()) return null;
+        var author = documentManifest.getAuthorFirstRep();
+        if (author.getResource() instanceof PractitionerRole) {
+            var practitionerRole = (PractitionerRole) author.getResource();
+            if (!practitionerRole.hasPractitioner()) return null;
+            author = practitionerRole.getPractitioner();
+        }
+        if (author.getResource() == null) return null;
+        if (author.getResource() instanceof Practitioner) {
+            var practitioner = (Practitioner) author.getResource();
+            if (!practitioner.hasName()) return null;
+            var name = practitioner.getNameFirstRep();
+            return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
+        }
+        return null;
+    }));
 }

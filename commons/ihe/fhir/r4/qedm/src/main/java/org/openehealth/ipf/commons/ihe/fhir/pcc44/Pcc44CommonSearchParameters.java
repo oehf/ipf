@@ -19,9 +19,12 @@ package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
-import lombok.*;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.hl7.fhir.r4.model.DomainResource;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +35,7 @@ import java.util.Set;
  * @since 3.6
  */
 @AllArgsConstructor
-abstract class Pcc44CommonSearchParameters implements FhirSearchParameters {
+abstract class Pcc44CommonSearchParameters<T extends DomainResource> extends FhirSearchAndSortParameters<T> {
 
     @Getter private final ReferenceParam patientReference;
     @Getter private final TokenParam _id;

@@ -61,8 +61,8 @@ public enum ResponseCase {
                 PID[3](0)[4][3] = "ISO"
                 PID[3](0)[5] = "PI"
 
-                PID[5][1] = 'Test1'
-                PID[5][2] = 'Patient'
+                PID[5][1] = 'Test2'
+                PID[5][2] = 'Zed'
                 PID[5][7] = 'L'
                 PID[6][1] = 'Maiden'
                 PID[6][7] = 'L'
@@ -78,7 +78,7 @@ public enum ResponseCase {
                 PID[3](0)[5] = "PI"
 
                 PID[5][1] = 'Test2'
-                PID[5][2] = 'Patient'
+                PID[5][2] = 'Hilmar'
                 PID[5][7] = 'L'
                 PID[6][1] = 'Maiden'
                 PID[6][7] = 'L'
@@ -93,8 +93,8 @@ public enum ResponseCase {
                 PID[3](0)[4][3] = "ISO"
                 PID[3](0)[5] = "PI"
 
-                PID[5][1] = 'Test3'
-                PID[5][2] = 'Patient'
+                PID[5][1] = 'Test1'
+                PID[5][2] = 'Peter'
                 PID[5][7] = 'L'
                 PID[6][1] = 'Maiden'
                 PID[6][7] = 'L'

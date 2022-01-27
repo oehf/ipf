@@ -50,12 +50,12 @@ public class Iti78TestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .toF("pdqm-iti78:localhost:%d?fhirContext=#fhirContext", FhirTestContainer.DEMO_APP_PORT);
 
-        from("pdqm-iti78:translation?audit=true&fhirContext=#fhirContext")
+        from("pdqm-iti78:translation?audit=true&fhirContext=#fhirContext&sort=true")
                 // Translate into ITI-9
                 .errorHandler(noErrorHandler())
                 .process(translateFhir(requestTranslator))

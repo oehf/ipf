@@ -216,9 +216,15 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @return resulting bundle provider
      */
     protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers) {
-        FhirEndpointConfiguration<?> endpointConfiguration = getEndpoint().getInterceptableConfiguration();
+        var endpointConfiguration = getEndpoint().getInterceptableConfiguration();
         return supportsLazyLoading() ?
-                new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers) :
-                new EagerBundleProvider(this, payload, headers);
+                new LazyBundleProvider(this,
+                        endpointConfiguration.isCacheBundles(),
+                        endpointConfiguration.isSort(),
+                        payload,
+                        headers) :
+                new EagerBundleProvider(this,
+                        endpointConfiguration.isSort(),
+                        payload, headers);
     }
 }

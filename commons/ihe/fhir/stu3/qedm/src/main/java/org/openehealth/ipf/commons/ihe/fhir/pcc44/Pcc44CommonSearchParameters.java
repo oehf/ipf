@@ -19,8 +19,10 @@ package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
-import lombok.*;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.util.Collections;

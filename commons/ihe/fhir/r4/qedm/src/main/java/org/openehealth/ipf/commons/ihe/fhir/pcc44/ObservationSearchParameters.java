@@ -19,19 +19,32 @@ package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.InstantType;
+import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Period;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class ObservationSearchParameters extends Pcc44CommonSearchParameters {
+public class ObservationSearchParameters extends Pcc44CommonSearchParameters<Observation> {
 
     @Getter
     private final DateRangeParam date;
@@ -57,4 +70,26 @@ public class ObservationSearchParameters extends Pcc44CommonSearchParameters {
         this.category = category;
         this.code = code;
     }
+
+    @Override
+    protected Optional<Comparator<Observation>> comparatorFor(String paramName) {
+        if (Observation.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_EFFECTIVE));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<Observation> CP_EFFECTIVE = nullsLast(comparing(observation -> {
+        if (!observation.hasEffective()) return null;
+        var effective = observation.getEffective();
+        if (effective instanceof DateTimeType) {
+            return observation.getEffectiveDateTimeType().getValueAsString();
+        } else if (effective instanceof Period){
+            return observation.getEffectivePeriod().getStartElement().getValueAsString();
+        } else if (effective instanceof InstantType){
+            return observation.getEffectiveInstantType().getValueAsString();
+        } else  {
+            return null;
+        }
+    }));
 }

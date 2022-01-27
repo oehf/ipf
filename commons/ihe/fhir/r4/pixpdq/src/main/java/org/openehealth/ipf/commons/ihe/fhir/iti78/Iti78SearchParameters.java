@@ -29,12 +29,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @since 3.6
@@ -42,7 +47,7 @@ import java.util.stream.Collectors;
 @Builder
 @ToString
 @AllArgsConstructor
-public class Iti78SearchParameters implements FhirSearchParameters {
+public class Iti78SearchParameters extends FhirSearchAndSortParameters<PdqPatient> {
 
     @Getter @Setter private TokenAndListParam identifiers;
     @Getter @Setter private TokenParam active;
@@ -75,4 +80,19 @@ public class Iti78SearchParameters implements FhirSearchParameters {
                 .collect(Collectors.toList());
         return Collections.emptyList();
     }
+
+    @Override
+    public Optional<Comparator<PdqPatient>> comparatorFor(String paramName) {
+        switch (paramName) {
+            case PdqPatient.SP_BIRTHDATE : return Optional.of(CP_DATE);
+            case PdqPatient.SP_FAMILY: return Optional.of(CP_FAMILY);
+            case PdqPatient.SP_GIVEN: return Optional.of(CP_GIVEN);
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<PdqPatient> CP_DATE = nullsLast(comparing(PdqPatient::getBirthDate));
+    private static final Comparator<PdqPatient> CP_FAMILY = nullsLast(comparing(patient -> patient.getNameFirstRep().getFamily()));
+    private static final Comparator<PdqPatient> CP_GIVEN = nullsLast(comparing(patient -> patient.getNameFirstRep().getGivenAsSingleString()));
+
 }

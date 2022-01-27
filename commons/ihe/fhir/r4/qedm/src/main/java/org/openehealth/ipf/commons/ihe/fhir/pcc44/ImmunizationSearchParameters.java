@@ -23,15 +23,21 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.Immunization;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class ImmunizationSearchParameters extends Pcc44CommonSearchParameters {
+public class ImmunizationSearchParameters extends Pcc44CommonSearchParameters<Immunization> {
 
     @Builder
     ImmunizationSearchParameters(ReferenceParam patientReference,
@@ -42,4 +48,17 @@ public class ImmunizationSearchParameters extends Pcc44CommonSearchParameters {
                                  FhirContext fhirContext) {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
     }
+
+    @Override
+    protected Optional<Comparator<Immunization>> comparatorFor(String paramName) {
+        if (Immunization.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_OCCURRENCE));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<Immunization> CP_OCCURRENCE = nullsLast(comparing(immunization -> {
+        if (!immunization.hasOccurrenceDateTimeType()) return null;
+        return immunization.getOccurrenceDateTimeType().getValue();
+    }));
 }

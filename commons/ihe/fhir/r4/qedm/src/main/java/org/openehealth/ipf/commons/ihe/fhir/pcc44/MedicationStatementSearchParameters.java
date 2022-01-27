@@ -23,15 +23,22 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.MedicationStatement;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
 @ToString
-public class MedicationStatementSearchParameters extends Pcc44CommonSearchParameters {
+public class MedicationStatementSearchParameters extends Pcc44CommonSearchParameters<MedicationStatement> {
 
     @Builder
     MedicationStatementSearchParameters(ReferenceParam patientReference,
@@ -42,4 +49,22 @@ public class MedicationStatementSearchParameters extends Pcc44CommonSearchParame
                                                FhirContext fhirContext) {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
     }
+
+    @Override
+    protected Optional<Comparator<MedicationStatement>> comparatorFor(String paramName) {
+        if (MedicationStatement.SP_EFFECTIVE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_EFFECTIVE));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<MedicationStatement> CP_EFFECTIVE = nullsLast(comparing(medicationStatement -> {
+        if (!medicationStatement.hasEffective()) return null;
+        var effective = medicationStatement.getEffective();
+        if (effective instanceof DateTimeType) {
+            return medicationStatement.getEffectiveDateTimeType().getValueAsString();
+        } else {
+            return medicationStatement.getEffectivePeriod().getStartElement().getValueAsString();
+        }
+    }));
 }

@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_PARAMETERS;
+
 /**
  * Base class of a {@link IBundleProvider} delegating to a {@link RequestConsumer} instance
  */
@@ -32,11 +34,17 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     private final RequestConsumer consumer;
     private final Object payload;
     private final Map<String, Object> headers;
+    private final boolean sort;
 
     public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
+        this(consumer, false, payload, headers);
+    }
+
+    public AbstractBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers) {
         this.consumer = consumer;
         this.payload = payload;
         this.headers = headers;
+        this.sort = sort;
     }
 
     @Override
@@ -72,4 +80,12 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     public String getUuid() {
         return null;
     }
+
+    public <T extends IBaseResource> void sortIfApplicable(List<T> resources) {
+        if (sort && headers.containsKey(FHIR_REQUEST_PARAMETERS)) {
+            var searchParameters = (FhirSearchParameters<T>) headers.get(FHIR_REQUEST_PARAMETERS);
+            searchParameters.sort(resources);
+        }
+    }
+
 }

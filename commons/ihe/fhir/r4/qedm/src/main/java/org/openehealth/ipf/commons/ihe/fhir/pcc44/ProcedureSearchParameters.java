@@ -26,8 +26,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.Period;
+import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.StringType;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 
 /**
  * @author Christian Ohr
@@ -35,7 +44,7 @@ import java.util.Set;
  */
 
 @ToString
-public class ProcedureSearchParameters extends Pcc44CommonSearchParameters {
+public class ProcedureSearchParameters extends Pcc44CommonSearchParameters<Procedure> {
 
     @Getter @Setter
     private DateRangeParam date;
@@ -51,4 +60,26 @@ public class ProcedureSearchParameters extends Pcc44CommonSearchParameters {
         super(patientReference, _id, sortSpec, includeSpec, revIncludeSpec, fhirContext);
         this.date = date;
     }
+
+    @Override
+    protected Optional<Comparator<Procedure>> comparatorFor(String paramName) {
+        if (Procedure.SP_DATE.equals(paramName)) {
+            return Optional.of(nullsLast(CP_PERFORMED));
+        }
+        return Optional.empty();
+    }
+
+    private static final Comparator<Procedure> CP_PERFORMED = nullsLast(comparing(procedure -> {
+        if (!procedure.hasPerformed()) return null;
+        var performed = procedure.getPerformed();
+        if (performed instanceof DateTimeType) {
+            return procedure.getPerformedDateTimeType().getValueAsString();
+        } else if (performed instanceof Period){
+            return procedure.getPerformedPeriod().getStartElement().getValueAsString();
+        } else if (performed instanceof StringType){
+            return procedure.getPerformedStringType().getValueNotNull();
+        } else  {
+            return null;
+        }
+    }));
 }
