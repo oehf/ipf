@@ -58,7 +58,7 @@ public class PixV3QueryResponseTransformer {
         // Prepare response with fixed values
         final PRPAIN201310UV02Type response = new PRPAIN201310UV02Type();
         response.setITSVersion("XML_1.0");
-        response.setInteractionId(new II("2.16.840.1.113883.1.18", "PRPA_IN201310UV02"));
+        response.setInteractionId(new II("2.16.840.1.113883.1.6", "PRPA_IN201310UV02"));
         response.setProcessingCode(new CS("P", null, null));
         response.setProcessingModeCode(new CS("T", null, null));
         response.setAcceptAckCode(new CS("NE", null, null));
