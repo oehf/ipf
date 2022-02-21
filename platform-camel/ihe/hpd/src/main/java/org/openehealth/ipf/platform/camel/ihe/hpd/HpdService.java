@@ -18,10 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hpd.HpdException;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
@@ -29,7 +26,9 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 @Slf4j
 abstract public class HpdService extends AbstractWebService {
 
-    public BatchResponse doProcess(BatchRequest request) {
+    public static final ObjectFactory DSMLV2_OBJECT_FACTORY = new ObjectFactory();
+
+    protected BatchResponse doProcess(BatchRequest request) {
         Exchange result = process(request);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
@@ -39,19 +38,20 @@ abstract public class HpdService extends AbstractWebService {
         return Exchanges.resultMessage(result).getBody(BatchResponse.class);
     }
 
-    private BatchResponse errorMessage(BatchRequest request, Exception exception) {
-        ObjectFactory factory = new ObjectFactory();
-
-        ErrorResponse error = factory.createErrorResponse();
+    protected static ErrorResponse errorResponse(Exception exception, String requestId) {
+        ErrorResponse error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
         error.setMessage(exception.getMessage());
-        error.setRequestID(request.getRequestID());
+        error.setRequestID(requestId);
         ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorType.OTHER;
         error.setType(errorType);
+        return error;
+    }
 
-        BatchResponse response = factory.createBatchResponse();
-        response.setRequestID(request.getRequestID());
-        response.getBatchResponses().add(factory.createBatchResponseErrorResponse(error));
-        
-        return response;
+    private BatchResponse errorMessage(BatchRequest batchRequest, Exception exception) {
+        ErrorResponse errorResponse = errorResponse(exception, batchRequest.getRequestID());
+        BatchResponse batchResponse = new BatchResponse();
+        batchResponse.setRequestID(batchRequest.getRequestID());
+        batchResponse.getBatchResponses().add(DSMLV2_OBJECT_FACTORY.createBatchResponseErrorResponse(errorResponse));
+        return batchResponse;
     }
 }

@@ -29,9 +29,12 @@ import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -69,23 +72,36 @@ public class HpdValidator {
         }
     }
 
+    private static boolean isUniqueRequestId(String s, Set<Long> knownValues) {
+        try {
+            long value = Long.parseLong(s);
+            return ((value >= 0L) && knownValues.add(value));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     private static void validateBatchRequest(
-            BatchRequest batch,
+            BatchRequest batchRequest,
             Class<? extends DsmlMessage>[] allowedElementTypes,
             Consumer<DsmlMessage> requestValidator)
     {
-        check(batch.getBatchRequests() != null, "Batch is null");
-        check(!batch.getBatchRequests().isEmpty(), "Batch is empty");
-        for(DsmlMessage dsml : batch.getBatchRequests()) {
-            check(dsml != null, "Batch element is null");
-            check(ArrayUtils.contains(allowedElementTypes, dsml.getClass()), "Bad batch element type " + ClassUtils.getSimpleName(dsml));
+        check(batchRequest.getBatchRequests() != null, "Batch request is null");
+        check(!batchRequest.getBatchRequests().isEmpty(), "Batch request is empty");
+        Set<Long> requestIds = new HashSet<>();
+        check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
+
+        for (DsmlMessage dsml : batchRequest.getBatchRequests()) {
+            check(dsml != null, "Batch request element is null");
+            check(ArrayUtils.contains(allowedElementTypes, dsml.getClass()), "Bad batch request element type " + ClassUtils.getSimpleName(dsml));
+            check(isUniqueRequestId(dsml.getRequestID(), requestIds), "Request ID must be a non-negative number unique in the batch request");
             requestValidator.accept(dsml);
         }
     }
 
-    private static void validateSearchRequest(SearchRequest request, String dc, String o, String c) {
+    private static void validateSearchRequest(SearchRequest searchRequest, String dc, String o, String c) {
         try {
-            LdapName ldapName = new LdapName(request.getDn());
+            LdapName ldapName = new LdapName(searchRequest.getDn());
             for (Rdn rdn : ldapName.getRdns()) {
                 String value = (String) rdn.getValue();
                 switch (rdn.getType().toLowerCase()) {
@@ -122,6 +138,26 @@ public class HpdValidator {
 
     public static void validateIti58Response(BatchResponse batchResponse) {
         validateWithXsd(batchResponse, "/schema/DSMLv2.xsd");
+        Set<Long> requestIds = new HashSet<>();
+        check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
+
+        for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {
+            check(jaxbElement != null, "Batch response element is null");
+            Object value = jaxbElement.getValue();
+            check(value != null, "Batch response element is null");
+
+            String requestId;
+            if (value instanceof LDAPResult) {
+                requestId = ((LDAPResult) value).getRequestID();
+            } else if (value instanceof SearchResponse) {
+                requestId = ((SearchResponse) value).getRequestID();
+            } else if (value instanceof ErrorResponse) {
+                requestId = ((ErrorResponse) value).getRequestID();
+            } else {
+                throw new HpdException("Wrong response element type " + value.getClass().getSimpleName(), ErrorType.MALFORMED_REQUEST);
+            }
+            check(isUniqueRequestId(requestId, requestIds), "Request ID must be a non-negative number unique in the batch response");
+        }
     }
 
     public static void validateIti59Request(BatchRequest batchRequest) {
