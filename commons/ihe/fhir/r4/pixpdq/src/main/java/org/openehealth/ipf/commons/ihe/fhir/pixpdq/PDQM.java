@@ -39,7 +39,7 @@ public class PDQM implements IntegrationProfile {
         ITI_78(ITI_78_CONFIG);
 
         @Getter
-        FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 
     @Override

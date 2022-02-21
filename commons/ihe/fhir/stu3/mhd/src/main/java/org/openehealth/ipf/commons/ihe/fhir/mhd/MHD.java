@@ -46,7 +46,7 @@ public class MHD implements IntegrationProfile {
         ITI_65(ITI_65_CONFIG);
 
         @Getter
-        FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -54,7 +54,8 @@ public class MHD implements IntegrationProfile {
         ITI_66(ITI_66_CONFIG),
         ITI_67(ITI_67_CONFIG);
 
-        @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        @Getter
+        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -62,7 +63,7 @@ public class MHD implements IntegrationProfile {
         ITI_68(ITI_68_CONFIG);
 
         @Getter
-        TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
+        private final TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
     }
 
     @Override

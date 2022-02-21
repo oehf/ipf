@@ -39,7 +39,7 @@ public class QEDM implements IntegrationProfile {
         PCC_44;
 
         @Getter
-        FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
 
         @Override
         public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,

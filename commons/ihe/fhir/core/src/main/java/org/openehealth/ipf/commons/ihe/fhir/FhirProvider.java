@@ -37,7 +37,7 @@ public abstract class FhirProvider implements Serializable {
     protected abstract FhirContext getFhirContext();
 
     /**
-     * Returns the first consumer that is able to handle the provided paylaod
+     * Returns the first consumer that is able to handle the provided payload
      *
      * @param requestDetails FHIR request
      * @return consumer or {@link Optional#empty()}

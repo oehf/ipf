@@ -54,14 +54,14 @@ public class MHD implements IntegrationProfile {
         ITI_65(ITI_65_CONFIG);
 
         @Getter
-        FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
     }
 
     public enum QueryDocumentManifestInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
 
         ITI_66;
 
-        @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        @Getter private FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
 
         @Override
         public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,
@@ -83,7 +83,7 @@ public class MHD implements IntegrationProfile {
 
         ITI_67;
 
-        @Getter FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        @Getter private FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
 
         @Override
         public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,
@@ -106,7 +106,7 @@ public class MHD implements IntegrationProfile {
         ITI_68(ITI_68_CONFIG);
 
         @Getter
-        TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
+        private final TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -114,7 +114,7 @@ public class MHD implements IntegrationProfile {
         ITI_68_BIN(ITI_68_BIN_CONFIG);
 
         @Getter
-        TransactionConfiguration<FhirAuditDataset> transactionConfiguration;
+        private final TransactionConfiguration<FhirAuditDataset> transactionConfiguration;
     }
 
     @Override

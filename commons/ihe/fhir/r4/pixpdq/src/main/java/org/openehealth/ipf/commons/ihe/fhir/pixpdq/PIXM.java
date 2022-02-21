@@ -39,7 +39,7 @@ public class PIXM implements IntegrationProfile {
         ITI_83(ITI_83_CONFIG);
 
         @Getter
-        FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 
     @Override
