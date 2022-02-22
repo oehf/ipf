@@ -11,6 +11,8 @@
     <Loggers>
         <Logger name="org.openehealth.ipf.commons.ihe.core.atna" level="WARN"/>
         <Logger name="org.openehealth.ipf.commons.ihe.core.payload" level="WARN"/>
+        <Logger name="org.openehealth.ipf.commons.ihe.hpd" level="WARN"/>
+        <Logger name="org.openehealth.ipf.platform.camel.ihe.hpd" level="WARN"/>
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>
         </Root>

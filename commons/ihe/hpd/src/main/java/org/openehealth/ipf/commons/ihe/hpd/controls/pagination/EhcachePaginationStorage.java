@@ -21,6 +21,7 @@ import net.sf.ehcache.Element;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,24 +42,24 @@ public class EhcachePaginationStorage implements PaginationStorage {
 
     @Override
     public void store(byte[] cookie, List<SearchResultEntry> entries) {
-        log.debug("Store {} entries for cookie {}", entries.size(), cookie);
-        ehcache.put(new Element(cookie, entries));
+        log.debug("Store {} entries for cookie with hash {}", entries.size(), Arrays.hashCode(cookie));
+        ehcache.put(new Element(new String(cookie), entries));
     }
 
     @Override
     public TakeResult take(Pagination pagination) {
         byte[] cookie = pagination.getCookie();
-        Element element = ehcache.get(cookie);
+        Element element = ehcache.get(new String(cookie));
 
         if (element == null) {
-            log.debug("No entries for cookie {}", cookie);
+            log.debug("No entries for cookie with hash {}", Arrays.hashCode(cookie));
             return new TakeResult(null, false);
         }
 
         List<SearchResultEntry> entries = (List<SearchResultEntry>) element.getObjectValue();
         int entriesCount = entries.size();
         if (entriesCount > pagination.getSize()) {
-            log.debug("Return {} entries for cookie {}, let {} in the storage", pagination.getSize(), cookie, entries.size() - pagination.getSize());
+            log.debug("Return {} entries for cookie with hash {}, let {} in the storage", pagination.getSize(), Arrays.hashCode(cookie), entries.size() - pagination.getSize());
 
             List<SearchResultEntry> entriesToStore = new ArrayList<>(entries.subList(pagination.getSize(), entriesCount));
             store(cookie, entriesToStore);
@@ -67,7 +68,7 @@ public class EhcachePaginationStorage implements PaginationStorage {
             return new TakeResult(entriesToDeliver, true);
 
         } else {
-            log.debug("Return {} last entries for cookie {} and delete the cache", entriesCount, cookie);
+            log.debug("Return {} last entries for cookie with hash {} and delete the cache", entriesCount, Arrays.hashCode(cookie));
             ehcache.remove(cookie);
             return new TakeResult(entries, false);
         }

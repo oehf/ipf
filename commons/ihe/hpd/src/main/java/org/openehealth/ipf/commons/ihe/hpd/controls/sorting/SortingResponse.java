@@ -22,7 +22,7 @@ import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1UTF8String;
 import org.openehealth.ipf.commons.ihe.hpd.controls.AbstractControl;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Utils;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ public class SortingResponse extends AbstractControl {
     public static final String TYPE = "1.2.840.113556.1.4.474";
 
     static {
-        Utils.getMAP().put(TYPE, SortingResponse.class);
+        ControlUtils.getMAP().put(TYPE, SortingResponse.class);
     }
 
     @Getter

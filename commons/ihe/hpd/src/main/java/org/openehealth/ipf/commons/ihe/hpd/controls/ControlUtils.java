@@ -16,11 +16,11 @@
 package org.openehealth.ipf.commons.ihe.hpd.controls;
 
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.NotImplementedException;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.util.encoders.Base64;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResponse;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +34,8 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 3.7.5
  */
-public class Utils {
+@UtilityClass
+public class ControlUtils {
 
     @Getter
     private static final Map<String, Class<? extends AbstractControl>> MAP = new HashMap<>();
@@ -66,7 +67,6 @@ public class Utils {
                 : null;
     }
 
-
     public static Control toDsmlv2(AbstractControl ac) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DLSequence asn1Sequence = new DLSequence(ac.getASN1SequenceElements());
@@ -92,6 +92,18 @@ public class Utils {
             }
         }
         controls.add(toDsmlv2(ac));
+    }
+
+    public static String extractResponseRequestId(Object dsmlResponse) {
+        if (dsmlResponse instanceof SearchResponse) {
+            return ((SearchResponse) dsmlResponse).getRequestID();
+        } else if (dsmlResponse instanceof LDAPResult) {
+            return  ((LDAPResult) dsmlResponse).getRequestID();
+        } else if (dsmlResponse instanceof ErrorResponse) {
+            return  ((ErrorResponse) dsmlResponse).getRequestID();
+        } else {
+            throw new NotImplementedException("Cannot handle HPD response type " + dsmlResponse.getClass() + ", please submit a bug report");
+        }
     }
 
 }

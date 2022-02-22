@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.hpd.HpdException;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Utils;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.Pagination;
 import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.PaginationStorage;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
@@ -62,7 +62,7 @@ abstract public class HpdQueryService extends HpdService {
 
             if (request instanceof SearchRequest) {
                 try {
-                    Pagination pagination = Utils.extractControl(request, Pagination.TYPE);
+                    Pagination pagination = ControlUtils.extractControl(request, Pagination.TYPE);
                     if (pagination == null) {
                         log.debug("No pagination control in request with ID {} --> send it to the route", requestId);
                     } else {
@@ -83,7 +83,7 @@ abstract public class HpdQueryService extends HpdService {
                                 response.setSearchResultDone(new LDAPResult());
                                 response.getSearchResultDone().setResultCode(new ResultCode());
                                 response.getSearchResultDone().getResultCode().setCode(0);
-                                Utils.setControl(response, new Pagination(0, take.isMoreEntriesAvailable() ? pagination.getCookie() : null, true));
+                                ControlUtils.setControl(response, new Pagination(0, take.isMoreEntriesAvailable() ? pagination.getCookie() : null, true));
 
                                 result.getBatchResponses().add(DSMLV2_OBJECT_FACTORY.createBatchResponseSearchResponse(response));
                                 iterator.remove();
@@ -97,6 +97,9 @@ abstract public class HpdQueryService extends HpdService {
                     result.getBatchResponses().add(DSMLV2_OBJECT_FACTORY.createBatchResponseErrorResponse(errorResponse));
                     iterator.remove();
                 }
+
+            } else {
+                log.debug("Pass {} with request ID {} as is", request.getClass().getSimpleName(), requestId);
             }
         }
 
@@ -109,10 +112,10 @@ abstract public class HpdQueryService extends HpdService {
 
         for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {
             Object value = jaxbElement.getValue();
+            String requestId = ControlUtils.extractResponseRequestId(value);
 
             if (value instanceof SearchResponse) {
                 SearchResponse searchResponse = (SearchResponse) value;
-                String requestId = searchResponse.getRequestID();
                 Pagination pagination = paginationRequests.get(requestId);
 
                 if (pagination == null) {
@@ -125,7 +128,7 @@ abstract public class HpdQueryService extends HpdService {
 
                         if (entriesCount <= pagination.getSize()) {
                             log.debug("Pagination of request with ID {} finished", requestId);
-                            Utils.setControl(searchResponse, new Pagination(0, null, true));
+                            ControlUtils.setControl(searchResponse, new Pagination(0, null, true));
                         } else {
                             log.debug("For request with ID {}, return first {} entries and store {} more in the storage",
                                     requestId, pagination.getSize(), entriesCount - pagination.getSize());
@@ -137,7 +140,7 @@ abstract public class HpdQueryService extends HpdService {
                             List<SearchResultEntry> entriesToDeliver = new ArrayList<>(entries.subList(0, pagination.getSize()));
                             searchResponse.getSearchResultEntry().clear();
                             searchResponse.getSearchResultEntry().addAll(entriesToDeliver);
-                            Utils.setControl(searchResponse, new Pagination(0, cookie, true));
+                            ControlUtils.setControl(searchResponse, new Pagination(0, cookie, true));
                         }
 
                         result.getBatchResponses().add(jaxbElement);
@@ -149,7 +152,7 @@ abstract public class HpdQueryService extends HpdService {
                     }
                 }
             } else {
-                log.debug("Pass {} as is", value.getClass().getSimpleName());
+                log.debug("Pass {} with request ID {} as is", value.getClass().getSimpleName(), requestId);
                 result.getBatchResponses().add(jaxbElement);
             }
         }

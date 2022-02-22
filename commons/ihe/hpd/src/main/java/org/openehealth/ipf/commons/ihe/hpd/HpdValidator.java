@@ -36,6 +36,7 @@ import javax.xml.transform.Source;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 /**
  * @author Dmytro Rud
@@ -55,6 +56,8 @@ public class HpdValidator {
 
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator();
 
+    private static final Pattern DIGITS_PATTERN = Pattern.compile("\\d+");
+
     private static void check(boolean condition, String message) {
         if (! condition) {
             throw new HpdException(message, ErrorType.MALFORMED_REQUEST);
@@ -72,13 +75,8 @@ public class HpdValidator {
         }
     }
 
-    private static boolean isUniqueRequestId(String s, Set<Long> knownValues) {
-        try {
-            long value = Long.parseLong(s);
-            return ((value >= 0L) && knownValues.add(value));
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    private static boolean isUniqueRequestId(String id, Set<String> knownIds) {
+        return DIGITS_PATTERN.matcher(id).matches() && knownIds.add(id);
     }
 
     private static void validateBatchRequest(
@@ -88,7 +86,7 @@ public class HpdValidator {
     {
         check(batchRequest.getBatchRequests() != null, "Batch request is null");
         check(!batchRequest.getBatchRequests().isEmpty(), "Batch request is empty");
-        Set<Long> requestIds = new HashSet<>();
+        Set<String> requestIds = new HashSet<>();
         check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
 
         for (DsmlMessage dsml : batchRequest.getBatchRequests()) {
@@ -138,7 +136,7 @@ public class HpdValidator {
 
     public static void validateIti58Response(BatchResponse batchResponse) {
         validateWithXsd(batchResponse, "/schema/DSMLv2.xsd");
-        Set<Long> requestIds = new HashSet<>();
+        Set<String> requestIds = new HashSet<>();
         check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
 
         for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {

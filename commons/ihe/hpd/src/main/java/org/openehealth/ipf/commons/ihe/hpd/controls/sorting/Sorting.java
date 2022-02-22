@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bouncycastle.asn1.*;
 import org.openehealth.ipf.commons.ihe.hpd.controls.AbstractControl;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Utils;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class Sorting extends AbstractControl {
     public static final String TYPE = "1.2.840.113556.1.4.473";
 
     static {
-        Utils.getMAP().put(TYPE, Sorting.class);
+        ControlUtils.getMAP().put(TYPE, Sorting.class);
     }
 
     @Setter

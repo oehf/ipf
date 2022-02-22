@@ -17,12 +17,9 @@ package org.openehealth.ipf.commons.ihe.hpd.controls.pagination;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.*;
 import org.openehealth.ipf.commons.ihe.hpd.controls.AbstractControl;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Utils;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 
 /**
  * See <a href="https://www.ietf.org/rfc/rfc2696.txt">RFC 2696</a>
@@ -36,7 +33,7 @@ public class Pagination extends AbstractControl {
     public static final String TYPE = "1.2.840.113556.1.4.319";
 
     static {
-        Utils.getMAP().put(TYPE, Pagination.class);
+        ControlUtils.getMAP().put(TYPE, Pagination.class);
     }
 
     @Getter
@@ -50,7 +47,7 @@ public class Pagination extends AbstractControl {
     public Pagination(int size, byte[] cookie, boolean criticality) {
         super(TYPE, criticality);
         this.size = size;
-        this.cookie = cookie;
+        this.cookie = (cookie == null) ? new byte[0] : cookie;
     }
 
     public Pagination(ASN1Sequence asn1Sequence, boolean criticality) {
@@ -64,8 +61,8 @@ public class Pagination extends AbstractControl {
     @Override
     protected ASN1Encodable[] getASN1SequenceElements() {
         return new ASN1Encodable[]{
-                ASN1Integer.getInstance(size),
-                ASN1OctetString.getInstance(cookie)
+                new ASN1Integer(size),
+                new DEROctetString(cookie)
         };
     }
 

@@ -24,6 +24,8 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils
+import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.Pagination
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -35,6 +37,7 @@ class TestIti58 extends StandardTestContainer {
     static final String CONTEXT_DESCRIPTOR = 'iti-58.xml'
 
     final String SERVICE1 = "hpd-iti58://localhost:${port}/hpd-service1?inInterceptors=#clientInLogger&outInterceptors=#clientOutLogger"
+    final String SERVICE2 = "hpd-iti58://localhost:${port}/hpd-service2?inInterceptors=#clientInLogger&outInterceptors=#clientOutLogger&supportPagination=true"
 
 
     static void main(args) {
@@ -51,9 +54,11 @@ class TestIti58 extends StandardTestContainer {
 
     @Test
     void testIti58() {
-        BatchRequest request = new BatchRequest(
+        BatchRequest batchRequest = new BatchRequest(
+                requestID: '1',
                 batchRequests: [
                         new SearchRequest(
+                                requestID: '2',
                                 dn: 'O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
                                 derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
@@ -67,9 +72,135 @@ class TestIti58 extends StandardTestContainer {
                 ],
         )
 
-        BatchResponse response = sendIt(SERVICE1, request)
-        assert response != null
-        assert response.getBatchResponses().empty
+        BatchResponse batchResponse = sendIt(SERVICE1, batchRequest)
+        assert batchResponse != null
+        assert batchResponse.getBatchResponses().empty
+    }
+
+    @Test
+    void testIti58Pagination() {
+        BatchRequest batchRequest = new BatchRequest(
+                requestID: '1',
+                batchRequests: [
+                        // request with pagination, response with multiple pages
+                        new SearchRequest(
+                                requestID: '2',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                                dn: 'ou=2,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // request with pagination, response with single page
+                        new SearchRequest(
+                                requestID: '3',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                                dn: 'ou=3,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // request without pagination, response with single page
+                        new SearchRequest(
+                                requestID: '4',
+                                dn: 'ou=4,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // request without pagination, response unexpectedly paginated (server bug)
+                        new SearchRequest(
+                                requestID: '5',
+                                dn: 'ou=5,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // not a search request with pagination -- pagination shall be ignored
+                        new DelRequest(
+                                requestID: '6',
+                                dn: 'ou=6,O=HPDTEST1,DC=HPD',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                        ),
+                        // not a search request without pagination
+                        new DelRequest(
+                                requestID: '7',
+                                dn: 'ou=7,O=HPDTEST1,DC=HPD',
+                        ),
+                        // not a search request without pagination, response unexpectedly paginated (server bug)
+                        new DelRequest(
+                                requestID: '8',
+                                dn: 'ou=8,O=HPDTEST1,DC=HPD',
+                        ),
+                        // request with pagination, error response
+                        new SearchRequest(
+                                requestID: '9',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                                dn: 'ou=9,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // request with pagination, response with pagination, but status code not 0
+                        new SearchRequest(
+                                requestID: '10',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                                dn: 'ou=10,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                        // request with pagination, wrong response type with pagination
+                        new SearchRequest(
+                                requestID: '11',
+                                control: [
+                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                ],
+                                dn: 'ou=11,O=HPDTEST1,DC=HPD',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                                filter: new Filter(present: new AttributeDescription(name: 'uid')),
+                        ),
+                ],
+        )
+
+        BatchResponse batchResponse = sendIt(SERVICE2, batchRequest)
+
+        def map = batchResponse.batchResponses.collectEntries { [(it.value.requestID): it.value] }
+        assert map.size() == batchRequest.batchRequests.size()
+
+        assert map['2'] instanceof SearchResponse
+        assert map['2'].searchResultEntry.size() == 101
+
+        assert map['3'] instanceof SearchResponse
+        assert map['3'].searchResultEntry.size() == 6
+
+        assert map['4'] instanceof SearchResponse
+        assert map['4'].searchResultEntry.size() == 6
+
+        assert map['5'] instanceof SearchResponse
+        assert map['5'].searchResultEntry.size() == 152
+
+        assert map['6'] instanceof LDAPResult
+        assert map['7'] instanceof LDAPResult
+        assert map['8'] instanceof LDAPResult
+
+        assert map['9'] instanceof ErrorResponse
+
+        assert map['10'] instanceof SearchResponse
+        assert map['10'].searchResultEntry.size() == 10
+
+        assert map['11'] instanceof LDAPResult
     }
 
     BatchResponse sendIt(String endpoint, BatchRequest request) {
@@ -79,7 +210,7 @@ class TestIti58 extends StandardTestContainer {
     void doTestDsmlValueJaxb(String fileName, Class expectedClass) {
         def inputStream = getClass().classLoader.getResourceAsStream(fileName)
         def reader = StaxUtils.createXMLStreamReader(inputStream)
-        def dataReader = new DataReaderImpl(new JAXBDataBinding(HpdValidator.JAXB_CONTEXT), false);
+        def dataReader = new DataReaderImpl(new JAXBDataBinding(HpdValidator.JAXB_CONTEXT), false)
 
         BatchResponse batchResponse = dataReader.read(reader).value
         assert batchResponse.batchResponses.size() == 1

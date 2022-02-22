@@ -21,7 +21,9 @@ import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.Map;
 
@@ -36,7 +38,12 @@ public class ChCiqComponent extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdQueryEndpoint(uri, remaining, this, parameters, ChCiqService.class);
+        return new HpdQueryEndpoint(uri, remaining, this, parameters, ChCiqService.class) {
+            @Override
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint) {
+                return new ChCiqService(this);
+            }
+        };
     }
 
 }

@@ -32,7 +32,7 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 3.7.5
  */
-public class HpdQueryEndpoint extends HpdEndpoint<WsAuditDataset> {
+abstract public class HpdQueryEndpoint extends HpdEndpoint<WsAuditDataset> {
 
     @Getter
     @Setter
