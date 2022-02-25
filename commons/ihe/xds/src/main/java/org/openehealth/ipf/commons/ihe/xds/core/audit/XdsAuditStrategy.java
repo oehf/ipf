@@ -81,14 +81,14 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
 
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object pojo) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 
     @Override
-    public String getEventOutcomeDescription(Object pojo) {
+    public String getEventOutcomeDescription(T auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
@@ -96,9 +96,9 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
-        var outcomeCodes = getEventOutcomeIndicator(response);
+        var outcomeCodes = getEventOutcomeIndicator(auditDataset, response);
         auditDataset.setEventOutcomeIndicator(outcomeCodes);
-        auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
+        auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(auditDataset, response));
         return outcomeCodes == EventOutcomeIndicator.Success;
     }
 

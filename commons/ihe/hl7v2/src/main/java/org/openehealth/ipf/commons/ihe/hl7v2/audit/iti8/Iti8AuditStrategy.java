@@ -51,16 +51,16 @@ public class Iti8AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
             case "A04":
             case "A05":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Create, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Create, true)
                 };
             case "A08":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
                 };
             case "A40":
                 return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Delete, false),
-                        patientRecordAuditMessage(auditContext,auditDataset, EventActionCode.Update, true)
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, false),
+                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
                 };
             default:
                 throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());

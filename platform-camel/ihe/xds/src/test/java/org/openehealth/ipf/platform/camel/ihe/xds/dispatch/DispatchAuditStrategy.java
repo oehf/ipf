@@ -122,9 +122,9 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
         var strategy = getAuditStrategy();
-        return (strategy != null) ? strategy.getEventOutcomeIndicator(response) : null;
+        return (strategy != null) ? strategy.getEventOutcomeIndicator(auditDataset, response) : null;
     }
 
     private XdsAuditStrategy<T> getAuditStrategy() {

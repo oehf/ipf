@@ -75,12 +75,12 @@ abstract public class ChPpq1AuditStrategy extends AuditStrategySupport<ChPpqAudi
 
     @Override
     public boolean enrichAuditDatasetFromResponse(ChPpqAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        auditDataset.setEventOutcomeIndicator(getEventOutcomeIndicator(response));
+        auditDataset.setEventOutcomeIndicator(getEventOutcomeIndicator(auditDataset, response));
         return true;
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object responseObject) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(ChPpqAuditDataset auditDataset, Object responseObject) {
         var response = (EprPolicyRepositoryResponse) responseObject;
         return StatusCode.SUCCESS.equals(response.getStatus()) ? EventOutcomeIndicator.Success : EventOutcomeIndicator.SeriousFailure;
     }

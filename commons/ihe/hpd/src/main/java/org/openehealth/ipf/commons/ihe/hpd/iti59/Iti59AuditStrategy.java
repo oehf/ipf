@@ -224,12 +224,6 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        // is not used because individual outcome codes are determined for each sub-request
-        return null;
-    }
-
-    @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset) {
         // TODO: consider grouping multiple items per ATNA message based on a combination of action code and outcome code
         return Stream.of(auditDataset.getRequestItems())

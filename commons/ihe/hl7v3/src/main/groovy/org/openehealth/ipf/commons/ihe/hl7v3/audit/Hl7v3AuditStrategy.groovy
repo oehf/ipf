@@ -55,7 +55,7 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
      *      response message as {@link GPathResult}.
      */
     @Override
-    EventOutcomeIndicator getEventOutcomeIndicator(Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset, Object gpath) {
         try {
             String code = gpath.acknowledgement[0].typeCode.@code.text()
             if (!code) {
@@ -73,15 +73,15 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
     }
 
     @Override
-    String getEventOutcomeDescription(Object gpath) {
+    String getEventOutcomeDescription(Hl7v3AuditDataset auditDataset, Object gpath) {
         return gpath.acknowledgement[0].acknowledgementDetail[0].@text.text()
     }
 
     @Override
     boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response, AuditContext auditContext) {
         Object gpath = slurp(response)
-        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(gpath)
-        auditDataset.eventOutcomeDescription = getEventOutcomeDescription(gpath)
+        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(auditDataset, gpath)
+        auditDataset.eventOutcomeDescription = getEventOutcomeDescription(auditDataset, gpath)
         auditDataset.eventOutcomeIndicator == EventOutcomeIndicator.Success
     }
 

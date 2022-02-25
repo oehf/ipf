@@ -15,13 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentManifest;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
 
     public Iti65AuditStrategy(boolean serverSide) {
-        super(serverSide, OperationOutcomeOperations.INSTANCE);
+        super(serverSide);
     }
 
     @Override
@@ -76,7 +75,7 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
      * @return RFC3881EventOutcomeCode
      */
     @Override
-    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(IBaseResource resource) {
+    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(Iti65AuditDataset auditDataset, IBaseResource resource) {
         var bundle = (Bundle) resource;
         var responseStatus = bundle.getEntry().stream()
                 .map(Bundle.BundleEntryComponent::getResponse)

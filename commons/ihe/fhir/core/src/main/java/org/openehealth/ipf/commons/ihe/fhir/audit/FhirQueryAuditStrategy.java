@@ -35,8 +35,8 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
  */
 public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset> {
 
-    protected FhirQueryAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations) {
-        super(serverSide, operations);
+    protected FhirQueryAuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
     /**

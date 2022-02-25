@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import ca.uhn.fhir.context.FhirContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -72,6 +73,9 @@ public class FhirAuditDataset extends AuditDataset {
 
     @Getter @Setter
     private String destinationUserId;
+
+    @Getter @Setter
+    private FhirContext fhirContext;
 
     public FhirAuditDataset(boolean serverSide) {
         super(serverSide);
