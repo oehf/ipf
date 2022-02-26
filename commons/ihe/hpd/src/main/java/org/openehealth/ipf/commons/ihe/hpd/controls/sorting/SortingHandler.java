@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hpd;
+package org.openehealth.ipf.commons.ihe.hpd.controls.sorting;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlHandler;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SearchResponseSorter;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
+import org.openehealth.ipf.commons.ihe.hpd.controls.Handler;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import javax.naming.ldap.SortControl;
@@ -29,33 +30,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Server-side handler of sorting controls.
+ *
  * @author Dmytro Rud
  * @since 3.7.5
  */
 @Slf4j
-public class HpdQueryService0 extends HpdService {
+public class SortingHandler extends ControlHandler {
 
-    protected final HpdQueryEndpoint<?> endpoint;
-
-    protected HpdQueryService0(HpdQueryEndpoint<?> endpoint) {
-        this.endpoint = endpoint;
+    public SortingHandler(Handler<BatchRequest, BatchResponse> wrappedHandler) {
+        super(wrappedHandler);
     }
 
     @Override
-    protected BatchResponse doProcess(BatchRequest batchRequest) {
-        if (!endpoint.isSupportSorting()) {
-            log.debug("Sorting is not supported");
-            return super.doProcess(batchRequest);
-        }
+    public BatchResponse handle(BatchRequest batchRequest) {
+        Map<String, SortControl2> controls = new HashMap<>();
 
-        BatchResponse result = new BatchResponse();
-        result.setRequestID(batchRequest.getRequestID());
-
-        Map<String, SortControl2> sortings = new HashMap<>();
+        // responses computed locally, i.e. not obtained from the route
+        JAXBElement<?>[] localResponses = new JAXBElement[batchRequest.getBatchRequests().size()];
 
         for (int position = batchRequest.getBatchRequests().size() - 1; position >= 0; --position) {
             DsmlMessage request = batchRequest.getBatchRequests().get(position);
-            String requestId = request.getRequestID();
+            String requestId = StringUtils.trimToNull(request.getRequestID());
 
             if (requestId == null) {
                 log.warn("Request ID is missing in {} --> cannot handle, pass to the route as is", request.getClass().getSimpleName());
@@ -69,12 +65,12 @@ public class HpdQueryService0 extends HpdService {
                         log.debug("No sorting keys specified in request with ID {} --> pass it to the route", requestId);
                     } else {
                         log.debug("Sorting control in request with ID {} --> pass it to the route and handle response", requestId);
-                        sortings.put(requestId, sorting);
+                        controls.put(requestId, sorting);
                     }
 
                 } catch (Exception e) {
                     log.error("Exception while handling request with ID {} --> create error response", requestId, e);
-                    result.getBatchResponses().add(HpdUtils.errorResponse(e, requestId));
+                    localResponses[position] = HpdUtils.errorResponse(e, requestId);
                     batchRequest.getBatchRequests().remove(position);
                 }
 
@@ -83,36 +79,35 @@ public class HpdQueryService0 extends HpdService {
             }
         }
 
-        BatchResponse batchResponse = super.doProcess(batchRequest);
+        BatchResponse batchResponse = getWrappedHandler().handle(batchRequest);
 
-        for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {
+        for (int position = batchResponse.getBatchResponses().size() - 1; position >= 0; --position) {
+            JAXBElement<?> jaxbElement = batchResponse.getBatchResponses().get(position);
             Object value = jaxbElement.getValue();
             String requestId = HpdUtils.extractResponseRequestId(value);
 
             if (value instanceof SearchResponse) {
                 SearchResponse searchResponse = (SearchResponse) value;
-                SortControl2 sorting = sortings.get(requestId);
+                SortControl2 sorting = (requestId == null) ? null : controls.get(requestId);
 
                 if (sorting == null) {
                     log.debug("No sorting was requested for request with ID {} --> return response as is", requestId);
-                    result.getBatchResponses().add(jaxbElement);
+
                 } else {
                     try {
+                        log.debug("Sort items in response with ID {}", requestId);
                         SearchResponseSorter.sort(searchResponse, sorting);
-                        result.getBatchResponses().add(jaxbElement);
                     } catch (IOException e) {
-                        log.error("Exception while handling request with ID {}", requestId, e);
-                        result.getBatchResponses().add(HpdUtils.errorResponse(e, requestId));
+                        log.error("Exception while handling response with ID {}", requestId, e);
+                        batchResponse.getBatchResponses().set(position, HpdUtils.errorResponse(e, requestId));
                     }
                 }
             } else {
                 log.debug("Return {} with request ID {} as is", value.getClass().getSimpleName(), requestId);
-                result.getBatchResponses().add(jaxbElement);
             }
         }
 
-        return batchResponse;
+        return aggregateResponse(batchRequest, batchResponse, localResponses);
     }
 
 }
-

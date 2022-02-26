@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti58
 
+import groovy.util.logging.Slf4j
 import org.apache.cxf.jaxb.JAXBDataBinding
 import org.apache.cxf.jaxb.io.DataReaderImpl
 import org.apache.cxf.staxutils.StaxUtils
@@ -25,14 +26,19 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
+import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import javax.naming.ldap.PagedResultsControl
+import javax.naming.ldap.SortControl
+import javax.naming.ldap.SortKey
 
 /**
  * @author Dmytro Rud
  */
+@Slf4j
 class TestIti58 extends StandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'iti-58.xml'
@@ -79,7 +85,7 @@ class TestIti58 extends StandardTestContainer {
     }
 
     @Test
-    void testIti58Pagination() {
+    void testIti58Controls() {
         BatchRequest batchRequest = new BatchRequest(
                 requestID: '1',
                 batchRequests: [
@@ -99,6 +105,7 @@ class TestIti58 extends StandardTestContainer {
                                 requestID: '3',
                                 control: [
                                         ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
+                                        ControlUtils.toDsmlv2(new SortControl2(true, new SortKey("ABCD", false, "std_i"))),
                                 ],
                                 dn: 'ou=3,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
@@ -121,12 +128,13 @@ class TestIti58 extends StandardTestContainer {
                                 derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
                                 filter: new Filter(present: new AttributeDescription(name: 'uid')),
                         ),
-                        // not a search request with pagination -- pagination shall be ignored
+                        // not a search request with controls -- controls shall be ignored
                         new DelRequest(
                                 requestID: '6',
                                 dn: 'ou=6,O=HPDTEST1,DC=HPD',
                                 control: [
                                         ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
+                                        ControlUtils.toDsmlv2(new SortControl2(true, new SortKey("ABCD", true, "gggg"))),
                                 ],
                         ),
                         // not a search request without pagination
@@ -178,13 +186,17 @@ class TestIti58 extends StandardTestContainer {
         BatchResponse batchResponse = sendIt(SERVICE2, batchRequest)
 
         def map = batchResponse.batchResponses.collectEntries { [(it.value.requestID): it.value] }
-        assert map.size() == batchRequest.batchRequests.size()
+        assert map.size() == 13
 
         assert map['2'] instanceof SearchResponse
         assert map['2'].searchResultEntry.size() == 101
 
         assert map['3'] instanceof SearchResponse
         assert map['3'].searchResultEntry.size() == 6
+        for (Control dsml : map['3'].searchResultDone.control) {
+            def control = ControlUtils.extractControl(dsml.controlValue.toString(), dsml.type, dsml.criticality)
+            log.debug('Control: {}', control)
+        }
 
         assert map['4'] instanceof SearchResponse
         assert map['4'].searchResultEntry.size() == 6
@@ -202,6 +214,8 @@ class TestIti58 extends StandardTestContainer {
         assert map['10'].searchResultEntry.size() == 10
 
         assert map['11'] instanceof LDAPResult
+
+        log.debug("BatchResponse:\n{}", XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchResponse, true))
     }
 
     BatchResponse sendIt(String endpoint, BatchRequest request) {

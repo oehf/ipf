@@ -74,21 +74,25 @@ public class SearchResponseSorter {
         String requestId = searchResponse.getRequestID();
 
         if (control.getKeys().length == 0) {
-            log.debug("No sorting keys provided for response with ID {}" + requestId);
+            log.debug("No sorting keys provided for response with ID {}", requestId);
             ControlUtils.setControl(searchResponse, new SortResponseControl2(ResultCodes.UNWILLING_TO_PERFORM, null, control.isCritical()));
             return;
         }
         if (control.getKeys().length > 1) {
-            log.debug("More than one sorting key provided in response {}" + requestId);
+            log.debug("More than one sorting key provided in response with ID {}", requestId);
             ControlUtils.setControl(searchResponse, new SortResponseControl2(ResultCodes.UNWILLING_TO_PERFORM, null, control.isCritical()));
             return;
         }
 
         SortKey key = control.getKeys()[0];
 
-        Comparator<String> comparator0 = (StringUtils.isNotBlank(key.getMatchingRuleID()) && COMPARATORS.containsKey(key.getMatchingRuleID()))
-                ? COMPARATORS.get(key.getMatchingRuleID())
-                : COMPARATORS.get(DEFAULT_MATCHING_RULE);
+        String matchingRuleId = StringUtils.isBlank(key.getMatchingRuleID()) ? DEFAULT_MATCHING_RULE : key.getMatchingRuleID().trim();
+        Comparator<String> comparator0 = COMPARATORS.get(matchingRuleId);
+        if (comparator0 == null) {
+            log.debug("Unknown matching rule ID {} in response with ID {}", matchingRuleId, requestId);
+            ControlUtils.setControl(searchResponse, new SortResponseControl2(ResultCodes.INAPPROPRIATE_MATCHING, key.getAttributeID(), control.isCritical()));
+            return;
+        }
 
         Comparator<String> comparator = key.isAscending() ? comparator0 : (s1, s2) -> -comparator0.compare(s1, s2);
 

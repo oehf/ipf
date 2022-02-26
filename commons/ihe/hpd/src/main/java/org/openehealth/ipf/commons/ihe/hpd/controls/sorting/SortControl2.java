@@ -44,14 +44,14 @@ public class SortControl2 extends BasicControl {
     @Getter
     private final SortKey[] keys;
 
-    public SortControl2(SortKey[] keys, boolean criticality) throws IOException {
+    public SortControl2(boolean criticality, SortKey... keys) throws IOException {
         super(SortControl.OID, criticality, null);
         this.keys = Objects.requireNonNull(keys);
         this.internal = new SortControl(keys, criticality);
     }
 
     public SortControl2(byte[] berBytes, boolean criticality) throws IOException {
-        this(decode(berBytes), criticality);
+        this(criticality, decode(berBytes));
     }
 
     @Override

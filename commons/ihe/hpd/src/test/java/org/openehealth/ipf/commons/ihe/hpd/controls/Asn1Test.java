@@ -30,16 +30,13 @@ public class Asn1Test {
 
     @Test
     public void testSortControlParsing() throws IOException {
-        doTestSortControlParsing(new SortControl2(
-                new SortKey[]{
-                        new SortKey("a", false, "rule1"),
-                        new SortKey("b", false, null),
-                        new SortKey("c", true, "rule2"),
-                        new SortKey("d", true, null),
-                        },
-                true));
+        doTestSortControlParsing(new SortControl2(true,
+                new SortKey("a", false, "rule1"),
+                new SortKey("b", false, null),
+                new SortKey("c", true, "rule2"),
+                new SortKey("d", true, null)));
 
-        doTestSortControlParsing(new SortControl2(new SortKey[0], true));
+        doTestSortControlParsing(new SortControl2(true));
     }
 
     private static void doTestSortControlParsing(SortControl2 original) throws IOException {
