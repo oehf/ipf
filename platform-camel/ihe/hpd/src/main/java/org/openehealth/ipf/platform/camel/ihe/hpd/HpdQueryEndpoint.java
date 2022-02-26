@@ -32,20 +32,28 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 3.7.5
  */
-abstract public class HpdQueryEndpoint extends HpdEndpoint<WsAuditDataset> {
+abstract public class HpdQueryEndpoint<AuditDatasetType extends WsAuditDataset> extends HpdEndpoint<AuditDatasetType> {
 
     @Getter
     @Setter
-    private boolean supportPagination;
+    private boolean supportSorting = false;
 
     @Getter
     @Setter
-    private PaginationStorage paginationStorage;
+    private boolean supportPagination = false;
+
+    @Getter
+    @Setter
+    private PaginationStorage paginationStorage = null;
+
+    @Getter
+    @Setter
+    private int defaultPageSize = 100;
 
     public HpdQueryEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends WsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
             Map<String, Object> parameters,
             Class<? extends HpdQueryService> serviceClass)
     {
@@ -53,8 +61,8 @@ abstract public class HpdQueryEndpoint extends HpdEndpoint<WsAuditDataset> {
     }
 
     @Override
-    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
-        return new HpdQueryProducer((HpdQueryEndpoint) endpoint, clientFactory);
+    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory) {
+        return new HpdQueryProducer<>((HpdQueryEndpoint<AuditDatasetType>) endpoint, clientFactory);
     }
 
 }

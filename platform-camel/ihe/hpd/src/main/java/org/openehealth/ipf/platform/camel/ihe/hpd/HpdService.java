@@ -17,16 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.hpd.HpdException;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
+import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 
 @Slf4j
 abstract public class HpdService extends AbstractWebService {
-
-    public static final ObjectFactory DSMLV2_OBJECT_FACTORY = new ObjectFactory();
 
     protected BatchResponse doProcess(BatchRequest request) {
         Exchange result = process(request);
@@ -38,20 +36,10 @@ abstract public class HpdService extends AbstractWebService {
         return Exchanges.resultMessage(result).getBody(BatchResponse.class);
     }
 
-    protected static ErrorResponse errorResponse(Exception exception, String requestId) {
-        ErrorResponse error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
-        error.setMessage(exception.getMessage());
-        error.setRequestID(requestId);
-        ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorType.OTHER;
-        error.setType(errorType);
-        return error;
-    }
-
     private BatchResponse errorMessage(BatchRequest batchRequest, Exception exception) {
-        ErrorResponse errorResponse = errorResponse(exception, batchRequest.getRequestID());
         BatchResponse batchResponse = new BatchResponse();
         batchResponse.setRequestID(batchRequest.getRequestID());
-        batchResponse.getBatchResponses().add(DSMLV2_OBJECT_FACTORY.createBatchResponseErrorResponse(errorResponse));
+        batchResponse.getBatchResponses().add(HpdUtils.errorResponse(exception, batchRequest.getRequestID()));
         return batchResponse;
     }
 }

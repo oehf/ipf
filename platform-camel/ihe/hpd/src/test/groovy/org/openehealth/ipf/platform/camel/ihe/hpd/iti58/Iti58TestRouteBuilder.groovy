@@ -17,8 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti58
 
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils
-import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.Pagination
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
+
+import javax.naming.ldap.PagedResultsControl
 
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti58RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti58ResponseValidator
@@ -73,7 +74,7 @@ class Iti58TestRouteBuilder extends RouteBuilder {
                                                 searchResultDone: new LDAPResult(
                                                         resultCode: new ResultCode(code: 0),
                                                         control: [
-                                                                ControlUtils.toDsmlv2(new Pagination(0, [5, 5, 5] as byte[], true))
+                                                                ControlUtils.toDsmlv2(new PagedResultsControl(0, [5, 5, 5] as byte[], true))
                                                         ],
                                                 ),
                                                 searchResultEntry: (0..100).collect {
@@ -91,7 +92,7 @@ class Iti58TestRouteBuilder extends RouteBuilder {
                                         DSML2_OBJECT_FACTORY.createBatchResponseDelResponse(new LDAPResult(
                                                 requestID: '8',
                                                 control: [
-                                                        ControlUtils.toDsmlv2(new Pagination(0, [8, 8, 8] as byte[], true))
+                                                        ControlUtils.toDsmlv2(new PagedResultsControl(0, [8, 8, 8] as byte[], true))
                                                 ],
                                                 resultCode: new ResultCode(code: 0),
                                         )),
@@ -110,7 +111,7 @@ class Iti58TestRouteBuilder extends RouteBuilder {
                                         DSML2_OBJECT_FACTORY.createBatchResponseDelResponse(new LDAPResult(
                                                 requestID: '11',
                                                 control: [
-                                                        ControlUtils.toDsmlv2(new Pagination(0, [11, 11, 11] as byte[], true))
+                                                        ControlUtils.toDsmlv2(new PagedResultsControl(0, [11, 11, 11] as byte[], true))
                                                 ],
                                                 resultCode: new ResultCode(code: 0),
                                         )),
@@ -125,7 +126,7 @@ class Iti58TestRouteBuilder extends RouteBuilder {
                                                 searchResultDone: new LDAPResult(
                                                         resultCode: new ResultCode(code: 0),
                                                         control: [
-                                                                ControlUtils.toDsmlv2(new Pagination(0, null, true))
+                                                                ControlUtils.toDsmlv2(new PagedResultsControl(0, null, true))
                                                         ],
                                                 ),
                                                 searchResultEntry: (0..50).collect {

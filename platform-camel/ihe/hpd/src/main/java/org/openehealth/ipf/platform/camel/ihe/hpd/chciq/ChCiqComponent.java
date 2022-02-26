@@ -38,7 +38,7 @@ public class ChCiqComponent extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdQueryEndpoint(uri, remaining, this, parameters, ChCiqService.class) {
+        return new HpdQueryEndpoint<WsAuditDataset>(uri, remaining, this, parameters, ChCiqService.class) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint) {
                 return new ChCiqService(this);

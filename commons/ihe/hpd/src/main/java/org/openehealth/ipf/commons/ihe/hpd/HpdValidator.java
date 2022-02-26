@@ -76,7 +76,7 @@ public class HpdValidator {
     }
 
     private static boolean isUniqueRequestId(String id, Set<String> knownIds) {
-        return DIGITS_PATTERN.matcher(id).matches() && knownIds.add(id);
+        return (id != null) && DIGITS_PATTERN.matcher(id).matches() && knownIds.add(id);
     }
 
     private static void validateBatchRequest(

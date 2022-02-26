@@ -15,18 +15,32 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls.pagination;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
+import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
+import org.openehealth.ipf.commons.ihe.hpd.HpdValidator;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 
+import javax.naming.ldap.PagedResultsResponseControl;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Simple in-memory implementation of a pagination storage.
+ * Ehcache-based pagination storage.
  *
  * @author Dmytro Rud
  * @since 3.7.5
@@ -34,20 +48,45 @@ import java.util.Objects;
 @Slf4j
 public class EhcachePaginationStorage implements PaginationStorage {
 
-    private final Ehcache ehcache;
+    private static final JAXBContext JAXB_CONTEXT;
 
-    public EhcachePaginationStorage(Ehcache ehcache) {
+    static {
+        try {
+            JAXB_CONTEXT = JAXBContext.newInstance(
+                    org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory.class,
+                    Container.class);
+        } catch (JAXBException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+
+    private final Ehcache ehcache;
+    private final boolean needSerialization;
+
+    /**
+     * @param ehcache           ehcache instance
+     * @param needSerialization whether search result entries shall be serialized using JAXB -- this is necessary for persistent caches
+     */
+    public EhcachePaginationStorage(Ehcache ehcache, boolean needSerialization) {
         this.ehcache = Objects.requireNonNull(ehcache);
+        this.needSerialization = needSerialization;
     }
 
     @Override
     public void store(byte[] cookie, List<SearchResultEntry> entries) {
         log.debug("Store {} entries for cookie with hash {}", entries.size(), Arrays.hashCode(cookie));
-        ehcache.put(new Element(new String(cookie), entries));
+
+        if (needSerialization) {
+            Container container = new Container(entries);
+            String value = XmlUtils.renderJaxb(JAXB_CONTEXT, container, false);
+            ehcache.put(new Element(new String(cookie), value));
+        } else {
+            ehcache.put(new Element(new String(cookie), entries));
+        }
     }
 
     @Override
-    public TakeResult take(Pagination pagination) {
+    public TakeResult take(PagedResultsResponseControl pagination) throws Exception {
         byte[] cookie = pagination.getCookie();
         Element element = ehcache.get(new String(cookie));
 
@@ -56,21 +95,46 @@ public class EhcachePaginationStorage implements PaginationStorage {
             return new TakeResult(null, false);
         }
 
-        List<SearchResultEntry> entries = (List<SearchResultEntry>) element.getObjectValue();
-        int entriesCount = entries.size();
-        if (entriesCount > pagination.getSize()) {
-            log.debug("Return {} entries for cookie with hash {}, let {} in the storage", pagination.getSize(), Arrays.hashCode(cookie), entries.size() - pagination.getSize());
+        List<SearchResultEntry> entries;
+        if (needSerialization) {
+            Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
+            Container container = (Container) unmarshaller.unmarshal(XmlUtils.source((String) element.getObjectValue()));
+            entries = container.entries;
+        } else {
+            entries = (List<SearchResultEntry>) element.getObjectValue();
+        }
 
-            List<SearchResultEntry> entriesToStore = new ArrayList<>(entries.subList(pagination.getSize(), entriesCount));
+        int entriesCount = entries.size();
+        int requestedCount = pagination.getResultSize();
+        if (entriesCount > requestedCount) {
+            log.debug("Return {} entries for cookie with hash {}, let {} in the storage", requestedCount, Arrays.hashCode(cookie), entries.size() - requestedCount);
+
+            List<SearchResultEntry> entriesToStore = new ArrayList<>(entries.subList(requestedCount, entriesCount));
             store(cookie, entriesToStore);
 
-            List<SearchResultEntry> entriesToDeliver = new ArrayList<>(entries.subList(0, pagination.getSize()));
+            List<SearchResultEntry> entriesToDeliver = new ArrayList<>(entries.subList(0, requestedCount));
             return new TakeResult(entriesToDeliver, true);
 
         } else {
             log.debug("Return {} last entries for cookie with hash {} and delete the cache", entriesCount, Arrays.hashCode(cookie));
             ehcache.remove(cookie);
             return new TakeResult(entries, false);
+        }
+    }
+
+
+    @XmlRootElement
+    private static class Container {
+
+        @XmlElement(name = "entry")
+        public List<SearchResultEntry> entries;
+
+        public Container() {
+            // for JAXB
+        }
+
+        public Container(List<SearchResultEntry> entries) {
+            this.entries = entries;
         }
     }
 

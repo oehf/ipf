@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
 
+import javax.naming.ldap.PagedResultsResponseControl;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public interface PaginationStorage {
      * @param pagination an object containing the cookie (key) and the maximal count of result entries to return.
      * @return result entries and the remaining entries' availability flag.
      */
-    TakeResult take(Pagination pagination);
+    TakeResult take(PagedResultsResponseControl pagination) throws Exception;
 
 
     class TakeResult {

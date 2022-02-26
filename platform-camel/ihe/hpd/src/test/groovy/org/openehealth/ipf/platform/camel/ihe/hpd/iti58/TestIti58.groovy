@@ -25,9 +25,10 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils
-import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.Pagination
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import javax.naming.ldap.PagedResultsControl
 
 /**
  * @author Dmytro Rud
@@ -86,7 +87,7 @@ class TestIti58 extends StandardTestContainer {
                         new SearchRequest(
                                 requestID: '2',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                                 dn: 'ou=2,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
@@ -97,7 +98,7 @@ class TestIti58 extends StandardTestContainer {
                         new SearchRequest(
                                 requestID: '3',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                                 dn: 'ou=3,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
@@ -125,7 +126,7 @@ class TestIti58 extends StandardTestContainer {
                                 requestID: '6',
                                 dn: 'ou=6,O=HPDTEST1,DC=HPD',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                         ),
                         // not a search request without pagination
@@ -142,7 +143,7 @@ class TestIti58 extends StandardTestContainer {
                         new SearchRequest(
                                 requestID: '9',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                                 dn: 'ou=9,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
@@ -153,7 +154,7 @@ class TestIti58 extends StandardTestContainer {
                         new SearchRequest(
                                 requestID: '10',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                                 dn: 'ou=10,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
@@ -164,7 +165,7 @@ class TestIti58 extends StandardTestContainer {
                         new SearchRequest(
                                 requestID: '11',
                                 control: [
-                                        ControlUtils.toDsmlv2(new Pagination(10, null, true)),
+                                        ControlUtils.toDsmlv2(new PagedResultsControl(10, null, true)),
                                 ],
                                 dn: 'ou=11,O=HPDTEST1,DC=HPD',
                                 scope: SearchRequest.SearchScope.WHOLE_SUBTREE,

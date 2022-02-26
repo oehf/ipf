@@ -38,6 +38,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd">
                 <constructor-arg value="paginationCache" />
             </bean>
         </constructor-arg>
+        <constructor-arg value="true"/>
     </bean>
 
 </beans>

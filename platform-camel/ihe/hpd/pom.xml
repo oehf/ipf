@@ -41,6 +41,11 @@
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Dependencies for tests -->
         <dependency>

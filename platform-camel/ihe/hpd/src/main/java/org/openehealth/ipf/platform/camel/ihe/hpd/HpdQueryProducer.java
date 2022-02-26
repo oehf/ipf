@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.Pagination;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -27,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.springframework.beans.BeanUtils;
 
+import javax.naming.ldap.PagedResultsControl;
+import javax.naming.ldap.PagedResultsResponseControl;
 import javax.xml.bind.JAXBElement;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,20 +38,15 @@ import java.util.Set;
  * @since 3.7.5
  */
 @Slf4j
-public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, BatchRequest, BatchResponse> {
-
-    /**
-     * Default page size for the cases when the server unexpectedly answers with a pagination control.
-     */
-    @Getter
-    @Setter
-    private static int DEFAULT_PAGE_SIZE = 100;
+public class HpdQueryProducer<AuditDatasetType extends WsAuditDataset> extends SimpleWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, BatchRequest, BatchResponse> {
 
     private final boolean supportPagination;
+    private final int defaultPageSize;
 
-    public HpdQueryProducer(HpdQueryEndpoint endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+    public HpdQueryProducer(HpdQueryEndpoint<AuditDatasetType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory) {
         super(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
         this.supportPagination = endpoint.isSupportPagination();
+        this.defaultPageSize = endpoint.getDefaultPageSize();
     }
 
     @Override
@@ -68,7 +63,7 @@ public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransac
 
         Map<String, SearchRequest> requestMap = new HashMap<>();
         Map<String, JAXBElement<?>> responseMap = new HashMap<>();
-        Map<String, Pagination> paginations = new HashMap<>();
+        Map<String, PagedResultsResponseControl> paginations = new HashMap<>();
 
         log.debug("Start handling batch request with ID {}", batchRequest.getRequestID());
 
@@ -76,7 +71,7 @@ public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransac
             String requestId = request.getRequestID();
             if (request instanceof SearchRequest) {
                 requestMap.put(requestId, (SearchRequest) request);
-                Pagination pagination = ControlUtils.extractControl(request, Pagination.TYPE);
+                PagedResultsResponseControl pagination = ControlUtils.extractControl(request, PagedResultsResponseControl.OID);
                 if (pagination != null) {
                     paginations.put(requestId, pagination);
                 }
@@ -90,12 +85,12 @@ public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransac
 
             for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {
                 Object value = jaxbElement.getValue();
-                String requestId = ControlUtils.extractResponseRequestId(value);
+                String requestId = HpdUtils.extractResponseRequestId(value);
                 expectedPaginationResponses.remove(requestId);
 
                 if (value instanceof SearchResponse) {
                     SearchResponse searchResponse = (SearchResponse) value;
-                    Pagination pagination = ControlUtils.extractControl(searchResponse, Pagination.TYPE);
+                    PagedResultsResponseControl pagination = ControlUtils.extractControl(searchResponse, PagedResultsResponseControl.OID);
 
                     Integer resultCode = ((searchResponse.getSearchResultDone() != null) && (searchResponse.getSearchResultDone().getResultCode() != null))
                                          ? searchResponse.getSearchResultDone().getResultCode().getCode()
@@ -112,20 +107,22 @@ public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransac
                         if (pagination == null) {
                             log.debug("Expected pagination control in response with ID {}, got none --> break pagination", requestId);
                             paginations.remove(requestId);
-                        } else if (pagination.isEmptyCookie()) {
+                        } else if (pagination.getCookie() == null) {
                             log.debug("Got pagination control for response with ID {} without cookie --> pagination finished", requestId);
                             paginations.remove(requestId);
                         } else {
                             log.debug("Got pagination control for response with ID {} with cookie --> request next page", requestId);
-                            paginations.get(requestId).setCookie(pagination.getCookie());
+                            PagedResultsResponseControl responseControl = paginations.get(requestId);
+                            PagedResultsControl requestControl = new PagedResultsControl(responseControl.getResultSize(), pagination.getCookie(), true);
+                            paginations.put(requestId, ControlUtils.convert(requestControl));
                         }
                     } else if (pagination != null) {
-                        if (pagination.isEmptyCookie()) {
+                        if (pagination.getCookie() == null) {
                             log.debug("Expected no pagination control in response with ID {}, got one without cookie --> do nothing", requestId);
                         } else {
                             log.debug("Expected no pagination control in response with ID {}, got one with cookie --> request next page with default page size", requestId);
-                            pagination.setSize(DEFAULT_PAGE_SIZE);
-                            paginations.put(requestId, pagination);
+                            PagedResultsControl requestControl = new PagedResultsControl(defaultPageSize, pagination.getCookie(), true);
+                            paginations.put(requestId, ControlUtils.convert(requestControl));
                         }
                     } else {
                         log.debug("Expected no pagination control in response with ID {}, got none --> do nothing", requestId);
@@ -159,7 +156,7 @@ public class HpdQueryProducer extends SimpleWsProducer<WsAuditDataset, WsTransac
             } else {
                 log.debug("Create pagination request for request IDs {}", paginations.keySet());
                 batchRequest.getBatchRequests().clear();
-                for (Map.Entry<String, Pagination> entry : paginations.entrySet()) {
+                for (Map.Entry<String, PagedResultsResponseControl> entry : paginations.entrySet()) {
                     SearchRequest searchRequest = requestMap.get(entry.getKey());
                     ControlUtils.setControl(searchRequest, entry.getValue());
                     batchRequest.getBatchRequests().add(searchRequest);

@@ -38,7 +38,7 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new HpdQueryEndpoint(uri, remaining, this, parameters, Iti58Service.class) {
+        return new HpdQueryEndpoint<WsAuditDataset>(uri, remaining, this, parameters, Iti58Service.class) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint) {
                 return new Iti58Service(this);

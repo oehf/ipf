@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls;
 
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.NotImplementedException;
-import org.bouncycastle.asn1.*;
-import org.bouncycastle.util.encoders.Base64;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResponse;
 
-import java.io.ByteArrayOutputStream;
+import javax.naming.ldap.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Methods for mapping of Controls to and from DSMLv2 and Strings.
@@ -37,16 +37,26 @@ import java.util.Map;
 @UtilityClass
 public class ControlUtils {
 
-    @Getter
-    private static final Map<String, Class<? extends AbstractControl>> MAP = new HashMap<>();
-
-    public static <T extends AbstractControl> T extractControl(String base64Value, String type, boolean criticality) throws IOException, ReflectiveOperationException {
-        ASN1Sequence asn1Sequence = (ASN1Sequence) new ASN1InputStream(Base64.decode(base64Value)).readObject();
-        Object result = MAP.get(type).getDeclaredConstructor(ASN1Sequence.class, boolean.class).newInstance(asn1Sequence, criticality);
-        return (T) result;
+    public static <T extends BasicControl> T extractControl(String base64Value, String type, boolean criticality) throws IOException {
+        byte[] berBytes = Base64.decodeBase64(base64Value);
+        switch (type) {
+            case PagedResultsControl.OID:
+                return (T) new PagedResultsResponseControl(PagedResultsResponseControl.OID, criticality, berBytes);
+            case SortControl.OID:
+                return (T) new SortControl2(berBytes, criticality);
+            case SortResponseControl.OID:
+                return (T) new SortResponseControl2(berBytes, criticality);
+            default:
+                throw new NotImplementedException("Cannot handle control type " + type);
+        }
     }
 
-    public static <T extends AbstractControl> T extractControl(List<Control> controls, String type) throws IOException, ReflectiveOperationException {
+    public static PagedResultsResponseControl convert(PagedResultsControl control) throws IOException {
+        byte[] berBytes = control.getEncodedValue();
+        return new PagedResultsResponseControl(PagedResultsResponseControl.OID, control.isCritical(), berBytes);
+    }
+
+    public static <T extends BasicControl> T extractControl(List<Control> controls, String type) throws IOException {
         for (Control control : controls) {
             if (type.equals(control.getType())) {
                 return extractControl((String) control.getControlValue(), type, control.isCriticality());
@@ -55,55 +65,39 @@ public class ControlUtils {
         return null;
     }
 
-    public static <T extends AbstractControl> T extractControl(SearchResponse searchResponse, String type) throws IOException, ReflectiveOperationException {
+    public static <T extends BasicControl> T extractControl(SearchResponse searchResponse, String type) throws IOException {
         return ((searchResponse != null) && (searchResponse.getSearchResultDone() != null))
                ? extractControl(searchResponse.getSearchResultDone().getControl(), type)
                : null;
     }
 
-    public static <T extends AbstractControl> T extractControl(DsmlMessage dsmlMessage, String type) throws IOException, ReflectiveOperationException {
+    public static <T extends BasicControl> T extractControl(DsmlMessage dsmlMessage, String type) throws IOException {
         return (dsmlMessage != null)
-                ? extractControl(dsmlMessage.getControl(), type)
-                : null;
+               ? extractControl(dsmlMessage.getControl(), type)
+               : null;
     }
 
-    public static Control toDsmlv2(AbstractControl ac) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DLSequence asn1Sequence = new DLSequence(ac.getASN1SequenceElements());
-        ASN1OutputStream.create(baos, ASN1Encoding.BER).writeObject(asn1Sequence);
-
+    public static Control toDsmlv2(BasicControl bc) {
         Control control = new Control();
-        control.setType(ac.getType());
-        control.setCriticality(ac.isCriticality());
-        control.setControlValue(new String(Base64.encode(baos.toByteArray())));
+        control.setType(bc.getID());
+        control.setCriticality(bc.isCritical());
+        control.setControlValue(new String(Base64.encodeBase64(bc.getEncodedValue())));
         return control;
     }
 
-    public static void setControl(SearchResponse response, AbstractControl ac) throws IOException {
-        setControl(response.getSearchResultDone(), ac);
+    public static void setControl(SearchResponse response, BasicControl bc) {
+        setControl(response.getSearchResultDone(), bc);
     }
 
-    public static void setControl(DsmlMessage dsmlMessage, AbstractControl ac) throws IOException {
+    public static void setControl(DsmlMessage dsmlMessage, BasicControl bc) {
         List<Control> controls = dsmlMessage.getControl();
         for (int i = 0; i < controls.size(); ++i) {
-            if (ac.getType().equals(controls.get(i).getType())) {
-                controls.set(i, toDsmlv2(ac));
+            if (bc.getID().equals(controls.get(i).getType())) {
+                controls.set(i, toDsmlv2(bc));
                 return;
             }
         }
-        controls.add(toDsmlv2(ac));
-    }
-
-    public static String extractResponseRequestId(Object dsmlResponse) {
-        if (dsmlResponse instanceof SearchResponse) {
-            return ((SearchResponse) dsmlResponse).getRequestID();
-        } else if (dsmlResponse instanceof LDAPResult) {
-            return  ((LDAPResult) dsmlResponse).getRequestID();
-        } else if (dsmlResponse instanceof ErrorResponse) {
-            return  ((ErrorResponse) dsmlResponse).getRequestID();
-        } else {
-            throw new NotImplementedException("Cannot handle HPD response type " + dsmlResponse.getClass() + ", please submit a bug report");
-        }
+        controls.add(toDsmlv2(bc));
     }
 
 }
