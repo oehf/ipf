@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hpd.controls;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
 import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
@@ -37,8 +36,7 @@ import java.util.List;
 @UtilityClass
 public class ControlUtils {
 
-    public static <T extends BasicControl> T extractControl(String base64Value, String type, boolean criticality) throws IOException {
-        byte[] berBytes = Base64.decodeBase64(base64Value);
+    public static <T extends BasicControl> T extractControl(byte[] berBytes, String type, boolean criticality) throws IOException {
         switch (type) {
             case PagedResultsControl.OID:
                 return (T) new PagedResultsResponseControl(PagedResultsResponseControl.OID, criticality, berBytes);
@@ -59,7 +57,7 @@ public class ControlUtils {
     public static <T extends BasicControl> T extractControl(List<Control> controls, String type) throws IOException {
         for (Control control : controls) {
             if (type.equals(control.getType())) {
-                return extractControl((String) control.getControlValue(), type, control.isCriticality());
+                return extractControl((byte[]) control.getControlValue(), type, control.isCriticality());
             }
         }
         return null;
@@ -81,7 +79,7 @@ public class ControlUtils {
         Control control = new Control();
         control.setType(bc.getID());
         control.setCriticality(bc.isCritical());
-        control.setControlValue(new String(Base64.encodeBase64(bc.getEncodedValue())));
+        control.setControlValue(bc.getEncodedValue());
         return control;
     }
 

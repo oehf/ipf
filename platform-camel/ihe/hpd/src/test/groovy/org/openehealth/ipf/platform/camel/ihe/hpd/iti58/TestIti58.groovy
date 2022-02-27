@@ -194,7 +194,7 @@ class TestIti58 extends StandardTestContainer {
         assert map['3'] instanceof SearchResponse
         assert map['3'].searchResultEntry.size() == 6
         for (Control dsml : map['3'].searchResultDone.control) {
-            def control = ControlUtils.extractControl(dsml.controlValue.toString(), dsml.type, dsml.criticality)
+            def control = ControlUtils.extractControl(dsml.controlValue as byte[], dsml.type, dsml.criticality)
             log.debug('Control: {}', control)
         }
 
