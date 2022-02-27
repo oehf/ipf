@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.hpd.HpdException;
 import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.ControlHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ConsumerHpdHandler;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Handler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandler;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import javax.naming.ldap.PagedResultsControl;
@@ -37,11 +37,11 @@ import java.util.*;
  * @since 3.7.5
  */
 @Slf4j
-public class PaginationHandler extends ControlHandler {
+public class ConsumerPaginationHandler extends ConsumerHpdHandler {
 
     private final PaginationStorage paginationStorage;
 
-    public PaginationHandler(Handler<BatchRequest, BatchResponse> wrappedHandler, PaginationStorage paginationStorage) {
+    public ConsumerPaginationHandler(ConsumerHandler<BatchRequest, BatchResponse> wrappedHandler, PaginationStorage paginationStorage) {
         super(wrappedHandler);
         this.paginationStorage = Objects.requireNonNull(paginationStorage, "Pagination storage must be provided");
     }

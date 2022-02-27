@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.hpd.controls.sorting;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.hpd.HpdUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.ControlHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.ConsumerHpdHandler;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Handler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandler;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import javax.naming.ldap.SortControl;
@@ -36,9 +36,9 @@ import java.util.Map;
  * @since 3.7.5
  */
 @Slf4j
-public class SortingHandler extends ControlHandler {
+public class ConsumerSortingHandler extends ConsumerHpdHandler {
 
-    public SortingHandler(Handler<BatchRequest, BatchResponse> wrappedHandler) {
+    public ConsumerSortingHandler(ConsumerHandler<BatchRequest, BatchResponse> wrappedHandler) {
         super(wrappedHandler);
     }
 

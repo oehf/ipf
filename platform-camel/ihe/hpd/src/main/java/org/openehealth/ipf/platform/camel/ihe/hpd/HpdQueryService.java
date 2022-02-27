@@ -19,31 +19,32 @@ import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.hpd.controls.Handler;
-import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.PaginationHandler;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortingHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.ConsumerPaginationHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.ConsumerSortingHandler;
 
 /**
  * @author Dmytro Rud
  * @since 3.7.5
  */
 @Slf4j
-public class HpdQueryService extends HpdService implements Handler<BatchRequest, BatchResponse> {
+public class HpdQueryService extends HpdService implements ConsumerHandler<BatchRequest, BatchResponse> {
 
-    private Handler<BatchRequest, BatchResponse> handler;
+    private final ConsumerHandler<BatchRequest, BatchResponse> handler;
 
     public HpdQueryService(HpdQueryEndpoint<WsAuditDataset> endpoint) {
-        handler = this;
+        ConsumerHandler<BatchRequest, BatchResponse> handler = this;
         if (endpoint.isSupportSorting()) {
-            handler = new SortingHandler(handler);
+            handler = new ConsumerSortingHandler(handler);
         }
         if (endpoint.isSupportPagination()) {
-            handler = new PaginationHandler(handler, endpoint.getPaginationStorage());
+            handler = new ConsumerPaginationHandler(handler, endpoint.getPaginationStorage());
         }
+        this.handler = handler;
     }
 
     @Override
-    public Handler<BatchRequest, BatchResponse> getWrappedHandler() {
+    public ConsumerHandler<BatchRequest, BatchResponse> getWrappedHandler() {
         return null;
     }
 

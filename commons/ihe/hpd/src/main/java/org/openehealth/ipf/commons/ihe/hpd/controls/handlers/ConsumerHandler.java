@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hpd.controls;
+package org.openehealth.ipf.commons.ihe.hpd.controls.handlers;
 
 /**
- * Abstract server-side handler.
- *
  * @author Dmytro Rud
  * @since 3.7.5
  */
-public interface Handler<RequestType, ResponseType> {
+public interface ConsumerHandler<RequestType, ResponseType> {
 
     /**
      * @return Handler which is one step nearer to the Camel route.
      */
-    Handler<RequestType, ResponseType> getWrappedHandler();
+    ConsumerHandler<RequestType, ResponseType> getWrappedHandler();
 
     /**
-     * @return batch response for the given batch requests.
+     * @return Response to the given request.
      */
     ResponseType handle(RequestType request);
 

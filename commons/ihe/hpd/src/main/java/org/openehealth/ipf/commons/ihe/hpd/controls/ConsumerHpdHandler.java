@@ -15,25 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls;
 
-import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandler;
+import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandlerBase;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 
 import javax.xml.bind.JAXBElement;
 
 /**
- * Abstract server-side handler of LDAP controls.
- *
  * @author Dmytro Rud
  * @since 3.7.5
  */
-abstract public class ControlHandler implements Handler<BatchRequest, BatchResponse> {
+abstract public class ConsumerHpdHandler extends ConsumerHandlerBase<BatchRequest, BatchResponse> {
 
-    @Getter
-    private final Handler<BatchRequest, BatchResponse> wrappedHandler;
-
-    public ControlHandler(Handler<BatchRequest, BatchResponse> wrappedHandler) {
-        this.wrappedHandler = wrappedHandler;
+    public ConsumerHpdHandler(ConsumerHandler<BatchRequest, BatchResponse> wrappedHandler) {
+        super(wrappedHandler);
     }
 
     /**
