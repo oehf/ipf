@@ -31,9 +31,9 @@ import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r5.utils.IResourceValidator;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
@@ -69,7 +69,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     private FhirInstanceValidator fhirInstanceValidator(IValidationSupport validationSupport) {
         var fhirInstanceValidator = new FhirInstanceValidator(validationSupport);
         fhirInstanceValidator.setNoTerminologyChecks(true);
-        fhirInstanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
+        fhirInstanceValidator.setBestPracticeWarningLevel(BestPracticeWarningLevel.Hint);
         fhirInstanceValidator.setErrorForUnknownProfiles(true);
         return fhirInstanceValidator;
     }
