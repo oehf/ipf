@@ -59,6 +59,7 @@
         <guava-version>31.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
         <mockserver-version>5.12.0</mockserver-version>
+        <bouncycastle-version>1.70</bouncycastle-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>9.0.59</tomcat-version>
         <xbean-spring-version>4.20</xbean-spring-version>
@@ -256,6 +257,16 @@
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bouncycastle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>${bouncycastle-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
