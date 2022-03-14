@@ -33,7 +33,7 @@
         <vertx-version>3.9.8</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.3.0</xmlsec-version>
-        <woodstox-version>6.2.7</woodstox-version>
+        <woodstox-version>6.2.8</woodstox-version>
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
