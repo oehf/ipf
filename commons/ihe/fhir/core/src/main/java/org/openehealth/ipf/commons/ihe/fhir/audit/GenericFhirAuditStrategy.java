@@ -19,30 +19,22 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
-import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
 import org.hl7.fhir.instance.model.api.IBaseBinary;
-import org.hl7.fhir.instance.model.api.IBaseReference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IDomainResource;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_OPERATION_HEADER;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_DETAILS;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_RESOURCE_TYPE_HEADER;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
 
 /**
  * Generic Audit Strategy for FHIR interfaces. The audit written is built alongside what is
@@ -50,7 +42,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
  *
  * @author Christian Ohr
  */
-public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
+public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
     private final PatientIdExtractor patientIdExtractor;
 
@@ -95,7 +87,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         }
 
         // For instance-level operations e.g. PUT, DELETE, EXTENDED_OPERATION_INSTANCE: set resource ID and patient ID
-        if (auditDataset.getResourceId() == null && requestDetails.getId() != null) {
+        if (auditDataset.getResourceId() == null && requestDetails != null && requestDetails.getId() != null) {
             var id = requestDetails.getId();
             auditDataset.setResourceId(id.toUnqualifiedVersionless());
             if (id.hasResourceType()) {
@@ -108,48 +100,31 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
 
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (request instanceof IDomainResource) {
-            addResourceData(auditDataset, (T) request);
+            addResourceData(auditDataset, (IDomainResource) request);
         } else if (request instanceof IIdType) {
             auditDataset.setResourceId((IIdType) request);
         }
 
-        switch (requestDetails.getRestOperationType()) {
-            case EXTENDED_OPERATION_SERVER:
-            case EXTENDED_OPERATION_TYPE:
-            case EXTENDED_OPERATION_INSTANCE:
-                auditDataset.setOperationName(requestDetails.getOperation());
-                break;
-            case SEARCH_TYPE: {
-                auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
-                patientIdExtractor.patientReferenceFromSearchParameter(requestDetails).ifPresentOrElse(id ->
-                                auditDataset.getPatientIds().add(id),
-                        () -> patientIdExtractor.patientIdentifierFromSearchParameter(requestDetails).ifPresent(id ->
-                                auditDataset.getPatientIds().add(id.substring(id.indexOf("|") + 1))));
-                break;
-            }
-            case SEARCH_SYSTEM:
-                auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
-                break;
-        }
-
-/*
-        if (parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            var query = (String) parameters.get(HTTP_QUERY);
-            auditDataset.setQueryString(query);
-
-            var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
-            if (searchParameter != null) {
-                var tokenParams = searchParameter.getPatientIdParam();
-                if (tokenParams != null) {
-                    auditDataset.getPatientIds().addAll(
-                            tokenParams.stream()
-                                    .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
-                                    .collect(Collectors.toList()));
+        if (requestDetails != null) {
+            switch (requestDetails.getRestOperationType()) {
+                case EXTENDED_OPERATION_SERVER:
+                case EXTENDED_OPERATION_TYPE:
+                case EXTENDED_OPERATION_INSTANCE:
+                    auditDataset.setOperationName(requestDetails.getOperation());
+                    break;
+                case SEARCH_TYPE: {
+                    auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
+                    patientIdExtractor.patientReferenceFromSearchParameter(requestDetails).ifPresentOrElse(
+                            id -> auditDataset.getPatientIds().add(id),
+                            () -> patientIdExtractor.patientIdentifierFromSearchParameter(requestDetails).ifPresent(
+                                    id -> auditDataset.getPatientIds().add(id.substring(id.indexOf("|") + 1))));
+                    break;
                 }
+                case SEARCH_SYSTEM:
+                    auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
+                    break;
             }
         }
-
- */
 
         return auditDataset;
     }
@@ -158,7 +133,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     public boolean enrichAuditDatasetFromResponse(GenericFhirAuditDataset auditDataset, Object response, AuditContext auditContext) {
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (response instanceof IDomainResource) {
-            addResourceData(auditDataset, (T) response);
+            addResourceData(auditDataset, (IDomainResource) response);
         }
         if (response instanceof MethodOutcome) {
             var methodOutcome = (MethodOutcome) response;
@@ -171,7 +146,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
             }
             if (methodOutcome.getResource() != null && methodOutcome.getResource() instanceof IDomainResource) {
-                addResourceData(auditDataset, (T) methodOutcome.getResource());
+                addResourceData(auditDataset, methodOutcome.getResource());
             } else if (methodOutcome.getId() != null) {
                 auditDataset.setResourceId(methodOutcome.getId());
                 if (methodOutcome.getId().hasResourceType()) {
