@@ -55,10 +55,17 @@ public class GenericPatientIdExtractor implements PatientIdExtractor {
             } else {
                 return SearchParameterUtil.getOnlyPatientSearchParamForResourceType(fhirContext, resourceDefinition.getName())
                         .map(RuntimeSearchParam::getPath)
-                        .flatMap(path -> fhirContext.newFhirPath().evaluateFirst(resource, path, IBaseReference.class)); // Seems expensive
+                        .flatMap(path -> fhirContext.newFhirPath().evaluateFirst(resource, simplifyPath(path), IBaseReference.class));
             }
         }
         return Optional.empty();
+    }
+
+    // There is probably a bug in HAPI FHIR for expressions like DocumentReference.subject.where(resolve() is Patient)
+    // resolve() always returns null instead of the actual reference value, see FhirPathEngine#funcResolve()
+    private String simplifyPath(String path) {
+        int idx = path.indexOf(".where");
+        return idx < 0 ? path : path.substring(0, idx);
     }
 
     @Override

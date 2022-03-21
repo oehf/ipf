@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GenericPatientIdExtractorTest {
 
-    private FhirContext fhirContext = FhirContext.forR4Cached();
-    private PatientIdExtractor extractor = new GenericPatientIdExtractor(fhirContext);
+    private final FhirContext fhirContext = FhirContext.forR4Cached();
+    private final PatientIdExtractor extractor = new GenericPatientIdExtractor(fhirContext);
+
     @Test
     public void extractPatientReference() {
         var dr = new DocumentReference()
@@ -33,5 +35,14 @@ public class GenericPatientIdExtractorTest {
         var extracted = extractor.patientReferenceFromResource(dr)
                 .orElseThrow(() -> new AssertionError("Expected patient reference"));
         assertEquals(dr.getSubject().getReferenceElement().getValue(), extracted.getReferenceElement().getValue());
+    }
+
+    @Test
+    public void extractPatientId() {
+        var p = new Patient();
+        p.setId("Patient/0815");
+        var extracted = extractor.patientReferenceFromResource(p)
+                .orElseThrow(() -> new AssertionError("Expected patient reference"));
+        assertEquals(p.getId(), extracted.getReferenceElement().getValue());
     }
 }
