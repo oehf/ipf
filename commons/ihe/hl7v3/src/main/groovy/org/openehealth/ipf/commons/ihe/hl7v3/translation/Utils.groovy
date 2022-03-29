@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.Version
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Message
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
+
+import java.util.regex.Pattern
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
@@ -30,6 +33,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 class Utils {
 
     public static final String HL7V2_NULL = '""'
+    private static final Pattern OID_PATTERN = Pattern.compile("[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+");
 
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
@@ -60,9 +64,19 @@ class Utils {
             boolean useSenderDeviceName,
             boolean useReceiverDeviceName) 
     {
-        msg.MSH[3][1] = senderOrReceiverIdentification(xml.sender, useSenderDeviceName)
+        String sender = senderOrReceiverIdentification(xml.sender, useSenderDeviceName)
+        msg.MSH[3][1] = sender
+        if (Version.versionOf(msg.version).isGreaterThan(Version.V22) && OID_PATTERN.matcher(sender).matches()) {
+            msg.MSH[3][2] = sender
+            msg.MSH[3][3] = 'ISO'
+        }
         msg.MSH[4][1] = 'unknown'
-        msg.MSH[5][1] = senderOrReceiverIdentification(xml.receiver, useReceiverDeviceName)
+        String receiver = senderOrReceiverIdentification(xml.receiver, useReceiverDeviceName)
+        msg.MSH[5][1] = receiver
+        if (Version.versionOf(msg.version).isGreaterThan(Version.V22) && OID_PATTERN.matcher(receiver).matches()) {
+            msg.MSH[5][2] = receiver
+            msg.MSH[5][3] = 'ISO'
+        }
         msg.MSH[6][1] = 'unknown'
         msg.MSH[7][1] = xml.creationTime.@value.text().replaceFirst('[.+-].*$', '')
         
