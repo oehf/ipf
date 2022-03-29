@@ -30,6 +30,9 @@
             <action issue="386" dev="unixoid" type="add">
                 Asynchronous Web Service Option for ITI-41
             </action>
+            <action issue="384" dev="unixoid" type="update">
+                Method getCustomInterceptors() in AbstractWsEndpoint is deprecated in favor of getCustomCxfInterceptors()
+            </action>
             <action issue="380" dev="qligier" type="fix">
                 Fix PIXv3Query transformers
             </action>

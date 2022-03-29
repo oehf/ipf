@@ -44,7 +44,7 @@ public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
@@ -59,7 +59,7 @@ public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> exten
                 getServiceAddress(),
                 isAudit() ? getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 

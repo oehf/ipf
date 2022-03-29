@@ -54,7 +54,7 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getCorrelator());
     }
 

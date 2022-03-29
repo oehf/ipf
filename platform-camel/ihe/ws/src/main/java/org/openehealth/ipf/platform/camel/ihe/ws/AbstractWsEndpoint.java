@@ -344,8 +344,17 @@ public abstract class AbstractWsEndpoint<
     /**
      * Returns custom interceptors configured for this endpoint.
      */
-    public InterceptorProvider getCustomInterceptors() {
+    public InterceptorProvider getCustomCxfInterceptors() {
         return customInterceptors;
+    }
+
+    /**
+     * Returns custom interceptors configured for this endpoint.
+     * @deprecated use {@link #getCustomCxfInterceptors()}
+     */
+    @Deprecated
+    public InterceptorProvider getCustomInterceptors() {
+        return getCustomCxfInterceptors();
     }
 
     /**
