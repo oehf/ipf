@@ -54,7 +54,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getServiceUrl(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getSecurityInformation());
@@ -69,7 +69,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
                 getCorrelator(),
-                getCustomInterceptors());
+                getCustomCxfInterceptors());
     }
 
     @Override

@@ -47,7 +47,7 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
@@ -62,7 +62,7 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 }

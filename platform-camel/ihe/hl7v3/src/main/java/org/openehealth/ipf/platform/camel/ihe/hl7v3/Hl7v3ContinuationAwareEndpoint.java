@@ -167,7 +167,7 @@ public class Hl7v3ContinuationAwareEndpoint
                 getServiceUrl(),
                 isManualAudit() ? null : getComponent().getClientAuditStrategy(),
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
@@ -182,7 +182,7 @@ public class Hl7v3ContinuationAwareEndpoint
                 getServiceAddress(),
                 isManualAudit() ? null : getComponent().getServerAuditStrategy(),
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 }
