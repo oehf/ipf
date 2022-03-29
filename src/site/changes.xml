@@ -39,7 +39,7 @@
             <action issue="378" dev="unixoid" type="fix">
                 Fix JAXB classes for XDS and XDS-I
             </action>
-            <action issue="377" dev="tpapke" type="add">
+            <action issue="377" dev="thopap" type="add">
                 Provide JDK 17 compatibility
             </action>
             <action issue="375" dev="ohr" type="add">
@@ -51,7 +51,7 @@
             <action issue="373" dev="ohr" type="fix">
                 Fix logic in Iti67ResourceProvider
             </action>
-            <action issue="372" dev="ohr" type="update">
+            <action issue="372" dev="ohr" type="add">
                 Allow to set HttpClientPolicy on outgoing SOAP requests
             </action>
             <action issue="371" dev="ohr" type="update">
@@ -60,7 +60,7 @@
             <action issue="366" dev="rsteppac" type="fix">
                 Clear CXF client request context after use to allow it to be GCed (CXF-7710)
             </action>
-            <action issue="366" dev="tpapke" type="fix">
+            <action issue="357" dev="thopap" type="fix">
                 Fix JDOM2 CVE vulnerability
             </action>
         </release>
