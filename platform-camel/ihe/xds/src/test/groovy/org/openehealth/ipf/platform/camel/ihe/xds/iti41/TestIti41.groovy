@@ -35,7 +35,6 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.iti39.Iti39TestRouteBuilder
 
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
