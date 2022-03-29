@@ -28,36 +28,4 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.xds.rad75.Rad75TestRouteBuilder">
     </bean>
 
-    <import resource="ehcache-spring.xml" />
-
-
-    <bean id="logFileNamePrefix" class="java.lang.String">
-        <constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]" />
-    </bean>
-
-    <bean id="serverInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
-    </bean>
-
-    <bean id="serverOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-server-out[partialResponse ? '-partial' : ''].txt" />
-    </bean>
-
-    <bean id="clientSyncInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-client-sync-in.txt" />
-    </bean>
-
-    <bean id="clientSyncOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-client-sync-out.txt" />
-    </bean>
-
-    <bean id="clientAsyncInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-client-async-in.txt" />
-    </bean>
-
-    <bean id="clientAsyncOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
-        <constructor-arg value="#{@logFileNamePrefix}-client-async-out.txt" />
-    </bean>
-
-
 </beans>

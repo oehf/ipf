@@ -24,6 +24,4 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti38.Iti38TestRouteBuilder">
     </bean>
 
-    <import resource="ehcache-spring.xml" />
-
 </beans>

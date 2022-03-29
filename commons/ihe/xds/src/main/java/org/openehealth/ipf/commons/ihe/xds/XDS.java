@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti41.asyncresponse.Iti41AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
@@ -60,6 +61,7 @@ public class XDS implements XdsIntegrationProfile {
     public enum Interactions implements XdsInteractionId {
         ITI_18(ITI_18_WS_CONFIG),
         ITI_41(ITI_41_WS_CONFIG),
+        ITI_41_ASYNC_RESPONSE(ITI_41_ASYNC_RESPONSE_WS_CONFIG),
         ITI_42(ITI_42_WS_CONFIG),
         ITI_43(ITI_43_WS_CONFIG),
         ITI_51(ITI_51_WS_CONFIG),
@@ -118,6 +120,22 @@ public class XDS implements XdsIntegrationProfile {
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
             true,
             "wsdl/iti41.wsdl",
+            true,
+            false,
+            false,
+            true);
+
+    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_41_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
+            "xds-iti41-async-response",
+            "Provide and Register Document Set-b",
+            false,
+            null,
+            new Iti41ClientAuditStrategy(),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentSource_Service", "ihe"),
+            Iti41AsyncResponsePortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentSource_Binding", "ihe"),
+            true,
+            "wsdl/iti41-asyncresponse.wsdl",
             true,
             false,
             false,

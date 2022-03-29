@@ -31,12 +31,16 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.xml.XmlUtils
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.iti39.Iti39TestRouteBuilder
 
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
 import javax.xml.ws.soap.SOAPFaultException
+import java.util.concurrent.TimeUnit
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -49,10 +53,22 @@ class TestIti41 extends XdsStandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'iti-41.xml'
 
+    static final long AWAIT_DELAY = 20 * 1000L
+
     final String SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
     final String SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
     final String SERVICE3 = "xds-iti41://localhost:${port}/xds-iti41-service3"
     final String SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
+
+    final String SERVICE_ASYNC_URI =
+            "xds-iti41://localhost:${port}/iti41service-async" +
+                    '?correlator=#correlator' +
+                    '&inInterceptors=#clientSyncInLogger' +
+                    '&inFaultInterceptors=#clientSyncInLogger' +
+                    '&outInterceptors=#clientSyncOutLogger' +
+                    '&outFaultInterceptors=#clientSyncOutLogger'
+
+    final String SERVICE_ASYNC_RESPONSE_URI = "http://localhost:${port}/iti41service-async-response"
 
     final String SERVICE_SOAP_FAULT_UNHANDLED = "xds-iti41://localhost:${port}/soap-fault-unhandled"
     final String SERVICE_SOAP_FAULT_HANDLED   = "xds-iti41://localhost:${port}/soap-fault-handled"
@@ -167,6 +183,78 @@ class TestIti41 extends XdsStandardTestContainer {
     @Test
     void testHandlingOfHandledSoapFault() {
         assert SUCCESS == sendIt(SERVICE_SOAP_FAULT_HANDLED, 'ok', null).status
+    }
+
+    /**
+     * Test whether:
+     * <ol>
+     *   <li> sync and async requests are possible...
+     *   <li> ...and not influence each other (they shouldn't),
+     *   <li> async requests are really async (exchanges are InOnly and delays do not matter),
+     *   <li> SOAP headers (WSA ReplyTo) can be set and read,
+     *   <li> XSD and Schematron validations work...
+     *   <li> ...and the messages are valid either,
+     *   <li> ATNA auditing works.
+     * </ol>
+     */
+    @Test
+    void testIti41Async() {
+        final int N = Iti41TestRouteBuilder.TASKS_COUNT
+        int i = 0
+
+        N.times {
+            sendAsync(SERVICE_ASYNC_URI, i++, SERVICE_ASYNC_RESPONSE_URI)
+            sendAsync(SERVICE_ASYNC_URI, i++)
+        }
+
+        // wait for completion of asynchronous routes
+        Iti41TestRouteBuilder routeBuilder = appContext.getBean(Iti41TestRouteBuilder.class)
+        routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+
+        assert Iti41TestRouteBuilder.responseCount.get() == N * 2
+        assert Iti41TestRouteBuilder.asyncResponseCount.get() == N
+
+        assert auditSender.messages.size() == N * 4
+
+        assert ! Iti41TestRouteBuilder.errorOccurred
+    }
+
+
+
+    private void sendAsync(
+            String endpointUri,
+            int n,
+            String responseEndpointUri = null)
+    {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = request
+
+        // set WSA ReplyTo header, when necessary
+        if (responseEndpointUri) {
+            requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+        }
+
+        // set correlation key
+        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+
+        // set request HTTP headers
+        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
+                ['MyRequestHeader': "Number ${n}".toString()]
+
+        // send and check timing
+        long startTimestamp = System.currentTimeMillis()
+        def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
+        // TODO: reactivate test
+        //assert (System.currentTimeMillis() - startTimestamp < Iti41TestRouteBuilder.ASYNC_DELAY)
+
+        // for sync messages -- check acknowledgement code and incoming TTL header
+        if (!responseEndpointUri) {
+            assert resultMessage.getBody(Response.class).status == SUCCESS
+
+            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+            assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+        }
     }
 
 }

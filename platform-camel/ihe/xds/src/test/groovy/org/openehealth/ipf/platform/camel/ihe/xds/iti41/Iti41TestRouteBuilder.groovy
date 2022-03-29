@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import org.apache.camel.ExchangePattern
+import org.apache.camel.Message
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
@@ -28,6 +30,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_SUCCESS
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -39,7 +45,21 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
  */
 public class Iti41TestRouteBuilder extends RouteBuilder {
 
+    static final AtomicInteger responseCount = new AtomicInteger()
+    static final AtomicInteger asyncResponseCount = new AtomicInteger()
+
+    static boolean errorOccurred = false
+
+    final CountDownLatch countDownLatch, asyncCountDownLatch
+
+    static final int TASKS_COUNT = 5
+
     String soapFaultUnhandledEndpoint
+
+    Iti41TestRouteBuilder(){
+        countDownLatch      = new CountDownLatch(TASKS_COUNT)
+        asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
+    }
 
     @Override
     public void configure() throws Exception {
@@ -72,6 +92,65 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
             }
             .recipientList(header('soapFaultUnhandledEndpoint'))
             .setBody(constant(new Response(SUCCESS)))
+
+        /* ===== for WS-Addressing Asynchrony tests ===== */
+
+        // responding route
+        from('xds-iti41:iti41service-async' +
+                '?inInterceptors=#serverInLogger' +
+                '&inFaultInterceptors=#serverInLogger' +
+                '&outInterceptors=#serverOutLogger' +
+                '&outFaultInterceptors=#serverOutLogger'
+        )
+                .process(iti41RequestValidator())
+                .process {
+                    // check incoming SOAP and HTTP headers
+                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+
+                    try {
+                        assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
+                    } catch (Exception e) {
+                        errorOccurred = true
+                        log.error('Error occurred', e)
+                    }
+
+                    // create response, inclusive SOAP and HTTP headers
+                    Message message = Exchanges.resultMessage(it)
+                    message.body = new Response(status: SUCCESS)
+                    message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
+                            ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
+
+                    responseCount.incrementAndGet()
+                    countDownLatch.countDown()
+                }
+                .process(iti41ResponseValidator())
+
+        // receiver of asynchronous responses
+        from('xds-iti41-async-response:iti41service-async-response' +
+                '?correlator=#correlator' +
+                '&inInterceptors=#clientAsyncInLogger' +
+                '&inFaultInterceptors=#clientAsyncInLogger' +
+                '&outInterceptors=#clientAsyncOutLogger' +
+                '&outFaultInterceptors=#clientAsyncOutLogger'
+        )
+                .process(iti41ResponseValidator())
+                .process {
+                    try {
+                        def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                        assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+
+                        assert it.pattern == ExchangePattern.InOnly
+                        assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                                "corr ${asyncResponseCount.getAndIncrement() * 2}"
+
+                        assert it.in.getBody(Response.class).status == SUCCESS
+                        asyncCountDownLatch.countDown()
+                    } catch (Exception e) {
+                        errorOccurred = true
+                        log.error('Error occurred', e)
+                    }
+                }
+
     }
 
 

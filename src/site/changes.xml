@@ -23,6 +23,47 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action dev="thopap" type="update">
+                Various dependency updates
+            </action>
+            <action issue="386" dev="unixoid" type="add">
+                Asynchronous Web Service Option for ITI-41
+            </action>
+            <action issue="380" dev="qligier" type="fix">
+                Fix PIXv3Query transformers
+            </action>
+            <action issue="379" dev="ohr" type="add">
+                Provide basic sorting for FHIR endpoints
+            </action>
+            <action issue="378" dev="unixoid" type="fix">
+                Fix JAXB classes for XDS and XDS-I
+            </action>
+            <action issue="377" dev="tpapke" type="add">
+                Provide JDK 17 compatibility
+            </action>
+            <action issue="375" dev="ohr" type="add">
+                Offer JDK HttpClient/Methanol as option for HAPI FHIR clients
+            </action>
+            <action issue="374" dev="ohr" type="add">
+                Support extended operations in Audit Trail of FHIR transactions
+            </action>
+            <action issue="373" dev="ohr" type="fix">
+                Fix logic in Iti67ResourceProvider
+            </action>
+            <action issue="372" dev="ohr" type="update">
+                Allow to set HttpClientPolicy on outgoing SOAP requests
+            </action>
+            <action issue="371" dev="ohr" type="update">
+                Lazy instantiation of FhirTransactionValidator
+            </action>
+            <action issue="366" dev="rsteppac" type="fix">
+                Clear CXF client request context after use to allow it to be GCed (CXF-7710)
+            </action>
+            <action issue="366" dev="tpapke" type="fix">
+                Fix JDOM2 CVE vulnerability
+            </action>
+        </release>
         <release version="4.2.0" description="IPF 4.2.0" date="18 Oct 2021">
             <action dev="thopap" type="update">
                 Various dependency updates. This also fixes a potentially critical problem with timed-out MLLP requests.
