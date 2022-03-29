@@ -23,7 +23,37 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.7.2" description="IPF 3.7.2" date="14 Jul 2020">
+        <release version="3.7.5" description="IPD 3.7.5" date="xx Mar 2022">
+            <action dev="unixoid" issue="384" type="update">
+                Method AbstractWsEndpoint#getCustomInterceptors is depreacted, use getCustomCxfInterceptors instead
+            </action>
+            <action dev="unixoid" issue="381" type="add">
+                Support for pagination and sorting in HPD queries
+            </action>
+        </release>
+        <release version="3.7.4" description="IPF 3.7.3" date="26 Jan 2021">
+            <action dev="stanojevic-boris" issue="338" type="add">
+                Add support for stored query type "FindDocumentsByTitle"
+            </action>
+            <action dev="unixoid" issue="335" type="add">
+                Possibility to use application IDs in payload logging file name patterns
+            </action>
+        </release>
+        <release version="3.7.3" description="IPF 3.7.3" date="23 Nov 2020">
+            <action dev="thopap" issue="330" type="fix">
+                Fixed creating of ITI-62 requests
+            </action>
+            <action dev="unixoid" issue="332" type="add">
+                Possibility to use transaction IDs in payload logging file name patterns
+            </action>
+            <action dev="unixoid" issue="331" type="add">
+                Paging mechanism in CH:PIDD transactions
+            </action>
+            <action dev="unixoid" issue="291" type="update">
+                Define usage and validation of homeCommunityID query parameter for many IHE profiles
+            </action>
+        </release>
+        <release version="3.7.2" description="IPF 3.7.2" date="6 Oct 2020">
             <action dev="unixoid" issue="332" type="add">
                 Possibility to use interaction IDs in payload logging file name patterns
             </action>
