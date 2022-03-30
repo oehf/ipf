@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
 
 /**
  * Generic Audit Strategy for FHIR query transactions
@@ -52,9 +51,10 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
-        var url = (String) parameters.get(HTTP_URL);
         var query = (String) parameters.get(HTTP_QUERY);
-        dataset.setQueryString(URLDecoder.decode(String.format("%s?%s", url, query), StandardCharsets.UTF_8));
+        if (query != null) {
+            dataset.setQueryString(URLDecoder.decode(query, StandardCharsets.UTF_8));
+        }
 
         var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
         if (searchParameter != null) {

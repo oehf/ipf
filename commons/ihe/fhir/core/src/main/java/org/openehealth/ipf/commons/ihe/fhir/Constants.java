@@ -48,6 +48,7 @@ public interface Constants {
 
     String FHIR_RESOURCE_TYPE_HEADER = "RESOURCE_TYPE_HEADER";
     String FHIR_OPERATION_HEADER = "OPERATION_HEADER";
+    String FHIR_AUDIT_HEADER = "AUDIT_HEADER";
 
     // Paging stuff
     String FHIR_COUNT = ca.uhn.fhir.rest.api.Constants.PARAM_COUNT;

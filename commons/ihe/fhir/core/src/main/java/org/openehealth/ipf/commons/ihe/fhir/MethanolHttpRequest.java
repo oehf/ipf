@@ -37,8 +37,6 @@ abstract class MethanolHttpRequest extends BaseHttpRequest implements IHttpReque
 
     protected final Methanol httpClient;
     protected final MutableRequest request;
-    private boolean requestBuffered = false;
-    private byte[] requestBuffer;
 
     public MethanolHttpRequest(Methanol httpClient, MutableRequest request) {
         this.httpClient = httpClient;

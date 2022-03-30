@@ -23,8 +23,10 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.HapiClientAuditInterceptor;
 
 import java.util.Map;
 
@@ -53,6 +55,9 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         if (securityInformation != null && securityInformation.getUsername() != null) {
             client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
         }
+
+        client.registerInterceptor(new HapiClientAuditInterceptor(exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class)));
+        exchange.getIn().removeHeader(Constants.FHIR_AUDIT_HEADER);
 
         // deploy user-defined HAPI interceptors
         var factories = config.getHapiClientInterceptorFactories();

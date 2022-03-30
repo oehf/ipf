@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.nio.charset.StandardCharsets;
 
@@ -103,11 +104,36 @@ public class TestIti67Success extends AbstractTestIti67 {
         var query = event.getParticipantObjectIdentifications().get(1);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/DocumentReference?patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1&_format=xml",
+        assertEquals("patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1&_format=xml",
                 new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobileDocumentReferenceQuery, query.getParticipantObjectIDTypeCode());
 
+    }
+
+    @Test
+    public void testSendEndpointIti67() {
+       var response = producerTemplate.requestBody(
+               "direct:input",
+               referencePatientIdentifierParameter(),
+               Bundle.class);
+        var sender = getAuditSender();
+        assertEquals(2, sender.getMessages().size());
+
+        // Check the client-side audit
+        var event = sender.getMessages().get(1);
+
+        // Query Parameters
+        var query = event.getParticipantObjectIdentifications().get(0);
+        assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
+        assertEquals("patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1",
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
+
+        // Audit Source
+        var sourceIdentificationType = event.getAuditSourceIdentification();
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
     }
 
     @Test

@@ -102,7 +102,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/Patient?family=Test&_format=xml",
+        assertEquals("family=Test&_format=xml",
                 new String(patient.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
