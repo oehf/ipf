@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,11 +28,17 @@ public class XdsRenderingUtilsTest {
     @Test
     public void testRenderProvideAndRegisterDocumentSet30() {
         var pnr = SampleData.createProvideAndRegisterDocumentSet();
-        var converted =
-                EbXML30Converters.convert(pnr);
+        for (var document : pnr.getDocuments()) {
+            document.getDocumentEntry().setExtraMetadata(Collections.singletonMap(
+                    "urn:e-health-suisse:2020:originalProviderRole",
+                    Collections.singletonList("HCP^^^&2.16.756.5.30.1.127.3.10.6&ISO")));
+        }
+        
+        var converted = EbXML30Converters.convert(pnr);
         var renderedPnr = XdsRenderingUtils.renderEbxml(converted);
         assertNotNull(renderedPnr);
         assertTrue(renderedPnr.contains("ProvideAndRegisterDocumentSetRequest"));
+        assertTrue(renderedPnr.contains("urn:e-health-suisse:2020:originalProviderRole"));
     }
 
 }

@@ -27,6 +27,9 @@
             <action dev="thopap" type="update">
                 Various dependency updates
             </action>
+            <action issue="388" dev="unixoid" type="fix">
+                Properly render Extra Metadata in XdsRenderingUtils
+            </action>
             <action issue="386" dev="unixoid" type="add">
                 Asynchronous Web Service Option for ITI-41
             </action>
