@@ -17,21 +17,31 @@ package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 
-import static org.junit.Assert.assertTrue;
+import java.util.Collections;
+
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class XdsRenderingUtilsTest {
 
     @Test
     public void testRenderProvideAndRegisterDocumentSet30() {
         ProvideAndRegisterDocumentSet pnr = SampleData.createProvideAndRegisterDocumentSet();
-        org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType converted =
-                EbXML30Converters.convert(pnr);
+        for (Document document : pnr.getDocuments()) {
+            document.getDocumentEntry().setExtraMetadata(Collections.singletonMap(
+                    "urn:e-health-suisse:2020:originalProviderRole",
+                    Collections.singletonList("HCP^^^&2.16.756.5.30.1.127.3.10.6&ISO")));
+        }
+
+        ProvideAndRegisterDocumentSetRequestType converted = EbXML30Converters.convert(pnr);
         String renderedPnr = XdsRenderingUtils.renderEbxml(converted);
         assertNotNull(renderedPnr);
         assertTrue(renderedPnr.contains("ProvideAndRegisterDocumentSetRequest"));
+        assertTrue(renderedPnr.contains("urn:e-health-suisse:2020:originalProviderRole"));
     }
 
 }

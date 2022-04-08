@@ -66,7 +66,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     }
 
 
-    private static class UnmarshallerListener extends Unmarshaller.Listener {
+    public static class UnmarshallerListener extends Unmarshaller.Listener {
         static final ThreadLocal<Boolean> RESULTS = new ThreadLocal<>();
 
         @Override
@@ -105,7 +105,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     }
 
 
-    private static class MarshallerListener extends Marshaller.Listener {
+    public static class MarshallerListener extends Marshaller.Listener {
         @Override
         public void beforeMarshal(Object source) {
             if (source instanceof ExtrinsicObjectType) {
