@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.7.5" description="IPD 3.7.5" date="xx Mar 2022">
+            <action issue="388" dev="unixoid" type="fix">
+                Properly render Extra Metadata in XdsRenderingUtils
+            </action>
             <action dev="unixoid" issue="384" type="update">
                 Method AbstractWsEndpoint#getCustomInterceptors is depreacted, use getCustomCxfInterceptors instead
             </action>
