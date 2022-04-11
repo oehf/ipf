@@ -1,0 +1,131 @@
+/*
+ * Copyright 2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.platform.camel.ihe.fhir.pharm5;
+
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ *
+ */
+public class TestPharm5Success extends AbstractTestPharm5 {
+
+    private static final String CONTEXT_DESCRIPTOR = "pharm-5.xml";
+
+    @BeforeAll
+    public static void setUpClass() {
+        startServer(CONTEXT_DESCRIPTOR);
+    }
+
+    @Test
+    void testGetConformance() {
+        assertConformance("DocumentReference");
+    }
+
+    @Test
+    void testPharm5FindMedicationTreatmentPlans() {
+
+        var result = sendManually(findMedicationTreatmentPlanParameters());
+
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertEquals(1, result.getTotal());
+
+        var p = (DocumentReference) result.getEntry().get(0).getResource();
+        assertEquals("63ab1c29-4225-11e6-9b33-0050569b0094", p.getIdElement().getIdPart());
+        assertEquals("$find-medication-treatment-plans", p.getDescription());
+
+        // Check ATNA Audit
+
+        var sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        var event = sender.getMessages().get(0);
+
+        // Event
+        assertEquals(
+                EventOutcomeIndicator.Success,
+                event.getEventIdentification().getEventOutcomeIndicator());
+        assertEquals(
+                EventActionCode.Execute,
+                event.getEventIdentification().getEventActionCode());
+        assertEquals(EventIdCode.Query, event.getEventIdentification().getEventID());
+        assertEquals(FhirEventTypeCode.QueryPharmacyDocumentsOverMhd, event.getEventIdentification().getEventTypeCode().get(0));
+
+
+        // ActiveParticipant Source
+        var source = event.getActiveParticipants().get(0);
+        assertTrue(source.isUserIsRequestor());
+        assertEquals("127.0.0.1", source.getNetworkAccessPointID());
+        assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
+
+        // ActiveParticipant Destination
+        var destination = event.getActiveParticipants().get(1);
+        assertFalse(destination.isUserIsRequestor());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/DocumentReference/$find-medication-treatment-plans",
+                destination.getUserID());
+        assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
+
+        // Audit Source
+        var sourceIdentificationType = event.getAuditSourceIdentification();
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
+
+        // Patient
+        var patient = event.getParticipantObjectIdentifications().get(0);
+        assertEquals(ParticipantObjectTypeCode.Person, patient.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Patient, patient.getParticipantObjectTypeCodeRole());
+        assertEquals("1234^^^&1.2.3&ISO", patient.getParticipantObjectID());
+
+        // Query Parameters
+        var query = event.getParticipantObjectIdentifications().get(1);
+        assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
+        assertEquals("$find-medication-treatment-plans", query.getParticipantObjectID());
+        assertEquals("patient.identifier=urn:oid:1.2.3|1234&status=current&_format=xml",
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
+
+        assertEquals(FhirParticipantObjectIdTypeCode.QueryPharmacyDocumentsOverMhd, query.getParticipantObjectIDTypeCode());
+    }
+
+    @Test
+    void testSendPharm5FindMedicationList() {
+        var result = sendManually(findMedicationListParameters());
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertEquals(1, result.getTotal());
+
+        var p = (DocumentReference) result.getEntry().get(0).getResource();
+        assertEquals("63ab1c29-4225-11e6-9b33-0050569b0094", p.getIdElement().getIdPart());
+        assertEquals("$find-medication-list", p.getDescription());
+
+        var sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        var event = sender.getMessages().get(0);
+        var query = event.getParticipantObjectIdentifications().get(1);
+        assertEquals("$find-medication-list", query.getParticipantObjectID());
+    }
+}

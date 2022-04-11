@@ -34,7 +34,8 @@ public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, 
     MobilePatientDemographicsQuery("ITI-78", "Mobile Patient Demographics Query"),
     RetrieveATNAAuditEvent("ITI-81", "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", "Mobile Patient Identifier Cross-reference Query"),
-    MobileQueryExistingData("PCC-44", "Mobile Query Existing Data");
+    MobileQueryExistingData("PCC-44", "Mobile Query Existing Data"),
+    QueryPharmacyDocumentsOverMhd("PHARM-5", "Query Pharmacy Documents over MHD");
 
     @Getter
     private final ParticipantObjectIdType value;
