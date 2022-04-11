@@ -24,7 +24,7 @@ import java.io.Serializable;
 import static java.util.Objects.requireNonNull;
 
 /**
- * @author Dmytro Ruds
+ * @author Dmytro Rud
  * @author Christian Ohr
  */
 public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {

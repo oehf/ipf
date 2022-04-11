@@ -9,6 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
+        <bouncycastle-version>1.71</bouncycastle-version>
         <brave-version>5.13.7</brave-version>
         <camel-version>3.14.2</camel-version>
         <cxf-version>3.5.1</cxf-version>
@@ -419,6 +420,11 @@
                         <artifactId>*</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bouncycastle-version}</version>
             </dependency>
 
             <!-- All IPF dependencies -->

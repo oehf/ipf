@@ -18,9 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti58;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.platform.camel.ihe.hpd.HpdService;
+import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryService;
 
-public class Iti58Service extends HpdService implements Iti58PortType {
+public class Iti58Service extends HpdQueryService implements Iti58PortType {
+
+    protected Iti58Service(HpdQueryEndpoint endpoint) {
+        super(endpoint);
+    }
 
     @Override
     public BatchResponse providerInformationQueryRequest(BatchRequest body) {

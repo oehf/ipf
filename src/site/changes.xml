@@ -33,8 +33,14 @@
             <action issue="386" dev="unixoid" type="add">
                 Asynchronous Web Service Option for ITI-41
             </action>
+            <action issue="385" dev="qligier" type="add">
+                Support PHARM-5 transaction
+            </action>
             <action issue="384" dev="unixoid" type="update">
                 Method getCustomInterceptors() in AbstractWsEndpoint is deprecated in favor of getCustomCxfInterceptors()
+            </action>
+            <action dev="unixoid" issue="381" type="add">
+                Support for pagination and sorting in HPD queries
             </action>
             <action issue="380" dev="qligier" type="fix">
                 Fix PIXv3Query transformers
