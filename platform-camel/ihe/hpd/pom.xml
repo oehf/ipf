@@ -37,6 +37,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Dependencies for tests -->
         <dependency>

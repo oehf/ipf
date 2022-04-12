@@ -58,10 +58,9 @@
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>31.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
-        <mockserver-version>5.12.0</mockserver-version>
-        <bouncycastle-version>1.70</bouncycastle-version>
+        <mockserver-version>5.13.2</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.60</tomcat-version>
+        <tomcat-version>9.0.62</tomcat-version>
         <xbean-spring-version>4.20</xbean-spring-version>
         <xmlunit-version>2.9.0</xmlunit-version>
     </properties>
@@ -252,21 +251,17 @@
                 <artifactId>mockserver-netty</artifactId>
                 <version>${mockserver-version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bouncycastle-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcpkix-jdk15on</artifactId>
-                <version>${bouncycastle-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
