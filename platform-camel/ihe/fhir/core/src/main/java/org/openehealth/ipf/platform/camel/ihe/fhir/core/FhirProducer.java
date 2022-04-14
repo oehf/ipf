@@ -56,8 +56,10 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
             client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
         }
 
-        client.registerInterceptor(new HapiClientAuditInterceptor(exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class)));
-        exchange.getIn().removeHeader(Constants.FHIR_AUDIT_HEADER);
+        if (config.isAudit()) {
+            client.registerInterceptor(new HapiClientAuditInterceptor(exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class)));
+            exchange.getIn().removeHeader(Constants.FHIR_AUDIT_HEADER);
+        }
 
         // deploy user-defined HAPI interceptors
         var factories = config.getHapiClientInterceptorFactories();
