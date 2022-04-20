@@ -53,9 +53,13 @@ public class GenericPatientIdExtractor implements PatientIdExtractor {
                 String id = resource.getIdElement().getIdPart();
                 return id != null ? Optional.of(patientReference(id)) : Optional.empty();
             } else {
-                return SearchParameterUtil.getOnlyPatientSearchParamForResourceType(fhirContext, resourceDefinition.getName())
-                        .map(RuntimeSearchParam::getPath)
-                        .flatMap(path -> fhirContext.newFhirPath().evaluateFirst(resource, simplifyPath(path), IBaseReference.class));
+                try {
+                    return SearchParameterUtil.getOnlyPatientSearchParamForResourceType(fhirContext, resourceDefinition.getName())
+                            .map(RuntimeSearchParam::getPath)
+                            .flatMap(path -> fhirContext.newFhirPath().evaluateFirst(resource, simplifyPath(path), IBaseReference.class));
+                } catch (Exception e) {
+                    return Optional.empty();
+                }
             }
         }
         return Optional.empty();
