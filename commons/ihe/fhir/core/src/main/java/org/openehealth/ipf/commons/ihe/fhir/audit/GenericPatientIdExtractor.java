@@ -75,8 +75,12 @@ public class GenericPatientIdExtractor implements PatientIdExtractor {
     @Override
     public Optional<String> patientReferenceParameterName(String resourceName) {
         if (!PATIENT.equals(resourceName)) {
-            return SearchParameterUtil.getOnlyPatientSearchParamForResourceType(fhirContext, resourceName)
-                    .map(RuntimeSearchParam::getName);
+            try {
+                return SearchParameterUtil.getOnlyPatientSearchParamForResourceType(fhirContext, resourceName)
+                        .map(RuntimeSearchParam::getName);
+            } catch (Exception e) {
+                return Optional.empty();
+            }
         }
         return Optional.of("_id");
     }
