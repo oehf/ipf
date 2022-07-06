@@ -31,7 +31,7 @@ public class TestPcc44Error extends AbstractTestPcc44 {
 
     @BeforeAll
     public static void setUpClass() {
-        startServer(CONTEXT_DESCRIPTOR);
+        startServer(CONTEXT_DESCRIPTOR, false);
     }
 
     @Test

@@ -39,7 +39,7 @@ public class TestPcc44Success extends AbstractTestPcc44 {
 
     @BeforeAll
     public static void setUpClass() {
-        startServer(CONTEXT_DESCRIPTOR);
+        startServer(CONTEXT_DESCRIPTOR, false);
     }
 
     @Test
