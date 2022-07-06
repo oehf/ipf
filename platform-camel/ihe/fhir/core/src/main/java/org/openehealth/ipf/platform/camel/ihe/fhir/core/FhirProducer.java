@@ -42,15 +42,14 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     protected IGenericClient getClient(Exchange exchange) {
         var context = getEndpoint().getContext();
-        var clientFactory = context.getRestfulClientFactory();
         var config = getEndpoint().getInterceptableConfiguration();
-
         var securityInformation = config.getSecurityInformation();
 
         // For the producer, the path is supposed to be the server URL
         var path = config.getPath();
         path = (securityInformation != null && securityInformation.isSecure() ? "https://" : "http://") + path;
-        var client = clientFactory.newGenericClient(path);
+
+        var client = context.getRestfulClientFactory().newGenericClient(path);
 
         if (securityInformation != null && securityInformation.getUsername() != null) {
             client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));

@@ -28,6 +28,10 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -37,7 +41,6 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -92,16 +95,6 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
         proxy = host != null ? new HttpHost(host, port, "http") : null;
     }
 
-    /**
-     * Possibility to customize the HttpClientBuilder. The default implementation of this method
-     * does nothing.
-     *
-     * @param httpClientBuilder HttpClientBuilder
-     */
-    protected HttpClientBuilder customizeHttpClientBuilder(HttpClientBuilder httpClientBuilder) {
-        return httpClientBuilder;
-    }
-
     @Override
     protected HttpClientBuilder newHttpClientBuilder() {
         return HttpClients.custom();
@@ -109,7 +102,16 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
 
     protected synchronized HttpClient getNativeHttpClient() {
         if (httpClient == null) {
-            var connectionManager = new PoolingHttpClientConnectionManager(5000L, TimeUnit.MILLISECONDS);
+            PoolingHttpClientConnectionManager connectionManager;
+            if (getSecurityInformation() != null && getSecurityInformation().isSecure()) {
+                SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                        getSecurityInformation().getSslContext(),
+                        getSecurityInformation().getHostnameVerifier());
+                Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register("https", sslsf).build();
+                connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry, null, null, null, 5000L, TimeUnit.MILLISECONDS);
+            } else {
+                connectionManager = new PoolingHttpClientConnectionManager(5000L, TimeUnit.MILLISECONDS);
+            }
             connectionManager.setMaxTotal(getPoolMaxTotal());
             connectionManager.setDefaultMaxPerRoute(getPoolMaxPerRoute());
             var defaultRequestConfig = RequestConfig.custom()
@@ -119,7 +121,7 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
                     .setProxy(proxy)
                     .build();
             HttpClientBuilder builder = httpClientBuilder()
-                    .useSystemProperties()
+                    // .useSystemProperties()
                     .setConnectionManager(connectionManager)
                     .setDefaultRequestConfig(defaultRequestConfig)
                     .disableCookieManagement();
@@ -154,22 +156,14 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
         }
 
         @Override
-        public void configureHttpClientBuilder(HttpClientBuilder builder)  {
+        public void configureHttpClientBuilder(HttpClientBuilder builder) {
             if (isSecure()) {
-                if (getSslContext() == null) {
-                    try {
-                        builder.setSSLContext(SSLContext.getDefault());
-                    } catch (NoSuchAlgorithmException e) {
-                        // Should never happen
-                        throw new RuntimeException("Could not create SSL Context", e);
-                    }
-                } else {
-                    builder.setSSLContext(getSslContext());
-                }
+                builder.setSSLContext(getSslContext());
                 if (getHostnameVerifier() != null) {
                     builder.setSSLHostnameVerifier(getHostnameVerifier());
                 }
             }
         }
+
     }
 }

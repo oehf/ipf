@@ -107,14 +107,24 @@ public abstract class SharedFhirProvider extends FhirProvider {
     @Override
     public void setConsumer(RequestConsumer consumer) {
         if (consumers.isEmpty()) {
-            fhirContext = consumer.getFhirContext();
+            this.fhirContext = consumer.getFhirContext();
         } else if (consumers.contains(consumer)) {
             throw new IllegalStateException("This provider has this consumer already registered: " + consumer);
-        } else if (consumer.getFhirContext() != fhirContext) {
+        } else if (conflictingFhirContext(consumer.getFhirContext())) {
             throw new IllegalStateException("Consumer has a different FhirContext than the others: " + consumer);
         }
         consumers.add(consumer);
         LOG.info("Connected consumer {} to provider {}", consumer, this);
+    }
+
+    boolean conflictingFhirContext(FhirContext otherFhirContext) {
+        FhirContext thisContext = this.fhirContext instanceof DelegatingFhirContext ?
+                ((DelegatingFhirContext)this.fhirContext).getDelegate() :
+                this.fhirContext;
+        FhirContext otherContext = otherFhirContext instanceof DelegatingFhirContext ?
+                ((DelegatingFhirContext)otherFhirContext).getDelegate() :
+                otherFhirContext;
+        return thisContext != otherContext;
     }
 
     /**
