@@ -23,12 +23,20 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+        <release version="4.3.1" description="IPF 4.3.1" date="19 Apr 2022">
+            <action issue="389" dev="ohr" type="fix">
+                Avoid NullPointerException in FHIR producers when auditing is disabled
+            </action>
+        </release>
+        <release version="4.3.0" description="IPF 4.3.0" date="13 Apr 2022">
             <action dev="thopap" type="update">
                 Various dependency updates
             </action>
             <action issue="388" dev="unixoid" type="fix">
                 Properly render Extra Metadata in XdsRenderingUtils
+            </action>
+            <action issue="387" dev="ohr" type="update">
+                Adding missing information when FHIR producers write audit records
             </action>
             <action issue="386" dev="unixoid" type="add">
                 Asynchronous Web Service Option for ITI-41
@@ -38,6 +46,9 @@
             </action>
             <action issue="384" dev="unixoid" type="update">
                 Method getCustomInterceptors() in AbstractWsEndpoint is deprecated in favor of getCustomCxfInterceptors()
+            </action>
+            <action dev="ohr" issue="382" type="update">
+                HL7v3 to v2 translation also populates fields MSH-3-2 and MSH-5-2
             </action>
             <action dev="unixoid" issue="381" type="add">
                 Support for pagination and sorting in HPD queries
