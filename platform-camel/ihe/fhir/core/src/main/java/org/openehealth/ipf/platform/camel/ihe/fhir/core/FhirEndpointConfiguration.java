@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
@@ -164,25 +165,46 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         // Configuring producer specific connection parameters. We use an endpoint-specific IRestfulClientFactory to cover
         // different connection and security configs without the need to use a new FhirContext for every endpoint. Instead,
-        // a delegate is used that wraps the custom IRestfulClientFactory and the configured FhirContext
+        // a delegate is used that wraps the custom IRestfulClientFactory and the configured FhirContext. Reuse the original
+        // IRestfulClientFactory's settings if not specified otherwise here.
 
         String httpClient = component.getAndRemoveParameter(parameters, HTTP_CLIENT, String.class, "apache");
-        SslAwareAbstractRestfulClientFactory<?> restfulClientFactory = "methanol".equalsIgnoreCase(httpClient) ?
+        SslAwareAbstractRestfulClientFactory<?> producerRestfulClientFactory = "methanol".equalsIgnoreCase(httpClient) ?
                 new SslAwareMethanolRestfulClientFactory(null) :
                 new SslAwareApacheRestfulClientFactory(null);
-        this.context = new DelegatingFhirContext(context, restfulClientFactory);
-        restfulClientFactory.setFhirContext(this.context);
 
-        var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
+        IRestfulClientFactory defaultRestfulClientFactory = context.getRestfulClientFactory();
+        this.context = new DelegatingFhirContext(context, producerRestfulClientFactory);
+        producerRestfulClientFactory.setFhirContext(this.context);
+
+        var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class,
+                defaultRestfulClientFactory.getConnectTimeout());
         if (connectTimeout != null) {
-            setConnectTimeout(connectTimeout);
+            producerRestfulClientFactory.setConnectTimeout(connectTimeout);
         }
-        var timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
-        if (timeout != null) {
-            setTimeout(timeout);
+        var connectRequestTimeout = component.getAndRemoveParameter(parameters, "connectionRequestTimeout", Integer.class,
+                defaultRestfulClientFactory.getConnectionRequestTimeout());
+        if (connectRequestTimeout != null) {
+            producerRestfulClientFactory.setConnectionRequestTimeout(connectRequestTimeout);
         }
-        setDisableServerValidation(
-                component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class, false));
+        var socketTimeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class,
+                defaultRestfulClientFactory.getSocketTimeout());
+        if (socketTimeout != null) {
+            producerRestfulClientFactory.setSocketTimeout(socketTimeout);
+        }
+        var poolMax = component.getAndRemoveParameter(parameters, "poolMax", Integer.class,
+                defaultRestfulClientFactory.getPoolMaxPerRoute());
+        if (poolMax != null) {
+            producerRestfulClientFactory.setPoolMaxPerRoute(poolMax);
+            producerRestfulClientFactory.setPoolMaxTotal(poolMax);
+        }
+        var disableServerValidation = component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class,
+                defaultRestfulClientFactory.getServerValidationMode() == ServerValidationModeEnum.NEVER);
+        if (disableServerValidation != null) {
+            producerRestfulClientFactory.setServerValidationMode(disableServerValidation ?
+                    ServerValidationModeEnum.NEVER :
+                    ServerValidationModeEnum.ONCE);
+        }
 
         // Security stuff
 
@@ -204,7 +226,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             }
         }
 
-        this.securityInformation = restfulClientFactory.initializeSecurityInformation(
+        this.securityInformation = producerRestfulClientFactory.initializeSecurityInformation(
                 secure,
                 sslContextParameters != null ?
                         sslContextParameters.createSSLContext(component.getCamelContext()) :
@@ -234,6 +256,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public void setConnectTimeout(int connectTimeout) {
         context.getRestfulClientFactory().setConnectTimeout(connectTimeout);
+    }
+
+    public void setConnectRequestTimeout(int connectTimeout) {
+        context.getRestfulClientFactory().setConnectionRequestTimeout(connectTimeout);
     }
 
     public void setTimeout(int timeout) {
