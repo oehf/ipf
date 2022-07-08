@@ -23,6 +23,11 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.3.2" description="IPF 4.3.2" date="11 Jul 2022">
+            <action issue="394" dev="ohr" type="fix">
+                Make sure that FHIR producers have separate HTTP client configurations
+            </action>
+        </release>
         <release version="4.3.1" description="IPF 4.3.1" date="19 Apr 2022">
             <action issue="389" dev="ohr" type="fix">
                 Avoid NullPointerException in FHIR producers when auditing is disabled
