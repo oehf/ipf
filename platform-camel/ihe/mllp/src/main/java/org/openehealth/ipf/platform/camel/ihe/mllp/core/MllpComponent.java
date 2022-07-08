@@ -135,7 +135,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         Charset charset = null;
         var decoder = new HL7MLLPNettyDecoderFactory();
         try {
-            var decoders = nettyConfiguration.getDecoders();
+            var decoders = nettyConfiguration.getDecodersAsList();
             if (decoders.isEmpty()) {
                 decoders.add(decoder);
                 LOG.warn("No HL7 decoder factory found, creating new default instance {}", decoder);

@@ -74,7 +74,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             addToPipeline("ssl", channelPipeline, sslHandler);
         }
 
-        var encoders = consumer.getConfiguration().getEncoders();
+        var encoders = consumer.getConfiguration().getEncodersAsList();
         for (var i = 0; i < encoders.size(); i++) {
             var encoder = encoders.get(i);
             if (encoder instanceof ChannelHandlerFactory) {
@@ -84,7 +84,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             addToPipeline("encoder-" + i, channelPipeline, encoder);
         }
 
-        var decoders = consumer.getConfiguration().getDecoders();
+        var decoders = consumer.getConfiguration().getDecodersAsList();
         for (var i = 0; i < decoders.size(); i++) {
             var decoder = decoders.get(i);
             if (decoder instanceof ChannelHandlerFactory) {
