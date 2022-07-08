@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.test.context.ContextConfiguration
 
 import java.nio.charset.Charset
@@ -44,6 +46,7 @@ import static org.junit.jupiter.api.Assertions.*
 @ContextConfiguration('/iti21/iti-21.xml')
 class TestIti21 extends AbstractMllpTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
     private Random random = new Random(System.currentTimeMillis())
 
     @EndpointInject("mock:trace")
@@ -109,6 +112,9 @@ class TestIti21 extends AbstractMllpTest {
         final String timeoutString = Integer.toString(timeout)
         def msg = send(endpointUri, body.replace('1402274727', timeoutString))
         assertRSP(msg)
+        if (timeoutString != msg.QAK[1].value) {
+            LOG.error("{} does not match {}", timeoutString, msg.QAK[1].value)
+        }
         assertEquals(timeoutString, msg.QAK[1].value)
     }
 
