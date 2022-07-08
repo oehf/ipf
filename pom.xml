@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>4.3.2</version>
+        <version>4.3-SNAPSHOT</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -67,7 +67,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>ipf-4.3.2</tag>
+       <tag>HEAD</tag>
     </scm>
 
     <profiles>
