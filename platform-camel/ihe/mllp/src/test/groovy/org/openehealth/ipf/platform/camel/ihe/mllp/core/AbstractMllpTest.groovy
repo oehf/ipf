@@ -100,7 +100,7 @@ abstract class AbstractMllpTest {
         assertFalse(msg.QPD.empty, "QPD segment must be present")
     }
 
-    void assertAuditEvents(Predicate<AbstractMockedAuditMessageQueue> check, long maxWait = 100) {
+    void assertAuditEvents(Predicate<AbstractMockedAuditMessageQueue> check, long maxWait = 200) {
         Awaitility.await()
                 .pollDelay(maxWait >> 2, TimeUnit.MILLISECONDS)
                 .atMost(maxWait, TimeUnit.MILLISECONDS)

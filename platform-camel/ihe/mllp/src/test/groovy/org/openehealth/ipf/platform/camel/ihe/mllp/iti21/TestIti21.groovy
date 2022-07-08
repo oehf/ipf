@@ -33,9 +33,7 @@ import org.springframework.test.context.ContextConfiguration
 
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 import static org.junit.jupiter.api.Assertions.*
 
@@ -107,15 +105,13 @@ class TestIti21 extends AbstractMllpTest {
         assertAuditEvents { expectedAuditItemsCount <= it.messages.size() }
     }
 
-    def doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
+    String doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
         final String body = getMessageString('QBP^Q22', '2.5')
         final String timeoutString = Integer.toString(timeout)
         def msg = send(endpointUri, body.replace('1402274727', timeoutString))
-        assertRSP(msg)
-        if (timeoutString != msg.QAK[1].value) {
-            LOG.error("{} does not match {}", timeoutString, msg.QAK[1].value)
-        }
-        assertEquals(timeoutString, msg.QAK[1].value)
+        // assertRSP(msg)
+        // assertEquals(timeoutString, msg.QAK[1].value)
+        return msg.QAK[1].value
     }
 
     def doTestWaitAndAssertTimeout(String endpointUri, int timeout) {
@@ -204,9 +200,9 @@ class TestIti21 extends AbstractMllpTest {
     @Test
     void testTestTimeoutHandling() {
         // Timeout after 500ms, but response takes 1000ms => Exception
-        doTestWaitAndAssertTimeout("pdq-iti21://localhost:18220?producerPoolMaxActive=1&timeout=500", 1000)
+        doTestWaitAndAssertTimeout("pdq-iti21://localhost:18220?producerPoolMaxTotal=1&timeout=500", 1000)
         // Long timeout, response takes 1500ms => check that response is not from previous request, that is handled by now
-        doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?producerPoolMaxActive=1&timeout=5000", 1500)
+        doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?producerPoolMaxTotal=1&timeout=5000", 1500)
     }
 
     @Test
@@ -231,18 +227,33 @@ class TestIti21 extends AbstractMllpTest {
         stressTest(50, 10, "pdq-iti21://localhost:18220?producerPoolEnabled=false&timeout=10000&correlationManager=#hl7CorrelationManager")
     }
 
-    private void stressTest(int messages, int threads, String endpoint) {
+    private void stressTest(int numberOfMessages, int threads, String endpoint) {
         def executorService = Executors.newFixedThreadPool(threads)
-        def latch = new CountDownLatch(messages)
+        def latch = new CountDownLatch(numberOfMessages)
+        Map<String, List<Future<String>>> results = new ConcurrentHashMap<>()
         try {
-            for (int i = 0; i < messages; i++) {
-                int delay = random.nextInt(messages)
-                executorService.submit(() -> {
-                    doTestWaitAndAssertCorrectResponse(endpoint, delay)
-                    latch.countDown()
+            for (int i = 0; i < numberOfMessages; i++) {
+                int delay = random.nextInt(numberOfMessages)
+                Future<String> result = executorService.submit(new Callable<String>() {
+                    @Override
+                    String call() throws Exception {
+                        String answer = doTestWaitAndAssertCorrectResponse(endpoint, delay)
+                        latch.countDown()
+                        return answer
+                    }
                 })
+                results.computeIfAbsent(
+                        Integer.toString(delay),
+                        r -> new CopyOnWriteArrayList<Future<String>>())
+                        .add(result)
             }
             assertTrue(latch.await(10, TimeUnit.SECONDS), () -> 'Responses not arrived: ' + latch.count)
+            int numberOfResponses = 0
+            for (Map.Entry<String, List<Future<String>>> entry: results) {
+                entry.value.forEach(f -> assertEquals(entry.key, f.get()))
+                numberOfResponses += entry.value.size()
+            }
+            assertEquals(numberOfResponses, numberOfMessages)
         } finally {
             executorService.shutdownNow()
             executorService.awaitTermination(5, TimeUnit.SECONDS)
@@ -266,7 +277,7 @@ class TestIti21 extends AbstractMllpTest {
         def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertAuditEvents{ it.messages.empty }
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -313,7 +324,7 @@ class TestIti21 extends AbstractMllpTest {
             }
         }
         assertFalse(failed)
-        assertAuditEvents{ it.messages.empty }
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -324,7 +335,7 @@ class TestIti21 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18213?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertAuditEvents{ it.messages.size() == 2 }
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -336,7 +347,7 @@ class TestIti21 extends AbstractMllpTest {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18219?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertAuditEvents{ it.messages.size() == 2 }
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -349,7 +360,7 @@ class TestIti21 extends AbstractMllpTest {
                         'QID|dummy|gummy||\n'
         def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertAuditEvents{ it.messages.empty }
+        assertAuditEvents { it.messages.empty }
         assertACK(msg)
     }
 }

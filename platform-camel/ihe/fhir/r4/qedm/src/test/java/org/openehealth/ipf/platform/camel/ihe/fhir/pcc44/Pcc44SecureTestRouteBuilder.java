@@ -45,7 +45,7 @@ public class Pcc44SecureTestRouteBuilder extends RouteBuilder {
                 .toF("qedm-pcc44:localhost:%d?secure=true&sslContextParameters=#myContext&httpClient=methanol", FhirTestContainer.DEMO_APP_PORT);
         from("direct:apache")
                 .toF("qedm-pcc44:localhost:%d?secure=true&sslContextParameters=#myContext", FhirTestContainer.DEMO_APP_PORT);
-        from("qedm-pcc44:translation?audit=true&options=OBSERVATIONS")
+        from("qedm-pcc44:translation?audit=true&iheOptions=OBSERVATIONS")
                 .errorHandler(noErrorHandler())
                 .transform(new Pcc44Responder());
     }
