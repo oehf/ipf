@@ -20,6 +20,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
@@ -50,10 +51,13 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        var msg = exchange.getIn().getBody(IBaseResource.class);
+        var msg = exchange.getIn().getBody();
 
         var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
         determineParticipantsAddresses(exchange, auditDataset);
+
+        // Pass in AuditDataset for Client Interceptor
+        exchange.getIn().setHeader(Constants.FHIR_AUDIT_HEADER, auditDataset);
 
         var failed = false;
         try {
@@ -89,13 +93,10 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
+    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
             var auditDataset = strategy.createAuditDataset();
-            auditDataset.setSourceUserId("unknown");
-            auditDataset.setDestinationUserId(exchange.getProperty("CamelToEndpoint").toString());
-
-            // TODO set client-side headers
+            auditDataset.setSourceUserId(auditContext.getAuditValueIfMissing());
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

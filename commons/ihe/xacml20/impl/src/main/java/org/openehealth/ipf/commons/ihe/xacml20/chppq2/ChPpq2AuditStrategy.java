@@ -53,7 +53,7 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        var builder = new QueryInformationBuilder(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
+        var builder = new QueryInformationBuilder<>(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
         return builder
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(
@@ -78,12 +78,12 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public boolean enrichAuditDatasetFromResponse(ChPpqAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        auditDataset.setEventOutcomeIndicator(getEventOutcomeIndicator(response));
+        auditDataset.setEventOutcomeIndicator(getEventOutcomeIndicator(auditDataset, response));
         return true;
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object responseObject) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(ChPpqAuditDataset auditDataset, Object responseObject) {
         var response = (ResponseType) responseObject;
         try {
             if (!Xacml20Utils.SAML20_STATUS_SUCCESS.equals(response.getStatus().getStatusCode().getValue())) {

@@ -21,6 +21,7 @@ import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.openehealth.ipf.commons.ihe.ws.cxf.NonReadingAttachmentMarshaller;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
@@ -198,6 +199,7 @@ public abstract class XdsRenderingUtils {
             var writer = new StringWriter();
             var marshaller = JAXB_CONTEXT.createMarshaller();
             marshaller.setAttachmentMarshaller(new NonReadingAttachmentMarshaller());
+            marshaller.setListener(new XdsJaxbDataBinding.MarshallerListener());
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(ebXml, writer);
             return writer.toString();

@@ -102,7 +102,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         var patient = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.System, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, patient.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/Patient?family=Test&_format=xml",
+        assertEquals("family=Test&_format=xml",
                 new String(patient.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
@@ -134,10 +134,41 @@ public class TestIti78Success extends AbstractTestIti78 {
         var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
         // printAsXML(result);
 
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertTrue(result.hasEntry());
+
         // Check ATNA Audit
         var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
-        // FIXME client-side audit message needs ip addresses, target URL and queryString
+
+        // Check the client-side audit
+        var event = sender.getMessages().get(1);
+
+        // ActiveParticipant Source
+        var source = event.getActiveParticipants().get(0);
+        assertTrue(source.isUserIsRequestor());
+        assertEquals(AuditUtils.getLocalIPAddress(), source.getNetworkAccessPointID());
+        assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
+
+        // ActiveParticipant Destination
+        var destination = event.getActiveParticipants().get(1);
+        assertFalse(destination.isUserIsRequestor());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
+        assertEquals("localhost", destination.getNetworkAccessPointID());
+        assertEquals(NetworkAccessPointTypeCode.MachineName, destination.getNetworkAccessPointTypeCode());
+
+        // Query Parameters
+        var query = event.getParticipantObjectIdentifications().get(0);
+        assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
+        assertEquals("family=Test",
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
+
+        // Audit Source
+        var sourceIdentificationType = event.getAuditSourceIdentification();
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
     }
 
     @Test
@@ -145,10 +176,41 @@ public class TestIti78Success extends AbstractTestIti78 {
         var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertTrue(result.hasEntry());
+
         // Check ATNA Audit
         var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
-        // FIXME client-side audit message needs ip addresses, target URL and queryString
+
+        // Check the client-side audit
+        var event = sender.getMessages().get(1);
+
+        // ActiveParticipant Source
+        var source = event.getActiveParticipants().get(0);
+        assertTrue(source.isUserIsRequestor());
+        assertEquals(AuditUtils.getLocalIPAddress(), source.getNetworkAccessPointID());
+        assertEquals(NetworkAccessPointTypeCode.IPAddress, source.getNetworkAccessPointTypeCode());
+
+        // ActiveParticipant Destination
+        var destination = event.getActiveParticipants().get(1);
+        assertFalse(destination.isUserIsRequestor());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
+        assertEquals("localhost", destination.getNetworkAccessPointID());
+        assertEquals(NetworkAccessPointTypeCode.MachineName, destination.getNetworkAccessPointTypeCode());
+
+        // Query Parameters
+        var query = event.getParticipantObjectIdentifications().get(0);
+        assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
+        assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
+        assertEquals("family=Test",
+                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
+
+        // Audit Source
+        var sourceIdentificationType = event.getAuditSourceIdentification();
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
     }
 
 

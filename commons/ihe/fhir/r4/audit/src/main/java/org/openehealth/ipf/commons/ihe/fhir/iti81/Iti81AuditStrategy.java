@@ -21,7 +21,6 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 /**
  * ITI-81 audit strategy
@@ -32,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 public class Iti81AuditStrategy extends FhirAuditStrategy<FhirAuditEventQueryAuditDataset> {
 
     public Iti81AuditStrategy(boolean serverSide) {
-        super(serverSide, OperationOutcomeOperations.INSTANCE);
+        super(serverSide);
     }
 
     @Override

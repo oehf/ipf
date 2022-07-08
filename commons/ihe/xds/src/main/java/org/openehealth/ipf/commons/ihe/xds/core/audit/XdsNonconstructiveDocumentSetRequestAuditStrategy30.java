@@ -66,12 +66,4 @@ public abstract class XdsNonconstructiveDocumentSetRequestAuditStrategy30 extend
         return new XdsNonconstructiveDocumentSetRequestAuditDataset(isServerSide());
     }
 
-    /**
-     * This method is not used, because the outcome code will be determined
-     * based on the statuses of individual {@link Document Document}s.
-     */
-    @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        return null;
-    }
 }

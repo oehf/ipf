@@ -39,7 +39,7 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StructureDefinition;
-import org.hl7.fhir.r5.utils.IResourceValidator;
+import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -92,7 +92,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         var instanceValidator = new FhirInstanceValidator(validationSupport);
         instanceValidator.setNoTerminologyChecks(false);
         instanceValidator.setErrorForUnknownProfiles(true);
-        instanceValidator.setBestPracticeWarningLevel(IResourceValidator.BestPracticeWarningLevel.Hint);
+        instanceValidator.setBestPracticeWarningLevel(BestPracticeWarningLevel.Hint);
         validator.registerValidatorModule(instanceValidator);
         var validationResult = validator.validateWithResult(transactionBundle);
         if (!validationResult.isSuccessful()) {

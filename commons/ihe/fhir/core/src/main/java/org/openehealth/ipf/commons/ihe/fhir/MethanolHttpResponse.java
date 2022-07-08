@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.api.Constants;
 import ca.uhn.fhir.rest.client.impl.BaseHttpResponse;
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.util.StopWatch;
 import org.apache.commons.io.IOUtils;
 
@@ -30,9 +29,6 @@ import java.io.UncheckedIOException;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 public class MethanolHttpResponse extends BaseHttpResponse {
 

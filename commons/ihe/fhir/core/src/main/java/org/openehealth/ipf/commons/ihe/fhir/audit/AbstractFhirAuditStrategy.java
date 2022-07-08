@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -51,15 +52,18 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
         if (parameters.get(HTTP_CLIENT_IP_ADDRESS) != null) {
             auditDataset.setRemoteAddress((String) parameters.get(HTTP_CLIENT_IP_ADDRESS));
         }
+        if (parameters.get(FHIR_CONTEXT) != null) {
+            auditDataset.setFhirContext((FhirContext) parameters.get(FHIR_CONTEXT));
+        }
         return auditDataset;
     }
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
         if (response instanceof IBaseResource) {
-            var eventOutcomeIndicator = getEventOutcomeIndicator(response);
+            var eventOutcomeIndicator = getEventOutcomeIndicator(auditDataset, response);
             auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);
-            auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(response));
+            auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(auditDataset, response));
             return eventOutcomeIndicator == EventOutcomeIndicator.Success;
         }
         return true;
@@ -67,8 +71,8 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
 
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        return getEventOutcomeCodeFromResource((IBaseResource) response);
+    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
+        return getEventOutcomeCodeFromResource(auditDataset, (IBaseResource) response);
     }
 
     /**
@@ -77,16 +81,16 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @param resource FHIR resource
      * @return event outcome code
      */
-    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(IBaseResource resource) {
+    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(T auditDataset, IBaseResource resource) {
         return resource instanceof IBaseOperationOutcome ?
-                getEventOutcomeCodeFromOperationOutcome((O)resource) :
+                getEventOutcomeCodeFromOperationOutcome(auditDataset.getFhirContext(), (O)resource) :
                 EventOutcomeIndicator.Success;
     }
 
     @Override
-    public String getEventOutcomeDescription(Object response) {
+    public String getEventOutcomeDescription(T auditDataset, Object response) {
         return response instanceof IBaseOperationOutcome ?
-                getEventOutcomeDescriptionFromOperationOutcome((O)response) :
+                getEventOutcomeDescriptionFromOperationOutcome(auditDataset.getFhirContext(), (O)response) :
                 null;
     }
 
@@ -99,8 +103,8 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @param response {@link IBaseOperationOutcome} to be analyzed
      * @return ATNA outcome code
      */
-    public abstract EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(O response);
+    public abstract EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(FhirContext fhirContext, O response);
 
-    public abstract String getEventOutcomeDescriptionFromOperationOutcome(O response);
+    public abstract String getEventOutcomeDescriptionFromOperationOutcome(FhirContext fhirContext, O response);
 
 }

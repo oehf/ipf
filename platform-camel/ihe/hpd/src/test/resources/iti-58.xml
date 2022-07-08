@@ -30,5 +30,21 @@ http://cxf.apache.org/schemas/configuration/security.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.hpd.iti58.Iti58TestRouteBuilder">
     </bean>
 
+    <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
+
+    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
+        <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
+        <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
+    </bean>
+
+    <bean id="paginationStorage" class="org.openehealth.ipf.commons.ihe.hpd.controls.pagination.EhcachePaginationStorage">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="paginationCache" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg value="true"/>
+    </bean>
+
 </beans>
         

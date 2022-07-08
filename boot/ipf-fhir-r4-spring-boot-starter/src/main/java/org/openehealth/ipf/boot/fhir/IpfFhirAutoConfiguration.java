@@ -22,7 +22,7 @@ import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IServerConformanceProvider;
-import ca.uhn.fhir.rest.server.RestfulServerConfiguration;
+import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.provider.ServerCapabilityStatementProvider;
 import org.hl7.fhir.instance.model.api.IBaseConformance;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
+import org.openehealth.ipf.commons.ihe.fhir.support.NullsafeServerCapabilityStatementProvider;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,7 +45,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -103,15 +103,8 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IServerConformanceProvider.class)
-    public IServerConformanceProvider<IBaseConformance> serverConformanceProvider(FhirContext fhirContext,
-            RestfulServerConfiguration theServerConfiguration) {
-        return new ServerCapabilityStatementProvider(fhirContext, theServerConfiguration);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(RestfulServerConfiguration.class)
-    public RestfulServerConfiguration serverConfiguration() {
-        return new RestfulServerConfiguration();
+    public IServerConformanceProvider<IBaseConformance> serverConformanceProvider(RestfulServer restfulServer) {
+        return new NullsafeServerCapabilityStatementProvider(restfulServer);
     }
 
     @Bean
@@ -143,7 +136,6 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
             FhirContext fhirContext,
-            IServerConformanceProvider<IBaseConformance> serverConformanceProvider,
             ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
@@ -153,7 +145,6 @@ public class IpfFhirAutoConfiguration {
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
         fhirServlet.setStrictErrorHandler(servletProperties.isStrict());
-        fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
         fhirServlet.setPagingProviderSize(servletProperties.getPagingRequests());
         fhirServlet.setMaximumPageSize(servletProperties.getMaxPageSize());

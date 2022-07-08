@@ -30,7 +30,6 @@ import java.net.CookiePolicy;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.http.HttpClient;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +92,7 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
 
     /**
      * Whether to use a thread pool to send the requests
+     *
      * @param async true to send the requests asynchronosly, false otherwise
      */
     public void setAsync(boolean async) {
@@ -101,6 +101,7 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
 
     /**
      * Define an executor to be used for asynchronous request processing
+     *
      * @param executor executor to be used for asynchronous request processing
      */
     public void setExecutor(Executor executor) {
@@ -155,16 +156,7 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
         @Override
         public void configureHttpClientBuilder(Methanol.Builder builder) {
             if (isSecure()) {
-                if (getSslContext() == null) {
-                    try {
-                        builder.sslContext(SSLContext.getDefault());
-                    } catch (NoSuchAlgorithmException e) {
-                        // Should never happen
-                        throw new RuntimeException("Could not create SSL Context", e);
-                    }
-                } else {
-                    builder.sslContext(getSslContext());
-                }
+                builder.sslContext(getSslContext());
                 /*
                 if (getHostnameVerifier() != null) {
                     builder.setSSLHostnameVerifier(getHostnameVerifier());

@@ -19,27 +19,22 @@ package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
-import ca.uhn.fhir.rest.api.server.RequestDetails;
-import org.hl7.fhir.instance.model.api.IBaseReference;
+import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
+import org.hl7.fhir.instance.model.api.IBaseBinary;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IDomainResource;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_OPERATION_HEADER;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_DETAILS;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_RESOURCE_TYPE_HEADER;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
 
 /**
  * Generic Audit Strategy for FHIR interfaces. The audit written is built alongside what is
@@ -47,18 +42,16 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
  *
  * @author Christian Ohr
  */
-public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAuditStrategy<GenericFhirAuditDataset> {
+public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAuditDataset> {
 
-    private final Function<T, Optional<? extends IBaseReference>> patientIdExtractor;
+    private final PatientIdExtractor patientIdExtractor;
 
     /**
      * @param serverSide         server side auditing
-     * @param operations         operations for accessthe FHIR version-specific OperationOutcome
      * @param patientIdExtractor function that extracts a patient reference from a domain resource
      */
-    public GenericFhirAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations,
-                                    Function<T, Optional<? extends IBaseReference>> patientIdExtractor) {
-        super(serverSide, operations);
+    public GenericFhirAuditStrategy(boolean serverSide, PatientIdExtractor patientIdExtractor) {
+        super(serverSide);
         this.patientIdExtractor = requireNonNull(patientIdExtractor);
     }
 
@@ -70,7 +63,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     @Override
     public GenericFhirAuditDataset enrichAuditDatasetFromRequest(GenericFhirAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        var requestDetails = (RequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
+        var requestDetails = (ServletRequestDetails) parameters.get(FHIR_REQUEST_DETAILS);
 
         var resourceType = (String) parameters.get(FHIR_RESOURCE_TYPE_HEADER);
         if (resourceType == null && requestDetails != null) {
@@ -84,41 +77,52 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         }
         auditDataset.setOperation(operation);
 
-        // Extract operation name
-        if (requestDetails != null) {
-            if (requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE ||
-                    requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_TYPE ||
-                    requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_SERVER) {
-                auditDataset.setOperationName(requestDetails.getOperation());
-            }
+        // Resource in the request? Extract Patient ID and Sensitivity at this point
+        if (request instanceof IDomainResource) {
+            addResourceData(auditDataset, (IDomainResource) request);
+        } else if (request instanceof IBaseBinary) {
+            addResourceData(auditDataset, (IBaseBinary) request);
+        } else if (request instanceof IIdType) {
+            auditDataset.setResourceId(((IIdType) request).toUnqualifiedVersionless());
+        }
 
-            // set resource ID with extended-instance-operations
-            if (requestDetails.getRestOperationType() == RestOperationTypeEnum.EXTENDED_OPERATION_INSTANCE) {
-                auditDataset.setResourceId(requestDetails.getId());
+        // For instance-level operations e.g. PUT, DELETE, EXTENDED_OPERATION_INSTANCE: set resource ID and patient ID
+        if (auditDataset.getResourceId() == null && requestDetails != null && requestDetails.getId() != null) {
+            var id = requestDetails.getId();
+            auditDataset.setResourceId(id.toUnqualifiedVersionless());
+            if (id.hasResourceType()) {
+                auditDataset.setAffectedResourceType(id.getResourceType());
+            }
+            if ("Patient".equals(id.getResourceType())) {
+                auditDataset.getPatientIds().add(id.getIdPart());
             }
         }
 
-
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (request instanceof IDomainResource) {
-            addResourceData(auditDataset, (T) request);
+            addResourceData(auditDataset, (IDomainResource) request);
         } else if (request instanceof IIdType) {
             auditDataset.setResourceId((IIdType) request);
         }
 
-        if (parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            var query = (String) parameters.get(HTTP_QUERY);
-            auditDataset.setQueryString(query);
-
-            var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
-            if (searchParameter != null) {
-                var tokenParams = searchParameter.getPatientIdParam();
-                if (tokenParams != null) {
-                    auditDataset.getPatientIds().addAll(
-                            tokenParams.stream()
-                                    .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
-                                    .collect(Collectors.toList()));
+        if (requestDetails != null) {
+            switch (requestDetails.getRestOperationType()) {
+                case EXTENDED_OPERATION_SERVER:
+                case EXTENDED_OPERATION_TYPE:
+                case EXTENDED_OPERATION_INSTANCE:
+                    auditDataset.setOperationName(requestDetails.getOperation());
+                    break;
+                case SEARCH_TYPE: {
+                    auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
+                    patientIdExtractor.patientReferenceFromSearchParameter(requestDetails).ifPresentOrElse(
+                            id -> auditDataset.getPatientIds().add(id),
+                            () -> patientIdExtractor.patientIdentifierFromSearchParameter(requestDetails).ifPresent(
+                                    id -> auditDataset.getPatientIds().add(id.substring(id.indexOf("|") + 1))));
+                    break;
                 }
+                case SEARCH_SYSTEM:
+                    auditDataset.setQueryString(requestDetails.getServletRequest().getQueryString());
+                    break;
             }
         }
 
@@ -129,7 +133,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
     public boolean enrichAuditDatasetFromResponse(GenericFhirAuditDataset auditDataset, Object response, AuditContext auditContext) {
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
         if (response instanceof IDomainResource) {
-            addResourceData(auditDataset, (T) response);
+            addResourceData(auditDataset, (IDomainResource) response);
         }
         if (response instanceof MethodOutcome) {
             var methodOutcome = (MethodOutcome) response;
@@ -142,7 +146,7 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
             }
             if (methodOutcome.getResource() != null && methodOutcome.getResource() instanceof IDomainResource) {
-                addResourceData(auditDataset, (T) methodOutcome.getResource());
+                addResourceData(auditDataset, methodOutcome.getResource());
             } else if (methodOutcome.getId() != null) {
                 auditDataset.setResourceId(methodOutcome.getId());
                 if (methodOutcome.getId().hasResourceType()) {
@@ -167,19 +171,24 @@ public class GenericFhirAuditStrategy<T extends IDomainResource> extends FhirAud
         return builder.getMessages();
     }
 
-    private void addResourceData(GenericFhirAuditDataset auditDataset, T resource) {
-        auditDataset.setResourceId(resource.getIdElement());
+    private void addResourceData(GenericFhirAuditDataset auditDataset, IBaseResource resource) {
+        // Note that OperationOutcome is also a IDomainResource. Do not overwrite any resource
+        // details has already been recorded.
+        if (auditDataset.getResourceId() == null && resource.getIdElement().hasIdPart()) {
+            auditDataset.setResourceId(resource.getIdElement().toUnqualifiedVersionless());
+        }
         if (resource.getIdElement().hasResourceType()) {
             auditDataset.setAffectedResourceType(resource.getIdElement().getResourceType());
         }
-        patientIdExtractor.apply(resource).ifPresent(patient ->
-                auditDataset.getPatientIds().add(patient.getResource() != null ?
-                        patient.getResource().getIdElement().toUnqualifiedVersionless().getValue() :
-                        patient.getReferenceElement().getValue()));
+        patientIdExtractor.patientReferenceFromResource(resource).ifPresent(ref ->
+                auditDataset.getPatientIds().add(ref.getResource() != null ?
+                        ref.getResource().getIdElement().getIdPart() :
+                        ref.getReferenceElement().getIdPart()));
 
         var securityLabels = resource.getMeta().getSecurity();
         if (!securityLabels.isEmpty()) {
             auditDataset.setSecurityLabel(securityLabels.get(0).getCode());
         }
     }
+
 }

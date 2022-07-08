@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
-import org.openehealth.ipf.commons.ihe.fhir.support.OperationOutcomeOperations;
 
 import java.util.Map;
 
@@ -36,7 +35,7 @@ import java.util.Map;
 class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     protected Iti78AuditStrategy(boolean serverSide) {
-        super(serverSide, OperationOutcomeOperations.INSTANCE);
+        super(serverSide);
     }
 
     @Override

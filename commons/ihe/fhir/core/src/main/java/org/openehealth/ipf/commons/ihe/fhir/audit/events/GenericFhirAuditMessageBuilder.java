@@ -124,7 +124,7 @@ public class GenericFhirAuditMessageBuilder extends
                 null,
                 null,
                 null,
-                auditDataset.getResourceId().getValue(),
+                auditDataset.getResourceId().getIdPart(),
                 ParticipantObjectTypeCode.System,
                 ParticipantObjectTypeCodeRole.Job,
                 null,

@@ -52,7 +52,7 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getServiceUrl(),
                 isAudit() ? getComponent().getClientAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
@@ -68,7 +68,7 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 

@@ -38,12 +38,12 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.3.0</assembly-plugin-version>
-        <build-helper-version>3.2.0</build-helper-version>
-        <compiler-plugin-version>3.8.1</compiler-plugin-version>
+        <build-helper-version>3.3.0</build-helper-version>
+        <compiler-plugin-version>3.10.1</compiler-plugin-version>
         <enforcer-plugin-version>3.0.0</enforcer-plugin-version>
         <gmavenplus-plugin-version>1.13.1</gmavenplus-plugin-version>
 
-        <jar-plugin-version>3.2.0</jar-plugin-version>
+        <jar-plugin-version>3.2.2</jar-plugin-version>
         <javadoc-plugin-version>3.2.0</javadoc-plugin-version>
         <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
@@ -57,13 +57,13 @@
         <awaitility-version>4.1.1</awaitility-version>
         <easymock-version>4.3</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
-        <guava-version>30.1.1-jre</guava-version>
+        <guava-version>31.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
-        <mockserver-version>5.11.2</mockserver-version>
+        <mockserver-version>5.13.2</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.56</tomcat-version>
+        <tomcat-version>9.0.64</tomcat-version>
         <xbean-spring-version>4.20</xbean-spring-version>
-        <xmlunit-version>2.8.3</xmlunit-version>
+        <xmlunit-version>2.9.0</xmlunit-version>
     </properties>
 
     <scm>
@@ -258,6 +258,12 @@
                 <artifactId>mockserver-netty</artifactId>
                 <version>${mockserver-version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.mock-server</groupId>

@@ -46,7 +46,7 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 getCorrelator(),
@@ -61,7 +61,7 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 

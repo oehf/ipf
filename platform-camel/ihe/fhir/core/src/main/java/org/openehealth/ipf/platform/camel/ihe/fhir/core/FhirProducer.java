@@ -23,7 +23,10 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.HapiClientAuditInterceptor;
 
 import java.util.Map;
 
@@ -39,18 +42,25 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     protected IGenericClient getClient(Exchange exchange) {
         var context = getEndpoint().getContext();
-        var clientFactory = context.getRestfulClientFactory();
         var config = getEndpoint().getInterceptableConfiguration();
-
         var securityInformation = config.getSecurityInformation();
 
         // For the producer, the path is supposed to be the server URL
         var path = config.getPath();
         path = (securityInformation != null && securityInformation.isSecure() ? "https://" : "http://") + path;
-        var client = clientFactory.newGenericClient(path);
+
+        var client = context.getRestfulClientFactory().newGenericClient(path);
 
         if (securityInformation != null && securityInformation.getUsername() != null) {
             client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
+        }
+
+        if (config.isAudit()) {
+            FhirAuditDataset auditDataset = exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class);
+            if (auditDataset != null) {
+                client.registerInterceptor(new HapiClientAuditInterceptor(auditDataset));
+                exchange.getIn().removeHeader(Constants.FHIR_AUDIT_HEADER);
+            }
         }
 
         // deploy user-defined HAPI interceptors
@@ -85,7 +95,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
         var result = executableClient.execute();
-        var resultMessage = exchange.getMessage();
+        var resultMessage = Exchanges.resultMessage(exchange);
         resultMessage.setBody(result);
     }
 

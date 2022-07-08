@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
@@ -27,9 +28,12 @@ import org.apache.camel.spi.UriParams;
 import org.apache.camel.support.EndpointHelper;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.DelegatingFhirContext;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
@@ -55,6 +59,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     static final String LENIENT = "lenient";
     static final String LAZY_LOAD_BUNDLES = "lazyLoadBundles";
     static final String CACHE_BUNDLES = "cacheBundles";
+    static final String HTTP_CLIENT = "httpClient";
     static final String CONSUMER_SELECTOR = "consumerSelector";
     static final String SORT = "sort";
 
@@ -62,7 +67,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private final String path;
 
     @Getter
-    private FhirContext context;
+    private final FhirContext context;
 
     @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
@@ -132,7 +137,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         hapiServerInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "hapiServerInterceptorFactories", HapiServerInterceptorFactory.class);
 
-        context = component.getAndRemoveOrResolveReferenceParameter(
+        FhirContext context = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
 
         // No FhirContext parameter is set on the endpoint, so the component must provide one according
@@ -145,17 +150,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             } else if (!LENIENT.equals(parserErrorHandling)) {
                 throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
             }
-
-            var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
-            if (connectTimeout != null) {
-                setConnectTimeout(connectTimeout);
-            }
-            var timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
-            if (timeout != null) {
-                setTimeout(timeout);
-            }
-            setDisableServerValidation(
-                    component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class, false));
         } else {
             if (!component.isCompatibleContext(context)) {
                 throw new IllegalArgumentException("FhirContext with version [" + context.getVersion().getVersion() +
@@ -168,7 +162,52 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         sort = component.getAndRemoveParameter(parameters, SORT, Boolean.class, false);
         consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class);
 
+
+        // Configuring producer specific connection parameters. We use an endpoint-specific IRestfulClientFactory to cover
+        // different connection and security configs without the need to use a new FhirContext for every endpoint. Instead,
+        // a delegate is used that wraps the custom IRestfulClientFactory and the configured FhirContext. Reuse the original
+        // IRestfulClientFactory's settings if not specified otherwise here.
+
+        String httpClient = component.getAndRemoveParameter(parameters, HTTP_CLIENT, String.class, "apache");
+        SslAwareAbstractRestfulClientFactory<?> producerRestfulClientFactory = "methanol".equalsIgnoreCase(httpClient) ?
+                new SslAwareMethanolRestfulClientFactory(null) :
+                new SslAwareApacheRestfulClientFactory(null);
+
+        IRestfulClientFactory defaultRestfulClientFactory = context.getRestfulClientFactory();
+        this.context = new DelegatingFhirContext(context, producerRestfulClientFactory);
+        producerRestfulClientFactory.setFhirContext(this.context);
+
+        var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class,
+                defaultRestfulClientFactory.getConnectTimeout());
+        if (connectTimeout != null) {
+            producerRestfulClientFactory.setConnectTimeout(connectTimeout);
+        }
+        var connectRequestTimeout = component.getAndRemoveParameter(parameters, "connectionRequestTimeout", Integer.class,
+                defaultRestfulClientFactory.getConnectionRequestTimeout());
+        if (connectRequestTimeout != null) {
+            producerRestfulClientFactory.setConnectionRequestTimeout(connectRequestTimeout);
+        }
+        var socketTimeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class,
+                defaultRestfulClientFactory.getSocketTimeout());
+        if (socketTimeout != null) {
+            producerRestfulClientFactory.setSocketTimeout(socketTimeout);
+        }
+        var poolMax = component.getAndRemoveParameter(parameters, "poolMax", Integer.class,
+                defaultRestfulClientFactory.getPoolMaxPerRoute());
+        if (poolMax != null) {
+            producerRestfulClientFactory.setPoolMaxPerRoute(poolMax);
+            producerRestfulClientFactory.setPoolMaxTotal(poolMax);
+        }
+        var disableServerValidation = component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class,
+                defaultRestfulClientFactory.getServerValidationMode() == ServerValidationModeEnum.NEVER);
+        if (disableServerValidation != null) {
+            producerRestfulClientFactory.setServerValidationMode(disableServerValidation ?
+                    ServerValidationModeEnum.NEVER :
+                    ServerValidationModeEnum.ONCE);
+        }
+
         // Security stuff
+
         var sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "sslContextParameters", SSLContextParameters.class);
         var hostnameVerifier = component.getAndRemoveOrResolveReferenceParameter(
@@ -187,28 +226,14 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             }
         }
 
-        if (context.getRestfulClientFactory() instanceof SslAwareAbstractRestfulClientFactory) {
-            var sslAwareRestfulClientFactory = (SslAwareAbstractRestfulClientFactory<?>) context.getRestfulClientFactory();
-            if (sslAwareRestfulClientFactory.getSecurityInformation() == null) {
-                this.securityInformation = sslAwareRestfulClientFactory.initializeSecurityInformation(
-                        secure,
-                        sslContextParameters != null ?
-                                sslContextParameters.createSSLContext(component.getCamelContext()) :
-                                null,
-                        hostnameVerifier,
-                        username,
-                        password);
-            } else {
-                this.securityInformation = sslAwareRestfulClientFactory.getSecurityInformation();
-            }
-        } else {
-            this.securityInformation = null;
-            if (secure) {
-                throw new IllegalArgumentException("When using TLS, FhirContext must use a IRestfulClientFactory that is a subclass of "
-                        + "SslAwareAbstractRestfulClientFactory, but is : " + context.getRestfulClientFactory().getClass().getName());
-            }
-        }
-
+        this.securityInformation = producerRestfulClientFactory.initializeSecurityInformation(
+                secure,
+                sslContextParameters != null ?
+                        sslContextParameters.createSSLContext(component.getCamelContext()) :
+                        null,
+                hostnameVerifier,
+                username,
+                password);
     }
 
     public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters, String key, Class<T> type) {
@@ -231,6 +256,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public void setConnectTimeout(int connectTimeout) {
         context.getRestfulClientFactory().setConnectTimeout(connectTimeout);
+    }
+
+    public void setConnectRequestTimeout(int connectTimeout) {
+        context.getRestfulClientFactory().setConnectionRequestTimeout(connectTimeout);
     }
 
     public void setTimeout(int timeout) {

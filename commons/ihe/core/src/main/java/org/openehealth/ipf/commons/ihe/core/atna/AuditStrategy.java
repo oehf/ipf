@@ -94,14 +94,38 @@ public interface AuditStrategy<T extends AuditDataset> {
      *
      * @param response POJO
      * @return event outcome code
+     * @deprecated use {@link #getEventOutcomeIndicator(AuditDataset, Object)}
      */
     EventOutcomeIndicator getEventOutcomeIndicator(Object response);
+
+    /**
+     * Determines which event outcome corresponds with the provided response POJO
+     *
+     * @param auditDataset Audit dataset
+     * @param response POJO
+     * @return event outcome code
+     */
+    default EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
+        return auditDataset.getEventOutcomeIndicator();
+    }
 
     /**
      * Determines which event outcome description corresponds with the provided response POJO
      *
      * @param response POJO
      * @return event outcome description
+     * @deprecated use {@link #getEventOutcomeDescription(AuditDataset, Object)}
      */
     String getEventOutcomeDescription(Object response);
+
+    /**
+     * Determines which event outcome description corresponds with the provided response POJO
+     *
+     * @param auditDataset Audit dataset
+     * @param response POJO
+     * @return event outcome description
+     */
+    default String getEventOutcomeDescription(T auditDataset, Object response) {
+        return auditDataset.getEventOutcomeDescription();
+    }
 }

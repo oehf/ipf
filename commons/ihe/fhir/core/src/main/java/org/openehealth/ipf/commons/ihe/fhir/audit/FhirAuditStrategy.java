@@ -16,27 +16,29 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+
+import static org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUtils.getDiagnostics;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUtils.getWorstIssueSeverity;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUtils.hasIssue;
 
 /**
  * @author Christian Ohr
  */
 public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends AbstractFhirAuditStrategy<T, IBaseOperationOutcome> {
 
-    private final IBaseOperationOutcomeOperations operations;
-
-    public FhirAuditStrategy(boolean serverSide, IBaseOperationOutcomeOperations operations) {
+    public FhirAuditStrategy(boolean serverSide) {
         super(serverSide);
-        this.operations = operations;
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(IBaseOperationOutcome response) {
-        if (!operations.hasIssue(response)) {
+    public EventOutcomeIndicator getEventOutcomeCodeFromOperationOutcome(FhirContext fhirContext, IBaseOperationOutcome response) {
+        if (!hasIssue(fhirContext, response)) {
             return EventOutcomeIndicator.Success;
         }
-        var severity = operations.getWorstIssueSeverity(response);
+        var severity = getWorstIssueSeverity(fhirContext, response);
         switch (severity) {
             case "fatal":
             case "error":
@@ -46,14 +48,14 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
             default:
                 return EventOutcomeIndicator.Success;
         }
-
     }
 
     @Override
-    public String getEventOutcomeDescriptionFromOperationOutcome(IBaseOperationOutcome response) {
-        if (!operations.hasIssue(response)) {
+    public String getEventOutcomeDescriptionFromOperationOutcome(FhirContext fhirContext, IBaseOperationOutcome response) {
+        if (!hasIssue(fhirContext, response)) {
             return null;
         }
-        return operations.getDiagnostics(response);
+        return getDiagnostics(fhirContext, response);
     }
+
 }

@@ -25,6 +25,7 @@ import java.util.Comparator;
 /**
  * @author Christian Ohr
  * @since 3.6
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUtils}
  */
 public class OperationOutcomeOperations implements IBaseOperationOutcomeOperations {
 

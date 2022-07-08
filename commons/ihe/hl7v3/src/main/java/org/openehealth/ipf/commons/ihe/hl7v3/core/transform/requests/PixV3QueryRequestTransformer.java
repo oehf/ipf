@@ -56,7 +56,7 @@ public class PixV3QueryRequestTransformer {
         // Prepare query with fixed values
         final var query = new PRPAIN201309UV02Type();
         query.setITSVersion("XML_1.0");
-        query.setInteractionId(new II("2.16.840.1.113883.1.18", "PRPA_IN201309UV02"));
+        query.setInteractionId(new II("2.16.840.1.113883.1.6", "PRPA_IN201309UV02"));
         query.setProcessingCode(new CS("P", null, null));
         query.setProcessingModeCode(new CS("T", null, null));
         query.setAcceptAckCode(new CS("AL", null, null));

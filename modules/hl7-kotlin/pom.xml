@@ -25,13 +25,13 @@
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules</artifactId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.4-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <kotlin.dokka.version>1.4.10.2</kotlin.dokka.version>
-        <kotlin.version>1.5.20</kotlin.version>
-        <kotlin.logging.version>2.0.10</kotlin.logging.version>
+        <kotlin.dokka.version>1.4.32</kotlin.dokka.version>
+        <kotlin.version>1.5.32</kotlin.version>
+        <kotlin.logging.version>2.0.13</kotlin.logging.version>
     </properties>
 
     <dependencies>

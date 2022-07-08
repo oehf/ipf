@@ -34,7 +34,7 @@ public class ChPpq1ServerAuditStrategy extends ChPpq1AuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        var builder = new PHIImportBuilder(auditContext, auditDataset, auditDataset.getAction(), PrivacyPolicyFeed, auditDataset.getPurposesOfUse());
+        var builder = new PHIImportBuilder<>(auditContext, auditDataset, auditDataset.getAction(), PrivacyPolicyFeed, auditDataset.getPurposesOfUse());
         builder.addSecurityResourceParticipantObjects(ParticipantObjectIdType.of(PrivacyPolicyFeed), auditDataset.getPolicyAndPolicySetIds());
         if (auditDataset.getPatientId() != null) {
             builder.setPatient(auditDataset.getPatientId());

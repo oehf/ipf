@@ -94,7 +94,7 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getServiceUrl(),
                 null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getFeatures(),
                 getProperties(),
                 null,
@@ -110,7 +110,7 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getServiceAddress(),
                 null,
                 getAuditContext(),
-                getCustomInterceptors(),
+                getCustomCxfInterceptors(),
                 getRejectionHandlingStrategy());
     }
 

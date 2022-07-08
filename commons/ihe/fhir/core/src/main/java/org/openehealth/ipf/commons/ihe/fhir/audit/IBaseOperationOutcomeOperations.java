@@ -20,6 +20,7 @@ import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 
 /**
  * @author Christian Ohr
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUtils}
  */
 public interface IBaseOperationOutcomeOperations {
 

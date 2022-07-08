@@ -23,6 +23,70 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.3.1" description="IPF 4.3.1" date="19 Apr 2022">
+            <action issue="389" dev="ohr" type="fix">
+                Avoid NullPointerException in FHIR producers when auditing is disabled
+            </action>
+        </release>
+        <release version="4.3.0" description="IPF 4.3.0" date="13 Apr 2022">
+            <action dev="thopap" type="update">
+                Various dependency updates
+            </action>
+            <action issue="388" dev="unixoid" type="fix">
+                Properly render Extra Metadata in XdsRenderingUtils
+            </action>
+            <action issue="387" dev="ohr" type="update">
+                Adding missing information when FHIR producers write audit records
+            </action>
+            <action issue="386" dev="unixoid" type="add">
+                Asynchronous Web Service Option for ITI-41
+            </action>
+            <action issue="385" dev="qligier" type="add">
+                Support PHARM-5 transaction
+            </action>
+            <action issue="384" dev="unixoid" type="update">
+                Method getCustomInterceptors() in AbstractWsEndpoint is deprecated in favor of getCustomCxfInterceptors()
+            </action>
+            <action dev="ohr" issue="382" type="update">
+                HL7v3 to v2 translation also populates fields MSH-3-2 and MSH-5-2
+            </action>
+            <action dev="unixoid" issue="381" type="add">
+                Support for pagination and sorting in HPD queries
+            </action>
+            <action issue="380" dev="qligier" type="fix">
+                Fix PIXv3Query transformers
+            </action>
+            <action issue="379" dev="ohr" type="add">
+                Provide basic sorting for FHIR endpoints
+            </action>
+            <action issue="378" dev="unixoid" type="fix">
+                Fix JAXB classes for XDS and XDS-I
+            </action>
+            <action issue="377" dev="thopap" type="add">
+                Provide JDK 17 compatibility
+            </action>
+            <action issue="375" dev="ohr" type="add">
+                Offer JDK HttpClient/Methanol as option for HAPI FHIR clients
+            </action>
+            <action issue="374" dev="ohr" type="add">
+                Support extended operations in Audit Trail of FHIR transactions
+            </action>
+            <action issue="373" dev="ohr" type="fix">
+                Fix logic in Iti67ResourceProvider
+            </action>
+            <action issue="372" dev="ohr" type="add">
+                Allow to set HttpClientPolicy on outgoing SOAP requests
+            </action>
+            <action issue="371" dev="ohr" type="update">
+                Lazy instantiation of FhirTransactionValidator
+            </action>
+            <action issue="366" dev="rsteppac" type="fix">
+                Clear CXF client request context after use to allow it to be GCed (CXF-7710)
+            </action>
+            <action issue="357" dev="thopap" type="fix">
+                Fix JDOM2 CVE vulnerability
+            </action>
+        </release>
         <release version="4.2.0" description="IPF 4.2.0" date="18 Oct 2021">
             <action dev="thopap" type="update">
                 Various dependency updates. This also fixes a potentially critical problem with timed-out MLLP requests.

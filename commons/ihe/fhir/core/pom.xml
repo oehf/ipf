@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -77,6 +77,11 @@
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-structures-dstu3</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-r4</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
