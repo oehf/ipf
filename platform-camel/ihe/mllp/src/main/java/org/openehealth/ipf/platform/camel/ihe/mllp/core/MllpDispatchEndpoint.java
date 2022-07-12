@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.netty.NettyEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
@@ -33,14 +33,14 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
     public MllpDispatchEndpoint(
             MllpDispatchComponent mllpComponent,
-            MinaEndpoint wrappedEndpoint,
+            NettyEndpoint wrappedEndpoint,
             MllpDispatchEndpointConfiguration config) {
         super(mllpComponent, wrappedEndpoint, config);
     }
 
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
-        List<Interceptor> initialChain = new ArrayList<>();
+        var initialChain = new ArrayList<Interceptor>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
         var dispatcher = getConfig().getDispatcher();

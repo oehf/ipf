@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 import org.apache.camel.support.DefaultExchange
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
@@ -26,7 +26,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 /**
  * @author Dmytro Rud
  */
-abstract class TestDispatch extends MllpTestContainer {
+abstract class TestDispatch extends AbstractMllpTest {
 
     static final String ITI_8_REQUEST =
         'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|dummy|dummy|20081204114742||ADT^A01|123456|T|2.3.1|||ER\n' +
@@ -73,22 +73,29 @@ abstract class TestDispatch extends MllpTestContainer {
         // ITI-9 from client (failure)
         // ITI-64 from server
         // ITI-64 from client
-        assertEquals(5, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 5 }
 
-        assertEquals(2, auditSender.messages.findAll {
-            it.eventIdentification.eventTypeCode[0].code == 'ITI-8' &&
-            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success}
-        .size())
+        assertAuditEvents {
+            it.messages.count {
+                it.eventIdentification.eventTypeCode[0].code == 'ITI-8' &&
+                it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            } == 2
+        }
 
-        assertEquals(1, auditSender.messages.findAll {
-            it.eventIdentification.eventTypeCode[0].code == 'ITI-9' &&
-            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.MajorFailure}
-        .size())
+        assertAuditEvents {
+            it.messages.count {
+                it.eventIdentification.eventTypeCode[0].code == 'ITI-9' &&
+                it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.MajorFailure
+            } == 1
+        }
 
-        assertEquals(2, auditSender.messages.findAll {
-            it.eventIdentification.eventTypeCode[0].code == 'ITI-64' &&
-            it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success}
-        .size())
+        assertAuditEvents {
+            it.messages.count {
+                it.eventIdentification.eventTypeCode[0].code == 'ITI-64' &&
+                it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            } == 2
+        }
+
     }
 
     protected abstract String getDispatcherPort()

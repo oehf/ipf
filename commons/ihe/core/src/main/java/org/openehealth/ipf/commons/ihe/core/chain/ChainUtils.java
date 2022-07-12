@@ -42,8 +42,8 @@ public class ChainUtils {
      * @throws ChainException when chain extension fails, e.g. when cyclic dependencies are discovered.
      */
     public static <T extends Chainable> List<T> createChain(List<T> initial, Collection<T> custom) {
-        List<T> chain = new ArrayList<>(initial);
-        List<T> unprocessed = new ArrayList<>(custom);
+        var chain = new ArrayList<>(initial);
+        var unprocessed = new ArrayList<>(custom);
 
         var chainIds = chain.stream()
                 .map(Chainable::getId)
@@ -65,7 +65,7 @@ public class ChainUtils {
                     continue;
                 }
 
-                List<T> unProcessedWithoutC = new ArrayList<>(unprocessed);
+                var unProcessedWithoutC = new ArrayList<>(unprocessed);
                 unProcessedWithoutC.remove(c);
                 // check whether this element depends on some other unprocessed ones
                 var unprocessedDependencies = unProcessedWithoutC.stream()

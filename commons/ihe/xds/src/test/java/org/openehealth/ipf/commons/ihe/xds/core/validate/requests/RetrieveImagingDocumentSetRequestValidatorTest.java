@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -62,12 +61,12 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
     
     @Test
     public void testStudyInstanceIdMustBeSpecified() {
-        List<DocumentReference> documentReferences = new ArrayList<>();
+        var documentReferences = new ArrayList<DocumentReference>();
         var documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.5");
         documentReferences.add(documentReference);
 
         var retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", documentReferences);
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
+        var retrieveSerieses = new ArrayList<RetrieveSeries>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy(null, retrieveSerieses));
@@ -77,12 +76,12 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
 
     @Test
     public void testSteriesInstanceIdMustBeSpecified() {
-        List<DocumentReference> documentReferences = new ArrayList<>();
+        var documentReferences = new ArrayList<DocumentReference>();
         var documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.6");
         documentReferences.add(documentReference);
 
         var retrieveSeries = new RetrieveSeries(null, documentReferences);
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
+        var retrieveSerieses = new ArrayList<RetrieveSeries>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy("urn:oid:1.1.3", retrieveSerieses));

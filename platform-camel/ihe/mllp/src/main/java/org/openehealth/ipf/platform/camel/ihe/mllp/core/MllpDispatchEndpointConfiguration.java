@@ -27,7 +27,6 @@ import static org.apache.commons.lang3.StringUtils.stripToNull;
  * @author Dmytro Rud
  */
 public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration {
-    private static final long serialVersionUID = -2217584969904791989L;
 
     @Getter private final String[] routes;
 

@@ -16,16 +16,23 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 
 
 /**
  * Producer-side Hl7 marshalling/unmarshalling interceptor.
+ *
  * @author Dmytro Rud
  */
-public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ProducerMarshalInterceptor extends InterceptorSupport {
+
+    private final String charsetName;
+
+    public ProducerMarshalInterceptor(String charsetName) {
+        this.charsetName = charsetName;
+    }
 
     /**
      * Marshals the request, sends it to the route, and unmarshals the response. 
@@ -34,15 +41,17 @@ public class ProducerMarshalInterceptor extends InterceptorSupport<HL7v2Endpoint
     public void process(Exchange exchange) throws Exception {
         // marshal
         var message = exchange.getIn();
-        var request = message.getBody(ca.uhn.hl7v2.model.Message.class);
-        message.setBody(request.toString());
+        message.setBody(Hl7v2MarshalUtils.convertMessageToByteArray(
+                message,
+                exchange.getProperty(Exchange.CHARSET_NAME, charsetName, String.class)));
 
         // run the route
         getWrappedProcessor().process(exchange);
 
         // unmarshal
-        message = Exchanges.resultMessage(exchange);
-        var responseString = message.getBody(String.class);
-        message.setBody(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
+        var hl7Message = Hl7v2MarshalUtils.convertBodyToMessage(
+                exchange.getMessage(), charsetName,
+                getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser());
+        exchange.getMessage().setBody(hl7Message);
     }
 }

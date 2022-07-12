@@ -25,7 +25,6 @@ import javax.activation.DataHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Utility class to create sample data used in tests.
@@ -371,13 +370,13 @@ public abstract class SampleData {
     public static RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
         var request = new RetrieveImagingDocumentSet();
 
-        List<DocumentReference> documentReferences = new ArrayList<>();
+        var documentReferences = new ArrayList<DocumentReference>();
         var documentReference1 = new DocumentReference("repo1", "doc1", "urn:oid:1.2.3");
         documentReferences.add(documentReference1);
         var documentReference2 = new DocumentReference("repo2", "doc2", "urn:oid:1.2.4");
         documentReferences.add(documentReference2);
 
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
+        var retrieveSerieses = new ArrayList<RetrieveSeries>();
         var retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", documentReferences);
         retrieveSerieses.add(retrieveSeries1);
         var retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", documentReferences);

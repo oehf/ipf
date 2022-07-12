@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -30,17 +29,17 @@ import java.nio.charset.StandardCharsets;
 abstract public class Hl7v3ConvertersBase {
 
     protected static String toXml(Object pojo, JAXBContext jaxbContext) throws JAXBException {
-        final Marshaller marshaller = jaxbContext.createMarshaller();
+        final var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
+        final var stringWriter = new StringWriter();
         marshaller.marshal(pojo, stringWriter);
         return stringWriter.toString();
     }
 
     protected static <T> T fromXml(String xml, JAXBContext jaxbContext) throws JAXBException {
-        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        final var unmarshaller = jaxbContext.createUnmarshaller();
         return (T) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
     }
 

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
@@ -28,15 +27,15 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
  * @author Dmytro Rud
  */
-public class ConsumerStringProcessingInterceptor extends InterceptorSupport<MllpEndpoint<?,?,?>> {
+public class ConsumerStringProcessingInterceptor extends InterceptorSupport {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final var charsetName = getEndpoint().getCharsetName();
+        final var charsetName = getEndpoint(MllpEndpoint.class).getCharsetName();
         exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
 
-        var supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
-        var segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
+        var supportSegmentFragmentation = getEndpoint(MllpEndpoint.class).isSupportSegmentFragmentation();
+        var segmentFragmentationThreshold = getEndpoint(MllpEndpoint.class).getSegmentFragmentationThreshold();
         
         // read in the request
         var message = exchange.getIn();
@@ -50,7 +49,7 @@ public class ConsumerStringProcessingInterceptor extends InterceptorSupport<Mllp
 
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
-            message = Exchanges.resultMessage(exchange);
+            message = exchange.getMessage();
             var s = message.getBody(String.class);
             s = FragmentationUtils.ensureMaximalSegmentsLength(s, segmentFragmentationThreshold);
             message.setBody(s);

@@ -113,7 +113,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = Exchanges.resultMessage(it)
+                Message message = it.message
                 message.body = RESPONSE
                 if (dura) {
                     XcpdTestUtils.setTtl(message, dura.years * 2)

@@ -48,7 +48,7 @@ public class EbXMLNonconstructiveDocumentSetRequest30<T extends RetrieveDocument
 
     @Override
     public List<DocumentReference> getDocuments() {
-        List<DocumentReference> docs = new ArrayList<>();
+        var docs = new ArrayList<DocumentReference>();
         for (var documentRequest : request.getDocumentRequest()) {
             var doc = new DocumentReference();
             doc.setDocumentUniqueId(documentRequest.getDocumentUniqueId());

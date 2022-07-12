@@ -67,7 +67,7 @@ public class MHD implements IntegrationProfile {
 
     @Override
     public List<InteractionId> getInteractionIds() {
-        List<InteractionId> interactions = new ArrayList<>();
+        var interactions = new ArrayList<InteractionId>();
         interactions.addAll(Arrays.asList(SubmitInteractions.values()));
         interactions.addAll(Arrays.asList(QueryInteractions.values()));
         return Collections.unmodifiableList(interactions);

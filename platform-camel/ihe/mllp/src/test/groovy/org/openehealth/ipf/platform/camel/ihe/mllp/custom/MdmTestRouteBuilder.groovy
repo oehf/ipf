@@ -17,9 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.custom
 
 import org.apache.camel.builder.RouteBuilder
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
-
 
 class MdmTestRouteBuilder extends RouteBuilder {
     
@@ -32,8 +30,8 @@ class MdmTestRouteBuilder extends RouteBuilder {
         // fictive route to test producer-side acceptance checking
         from('mdm://0.0.0.0:19084?audit=false')
                 .process {
-                    resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-                    resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
+                    it.message.body.MSH[9][1] = 'DOES NOT MATTER'
+                    it.message.body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
                 }
 
         // route with normal exception
@@ -51,12 +49,6 @@ class MdmTestRouteBuilder extends RouteBuilder {
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         from('mdm://0.0.0.0:19087?audit=false&'+
-                'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=TLSv1.2,TLSv1.3&' +
-                'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
-                .transform(ack())
-
-        from('mdm://0.0.0.0:19088?audit=false&'+
                 'sslContextParameters=#sslContextParameters')
                 .transform(ack())
     }

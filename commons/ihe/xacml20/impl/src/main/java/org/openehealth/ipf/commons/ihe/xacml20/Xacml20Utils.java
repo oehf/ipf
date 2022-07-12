@@ -44,7 +44,6 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -92,7 +91,7 @@ public class Xacml20Utils {
      * @param customInitializers additional optional user-defined custom initializers.
      */
     public static void initializeHerasaf(Initializer... customInitializers) {
-        Set<Initializer> initializers = new HashSet<>(InitializerExecutor.getDefaultInitializers());
+        var initializers = new HashSet<>(InitializerExecutor.getDefaultInitializers());
         initializers.add(new Hl7v3DataTypesInitializer());
         initializers.add(new Hl7v3FunctionsInitializer());
         initializers.addAll(Arrays.asList(customInitializers));

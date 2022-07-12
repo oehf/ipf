@@ -24,11 +24,11 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 /**
  * Interceptor that adds the HL7InteractionId to the camel headers
  */
-public class ConsumerRequestInteractionSetterInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerRequestInteractionSetterInterceptor extends InterceptorSupport {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        exchange.getIn().setHeader(Constants.INTERACTION_ID_NAME, getEndpoint().getInteractionId());
+        exchange.getIn().setHeader(Constants.INTERACTION_ID_NAME, getEndpoint(HL7v2Endpoint.class).getInteractionId());
         getWrappedProcessor().process(exchange);
     }
 }

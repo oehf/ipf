@@ -39,7 +39,6 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +140,7 @@ public abstract class AbstractWsProducer<
             // (async responses are handled in the service instance derived from
             // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
             if (replyToUri == null) {
-                var responseMessage = Exchanges.resultMessage(exchange);
+                var responseMessage = exchange.getMessage();
                 responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
                 var responseContext = (WrappedMessageContext) bindingProvider.getResponseContext();
                 processIncomingHeaders(responseContext, responseMessage);

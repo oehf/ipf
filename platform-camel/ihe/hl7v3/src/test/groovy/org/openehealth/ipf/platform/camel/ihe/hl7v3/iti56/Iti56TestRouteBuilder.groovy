@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
-import org.apache.camel.builder.RouteBuilder
-
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.atomic.AtomicInteger
 import org.apache.camel.ExchangePattern
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
+
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti56RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti56ResponseValidator
 
 /**
  * Test routes for ITI-56.
@@ -71,7 +71,7 @@ class Iti56TestRouteBuilder extends RouteBuilder {
                 '&outInterceptors=#outLogInterceptor')
             .process(iti56RequestValidator())
             .process {
-                Exchanges.resultMessage(it).body = RESPONSE
+                it.message.body = RESPONSE
                 responseCount.incrementAndGet()
                 countDownLatch.countDown()
             }

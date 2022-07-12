@@ -25,12 +25,9 @@ import org.openehealth.ipf.commons.ihe.fhir.mhd.MHD;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
-import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.fhir.iti68.Iti68Endpoint;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,16 +61,6 @@ public class Iti68BinaryComponent extends ServletComponent implements Intercepta
     @Override
     protected boolean lenientContextPath() {
         return false;
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalConsumerInterceptors() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<Interceptor<?>> getAdditionalProducerInterceptors() {
-        return Collections.emptyList();
     }
 
     @Override

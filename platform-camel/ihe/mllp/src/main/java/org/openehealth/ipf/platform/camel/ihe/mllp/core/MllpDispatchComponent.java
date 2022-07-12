@@ -20,7 +20,7 @@ import java.util.Map;
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
-import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.netty.NettyEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
@@ -65,7 +65,7 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     }
 
     @Override
-    protected MllpEndpoint<?, ?, ?> createEndpoint(MinaEndpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?, ?> createEndpoint(NettyEndpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
         return new MllpDispatchEndpoint(this, wrappedEndpoint, config);
     }
 

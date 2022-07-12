@@ -27,11 +27,12 @@ class Iti8TestSecureRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
 
-        from('xds-iti8://0.0.0.0:18087?audit=false&' +
-                'secure=true&sslContext=#sslContext&' +
-                'sslProtocols=TLSv1.2,TLSv1.3&' +
-                'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
-                .transform(ack())
+        // TODO sslContext is not possible anymore
+        //from('xds-iti8://0.0.0.0:18087?audit=false&' +
+        //        'secure=true&sslContext=#sslContext&' +
+        //        'sslProtocols=TLSv1.2,TLSv1.3&' +
+        //        'sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256')
+         //       .transform(ack())
 
         from('xds-iti8://0.0.0.0:18088?audit=false&' +
                 'sslContextParameters=#iti8SslContextParameters')

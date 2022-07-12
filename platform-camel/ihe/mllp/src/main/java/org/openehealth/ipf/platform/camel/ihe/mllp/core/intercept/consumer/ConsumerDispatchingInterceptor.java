@@ -26,8 +26,7 @@ import org.apache.camel.StartupListener;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpConsumer;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpDispatchEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
@@ -39,20 +38,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
  * <p>
  *
  * @author Dmytro Rud
  */
-public final class ConsumerDispatchingInterceptor extends InterceptorSupport<MllpDispatchEndpoint>
+public final class ConsumerDispatchingInterceptor extends InterceptorSupport
         implements StartupListener {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final List<String> routeIds = new ArrayList<>();
-    private final Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
+    private final Map<String, Interceptor> map = new HashMap<>();
 
 
     /**
@@ -116,7 +113,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
             try {
                 var route = camelContext.getRoute(routeId);
                 if (route != null) {
-                    var consumer = (MllpConsumer) route.getConsumer();
+                    var consumer = route.getConsumer();
                     var interceptor = (Interceptor) consumer.getProcessor();
                     while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
                         interceptor = (Interceptor) interceptor.getWrappedProcessor();
@@ -148,7 +145,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
         var found = false;
         for (var routeId : routeIds) {
             var interceptor = map.get(routeId);
-            var config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+            var config = interceptor.getEndpoint(MllpEndpoint.class).getHl7v2TransactionConfiguration();
             try {
                 config.checkMessageAcceptance(messageType, triggerEvent, messageStructure, version, true);
 
@@ -167,7 +164,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
                     messageType, triggerEvent, messageStructure, version);
             var exception = new HL7Exception(
                     "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);
-            resultMessage(exchange).setBody(getEndpoint().getNakFactory().createDefaultNak(exception).encode());
+            exchange.getMessage().setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createDefaultNak(exception).encode());
         }
     }
 

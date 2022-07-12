@@ -32,12 +32,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.HTTPS_CIPHERSUITES;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_PASSWORD;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_KEYSTORE_TYPE;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_NET_SSL_TRUSTSTORE_PASSWORD;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_TLS_CLIENT_CIPHERSUITES;
+import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JAVAX_TLS_SERVER_CIPHERSUITES;
 import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol.JDK_TLS_CLIENT_PROTOCOLS;
 
 /**
@@ -47,11 +48,11 @@ import static org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtoc
  */
 public class CustomTlsParameters implements TlsParameters {
 
-    private String provider = "SunJSSE";
-    private String tlsProtocol = "TLSv1.2";
-    private String certificateType = "SunX509";
+    protected String provider = "SunJSSE";
+    protected String tlsProtocol = "TLSv1.2";
+    protected String certificateType = "SunX509";
 
-    private String certAlias;
+    protected String certAlias;
 
     protected String keyStoreType;
     protected String trustStoreType;
@@ -60,12 +61,14 @@ public class CustomTlsParameters implements TlsParameters {
     protected String trustStoreFile;
     protected String trustStorePassword;
 
-    protected String enabledCipherSuites;
+    protected String enabledClientCipherSuites;
+    protected String enabledServerCipherSuites;
     protected String enabledProtocols;
 
-    private int sessionTimeout;
-    private boolean performDomainValidation;
-    private final List<String> sniHostnames = new ArrayList<>();
+    protected int sessionTimeout;
+    protected boolean performDomainValidation;
+    protected List<String> sniHostnames = new ArrayList<>();
+    protected String clientAuthentication;
 
     static TlsParameters getDefault() {
         return new CustomTlsParameters();
@@ -111,8 +114,12 @@ public class CustomTlsParameters implements TlsParameters {
         this.trustStorePassword = trustStorePassword;
     }
 
-    public void setEnabledCipherSuites(String enabledCipherSuites) {
-        this.enabledCipherSuites = enabledCipherSuites;
+    public void setEnabledClientCipherSuites(String enabledClientCipherSuites) {
+        this.enabledClientCipherSuites = enabledClientCipherSuites;
+    }
+
+    public void setEnabledServerCipherSuites(String enabledServerCipherSuites) {
+        this.enabledServerCipherSuites = enabledServerCipherSuites;
     }
 
     public void setEnabledProtocols(String enabledProtocols) {
@@ -127,8 +134,20 @@ public class CustomTlsParameters implements TlsParameters {
         this.performDomainValidation = performDomainValidation;
     }
 
+    public String getClientAuthentication() {
+        return clientAuthentication;
+    }
+
+    public void setClientAuthentication(String clientAuthentication) {
+        this.clientAuthentication = clientAuthentication;
+    }
+
     public List<String> getSniHostnames() {
         return sniHostnames;
+    }
+
+    public void setSniHostnames(List<String> sniHostnames) {
+        this.sniHostnames = sniHostnames;
     }
 
     public CustomTlsParameters() {
@@ -138,18 +157,22 @@ public class CustomTlsParameters implements TlsParameters {
         keyStorePassword = System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD);
         trustStoreFile = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE);
         trustStorePassword = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD);
-        enabledCipherSuites = System.getProperty(HTTPS_CIPHERSUITES);
+        enabledClientCipherSuites = System.getProperty(JAVAX_TLS_CLIENT_CIPHERSUITES);
+        enabledServerCipherSuites = System.getProperty(JAVAX_TLS_SERVER_CIPHERSUITES);
         enabledProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
     }
 
-    private Function<SSLSocketFactory, SSLSocketFactory> sslSocketFactoryConfigurer() {
-        return sslSocketFactory -> new SSLSocketFactoryDecorator(sslSocketFactory, sslSocketConfigurer());
+    private Function<SSLSocketFactory, SSLSocketFactory> sslSocketFactoryConfigurer(boolean serverSide) {
+        return sslSocketFactory -> new SSLSocketFactoryDecorator(sslSocketFactory, sslSocketConfigurer(serverSide));
     }
 
-    private Function<SSLSocket, SSLSocket> sslSocketConfigurer() {
+    private Function<SSLSocket, SSLSocket> sslSocketConfigurer(boolean serverSide) {
         return sslSocket -> {
-            if (enabledCipherSuites != null) {
-                sslSocket.setEnabledCipherSuites(split(enabledCipherSuites));
+            if (!serverSide && enabledClientCipherSuites != null) {
+                sslSocket.setEnabledCipherSuites(split(enabledClientCipherSuites));
+            }
+            if (serverSide && enabledServerCipherSuites != null) {
+                sslSocket.setEnabledCipherSuites(split(enabledServerCipherSuites));
             }
             if (enabledProtocols != null) {
                 sslSocket.setEnabledProtocols(split(enabledProtocols));
@@ -170,10 +193,13 @@ public class CustomTlsParameters implements TlsParameters {
         };
     }
 
-    private Function<SSLEngine, SSLEngine> sslEngineConfigurer() {
+    private Function<SSLEngine, SSLEngine> sslEngineConfigurer(boolean serverSide) {
         return sslEngine -> {
-            if (enabledCipherSuites != null) {
-                sslEngine.setEnabledCipherSuites(split(enabledCipherSuites));
+            if (!serverSide && enabledClientCipherSuites != null) {
+                sslEngine.setEnabledCipherSuites(split(enabledClientCipherSuites));
+            }
+            if (serverSide && enabledServerCipherSuites != null) {
+                sslEngine.setEnabledCipherSuites(split(enabledClientCipherSuites));
             }
             if (enabledProtocols != null) {
                 sslEngine.setEnabledProtocols(split(enabledProtocols));
@@ -187,7 +213,7 @@ public class CustomTlsParameters implements TlsParameters {
     }
 
     @Override
-    public SSLContext getSSLContext() {
+    public SSLContext getSSLContext(boolean serverSide) {
         try {
             var keyStore = getKeyStore(keyStoreType, keyStoreFile, keyStorePassword);
             var keyManagerFactory = KeyManagerFactory.getInstance(certificateType, provider);
@@ -217,8 +243,8 @@ public class CustomTlsParameters implements TlsParameters {
 
             return new CustomSSLContext(new SSLContextSpiDecorator(
                     sslContext,
-                    sslEngineConfigurer(),
-                    sslSocketFactoryConfigurer()));
+                    sslEngineConfigurer(serverSide),
+                    sslSocketFactoryConfigurer(serverSide)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

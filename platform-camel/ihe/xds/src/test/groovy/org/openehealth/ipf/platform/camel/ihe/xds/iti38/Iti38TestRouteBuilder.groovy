@@ -15,19 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-
-import java.util.concurrent.atomic.AtomicInteger
-
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
+
+import java.util.concurrent.atomic.AtomicInteger
+
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti38RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti38ResponseValidator
 
 /**
  * Test routes for ITI-38.
@@ -84,7 +84,7 @@ class Iti38TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = Exchanges.resultMessage(it)
+                Message message = it.message
                 message.body = RESPONSE
                 message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]

@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.pharm1RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.pharm1ResponseValidator
 
 import java.util.function.Function
 
@@ -62,17 +62,17 @@ class Pharm1TestRouteBuilder extends RouteBuilder {
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        resultMessage(it).body = response
+                        it.message.body = response
                     }
                 .when().body( { body -> body.query instanceof FindMedicationListQuery } as Function )
                     .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        resultMessage(it).body = response
+                        it.message.body = response
                     }
                 // Any other query else is a failure
             .otherwise()
-                .process { resultMessage(it).body = new QueryResponse(FAILURE) }
+                .process { it.message.body = new QueryResponse(FAILURE) }
 
         from('cmpd-pharm1:featuresTest?features=#policyFeature,#gzipFeature')
                 .process(pharm1RequestValidator())
@@ -85,6 +85,6 @@ class Pharm1TestRouteBuilder extends RouteBuilder {
         def query = exchange.in.getBody(QueryRegistry.class).query
         def value = query.authorPersons[0]
         def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
-        resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

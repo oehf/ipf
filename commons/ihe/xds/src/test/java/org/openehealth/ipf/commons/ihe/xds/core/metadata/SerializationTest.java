@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 
 import java.io.*;
 
@@ -76,8 +74,8 @@ public class SerializationTest {
 
     @Test
     public void testRetrievedDocumentSet() throws Exception {
-        RetrievedDocumentSet response = SampleData.createRetrievedDocumentSet();
-        for (RetrievedDocument doc : response.getDocuments()) {
+        var response = SampleData.createRetrievedDocumentSet();
+        for (var doc : response.getDocuments()) {
             doc.setDataHandler(null);
         }
         checkSerialization(response);
@@ -95,7 +93,7 @@ public class SerializationTest {
         }
         var in = new ByteArrayInputStream(out.toByteArray());
         try (var ois = new ObjectInputStream(in)) {
-            Object copy = ois.readObject();
+            var copy = ois.readObject();
             assertSame(original.getClass(), copy.getClass());
             assertEquals(original, copy);
         }

@@ -15,14 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.rad75
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75ResponseValidator
-
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.atomic.AtomicInteger
-
-import javax.activation.DataHandler
-
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.builder.RouteBuilder
@@ -30,9 +22,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
+
+import javax.activation.DataHandler
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
+
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75ResponseValidator
 
 /**
  * Test routes for RAD-75.
@@ -113,7 +111,7 @@ class Rad75TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = Exchanges.resultMessage(it)
+                Message message = it.message
                 message.body = createRetrievedDocumentSet()
                 message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]

@@ -26,7 +26,7 @@ public class PixV3QueryResponseTest {
 
     @Test
     public void testFromQuery() {
-        final PixV3QueryRequest query = new PixV3QueryRequest();
+        final var query = new PixV3QueryRequest();
         query.getDataSourceOids().add("7.8.9");
         query.setQueryPatientId(new II("123", "1.2.3"));
         query.setQueryId(new II("abc", "4.5.6"));
@@ -36,7 +36,7 @@ public class PixV3QueryResponseTest {
         query.getSender().getIds().add(new II("sender", "1.3"));
         query.setMessageId(new II("m1", "1.3.5"));
 
-        final PixV3QueryResponse response = PixV3QueryResponse.fromQuery(query);
+        final var response = PixV3QueryResponse.fromQuery(query);
         assertEquals(query.getDataSourceOids(), response.getDataSourceOids());
         assertEquals(query.getQueryPatientId(), response.getQueryPatientId());
         assertEquals(query.getQueryId(), response.getQueryId());

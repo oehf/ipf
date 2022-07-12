@@ -44,7 +44,7 @@ public class Iti67TestRouteBuilder extends RouteBuilder {
         from("direct:input")
                 .toF("mhd-iti67:localhost:%d?fhirContext=#fhirContext", FhirTestContainer.DEMO_APP_PORT);
 
-        from("mhd-iti67:translation?audit=true&fhirContext=#fhirContext&options=LENIENT")
+        from("mhd-iti67:translation?audit=true&fhirContext=#fhirContext&iheOptions=LENIENT")
                 .errorHandler(noErrorHandler())
                 .transform(new Iti67Responder());
     }

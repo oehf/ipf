@@ -61,8 +61,8 @@ public class VertxTlsParameters extends CustomTlsParameters {
         Stream.of(split(enabledProtocols))
                 .forEach(options::addEnabledSecureTransportProtocol);
 
-        if (enabledCipherSuites != null) {
-            Stream.of(split(enabledCipherSuites))
+        if (enabledClientCipherSuites != null) {
+            Stream.of(split(enabledClientCipherSuites))
                     .forEach(options::addEnabledCipherSuite);
         }
     }

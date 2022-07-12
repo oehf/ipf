@@ -26,12 +26,12 @@ import java.util.stream.Stream;
 
 public class NettyUtils {
 
-    public static SslContext initSslContext(TlsParameters tlsParameters, boolean client) {
+    public static SslContext initSslContext(TlsParameters tlsParameters, boolean serverSide) {
         var allowedProtocols = System.getProperty("jdk.tls.client.protocols", "TLSv1.2");
         var protocols = Stream.of(allowedProtocols.split("\\s*,\\s*")).toArray(String[]::new);
         return new JdkSslContext(
-                tlsParameters.getSSLContext(),
-                client,
+                tlsParameters.getSSLContext(serverSide),
+                !serverSide,
                 null, // use default
                 SupportedCipherSuiteFilter.INSTANCE,
                 ApplicationProtocolConfig.DISABLED,

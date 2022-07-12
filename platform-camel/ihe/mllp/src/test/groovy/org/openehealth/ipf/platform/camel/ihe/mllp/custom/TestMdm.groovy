@@ -21,11 +21,9 @@ import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import static org.junit.jupiter.api.Assertions.*
 
@@ -33,19 +31,9 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
  * @author Dmytro Rud
  */
-class TestMdm extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'custom/mdm.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
-    
+@ContextConfiguration('/custom/mdm.xml')
+class TestMdm extends AbstractMllpTest {
+
     // -----------------------------------
     // Test program:
     //   1. Happy case
@@ -56,20 +44,20 @@ class TestMdm extends MllpTestContainer {
     //   6. Alternative HL7 codec factory
     //   7. Secure Endpoint
     // -----------------------------------
-    
+
 
     @Test
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit("mdm://localhost:19081?audit=false&timeout=${TIMEOUT}", 0)
     }
-    
+
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('MDM^T01', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { expectedAuditItemsCount == it.messages.size() }
     }
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on consumer side, audit enabled.
@@ -80,46 +68,50 @@ class TestMdm extends MllpTestContainer {
      * (it is really a feature, not a bug! ;-)) 
      */
     @Test
-    public void testInacceptanceOnConsumer1() {
+    void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('ADT^A01', '2.5')
     }
+
     @Test
-    public void testInacceptanceOnConsumer2() {
+    void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.3.1')
     }
+
     @Test
-    public void testInacceptanceOnConsumer3() {
+    void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('MDM^T11', '2.5')
     }
+
     @Test
-    public void testInacceptanceOnConsumer4() {
+    void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('MDM^T01', '3.1415926')
     }
+
     @Test
-    public void testInacceptanceOnConsumer5() {
+    void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('MDM^T01^MDM_T02', '2.5')
     }
-    
+
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'mdm://localhost:19081?audit=false'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-                [process : { Exchange e -> /* nop */ }] as Processor
-                )
+                [process: { Exchange e -> /* nop */ }] as Processor
+        )
         def processor = consumer.processor
-        
+
         def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-        
+
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
-    
-    
+
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on producer side, audit enabled.
@@ -129,41 +121,44 @@ class TestMdm extends MllpTestContainer {
     void testInacceptanceOnProducer1() {
         doTestInacceptanceOnProducer('ADT^A01', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer2() {
         doTestInacceptanceOnProducer('MDM^T11', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer3() {
         doTestInacceptanceOnProducer('MDM^T01', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnProducer4() {
         doTestInacceptanceOnProducer('MDM^T01', '3.1415926')
     }
+
     @Test
     void testInacceptanceOnProducer5() {
         doTestInacceptanceOnProducer('MDM^T01^MDM^T02', '2.5')
     }
-    
+
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = 'mdm://localhost:19081?audit=false'
         def body = getMessageString(msh9, msh12)
         def failed = true
-        
+
         try {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception))
-            {
+            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception)) {
                 failed = false
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
-    
+
 
     /**
      * Tests how the exceptions in the route are handled.
@@ -174,20 +169,20 @@ class TestMdm extends MllpTestContainer {
         doTestException('mdm://localhost:19085?audit=false', body, 'you cry')
         doTestException('mdm://localhost:19086?audit=false', body, 'lazy dog')
     }
-    
+
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
         def msg = send(endpointUri, body)
         assertNAK(msg)
         assertTrue(msg.toString().contains(wantedOutputContent))
     }
-    
-    
+
+
     /**
      * Checks whether alternative HL7 codec factories can be used.
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'mdm://fake.address.no.uri:180?codec=#alternativeCodec&audit=false'
+        def endpointUri1 = 'mdm://fake.address.no.uri:180?decoders=#alternativeDecoder&encoders=#alternativeEncoder&audit=false'
         def endpointUri2 = 'mdm://localhost:19085?audit=false'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
@@ -196,24 +191,9 @@ class TestMdm extends MllpTestContainer {
     }
 
     @Test
-    void testSecureEndpoint() {
-        final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1.2&audit=false'
-        def msg = send(endpointUri, body)
-        assertACK(msg)
-    }
-    
-    @Test
-    void testUnsecureProducer() {
-        final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19087?audit=false'
-        assertThrows(CamelExchangeException.class, ()->send(endpointUri, body));
-    }
-
-    @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19088?sslContextParameters=#sslContextParameters&audit=false'
+        def endpointUri = 'mdm://localhost:19087?sslContextParameters=#sslContextParameters&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
@@ -221,7 +201,7 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testSecureEndpointWithCamelJsseConfigClientFails() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mdm://localhost:19088?audit=false'
-        assertThrows(CamelExchangeException.class, ()-> send(endpointUri, body));
+        def endpointUri = 'mdm://localhost:19087?audit=false'
+        assertThrows(CamelExchangeException.class, () -> send(endpointUri, body));
     }
 }

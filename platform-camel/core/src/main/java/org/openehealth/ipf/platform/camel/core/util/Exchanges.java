@@ -44,6 +44,7 @@ public class Exchanges {
      * 
      * @param exchange message exchange.
      * @return result message.
+     * @deprecated
      */
     public static Message resultMessage(Exchange exchange) {
         return exchange.getMessage();
@@ -57,7 +58,7 @@ public class Exchanges {
      * @return result message.
      */
     public static Message prepareResult(Exchange exchange) {
-        var result = resultMessage(exchange);
+        var result = exchange.getMessage();
         if (exchange.getPattern().isOutCapable()) {
             result.copyFrom(exchange.getIn());
         }

@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.springframework.beans.factory.FactoryBean;
@@ -36,8 +37,8 @@ public class MdmHl7v2TransactionConfigurationFactoryBean implements FactoryBean<
                 "mdm",
                 "Medical Document Management",
                 false,
-                null,
-                null,
+                new NoAuditStrategy<>(false),
+                new NoAuditStrategy<>(true),
                 new Version[] {Version.V25, Version.V251},
                 "MDM Adapter",
                 "IPF",

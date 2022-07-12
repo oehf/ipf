@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.core;
 
 import org.apache.camel.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +46,9 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    List<Interceptor<?>> getAdditionalConsumerInterceptors();
+    default List<Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.emptyList();
+    }
 
     /**
      * Returns a list of component-specific (i.e. transaction-specific)
@@ -65,5 +68,7 @@ public interface InterceptableComponent extends Component {
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    List<Interceptor<?>> getAdditionalProducerInterceptors();
+    default List<Interceptor> getAdditionalProducerInterceptors() {
+        return Collections.emptyList();
+    }
 }

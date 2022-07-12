@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
@@ -38,7 +37,10 @@ import javax.management.ObjectName;
 import java.util.Scanner;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
@@ -184,7 +186,7 @@ public class Pcd01Test extends StandardTestContainer {
 
     private String requestBody(String uri, String msg) {
         var response = send(uri, msg);
-        return Exchanges.resultMessage((Exchange) response).getBody(String.class);
+        return ((Exchange) response).getMessage().getBody(String.class);
     }
 
     private void assertResponseEquals(String expected, String response) {

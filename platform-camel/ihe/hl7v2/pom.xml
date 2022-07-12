@@ -35,6 +35,10 @@
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-hl7</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.zipkin.brave</groupId>
             <artifactId>brave</artifactId>
             <optional>true</optional>

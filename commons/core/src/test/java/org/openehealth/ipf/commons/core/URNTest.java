@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,14 +69,14 @@ public class URNTest {
 
     @Test
     public void testHashCode() throws URISyntaxException {
-        Set<URN> set = new HashSet<>();
+        var set = new HashSet<URN>();
         set.add(URN.create("urn:oid:1.2.3.4"));
         assertTrue(set.contains(URN.create("urn:OID:1.2.3.4")));
     }
 
     @Test
     public void testFromOid() throws GSSException, URISyntaxException {
-        String oid = "2.999.2.3.2.43.54";
+        var oid = "2.999.2.3.2.43.54";
         assertEquals(URN.create("urn:oid:" + oid), new URN(new Oid(oid)));
     }
 }

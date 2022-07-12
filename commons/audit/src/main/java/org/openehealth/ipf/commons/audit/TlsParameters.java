@@ -31,7 +31,7 @@ import java.security.NoSuchAlgorithmException;
 public interface TlsParameters {
 
     static TlsParameters getDefault() {
-        return () -> {
+        return (serverSide) -> {
             try {
                 return SSLContext.getDefault();
             } catch (NoSuchAlgorithmException e) {
@@ -43,13 +43,13 @@ public interface TlsParameters {
     /**
      * @return the {@link SSLContext}
      */
-    SSLContext getSSLContext();
+    SSLContext getSSLContext(boolean serverSide);
 
     /**
      * @return the {@link SSLSocketFactory}
      */
-    default SSLSocketFactory getSSLSocketFactory() {
-        return getSSLContext().getSocketFactory();
+    default SSLSocketFactory getSSLSocketFactory(boolean serverSide) {
+        return getSSLContext(serverSide).getSocketFactory();
     }
 
 }

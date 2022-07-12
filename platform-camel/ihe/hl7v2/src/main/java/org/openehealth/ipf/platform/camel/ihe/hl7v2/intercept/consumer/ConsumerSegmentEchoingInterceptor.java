@@ -17,9 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 
 /**
  * Consumer-side HL7v2 interceptor which echoes one segment from
@@ -29,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
  *
  * @author Dmytro Rud
  */
-public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport {
     private final String segmentName;
 
 
@@ -54,10 +52,10 @@ public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2E
 
         // replace the segment in the response message by the one from the request
         if (requestQpdBoundaries != null) {
-            var response = Exchanges.resultMessage(exchange).getBody(String.class);
+            var response = exchange.getMessage().getBody(String.class);
             var responseQpdBoundaries = getQpdBoundaries(response);
             if (responseQpdBoundaries != null) {
-                Exchanges.resultMessage(exchange).setBody(response.substring(0, responseQpdBoundaries[0]) +
+                exchange.getMessage().setBody(response.substring(0, responseQpdBoundaries[0]) +
                         request.substring(requestQpdBoundaries[0], requestQpdBoundaries[1]) +
                         response.substring(responseQpdBoundaries[1]));
             }

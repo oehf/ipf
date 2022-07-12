@@ -19,11 +19,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.mina.MinaConstants;
+import org.apache.camel.component.netty.NettyConstants;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.ssl.SslFilter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.AuditUtils;
@@ -35,19 +33,15 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.ldap.LdapName;
-import javax.net.ssl.SSLSession;
-
 import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Common audit interceptor support for both consumer and producer side of MLLP endpoints
  *
  * @author Christian Ohr
  */
-public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpAuditDataset> extends InterceptorSupport<MllpTransactionEndpoint<AuditDatasetType>>
-        implements AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> {
+public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpAuditDataset> extends InterceptorSupport
+        implements AuditInterceptor<AuditDatasetType> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MllpAuditInterceptorSupport.class);
     private final AuditContext auditContext;
@@ -73,7 +67,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            var result = resultMessage(exchange).getBody(Message.class);
+            var result = exchange.getMessage().getBody(Message.class);
             enrichAuditDatasetFromResponse(auditDataset, result);
             failed = !AuditUtils.isPositiveAck(result);
         } catch (Exception e) {
@@ -95,26 +89,9 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
     }
 
     private void extractSslClientUser(Exchange exchange, AuditDatasetType auditDataset) {
-        var ioSession = exchange.getIn().getHeader(MinaConstants.MINA_IOSESSION, IoSession.class);
-        if (ioSession != null) {
-            var sslSession = (SSLSession) ioSession.getAttribute(SslFilter.SSL_SESSION);
-            if (sslSession != null) {
-                try {
-                    var principal = sslSession.getPeerPrincipal();
-                    if (principal != null) {
-                        var dn = principal.getName();
-                        var ldapDN = new LdapName(dn);
-                        for (var rdn : ldapDN.getRdns()) {
-                            if (rdn.getType().equalsIgnoreCase("CN")) {
-                                auditDataset.setSourceUserName((String) rdn.getValue());
-                                break;
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    LOG.info("Could not extract CN from client certificate", e);
-                }
-            }
+        var userName = exchange.getIn().getHeader(NettyConstants.NETTY_SSL_CLIENT_CERT_SUBJECT_NAME, String.class);
+        if (userName != null) {
+            auditDataset.setSourceUserName(userName);
         }
     }
 
@@ -158,7 +135,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             var terser = new Terser(message);
             return (!ArrayUtils.contains(message.getNames(), "DSC") ||
                     !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
-                    getEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
+                    getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
             LOG.warn("Exception when determining message auditability, no audit will be performed", e);
             return false;

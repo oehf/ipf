@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.ClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
@@ -30,8 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+import java.util.Optional;
 
 
 /**
@@ -40,7 +38,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerAdaptingInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
     public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
@@ -87,40 +85,32 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
                 throw exception;
             }
         } catch (Exception e) {
-            LOG.warn("Message processing failed", e);
-            resultMessage(exchange).setBody(getEndpoint().getNakFactory().createNak(originalMessage, e));
+            LOG.warn("Message processing failed ({}: {}). Creating NAK message.", e.getClass().getSimpleName(), e.getMessage());
+            LOG.debug("Exception details: ", e);
+            exchange.getMessage().setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, e));
         }
-
-        var m = Exchanges.resultMessage(exchange);
-        var body = m.getBody();
 
         // try to convert route response from a known type
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        var msg = Hl7v2MarshalUtils.extractHapiMessage(
-                m,
-                characterSet(exchange),
-                getEndpoint().getHl7v2TransactionConfiguration().getParser());
-        
-        // additionally: an Exception in the body?
-        if((msg == null) && (body instanceof Throwable)) {
-           msg = getEndpoint().getNakFactory().createNak(originalMessage, (Throwable) body);
-        }
-        
-        // no known data type --> determine user's intention on the basis of a header 
-        if(msg == null) {
-            msg = analyseMagicHeader(m, originalMessage);
-        }
 
-        // unable to create a Message :-(
-        if(msg == null) {
-            throw new Hl7v2AdaptingException("Cannot create HL7v2 message from " +
-                    ClassUtils.getSimpleName(body, "<null>") +
-                    " returned from the route");
+        var message = exchange.getMessage();
+        var body = exchange.getMessage().getBody();
+        try {
+            message.setBody(Hl7v2MarshalUtils.convertBodyToMessage(
+                    message,
+                    characterSet(exchange),
+                    getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser()));
+        } catch (Hl7v2AdaptingException e) {
+            if (body instanceof Throwable) {
+                message.setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, (Throwable) body));
+            } else {
+                analyseMagicHeader(message, originalMessage).ifPresentOrElse(message::setBody, () -> {
+                    throw e;
+                });
+            }
         }
-        
-        m.setBody(msg);
     }
 
 
@@ -128,26 +118,26 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
      * Considers a specific header to determine whether the route author want us to generate
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
-    private Message analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
+    private Optional<Message> analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
         var header = m.getHeader(ACK_TYPE_CODE_HEADER);
         if (!(header instanceof AcknowledgmentCode)) {
-            return null;
+            return Optional.empty();
         }
 
         Message ack;
         if ((header == AcknowledgmentCode.AA) || (header == AcknowledgmentCode.CA)) {
-            ack = getEndpoint().getNakFactory().createAck(
+            ack = getEndpoint(HL7v2Endpoint.class).getNakFactory().createAck(
                     originalMessage);
         } else {
             var exception = new HL7Exception(
                     "HL7v2 processing failed",
-                    getEndpoint().getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
-            ack = getEndpoint().getNakFactory().createNak(
+                    getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
+            ack = getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(
                     originalMessage,
                     exception, 
                     (AcknowledgmentCode) header);
         }
-        return ack;
+        return Optional.ofNullable(ack);
     }
 
 }

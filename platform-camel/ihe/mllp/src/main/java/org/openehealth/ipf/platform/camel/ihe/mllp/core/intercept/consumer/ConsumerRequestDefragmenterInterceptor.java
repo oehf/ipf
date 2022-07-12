@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.util.Terser;
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * 
  * @author Dmytro Rud
  */
-public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
@@ -45,9 +45,9 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
 
 
     @Override
-    public void setEndpoint(MllpTransactionEndpoint<?> endpoint) {
+    public void setEndpoint(Endpoint endpoint) {
         super.setEndpoint(endpoint);
-        this.storage = getEndpoint().getUnsolicitedFragmentationStorage();
+        this.storage = getEndpoint(MllpTransactionEndpoint.class).getUnsolicitedFragmentationStorage();
         requireNonNull(storage);
     }
 
@@ -57,7 +57,7 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
     @Override
     public void process(Exchange exchange) throws Exception {
         var requestString = exchange.getIn().getBody(String.class);
-        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var parser = getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().getParser();
         var requestMessage = parser.parse(requestString);
         var requestTerser = new Terser(requestMessage);
         var msh14 = requestTerser.get("MSH-14");
@@ -118,7 +118,7 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
         var ackTerser = new Terser(ack);
         ackTerser.set("MSA-1", "CA");
         ackTerser.set("MSA-2", requestTerser.get("MSH-10"));
-        Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
+        exchange.getMessage().setBody(parser.encode(ack));
     }
     
 }

@@ -16,9 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.apache.camel.builder.RouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
 /**
  * Camel route for generic unit tests.
@@ -43,8 +42,8 @@ class Iti8TestRouteBuilder extends RouteBuilder {
         // fictive route to test producer-side acceptance checking
         from('pix-iti8://0.0.0.0:18084?interceptorFactories=#serverInLogger,#serverOutLogger')
                 .process {
-                    resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-                    resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
+                    it.message.body.MSH[9][1] = 'DOES NOT MATTER'
+                    it.message.body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
                 }
         
         // route with normal exception
@@ -62,7 +61,8 @@ class Iti8TestRouteBuilder extends RouteBuilder {
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
         from('xds-iti8://0.0.0.0:18089?audit=false&'+
-                'codec=#alternativeCodec&' +
+                'decoders=#alternativeDecoder&' +
+                'encoders=#alternativeEncoder&' +
                 'exceptionHandler=#iti8MllpExceptionHandler' +
                 '&interceptorFactories=#serverInLogger,#serverOutLogger')
                 .transform(ack())

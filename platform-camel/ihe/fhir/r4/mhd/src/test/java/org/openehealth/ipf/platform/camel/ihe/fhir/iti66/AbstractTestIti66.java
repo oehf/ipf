@@ -67,7 +67,7 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
         if (requestData != null && requestData.length > 0) {
             query = query.where(requestData[0]);
             if (requestData.length > 1) {
-                for (int i = 1; i < requestData.length; i++) {
+                for (var i = 1; i < requestData.length; i++) {
                     query = query.and(requestData[i]);
                 }
             }

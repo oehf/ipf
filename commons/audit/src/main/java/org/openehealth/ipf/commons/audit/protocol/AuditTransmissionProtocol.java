@@ -35,6 +35,8 @@ public interface AuditTransmissionProtocol {
     String JAVAX_NET_SSL_KEYSTORE = "javax.net.ssl.keyStore";
     String JAVAX_NET_SSL_KEYSTORE_TYPE = "javax.net.ssl.keyStoreType";
     String JAVAX_NET_SSL_KEYSTORE_PASSWORD = "javax.net.ssl.keyStorePassword";
+    String JAVAX_TLS_CLIENT_CIPHERSUITES = "jdk.tls.client.cipherSuites";
+    String JAVAX_TLS_SERVER_CIPHERSUITES = "jdk.tls.server.cipherSuites";
     String HTTPS_CIPHERSUITES = "https.ciphersuites";
     String JDK_TLS_CLIENT_PROTOCOLS = "jdk.tls.client.protocols";
 

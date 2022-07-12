@@ -91,10 +91,10 @@ public class RemoveMetadataTransformerTest {
     @Test
     public void verifyEbXmlSerialization() throws JAXBException {
         var ebXML = transformer.toEbXML(SampleData.createRemoveMetadata());
-        JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
+        var jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class);
+        var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        StringWriter writer = new StringWriter();
+        var writer = new StringWriter();
         marshaller.marshal(ebXML.getInternal(), writer);
         new RemoveMetadataRequestValidator().validate(ebXML, ITI_62);
         assertFalse(writer.toString().contains("AdhocQuery"), "AdhocQuery is not expected in ITI-62 request");

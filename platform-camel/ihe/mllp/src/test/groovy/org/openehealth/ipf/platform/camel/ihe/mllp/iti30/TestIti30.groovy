@@ -20,28 +20,18 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
-import static org.junit.jupiter.api.Assertions.*
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Unit tests for the PAM "Patient Identity Management" transaction ITI-30.
  */
-class TestIti30 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti30/iti-30.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti30/iti-30.xml')
+class TestIti30 extends AbstractMllpTest {
     
     // -----------------------------------
     // Test program:
@@ -72,14 +62,14 @@ class TestIti30 extends MllpTestContainer {
 
     @Test
     void testHappyCaseAndAuditLink() {
-        doTestHappyCaseAndAudit('ADT^A24^ADT_A24', "pam-iti30://localhost:18103?audit=false&timeout=${TIMEOUT}&options=LINK_UNLINK", 1)
+        doTestHappyCaseAndAudit('ADT^A24^ADT_A24', "pam-iti30://localhost:18103?audit=false&timeout=${TIMEOUT}&iheOptions=LINK_UNLINK", 1)
     }
     
     def doTestHappyCaseAndAudit(String trigger, String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString(trigger, '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
 
 
@@ -127,10 +117,10 @@ class TestIti30 extends MllpTestContainer {
         exchange.in.body = body
         
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -175,7 +165,7 @@ class TestIti30 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
 

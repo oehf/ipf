@@ -19,7 +19,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti42RequestValidator
@@ -58,7 +58,7 @@ class Iti42TestRouteBuilder extends RouteBuilder {
             .process {
                 boolean hasExtraMetadata = it.in.getHeader(XdsJaxbDataBinding.SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.class)
                 def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
-                Exchanges.resultMessage(it).body = response
+                it.message.body = response
             }
 
         from('xds-iti42:xds-iti42-service4?schemaLocations=#schemaLocations&properties=#props')
@@ -69,6 +69,6 @@ class Iti42TestRouteBuilder extends RouteBuilder {
     void checkValue(exchange, expected) {
         def value = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        
         def response = new Response(expected == value ? SUCCESS : FAILURE)
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

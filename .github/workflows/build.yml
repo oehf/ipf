@@ -5,6 +5,11 @@ on: [push, pull_request, workflow_dispatch]
 env:
   MAVEN_OPTS: -Xmx2048m
 
+# on download timeouts, consider to disable connection pooling
+# -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3
+# or consider to restrict the ttl
+#  -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,9 +33,12 @@ jobs:
 #   Maybe in a separate action file
 #   for publishing/releasing: https://github.com/marketplace/actions/action-maven-publish
 #   see https://github.com/organizations/oehf/settings/secrets/actions
+
       - name: Deploy to Sonatype Snapshot Repo
         uses: samuelmeuli/action-maven-publish@v1
         with:
+          maven_goals_phases: "deploy"
+          maven_args: "-DskipTests"
           gpg_private_key: ${{ secrets.gpg_private_key }}
           gpg_passphrase: ${{ secrets.gpg_passphrase }}
           nexus_username: ${{ secrets.nexus_username }}

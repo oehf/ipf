@@ -73,7 +73,7 @@ public class PatientInfoTransformer {
             return Collections.emptyList();
         }
 
-        List<String> result = new ArrayList<>();
+        var result = new ArrayList<String>();
 
         patientInfo.getAllFieldIds().stream().sorted(new PatientInfo.Hl7FieldIdComparator()).forEach(fieldId -> {
             var iterator = patientInfo.getHl7FieldIterator(fieldId);

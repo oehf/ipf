@@ -27,7 +27,7 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.0.0-M5</surefire-plugin-version>
+        <surefire-plugin-version>2.22.2</surefire-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
         <project-info-reports-plugin-version>3.0.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
@@ -54,6 +54,7 @@
         <site-plugin-version>3.9.1</site-plugin-version>
 
         <!-- Dependency version properties -->
+        <awaitility-version>4.1.1</awaitility-version>
         <easymock-version>4.3</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>31.1-jre</guava-version>
@@ -157,6 +158,12 @@
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

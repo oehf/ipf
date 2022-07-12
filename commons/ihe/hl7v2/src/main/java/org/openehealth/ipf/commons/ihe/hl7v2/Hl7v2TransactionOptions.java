@@ -30,7 +30,7 @@ public interface Hl7v2TransactionOptions extends TransactionOptions<String> {
     static List<String> concat(Hl7v2TransactionOptions options, List<String> suffix) {
         if (suffix != null && !suffix.isEmpty()) {
             // Remove potential duplicates
-            Set<String> events = new HashSet<>(options.getSupportedThings());
+            var events = new HashSet<>(options.getSupportedThings());
             events.addAll(suffix);
             return new ArrayList<>(events);
         }
@@ -52,6 +52,7 @@ public interface Hl7v2TransactionOptions extends TransactionOptions<String> {
     static <T extends Hl7v2TransactionOptions> String concatAllToString(List<? extends T> options) {
         return options.stream()
                 .flatMap(o -> o.getSupportedThings().stream())
+                .distinct()
                 .map(Object::toString)
                 .collect(Collectors.joining(" "));
     }

@@ -116,7 +116,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
 
     @Override
     public List<ObjectReference> getReferences() {
-        List<ObjectReference> results = new ArrayList<>();
+        var results = new ArrayList<ObjectReference>();
         for (var identifiable : getContents()) {
             var objRefEbXML = cast(identifiable, ObjectRefType.class);
             if (objRefEbXML != null) {

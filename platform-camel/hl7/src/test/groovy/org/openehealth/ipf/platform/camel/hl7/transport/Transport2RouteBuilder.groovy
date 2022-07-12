@@ -25,7 +25,7 @@ class Transport2RouteBuilder extends RouteBuilder {
     
     void configure() {
 
-        from('mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
+        from('netty:tcp://127.0.0.1:8888?sync=true&decoders=#hl7decoder&encoders=#hl7encoder')
             .unmarshal().hl7()
             .delay(50) // simulate some processing effort
             .transform(HL7v2.ack())

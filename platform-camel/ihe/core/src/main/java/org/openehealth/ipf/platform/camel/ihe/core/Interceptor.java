@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.core.chain.Chainable;
  *
  * @since 3.1
  */
-public interface Interceptor<E extends Endpoint> extends Processor, Chainable {
+public interface Interceptor extends Processor, Chainable {
 
     /**
      * @return the processor instance wrapped by this interceptor.
@@ -43,12 +43,16 @@ public interface Interceptor<E extends Endpoint> extends Processor, Chainable {
     /**
      * @return the endpoint that uses this interceptor
      */
-    E getEndpoint();
+    Endpoint getEndpoint();
 
     /**
      * Sets the endpoint that uses this interceptor
      *
      * @param endpoint the endpoint that uses this interceptor
      */
-    void setEndpoint(E endpoint);
+    void setEndpoint(Endpoint endpoint);
+
+    default <T extends Endpoint> T getEndpoint(Class<T> clazz) {
+        return clazz.cast(getEndpoint());
+    }
 }

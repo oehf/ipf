@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.UdpSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -37,7 +36,7 @@ public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
         try (var ignored = new UdpSyslogServer(consumer, Throwable::printStackTrace)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit(Integer.toString(i)));
-            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            var completed = consumer.await(5, TimeUnit.SECONDS);
             assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         }
     }
@@ -52,12 +51,12 @@ public class UdpAuditorIntegrationTest extends AbstractAuditorIntegrationTest {
         var consumer = SyslogEventCollector.newInstance()
                 .withExpectation(count)
                 .withDelay(100);  // even if handling artificially takes long, we're done fast enough
-        ExecutorService executor = Executors.newFixedThreadPool(threads);
+        var executor = Executors.newFixedThreadPool(threads);
 
         try (var ignored = new UdpSyslogServer(consumer, Throwable::printStackTrace)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
-            boolean completed = consumer.await(5, TimeUnit.SECONDS);
+            var completed = consumer.await(5, TimeUnit.SECONDS);
             assertTrue(completed, "Consumer only received " + consumer.getSyslogEvents().size());
         } finally {
             executor.shutdownNow();

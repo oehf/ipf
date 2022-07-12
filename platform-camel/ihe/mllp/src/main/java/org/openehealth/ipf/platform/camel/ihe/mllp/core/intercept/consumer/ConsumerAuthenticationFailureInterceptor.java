@@ -16,12 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.component.mina.MinaConstants;
+import org.apache.camel.component.netty.NettyConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 
 import java.net.InetSocketAddress;
 
@@ -31,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
  * processing an exchange.
  */
-public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport {
 
     private final AuditContext auditContext;
 
@@ -53,7 +52,7 @@ public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport
     }
 
     private String getRemoteAddress(Exchange exchange) {
-        var address = (InetSocketAddress) exchange.getIn().getHeader(MinaConstants.MINA_REMOTE_ADDRESS);
+        var address = (InetSocketAddress) exchange.getIn().getHeader(NettyConstants.NETTY_REMOTE_ADDRESS);
         return address != null ? address.getAddress().getHostAddress() : "unknown";
     }
 

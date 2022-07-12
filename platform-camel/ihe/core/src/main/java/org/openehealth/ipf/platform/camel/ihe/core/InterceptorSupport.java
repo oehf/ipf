@@ -29,10 +29,10 @@ import java.nio.charset.Charset;
  *
  * @since 3.1
  */
-public abstract class InterceptorSupport<E extends Endpoint> extends ChainableImpl implements Interceptor<E> {
+public abstract class InterceptorSupport extends ChainableImpl implements Interceptor {
 
     private Processor wrappedProcessor;
-    private E endpoint;
+    private Endpoint endpoint;
 
     @Override
     public Processor getWrappedProcessor() {
@@ -45,12 +45,12 @@ public abstract class InterceptorSupport<E extends Endpoint> extends ChainableIm
     }
 
     @Override
-    public E getEndpoint() {
+    public Endpoint getEndpoint() {
         return endpoint;
     }
 
     @Override
-    public void setEndpoint(E endpoint) {
+    public void setEndpoint(Endpoint endpoint) {
         this.endpoint = endpoint;
     }
 

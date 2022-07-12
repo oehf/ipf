@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
@@ -24,8 +25,7 @@
         <jaxb-version>2.3.6</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
-        <mina-version>2.1.6</mina-version>
-        <methanol-version>1.6.0</methanol-version>
+        <methanol-version>1.7.0</methanol-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>10.8</saxon-he-version>
@@ -262,11 +262,6 @@
                         <artifactId>brave-instrumentation-http</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.mina</groupId>
-                <artifactId>mina-core</artifactId>
-                <version>${mina-version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
@@ -945,8 +940,8 @@
     <scm>
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <repositories>
         <repository>

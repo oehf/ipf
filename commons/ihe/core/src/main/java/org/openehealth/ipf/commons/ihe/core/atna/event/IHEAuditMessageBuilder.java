@@ -144,22 +144,8 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                                                    String homeCommunityId,
                                                    String seriesInstanceId,
                                                    String studyInstanceId,
-                                                   boolean xcaHomeCommunityId) {
-        List<TypeValuePairType> tvp = new ArrayList<>();
-        if (studyInstanceId != null) {
-            tvp.add(getTypeValuePair(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId));
-        }
-        if (seriesInstanceId != null) {
-            tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
-        }
-        if (repositoryId != null) {
-            tvp.add(getTypeValuePair(REPOSITORY_UNIQUE_ID, repositoryId));
-        }
-        if (homeCommunityId != null) {
-            var type = xcaHomeCommunityId ? URN_IHE_ITI_XCA_2010_HOME_COMMUNITY_ID : IHE_HOME_COMMUNITY_ID;
-            tvp.add(getTypeValuePair(type, homeCommunityId));
-        }
-        return tvp;
+                                                   boolean isXcaHomeCommunityId) {
+        return details(STUDY_INSTANCE_UNIQUE_ID, studyInstanceId, seriesInstanceId, repositoryId, homeCommunityId, isXcaHomeCommunityId);
     }
 
 
@@ -167,10 +153,14 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
             String homeCommunityId,
             String documentInstanceId,
             String seriesInstanceId,
-            boolean xcaHomeCommunityId) {
-        List<TypeValuePairType> tvp = new ArrayList<>(0);
-        if (documentInstanceId != null) {
-            tvp.add(getTypeValuePair(DOCUMENT_UNIQUE_ID, documentInstanceId));
+            boolean isXcaHomeCommunityId) {
+        return details(DOCUMENT_UNIQUE_ID, documentInstanceId, seriesInstanceId, repositoryId, homeCommunityId, isXcaHomeCommunityId);
+    }
+
+    private List<TypeValuePairType> details(String insranceKey, String instanceId, String seriesInstanceId, String repositoryId, String homeCommunityId, boolean xcaHomeCommunityId) {
+        var tvp = new ArrayList<TypeValuePairType>(0);
+        if (instanceId != null) {
+            tvp.add(getTypeValuePair(insranceKey, instanceId));
         }
         if (seriesInstanceId != null) {
             tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));
@@ -184,7 +174,6 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         }
         return tvp;
     }
-
 
     /**
      * Adds a Participant Object representing a Security Resource involved in the event

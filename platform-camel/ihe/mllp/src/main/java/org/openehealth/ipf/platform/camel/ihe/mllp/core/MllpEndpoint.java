@@ -27,24 +27,17 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
-import org.apache.camel.component.mina.MinaConfiguration;
-import org.apache.camel.component.mina.MinaConsumer;
-import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.camel.component.mina.MinaProducer;
+import org.apache.camel.component.netty.NettyConfiguration;
+import org.apache.camel.component.netty.NettyEndpoint;
 import org.apache.camel.support.DefaultEndpoint;
-import org.apache.mina.core.session.IoSession;
-import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-
-import javax.net.ssl.SSLContext;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +45,7 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A wrapper for standard camel-mina endpoint
+ * A wrapper for standard camel-netty endpoint
  * which provides support for IHE PIX/PDQ-related extensions.
  *
  * @author Dmytro Rud
@@ -70,18 +63,18 @@ public abstract class MllpEndpoint<
     @Getter(AccessLevel.PROTECTED)
     private final ComponentType mllpComponent;
     @Getter(AccessLevel.PROTECTED)
-    private final MinaEndpoint wrappedEndpoint;
+    private final NettyEndpoint wrappedEndpoint;
 
     /**
      * Constructor.
      *
      * @param mllpComponent   MLLP Component instance which is creating this endpoint.
-     * @param wrappedEndpoint The original camel-mina endpoint instance.
+     * @param wrappedEndpoint The original camel-netty endpoint instance.
      * @param config          Configuration parameters.
      */
     public MllpEndpoint(
             ComponentType mllpComponent,
-            MinaEndpoint wrappedEndpoint,
+            NettyEndpoint wrappedEndpoint,
             ConfigType config) {
         super(wrappedEndpoint.getEndpointUri(), mllpComponent);
         this.mllpComponent = requireNonNull(mllpComponent);
@@ -100,66 +93,24 @@ public abstract class MllpEndpoint<
     }
 
     /**
-     * Returns the original camel-mina producer which will be wrapped
+     * Returns the original camel-netty producer which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createProducer()}.
      */
     @Override
     public Producer doCreateProducer() throws Exception {
-        var producer = (MinaProducer) wrappedEndpoint.createProducer();
-        if (config.getSslContext() != null) {
-            var filterChain = producer.getFilterChain();
-            if (!filterChain.contains("ssl")) {
-                var filter = new HandshakeCallbackSSLFilter(config.getSslContext());
-                filter.setUseClientMode(true);
-                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-                filter.setEnabledProtocols(config.getSslProtocols());
-                filter.setEnabledCipherSuites(config.getSslCiphers());
-                filterChain.addFirst("ssl", filter);
-            }
-        }
-        return new MllpProducer(producer);
+        return wrappedEndpoint.createProducer();
     }
 
     /**
-     * Returns the original starting point of the camel-mina route which will be wrapped
+     * Returns the original starting point of the camel-netty route which will be wrapped
      * into a set of PIX/PDQ-specific interceptors in {@link #createConsumer(Processor)}.
      *
      * @param processor The original consumer processor.
      */
     @Override
     public Consumer doCreateConsumer(Processor processor) throws Exception {
-        var consumer = (MinaConsumer) wrappedEndpoint.createConsumer(processor);
-        if (config.getSslContext() != null) {
-            var filterChain = consumer.getAcceptor().getFilterChain();
-            if (!filterChain.contains("ssl")) {
-                var filter = new HandshakeCallbackSSLFilter(config.getSslContext());
-                filter.setNeedClientAuth(config.getClientAuthType() == ClientAuthType.MUST);
-                filter.setWantClientAuth(config.getClientAuthType() == ClientAuthType.WANT);
-                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-                filter.setEnabledProtocols(config.getSslProtocols());
-                filter.setEnabledCipherSuites(config.getSslCiphers());
-                filterChain.addFirst("ssl", filter);
-            }
-        }
-        consumer.getAcceptor().getFilterChain().addLast("mllp.exception.filter", new MllpExceptionIoFilter(consumer));
-        return new MllpConsumer(consumer);
+        return wrappedEndpoint.createConsumer(processor);
     }
-
-
-    private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
-
-        @Override
-        public void run(IoSession session, String message) {
-            if (config.isAudit()) {
-                var hostAddress = session.getRemoteAddress().toString();
-                var auditMessage = MllpAuditUtils.auditAuthenticationNodeFailure(
-                        config.getAuditContext(), message, hostAddress);
-                config.getAuditContext().audit(auditMessage);
-            }
-        }
-    }
-
-// ----- getters -----
 
     /**
      * Returns transaction configuration.
@@ -198,75 +149,34 @@ public abstract class MllpEndpoint<
         return config.getSegmentFragmentationThreshold();
     }
 
-    /**
-     * @return the sslContext
-     */
-    public SSLContext getSslContext() {
-        return config.getSslContext();
-    }
-
-    /**
-     * @return the sslProtocols
-     */
-    @ManagedAttribute(description = "Defined SSL Protocols")
-    public String[] getSslProtocols() {
-        return config.getSslProtocols();
-    }
-
-    /**
-     * @return the sslCiphers
-     */
-    @ManagedAttribute(description = "Defined SSL Ciphers")
-    public String[] getSslCiphers() {
-        return config.getSslCiphers();
-    }
-
     @ManagedAttribute(description = "Component Type Name")
     public String getComponentType() {
         return getComponent().getClass().getName();
     }
 
-    @ManagedAttribute(description = "Mina Host")
+    @ManagedAttribute(description = "Netty Host")
     public String getHost() {
         return getConfiguration().getHost();
     }
 
-    @ManagedAttribute(description = "Mina Port")
+    @ManagedAttribute(description = "Netty Port")
     public int getPort() {
         return getConfiguration().getPort();
     }
 
-    @ManagedAttribute(description = "Mina Character Set")
+    @ManagedAttribute(description = "Netty Character Set")
     public String getCharsetName() {
         return getConfiguration().getCharsetName();
     }
 
-    @ManagedAttribute(description = "Mina Timeout")
+    @ManagedAttribute(description = "Netty Request Timeout")
+    public long getRequestTimeout() {
+        return getConfiguration().getRequestTimeout();
+    }
+
+    @ManagedAttribute(description = "Netty Request Timeout")
     public long getTimeout() {
-        return getConfiguration().getTimeout();
-    }
-
-    @ManagedAttribute(description = "Mina Filters")
-    public String[] getIoFilters() {
-        var filters = getConfiguration().getFilters();
-        return toStringArray(filters);
-    }
-
-    @ManagedAttribute(description = "SSL Secure Enabled")
-    public boolean isSslSecure() {
-        return getSslContext() != null;
-    }
-
-    /**
-     * @return the client authentication type.
-     */
-    public ClientAuthType getClientAuthType() {
-        return config.getClientAuthType();
-    }
-
-    @ManagedAttribute(description = "Client Authentication Type")
-    public String getClientAuthTypeClass() {
-        return getClientAuthType().toString();
+        return getConfiguration().getRequestTimeout();
     }
 
     /**
@@ -290,11 +200,9 @@ public abstract class MllpEndpoint<
     }
 
     private String[] toStringArray(List<?> list) {
-        final var result = new String[list.size()];
-        for (var i = 0; i < list.size(); i++) {
-            result[i] = list.get(i).getClass().getCanonicalName();
-        }
-        return result;
+        return list.stream()
+                .map(o -> o.getClass().getCanonicalName())
+                .toArray(String[]::new);
     }
 
 
@@ -339,7 +247,7 @@ public abstract class MllpEndpoint<
         return wrappedEndpoint.getComponent();
     }
 
-    public MinaConfiguration getConfiguration() {
+    public NettyConfiguration getConfiguration() {
         return wrappedEndpoint.getConfiguration();
     }
 

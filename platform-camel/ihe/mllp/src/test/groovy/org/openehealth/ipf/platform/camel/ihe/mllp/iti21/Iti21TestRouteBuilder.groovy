@@ -17,7 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.AcknowledgmentCode
 import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
@@ -26,6 +29,8 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
  * @author Dmytro Rud
  */
 class Iti21TestRouteBuilder extends RouteBuilder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Iti21TestRouteBuilder)
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^K22^RSP_K21|356757|P|2.5
 MSA|AA|1305506339
@@ -51,7 +56,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  .end()
              .transform(constant(rsp))
 
-         from('pdq-iti21://0.0.0.0:18211?secure=true&clientAuth=MUST&sslContext=#sslContext')
+         from('pdq-iti21://0.0.0.0:18211?secure=true&sslContextParameters=#sslContextParameters')
              .transform(constant(rsp))
 
          // for cancel messages
@@ -73,6 +78,23 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  it.out.body = null
                  it.out.headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              }
+
+         // wait "QPD-2" seconds and properly respond with a valid answer
+         from('pdq-iti21://0.0.0.0:18220')
+                 .process {
+                     long wait = Long.parseLong(it.in.body.QPD[2].value)
+                     LOG.debug("Waiting $wait ms")
+                     Thread.sleep(wait)
+                 }
+                 .transmogrify {
+                     def response = MessageUtils.response(it, 'RSP', 'K22')
+                     response.QPD = it.QPD
+                     response.QAK[1] = response.QPD[2].value
+                     response.MSA[1] = 'AA'
+                     response.MSH[18] = it.MSH[18]
+                     LOG.debug("Now responding after waiting ${response.QAK[1].value} ms")
+                     response
+                 }
 
          /*
          from('pdq-iti21://0.0.0.0:18225?interceptorFactories=#receiveTracingData')

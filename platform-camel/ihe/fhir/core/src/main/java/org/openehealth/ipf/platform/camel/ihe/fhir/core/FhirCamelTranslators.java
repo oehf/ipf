@@ -23,7 +23,6 @@ import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * Camel processors for translation of messages between FHIR and something else
@@ -49,7 +48,7 @@ public final class FhirCamelTranslators {
         return exchange -> {
             var fhir = exchange.getIn().getBody();
             var parameters = exchange.getIn().getHeaders();
-            var resultMessage = Exchanges.resultMessage(exchange);
+            var resultMessage = exchange.getMessage();
             resultMessage.setBody(translator.translateFhir(fhir, parameters));
             resultMessage.getHeaders().putAll(parameters);
             if (fhir instanceof IIdType) {
@@ -78,7 +77,7 @@ public final class FhirCamelTranslators {
         return exchange -> {
             var msg = exchange.getIn().getMandatoryBody(clazz);
             var parameters = exchange.getIn().getHeaders();
-            var resultMessage = Exchanges.resultMessage(exchange);
+            var resultMessage = exchange.getMessage();
             resultMessage.setBody(translator.translateToFhir(msg, parameters));
             resultMessage.getHeaders().putAll(parameters);
         };

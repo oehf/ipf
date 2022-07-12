@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -37,29 +36,29 @@ public class PixV3QueryRequestTransformerTest {
 
     @Test
     public void testTransform() throws Exception {
-        final PixV3QueryRequestTransformer transformer = new PixV3QueryRequestTransformer();
-        final JAXBContext jaxbContext = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
-        final PixV3QueryRequest query = getSampleQuery();
+        final var transformer = new PixV3QueryRequestTransformer();
+        final var jaxbContext = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
+        final var query = getSampleQuery();
 
         // Transform simple query to JAXB model
-        final PRPAIN201309UV02Type prpain201309UV02Type = transformer.toPrpa(query);
+        final var prpain201309UV02Type = transformer.toPrpa(query);
 
         // Marshall JAXB model
-        final Marshaller marshaller = jaxbContext.createMarshaller();
+        final var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final StringWriter stringWriter = new StringWriter();
+        final var stringWriter = new StringWriter();
         marshaller.marshal(prpain201309UV02Type, stringWriter);
-        final String xml = stringWriter.toString();
+        final var xml = stringWriter.toString();
 
         // Unmarshall JAXB model
-        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        final PRPAIN201309UV02Type parsedPrpain201309UV02Type =
+        final var unmarshaller = jaxbContext.createUnmarshaller();
+        final var parsedPrpain201309UV02Type =
                 (PRPAIN201309UV02Type) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
 
         // Transform JAXB model to simple query
-        final PixV3QueryRequest parsedQuery = transformer.fromPrpa(parsedPrpain201309UV02Type);
+        final var parsedQuery = transformer.fromPrpa(parsedPrpain201309UV02Type);
 
         // The two simple queries should be equal
         assertIiEquals(query.getQueryPatientId(), parsedQuery.getQueryPatientId());
@@ -87,7 +86,7 @@ public class PixV3QueryRequestTransformerTest {
     }
 
     public static PixV3QueryRequest getSampleQuery() {
-        final PixV3QueryRequest query = new PixV3QueryRequest();
+        final var query = new PixV3QueryRequest();
         query.setCreationTime(ZonedDateTime.now());
         query.getDataSourceOids().add("1.2.3");
         query.getDataSourceOids().add("7.8.9");

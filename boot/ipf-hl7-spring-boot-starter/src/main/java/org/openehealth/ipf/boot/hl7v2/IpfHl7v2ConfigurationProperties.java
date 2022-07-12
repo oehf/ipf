@@ -61,6 +61,12 @@ public class IpfHl7v2ConfigurationProperties {
     @Getter @Setter
     private String generator = "file";
 
+    /**
+     * Duration in milliseconds for which correlated message IDs remain active
+     */
+    @Getter @Setter
+    private long correlationTimeout = 30000;
+
     @Getter
     @NestedConfigurationProperty
     private final FileIdGeneratorProperties idGenerator = new FileIdGeneratorProperties();

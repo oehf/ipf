@@ -71,7 +71,7 @@ class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
         }
         var map = parseByteBuf(msg);
         if (socketAddress instanceof InetSocketAddress) {
-            Map<String, Object> enriched = new HashMap<>(map);
+            var enriched = new HashMap<>(map);
             var inetSocketAddress = (InetSocketAddress) socketAddress;
             enriched.put(SYSLOG_REMOTE_HOST, inetSocketAddress.getHostName());
             enriched.put(SYSLOG_REMOTE_PORT, inetSocketAddress.getPort());
@@ -88,7 +88,7 @@ class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
             // Get rid of the pesky BOM character
             return syslogParser.parseLine(message.replace("\uFEFF", ""));
         } catch (ParseException e) {
-            Map<String, Object> map = new HashMap<>();
+            var map = new HashMap<String, Object>();
             map.put(SYSLOG_RAW_MESSAGE, message);
             map.put(SYSLOG_EXCEPTION, e);
             return map;

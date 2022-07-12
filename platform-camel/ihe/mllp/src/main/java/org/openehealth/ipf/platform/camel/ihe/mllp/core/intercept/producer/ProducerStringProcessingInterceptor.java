@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
@@ -27,22 +25,24 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 /**
  * Producer-side MLLP interceptor that sets character encoding configured
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
+ *
  * @author Dmytro Rud
  */
-public class ProducerStringProcessingInterceptor extends InterceptorSupport<MllpEndpoint<?,?,?>> {
+public class ProducerStringProcessingInterceptor extends InterceptorSupport {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final var charsetName = getEndpoint().getCharsetName();
-        exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        final var charsetName = getEndpoint(MllpEndpoint.class).getCharsetName();
+        if (charsetName != null) {
+            exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        }
 
-        var supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
-        var segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
-        Message message;
+        var supportSegmentFragmentation = getEndpoint(MllpEndpoint.class).isSupportSegmentFragmentation();
+        var segmentFragmentationThreshold = getEndpoint(MllpEndpoint.class).getSegmentFragmentationThreshold();
         
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
-            message = exchange.getIn();
+            var message = exchange.getIn();
             var s = message.getBody(String.class);
             s = FragmentationUtils.ensureMaximalSegmentsLength(s, segmentFragmentationThreshold);
             message.setBody(s);
@@ -51,9 +51,12 @@ public class ProducerStringProcessingInterceptor extends InterceptorSupport<Mllp
         // run the route
         getWrappedProcessor().process(exchange);
 
-        // read in the response
-        message = Exchanges.resultMessage(exchange);
-        message.setBody(Hl7v2MarshalUtils.convertBodyToString(
+        // Read in the response. If an exception is set (e.g. because the connection was closed, return it)
+        if (exchange.getException() != null) {
+            throw exchange.getException();
+        }
+        var message = exchange.getMessage();
+        exchange.getMessage().setBody(Hl7v2MarshalUtils.convertBodyToString(
                 message,
                 charsetName,
                 supportSegmentFragmentation));

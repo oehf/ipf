@@ -40,10 +40,12 @@ public class TestPcc44SecureSuccess extends AbstractTestPcc44 {
     public void testSendSecureCamelPcc44Apache() {
         test("direct:apache");
     }
+
     @Test
     public void testSendSecureCamelPcc44Methanol() {
         test("direct:methanol");
     }
+
     public void test(String endpoint) {
         var query = observationPatientReferenceParameter();
         var result = producerTemplate.requestBodyAndHeader(endpoint, query, Constants.FHIR_RESOURCE_TYPE_HEADER, "Observation", Bundle.class);

@@ -25,11 +25,8 @@ public class SomeMllpItiRouteBuilder extends RouteBuilder {
     
     @Override
     public void configure() throws Exception {
-        from("some-mllp-iti://0.0.0.0:18181?audit=true&" +
-                "secure=true&" +
-                "sslContext=#sslContext&" +
-                "sslProtocols=TLSv1.2,TLSv1.3&" +
-                "sslCiphers=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_AES_128_GCM_SHA256" +
+        from("some-mllp-iti://0.0.0.0:18181?audit=true" +
+                "&secure=true" +
                 "&interceptorFactories=#dummyInterceptor1,#dummyInterceptor2")
             .to("mock:result");
     }

@@ -17,33 +17,20 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
 import java.nio.ByteBuffer
 
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Unit test for datatypes handling.
  * @author Dmytro Rud
  */
-class TestIti8Datatypes extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-datatypes.xml'
-
-    static String TIMEOUT = '30000'
-    
-    def static main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti8/iti-8-datatypes.xml')
+class TestIti8Datatypes extends AbstractMllpTest {
     
     /**
      * Checks whether various request data types are being handled properly.
@@ -110,7 +97,7 @@ class TestIti8Datatypes extends MllpTestContainer {
      * Checks whether various response data types are being handled properly.
      */
     @Test
-    public void testResponseDataTypes() {
+    void testResponseDataTypes() {
         final String endpointUri = "pix-iti8://localhost:18187?audit=false&timeout=${TIMEOUT}"
         final String body = getMessageString('ADT^A01', '2.3.1')
         DatatypesRouteBuilder.cleanCheckedContentTypes()
@@ -122,15 +109,10 @@ class TestIti8Datatypes extends MllpTestContainer {
         }
         
         // 9-12 should throw exceptions
-        def exceptionsCount = 0
         for(int i = 8; i <= 11; ++i) {
-            try {
-                send(endpointUri, body)
-            } catch (Exception e) {
-                ++exceptionsCount
-            }
+            def msg = send(endpointUri, body)
+            assertNAK(msg)
         }
-        assertEquals(4, exceptionsCount)
         
         // 13-18 should return NAKs
         for(int i = 12; i <= 17; ++i) {

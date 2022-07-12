@@ -99,7 +99,7 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> slotValues = new ArrayList<>();
+        var slotValues = new ArrayList<String>();
         for (var code : codes) {
             var hl7CE = Hl7v2Based.render(code);
             slotValues.add(encodeAsStringList(hl7CE));
@@ -167,7 +167,7 @@ public class QuerySlotHelper {
 
         var queryList = new QueryList<String>();
         for (var slot : slots) {
-            List<String> innerList = new ArrayList<>();
+            var innerList = new ArrayList<String>();
             for (var slotValue : slot.getValueList()) {
                 innerList.addAll(decodeStringList(slotValue));
             }
@@ -247,7 +247,7 @@ public class QuerySlotHelper {
             return null;
         }
         
-        List<String> values = new ArrayList<>();
+        var values = new ArrayList<String>();
         for (var slotValue : slotValues) {
             values.addAll(decodeStringList(slotValue));
         }
@@ -285,7 +285,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<Identifiable> patientIds = new ArrayList<>();
+        var patientIds = new ArrayList<Identifiable>();
         for (var value : values) {
             patientIds.add(Hl7v2Based.parse(value, Identifiable.class));
         }
@@ -381,7 +381,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<AvailabilityStatus> list = new ArrayList<>();
+       var list = new ArrayList<AvailabilityStatus>();
         for (var opcode : opcodes) {
             var status = AvailabilityStatus.valueOfOpcode(opcode);
             if (status != null) {
@@ -453,7 +453,7 @@ public class QuerySlotHelper {
             return null;
         }
         
-        List<Code> codes = new ArrayList<>();
+        var codes = new ArrayList<Code>();
         for (var slotValue : slotValues) {
             for (var hl7CE : decodeStringList(slotValue)) {
                 var code = Hl7v2Based.parse(hl7CE, Code.class);
@@ -497,7 +497,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<DocumentAvailability> list = new ArrayList<>();
+        var list = new ArrayList<DocumentAvailability>();
         for (var opcode : opcodes) {
             var availability = DocumentAvailability.valueOfOpcode(opcode);
             if (availability != null) {
@@ -577,8 +577,8 @@ public class QuerySlotHelper {
         if (list.endsWith(")")) {
             list = list.substring(0, list.length() - 1);
         }
-        
-        List<String> values = new ArrayList<>();
+
+        var values = new ArrayList<String>();
         for (var value: list.split(",")){
             var decodedValue = isNotBlank(value)? decodeString(value.trim()): "";
             values.add(decodedValue);

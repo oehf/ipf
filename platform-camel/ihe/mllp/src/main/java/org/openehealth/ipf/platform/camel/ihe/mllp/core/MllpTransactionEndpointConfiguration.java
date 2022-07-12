@@ -17,19 +17,17 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 
 import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 
 /**
  * Camel endpoint configuration for MLLP-based eHealth transactions (like IHE PIX, PDQ, XAD-PID, etc.).
  * @author Dmytro Rud
  */
 public class MllpTransactionEndpointConfiguration extends MllpEndpointConfiguration {
-    private static final long serialVersionUID = -6154765290339153487L;
 
     @Getter private final boolean supportUnsolicitedFragmentation;
     @Getter private final int unsolicitedFragmentationThreshold;
@@ -39,11 +37,13 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final int interactiveContinuationDefaultThreshold;
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
     @Getter private final boolean autoCancel;
-
+    @Getter private final boolean copyOriginalMessage;
 
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, uri, parameters);
 
+        copyOriginalMessage = component.getAndRemoveParameter(
+                parameters, "copyOriginalMessage", boolean.class, true);
         supportUnsolicitedFragmentation = component.getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);
         unsolicitedFragmentationThreshold = component.getAndRemoveParameter(

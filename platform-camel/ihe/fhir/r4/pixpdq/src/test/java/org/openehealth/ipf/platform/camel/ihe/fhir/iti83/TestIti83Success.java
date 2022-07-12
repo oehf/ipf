@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import org.hl7.fhir.r4.model.CapabilityStatement;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestResourceOperationComponent;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Parameters;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,7 +49,7 @@ public class TestIti83Success extends AbstractTestIti83 {
 
         assertEquals(1, conf.getRest().size());
         var component = conf.getRest().iterator().next();
-        CapabilityStatementRestResourceOperationComponent operation = component.getResource().stream()
+        var operation = component.getResource().stream()
                 .filter(resource -> "Patient".equals(resource.getType()))
                 .flatMap(resource -> resource.getOperation().stream()).findFirst().get();
         assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());

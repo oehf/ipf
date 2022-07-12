@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
-import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang3.ClassUtils;
@@ -26,29 +25,25 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 
 
 /**
- * Producer-side Camel interceptor which creates a {@link Message}
- * from various possible request types.
- *  
+ * Producer-side Camel interceptor which creates a HAPI Message from various possible request types.
+ *
  * @author Dmytro Rud
  */
-public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ProducerAdaptingInterceptor extends InterceptorSupport {
 
     private final String charsetName;
 
-
     /**
-     * Constructor which enforces the use of a particular character set.
-     * The given value will be propagated to the Camel exchange property
+     * Constructor which enforces the use of a particular character set if not specified otherwise
+     * in MSH-18. The given value will be propagated to the Camel exchange property
      * {@link Exchange#CHARSET_NAME}, rewriting its old content.
      *
-     * @param charsetName
-     *      character set to use in all data transformations.
+     * @param charsetName character set to use in all data transformations.
      */
     public ProducerAdaptingInterceptor(String charsetName) {
         super();
         this.charsetName = charsetName;
     }
-
 
     /**
      * Constructor which does not enforce the use of a particular character set.
@@ -61,7 +56,7 @@ public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
 
 
     /**
-     * Converts outgoing request to a {@link Message}
+     * Converts outgoing request to a HAPI Message
      * and performs some exchange configuration.
      */
     @Override
@@ -69,16 +64,16 @@ public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoin
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        var msg = Hl7v2MarshalUtils.extractHapiMessage(
+        var msg = Hl7v2MarshalUtils.convertBodyToMessage(
                 exchange.getIn(),
                 characterSet(exchange),
-                getEndpoint().getHl7v2TransactionConfiguration().getParser());
-        
+                getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration().getParser());
+
         if (msg == null) {
             throw new Hl7v2AdaptingException("Cannot create HL7v2 message from the given " +
                     ClassUtils.getSimpleName(exchange.getIn().getBody(), "<null>"));
         }
-        
+
         exchange.getIn().setBody(msg);
         exchange.setPattern(ExchangePattern.InOut);
         

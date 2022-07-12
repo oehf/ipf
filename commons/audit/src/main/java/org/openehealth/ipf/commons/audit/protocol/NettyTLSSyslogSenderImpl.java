@@ -218,7 +218,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
             @Override
             protected void initChannel(SocketChannel channel) {
                 var pipeline = channel.pipeline();
-                var sslContext = NettyUtils.initSslContext(tlsParameters, true);
+                var sslContext = NettyUtils.initSslContext(tlsParameters, false);
                 pipeline.addLast(sslContext.newHandler(channel.alloc(), host, port));
                 pipeline.addLast(new InboundHandler(host, port));
                 if (withLogging) {

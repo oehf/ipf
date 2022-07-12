@@ -36,6 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     protected List<Interceptor> getProducerInterceptorChain() {
         return Arrays.asList(
-                new ProducerMarshalInterceptor(),
+                new ProducerMarshalInterceptor(StandardCharsets.UTF_8.name()),
                 new ProducerResponseAcceptanceInterceptor(),
                 new ProducerRequestAcceptanceInterceptor(),
                 new ProducerAdaptingInterceptor()

@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9
 
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.test.context.ContextConfiguration
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -30,20 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue
  * Unit tests for the PIX Query transaction a.k.a. ITI-9, where requests are sent
  * @author Christian Ohr
  */
-class TestIti9QueryStream extends MllpTestContainer {
+@ContextConfiguration('/iti9/iti-9.xml')
+class TestIti9QueryStream extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti9QueryStream)
-
-    def static CONTEXT_DESCRIPTOR = 'iti9/iti-9.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
     
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PIX_CLIENT|MESA_DEPARTMENT|MESA_XREF|XYZ_HOSPITAL|'+
@@ -58,7 +48,7 @@ class TestIti9QueryStream extends MllpTestContainer {
 
 
     @Test
-    public void testQueryStream() throws Exception {
+    void testQueryStream() throws Exception {
         final String message = getMessageString('QBP^Q23', '2.5')
 
         Socket socket = new Socket("localhost", 18091)

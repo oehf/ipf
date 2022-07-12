@@ -24,7 +24,6 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -36,9 +35,9 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
-public class NakFactory<T extends MllpAuditDataset> {
+public class NakFactory<AuditDatasetType extends MllpAuditDataset> {
 
-    private final Hl7v2TransactionConfiguration<T> config;
+    private final Hl7v2TransactionConfiguration<AuditDatasetType> config;
     private final boolean useCAckTypeCodes;
     private final String defaultNakMsh9;
 
@@ -52,7 +51,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      *                         <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.
      * @param defaultNakMsh9   desired contents of MSH-9 in this transaction's default NAKs.
      */
-    public NakFactory(Hl7v2TransactionConfiguration<T> config, boolean useCAckTypeCodes, String defaultNakMsh9) {
+    public NakFactory(Hl7v2TransactionConfiguration<AuditDatasetType> config, boolean useCAckTypeCodes, String defaultNakMsh9) {
         this.config = requireNonNull(config);
         this.useCAckTypeCodes = useCAckTypeCodes;
         this.defaultNakMsh9 = requireNonNull(defaultNakMsh9);
@@ -64,7 +63,7 @@ public class NakFactory<T extends MllpAuditDataset> {
      *
      * @param config Configuration of the transaction served by this factory.
      */
-    public NakFactory(Hl7v2TransactionConfiguration<T> config) {
+    public NakFactory(Hl7v2TransactionConfiguration<AuditDatasetType> config) {
         this(config, false, "ACK");
     }
 
@@ -177,7 +176,7 @@ public class NakFactory<T extends MllpAuditDataset> {
     /**
      * Returns configuration of the transaction served by this factory.
      */
-    protected Hl7v2TransactionConfiguration getConfig() {
+    protected Hl7v2TransactionConfiguration<AuditDatasetType> getConfig() {
         return config;
     }
 
@@ -216,7 +215,7 @@ public class NakFactory<T extends MllpAuditDataset> {
     }
 
     private static Stream<Throwable> createExceptionStream(Throwable exception) {
-        List<Throwable> throwables = new ArrayList<>();
+        var throwables = new ArrayList<Throwable>();
         var current = exception;
         while (current != null) {
             throwables.add(current);

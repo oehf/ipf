@@ -20,12 +20,14 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
 import zipkin2.Span
 
 import static org.junit.jupiter.api.Assertions.*
@@ -34,19 +36,21 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
  * @author Dmytro Rud
  */
-class TestIti8 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8.xml'
-    
-    static void main(args) {
-        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
+@ContextConfiguration('/iti8/iti-8.xml')
+class TestIti8 extends AbstractMllpTest {
+
+    @Autowired
+    private MockReporter reporter
+
     @BeforeAll
     static void setUpClass() {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
-        init(CONTEXT_DESCRIPTOR, false)
+    }
+
+
+    @AfterAll
+    static void tearDownAfterClass() {
+        System.clearProperty(PayloadLoggerBase.PROPERTY_DISABLED)
     }
     
     /**
@@ -68,7 +72,6 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testHappyCaseAndTrace() {
         doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor,#clientInLogger,#clientOutLogger&timeout=${TIMEOUT}", 2)
-        MockReporter reporter = appContext.getBean(MockReporter)
         assertEquals(2, reporter.spans.size())
 
         Span clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT}
@@ -86,7 +89,7 @@ class TestIti8 extends MllpTestContainer {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
     
     /**
@@ -132,10 +135,10 @@ class TestIti8 extends MllpTestContainer {
         exchange.in.body = body
         
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -180,7 +183,7 @@ class TestIti8 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
 
@@ -212,7 +215,7 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?codec=#alternativeCodec'
+        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?decoders=#alternativeDecoder&encoders=#alternativeEncoder'
         def endpointUri2 = 'xds-iti8://localhost:18085'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)

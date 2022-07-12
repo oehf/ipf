@@ -20,30 +20,18 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
 
 /**
  * Unit tests for the PIX Query transaction a.k.a. ITI-9.
  * @author Dmytro Rud
  */
-class TestIti9 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti9/iti-9.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti9/iti-9.xml')
+class TestIti9 extends AbstractMllpTest {
     
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PIX_CLIENT|MESA_DEPARTMENT|MESA_XREF|XYZ_HOSPITAL|'+
@@ -73,7 +61,7 @@ class TestIti9 extends MllpTestContainer {
         final String body = getMessageString('QBP^Q23', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
     
     /**
@@ -119,10 +107,10 @@ class TestIti9 extends MllpTestContainer {
         exchange.in.body = body
         
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -166,7 +154,7 @@ class TestIti9 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
     
     
@@ -178,7 +166,7 @@ class TestIti9 extends MllpTestContainer {
         def body = getMessageString('QBP^Q23', '2.5')
         def endpointUri = "pix-iti9://localhost:18093?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K23')
     }
     
@@ -190,7 +178,7 @@ class TestIti9 extends MllpTestContainer {
         def body = getMessageString('QBP^Q23', '2.5')
         def endpointUri = "pix-iti9://localhost:18094?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K23')
     }
 }

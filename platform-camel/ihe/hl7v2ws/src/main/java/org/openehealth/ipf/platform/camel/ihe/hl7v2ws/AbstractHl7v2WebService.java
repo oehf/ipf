@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import java.io.IOException;
-
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
@@ -31,9 +29,10 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
@@ -90,15 +89,13 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
             }
 
             // check response existence and acceptance
-            if ((msg = Hl7v2MarshalUtils.extractHapiMessage(
-                    resultMessage(exchange),
+            var response = Hl7v2MarshalUtils.convertBodyToMessage(
+                    exchange.getMessage(),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                    config.getParser())) != null) {
-                config.checkResponseAcceptance(msg);
-                return render(msg);
-            } else {
-                throw new Exception("Could not extract HAPI message object from exchange");
-            }
+                    config.getParser());
+            config.checkResponseAcceptance(response);
+            return render(response);
+
 
         } catch (Exception e) {
             LOG.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);

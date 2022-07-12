@@ -21,12 +21,11 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.tracing.MessageTracer;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 
 /**
  * @author Christian Ohr
  */
-public class ConsumerTracingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
+public class ConsumerTracingInterceptor extends InterceptorSupport {
 
     private final MessageTracer messageTracer;
 
@@ -43,7 +42,7 @@ public class ConsumerTracingInterceptor extends InterceptorSupport<HL7v2Endpoint
                 getWrappedProcessor().process(exchange));
     }
 
-    public static class Factory implements InterceptorFactory<HL7v2Endpoint, ConsumerTracingInterceptor> {
+    public static class Factory implements InterceptorFactory {
         private final MessageTracer messageTracer;
 
         public Factory(MessageTracer messageTracer) {

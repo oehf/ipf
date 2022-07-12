@@ -86,7 +86,7 @@ public abstract class FhirProvider implements Serializable {
     protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest,
                                                    RequestDetails requestDetails) {
         // Populate some headers.
-        Map<String, Object> enriched = new HashMap<>();
+        var enriched = new HashMap<String, Object>();
         enriched.put(Constants.HTTP_URI, httpServletRequest.getRequestURI());
         enriched.put(Constants.HTTP_URL, httpServletRequest.getRequestURL().toString());
         enriched.put(Constants.HTTP_METHOD, httpServletRequest.getMethod());
@@ -122,14 +122,14 @@ public abstract class FhirProvider implements Serializable {
      * @return A map mapping header names to list of header values.
      */
     private static Map<String, List<String>> extractHttpHeaders(HttpServletRequest httpServletRequest) {
-        Map<String, List<String>> result = new HashMap<>();
+        var result = new HashMap<String, List<String>>();
         var headerNames = httpServletRequest.getHeaderNames();
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {
                 var name = headerNames.nextElement();
                 var headers = httpServletRequest.getHeaders(name);
                 if (headers != null) {
-                    List<String> list = new ArrayList<>();
+                    var list = new ArrayList<String>();
                     while (headers.hasMoreElements()) {
                         list.add(headers.nextElement());
                     }

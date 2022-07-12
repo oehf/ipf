@@ -82,8 +82,8 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
         qry.QPD[1] = this.queryName
         qry.QPD[2] = UUID.randomUUID().toString()
 
-        Map<String, Object> map = new HashMap<>()
-        List<Parameters.ParametersParameterComponent> parts = inParams.parameter
+        def map = new HashMap<String, Object>()
+        def parts = inParams.parameter
         for (Parameters.ParametersParameterComponent part : parts) {
             map.put(part.name, part.value)
         }

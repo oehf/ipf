@@ -28,18 +28,23 @@ import ca.uhn.hl7v2.util.idgenerator.UUIDGenerator;
 import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.CamelContext;
-import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
-import org.apache.camel.component.hl7.HL7MLLPCodec;
+import org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory;
+import org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory;
+import org.apache.camel.component.netty.NettyCamelStateCorrelationManager;
+import org.apache.camel.component.netty.TimeoutCorrelationManagerSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7CorrelationManager;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
@@ -49,7 +54,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,28 +72,36 @@ public class IpfHl7v2AutoConfiguration {
         this.properties = properties;
     }
 
-    @Bean
-    @ConditionalOnMissingBean(HL7MLLPCodec.class)
-    HL7MLLPCodec hl7codec(IpfHl7v2ConfigurationProperties config) {
-        HL7MLLPCodec hl7MLLPCodec = new CustomHL7MLLPCodec();
+    @Bean(name = MllpComponent.DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME)
+    @ConditionalOnMissingBean(HL7MLLPNettyDecoderFactory.class)
+    HL7MLLPNettyDecoderFactory hl7decoder(IpfHl7v2ConfigurationProperties config) {
+        var decoder = new HL7MLLPNettyDecoderFactory();
         if (config.getCharset() != null) {
-            hl7MLLPCodec.setCharset(config.getCharset());
+            decoder.setCharset(config.getCharset());
         }
-        hl7MLLPCodec.setConvertLFtoCR(config.isConvertLinefeed());
-        return hl7MLLPCodec;
+        decoder.setProduceString(false);
+        decoder.setConvertLFtoCR(config.isConvertLinefeed());
+        return decoder;
+    }
+
+    @Bean(name = MllpComponent.DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME)
+    @ConditionalOnMissingBean(HL7MLLPNettyEncoderFactory.class)
+    HL7MLLPNettyEncoderFactory hl7encoder(IpfHl7v2ConfigurationProperties config) {
+        var encoder = new HL7MLLPNettyEncoderFactory();
+        if (config.getCharset() != null) {
+            encoder.setCharset(config.getCharset());
+        }
+        encoder.setConvertLFtoCR(config.isConvertLinefeed());
+        return encoder;
     }
 
     @Bean
     @ConditionalOnMissingBean(CustomModelClassFactory.class)
     public CustomModelClassFactory mllpModelClassFactory() {
-        Map<String, String[]> eventMap = new HashMap<>();
-        eventMap.put("2.3.1", new String[] {
-                IPF_HL7_DEFINITIONS_PREFIX + "pix.v231"
-        });
-        eventMap.put("2.5", new String[] {
-                IPF_HL7_DEFINITIONS_PREFIX + "pdq.v25",
-                IPF_HL7_DEFINITIONS_PREFIX + "pix.v25"
-        });
+        var eventMap = Map.of(
+                "2.3.1", new String[] { IPF_HL7_DEFINITIONS_PREFIX + "pix.v231" },
+                "2.5", new String[] { IPF_HL7_DEFINITIONS_PREFIX + "pdq.v25", IPF_HL7_DEFINITIONS_PREFIX + "pix.v25" }
+        );
         var modelClassFactory = new CustomModelClassFactory(eventMap);
         modelClassFactory.setEventMapDirectory("org/openehealth/ipf/commons/ihe/hl7v2/");
         return modelClassFactory;
@@ -158,6 +170,7 @@ public class IpfHl7v2AutoConfiguration {
     // Provide bean for MLLP endpoint dispatching
     @Bean
     @ConditionalOnMissingBean(ConsumerDispatchingInterceptor.class)
+    @ConditionalOnBean(CamelContext.class)
     public ConsumerDispatchingInterceptor mllpDispatcher(CamelContext camelContext) {
         return new ConsumerDispatchingInterceptor(camelContext);
     }
@@ -180,4 +193,11 @@ public class IpfHl7v2AutoConfiguration {
         return new SpringCacheUnsolicitedFragmentationStorage(cacheManager);
     }
 
+    @Bean(name = MllpComponent.DEFAULT_HL7_CORRELATION_BEAN_NAME)
+    @ConditionalOnMissingBean(NettyCamelStateCorrelationManager.class)
+    public NettyCamelStateCorrelationManager hl7Correlation(HapiContext hapiContext) {
+        TimeoutCorrelationManagerSupport correlationManager = new Hl7CorrelationManager(hapiContext);
+        correlationManager.setTimeout(properties.getCorrelationTimeout());
+        return correlationManager;
+    }
 }

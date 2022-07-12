@@ -20,30 +20,18 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
+import org.springframework.test.context.ContextConfiguration
 
-import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
 
 /**
  * Unit tests for the Notify XAD-PID Link Change transaction a.k.a. ITI-64.
  * @author Boris Stanojevic
  */
-class TestIti64 extends MllpTestContainer {
-    
-    def static CONTEXT_DESCRIPTOR = 'iti64/iti-64.xml'
-    
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-    
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+@ContextConfiguration('/iti64/iti-64.xml')
+class TestIti64 extends AbstractMllpTest {
     
     static String getMessageString(msh9, msh12) {
         def s = 'MSH|^~\\&|REPOSITORY|ENT|RSP1P8|GOOD HEALTH HOSPITAL|200701051530|' +
@@ -67,7 +55,7 @@ class TestIti64 extends MllpTestContainer {
         final String body = getMessageString('ADT^A43^ADT_A43', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
 
     /**
@@ -105,10 +93,10 @@ class TestIti64 extends MllpTestContainer {
         exchange.in.body = body
 
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -143,6 +131,6 @@ class TestIti64 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 }

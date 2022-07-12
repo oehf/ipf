@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46
 
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -43,7 +42,7 @@ class Iti46TestRouteBuilder extends RouteBuilder {
                     throw new RuntimeException('KOI-8 character set expected')
                 }
                 it.setProperty(Exchange.CHARSET_NAME, 'Windows-1251')
-                Exchanges.resultMessage(it).body = '<MCCI_IN000002UV01 xmlns="urn:hl7-org:v3" from="PIX Consumer"/>'
+                it.message.body = '<MCCI_IN000002UV01 xmlns="urn:hl7-org:v3" from="PIX Consumer"/>'
             }
     }
 }

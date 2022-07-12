@@ -105,7 +105,7 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
      *      source XML document.
      */
     protected static String enrichNamespaces(Document source, String target) {
-        Map<String, String> namespaces = new HashMap<>();
+        var namespaces = new HashMap<String, String>();
 
         // collect namespace definitions from <soap:Envelope>
         var envelope = source.getDocumentElement();

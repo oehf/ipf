@@ -18,27 +18,28 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.appendSplitSegment;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.splitString;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.uniqueId;
 
 /**
  * A producer-side interceptor which implements non-interactive request 
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
     
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        var threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
+        var threshold = getEndpoint(MllpTransactionEndpoint.class).getUnsolicitedFragmentationThreshold();
         if (threshold < 3) {
             getWrappedProcessor().process(exchange);
             return;
@@ -119,8 +120,8 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<Mll
 
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
-                var responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                var responseTerser = new Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
+                var responseString = exchange.getMessage().getBody(String.class);
+                var responseTerser = new Terser(getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().getParser().parse(responseString));
 
                 var messageType = responseTerser.get("MSH-9-1");
                 var acknowledgementCode = responseTerser.get("MSA-1");

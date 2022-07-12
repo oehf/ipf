@@ -51,7 +51,7 @@ public interface InterceptableEndpoint<
         var producer = doCreateProducer();
 
         var initialChain = createInitialProducerInterceptorChain();
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
+        var additionalInterceptors = new ArrayList<Interceptor>();
         additionalInterceptors.addAll(getInterceptableComponent().getAdditionalProducerInterceptors());
         // add interceptors provided by the user
         additionalInterceptors.addAll(getCustomInterceptors());
@@ -77,7 +77,7 @@ public interface InterceptableEndpoint<
         // Configure interceptor chain
         var initialChain = createInitialConsumerInterceptorChain();
 
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
+        var additionalInterceptors = new ArrayList<Interceptor>();
         additionalInterceptors.addAll(getInterceptableComponent().getAdditionalConsumerInterceptors());
         // add interceptors provided by the user
         additionalInterceptors.addAll(getCustomInterceptors());
@@ -100,7 +100,7 @@ public interface InterceptableEndpoint<
      * @return a list of endpoint-specific custom interceptors
      */
     default List<Interceptor> getCustomInterceptors() {
-        List<Interceptor> result = new ArrayList<>();
+        var result = new ArrayList<Interceptor>();
         var factories = getInterceptableConfiguration().getCustomInterceptorFactories();
         factories.stream()
                 .map(InterceptorFactory::getNewInstance)

@@ -19,7 +19,6 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 
 import javax.xml.namespace.QName
@@ -65,6 +64,6 @@ public class Iti57TestRouteBuilder extends RouteBuilder {
     void checkValue(exchange, expected) {
         def value = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        
         def response = new Response(expected == value ? SUCCESS : FAILURE)
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

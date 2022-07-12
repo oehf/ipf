@@ -21,8 +21,8 @@ import org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver;
 import org.openehealth.ipf.commons.ihe.core.payload.SpringExpressionResolver;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
 /**
@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLog
  *
  * @author Dmytro Rud
  */
-public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpEndpoint<?,?,?>> {
+public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport {
     @Delegate
     private final MllpPayloadLoggerBase base = new MllpPayloadLoggerBase();
 
@@ -62,12 +62,12 @@ public class ConsumerInPayloadLoggerInterceptor extends InterceptorSupport<MllpE
     @Override
     public void process(Exchange exchange) throws Exception {
         if (canProcess()) {
-            logPayload(exchange, getEndpoint().getInteractionId());
+            logPayload(exchange, getEndpoint(HL7v2Endpoint.class).getInteractionId());
         }
         getWrappedProcessor().process(exchange);
     }
 
-    public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?,?,?>, ConsumerInPayloadLoggerInterceptor> {
+    public static class Factory extends InterceptorFactorySupport<ConsumerInPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
         private boolean enabled = true;

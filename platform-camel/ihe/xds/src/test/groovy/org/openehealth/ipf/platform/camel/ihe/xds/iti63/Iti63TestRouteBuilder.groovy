@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
 
@@ -110,7 +109,7 @@ class Iti63TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = Exchanges.resultMessage(it)
+                Message message = it.message
                 message.body = RESPONSE
                 message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]

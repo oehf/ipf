@@ -77,7 +77,7 @@ public class TLSSyslogSenderImpl extends RFC5425Protocol implements AuditTransmi
     }
 
     public TLSSyslogSenderImpl(TlsParameters tlsParameters) {
-        this(tlsParameters.getSSLSocketFactory(), SocketTestPolicy.TEST_BEFORE_WRITE);
+        this(tlsParameters.getSSLSocketFactory(false), SocketTestPolicy.TEST_BEFORE_WRITE);
     }
 
     /**
@@ -99,7 +99,7 @@ public class TLSSyslogSenderImpl extends RFC5425Protocol implements AuditTransmi
      *                         connection close/reset
      */
     public TLSSyslogSenderImpl(TlsParameters tlsParameters, SocketTestPolicy socketTestPolicy) {
-        this(tlsParameters.getSSLSocketFactory(), socketTestPolicy);
+        this(tlsParameters.getSSLSocketFactory(false), socketTestPolicy);
     }
 
 

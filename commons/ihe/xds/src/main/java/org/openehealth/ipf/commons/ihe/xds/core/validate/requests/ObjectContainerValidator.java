@@ -81,7 +81,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
         var needRepositoryUniqueId = (profile.getInteractionId() == XDS.Interactions.ITI_42) || isOnDemand || profile.isQuery();
 
-        List<RegistryObjectValidator> validators = new ArrayList<>();
+        var validators = new ArrayList<RegistryObjectValidator>();
         Collections.addAll(validators,
             new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator,
                     (limitedMetadata || isOnDemand) ? 0 : 1,
@@ -131,7 +131,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
         var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
 
-        List<RegistryObjectValidator> validators = new ArrayList<>();
+        var validators = new ArrayList<RegistryObjectValidator>();
         Collections.addAll(validators,
                 new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
                 new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
@@ -147,7 +147,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private List<RegistryObjectValidator> getFolderSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
         var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
 
-        List<RegistryObjectValidator> validators = new ArrayList<>();
+        var validators = new ArrayList<RegistryObjectValidator>();
         Collections.addAll(validators,
                 new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidatorSec, 0, 1),
                 new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME,
@@ -192,7 +192,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<>();
+        var logicalIds = new HashSet<String>();
         for (var folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
              if (profile == RMU.Interactions.ITI_92) {
                  throw new XdsRuntimeException(ErrorCode.OBJECT_TYPE_ERROR, "Folders cannot be updated", Severity.ERROR, folder.getId());
@@ -239,7 +239,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<>();
+        var logicalIds = new HashSet<String>();
         for (var docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             var limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_NODE, profile);
 
@@ -294,9 +294,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateUniqueIds(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> idsInRequest = new HashSet<>();
+        var idsInRequest = new HashSet<String>();
         var validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
-        ValueValidator uniquenessValidator = (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
+        var uniquenessValidator = (ValueValidator) (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
         validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
         validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
@@ -312,7 +312,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateUniquenessOfUUIDs(EbXMLObjectContainer container) throws XDSMetaDataException {
-        Set<String> uuids = new HashSet<>();
+        var uuids = new HashSet<String>();
         addUUIDs(container.getAssociations(), uuids);
         addUUIDs(container.getExtrinsicObjects(), uuids);
         addUUIDs(container.getRegistryPackages(), uuids);
@@ -345,7 +345,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<>();
+        var logicalIds = new HashSet<String>();
         var docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
                 .filter(docEntry -> docEntry.getId() != null)
                 .map(EbXMLRegistryObject::getId)
@@ -353,7 +353,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         var submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
                 .map(EbXMLRegistryObject::getId)
                 .collect(Collectors.toSet());
-        Set<String> associationIds = new HashSet<>();
+        var associationIds = new HashSet<String>();
         var hasSubmitAssociationType = false;
         for (var association : container.getAssociations()) {
             //metaDataAssert(StringUtils.isNotEmpty(association.getId()), ASSOCIATION_ID_MISSING);

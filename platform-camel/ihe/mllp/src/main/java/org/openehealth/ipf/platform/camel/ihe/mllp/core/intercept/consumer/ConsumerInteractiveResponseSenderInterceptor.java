@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -25,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStor
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,11 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.appendSegments;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.joinSegments;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.keyString;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.splitString;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.uniqueId;
 
 
 /**
@@ -43,20 +49,19 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
+public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
-
     @Override
-    public void setEndpoint(MllpTransactionEndpoint<?> endpoint) {
+    public void setEndpoint(Endpoint endpoint) {
         super.setEndpoint(endpoint);
-        this.storage = requireNonNull(getEndpoint().getInteractiveContinuationStorage());
+        this.storage = requireNonNull(getEndpoint(MllpTransactionEndpoint.class).getInteractiveContinuationStorage());
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var parser = getHl7v2TransactionConfiguration().getParser();
         var requestMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
         var requestTerser = new Terser(requestMessage);
         var requestMessageType = requestTerser.get("MSH-9-1");
@@ -77,7 +82,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
 
                 // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
                 Terser.set((Segment)ack.get("MSH"), 9, 0, 3, 1, "ACK");
-                Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
+                exchange.getMessage().setBody(parser.encode(ack));
             } else {
                 getWrappedProcessor().process(exchange);
             }
@@ -85,7 +90,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
 
         // check whether responses to messages of this type can even be splitted
-        if (! getEndpoint().getHl7v2TransactionConfiguration().isContinuable(requestMessageType)) {
+        if (! getHl7v2TransactionConfiguration().isContinuable(requestMessageType)) {
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -108,7 +113,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
-            threshold = getEndpoint().getInteractiveContinuationDefaultThreshold();
+            threshold = getEndpoint(MllpTransactionEndpoint.class).getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
             LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");
@@ -194,7 +199,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         final var fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold;
         
         // create a new chain of fragments
-        var parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        var parser = getHl7v2TransactionConfiguration().getParser();
         String continuationPointer = null;
         for (var currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 
@@ -237,8 +242,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
      * For N data records there will be N+1 boundaries.
      */
     private List<Integer> getRecordBoundaries(List<String> segments) {
-        Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
-        List<Integer> recordBoundaries = new ArrayList<>();
+        var config = getHl7v2TransactionConfiguration();
+        var recordBoundaries = new ArrayList<Integer>();
         var foundFooter = false;
         for (var i = 1; i < segments.size(); ++i) {
             if (config.isDataStartSegment(segments, i)) {
@@ -254,5 +259,9 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
         return recordBoundaries;
     }
-    
+
+    private Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return getEndpoint(HL7v2Endpoint.class).getHl7v2TransactionConfiguration();
+    }
+
 }

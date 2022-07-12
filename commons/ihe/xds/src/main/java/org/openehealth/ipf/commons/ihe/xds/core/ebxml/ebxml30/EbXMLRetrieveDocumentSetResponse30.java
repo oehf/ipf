@@ -53,7 +53,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
 
     @Override
     public List<RetrievedDocument> getDocuments() {
-        List<RetrievedDocument> docs = new ArrayList<>();
+        var docs = new ArrayList<RetrievedDocument>();
         for (var documentResponse : response.getDocumentResponse()) {
             var requestData = new DocumentReference();
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());

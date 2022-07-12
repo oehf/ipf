@@ -16,24 +16,24 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.HapiContext
-import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.CamelExchangeException
-import org.apache.camel.Exchange
-import org.apache.camel.Predicate
-import org.apache.camel.Processor
+import io.netty.handler.timeout.ReadTimeoutException
+import org.apache.camel.*
+import org.apache.camel.component.hl7.HL7Charset
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventIdCode
 import org.openehealth.ipf.commons.ihe.core.Constants
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.test.context.ContextConfiguration
 
-import java.util.concurrent.TimeUnit
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.*
 
 import static org.junit.jupiter.api.Assertions.*
 
@@ -41,31 +41,36 @@ import static org.junit.jupiter.api.Assertions.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@TestMethodOrder(MethodOrderer.MethodName)
-@Timeout(value = 5L, unit = TimeUnit.MINUTES)
-class TestIti21 extends MllpTestContainer {
+@ContextConfiguration('/iti21/iti-21.xml')
+class TestIti21 extends AbstractMllpTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
+    private Random random = new Random(System.currentTimeMillis())
 
-    def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
-
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeAll
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
+    @EndpointInject("mock:trace")
+    private MockEndpoint mockEndpoint
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
+        def msgId = UUID.randomUUID().toString()
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
-                "20081031112704||${msh9}|324406609|P|${msh12}|||ER|||||\n"
+                "20081031112704||${msh9}|${msgId}|P|${msh12}|||ER|||||\n"
         if (needQpd) {
             s += 'QPD|IHE PDQ Query|1402274727|@PID.3.1^12345678~@PID.3.2.1^BLABLA~@PID.3.4.2^1.2.3.4~@PID.3.4.3^KRYSO|||||\n'
         }
         s += 'RCP|I|10^RD|||||\n'
         return s
+    }
+
+    static byte[] getMessageByteArray(String msh9, String msh12, boolean needQpd = true, Charset charset = StandardCharsets.UTF_8) {
+        def msgId = UUID.randomUUID().toString()
+        def msh18 = HL7Charset.getHL7Charset(charset.name()).getHL7CharsetName()
+        def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
+                "20081031112704||${msh9}|${msgId}|P|${msh12}|||ER|||${msh18}||\n"
+        if (needQpd) {
+            s += 'QPD|IHE PDQ Query|10|@PID.5.1^ÄÖÜè|||||\n'
+        }
+        s += 'RCP|I|10^RD|||||\n'
+        return s.getBytes(charset)
     }
 
     @Test
@@ -84,48 +89,64 @@ class TestIti21 extends MllpTestContainer {
         try {
             send("pdq-iti21://localhost:18211?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (Exception expected) {
-            // FIXME: race condition throws one of two possible exceptions
-            // 1.) RuntimeIOException: Failed to get the session
-            // 2.) CamelExchangeException (expected)
+        } catch (CamelExchangeException ignored) {
         }
-
-        def messages = auditSender.messages
-        assertEquals(2, messages.size())
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        assertAuditEvents() {
+            it.messages.any {
+                it.eventIdentification.eventID == EventIdCode.SecurityAlert
+            }
+        }
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
+        assertAuditEvents { expectedAuditItemsCount <= it.messages.size() }
+    }
+
+    String doTestWaitAndAssertCorrectResponse(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+        // assertRSP(msg)
+        // assertEquals(timeoutString, msg.QAK[1].value)
+        return msg.QAK[1].value
+    }
+
+    def doTestWaitAndAssertTimeout(String endpointUri, int timeout) {
+        final String body = getMessageString('QBP^Q22', '2.5')
+        final String timeoutString = Integer.toString(timeout)
+        try {
+            def msg = send(endpointUri, body.replace('1402274727', timeoutString))
+            fail("Assuming timeout after $timeout ms")
+        } catch (ReadTimeoutException ignored) {
+        }
     }
 
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
-        def messages = auditSender.messages
-        assertEquals(3, messages.size())
-        LOG.warn("{}", messages)
-        assertEquals(EventIdCode.SecurityAlert, messages[0].getEventIdentification().getEventID())
+        assertAuditEvents {
+            it.messages.any {
+                EventIdCode.SecurityAlert == it.eventIdentification.eventID
+            }
+        }
     }
 
     @Disabled
     void testSendAndReceiveTracingInformation() {
         String msg = getMessageString('QBP^Q22', '2.5')
-        HapiContext hapiContext = appContext.getBean(HapiContext.class)
-        Message qbp = hapiContext.getPipeParser().parse(msg)
+        var qbp = hapiContext.getPipeParser().parse(msg)
         Map<String, Object> headers = [
-                (Constants.TRACE_ID) : 'trace_id',
-                (Constants.SPAN_ID) : 'span_id',
-                (Constants.PARENT_SPAN_ID) : 'parent_span_id',
-                (Constants.SAMPLED) : '1',
-                (Constants.FLAGS) : '1'
+                (Constants.TRACE_ID)      : 'trace_id',
+                (Constants.SPAN_ID)       : 'span_id',
+                (Constants.PARENT_SPAN_ID): 'parent_span_id',
+                (Constants.SAMPLED)       : '1',
+                (Constants.FLAGS)         : '1'
         ]
 
         // Expect that the headers being sent arrive at the mock endpoint
-        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace")
         mockEndpoint.expectedMessageCount(1)
         mockEndpoint.expectedMessagesMatches(new Predicate() {
             @Override
@@ -138,7 +159,7 @@ class TestIti21 extends MllpTestContainer {
                 return true
             }
         })
-        Message response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
+        var response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
         mockEndpoint.assertIsSatisfied(2000)
     }
 
@@ -176,6 +197,70 @@ class TestIti21 extends MllpTestContainer {
         doTestInacceptanceOnConsumer('QBP^Q22^QBP_Q26', '2.5')
     }
 
+    @Test
+    void testTestTimeoutHandling() {
+        // Timeout after 500ms, but response takes 1000ms => Exception
+        doTestWaitAndAssertTimeout("pdq-iti21://localhost:18220?producerPoolMaxTotal=1&timeout=500", 1000)
+        // Long timeout, response takes 1500ms => check that response is not from previous request, that is handled by now
+        doTestWaitAndAssertCorrectResponse("pdq-iti21://localhost:18220?producerPoolMaxTotal=1&timeout=5000", 1500)
+    }
+
+    @Test
+    void testHappyCaseWithCustomCharset() {
+        var body = getMessageByteArray('QBP^Q22', '2.5')
+        def msg = send("pdq-iti21://localhost:18220", body)
+        assertRSP(msg)
+        assertAuditEvents {
+            it.messages.every {
+                new String(it.participantObjectIdentifications[0].participantObjectQuery).contains("ÄÖÜè");
+            }
+        }
+    }
+
+    @Test
+    void stressTestWithDefaultSetup() {
+        stressTest(200, 20, "pdq-iti21://localhost:18220?timeout=10000")
+    }
+
+    @Test
+    void stressTestWithoutProducerPoolSetup() {
+        stressTest(50, 10, "pdq-iti21://localhost:18220?producerPoolEnabled=false&timeout=10000&correlationManager=#hl7CorrelationManager")
+    }
+
+    private void stressTest(int numberOfMessages, int threads, String endpoint) {
+        def executorService = Executors.newFixedThreadPool(threads)
+        def latch = new CountDownLatch(numberOfMessages)
+        Map<String, List<Future<String>>> results = new ConcurrentHashMap<>()
+        try {
+            for (int i = 0; i < numberOfMessages; i++) {
+                int delay = random.nextInt(numberOfMessages)
+                Future<String> result = executorService.submit(new Callable<String>() {
+                    @Override
+                    String call() throws Exception {
+                        String answer = doTestWaitAndAssertCorrectResponse(endpoint, delay)
+                        latch.countDown()
+                        return answer
+                    }
+                })
+                results.computeIfAbsent(
+                        Integer.toString(delay),
+                        r -> new CopyOnWriteArrayList<Future<String>>())
+                        .add(result)
+            }
+            assertTrue(latch.await(10, TimeUnit.SECONDS), () -> 'Responses not arrived: ' + latch.count)
+            int numberOfResponses = 0
+            for (Map.Entry<String, List<Future<String>>> entry: results) {
+                entry.value.forEach(f -> assertEquals(entry.key, f.get()))
+                numberOfResponses += entry.value.size()
+            }
+            assertEquals(numberOfResponses, numberOfMessages)
+        } finally {
+            executorService.shutdownNow()
+            executorService.awaitTermination(5, TimeUnit.SECONDS)
+        }
+
+    }
+
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def endpoint = camelContext.getEndpoint(endpointUri)
@@ -189,10 +274,10 @@ class TestIti21 extends MllpTestContainer {
         exchange.in.body = body
 
         processor.process(exchange)
-        def response = Exchanges.resultMessage(exchange).body
+        def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -239,7 +324,7 @@ class TestIti21 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
     }
 
     /**
@@ -250,7 +335,7 @@ class TestIti21 extends MllpTestContainer {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18213?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -262,7 +347,7 @@ class TestIti21 extends MllpTestContainer {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = "pdq-iti21://localhost:18219?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size())
+        assertAuditEvents { it.messages.size() == 2 }
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
 
@@ -275,7 +360,7 @@ class TestIti21 extends MllpTestContainer {
                         'QID|dummy|gummy||\n'
         def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
-        assertEquals(0, auditSender.messages.size())
+        assertAuditEvents { it.messages.empty }
         assertACK(msg)
     }
 }

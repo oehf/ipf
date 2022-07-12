@@ -156,7 +156,7 @@ public class AuthorTransformer {
             EbXMLClassification targetClassification,
             String targetSlotName)
     {
-        List<String> targetCollection = new ArrayList<>();
+        var targetCollection = new ArrayList<String>();
         for (var source : sourceCollection) {
             var target = Hl7v2Based.render(source);
             if (source != null) {

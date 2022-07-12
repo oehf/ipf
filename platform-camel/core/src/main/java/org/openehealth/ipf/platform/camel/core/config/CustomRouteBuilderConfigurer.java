@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import org.apache.camel.CamelContext;
 import org.slf4j.Logger;
@@ -44,8 +43,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
 
     @Override
     public Collection<CustomRouteBuilder> lookup(R registry) {        
-        List<CustomRouteBuilder> list = new ArrayList<>(
-                registry.beans(CustomRouteBuilder.class).values());
+        var list = new ArrayList<>(registry.beans(CustomRouteBuilder.class).values());
         Collections.sort(list);
         return list;
     }

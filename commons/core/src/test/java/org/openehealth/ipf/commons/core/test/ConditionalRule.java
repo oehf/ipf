@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 
@@ -140,7 +139,7 @@ public class ConditionalRule implements TestRule {
 
     private static boolean isIgnoredException(Throwable throwable) {
         var t = throwable;
-        List<Throwable> list = new ArrayList<>();
+        var list = new ArrayList<Throwable>();
         while (t != null && !list.contains(t)) {
             if (t instanceof IgnoredException) return true;
             list.add(throwable);
