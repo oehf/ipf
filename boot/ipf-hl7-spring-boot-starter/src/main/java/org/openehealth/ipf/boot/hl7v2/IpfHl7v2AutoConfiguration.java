@@ -31,6 +31,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory;
 import org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory;
 import org.apache.camel.component.netty.NettyCamelStateCorrelationManager;
+import org.apache.camel.component.netty.TimeoutCorrelationManagerSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
@@ -39,6 +40,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationSto
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7CorrelationManager;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -70,7 +72,7 @@ public class IpfHl7v2AutoConfiguration {
         this.properties = properties;
     }
 
-    @Bean
+    @Bean(name = MllpComponent.DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME)
     @ConditionalOnMissingBean(HL7MLLPNettyDecoderFactory.class)
     HL7MLLPNettyDecoderFactory hl7decoder(IpfHl7v2ConfigurationProperties config) {
         var decoder = new HL7MLLPNettyDecoderFactory();
@@ -82,7 +84,7 @@ public class IpfHl7v2AutoConfiguration {
         return decoder;
     }
 
-    @Bean
+    @Bean(name = MllpComponent.DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME)
     @ConditionalOnMissingBean(HL7MLLPNettyEncoderFactory.class)
     HL7MLLPNettyEncoderFactory hl7encoder(IpfHl7v2ConfigurationProperties config) {
         var encoder = new HL7MLLPNettyEncoderFactory();
@@ -191,9 +193,11 @@ public class IpfHl7v2AutoConfiguration {
         return new SpringCacheUnsolicitedFragmentationStorage(cacheManager);
     }
 
-    @Bean
+    @Bean(name = MllpComponent.DEFAULT_HL7_CORRELATION_BEAN_NAME)
     @ConditionalOnMissingBean(NettyCamelStateCorrelationManager.class)
     public NettyCamelStateCorrelationManager hl7Correlation(HapiContext hapiContext) {
-        return new Hl7CorrelationManager(hapiContext);
+        TimeoutCorrelationManagerSupport correlationManager = new Hl7CorrelationManager(hapiContext);
+        correlationManager.setTimeout(properties.getCorrelationTimeout());
+        return correlationManager;
     }
 }

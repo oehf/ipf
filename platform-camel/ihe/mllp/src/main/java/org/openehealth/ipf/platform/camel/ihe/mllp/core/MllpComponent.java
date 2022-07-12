@@ -50,8 +50,9 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
 
-    private static final String DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME = "#hl7decoder";
-    private static final String DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME = "#hl7encoder";
+    public static final String DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME = "hl7decoder";
+    public static final String DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME = "hl7encoder";
+    public static final String DEFAULT_HL7_CORRELATION_BEAN_NAME = "hl7Correlation";
     private static final String MLLP_ENDPOINT_CONFIG = "mllpEndpointConfig";
 
     protected MllpComponent() {
@@ -102,10 +103,10 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
                 new CustomServerInitializerFactory(getAndRemoveParameter(parameters, MLLP_ENDPOINT_CONFIG, MllpEndpointConfiguration.class)));
 
         if (!nettyParameters.containsKey("decoders")) {
-            nettyParameters.put("decoders", DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME);
+            nettyParameters.put("decoders", "#" + DEFAULT_HL7_DECODER_FACTORY_BEAN_NAME);
         }
         if (!nettyParameters.containsKey("encoders")) {
-            nettyParameters.put("encoders", DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME);
+            nettyParameters.put("encoders", "#" + DEFAULT_HL7_ENCODER_FACTORY_BEAN_NAME);
         }
         // Backwards compatibility
         if (!nettyParameters.containsKey("requestTimeout")) {
