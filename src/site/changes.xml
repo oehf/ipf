@@ -23,6 +23,14 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.4.0" description="IPF 4.4.0" date="21 Jul 2022">
+            <action issue="195" dev="ohr" type="update">
+                Change MLLP components to using Netty instead of Apache Mina
+            </action>
+            <action issue="57" dev="ohr" type="update">
+                Use MSH-18 field of HL7 messages to dynamically determine the character set for encoding and decoding
+            </action>
+        </release>
         <release version="4.3.2" description="IPF 4.3.2" date="11 Jul 2022">
             <action issue="394" dev="ohr" type="fix">
                 Make sure that FHIR producers have separate HTTP client configurations
