@@ -23,6 +23,7 @@ import org.apache.camel.component.netty.NettyConfiguration;
 import org.apache.camel.component.netty.NettyEndpoint;
 import org.apache.camel.component.netty.NettyEndpointConfigurer;
 import org.apache.camel.spi.PropertyConfigurer;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.ssl.CamelTlsParameters;
@@ -111,6 +112,13 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         // Backwards compatibility
         if (!nettyParameters.containsKey("requestTimeout")) {
             nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 30000L));
+        }
+        if (!nettyParameters.containsKey("needClientAuth")) {
+            String clientAuthTypeString = getAndRemoveParameter(parameters, "clientAuth", String.class);
+            if (clientAuthTypeString != null) {
+                ClientAuthType clientAuthType = ClientAuthType.valueOf(clientAuthTypeString);
+                nettyParameters.put("needClientAuth", clientAuthType == ClientAuthType.MUST);
+            }
         }
         if (!nettyParameters.containsKey("ssl")) {
             nettyParameters.put("ssl", getAndRemoveParameter(parameters, "secure", boolean.class, nettyParameters.containsKey("sslContextParameters")));
