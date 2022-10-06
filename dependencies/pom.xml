@@ -32,7 +32,7 @@
         <spring-boot-version>2.6.8</spring-boot-version>
         <vertx-version>4.3.4</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.3.0</xmlsec-version>
+        <xmlsec-version>2.3.2</xmlsec-version>
         <woodstox-version>6.2.8</woodstox-version>
     </properties>
 
