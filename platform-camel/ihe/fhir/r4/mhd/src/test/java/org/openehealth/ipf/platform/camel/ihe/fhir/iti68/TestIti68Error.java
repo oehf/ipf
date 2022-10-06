@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.CamelExecutionException;
-import org.apache.camel.http.common.HttpOperationFailedException;
+import org.apache.camel.http.base.HttpOperationFailedException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;

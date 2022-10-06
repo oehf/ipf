@@ -58,10 +58,10 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
     public void configure(CustomRouteBuilder customRouteBuilder) throws Exception{
         if (customRouteBuilder.getIntercepted() != null) {
             var intercepted = customRouteBuilder.getIntercepted();
-            customRouteBuilder.setContext(camelContext);
+            customRouteBuilder.setCamelContext(camelContext);
             customRouteBuilder.setRouteCollection(intercepted.getRouteCollection());
             customRouteBuilder.setRestCollection(intercepted.getRestCollection());
-            customRouteBuilder.setErrorHandlerBuilder(intercepted.getErrorHandlerBuilder());
+            customRouteBuilder.errorHandler(intercepted.getErrorHandlerFactory());
 
             // must invoke configure on the original builder so it adds its configuration to me
             customRouteBuilder.configure();
