@@ -58,11 +58,40 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation</artifactId>
+                <version>${hapi-fhir-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- A newer version is imported by Guava -->
+                        <groupId>com.google.errorprone</groupId>
+                        <artifactId>error_prone_annotations</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-bom</artifactId>
                 <version>${cxf-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-security</artifactId>
+                <version>${cxf-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- A newer version is imported by cxf-rt-ws-policy -->
+                        <groupId>org.apache.neethi</groupId>
+                        <artifactId>neethi</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- A newer version is imported by IPF -->
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
