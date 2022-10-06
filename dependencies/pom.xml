@@ -9,13 +9,13 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <bouncycastle-version>1.71</bouncycastle-version>
-        <brave-version>5.13.8</brave-version>
+        <bouncycastle-version>1.72</bouncycastle-version>
+        <brave-version>5.14.1</brave-version>
         <camel-version>3.14.4</camel-version>
         <cxf-version>3.5.2</cxf-version>
         <commons-io-version>2.11.0</commons-io-version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
-        <groovy-version>3.0.10</groovy-version>
+        <groovy-version>3.0.13</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>5.7.2</hapi-fhir-version>
         <herasaf-version>2.0.4</herasaf-version>
@@ -30,7 +30,7 @@
         <saxon-he-version>11.4</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>2.6.8</spring-boot-version>
-        <vertx-version>3.9.13</vertx-version>
+        <vertx-version>4.3.4</vertx-version>
         <vibur-version>25.0</vibur-version>
         <xmlsec-version>2.3.0</xmlsec-version>
         <woodstox-version>6.2.8</woodstox-version>
