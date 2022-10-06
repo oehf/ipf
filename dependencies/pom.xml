@@ -27,7 +27,7 @@
         <methanol-version>1.7.0</methanol-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.5</ph-commons-version>
-        <saxon-he-version>10.8</saxon-he-version>
+        <saxon-he-version>11.4</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>2.6.8</spring-boot-version>
         <vertx-version>3.9.13</vertx-version>

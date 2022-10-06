@@ -19,8 +19,13 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * URIResolver used to correctly resolve import commands in xslt or xquery
@@ -53,9 +58,18 @@ class ClasspathUriResolver implements URIResolver {
             saxSource.setInputSource(new InputSource(url.toString()));
             saxSource.setSystemId(url.toString());
             return saxSource;
-        } else {
+        } else if (standardResolver != null) {
             return standardResolver.resolve(href, base);
+        } else if (href != null && base != null) {
+            final URI baseUri;
+            try {
+                baseUri = new URI(base);
+            } catch (final URISyntaxException e) {
+                return null;
+            }
+            return new StreamSource(new File(baseUri.resolve(href)));
         }
+        return null;
     }
 
 }
