@@ -30,7 +30,7 @@ public class NamingSystemUriMapperXmlTest extends AbstractSystemUriMapperTest {
     protected UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService) {
         namingSystemService.addNamingSystemsFromXml(
                 new InputStreamReader(getClass().getResourceAsStream("/namingsystems.xml")));
-        return new NamingSystemUriMapper(namingSystemService, "identifiers");
+        return new NamingSystemUriMapper(namingSystemService, "Bundle/identifiers");
     }
 
 }
