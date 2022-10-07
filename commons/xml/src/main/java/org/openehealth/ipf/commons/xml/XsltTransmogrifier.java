@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.xml;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.sf.saxon.lib.StandardURIResolver;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,8 +89,12 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
     {
         super(classLoader);
         factory = TransformerFactory.newInstance();
-        // Wrap the default resolver
-        resolver = new ClasspathUriResolver(factory.getURIResolver());
+        // Wrap the default resolver if available
+        if (factory.getURIResolver() != null) {
+            resolver = new ClasspathUriResolver(factory.getURIResolver());
+        } else {
+            resolver = new ClasspathUriResolver(new StandardURIResolver());
+        }
         factory.setURIResolver(resolver);
         this.outputFormat = outputFormat;
         this.staticParams = staticParams;
