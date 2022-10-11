@@ -52,7 +52,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.support.translation.NamingSystemUriMapper">
         <constructor-arg ref="namingSystemService"/>
-        <constructor-arg value="identifiers"/>
+        <constructor-arg value="Bundle/identifiers"/>
     </bean>
 
     <!-- Set dummy context -->

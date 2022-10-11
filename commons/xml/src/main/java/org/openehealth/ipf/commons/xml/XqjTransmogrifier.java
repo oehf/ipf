@@ -48,7 +48,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
     private static final SaxonXQDataSource DATA_SOURCE;
     static {
         XQUERY_GLOBAL_CONFIG = new Configuration();
-        XQUERY_GLOBAL_CONFIG.setURIResolver(new ClasspathUriResolver(XQUERY_GLOBAL_CONFIG.getURIResolver()));
+        XQUERY_GLOBAL_CONFIG.setResourceResolver(new ClasspathResourceResolver(XQUERY_GLOBAL_CONFIG.getResourceResolver()));
         DATA_SOURCE = new SaxonXQDataSource(XQUERY_GLOBAL_CONFIG);
     }
 

@@ -77,16 +77,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-schematron</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-commons</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
             <scope>test</scope>
