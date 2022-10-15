@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
@@ -49,8 +48,8 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
         
         slots.fromPatientIdList(FOLDER_PATIENT_ID, query.getPatientIds());
         
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, toHL7(query.getLastUpdateTime().getFrom()));
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_TO, toHL7(query.getLastUpdateTime().getTo()));
+        slots.fromTimestamp(FOLDER_LAST_UPDATE_TIME_FROM, query.getLastUpdateTime().getFrom());
+        slots.fromTimestamp(FOLDER_LAST_UPDATE_TIME_TO, query.getLastUpdateTime().getTo());
 
         slots.fromCode(FOLDER_CODES, query.getCodes());
         
@@ -79,8 +78,8 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
         
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));
         
-        query.getLastUpdateTime().setFrom(slots.toNumber(FOLDER_LAST_UPDATE_TIME_FROM));
-        query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
+        query.getLastUpdateTime().setFrom(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_FROM));
+        query.getLastUpdateTime().setTo(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_TO));
         
         query.setStatus(slots.toStatus(FOLDER_STATUS));
     }

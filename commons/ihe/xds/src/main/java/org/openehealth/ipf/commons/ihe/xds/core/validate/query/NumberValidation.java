@@ -26,7 +26,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 /**
  * Query parameter validation for parameters that are Number-based.
  * @author Jens Riemschneider
+ * @deprecated not used
  */
+@Deprecated
 public class NumberValidation implements QueryParameterValidation {
     private final QueryParameter param;
     private final ValueValidator validator;

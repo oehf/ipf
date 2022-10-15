@@ -18,13 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import ca.uhn.hl7v2.model.Composite;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -337,7 +331,9 @@ public class QuerySlotHelper {
      *          the parameter.
      * @param value
      *          the value.
+     * @deprecated not used
      */
+    @Deprecated
     public void fromNumber(QueryParameter param, String value) {
         ebXML.addSlot(param.getSlotName(), value);
     }
@@ -347,9 +343,34 @@ public class QuerySlotHelper {
      * @param param
      *          the parameter.
      * @return the value.
+     * @deprecated used only in the deprecated class {@link org.openehealth.ipf.commons.ihe.xds.core.validate.query.NumberValidation}
      */
+    @Deprecated
     public String toNumber(QueryParameter param) {
         return ebXML.getSingleSlotValue(param.getSlotName());
+    }
+
+    /**
+     * Stores a timestamp parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param value
+     *          the value.
+     */
+    public void fromTimestamp(QueryParameter param, Timestamp value) {
+        ebXML.addSlot(param.getSlotName(), Timestamp.toHL7(value));
+    }
+
+    /**
+     * Retrieves a timestamp parameter from a slot.
+     * According to CP-ITI-1260, a timestamp parameter may be enclosed in single quotes.
+     * @param param
+     *          the parameter.
+     * @return the value.
+     */
+    public String toTimestamp(QueryParameter param) {
+        var value = ebXML.getSingleSlotValue(param.getSlotName());
+        return decodeString(value);
     }
 
     /**
@@ -465,7 +486,6 @@ public class QuerySlotHelper {
         }
         return codes;
     }
-
 
     /**
      * Stores a status parameter into a slot.

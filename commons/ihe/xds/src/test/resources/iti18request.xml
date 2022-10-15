@@ -16,6 +16,16 @@
                 <rim:Value>('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')</rim:Value>
             </rim:ValueList>
         </rim:Slot>
+        <rim:Slot name="$XDSDocumentEntryCreationTimeFrom">
+            <rim:ValueList>
+                <rim:Value>'20221015151515'</rim:Value>
+            </rim:ValueList>
+        </rim:Slot>
+        <rim:Slot name="$XDSDocumentEntryCreationTimeTo">
+            <rim:ValueList>
+                <rim:Value>20221016161616</rim:Value>
+            </rim:ValueList>
+        </rim:Slot>
     </rim:AdhocQuery>
 
 </query:AdhocQueryRequest>

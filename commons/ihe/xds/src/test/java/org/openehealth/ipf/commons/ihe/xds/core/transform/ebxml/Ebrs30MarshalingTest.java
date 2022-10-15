@@ -168,6 +168,19 @@ public class Ebrs30MarshalingTest {
     }
 
     @Test
+    public void testTimestampApostrophes() throws Exception {
+        var file = new File(getClass().getClassLoader().getResource("iti18request.xml").toURI());
+        var unmarshaller = context.createUnmarshaller();
+
+        var unmarshalled = unmarshaller.unmarshal(file);
+        var original = (AdhocQueryRequest) unmarshalled;
+
+        var slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(original));
+        assertEquals("20221015151515", slotHelper.toTimestamp(QueryParameter.DOC_ENTRY_CREATION_TIME_FROM));
+        assertEquals("20221016161616", slotHelper.toTimestamp(QueryParameter.DOC_ENTRY_CREATION_TIME_TO));
+    }
+
+    @Test
     public void testPatientIdMPQSlotRegexp() throws Exception {
         var file = new File(getClass().getClassLoader().getResource("iti51request.xml").toURI());
 
@@ -203,7 +216,7 @@ public class Ebrs30MarshalingTest {
                 .getSlots().size();
 
         assertEquals(numberOfSlotsInFirstDoc, numberOfSlotsInSecondDoc,
-                "Number of slots after Marshalling and Unmarsshalling does not match");
+                "Number of slots after Marshalling and Unmarshalling does not match");
     }
 
     private SubmitObjectsRequest send() throws JAXBException {
