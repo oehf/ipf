@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -77,7 +78,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
         assertEquals(ValidationException.class, exchange.getException()
                 .getClass());
         var e = (ValidationException) exchange.getException();
-        assertEquals(5, e.getCauses().length);
+        assertTrue(e.getCauses().length >= 5);
         error.assertIsSatisfied(2000);
     }
 
