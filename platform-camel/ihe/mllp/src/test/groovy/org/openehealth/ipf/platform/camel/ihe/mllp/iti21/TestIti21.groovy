@@ -212,7 +212,7 @@ class TestIti21 extends AbstractMllpTest {
         assertRSP(msg)
         assertAuditEvents {
             it.messages.every {
-                new String(it.participantObjectIdentifications[0].participantObjectQuery).contains("ÄÖÜè");
+                new String(it.participantObjectIdentifications[0].participantObjectQuery, "UTF-8").contains("ÄÖÜè");
             }
         }
     }
