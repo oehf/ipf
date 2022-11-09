@@ -118,13 +118,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
     }
 
     boolean conflictingFhirContext(FhirContext otherFhirContext) {
-        FhirContext thisContext = this.fhirContext instanceof DelegatingFhirContext ?
-                ((DelegatingFhirContext)this.fhirContext).getDelegate() :
-                this.fhirContext;
-        FhirContext otherContext = otherFhirContext instanceof DelegatingFhirContext ?
-                ((DelegatingFhirContext)otherFhirContext).getDelegate() :
-                otherFhirContext;
-        return thisContext != otherContext;
+        return fhirContext != otherFhirContext;
     }
 
     /**

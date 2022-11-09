@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
@@ -28,7 +27,7 @@ import org.apache.camel.spi.UriParams;
 import org.apache.camel.support.EndpointHelper;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.DelegatingFhirContext;
+import org.openehealth.ipf.commons.ihe.fhir.FhirContextProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
@@ -59,7 +58,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     static final String LENIENT = "lenient";
     static final String LAZY_LOAD_BUNDLES = "lazyLoadBundles";
     static final String CACHE_BUNDLES = "cacheBundles";
-    static final String HTTP_CLIENT = "httpClient";
+    static final String HTTP_CLIENT_TYPE = "httpClient";
     static final String CONSUMER_SELECTOR = "consumerSelector";
     static final String SORT = "sort";
 
@@ -124,86 +123,91 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
+
         this.path = path;
-
-        servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
-        resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
+        this.servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
+        this.resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
                 parameters, "resourceProvider", FhirProvider.class);
-        clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
+        this.clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class);
-        hapiClientInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
+        this.hapiClientInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "hapiClientInterceptorFactories", HapiClientInterceptorFactory.class);
-        // TODO: make use of hapiServerInterceptorFactories
-        hapiServerInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
+        this.hapiServerInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "hapiServerInterceptorFactories", HapiServerInterceptorFactory.class);
+        this.lazyLoadBundles = component.getAndRemoveParameter(
+                parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
+        this.cacheBundles = component.getAndRemoveParameter(
+                parameters, CACHE_BUNDLES, Boolean.class, true);
+        this.sort = component.getAndRemoveParameter(
+                parameters, SORT, Boolean.class, false);
+        this.consumerSelector = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, CONSUMER_SELECTOR, Predicate.class);
+        boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
 
-        FhirContext context = component.getAndRemoveOrResolveReferenceParameter(
+
+        FhirContext fhirContext = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
 
-        // No FhirContext parameter is set on the endpoint, so the component must provide one according
-        // to the component's transaction configuration
-        if (context == null) {
-            context = component.initializeFhirContext();
-            var parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
-            if (STRICT.equals(parserErrorHandling)) {
-                context.setParserErrorHandler(new StrictErrorHandler());
-            } else if (!LENIENT.equals(parserErrorHandling)) {
-                throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
-            }
-        } else {
-            if (!component.isCompatibleContext(context)) {
-                throw new IllegalArgumentException("FhirContext with version [" + context.getVersion().getVersion() +
+        // If a (shared) FhirContext parameter is set on the endpoint, no further producer-related parameters
+        // are evaluated as it would change the FhirContext instance
+        if (fhirContext != null) {
+            if (!component.isCompatibleContext(fhirContext)) {
+                throw new IllegalArgumentException("FhirContext with version [" + fhirContext.getVersion().getVersion() +
                         "] is not compatible with component of class [" + component.getClass() + "]");
             }
+            this.context = fhirContext;
+            this.securityInformation = new SslAwareApacheRestfulClientFactory(fhirContext)
+                    .initializeSecurityInformation(secure, null, null, null, null);
+            return;
         }
 
-        lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
-        cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
-        sort = component.getAndRemoveParameter(parameters, SORT, Boolean.class, false);
-        consumerSelector = component.getAndRemoveOrResolveReferenceParameter(parameters, CONSUMER_SELECTOR, Predicate.class);
+        // Create a new FhirContext either by a custom FhirContextProvider
+        // or by component itself according to its transaction configuration
+        FhirContextProvider fhirContextProvider = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "fhirContextProvider", FhirContextProvider.class);
+        this.context = fhirContextProvider != null ?
+                fhirContextProvider.apply(component.getFhirTransactionConfiguration().getFhirVersion()) :
+                component.initializeDefaultFhirContext();
 
+        // Now further customize the FhirContext by evaluating other parameters
+        var parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, LENIENT);
+        if (STRICT.equals(parserErrorHandling)) {
+            this.context.setParserErrorHandler(new StrictErrorHandler());
+        } else if (!LENIENT.equals(parserErrorHandling)) {
+            throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
+        }
 
-        // Configuring producer specific connection parameters. We use an endpoint-specific IRestfulClientFactory to cover
-        // different connection and security configs without the need to use a new FhirContext for every endpoint. Instead,
-        // a delegate is used that wraps the custom IRestfulClientFactory and the configured FhirContext. Reuse the original
-        // IRestfulClientFactory's settings if not specified otherwise here.
+        SslAwareAbstractRestfulClientFactory<?> restfulClientFactory;
+        var httpClientType = component.getAndRemoveParameter(parameters, HTTP_CLIENT_TYPE, String.class);
+        if ("methanol".equalsIgnoreCase(httpClientType)) {
+            restfulClientFactory = new SslAwareMethanolRestfulClientFactory(this.context);
+            this.context.setRestfulClientFactory(restfulClientFactory);
+        } else if ("apache".equalsIgnoreCase(httpClientType)) {
+            restfulClientFactory = new SslAwareApacheRestfulClientFactory(this.context);
+            this.context.setRestfulClientFactory(restfulClientFactory);
+        } else {
+            restfulClientFactory = getRestfulClientFactory();
+        }
 
-        String httpClient = component.getAndRemoveParameter(parameters, HTTP_CLIENT, String.class, "apache");
-        SslAwareAbstractRestfulClientFactory<?> producerRestfulClientFactory = "methanol".equalsIgnoreCase(httpClient) ?
-                new SslAwareMethanolRestfulClientFactory(null) :
-                new SslAwareApacheRestfulClientFactory(null);
-
-        IRestfulClientFactory defaultRestfulClientFactory = context.getRestfulClientFactory();
-        this.context = new DelegatingFhirContext(context, producerRestfulClientFactory);
-        producerRestfulClientFactory.setFhirContext(this.context);
-
-        var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class,
-                defaultRestfulClientFactory.getConnectTimeout());
+        var connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
         if (connectTimeout != null) {
-            producerRestfulClientFactory.setConnectTimeout(connectTimeout);
+            setConnectTimeout(connectTimeout);
         }
-        var connectRequestTimeout = component.getAndRemoveParameter(parameters, "connectionRequestTimeout", Integer.class,
-                defaultRestfulClientFactory.getConnectionRequestTimeout());
+        var connectRequestTimeout = component.getAndRemoveParameter(parameters, "connectionRequestTimeout", Integer.class);
         if (connectRequestTimeout != null) {
-            producerRestfulClientFactory.setConnectionRequestTimeout(connectRequestTimeout);
+            setConnectRequestTimeout(connectRequestTimeout);
         }
-        var socketTimeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class,
-                defaultRestfulClientFactory.getSocketTimeout());
+        var socketTimeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
         if (socketTimeout != null) {
-            producerRestfulClientFactory.setSocketTimeout(socketTimeout);
+            setTimeout(socketTimeout);
         }
-        var poolMax = component.getAndRemoveParameter(parameters, "poolMax", Integer.class,
-                defaultRestfulClientFactory.getPoolMaxPerRoute());
+        var poolMax = component.getAndRemoveParameter(parameters, "poolMax", Integer.class);
         if (poolMax != null) {
-            producerRestfulClientFactory.setPoolMaxPerRoute(poolMax);
-            producerRestfulClientFactory.setPoolMaxTotal(poolMax);
+            setPoolSize(poolMax);
         }
-        var disableServerValidation = component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class,
-                defaultRestfulClientFactory.getServerValidationMode() == ServerValidationModeEnum.NEVER);
+        var disableServerValidation = component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class);
         if (disableServerValidation != null) {
-            producerRestfulClientFactory.setServerValidationMode(disableServerValidation ?
-                    ServerValidationModeEnum.NEVER :
-                    ServerValidationModeEnum.ONCE);
+            setDisableServerValidation(disableServerValidation);
         }
 
         // Security stuff
@@ -212,7 +216,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, "sslContextParameters", SSLContextParameters.class);
         var hostnameVerifier = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "hostnameVerifier", HostnameVerifier.class);
-        boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
+
         var username = component.getAndRemoveParameter(parameters, "username", String.class);
         var password = component.getAndRemoveParameter(parameters, "password", String.class);
 
@@ -226,7 +230,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             }
         }
 
-        this.securityInformation = producerRestfulClientFactory.initializeSecurityInformation(
+        this.securityInformation = restfulClientFactory.initializeSecurityInformation(
                 secure,
                 sslContextParameters != null ?
                         sslContextParameters.createSSLContext(component.getCamelContext()) :
@@ -250,20 +254,29 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         }
     }
 
+    public SslAwareAbstractRestfulClientFactory<?> getRestfulClientFactory() {
+        return (SslAwareAbstractRestfulClientFactory<?>) this.context.getRestfulClientFactory();
+    }
+
     public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {
         return (ClientRequestFactory<T>) clientRequestFactory;
     }
 
     public void setConnectTimeout(int connectTimeout) {
-        context.getRestfulClientFactory().setConnectTimeout(connectTimeout);
+        this.context.getRestfulClientFactory().setConnectTimeout(connectTimeout);
     }
 
     public void setConnectRequestTimeout(int connectTimeout) {
-        context.getRestfulClientFactory().setConnectionRequestTimeout(connectTimeout);
+        this.context.getRestfulClientFactory().setConnectionRequestTimeout(connectTimeout);
     }
 
     public void setTimeout(int timeout) {
-        context.getRestfulClientFactory().setSocketTimeout(timeout);
+        this.context.getRestfulClientFactory().setSocketTimeout(timeout);
+    }
+
+    public void setPoolSize(int poolSize) {
+        this.context.getRestfulClientFactory().setPoolMaxPerRoute(poolSize);
+        this.context.getRestfulClientFactory().setPoolMaxPerRoute(poolSize);
     }
 
     /**
@@ -276,7 +289,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      * Setting this to true disables this check.
      */
     public void setDisableServerValidation(boolean disableServerValidation) {
-        context.getRestfulClientFactory().setServerValidationMode(disableServerValidation ?
+        this.context.getRestfulClientFactory().setServerValidationMode(disableServerValidation ?
                 ServerValidationModeEnum.NEVER :
                 ServerValidationModeEnum.ONCE);
     }

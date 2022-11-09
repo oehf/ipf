@@ -1,19 +1,4 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package org.openehealth.ipf.commons.audit.queue;
+package org.openehealth.ipf.boot.atna;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,27 +10,25 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.protocol.RecordingAuditMessageTransmission;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.web.client.RestClientException;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.AnyOf.anyOf;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-public class BasicHttpAuditMessageQueueTest {
+public class RestTemplateAuditMessageQueueTest {
+
 
     private int port;
     private ClientAndServer mockServer;
-    private BasicHttpAuditMessageQueue atnaQueue;
+    private RestTemplateAuditMessageQueue atnaQueue;
     private DefaultAuditContext auditContext;
     private Throwable caught;
 
@@ -63,11 +46,11 @@ public class BasicHttpAuditMessageQueueTest {
     @AfterEach
     public void tearDown() {
         caught = null;
-        mockServer.stop();
+        if (mockServer != null) mockServer.stop();
     }
 
     @Test
-    public void testSuccessfulAudit() throws MalformedURLException {
+    public void testSuccessfulAudit() {
         try (var server = new MockServerClient("127.0.0.1", port)) {
             server
                     .when(
@@ -81,14 +64,14 @@ public class BasicHttpAuditMessageQueueTest {
                     );
 
             // Setup producer
-            atnaQueue = new BasicHttpAuditMessageQueue(new URL("http://localhost:" + port + "/audit"));
+            atnaQueue = new RestTemplateAuditMessageQueue(new RestTemplateBuilder(), URI.create("http://localhost:" + port + "/audit"));
             auditContext.setAuditMessageQueue(atnaQueue);
             sendAudit();
         }
     }
 
     @Test
-    public void testUnsuccessfulAudit() throws MalformedURLException {
+    public void testUnsuccessfulAudit() {
         try (var server = new MockServerClient("127.0.0.1", port)) {
             server
                     .when(
@@ -102,20 +85,20 @@ public class BasicHttpAuditMessageQueueTest {
                     );
 
             // Setup producer
-            atnaQueue = new BasicHttpAuditMessageQueue(new URL("http://localhost:" + port + "/audit"));
+            atnaQueue = new RestTemplateAuditMessageQueue(new RestTemplateBuilder(), URI.create("http://localhost:" + port + "/audit"));
             auditContext.setAuditMessageQueue(atnaQueue);
             sendAudit();
-            assertThat(caught, instanceOf(IOException.class));
+            assertThat(caught, instanceOf(RestClientException.class));
         }
     }
 
     @Test
-    public void testAuditSomewhere() throws MalformedURLException {
-        atnaQueue = new BasicHttpAuditMessageQueue(new URL("http://localhost:" + freePort() + "/audit"));
+    public void testAuditSomewhere() {
+        atnaQueue = new RestTemplateAuditMessageQueue(new RestTemplateBuilder(), URI.create("http://localhost:" + freePort() + "/audit"));
         atnaQueue.setConnectTimeout(500);
         auditContext.setAuditMessageQueue(atnaQueue);
         sendAudit();
-        assertThat(caught, anyOf(instanceOf(ConnectException.class), instanceOf(SocketTimeoutException.class)));
+        assertThat(caught, instanceOf(RestClientException.class));
     }
 
     private void sendAudit() {
@@ -138,4 +121,5 @@ public class BasicHttpAuditMessageQueueTest {
             return -1;
         }
     }
+
 }

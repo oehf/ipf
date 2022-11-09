@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -52,11 +53,9 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_O
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
         implements SuspendableService, RequestConsumer {
 
-    private final FhirContext fhirContext;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
-        fhirContext = endpoint.getInterceptableConfiguration().getContext();
     }
 
     @Override
@@ -71,7 +70,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     @Override
     public FhirContext getFhirContext() {
-        return fhirContext;
+        return getEndpoint().getInterceptableConfiguration().getContext();
     }
 
     @Override

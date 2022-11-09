@@ -33,6 +33,7 @@ class LambdaPrimitiveTypeRule(rule: (String?) -> Array<ValidationException>,
     var omitLeadingWhitespace: Boolean = false
     var omitTrailingWhitespace: Boolean = false
 
+    @Deprecated(message = "Deprecated PrimitiveTypeRule", replaceWith = ReplaceWith("PrimitiveTypeRule.apply()"))
     override fun test(value: String?): Boolean = apply(value).isEmpty()
 
     override fun apply(value: String?): Array<ValidationException> = rule(correct(value))

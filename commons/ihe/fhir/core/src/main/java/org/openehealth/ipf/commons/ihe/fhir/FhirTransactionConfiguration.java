@@ -37,7 +37,7 @@ import java.util.function.Supplier;
 public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
 
     private final FhirVersionEnum fhirVersion;
-    private final Supplier<FhirContext> fhirContextProvider;
+    private final FhirContextProvider fhirContextProvider;
     private final List<? extends FhirProvider> staticResourceProviders;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final Supplier<FhirTransactionValidator> fhirValidatorSupplier;
@@ -72,7 +72,7 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
-        this.fhirContextProvider = () -> fhirContext;
+        this.fhirContextProvider = (fhirVersion) -> fhirContext;
         this.staticResourceProviders = resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
@@ -133,17 +133,19 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
      * @return the initialized FhirContext
      */
     public FhirContext initializeFhirContext() {
-        return fhirContextProvider.get();
+        return fhirContextProvider.apply(fhirVersion);
     }
 
     /**
-     * Returns a default supplier of a FhirContext with the configure FHIR version
+     * Returns a default provider of a FhirContext with the configured FHIR version. Do NOT
+     * use the "cached" static initializers (e.g. @link{{@link FhirContext#forCached(FhirVersionEnum)}}
+     * as we may want to customize the FhirContext afterwards.
      *
      * @return the initialized FhirContext
      */
-    private Supplier<FhirContext> fhirContextProvider() {
-        return () -> {
-            var fhirContext = FhirContext.forCached(fhirVersion);
+    private FhirContextProvider fhirContextProvider() {
+        return (fhirVersion) -> {
+            var fhirContext = new FhirContext(fhirVersion);
             fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
             return fhirContext;
         };

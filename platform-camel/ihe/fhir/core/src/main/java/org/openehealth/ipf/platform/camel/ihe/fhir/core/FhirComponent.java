@@ -79,7 +79,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      *
      * @return initialized default FHIR context
      */
-    public FhirContext initializeFhirContext() {
+    public FhirContext initializeDefaultFhirContext() {
         return getFhirTransactionConfiguration().initializeFhirContext();
     }
 
