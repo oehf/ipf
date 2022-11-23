@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -69,25 +70,28 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters sendManuallyOnType(Parameters queryParameters) {
-        var result = client.operation()
+        return client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
                 .execute();
-        return result;
     }
 
     protected Parameters sendManuallyOnInstance(String resourceId, Parameters queryParameters) {
-        var result = client.operation()
+        return client.operation()
                 .onInstance(new IdType("Patient", resourceId))
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
                 .execute();
-        return result;
     }
+
+    protected Parameters sendViaProducer(Parameters requestData) {
+        return producerTemplate.requestBody("direct:input", requestData, Parameters.class);
+    }
+
 
 }

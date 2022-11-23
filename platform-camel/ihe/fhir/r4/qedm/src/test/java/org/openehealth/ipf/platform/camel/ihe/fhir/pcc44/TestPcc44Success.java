@@ -112,7 +112,7 @@ public class TestPcc44Success extends AbstractTestPcc44 {
 
     @Test
     public void testSendPcc44WithPatientReference() {
-        var result = sendManually(observationPatientReferenceParameter());
+        var result = sendViaProducer(ResourceType.Observation, observationPatientReferenceParameter());
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());

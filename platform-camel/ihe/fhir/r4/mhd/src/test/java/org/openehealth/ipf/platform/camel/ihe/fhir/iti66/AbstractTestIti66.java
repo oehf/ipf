@@ -78,6 +78,10 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
                 .execute();
     }
 
+    protected Bundle sendViaProducer(ICriterion<?>... requestData) {
+        return producerTemplate.requestBody("direct:input", requestData, Bundle.class);
+    }
+
     protected Bundle nextPage(Bundle bundle) {
         return client.loadPage()
                 .next(bundle)

@@ -35,17 +35,29 @@ import java.util.Map;
  */
 public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
 
+
     @Override
     public IClientExecutable<IQuery<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<IBaseBundle> query;
-        var queriedResourceType = (String)parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
+        var queriedResourceType = (String) parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
         if (requestData instanceof ICriterion) {
             query = client.search()
                     .forResource(queriedResourceType)
                     .where((ICriterion<?>) requestData);
-        } else {
+        } else if (requestData instanceof ICriterion[]) {
             query = client.search()
-                    .byUrl(requestData.toString());
+                    .forResource(queriedResourceType);
+            ICriterion<?>[] criteria = (ICriterion<?>[]) requestData;
+            if (criteria.length > 0) {
+                query = query.where(criteria[0]);
+                if (criteria.length > 1) {
+                    for (var i = 1; i < criteria.length; i++) {
+                        query = query.and(criteria[i]);
+                    }
+                }
+            }
+        } else {
+            query = client.search().byUrl(requestData.toString());
         }
         if (parameters.containsKey(Constants.FHIR_COUNT)) {
             query.count(Integer.parseInt(parameters.get(Constants.FHIR_COUNT).toString()));

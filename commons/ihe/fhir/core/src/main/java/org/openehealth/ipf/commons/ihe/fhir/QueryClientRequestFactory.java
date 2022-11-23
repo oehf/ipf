@@ -46,9 +46,20 @@ public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientR
             query = client.search()
                     .forResource(type)
                     .where((ICriterion<?>) requestData);
-        } else {
+        } else if (requestData instanceof ICriterion[]) {
             query = client.search()
-                    .byUrl(requestData.toString());
+                    .forResource(type);
+            ICriterion<?>[] criteria = (ICriterion<?>[]) requestData;
+            if (criteria.length > 0) {
+                query = query.where(criteria[0]);
+                if (criteria.length > 1) {
+                    for (var i = 1; i < criteria.length; i++) {
+                        query = query.and(criteria[i]);
+                    }
+                }
+            }
+        } else {
+            query = client.search().byUrl(requestData.toString());
         }
         if (parameters.containsKey(Constants.FHIR_COUNT)) {
             query.count(Integer.parseInt(parameters.get(Constants.FHIR_COUNT).toString()));

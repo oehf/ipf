@@ -125,7 +125,7 @@ public class TestIti83Success extends AbstractTestIti83 {
 
     @Test
     public void testSendEndpointPixm() {
-        var result = producerTemplate.requestBody("direct:input", validQueryParameters(), Parameters.class);
+        var result = sendViaProducer(validQueryParameters());
 
         var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
@@ -137,7 +137,7 @@ public class TestIti83Success extends AbstractTestIti83 {
 
     @Test
     public void testSendEndpointPixmRead() {
-        var result = producerTemplate.requestBody("direct:input", validReadParameters(), Parameters.class);
+        var result = sendViaProducer(validReadParameters());
 
         var parameter = result.getParameter().iterator().next();
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());

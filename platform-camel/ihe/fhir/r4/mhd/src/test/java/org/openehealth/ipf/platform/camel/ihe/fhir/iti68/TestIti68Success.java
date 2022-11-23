@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
+import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
@@ -40,7 +41,7 @@ public class TestIti68Success extends AbstractTestIti68 {
     @Test
     public void testRetrieveDocument() {
 
-        var response = producerTemplate.requestBody("direct:input", null, byte[].class);
+        var response = sendViaProducer((ICriterion<?>) null);
         assertArrayEquals(Iti68TestRouteBuilder.DATA, response);
 
         // Check ATNA Audit

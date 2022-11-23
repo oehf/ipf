@@ -113,10 +113,7 @@ public class TestIti67Success extends AbstractTestIti67 {
 
     @Test
     public void testSendEndpointIti67() {
-       var response = producerTemplate.requestBody(
-               "direct:input",
-               referencePatientIdentifierParameter(),
-               Bundle.class);
+       var response = sendViaProducer(referencePatientIdentifierParameter());
         var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
 
@@ -138,7 +135,7 @@ public class TestIti67Success extends AbstractTestIti67 {
 
     @Test
     public void testSendIti67WithPatientReference() {
-        var result = sendManually(referencePatientReferenceParameter());
+        var result = sendViaProducer(referencePatientReferenceParameter());
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());

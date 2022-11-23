@@ -110,7 +110,7 @@ public class TestIti66Success extends AbstractTestIti66 {
 
     @Test
     public void testSendIti66WithPatientReference() {
-        var result = sendManually(manifestPatientReferenceParameter(), statusParameter());
+        var result = sendViaProducer(manifestPatientReferenceParameter(), statusParameter());
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());

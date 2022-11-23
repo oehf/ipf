@@ -98,9 +98,9 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
     }
 
-    @Disabled
+    @Test
     public void testSendEndpointMhd() throws Exception {
-        var result = producerTemplate.requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
+        var result = sendViaProducer(provideAndRegister());
         // printAsXML(result);
 
         // Check ATNA Audit

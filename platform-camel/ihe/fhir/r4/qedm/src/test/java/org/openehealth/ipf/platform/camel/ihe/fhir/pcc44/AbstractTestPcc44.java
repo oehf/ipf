@@ -21,6 +21,8 @@ import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
@@ -50,6 +52,12 @@ abstract class AbstractTestPcc44 extends FhirTestContainer {
                 .returnBundle(Bundle.class)
                 .encodedXml()
                 .execute();
+    }
+
+    protected Bundle sendViaProducer(ResourceType resourceType, ICriterion<?>... requestData) {
+        return producerTemplate.requestBodyAndHeader("direct:input", requestData,
+                Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType.toString(),
+                Bundle.class);
     }
 
     protected Bundle nextPage(Bundle bundle) {

@@ -131,7 +131,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmCriterion() {
-        var result = producerTemplate.requestBody("direct:input", familyParameters(), Bundle.class);
+        var result = sendViaProducer(familyParameters());
         // printAsXML(result);
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
@@ -173,7 +173,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testSendEndpointPdqmString() {
-        var result = producerTemplate.requestBody("direct:input", "Patient?family=Test", Bundle.class);
+        var result = sendViaProducer("Patient?family=Test");
         // printAsXML(result);
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());

@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
+import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
+import org.hl7.fhir.r4.model.Bundle;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 /**
@@ -27,6 +29,10 @@ abstract class AbstractTestIti68 extends StandardTestContainer {
     public static void startServer(String contextDescriptor) {
         var servlet = new CamelHttpTransportServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "CamelServlet");
+    }
+
+    protected byte[] sendViaProducer(ICriterion<?>... requestData) {
+        return producerTemplate.requestBody("direct:input", requestData, byte[].class);
     }
 
 }

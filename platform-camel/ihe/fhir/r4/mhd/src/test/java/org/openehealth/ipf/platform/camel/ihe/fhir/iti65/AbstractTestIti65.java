@@ -17,7 +17,9 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
+import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -152,6 +154,10 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     protected Bundle sendManually(Bundle bundle) {
         return client.transaction().withBundle(bundle).encodedXml().execute();
+    }
+
+    protected Bundle sendViaProducer(Bundle bundle) {
+        return producerTemplate.requestBody("direct:input", bundle, Bundle.class);
     }
 
     protected void printAsXML(IBaseResource resource) {
