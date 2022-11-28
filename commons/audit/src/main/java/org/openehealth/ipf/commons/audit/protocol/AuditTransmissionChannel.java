@@ -65,7 +65,7 @@ public enum AuditTransmissionChannel {
             }
         }
         throw new IllegalArgumentException("Unknown audit protocol name: " + protocolName +
-                ". Choose on of: " +
+                ". Choose one of: " +
                 Arrays.stream(AuditTransmissionChannel.values())
                         .map(AuditTransmissionChannel::getProtocolName)
                         .collect(Collectors.joining(",")));
