@@ -41,7 +41,7 @@ public class AbstractNamingSystemServiceImpl implements NamingSystemService {
     protected final transient Map<String, Set<NamingSystem>> namingSystems = new HashMap<>();
 
     public void addNamingSystems(Bundle bundle) {
-        this.namingSystems.merge(bundle.getId(), setOfNamingSystems(bundle), (set1, set2) -> {
+        this.namingSystems.merge(bundle.getIdElement().getIdPart(), setOfNamingSystems(bundle), (set1, set2) -> {
             var result = new HashSet<NamingSystem>(set1);
             result.addAll(set2);
             return result;
