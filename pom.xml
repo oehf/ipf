@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>4.5-SNAPSHOT</version>
+        <version>4.5-rc1</version>
         <relativePath>dependencies</relativePath>
     </parent>
 
@@ -68,7 +68,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>HEAD</tag>
+       <tag>ipf-4.5-rc1</tag>
     </scm>
 
     <profiles>
@@ -498,7 +498,7 @@
                             <configuration>
                                 <rules>
                                     <banDuplicatePomDependencyVersions />
-                                    <dependencyConvergence/>
+                                    <dependencyConvergence />
                                     <bannedDependencies>
                                         <searchTransitive>true</searchTransitive>
                                         <excludes>

@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>
-        <version>4.5-SNAPSHOT</version>
+        <version>4.5-rc1</version>
     </parent>
         
     <dependencies>

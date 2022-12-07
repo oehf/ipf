@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf-dependencies</artifactId>
-    <version>4.5-SNAPSHOT</version>
+    <version>4.5-rc1</version>
     <name>ipf-dependencies</name>
     <packaging>pom</packaging>
 
@@ -993,7 +993,7 @@
     <scm>
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-        <tag>HEAD</tag>
+        <tag>ipf-4.5-rc1</tag>
     </scm>
 
     <repositories>
