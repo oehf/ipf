@@ -30,7 +30,7 @@ public class NamingSystemUriMapperJsonTest extends AbstractSystemUriMapperTest {
     protected UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService) {
         namingSystemService.addNamingSystemsFromJson(
                 new InputStreamReader(getClass().getResourceAsStream("/namingsystems.json")));
-        return new NamingSystemUriMapper(namingSystemService, "Bundle/identifiers");
+        return new NamingSystemUriMapper(namingSystemService, "identifiers");
     }
 
 }
