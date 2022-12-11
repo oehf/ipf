@@ -54,16 +54,14 @@
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <awaitility-version>4.2.0</awaitility-version>
         <easymock-version>4.3</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>31.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
         <mockserver-version>5.14.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.68</tomcat-version>
+        <tomcat-version>9.0.69</tomcat-version>
         <xbean-spring-version>4.20</xbean-spring-version>
-        <xmlunit-version>2.9.0</xmlunit-version>
     </properties>
 
     <scm>
@@ -161,12 +159,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-test</artifactId>
                 <version>${groovy-version}</version>
@@ -222,18 +214,6 @@
                 <groupId>javax.security.auth.message</groupId>
                 <artifactId>javax.security.auth.message-api</artifactId>
                 <version>${jaspic-api-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.xmlunit</groupId>
-                <artifactId>xmlunit-core</artifactId>
-                <version>${xmlunit-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.xmlunit</groupId>
-                <artifactId>xmlunit-placeholders</artifactId>
-                <version>${xmlunit-version}</version>
                 <scope>test</scope>
             </dependency>
 
