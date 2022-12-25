@@ -52,6 +52,9 @@
         <camel:route>
             <camel:from uri="xds-iti42:xds-iti42?features=#policyFeature&amp;audit=false"/>
             <camel:to uri="log:worked"/>
+            <camel:transform>
+                <camel:groovy>new org.openehealth.ipf.commons.ihe.xds.core.responses.Response(org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS)</camel:groovy>
+            </camel:transform>
         </camel:route>
     </camel:camelContext>
 

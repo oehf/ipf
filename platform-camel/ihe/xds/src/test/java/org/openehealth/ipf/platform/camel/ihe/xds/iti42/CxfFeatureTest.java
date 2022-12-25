@@ -19,7 +19,6 @@ import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
@@ -36,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 
-@Disabled
 public class CxfFeatureTest extends XdsStandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
@@ -62,7 +60,6 @@ public class CxfFeatureTest extends XdsStandardTestContainer {
         }
     }
 
-    @Disabled("fails with java 9")
     @Test
     public void testFeatureEndpointWithPolicy() {
         var bf = new SpringBusFactory();
