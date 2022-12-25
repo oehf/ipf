@@ -54,14 +54,14 @@
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <easymock-version>4.3</easymock-version>
+        <easymock-version>5.0.1</easymock-version>
         <findbugs-version>3.0.2</findbugs-version>
         <guava-version>31.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
         <mockserver-version>5.14.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.69</tomcat-version>
-        <xbean-spring-version>4.20</xbean-spring-version>
+        <tomcat-version>9.0.70</tomcat-version>
+        <xbean-spring-version>4.22</xbean-spring-version>
     </properties>
 
     <scm>

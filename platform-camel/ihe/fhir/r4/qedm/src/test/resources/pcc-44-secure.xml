@@ -35,10 +35,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
             <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit">
-            <camel:keyStore type="JKS" password="changeit" resource="server.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="file:server.jks"/>
         </camel:keyManagers>
         <camel:trustManagers>
-            <camel:keyStore type="JKS" password="changeit" resource="server.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="file:server.jks"/>
         </camel:trustManagers>
         <camel:clientParameters>
             <camel:cipherSuitesFilter>

@@ -29,15 +29,15 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd">
 
     <import resource="common-xds-beans.xml"/>
 
-    <camel:sslContextParameters id="myContext">
+    <camel:sslContextParameters id="myContext" camelContextId="camelContext">
         <camel:secureSocketProtocols>
             <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
         </camel:secureSocketProtocols>
         <camel:keyManagers keyPassword="changeit">
-            <camel:keyStore type="JKS" password="changeit" resource="client.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="file:client.jks"/>
         </camel:keyManagers>
         <camel:trustManagers>
-            <camel:keyStore type="JKS" password="changeit" resource="client.jks"/>
+            <camel:keyStore type="JKS" password="changeit" resource="file:client.jks"/>
         </camel:trustManagers>
         <camel:clientParameters>
             <camel:cipherSuitesFilter>
