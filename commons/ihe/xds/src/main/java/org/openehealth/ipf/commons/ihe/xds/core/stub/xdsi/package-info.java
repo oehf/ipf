@@ -13,5 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@javax.xml.bind.annotation.XmlSchema(namespace = "urn:ihe:rad:xdsi-b:2009", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@XmlSchema(namespace = "urn:ihe:rad:xdsi-b:2009", 
+elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+    @XmlNs(prefix = "xdsi", namespaceURI = "urn:ihe:rad:xdsi-b:2009")})
 package org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi;
+
+import javax.xml.bind.annotation.XmlNs;
+import javax.xml.bind.annotation.XmlSchema;
