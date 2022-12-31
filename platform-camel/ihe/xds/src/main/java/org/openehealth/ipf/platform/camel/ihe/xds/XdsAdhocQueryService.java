@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.InvalidPayloadException;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -43,6 +45,7 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
         this.homeCommunityId = homeCommunityId;
     }
 
+    @SneakyThrows(InvalidPayloadException.class)
     protected AdhocQueryResponse processRequest(AdhocQueryRequest body) {
         var result = process(body);
         var exception = Exchanges.extractException(result);
@@ -56,6 +59,6 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
             errorResponse.getErrors().get(0).setLocation(homeCommunityId);
             return EbXML30Converters.convert(errorResponse);
         }
-        return result.getMessage().getBody(AdhocQueryResponse.class);
+        return result.getMessage().getMandatoryBody(AdhocQueryResponse.class);
     }
 }

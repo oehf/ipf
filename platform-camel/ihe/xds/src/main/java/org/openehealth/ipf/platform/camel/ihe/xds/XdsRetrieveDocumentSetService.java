@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.InvalidPayloadException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
@@ -38,6 +40,7 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
         this.homeCommunityId = homeCommunityId;
     }
 
+    @SneakyThrows(InvalidPayloadException.class)
     protected RetrieveDocumentSetResponseType processRequest(T body) {
         var result = process(body);
         var exception = Exchanges.extractException(result);
@@ -54,6 +57,6 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
             return EbXML30Converters.convert(errorResponse);
         }
 
-        return result.getMessage().getBody(RetrieveDocumentSetResponseType.class);
+        return result.getMessage().getMandatoryBody(RetrieveDocumentSetResponseType.class);
     }
 }

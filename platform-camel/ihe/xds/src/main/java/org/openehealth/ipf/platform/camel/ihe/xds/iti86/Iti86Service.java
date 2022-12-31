@@ -16,7 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti86;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.InvalidPayloadException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
@@ -35,6 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 @AllArgsConstructor
 public class Iti86Service extends AbstractWebService implements Iti86PortType {
 
+    @SneakyThrows(InvalidPayloadException.class)
     @Override
     public RegistryResponseType documentRepositoryRemoveDocuments(RemoveDocumentsRequestType body) {
         var result = process(body);
@@ -48,7 +51,7 @@ public class Iti86Service extends AbstractWebService implements Iti86PortType {
                     null);
             return EbXML30Converters.convert(errorResponse);
         }
-        return result.getMessage().getBody(RegistryResponseType.class);
+        return result.getMessage().getMandatoryBody(RegistryResponseType.class);
     }
 
 }
