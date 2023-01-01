@@ -17,7 +17,7 @@
         <equinox-app.version>1.3.200-v20130910-1609</equinox-app.version>
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
-        <groovy-version>3.0.13</groovy-version>
+        <groovy-version>3.0.14</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>6.2.2</hapi-fhir-version>
         <herasaf-version>2.0.4</herasaf-version>
@@ -871,9 +871,9 @@
         <developer>
             <id>stanojevic-boris</id>
             <name>Boris Stanojevic</name>
-            <email>boris.stanojevic@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <email>boris.stanojevic@x-tention.de</email>
+            <organization>x-tention Informationstechnologie GmbH</organization>
+            <organizationUrl>https://x-tention.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -882,9 +882,9 @@
         <developer>
             <id>ohr</id>
             <name>Christian Ohr</name>
-            <email>christian.ohr@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <email>christian.ohr@x-tention.de</email>
+            <organization>x-tention Informationstechnologie GmbH</organization>
+            <organizationUrl>https://x-tention.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -943,9 +943,9 @@
         <developer>
             <id>thopap</id>
             <name>Thomas Papke</name>
-            <email>thomas.papke@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <email>thomas.papke@x-tention.de</email>
+            <organization>x-tention Informationstechnologie GmbH</organization>
+            <organizationUrl>https://x-tention.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
