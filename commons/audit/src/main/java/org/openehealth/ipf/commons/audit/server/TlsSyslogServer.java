@@ -71,8 +71,8 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .doOnConnection(connection -> {
                     LOG.debug("Received connection from {}", connection.channel().localAddress());
                     connection
-                            .addHandler(new Rfc5425Decoder())   // extract frame
-                            .addHandler(new Rfc5424Decoder());  // parse frame, fast enough for receiver thread
+                            .addHandlerLast(new Rfc5425Decoder())   // extract frame
+                            .addHandlerLast(new Rfc5424Decoder());  // parse frame, fast enough for receiver thread
                 })
                 .handle((nettyInbound, nettyOutbound) -> nettyInbound.receiveObject()
                         .cast(Map.class)
