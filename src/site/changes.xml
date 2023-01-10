@@ -23,6 +23,29 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="4.5.0" description="IPF 4.5.0" date="tbd">
+            <action issue="396" dev="qligier" type="update">
+                Various dependency updates. 
+            </action>
+            <action issue="399" dev="ohr" type="fix">
+                FhirProducer instantiates FhirContext instances on the fly
+            </action>
+            <action issue="397" dev="ohr" type="add">
+                Allow to share FHIR producer instances between FHIR producers
+            </action>
+            <action issue="400" dev="ohr" type="add">
+                Add AuditMessageQueue implementation based on Spring RestTemplate
+            </action>
+            <action issue="400" dev="thopap" type="update">
+                XDS: Throw soap fault instead of an empty response when invalid payload was provided by backend processors
+            </action>
+            <action issue="404" dev="thopap" type="update">
+                Use explicit namespace aliases for XDS XML instead of self generated ns1 ... nsX
+            </action>
+            <action issue="398" dev="unixoid" type="update">
+                CP-ITI-1260-03: Optional quotes around ITI-18 datetime parameters
+            </action>
+        </release>
         <release version="4.4.0" description="IPF 4.4.0" date="21 Jul 2022">
             <action issue="195" dev="ohr" type="update">
                 Change MLLP components to using Netty instead of Apache Mina
