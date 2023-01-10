@@ -134,6 +134,8 @@ public class GenericFhirAuditMessageBuilder extends
 
 
     private static EventActionCode eventActionCode(RestOperationTypeEnum operation) {
+        if (operation == null)
+            return EventActionCode.Execute;
         switch (operation) {
             case CREATE:
                 return EventActionCode.Create;

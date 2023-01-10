@@ -105,7 +105,7 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
             auditDataset.setResourceId((IIdType) request);
         }
 
-        if (requestDetails != null) {
+        if (requestDetails != null && requestDetails.getRestOperationType() != null) {
             switch (requestDetails.getRestOperationType()) {
                 case EXTENDED_OPERATION_SERVER:
                 case EXTENDED_OPERATION_TYPE:
