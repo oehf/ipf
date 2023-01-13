@@ -21,7 +21,7 @@
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>6.2.4</hapi-fhir-version>
         <herasaf-version>2.0.4</herasaf-version>
-        <ipf-gazelle-version>2.1.0</ipf-gazelle-version>
+        <ipf-gazelle-version>2.2.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.3.7</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
