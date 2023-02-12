@@ -89,4 +89,9 @@ public interface EbXMLClassification extends EbXMLSlotList {
      * Assigns a random unique ID to this classification.
      */
     void assignUniqueId();
+
+    /**
+     * @return the wrapped ebXML representation of this request.
+     */
+    Object getInternal();
 }

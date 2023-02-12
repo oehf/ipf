@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import java.util.Set;
+
 /**
  * List of XDS related vocabulary constants.
  * @author Jens Riemschneider
@@ -47,7 +49,7 @@ public abstract class Vocabulary {
     public static final String DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME = 
         "urn:uuid:a09d5840-386c-46f2-b5ad-9c3699a4309d";
 
-    /** healthcareFacitilityTypeCode External Classification Scheme of the Document Entry */
+    /** healthcareFacilityTypeCode External Classification Scheme of the Document Entry */
     public static final String DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME =
         "urn:uuid:f33fb8ac-18af-42cc-ae0e-ed0b0bdb91e1";
 
@@ -81,7 +83,7 @@ public abstract class Vocabulary {
     
     
     /** XDSFolder classification node */
-    public static final String FOLDER_CLASS_NODE = 
+    public static final String FOLDER_CLASS_NODE =
         "urn:uuid:d9d542f3-6cc4-48b6-8870-ea235fbc94c2";    
     
     /** codeList External Classification Scheme of the folder */
@@ -255,4 +257,41 @@ public abstract class Vocabulary {
 
     /** Node representation for the class code classification */
     public static final String NODE_REPRESENTATION_CONFIDENTIALITY_CODE = "confidentialityCode";
+
+
+    private static final Set<String> STANDARD_UUIDS = Set.of(
+            DocumentEntryType.STABLE.getUuid(),
+            DocumentEntryType.ON_DEMAND.getUuid(),
+            DOC_ENTRY_AUTHOR_CLASS_SCHEME,
+            DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
+            DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME,
+            DOC_ENTRY_EVENT_CODE_CLASS_SCHEME,
+            DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME,
+            DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME,
+            DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME,
+            DOC_ENTRY_TYPE_CODE_CLASS_SCHEME,
+            DOC_ENTRY_LIMITED_METADATA_CLASS_NODE,
+            DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
+            DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID,
+
+            FOLDER_CLASS_NODE,
+            FOLDER_CODE_LIST_CLASS_SCHEME,
+            FOLDER_LIMITED_METADATA_CLASS_NODE,
+            FOLDER_PATIENT_ID_EXTERNAL_ID,
+            FOLDER_UNIQUE_ID_EXTERNAL_ID,
+
+            SUBMISSION_SET_CLASS_NODE,
+            SUBMISSION_SET_AUTHOR_CLASS_SCHEME,
+            SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
+            SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE,
+            SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
+            SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID,
+            SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID,
+
+            ASSOCIATION_DOC_CODE_CLASS_SCHEME);
+
+    public static boolean isNonStandardUuid(String uuid) {
+        return !STANDARD_UUIDS.contains(uuid);
+    }
+
 }

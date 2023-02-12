@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
@@ -25,6 +26,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Base class for transformers of {@link XDSMetaClass} and ebXML representations.
@@ -212,7 +216,13 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      * @param objectLibrary 
      *          the object library.
      */
-    protected void addClassifications(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {}
+    protected void addClassifications(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
+        if (metaData.getExtraClassifications() != null) {
+            metaData.getExtraClassifications().stream()
+                    .filter(c -> Vocabulary.isNonStandardUuid(c.getClassificationScheme()))
+                    .forEach(c -> ebXML.addClassification(c, c.getClassificationScheme()));
+        }
+    }
 
     /**
      * Called by the base class to add classifications to the meta data.
@@ -221,7 +231,14 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      * @param ebXML
      *          the ebXML instance containing the classifications.
      */
-    protected void addClassificationsFromEbXML(C metaData, E ebXML) {}
+    protected void addClassificationsFromEbXML(C metaData, E ebXML) {
+        List<EbXMLClassification> extraClassifications = ebXML.getClassifications().stream()
+                .filter(c -> Vocabulary.isNonStandardUuid(c.getClassificationScheme()))
+                .collect(Collectors.toList());
+        if (!extraClassifications.isEmpty()) {
+            metaData.setExtraClassifications(extraClassifications);
+        }
+    }
 
     /**
      * Called by the base class to add external identifiers to the ebXML instance.

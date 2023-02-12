@@ -99,7 +99,8 @@ public class EbXMLClassification30 implements EbXMLClassification {
     /**
      * @return the ebXML 3.0 object being wrapped by this class.
      */
-    ClassificationType getInternal() {
+    @Override
+    public ClassificationType getInternal() {
         return classification;
     }
 

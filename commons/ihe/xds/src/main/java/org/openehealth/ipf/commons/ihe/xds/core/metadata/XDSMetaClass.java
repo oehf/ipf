@@ -22,6 +22,9 @@ import lombok.ToString;
 import org.openehealth.ipf.commons.core.OidGenerator;
 import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ClassificationList;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ClassificationListAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
 
@@ -46,7 +49,7 @@ import java.util.UUID;
 @XmlType(name = "IdentifiedObject", propOrder = {
         "homeCommunityId", "entryUuid", "logicalUuid", "version", "uniqueId",
         "patientId", "availabilityStatus", "title", "comments", "limitedMetadata",
-        "extraMetadata"})
+        "extraMetadata", "extraClassifications"})
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
@@ -66,6 +69,10 @@ abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder 
     @XmlJavaTypeAdapter(StringMapAdapter.class)
     @XmlElement(name = "extraMetadata", type = StringMap.class)
     @Getter @Setter private Map<String, List<String>> extraMetadata;
+
+    @XmlJavaTypeAdapter(ClassificationListAdapter.class)
+    @XmlElement(name = "extraClassifications", type = ClassificationList.class)
+    @Getter @Setter private List<EbXMLClassification> extraClassifications;
     
     /**
      * If a Document Source do not have a uniqueId to assign, this
