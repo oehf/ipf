@@ -59,32 +59,32 @@ public class PdqPatient extends Patient {
     public static final StringClientParam TELECOM = new StringClientParam(Patient.SP_TELECOM);
 
     @Child(name = "birthPlace")
-    @Extension(url = "http://hl7.org/fhir/StructureDefinition/birthPlace", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/StructureDefinition/birthPlace", definedLocally = false)
     @Description(shortDefinition = "The registered place of birth of the patient. A system may use the address.text if they don't store the birthPlace address in discrete elements")
     private Address birthPlace;
 
     @Child(name = "mothersMaidenName")
-    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName", definedLocally = false)
     @Description(shortDefinition = "Mother's maiden name of a patient")
     private HumanName mothersMaidenName;
 
     @Child(name = "citizenship", max = Child.MAX_UNLIMITED)
-    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-citizenship", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-citizenship", definedLocally = false)
     @Description(shortDefinition = "The citizenship of the patient")
     private List<Citizenship> citizenship;
 
     @Child(name = "religion", max = Child.MAX_UNLIMITED)
-    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-religion", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-religion", definedLocally = false)
     @Description(shortDefinition = "The patient's professed religious affiliations")
     private List<CodeableConcept> religion;
 
     @Child(name = "race")
-    @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race", definedLocally = false)
     @Description(shortDefinition = "Concepts classifying  the person into a named category of humans sharing common history, traits, geographical origin or nationality")
     private Race race;
 
     @Child(name = "ethnicity")
-    @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity", isModifier = false, definedLocally = false)
+    @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity", definedLocally = false)
     @Description(shortDefinition = "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.")
     private Ethnicity ethnicity;
 
@@ -231,11 +231,11 @@ public class PdqPatient extends Patient {
     public static class Citizenship extends BackboneElement {
 
         @Child(name = "code")
-        @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-citizenship/code", definedLocally = false, isModifier = false)
+        @Extension(url = "code", definedLocally = false)
         private CodeableConcept code;
 
         @Child(name = "period")
-        @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-citizenship/period", definedLocally = false, isModifier = false)
+        @Extension(url = "period", definedLocally = false)
         private Period period;
 
         @Override
@@ -280,15 +280,15 @@ public class PdqPatient extends Patient {
     public static class Race extends BackboneElement {
 
         @Child(name = "ombCategory")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/ombCategory", definedLocally = false, isModifier = false)
+        @Extension(url = "ombCategory", definedLocally = false)
         private Coding ombCategory;
 
         @Child(name = "detailed")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/detailed", definedLocally = false, isModifier = false)
+        @Extension(url = "detailed", definedLocally = false)
         private Coding detailed;
 
         @Child(name = "text")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/text", definedLocally = false, isModifier = false)
+        @Extension(url = "text", definedLocally = false)
         private StringType text;
 
         @Override
@@ -345,15 +345,15 @@ public class PdqPatient extends Patient {
     public static class Ethnicity extends BackboneElement {
 
         @Child(name = "ombCategory")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity/ombCategory", definedLocally = false, isModifier = false)
+        @Extension(url = "ombCategory", definedLocally = false)
         private Coding ombCategory;
 
         @Child(name = "detailed")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity/detailed", definedLocally = false, isModifier = false)
+        @Extension(url = "detailed", definedLocally = false)
         private Coding detailed;
 
         @Child(name = "text")
-        @Extension(url = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity/text", definedLocally = false, isModifier = false)
+        @Extension(url = "text", definedLocally = false)
         private StringType text;
 
         @Override
