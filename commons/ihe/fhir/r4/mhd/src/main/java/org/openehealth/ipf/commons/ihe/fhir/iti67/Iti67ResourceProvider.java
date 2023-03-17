@@ -50,12 +50,12 @@ import java.util.Set;
  * Resource Provider for MHD (ITI-67).
  * <p>
  * Note (CP by Rick Riemer):
- * When searching for XDS documents with specific referenceIdList values, MHD specifies to use the related-id query parameter.
- * This parameter is of type token (https://www.hl7.org/fhir/search.html#token). The token type does not allow searching for
+ * When searching for XDS documents with specific referenceIdList values, MHD specifies to use the related.identifier query parameter.
+ * This parameter is of type (<a href="https://www.hl7.org/fhir/search.html#token">token</a>). The token type does not allow searching for
  * the Identifier.type attribute, which would be a primary use case.
  * <p>
  * IHE should provide a mechanism to search for referenceIdList values by type, in addition to system and value.
- * Suggestion: don’t use token, but use composite, (https://www.hl7.org/fhir/search.html#composite) and define how
+ * Suggestion: don’t use token, but use (<a href="https://www.hl7.org/fhir/search.html#composite">composite</a>) and define how
  * to use it for searching against referenceIdList values. A composite parameter could look like:
  * related id=urn:oid:1.2.3.4.5.6|2013001$urn:ihe:iti:xds:2013:accession.
  *
@@ -78,7 +78,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
             @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN, Practitioner.SP_IDENTIFIER }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
             @OptionalParam(name = STU3_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,

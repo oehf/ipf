@@ -60,6 +60,7 @@ public class Iti67SearchParameters extends FhirSearchAndSortParameters<DocumentR
     @Getter @Setter private DateRangeParam date;
     @Getter @Setter private StringParam authorFamilyName;
     @Getter @Setter private StringParam authorGivenName;
+    @Getter @Setter private TokenParam authorIdentifier;
     @Getter @Setter private TokenParam identifier;
     @Getter @Setter private TokenOrListParam status;
     @Getter @Setter private TokenOrListParam category;
@@ -100,6 +101,8 @@ public class Iti67SearchParameters extends FhirSearchAndSortParameters<DocumentR
                     setAuthorFamilyName(ref.toStringParam(getFhirContext()));
                 } else if (Practitioner.SP_GIVEN.equals(authorChain)) {
                     setAuthorGivenName(ref.toStringParam(getFhirContext()));
+                } else if (Practitioner.SP_IDENTIFIER.equals(authorChain)) {
+                    setAuthorIdentifier(ref.toTokenParam(getFhirContext()));
                 }
             });
         }

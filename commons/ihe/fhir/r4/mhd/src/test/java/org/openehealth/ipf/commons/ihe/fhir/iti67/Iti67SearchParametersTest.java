@@ -37,9 +37,13 @@ public class Iti67SearchParametersTest {
                 .addAnd(new ReferenceOrListParam()
                         .addOr(new ReferenceParam(Practitioner.SP_FAMILY, "family")))
                 .addAnd(new ReferenceOrListParam()
-                        .addOr(new ReferenceParam(Practitioner.SP_GIVEN, "given")));
+                        .addOr(new ReferenceParam(Practitioner.SP_GIVEN, "given")))
+                .addAnd(new ReferenceOrListParam()
+                        .addOr(new ReferenceParam(Practitioner.SP_IDENTIFIER, "urn:oid:1.2.3.4|4711")));
         searchParameters.setAuthor(param);
         assertEquals("family", searchParameters.getAuthorFamilyName().getValue());
         assertEquals("given", searchParameters.getAuthorGivenName().getValue());
+        assertEquals("4711", searchParameters.getAuthorIdentifier().getValue());
+        assertEquals("urn:oid:1.2.3.4", searchParameters.getAuthorIdentifier().getSystem());
     }
 }
