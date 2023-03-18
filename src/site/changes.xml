@@ -23,9 +23,17 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.5.0" description="IPF 4.5.0" date="tbd">
+        <release version="4.???" description="IPF 4.???" date="???">
+            <action issue="410" dev="unixoid" type="add">
+                Add Camel component for ITI-80 "Cross-Gateway Document Provide"
+            </action>
+            <action issue="407" dev="unixoid" type="add">
+                Support user-defined classification schemes in XDS
+            </action>
+        </release>
+        <release version="4.5.0" description="IPF 4.5.0" date="13 Jan 2023">
             <action issue="396" dev="qligier" type="update">
-                Various dependency updates. 
+                Various dependency updates
             </action>
             <action issue="399" dev="ohr" type="fix">
                 FhirProducer instantiates FhirContext instances on the fly
