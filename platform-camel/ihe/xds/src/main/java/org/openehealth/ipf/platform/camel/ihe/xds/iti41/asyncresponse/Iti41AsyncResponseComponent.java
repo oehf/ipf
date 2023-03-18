@@ -25,7 +25,7 @@ import java.util.Map;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_41_ASYNC_RESPONSE;
 
 /**
- * The Camel component for the ITI-38 (XCA) async response.
+ * The Camel component for the ITI-41 (XDS) async response.
  */
 public class Iti41AsyncResponseComponent extends XdsComponent<XdsSubmitAuditDataset> {
 

@@ -80,5 +80,5 @@ public class XCDR implements XdsIntegrationProfile {
 		true,
 		false,
 		false,
-		true);
+		false);
 }

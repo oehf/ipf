@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.xds.XCDR;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
@@ -41,6 +42,6 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
     public void validate(EbXMLSubmitObjectsRequest request, ValidationProfile profile)  {
         OBJECT_CONTAINER_VALIDATOR.validate(request, profile);
         HOME_COMMUNITY_ID_VALIDATOR.validate(request.getRegistryPackages().get(0).getHome());
-        HOME_COMMUNITY_ID_VALIDATOR.validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
+        new HomeCommunityIdValidator(profile.getInteractionId() == XCDR.Interactions.ITI_80).validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
     }
 }

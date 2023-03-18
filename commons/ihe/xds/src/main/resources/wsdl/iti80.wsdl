@@ -24,7 +24,7 @@
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         targetNamespace="urn:ihe:iti:xds-b:2007"
-        name="DocumentRepository">
+        name="RespondingGateway">
 
     <documentation>IHE XCDR Responding Gateway = ITI-80 adaptor = Cross Gateway Provide Document</documentation>
 
@@ -45,8 +45,8 @@
         <part name="body" element="rs:RegistryResponse"/>
     </message>
 
-    <portType name="CrossGatewayDocumentProvide_PortType">
-        <operation name="DocumentRepository_CrossGatewayDocumentProvide">
+    <portType name="RespondingGateway_PortType">
+        <operation name="RespondingGateway_CrossGatewayDocumentProvide">
             <input message="ihe:CrossGatewayDocumentProvide_Message"
                    wsam:Action="urn:ihe:iti:2015:CrossGatewayDocumentProvide"/>
             <output message="ihe:CrossGatewayDocumentProvideResponse_Message"
@@ -54,9 +54,9 @@
         </operation>
     </portType>
 
-    <binding name="RespondingGateway_Binding_Soap12" type="ihe:CrossGatewayDocumentProvide_PortType">
+    <binding name="RespondingGateway_Binding_Soap12" type="ihe:RespondingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="DocumentRepository_CrossGatewayDocumentProvide">
+        <operation name="RespondingGateway_CrossGatewayDocumentProvide">
             <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>

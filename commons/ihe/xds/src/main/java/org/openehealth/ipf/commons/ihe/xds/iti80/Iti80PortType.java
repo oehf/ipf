@@ -32,7 +32,7 @@ import javax.xml.ws.Action;
  * Provides the ITI-80 web-service interface.
  * @since 3.3
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "CrossGatewayDocumentProvide_PortType", portName = "RespondingGateway_Port_Soap12")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "RespondingGateway_PortType", portName = "RespondingGateway_Port_Soap12")
 @XmlSeeAlso({
 	org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
 	org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
@@ -50,7 +50,7 @@ public interface Iti80PortType {
 	 */
 	@WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
 	@Action(input = "urn:ihe:iti:2015:CrossGatewayDocumentProvide", output = "urn:ihe:iti:2015:CrossGatewayDocumentProvideResponse")
-	@WebMethod(operationName = "DocumentRepository_CrossGatewayDocumentProvide")
+	@WebMethod(operationName = "RespondingGateway_CrossGatewayDocumentProvide")
 	RegistryResponseType documentCrossGatewayDocumentProvide(
 		@WebParam(partName = "body", name = "ProvideAndRegisterDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
 			ProvideAndRegisterDocumentSetRequestType body
