@@ -18,6 +18,7 @@ package org.openehealth.ipf.boot.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
+import ca.uhn.fhir.narrative2.NullNarrativeGenerator;
 import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
@@ -112,7 +113,7 @@ public class IpfFhirAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(INarrativeGenerator.class)
     public INarrativeGenerator narrativeGenerator() {
-        return (fhirContext, resource) -> false;
+        return new NullNarrativeGenerator();
     }
 
     @Bean

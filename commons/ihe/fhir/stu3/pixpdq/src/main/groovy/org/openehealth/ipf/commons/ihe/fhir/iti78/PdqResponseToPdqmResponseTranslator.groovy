@@ -111,7 +111,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
     }
 
     protected static void addSearchScore(PdqPatient pdqPatient, response) {
-        ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.code)
+        ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH)
         /*
         String searchScoreString = response.QRI[1]?.value
         if (searchScoreString != null) {

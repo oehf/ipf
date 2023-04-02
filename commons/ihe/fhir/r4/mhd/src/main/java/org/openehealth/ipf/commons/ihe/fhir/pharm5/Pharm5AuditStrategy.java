@@ -50,6 +50,7 @@ public class Pharm5AuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset
         super(serverSide);
     }
 
+    @Override
     public AuditMessage[] makeAuditMessage(final AuditContext auditContext,
                                            final FhirQueryAuditDataset auditDataset) {
         var operation = "unknown";
@@ -98,7 +99,7 @@ public class Pharm5AuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset
             }
         } else if (request instanceof Parameters) {
             final var bodyParameters = (Parameters) request;
-            final var patientIdentifier = bodyParameters.getParameter(Pharm5ResourceProvider.SP_PATIENT_IDENTIFIER);
+            final var patientIdentifier = bodyParameters.getParameterValues(Pharm5ResourceProvider.SP_PATIENT_IDENTIFIER);
             if (patientIdentifier instanceof StringType) {
                 final var parts = ((StringType) patientIdentifier).getValue().split("\\|");
                 addPatientId.accept(parts[1], parts[0]);

@@ -27,7 +27,7 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>2.22.2</surefire-plugin-version>
+        <surefire-plugin-version>3.0.0</surefire-plugin-version>
         <jxr-plugin-version>3.3.0</jxr-plugin-version>
         <project-info-reports-plugin-version>3.4.1</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
@@ -39,9 +39,9 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.4.2</assembly-plugin-version>
         <build-helper-version>3.3.0</build-helper-version>
-        <compiler-plugin-version>3.10.1</compiler-plugin-version>
+        <compiler-plugin-version>3.11.0</compiler-plugin-version>
         <enforcer-plugin-version>3.1.0</enforcer-plugin-version>
-        <gmavenplus-plugin-version>1.13.1</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>2.1.0</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.3.0</jar-plugin-version>
         <javadoc-plugin-version>3.4.1</javadoc-plugin-version>
@@ -59,7 +59,7 @@
         <jaspic-api-version>1.1.1</jaspic-api-version>
         <mockserver-version>5.14.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.70</tomcat-version>
+        <tomcat-version>9.0.73</tomcat-version>
         <xbean-spring-version>4.22</xbean-spring-version>
     </properties>
 
