@@ -62,16 +62,25 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
         Parameters parameters = new Parameters()
         if (pid3collection) {
             for (pid3 in pid3collection) {
-                Identifier identifier = new Identifier()
-                        .setSystem(uriMapper.oidToUri(pid3[4][2]?.value))
-                        .setValue(pid3[1].value)
-                        .setUse(Identifier.IdentifierUse.OFFICIAL)
                 parameters.addParameter()
                         .setName('targetIdentifier')
-                        .setValue(identifier)
+                        .setValue(convertIdentifier(pid3))
             }
         }
         parameters
+    }
+
+    /**
+     * Converts a CX instance into an {@link Identifier} instance
+     * @param cx CX composite
+     * @return an {@link Identifier} instance
+     */
+    protected Identifier convertIdentifier(cx) {
+        Identifier identifier = new Identifier()
+                .setUse(Identifier.IdentifierUse.OFFICIAL)
+                .setSystem(uriMapper.oidToUri(cx[4][2]?.value))
+                .setValue(cx[1]?.value)
+        identifier
     }
 
     // Handle an empty response

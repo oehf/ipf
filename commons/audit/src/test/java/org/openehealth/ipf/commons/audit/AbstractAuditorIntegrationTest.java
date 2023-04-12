@@ -67,7 +67,7 @@ abstract class AbstractAuditorIntegrationTest {
         tlsParameters.setKeyStorePassword(CLIENT_KEY_STORE_PASS);
         tlsParameters.setTrustStoreFile(TRUST_STORE);
         tlsParameters.setTrustStorePassword(TRUST_STORE_PASS);
-        tlsParameters.setEnabledProtocols("TLSv1.2");
+        tlsParameters.setEnabledProtocols("TLSv1.2,TLSv1.3");
         return tlsParameters;
     }
 
