@@ -23,9 +23,18 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.???" description="IPF 4.???" date="???">
+        <release version="4.6.0" description="IPF 4.6.0" date="???">
+            <action issue="411" dev="thopap" type="update">
+                Dependency Updates
+            </action>
             <action issue="410" dev="unixoid" type="add">
                 Add Camel component for ITI-80 "Cross-Gateway Document Provide"
+            </action>
+            <action issue="409" dev="ohr" type="update">
+                Add custom parameter to MHD ITI-67 to allow to search for author.id
+            </action>
+            <action issue="408" dev="ohr" type="fix">
+                Fix incorrect URLs in PDQm FHIR patient model inside composite extensions
             </action>
             <action issue="407" dev="unixoid" type="add">
                 Support user-defined classification schemes in XDS
