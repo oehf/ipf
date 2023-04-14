@@ -57,6 +57,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
                     '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
 
     private final String SERVICE_1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1"
+    private final String SERVICE_EMPTY = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-empty"
     private final String SERVICE_NAK_1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak1"
     private final String SERVICE_NAK_2 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak2"
     private final String SERVICE_NAK_VALIDATE = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNakValidate"
@@ -84,6 +85,18 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assert it.eventIdentification.eventActionCode == EventActionCode.Execute
             assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
             assert it.participantObjectIdentifications.size() == 9
+        }
+    }
+
+    @Test
+    void testHappyCaseEmptyAndAudit() {
+        String responseString = send(SERVICE_EMPTY, REQUEST, String.class)
+        assertTrue(responseString.startsWith('<PRPA_IN201306UV02'))
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            assert it.eventIdentification.eventActionCode == EventActionCode.Execute
+            assert it.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.Success
+            assert it.participantObjectIdentifications.size() == 2
         }
     }
 

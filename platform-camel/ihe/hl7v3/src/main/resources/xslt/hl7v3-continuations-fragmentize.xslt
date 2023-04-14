@@ -50,7 +50,7 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
     <!-- handle subjects -->
     <xsl:variable name="subjectsCount" as="xs:integer" select="count(/hl7:*/hl7:controlActProcess/hl7:subject)" />
     <xsl:variable name="endIndex" as="xs:integer" select="min(($subjectsCount, $startResultNumber + $continuationCount - 1))" />
-    <xsl:template match="/*[$subjectsCount lt $startResultNumber]">
+    <xsl:template match="/*[$subjectsCount lt $startResultNumber and $subjectsCount gt 0]">
         <xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] wrong startResultNumber')" />
     </xsl:template>
     <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:subject[position() lt $startResultNumber]" />

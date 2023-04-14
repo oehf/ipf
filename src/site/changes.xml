@@ -23,7 +23,10 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.6.0" description="IPF 4.6.0" date="???">
+        <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
+            <action issue="412" dev="ohr" type="fix">
+                Don't log in HL7v3 continuation webservice when returning zero results
+            </action>
             <action issue="411" dev="thopap" type="update">
                 Dependency Updates
             </action>

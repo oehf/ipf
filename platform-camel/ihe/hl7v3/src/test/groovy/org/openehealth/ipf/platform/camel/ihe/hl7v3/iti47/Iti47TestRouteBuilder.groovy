@@ -38,6 +38,7 @@ class Iti47TestRouteBuilder extends RouteBuilder {
         new PdqResponse2to3Translator()
 
     private static final String V3_RESPONSE = StandardTestContainer.readFile('iti47/02_PDQQuery1Response.xml')
+    private static final String V3_EMPTY_RESPONSE = StandardTestContainer.readFile('iti47/03_PDQQueryEmptyResponse.xml')
 
     private static final String V2_RESPONSE =
         'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' +
@@ -83,6 +84,15 @@ class Iti47TestRouteBuilder extends RouteBuilder {
         from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
             .transform().constant('<PRPA_IN201306UV02 xmlns="urn:hl7-org:v3" from="PDSupplier"/>')
 
+        from('pdqv3-iti47:pdqv3-iti47-empty'  +
+                '?supportContinuation=true' +
+                '&defaultContinuationThreshold=1' +
+                '&continuationStorage=#hl7v3ContinuationStorage' +
+                '&validationOnContinuation=true')
+                .process(PixPdqV3CamelValidators.iti47RequestValidator())
+                .streamCaching()
+                .setBody(constant(V3_EMPTY_RESPONSE.bytes))
+                .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
         // check Hl7v3 exception handling (NAK with issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak1')
