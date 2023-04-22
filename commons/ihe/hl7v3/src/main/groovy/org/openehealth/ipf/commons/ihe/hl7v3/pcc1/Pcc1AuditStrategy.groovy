@@ -58,7 +58,7 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData)
+        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData, auditDataset.getPurposesOfUse())
                 .setQueryParameters(auditDataset.messageId, QueryExistingData, auditDataset.requestPayload)
                 .addPatients(auditDataset.patientIds)
                 .getMessages()
