@@ -157,10 +157,10 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         return details(DOCUMENT_UNIQUE_ID, documentInstanceId, seriesInstanceId, repositoryId, homeCommunityId, isXcaHomeCommunityId);
     }
 
-    private List<TypeValuePairType> details(String insranceKey, String instanceId, String seriesInstanceId, String repositoryId, String homeCommunityId, boolean xcaHomeCommunityId) {
+    private List<TypeValuePairType> details(String instanceKey, String instanceId, String seriesInstanceId, String repositoryId, String homeCommunityId, boolean xcaHomeCommunityId) {
         var tvp = new ArrayList<TypeValuePairType>(0);
         if (instanceId != null) {
-            tvp.add(getTypeValuePair(insranceKey, instanceId));
+            tvp.add(getTypeValuePair(instanceKey, instanceId));
         }
         if (seriesInstanceId != null) {
             tvp.add(getTypeValuePair(SERIES_INSTANCE_UNIQUE_ID, seriesInstanceId));

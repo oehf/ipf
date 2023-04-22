@@ -54,7 +54,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        QueryInformationBuilder builder = new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery)
+        QueryInformationBuilder builder = new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery, auditDataset.getPurposesOfUse())
         // No patient identifiers are included for the Initiating Gateway
         if (isServerSide()) {
             builder.addPatients(auditDataset.patientIds)

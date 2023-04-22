@@ -71,7 +71,7 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery)
+        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.patientIds)
                 .setQueryParameters("PatientLocationQueryRequest", PatientLocationQuery, auditDataset.requestPayload)
                 .getMessages()
