@@ -42,11 +42,6 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
         </xsl:copy>
     </xsl:template>
 
-    <!-- check whether the response is positive -->
-    <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:queryAck/hl7:queryResponseCode[@code ne 'OK']">
-        <xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] negative response')" />
-    </xsl:template>
-
     <!-- handle subjects -->
     <xsl:variable name="subjectsCount" as="xs:integer" select="count(/hl7:*/hl7:controlActProcess/hl7:subject)" />
     <xsl:variable name="endIndex" as="xs:integer" select="min(($subjectsCount, $startResultNumber + $continuationCount - 1))" />
