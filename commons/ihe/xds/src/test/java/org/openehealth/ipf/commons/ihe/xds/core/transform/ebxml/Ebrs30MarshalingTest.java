@@ -128,10 +128,9 @@ public class Ebrs30MarshalingTest {
         assertTrue(values.contains("c"));
     }
 
-    @Test
-    public void testFromRealEbXML() throws Exception {
-        var file = new File(getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs30.xml").toURI());
-        
+    private void doTestFromRealEbXML(String fileName) throws Exception {
+        var file = new File(getClass().getClassLoader().getResource(fileName).toURI());
+
         var unmarshaller = context.createUnmarshaller();
 
         var unmarshalled = unmarshaller.unmarshal(file);
@@ -152,6 +151,13 @@ public class Ebrs30MarshalingTest {
 
         assertEquals(result.getAssociations().get(0).getAssociationType(), AssociationType.HAS_MEMBER);
         assertEquals(result.getAssociations().get(1).getAssociationType(), AssociationType.IS_SNAPSHOT_OF);
+
+    }
+
+    @Test
+    public void testFromRealEbXML() throws Exception {
+        doTestFromRealEbXML("SubmitObjectsRequest_ebrs30.xml");     // SS classification outside of RegistryPackage
+        doTestFromRealEbXML("SubmitObjectsRequest_ebrs30_2.xml");   // SS classification inside of RegistryPackage
     }
 
     @Test
@@ -193,7 +199,7 @@ public class Ebrs30MarshalingTest {
         var patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
         assertEquals(2, patientIdList.size());
     }
-    
+
     @Test
     public void verifyExtraMetadataWithJaxbBinding() throws Exception {
         var file = new File(
