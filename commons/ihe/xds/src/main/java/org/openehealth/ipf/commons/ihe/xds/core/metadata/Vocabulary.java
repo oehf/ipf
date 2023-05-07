@@ -291,7 +291,7 @@ public abstract class Vocabulary {
             ASSOCIATION_DOC_CODE_CLASS_SCHEME);
 
     public static boolean isNonStandardUuid(String uuid) {
-        return !STANDARD_UUIDS.contains(uuid);
+        return !((uuid == null) || STANDARD_UUIDS.contains(uuid));
     }
 
 }
