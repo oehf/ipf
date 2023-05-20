@@ -56,7 +56,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder.setLastUpdateTime("20150102030405");
         folder.setPatientId(createIdentifiable(3));
         folder.setTitle(createLocal(11));
-        folder.setUniqueId("uniqueId");
+        folder.setUniqueId("1.2.3");
         folder.getCodeList().add(createCode(6));
         folder.getCodeList().add(createCode(7));
         folder.setLimitedMetadata(true);
@@ -94,7 +94,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
                 "id 3^^^&uni 3&uniType 3", Vocabulary.FOLDER_LOCALIZED_STRING_PATIENT_ID);
 
         assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML, 
-                "uniqueId", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);
+                "1.2.3", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);
 
         assertClassification(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
 

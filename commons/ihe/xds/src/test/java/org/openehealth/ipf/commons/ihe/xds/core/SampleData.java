@@ -218,7 +218,7 @@ public abstract class SampleData {
         folder.setLastUpdateTime("19820910121315");
         folder.setPatientId(patientID);
         folder.setTitle(new LocalizedString("Folder 01", "en-US", "UTF8"));
-        folder.setUniqueId("48574589");
+        folder.setUniqueId("1.48574589");
         return folder;
     }
 
@@ -247,7 +247,7 @@ public abstract class SampleData {
         submissionSet.setSourceId("1.2.3");
         submissionSet.setSubmissionTime("1980");
         submissionSet.setTitle(new LocalizedString("Submission Set 01", "en-US", "UTF8"));
-        submissionSet.setUniqueId("123");
+        submissionSet.setUniqueId("1.123");
         submissionSet.setHomeCommunityId("urn:oid:1.2.3.4.5.6.2333.23");
 
         return submissionSet;

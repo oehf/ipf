@@ -62,6 +62,7 @@ public enum ValidationMessage {
     INVALID_OID("OID contains invalid characters: %1s"),
     INVALID_PID("Invalid HL7 field name (only PID fields are supported): %1s"),
     INVALID_UUID("UUID contains invalid characters: %1s"),
+    INVALID_IDENTIFIER("Identifier contains invalid characters: %1s"),
     UNSUPPORTED_PID("PID field with this number is prohibited in XDS: %1s"),
     INVALID_NUMBER_FORMAT("Invalid number format: %1s"),
     RECIPIENT_LIST_EMPTY("Recipient list should not be empty"),

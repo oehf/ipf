@@ -162,7 +162,7 @@ class XdsStandardTestContainer extends StandardTestContainer {
         assert submissionSet.participantObjectTypeCode == ParticipantObjectTypeCode.System
         assert submissionSet.participantObjectTypeCodeRole == ParticipantObjectTypeCodeRole.Job
         checkCode(submissionSet.participantObjectIDTypeCode, 'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd', 'IHE XDS Metadata')
-        assert submissionSet.participantObjectID == '123'
+        assert submissionSet.participantObjectID == '1.123'
     }
 
     void checkRegistryObjectParticipantObjectDetail(ParticipantObjectIdentificationType detail, String typeCode, String registryObjectUuid) {

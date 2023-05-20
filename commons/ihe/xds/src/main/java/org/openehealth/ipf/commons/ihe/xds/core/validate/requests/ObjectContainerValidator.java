@@ -60,6 +60,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final XTNValidator xtnValidator = new XTNValidator();
     private final CXiValidator cxiValidator = new CXiValidator();
     private final UUIDValidator uuidValidator = new UUIDValidator();
+    private final IdentifierValidator identifierValidator = new IdentifierValidator();
 
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
@@ -297,17 +298,23 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         var idsInRequest = new HashSet<String>();
         var validationMsg = profile == XDS.Interactions.ITI_41 ?  UNIQUE_ID_NOT_UNIQUE_REPO : UNIQUE_ID_NOT_UNIQUE;
         var uniquenessValidator = (ValueValidator) (uniqueId) -> metaDataAssert(idsInRequest.add(uniqueId), validationMsg, uniqueId);
-        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
-        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
-        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator);
+        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator, identifierValidator);
+        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator, oidValidator);
+        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, uniquenessValidator, oidValidator);
     }
 
-    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme, ValueValidator uniquenessValidator) throws XDSMetaDataException {
+    private void validateUniqueIds(
+            List<? extends EbXMLRegistryObject> objects,
+            String scheme,
+            ValueValidator uniquenessValidator,
+            ValueValidator formatValidator) throws XDSMetaDataException
+    {
         for (EbXMLRegistryObject obj : objects) {
             var uniqueId = obj.getExternalIdentifierValue(scheme);
             metaDataAssert(uniqueId != null, UNIQUE_ID_MISSING);
             metaDataAssert(uniqueId.length() <= 128, UNIQUE_ID_TOO_LONG);
             uniquenessValidator.validate(uniqueId);
+            formatValidator.validate(uniqueId);
         }
     }
 

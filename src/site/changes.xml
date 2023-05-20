@@ -27,6 +27,12 @@
             <action issue="413" dev="zortx233" type="fix">
                 Properly populate PurposeOfUse attribute in audit records of some HL7v3-based transactions
             </action>
+            <action issue="415" dev="unixoid" type="fix">
+                Avoid NPE when transforming XDS classifications without schemas
+            </action>
+            <action issue="417" dev="unixoid" type="fix">
+                Better validation for unique IDs of XDS Document Entries, Submission Sets, and Folders
+            </action>
         </release>
         <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
             <action issue="412" dev="ohr" type="fix">

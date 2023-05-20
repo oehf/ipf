@@ -96,7 +96,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.setEntryUuid("uuid");
         set.setPatientId(createIdentifiable(3));
         set.setTitle(createLocal(11));
-        set.setUniqueId("uniqueId");
+        set.setUniqueId("1.2.3");
         set.setContentTypeCode(createCode(6));
         set.setSourceId("sourceId");
         set.setLimitedMetadata(true);
@@ -153,7 +153,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
                 "id 3^^^&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
 
         assertExternalIdentifier(SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, ebXML,
-                "uniqueId", SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);
+                "1.2.3", SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);
 
         assertExternalIdentifier(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, ebXML,
                 "sourceId", SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
