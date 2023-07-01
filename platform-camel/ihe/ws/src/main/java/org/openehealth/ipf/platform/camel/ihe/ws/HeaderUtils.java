@@ -17,12 +17,18 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import static org.apache.cxf.message.Message.PROTOCOL_HEADERS;
 
-import java.util.*;
-import java.util.function.Supplier;
-
 import javax.xml.namespace.QName;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import org.apache.camel.Message;
+import org.apache.camel.util.CaseInsensitiveMap;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
@@ -182,7 +188,7 @@ abstract public class HeaderUtils {
             Map<String, Object> messageContext, 
             Message message) 
     {
-        var userHeaders = new HashMap<String, String>();
+        var userHeaders = new CaseInsensitiveMap();
         Map<String, List<String>> httpHeaders = getHeaders(
                 messageContext, PROTOCOL_HEADERS, true, false, null);
         if (httpHeaders != null) {
