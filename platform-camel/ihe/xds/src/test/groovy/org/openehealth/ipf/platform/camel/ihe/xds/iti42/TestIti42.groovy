@@ -177,9 +177,9 @@ class TestIti42 extends XdsStandardTestContainer {
         def role2 = ActiveParticipantRoleId.of('HCP' as String, '2.16.756.5.30.1.127.3.10.6' as String, 'Healthcare Practitioner' as String)
         def role3 = ActiveParticipantRoleId.of('GYN' as String, '1.2.3.4.5.6.777.2' as String, 'Gynecologist' as String)
         def role4 = ActiveParticipantRoleId.of('ASS' as String, '2.16.756.5.30.1.127.3.10.6' as String, 'Assistant' as String)
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[2], 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
+        checkHumanRequestor(message.activeParticipants[1], true, 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], false, 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[3], false, '7601000000001', 'Hannelore Fleissig', [role4])
 
         checkDestination(message.activeParticipants[4], SERVICE2_ADDR, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
@@ -195,9 +195,9 @@ class TestIti42 extends XdsStandardTestContainer {
         checkEvent(message.eventIdentification, '110106', 'ITI-42', EventActionCode.Read, outcome)
         checkSource(message.activeParticipants[0], false)
 
-        checkHumanRequestor(message.activeParticipants[1], 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[2], 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
-        checkHumanRequestor(message.activeParticipants[3], '7601000000001', 'Hannelore Fleissig', [role4])
+        checkHumanRequestor(message.activeParticipants[1], true, 'alias2<lipse@demo.com>', 'alias2<lipse@demo.com>', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[2], false, 'lipse', 'Dr. Klaus-Peter Kohlrabi', [role1, role2, role3])
+        checkHumanRequestor(message.activeParticipants[3], false, '7601000000001', 'Hannelore Fleissig', [role4])
 
         checkDestination(message.activeParticipants[4], SERVICE2_ADDR, false)
         checkAuditSource(message.auditSourceIdentification, 'sourceId')
