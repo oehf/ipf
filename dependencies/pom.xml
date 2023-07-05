@@ -18,13 +18,13 @@
         <equinox-app.version>1.3.200-v20130910-1609</equinox-app.version>
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
-        <groovy-version>3.0.20</groovy-version>
-        <hapi-version>2.4.1</hapi-version>
-        <hapi-fhir-version>6.10.2</hapi-fhir-version>
+        <groovy-version>4.0.12</groovy-version>
+        <hapi-version>2.3</hapi-version>
+        <hapi-fhir-version>6.10.0</hapi-fhir-version>
         <herasaf-version>2.0.4</herasaf-version>
-        <ipf-gazelle-version>2.6.0</ipf-gazelle-version>
+        <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jaxb-version>2.3.9</jaxb-version>
+        <jaxb-version>4.0.2</jaxb-version>
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <methanol-version>1.7.0</methanol-version>
@@ -33,12 +33,12 @@
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>11.4</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>2.7.18</spring-boot-version>
+        <spring-boot-version>3.0.6</spring-boot-version>
         <velocity-version>2.3</velocity-version>
         <vertx-version>4.5.1</vertx-version>
         <vibur-version>25.0</vibur-version>
         <woodstox-version>6.6.1</woodstox-version>
-        <xmlsec-version>2.3.4</xmlsec-version>
+        <xmlsec-version>3.0.2</xmlsec-version>
         <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
         <jackson-version>2.15.3</jackson-version>
 
@@ -175,17 +175,17 @@
                 <version>${commons-io-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-templates</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-xml</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
@@ -325,35 +325,11 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
                 <version>${cxf-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-io</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-security</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-continuation</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-integration-tracing-brave</artifactId>
                 <version>${cxf.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.zipkin.brave</groupId>
-                        <artifactId>brave</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.zipkin.brave</groupId>
-                        <artifactId>brave-instrumentation-http</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>

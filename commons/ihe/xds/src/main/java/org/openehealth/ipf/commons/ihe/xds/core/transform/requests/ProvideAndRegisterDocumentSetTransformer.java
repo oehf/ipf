@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 

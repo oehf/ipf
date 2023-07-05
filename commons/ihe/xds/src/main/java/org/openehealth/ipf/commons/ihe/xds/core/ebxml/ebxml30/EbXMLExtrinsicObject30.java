@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import java.util.List;
 import java.util.Map;
 

@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import static java.util.Objects.requireNonNull;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import java.io.Serializable;
 
 import ca.uhn.hl7v2.Location;
@@ -35,6 +33,8 @@ import ca.uhn.hl7v2.parser.PipeParser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * An XDS model object backed up by an HL7 v2 element.

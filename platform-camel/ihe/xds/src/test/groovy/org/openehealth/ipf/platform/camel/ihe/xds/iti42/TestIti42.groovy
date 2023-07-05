@@ -38,8 +38,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.Unmarshaller
 import javax.xml.namespace.QName
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory

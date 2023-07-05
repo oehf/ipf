@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.stub;
 
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 
-import javax.xml.ws.WebFault;
+import jakarta.xml.ws.WebFault;
 
 
 /**

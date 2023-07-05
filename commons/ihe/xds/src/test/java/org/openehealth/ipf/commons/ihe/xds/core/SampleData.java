@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

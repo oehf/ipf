@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.server;
 
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;

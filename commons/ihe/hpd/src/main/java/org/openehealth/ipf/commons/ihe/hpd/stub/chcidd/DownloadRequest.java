@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.chcidd;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 

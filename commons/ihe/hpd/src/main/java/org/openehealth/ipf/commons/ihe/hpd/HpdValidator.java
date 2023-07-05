@@ -27,10 +27,10 @@ import org.openehealth.ipf.commons.xml.XsdValidator;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.util.JAXBSource;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
 import java.util.HashSet;
 import java.util.Set;

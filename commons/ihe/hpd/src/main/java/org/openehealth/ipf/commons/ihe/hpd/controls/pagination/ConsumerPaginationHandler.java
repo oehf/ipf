@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import javax.naming.ldap.PagedResultsControl;
 import javax.naming.ldap.PagedResultsResponseControl;
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 

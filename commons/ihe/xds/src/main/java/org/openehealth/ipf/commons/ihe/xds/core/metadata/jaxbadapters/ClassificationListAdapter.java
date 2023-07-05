@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLClassification30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmytro Rud

@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -36,7 +38,7 @@ public class JettyServer extends ServletServer {
     public void start() {
         server = new Server();
         var connector = isSecure()
-                ? new ServerConnector(server, createSecureContextFactory())
+                ? new ServerConnector(server, createSecureConnectionFactory())
                 : new ServerConnector(server);
 
         server.addConnector(connector);
@@ -66,7 +68,7 @@ public class JettyServer extends ServletServer {
         }
     }
 
-    private SslContextFactory createSecureContextFactory() {
+    private SslConnectionFactory createSecureConnectionFactory() {
         var sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
@@ -74,7 +76,8 @@ public class JettyServer extends ServletServer {
         sslContextFactory.setTrustStorePassword(getTruststorePass());
         sslContextFactory.setNeedClientAuth(getClientAuthType() == ClientAuthType.MUST);
         sslContextFactory.setWantClientAuth(getClientAuthType() == ClientAuthType.WANT);
-        return sslContextFactory;
+        var http11 = new HttpConnectionFactory();
+        return new SslConnectionFactory(sslContextFactory, http11.getProtocol());
     }
 
     @Override

@@ -27,9 +27,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import java.io.ByteArrayOutputStream;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;

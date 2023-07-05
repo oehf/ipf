@@ -21,9 +21,9 @@ import org.herasaf.xacml.core.dataTypeAttribute.impl.AbstractDataTypeAttribute;
 import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.w3c.dom.Node;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
 import java.util.List;
 
 /**

@@ -23,8 +23,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformer;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses.PixV3QueryResponseTransformer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * Camel type converters for HL7 PRPA models in ITI-45 transaction.

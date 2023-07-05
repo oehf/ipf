@@ -32,7 +32,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 

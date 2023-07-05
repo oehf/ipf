@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 
 /**

@@ -17,13 +17,13 @@ package org.openehealth.ipf.commons.ihe.hl7v3.pcc1;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.jws.soap.SOAPBinding.Style;
-import javax.xml.ws.Action;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
+import jakarta.jws.soap.SOAPBinding.ParameterStyle;
+import jakarta.jws.soap.SOAPBinding.Style;
+import jakarta.xml.ws.Action;
  
 /**
  * SEI for PCC QED -- Query for Existing Data.

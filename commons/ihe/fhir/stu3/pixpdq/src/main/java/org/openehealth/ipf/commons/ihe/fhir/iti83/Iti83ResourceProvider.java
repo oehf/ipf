@@ -26,8 +26,8 @@ import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import org.hl7.fhir.dstu3.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.SOURCE_IDENTIFIER_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;

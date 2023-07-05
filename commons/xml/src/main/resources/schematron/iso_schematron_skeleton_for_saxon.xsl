@@ -165,7 +165,7 @@
   System.setProperty("javax.xml.transform.TransformerFactory",
                           "net.sf.saxon.TransformerFactoryImpl");
  rather than 
-  System.setProperty("javax.xml.xpath.TransformerFactory",
+  System.setProperty("jakarta.xml.xpath.TransformerFactory",
                            "net.sf.saxon.TransformerFactoryImpl");
  which is does not work, at least for the versions of SAXON we tried.
 -->

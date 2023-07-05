@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBElement
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBElement
 
 /**
  * @author Dmytro Rud

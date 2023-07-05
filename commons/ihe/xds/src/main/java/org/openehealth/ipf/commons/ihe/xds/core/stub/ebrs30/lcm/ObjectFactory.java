@@ -8,7 +8,7 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm;
 
-import javax.xml.bind.annotation.XmlRegistry;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 
 /**

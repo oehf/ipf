@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
-import javax.xml.bind.annotation.XmlElementRef;
+import jakarta.xml.bind.annotation.XmlElementRef;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

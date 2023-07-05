@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationTy
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.xml.XmlUtils;
 
-import javax.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContext;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;

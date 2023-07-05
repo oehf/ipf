@@ -20,10 +20,10 @@ import org.apache.camel.spi.Metadata;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.hl7.adapter.HapiAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *

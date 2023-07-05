@@ -42,7 +42,8 @@ public class ConformanceProfileBasedValidationBuilder extends DefaultValidationW
         super.configure();
 
         forAllVersions()
-                .message().all()
+                .message()
+                .all()
                 .test(new CachingGazelleProfileRule(transaction));
     }
 }

@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import org.apache.cxf.attachment.AttachmentImpl;
 import org.apache.cxf.binding.soap.SoapMessage;

@@ -19,8 +19,8 @@ import net.ihe.gazelle.hl7v3.prpain201305UV02.PRPAIN201305UV02Type;
 import net.ihe.gazelle.hl7v3.prpain201306UV02.PRPAIN201306UV02Type;
 import org.apache.camel.Converter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * Camel type converters for HL7 PRPA models for ITI-47 transaction.

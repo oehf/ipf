@@ -22,9 +22,9 @@ import org.apache.camel.Expression;
 import org.openehealth.ipf.platform.camel.core.adapter.StaticParams;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Martin Krasser

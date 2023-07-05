@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.core;
 
+import jakarta.xml.bind.annotation.XmlTransient;
 import org.openehealth.ipf.commons.core.config.TypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashMap;
 import java.util.Map;
 

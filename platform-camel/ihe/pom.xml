@@ -32,7 +32,7 @@
         <module>hl7v3</module>
         <module>hl7v2ws</module>
         <module>continua</module>
-        <module>fhir</module>
+        <!--<module>fhir</module>-->
         <module>core</module>
         <module>hpd</module>
         <module>xacml20</module>

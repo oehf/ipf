@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * @author Dmytro Rud

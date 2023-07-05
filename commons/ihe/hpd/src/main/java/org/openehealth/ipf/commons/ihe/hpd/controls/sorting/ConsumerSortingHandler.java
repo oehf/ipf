@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandler;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*;
 
 import javax.naming.ldap.SortControl;
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

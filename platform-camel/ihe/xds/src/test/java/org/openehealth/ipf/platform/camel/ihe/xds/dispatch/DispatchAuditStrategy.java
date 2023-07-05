@@ -41,7 +41,7 @@ import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 
-import javax.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.MessageContext;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -50,11 +50,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <!-- dependencies for test -->
 

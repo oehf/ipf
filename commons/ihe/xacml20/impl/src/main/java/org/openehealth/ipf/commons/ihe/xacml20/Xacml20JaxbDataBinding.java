@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20;
 
-import com.sun.xml.bind.marshaller.MinimumEscapeHandler;
 import org.apache.cxf.jaxb.JAXBDataBinding;
+import org.glassfish.jaxb.core.marshaller.MinimumEscapeHandler;
 
 /**
  * Prevents the usage of com.sun.xml.bind.v2.runtime.output.XMLStreamWriterOutput.NewLineEscapeHandler

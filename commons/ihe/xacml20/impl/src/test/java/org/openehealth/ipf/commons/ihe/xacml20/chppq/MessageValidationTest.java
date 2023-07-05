@@ -16,10 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xacml20.chppq;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
 
@@ -27,6 +28,7 @@ import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;
  * @since 3.5.1
  * @author Dmytro Rud
  */
+@Disabled("disabled due to javax dependency in herasaf lib")
 public class MessageValidationTest {
 
     @BeforeAll

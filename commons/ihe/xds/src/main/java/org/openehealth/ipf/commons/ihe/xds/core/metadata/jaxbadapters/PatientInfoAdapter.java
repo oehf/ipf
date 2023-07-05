@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;

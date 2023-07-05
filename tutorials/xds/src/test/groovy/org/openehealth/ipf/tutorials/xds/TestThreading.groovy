@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit

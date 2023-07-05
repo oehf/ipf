@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.slf4j.LoggerFactory
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 

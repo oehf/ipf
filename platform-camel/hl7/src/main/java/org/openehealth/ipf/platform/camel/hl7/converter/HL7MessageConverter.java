@@ -16,10 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.hl7.converter;
 
-import javax.jms.*;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
+import jakarta.jms.*;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 
@@ -43,11 +42,11 @@ public class HL7MessageConverter implements MessageConverter {
     }
 
     /**
-     * Returns a {@link javax.jms.TextMessage} instance containing the HL7 message as string
+     * Returns a {@link jakarta.jms.TextMessage} instance containing the HL7 message as string
      *
      * @param o       incoming object, can be either String or {@link ca.uhn.hl7v2.model.Message}
      * @param session JMS session
-     * @return a {@link javax.jms.TextMessage} instance containing the HL7 message as string
+     * @return a {@link jakarta.jms.TextMessage} instance containing the HL7 message as string
      * @throws JMSException
      * @throws MessageConversionException
      */
@@ -69,7 +68,7 @@ public class HL7MessageConverter implements MessageConverter {
     /**
      * Returns a {@link ca.uhn.hl7v2.model.Message} built from the JMS message type, using the specified HapiContext
      *
-     * @param message JMS {@link javax.jms.ObjectMessage} or {@link javax.jms.TextMessage}
+     * @param message JMS {@link jakarta.jms.ObjectMessage} or {@link jakarta.jms.TextMessage}
      * @return a {@link ca.uhn.hl7v2.model.Message} built from the JMS message type
      * @throws JMSException
      * @throws MessageConversionException

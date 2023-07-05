@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.tutorials.xds;
 
-import javax.activation.DataSource;
+import jakarta.activation.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;

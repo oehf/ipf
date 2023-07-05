@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
-import javax.jws.WebMethod;
+import jakarta.jws.WebMethod;
 
 /**
  * Generic producer for Web Services which have only one operation.

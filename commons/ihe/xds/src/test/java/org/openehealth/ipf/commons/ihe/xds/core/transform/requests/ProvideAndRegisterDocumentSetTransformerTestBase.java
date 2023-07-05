@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import static org.junit.jupiter.api.Assertions.*;
 
