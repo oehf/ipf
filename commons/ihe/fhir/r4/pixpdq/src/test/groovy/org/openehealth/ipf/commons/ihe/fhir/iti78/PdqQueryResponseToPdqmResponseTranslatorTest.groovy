@@ -20,7 +20,10 @@ import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
 import org.hl7.fhir.r4.model.ContactPoint
+import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.HumanName
+import org.hl7.fhir.r4.model.codesystems.AdministrativeGender
+import org.hl7.fhir.r4.model.codesystems.GenderIdentity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
@@ -82,25 +85,31 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
         PdqPatient patient = ++patients.iterator()
 
         assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', patient.identifier[0].system)
-        assertEquals('79007', patient.identifier[0].value)
+        assertEquals('79007', patient.identifierFirstRep.value)
 
-        assertEquals('Beckenbauer', patient.name[0].family)
-        assertEquals('Michael', patient.name[0].given[0].value)
-        assertEquals('Joachim', patient.name[0].given[1].value)
-        assertEquals(HumanName.NameUse.OFFICIAL, patient.name[0].use)
+        patient.nameFirstRep.with {
+            assertEquals('Beckenbauer', it.family)
+            assertEquals('Michael', it.given[0].value)
+            assertEquals('Joachim', it.given[1].value)
+            assertEquals(HumanName.NameUse.OFFICIAL, it.use)
+        }
+        patient.addressFirstRep.with {
+            assertEquals('Muenchner Freiheit 1', it.line[0].value)
+            assertEquals('Muenchen', it.city)
+            assertEquals('89000', it.postalCode)
+            assertEquals('DE', it.country)
+        }
 
-        assertEquals('Muenchner Freiheit 1', patient.address[0].line[0].value)
-        assertEquals('Muenchen', patient.address[0].city)
-        assertEquals('89000', patient.address[0].postalCode)
-        assertEquals('DE', patient.address[0].country)
-
-        assertEquals(ContactPoint.ContactPointUse.MOBILE, patient.telecom[0].use)
-        assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecom[0].system)
-        assertEquals('01511134556', patient.telecom[0].value)
+        assertEquals(ContactPoint.ContactPointUse.MOBILE, patient.telecomFirstRep.use)
+        assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecomFirstRep.system)
+        assertEquals(Enumerations.AdministrativeGender.MALE, patient.gender)
+        assertEquals(GenderIdentity.MALE.toCode(), patient.genderIdentity.codingFirstRep.code)
+        assertEquals('http://hl7.org/fhir/StructureDefinition/patient-genderIdentity', patient.genderIdentity.codingFirstRep.system)
+        assertEquals('01511134556', patient.telecomFirstRep.value)
         assertEquals('Paukenbecker', patient.mothersMaidenName.family)
         assertEquals('Passau', patient.birthPlace.city)
-        assertEquals('deu',patient.citizenship[0].code.codingFirstRep.code)
-        assertEquals('1041', patient.religion[0].codingFirstRep.code)
+        assertEquals('deu',patient.citizenshipFirstRep.code.codingFirstRep.code)
+        assertEquals('1041', patient.religionFirstRep.codingFirstRep.code)
         assertEquals('M', patient.maritalStatus.codingFirstRep.code)
         assertEquals(2, patient.multipleBirthIntegerType.value)
     }

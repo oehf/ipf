@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import org.hl7.fhir.dstu3.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
@@ -64,8 +65,12 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
         var sourceIdentifier = new Identifier();
 
         if (resourceId == null) {
-            sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
-                    .setValue(sourceIdentifierParam.getValue());
+            if (sourceIdentifierParam != null) {
+                sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
+                        .setValue(sourceIdentifierParam.getValue());
+            } else {
+                throw new ForbiddenOperationException("Either resource ID or sourceIdentifier must be provided in request");
+            }
         } else {
             sourceIdentifier.setValue(resourceId.getIdPart());
         }

@@ -251,7 +251,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     Enumerations.AdministrativeGender.fromCode(gender.map('hl7v2fhir-patient-administrativeGender').toString()))
             patient.setGenderIdentity(
                     makeCodeableConcept(
-                            gender.map('hl7v2fhir-patient-genderIdentity'),
+                            gender.map('hl7v2fhir-patient-genderIdentity').toString(),
                             'hl7v2fhir-patient-genderIdentity'.valueSystem(),
                             null
                     ))

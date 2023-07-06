@@ -136,6 +136,10 @@ public class PdqPatient extends Patient {
         return citizenship;
     }
 
+    public Citizenship getCitizenshipFirstRep() {
+        return this.getCitizenship().get(0);
+    }
+
     public void setCitizenship(List<Citizenship> citizenship) {
         this.citizenship = citizenship;
     }
@@ -171,6 +175,10 @@ public class PdqPatient extends Patient {
             religion = new ArrayList<>();
         }
         return religion;
+    }
+
+    public CodeableConcept getReligionFirstRep() {
+        return this.getReligion().get(0);
     }
 
     public void setReligion(List<CodeableConcept> religion) {

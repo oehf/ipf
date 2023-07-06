@@ -74,7 +74,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
                 sourceIdentifier.setSystem(sourceIdentifierParam.getSystem())
                         .setValue(sourceIdentifierParam.getValue());
             } else {
-                throw new ForbiddenOperationException("Either resource ID or sourceIdentifier must be provided");
+                throw new ForbiddenOperationException("Either resource ID or sourceIdentifier must be provided in request");
             }
         } else {
             sourceIdentifier.setValue(resourceId.getIdPart());

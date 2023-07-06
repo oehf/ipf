@@ -187,6 +187,14 @@ mappings = {
         (ELSE)  : 'other'
     )
 
+    'hl7v2fhir-patient-gender'(['http://hl7.org/fhir/administrative-gender', '2.16.840.1.113883.12.1'],
+        'male'    : 'M',
+        'female'  : 'F',
+        'other'   : 'O',
+        'unknown' : 'U',
+        (ELSE): 'O'
+    )
+
     'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.12.1', 'http://hl7.org/fhir/administrative-gender'],
         'M' : 'male',
         'F' : 'female',
@@ -205,11 +213,4 @@ mappings = {
         (ELSE): 'other'
     )
 
-    'hl7v2fhir-patient-gender'(['http://hl7.org/fhir/administrative-gender', '2.16.840.1.113883.12.1'],
-        'male'    : 'M',
-        'female'  : 'F',
-        'other'   : 'O',
-        'unknown' : 'U',
-        (ELSE): 'O'
-    )
 }
