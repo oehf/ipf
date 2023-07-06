@@ -200,7 +200,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String convertBirthDate(DateAndListParam birthDateParam) {
-        String birthDate = firstOrNull(searchDateList(birthDateParam))
+        Date birthDate = firstOrNull(searchDateList(birthDateParam))
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 
