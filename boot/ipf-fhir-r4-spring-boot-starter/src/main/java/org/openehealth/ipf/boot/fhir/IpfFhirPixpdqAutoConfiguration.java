@@ -34,10 +34,17 @@ import org.springframework.core.io.ClassPathResource;
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirPixpdqAutoConfiguration {
 
+    private final IpfFhirConfigurationProperties config;
+
+    public IpfFhirPixpdqAutoConfiguration(IpfFhirConfigurationProperties config) {
+        this.config = config;
+    }
+
     @Bean
     public CustomMappings translationFhirHl7v2Mappings(FhirMappingCustomizer fhirMappingCustomizer) {
         var mappings = new CustomMappings();
         mappings.addMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.map"));
+        config.getMappings().forEach(mappings::addMappingResource);
         fhirMappingCustomizer.customizeFhirMapping(mappings);
         return mappings;
     }

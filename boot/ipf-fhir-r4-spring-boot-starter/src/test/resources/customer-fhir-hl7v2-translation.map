@@ -1,0 +1,46 @@
+/*
+ * Mapping definitions
+ *
+ * Always are in the following Groovy syntax:
+ *
+ * <pre>
+ * mappings = {
+ *   mappingKey1(['oid of key code system','oid of value code system'],
+ *      key1  : 'value1',
+ *      key2  : 'value2',
+ *      (ELSE): Closure or Value
+ *   )
+ *   mappingKey2(
+ *      ...
+ *   )
+ *   ...
+ *
+ * }
+ * <pre>
+ *
+ * The list of OIDs is optional. The ELSE element can be either a Closure or a normal Object,
+ * which is converted to a String. The closure takes the key as only parameter, so that
+ * <pre>
+ * ...
+ * (ELSE) : { it }
+ * ...
+ * </pre>
+ * will return that key, and thus an unknown key is mapped to itself.
+ *
+ * Note that most of these mappings are derived directly from the FHIR specification
+ */
+
+
+mappings = {
+
+    'hl7v2fhir-patient-genderIdentity'(['2.16.840.1.113883.12.1', 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity'],
+        'M'   : 'male',
+        'F'   : 'female',
+        'A'   : 'non-binary',
+        'D'   : 'non-binary',
+        'I'   : 'non-binary',
+        'CUSTOM'   : 'non-binary',
+        (ELSE): 'other'
+    )
+
+}

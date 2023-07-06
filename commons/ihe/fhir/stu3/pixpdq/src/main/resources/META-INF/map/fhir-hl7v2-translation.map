@@ -111,7 +111,7 @@ mappings = {
         // COI:  // Christian: Church of God in Christ
         // COM:  // Christian: Community
         // COL:  // Christian: Congregational
-        // EVC:  // Christian: Evangelical Church      
+        // EVC:  // Christian: Evangelical Church
         // FWB:  // Christian: Free Will Baptist
         // LMS:  // Christian: Lutheran Missouri Synod
         // MEN:  // Christian: Mennonite
@@ -140,7 +140,7 @@ mappings = {
         // NOE:  // Nonreligious
         // OTH:  // Other
         // SPI:  // Spiritist
-        // VAR:  // Unknown                              
+        // VAR:  // Unknown
 */
 
     'hl7v2fhir-patient-citizenship'(['1.0.3166', 'urn:iso:std:iso:3166'],
@@ -187,12 +187,30 @@ mappings = {
         (ELSE)  : 'other'
     )
 
-    'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.5.1', 'http://hl7.org/fhir/administrative-gender'],
+    'hl7v2fhir-patient-gender'(['http://hl7.org/fhir/administrative-gender', '2.16.840.1.113883.12.1'],
+        'male'    : 'M',
+        'female'  : 'F',
+        'other'   : 'O',
+        'unknown' : 'U',
+        (ELSE): 'O'
+    )
+
+    'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.12.1', 'http://hl7.org/fhir/administrative-gender'],
         'M' : 'male',
         'F' : 'female',
         'A' : 'other',
         'O' : 'other',
         'U' : 'unknown',
-        (ELSE): 'unknown'
+        (ELSE): 'other'
     )
+
+    'hl7v2fhir-patient-genderIdentity'(['2.16.840.1.113883.12.1', 'http://hl7.org/fhir/StructureDefinition/patient-genderIdentity'],
+        'M'   : 'male',
+        'F'   : 'female',
+        'A'   : 'non-binary',
+        'D'   : 'non-binary',
+        'I'   : 'non-binary',
+        (ELSE): 'other'
+    )
+
 }

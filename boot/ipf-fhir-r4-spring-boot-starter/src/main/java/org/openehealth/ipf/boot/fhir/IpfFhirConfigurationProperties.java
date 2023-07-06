@@ -59,10 +59,16 @@ public class IpfFhirConfigurationProperties {
     private String path = "/fhir";
 
     /**
-     * Resource containing NamingSystems used for mapping between namespaces
+     * Resources containing NamingSystems used for mapping between namespaces
      */
     @Getter @Setter
     private List<Resource> namingSystems = new ArrayList<>();
+
+    /**
+     * Resources containing custom mapping files for FHIR/HL7v2 translation
+     */
+    @Getter @Setter
+    private List<Resource> mappings = new ArrayList<>();
 
     /**
      * Whether to create a cached PagingProvider
