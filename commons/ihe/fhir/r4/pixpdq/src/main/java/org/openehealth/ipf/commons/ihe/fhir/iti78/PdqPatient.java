@@ -38,6 +38,7 @@ import java.util.List;
  * <li>religion</li>
  * <li>race</li>
  * <li>ethnicity</li>
+ * <li>gender identity</li>
  * </ul>
  *
  * @author Christian Ohr
@@ -88,9 +89,14 @@ public class PdqPatient extends Patient {
     @Description(shortDefinition = "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.")
     private Ethnicity ethnicity;
 
+    @Child(name = "genderIdentity")
+    @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-genderIdentity", definedLocally = false)
+    @Description(shortDefinition = "The gender the patient identifies with. The Patient's gender identity is used as guidance (e.g. for staff) about how to interact with the patient..")
+    private CodeableConcept genderIdentity;
+
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(birthPlace, mothersMaidenName, citizenship, religion, race, ethnicity);
+        return super.isEmpty() && ElementUtil.isEmpty(birthPlace, mothersMaidenName, citizenship, religion, race, ethnicity, genderIdentity);
     }
 
     public Address getBirthPlace() {
@@ -211,6 +217,22 @@ public class PdqPatient extends Patient {
     public boolean hasRace() {
         return this.race != null && !this.race.isEmpty();
     }
+
+    public CodeableConcept getGenderIdentity() {
+        if (genderIdentity == null) {
+            genderIdentity = new CodeableConcept();
+        }
+        return genderIdentity;
+    }
+
+    public void setGenderIdentity(CodeableConcept genderIdentity) {
+        this.genderIdentity = genderIdentity;
+    }
+
+    public boolean hasGenderIdentity() {
+        return this.genderIdentity != null && !this.genderIdentity.isEmpty();
+    }
+
 
     public Ethnicity getEthnicity() {
         if (ethnicity == null) {

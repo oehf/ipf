@@ -144,8 +144,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             patient.setMothersMaidenName(convertName(pid[6]))
         }
         if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
-        if (pid[8]?.value) patient.setGender(
-                Enumerations.AdministrativeGender.fromCode(pid[8].value?.map('hl7v2fhir-patient-administrativeGender')))
+
+        String gender = pid[8]?.value
+        convertGender(gender, patient)
 
         // No race (10) in the default FHIR patient resource (but in the US Core profile). Conversion not implemented yet.
 
@@ -160,7 +161,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         }
 
         if (pid[15]?.value) {
-            patient.addCommunication().setLanguage(makeCodeableConcept(pid[15].value, pid[15].value, "urn:ietf:bcp:47", null))
+            patient.addCommunication().setLanguage(makeCodeableConcept(pid[15].value, "urn:ietf:bcp:47", null))
         }
 
         if (pid[16]?.value) {
@@ -176,7 +177,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                             .setDisplay('Unmarried'); break
                 default: mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
             }
-            patient.setMaritalStatus(makeCodeableConcept(pid[16].value, mapped, mappedMaritalStatus.system, mappedMaritalStatus.display))
+            patient.setMaritalStatus(makeCodeableConcept(mapped, mappedMaritalStatus.system, mappedMaritalStatus.display))
         }
 
         if (pid[17].value) {
@@ -187,7 +188,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     mappedReligion = V3NullFlavor.UNK; break
                 default: mappedReligion = V3ReligiousAffiliation.fromCode(mapped)
             }
-            patient.addReligion(makeCodeableConcept(pid[17].value, mapped, mappedReligion.system, mappedReligion.display))
+            patient.addReligion(makeCodeableConcept(mapped, mappedReligion.system, mappedReligion.display))
 
 
         }
@@ -231,7 +232,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     .setDisplay(mapped)
             }
             patient.addCitizenship()
-                    .setCode(makeCodeableConcept(pid[26].value, mapped, mappedCitizenship.system, mappedCitizenship.display))
+                    .setCode(makeCodeableConcept(mapped, mappedCitizenship.system, mappedCitizenship.display))
         }
 
         // Death Indicators
@@ -244,7 +245,20 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         patient
     }
 
-    protected static CodeableConcept makeCodeableConcept(String originalCode, String code, String system, String display) {
+    protected void convertGender(String gender, PdqPatient patient) {
+        if (gender) {
+            patient.setGender(
+                    Enumerations.AdministrativeGender.fromCode(gender.map('hl7v2fhir-patient-administrativeGender').toString()))
+            patient.setGenderIdentity(
+                    makeCodeableConcept(
+                            gender.map('hl7v2fhir-patient-genderIdentity'),
+                            'hl7v2fhir-patient-genderIdentity'.valueSystem(),
+                            null
+                    ))
+        }
+    }
+
+    protected static CodeableConcept makeCodeableConcept(String code, String system, String display) {
         CodeableConcept codeableConcept = new CodeableConcept()
         codeableConcept.addCoding()
                 .setCode(code)

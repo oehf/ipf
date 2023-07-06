@@ -168,7 +168,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         // Properly convert gender code
         TokenParam genderParam = searchParameters.gender
         String genderString = genderParam ?
-                Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().mapReverse('hl7v2fhir-patient-administrativeGender') :
+                Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().map('hl7v2fhir-patient-gender') :
                 null
 
         Map<String, Object> searchParams = [

@@ -168,7 +168,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         // Properly convert gender code
         TokenParam genderParam = searchParameters.gender
         String genderString = genderParam ?
-                Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().mapReverse('hl7v2fhir-patient-administrativeGender') :
+                Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().map('hl7v2fhir-patient-gender') :
                 null
 
         Map<String, Object> searchParams = [
@@ -200,7 +200,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String convertBirthDate(DateAndListParam birthDateParam) {
-        Date birthDate = firstOrNull(searchDateList(birthDateParam))
+        String birthDate = firstOrNull(searchDateList(birthDateParam))
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 
@@ -247,7 +247,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         param?.valuesAsQueryTokens?.collect { searchToken(it?.valuesAsQueryTokens?.find()) }
     }
 
-    protected static def firstOrNull(List<?> list) {
+    protected static <T> T firstOrNull(List<T> list) {
         list == null || list.empty ? null : list[0]
     }
 
