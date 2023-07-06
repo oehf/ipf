@@ -18,11 +18,12 @@ import static org.hamcrest.Matchers.*;
         classes = {TestApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
-                "spring.application.name=test",
+                "spring.application.name=mappingstest",
+                "ipf.fhir.cors.allowed-headers=gablorg",
                 "ipf.fhir.mappings=classpath:customer-fhir-hl7v2-translation.map",
                 "ipf.atna.audit-enabled=false"
         })
-public class FhirMappingsTest {
+public class FhirApplicationTest {
 
     @Autowired
     private IpfFhirConfigurationProperties properties;
@@ -30,6 +31,13 @@ public class FhirMappingsTest {
     @Autowired
     @Qualifier("translationFhirHl7v2Mappings")
     private CustomMappings translationFhirHl7v2Mappings;
+
+    @Test
+    public void testCorsConfiguration() {
+        assertThat(properties, notNullValue()); // explicit config
+        assertThat(properties.getCors().getAllowedHeaders(), hasItem("gablorg"));
+        assertThat(properties.getCors().getExposedHeaders(), hasItem("ETag"));
+    }
 
     @Test
     public void testCustomizeFhirMapping() {
