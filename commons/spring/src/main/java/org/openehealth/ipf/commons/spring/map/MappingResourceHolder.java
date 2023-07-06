@@ -40,8 +40,10 @@ public interface MappingResourceHolder {
      */
     void setMappingResources(Collection<? extends Resource> resources);
 
+    void addMappingResource(Resource resource);
+
     /**
-     * @return registerd mapping resources
+     * @return immutable registered mapping resources
      */
     Collection<? extends Resource> getMappingResources();
 

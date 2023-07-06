@@ -59,19 +59,22 @@ public class CustomMappings implements MappingResourceHolder {
 
     @Override
     public Collection<? extends Resource> getMappingResources() {
-        return mappingResources;
+        return Collections.unmodifiableCollection(mappingResources);
+    }
+
+    @Override
+    public void addMappingResource(Resource mappingResource) {
+        if (mappingResource.exists() && mappingResource.isReadable()) {
+            mappingResources.add(mappingResource);
+        } else {
+            LOG.warn("Could not read mapping script {}", mappingResource.getFilename());
+        }
     }
 
     @Override
     public void setMappingResources(Collection<? extends Resource> mappingResources) {
         this.mappingResources = new ArrayList<>(mappingResources.size());
-        for (Resource mappingResource : mappingResources) {
-            if (mappingResource.exists() && mappingResource.isReadable()) {
-                this.mappingResources.add(mappingResource);
-            } else {
-                LOG.warn("Could not read mapping script {}", mappingResource.getFilename());
-            }
-        }
+        mappingResources.forEach(this::addMappingResource);
     }
 
     @Override

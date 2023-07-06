@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PDQM;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappings;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +35,17 @@ import org.springframework.core.io.ClassPathResource;
 public class IpfFhirPixpdqAutoConfiguration {
 
     @Bean
-    public CustomMappings translationFhirHl7v2Mappings() {
+    public CustomMappings translationFhirHl7v2Mappings(FhirMappingCustomizer fhirMappingCustomizer) {
         var mappings = new CustomMappings();
-        mappings.setMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.map"));
+        mappings.addMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.map"));
+        fhirMappingCustomizer.customizeFhirMapping(mappings);
         return mappings;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FhirMappingCustomizer.class)
+    public FhirMappingCustomizer fhirMappingCustomizer() {
+        return FhirMappingCustomizer.NOOP;
     }
 
 }
