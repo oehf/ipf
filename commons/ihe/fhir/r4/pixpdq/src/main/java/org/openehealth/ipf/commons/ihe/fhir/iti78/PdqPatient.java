@@ -44,7 +44,7 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.6
  */
-@ResourceDef(name = "Patient", id = "pdqm", profile = "http://org.openehealth.ipd/fhir/StructureDefinition/IHE.PDQm.PatientResource")
+@ResourceDef(name = "Patient", id = "pdqm", profile = "http://openehealth.org/fhir/StructureDefinition/IHE.PDQm.PatientResource")
 public class PdqPatient extends Patient {
 
     // Search Parameters
