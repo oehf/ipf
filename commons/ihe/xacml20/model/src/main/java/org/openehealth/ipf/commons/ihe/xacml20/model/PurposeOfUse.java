@@ -30,10 +30,10 @@ import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingS
 @XmlType(name = "PurposeOfUse", namespace = "http://www.openehealth.org/ipf/ppq")
 @XmlEnum
 public enum PurposeOfUse {
-    NORMAL    (new CE("NORM",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Normal")),
-    EMERGENCY (new CE("EMER",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Emergency")),
-    AUTO      (new CE("AUTO",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Machine Access")),
-    DICOM_AUTO(new CE("DICOM_AUTO", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Machine Access for DICOM"));
+    NORMAL    (new CE("NORM",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Normal access")),
+    EMERGENCY (new CE("EMER",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Emergency access")),
+    AUTO      (new CE("AUTO",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Automatic upload")),
+    DICOM_AUTO(new CE("DICOM_AUTO", CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Automatic upload of radiological contents"));
 
     @Getter private final CE code;
 
