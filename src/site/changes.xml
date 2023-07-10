@@ -23,7 +23,7 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="tbd" description="IPF tbd" date="tbd">
+        <release version="4.7.0" description="IPF 4.7.0" date="10 july 2023">
             <action issue="413" dev="zortx233" type="fix">
                 Properly populate PurposeOfUse attribute in audit records of some HL7v3-based transactions
             </action>
@@ -35,6 +35,9 @@
             </action>
             <action issue="419" dev="unixoid" type="fix">
                 Fixed the 'user is requestor' flag in ATNA records
+            </action>
+            <action issue="418" dev="thopap" type="update">
+                Dependency Updates (Important: Camel 3.20->3.21, CXF 3.5->3.6, Hapi 6.4->6.6)
             </action>
         </release>
         <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
