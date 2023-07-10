@@ -39,6 +39,9 @@
             <action issue="418" dev="thopap" type="update">
                 Dependency Updates (Important: Camel 3.20->3.21, CXF 3.5->3.6, Hapi 6.4->6.6)
             </action>
+            <action issue="420" dev="ohr" type="fix">
+                PDQm/PIXm translation improvements
+            </action>
         </release>
         <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
             <action issue="412" dev="ohr" type="fix">
