@@ -33,6 +33,9 @@
             <action issue="417" dev="unixoid" type="fix">
                 Better validation for unique IDs of XDS Document Entries, Submission Sets, and Folders
             </action>
+            <action issue="419" dev="unixoid" type="fix">
+                Fixed the 'user is requestor' flag in ATNA records
+            </action>
         </release>
         <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
             <action issue="412" dev="ohr" type="fix">
