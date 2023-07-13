@@ -23,7 +23,12 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.7.0" description="IPF 4.7.0" date="10 july 2023">
+        <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action issue="422" dev="unixoid" type="add">
+                Support JSON representation of the HPD DSMLv2 data model
+            </action>
+        </release>
+        <release version="4.7.0" description="IPF 4.7.0" date="10 Jul 2023">
             <action issue="413" dev="zortx233" type="fix">
                 Properly populate PurposeOfUse attribute in audit records of some HL7v3-based transactions
             </action>

@@ -74,7 +74,7 @@ import javax.xml.bind.annotation.XmlType;
     "message",
     "detail"
 })
-public class ErrorResponse {
+public class ErrorResponse implements BatchResponseElement {
 
     protected String message;
     protected Detail detail;

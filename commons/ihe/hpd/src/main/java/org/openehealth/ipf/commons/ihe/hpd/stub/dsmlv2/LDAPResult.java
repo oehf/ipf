@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -58,8 +56,14 @@ import javax.xml.bind.annotation.XmlType;
     ExtendedResponse.class
 })
 public class LDAPResult
-    extends DsmlMessage
+    extends DsmlMessage implements BatchResponseElement
 {
+
+    // this attribute is required only in JSON serialization to hold the actual element name
+    @XmlTransient
+    @JsonProperty("@e")
+    @Getter @Setter
+    private String elementName;
 
     @XmlElement(required = true)
     protected ResultCode resultCode;

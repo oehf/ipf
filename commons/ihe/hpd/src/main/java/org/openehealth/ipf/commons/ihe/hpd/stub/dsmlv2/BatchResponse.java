@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
@@ -59,6 +61,7 @@ public class BatchResponse {
         @XmlElementRef(name = "authResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "addResponse", namespace = "urn:oasis:names:tc:DSML:2:0:core", type = JAXBElement.class, required = false)
     })
+    @JsonSerialize(using = JaxbElementListSerializer.class)
     protected List<JAXBElement<?>> batchResponses;
     @XmlAttribute(name = "requestID")
     protected String requestID;

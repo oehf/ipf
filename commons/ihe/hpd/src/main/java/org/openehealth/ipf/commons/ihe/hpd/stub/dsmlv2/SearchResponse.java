@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
     "searchResultReference",
     "searchResultDone"
 })
-public class SearchResponse {
+public class SearchResponse implements BatchResponseElement {
 
     protected List<SearchResultEntry> searchResultEntry;
     protected List<SearchResultReference> searchResultReference;

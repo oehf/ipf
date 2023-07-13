@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -62,6 +64,7 @@ import javax.xml.bind.annotation.XmlType;
     ExtendedRequest.class,
     SearchResultEntry.class
 })
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class DsmlMessage {
 
     protected List<Control> control;
