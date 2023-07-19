@@ -21,7 +21,7 @@
         <groovy-version>4.0.12</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>6.10.0</hapi-fhir-version>
-        <herasaf-version>2.0.4</herasaf-version>
+        <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>4.0.2</jaxb-version>
