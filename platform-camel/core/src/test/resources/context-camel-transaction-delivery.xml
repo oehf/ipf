@@ -49,7 +49,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
   </bean> 
 
   <bean id="jmsConnectionFactoryDelivery" class="org.apache.activemq.ActiveMQConnectionFactory">
-      <property name="brokerURL" value="tcp://localhost:60001"/>
+      <property name="brokerURL" value="tcp://localhost:60003"/>
       <property name="redeliveryPolicy" ref="redeliveryPolicyDelivery" />
   </bean>
 
