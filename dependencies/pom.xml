@@ -9,16 +9,16 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <bouncycastle-version>1.77</bouncycastle-version>
-        <brave-version>5.17.0</brave-version>
-        <camel-version>4.0.0-RC1</camel-version>
+        <bouncycastle-version>1.76</bouncycastle-version>
+        <brave-version>5.16.0</brave-version>
+        <camel-version>4.0.0-RC2</camel-version>
         <cxf-version>4.0.2</cxf-version>
         <commons-io-version>2.15.1</commons-io-version>
         <commons-compress-version>1.26.1</commons-compress-version>
         <equinox-app.version>1.3.200-v20130910-1609</equinox-app.version>
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
-        <groovy-version>4.0.12</groovy-version>
+        <groovy-version>4.0.13</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>6.10.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
@@ -27,6 +27,9 @@
         <jaxb-version>4.0.3</jaxb-version>
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
+        <kotlin.dokka.version>1.8.10</kotlin.dokka.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.logging.version>3.0.5</kotlin.logging.version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
