@@ -24,7 +24,7 @@ import org.apache.camel.Producer;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Adapter for HL7v2 interceptors which allows them
+ * Adapter for interceptors which allows them
  * to be exposed as Camel {@link Producer}s.
  *
  * @author Dmytro Rud

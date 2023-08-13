@@ -43,18 +43,22 @@ public class HapiClientAuditInterceptor implements IClientInterceptor {
     public void interceptRequest(IHttpRequest request) {
         var requestUri = request.getUri();
         // Ignore requests for ConformanceStatements
-        if ("OPTIONS".equalsIgnoreCase(request.getHttpVerbName()) || requestUri.endsWith("metadata")) {
+        if ("OPTIONS".equalsIgnoreCase(request.getHttpVerbName()) || requestUri.endsWith("/metadata")) {
             return;
         }
         var uri = URI.create(requestUri);
         fhirAuditDataset.setRemoteAddress(uri.getHost());
         int queryPos = requestUri.indexOf("?");
-        fhirAuditDataset.setDestinationUserId(queryPos >= 0 ? requestUri.substring(0, queryPos) : requestUri);
-        if (fhirAuditDataset instanceof FhirQueryAuditDataset) {
-            ((FhirQueryAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
-        }
-        if (fhirAuditDataset instanceof GenericFhirAuditDataset) {
-            ((GenericFhirAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+        if (queryPos >= 0) {
+            fhirAuditDataset.setDestinationUserId(requestUri.substring(0, queryPos));
+            if (fhirAuditDataset instanceof FhirQueryAuditDataset) {
+                ((FhirQueryAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            }
+            if (fhirAuditDataset instanceof GenericFhirAuditDataset) {
+                ((GenericFhirAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            }
+        } else {
+            fhirAuditDataset.setDestinationUserId(requestUri);
         }
     }
 

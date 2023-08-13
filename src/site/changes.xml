@@ -27,6 +27,9 @@
             <action issue="422" dev="unixoid" type="add">
                 Support JSON representation of the HPD DSMLv2 data model
             </action>
+            <action issue="391" dev="unixoid" type="add">
+                Early support for the Swiss EPR integration profile CH:PPQm
+            </action>
         </release>
         <release version="4.7.0" description="IPF 4.7.0" date="10 Jul 2023">
             <action issue="413" dev="zortx233" type="fix">
