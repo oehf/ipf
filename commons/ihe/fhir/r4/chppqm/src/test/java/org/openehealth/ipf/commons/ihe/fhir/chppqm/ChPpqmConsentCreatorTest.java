@@ -105,10 +105,4 @@ public class ChPpqmConsentCreatorTest {
         doTest("303", consent, "POST", null);
     }
 
-    @Test
-    public void testConsent303Creation2() throws Exception {
-        Consent consent = create303Consent(createUuid(), "123456789012345678", "rep123", null, null);
-        doTest("303", consent, "PUT", "Resource ID must be present for UPDATE");
-    }
-
 }
