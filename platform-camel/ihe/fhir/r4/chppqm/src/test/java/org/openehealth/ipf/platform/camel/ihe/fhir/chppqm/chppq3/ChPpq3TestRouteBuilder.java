@@ -36,7 +36,7 @@ public class ChPpq3TestRouteBuilder extends RouteBuilder {
                 .setHeader(VALIDATION_MODE, constant(MODEL))
                 .process(itiRequestValidator())
                 .process(exchange -> {
-                    Consent request = exchange.getMessage().getMandatoryBody(Consent.class);
+                    //Consent request = exchange.getMessage().getMandatoryBody(Consent.class);
                     log.info("Method = {}", exchange.getMessage().getHeader(Constants.HTTP_METHOD));
                     exchange.getMessage().setBody(new MethodOutcome(new IdType(UUID.randomUUID().toString())));
                 })

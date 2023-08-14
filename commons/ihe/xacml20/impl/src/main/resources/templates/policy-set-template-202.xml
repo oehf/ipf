@@ -1,0 +1,56 @@
+<!-- Template 202 -->
+<PolicySet
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:hl7="urn:hl7-org:v3"
+        xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+        PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:deny-overrides"
+        PolicySetId="${id}">
+    <Description>
+        Patient specific PolicySet for EPD Setup 202 - granting default access level to the patients EPD for health professionals in case of a emergency access.
+        This policy set can be modified by the patient via a Policy Manager pointing to the more or less restrictive option (PolicyIdReference below)
+        according to the patient's choice of confidentiality level.
+    </Description>
+    <Target>
+        <Subjects>
+            <Subject>
+                <SubjectMatch MatchId="urn:hl7-org:v3:function:CV-equal">
+                    <AttributeValue DataType="urn:hl7-org:v3#CV">
+                        <hl7:CodedValue code="HCP" codeSystem="2.16.756.5.30.1.127.3.10.6"/>
+                    </AttributeValue>
+                    <SubjectAttributeDesignator
+                            DataType="urn:hl7-org:v3#CV"
+                            AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"/>
+                </SubjectMatch>
+                <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">urn:gs1:gln</AttributeValue>
+                    <SubjectAttributeDesignator
+                            AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id-qualifier"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                </SubjectMatch>
+                <SubjectMatch MatchId="urn:hl7-org:v3:function:CV-equal">
+                    <AttributeValue DataType="urn:hl7-org:v3#CV">
+                        <hl7:CodedValue code="EMER" codeSystem="2.16.756.5.30.1.127.3.10.5"/>
+                    </AttributeValue>
+                    <SubjectAttributeDesignator
+                            DataType="urn:hl7-org:v3#CV"
+                            AttributeId="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"/>
+                </SubjectMatch>
+            </Subject>
+        </Subjects>
+        <Resources>
+            <Resource>
+                <ResourceMatch MatchId="urn:hl7-org:v3:function:II-equal">
+                    <AttributeValue DataType="urn:hl7-org:v3#II">
+                        <hl7:InstanceIdentifier root="2.16.756.5.30.1.127.3.10.3" extension="${eprSpid}"/>
+                    </AttributeValue>
+                    <ResourceAttributeDesignator
+                            DataType="urn:hl7-org:v3#II"
+                            AttributeId="urn:e-health-suisse:2015:epr-spid"/>
+                </ResourceMatch>
+            </Resource>
+        </Resources>
+    </Target>
+    <PolicySetIdReference>
+        ${policyIdReference}
+    </PolicySetIdReference>
+</PolicySet>

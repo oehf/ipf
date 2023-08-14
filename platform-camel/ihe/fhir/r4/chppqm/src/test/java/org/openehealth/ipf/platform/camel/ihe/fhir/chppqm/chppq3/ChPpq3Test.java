@@ -25,6 +25,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.support.DefaultExchange;
 import org.hl7.fhir.r4.model.Consent;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -63,18 +64,23 @@ public class ChPpq3Test extends FhirTestContainer {
         }).registerInterceptor(loggingInterceptor);
     }
 
-    @Test
-    public void test1() throws Exception {
-        Consent consent = create201Consent(createUuid(), "123456789012345678");
-
+    private Exchange send(Object request, String httpMethod) throws Exception {
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);
-        exchange.getMessage().setBody(consent);
-        exchange.getMessage().setHeader(Constants.HTTP_METHOD, "POST");
+        exchange.getMessage().setBody(request);
+        exchange.getMessage().setHeader(Constants.HTTP_METHOD, httpMethod);
         exchange = producerTemplate.send("ch-ppq3://localhost:" + DEMO_APP_PORT, exchange);
         Exception exception = Exchanges.extractException(exchange);
         if (exception != null) {
             throw exception;
         }
+        return exchange;
+    }
+
+    @Test
+    public void testCreate1() throws Exception {
+        Consent consent = create201Consent(createUuid(), "123456789012345678");
+
+        Exchange exchange = send(consent, "POST");
 
         MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
         assertTrue(methodOutcome.getCreated());
@@ -82,7 +88,62 @@ public class ChPpq3Test extends FhirTestContainer {
         List<AuditMessage> auditMessages = auditSender.getMessages();
         assertEquals(2, auditMessages.size());
         log.info("");
+    }
 
+    @Test
+    public void testUpdate1() throws Exception {
+        Consent consent = create201Consent(createUuid(), "123456789012345678");
+        consent.setId(createUuid());
+
+        Exchange exchange = send(consent, "PUT");
+
+        MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
+
+        List<AuditMessage> auditMessages = auditSender.getMessages();
+        assertEquals(2, auditMessages.size());
+        log.info("");
+    }
+
+    @Test
+    public void testUpdate2() throws Exception {
+        Consent consent = create201Consent(createUuid(), "123456789012345678");
+        consent.setId(createUuid());
+
+        MethodOutcome methodOutcome = client.update()
+                .resource(consent)
+                .conditional()
+                .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))
+                .execute();
+
+        List<AuditMessage> auditMessages = auditSender.getMessages();
+        assertEquals(1, auditMessages.size());
+        log.info("");
+    }
+
+    @Test
+    @Disabled
+    public void testDelete1() throws Exception {
+        MethodOutcome methodOutcome = client.delete()
+                .resourceConditionalByType(Consent.class)
+                .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))
+                .execute();
+
+        List<AuditMessage> auditMessages = auditSender.getMessages();
+        assertEquals(1, auditMessages.size());
+        log.info("");
+    }
+
+    @Test
+    public void testDelete2() throws Exception {
+        String request = createUuid();
+
+        Exchange exchange = send(request, "DELETE");
+
+        MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
+
+        List<AuditMessage> auditMessages = auditSender.getMessages();
+        assertEquals(2, auditMessages.size());
+        log.info("");
     }
 
 }

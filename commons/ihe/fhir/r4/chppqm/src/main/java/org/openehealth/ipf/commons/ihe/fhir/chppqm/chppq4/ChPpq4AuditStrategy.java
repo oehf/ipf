@@ -49,15 +49,15 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
             switch (method) {
                 case POST:
                     auditDataset.setAction(EventActionCode.Create);
-                    enrichAuditDatasetFromRequestBundle(auditDataset, bundle);
+                    extractConsentIdsFromEntryResources(auditDataset, bundle);
                     break;
                 case PUT:
                     auditDataset.setAction(EventActionCode.Update);     // may be changed based on response entry status code
-                    enrichAuditDatasetFromRequestBundle(auditDataset, bundle);
+                    extractConsentIdsFromEntryResources(auditDataset, bundle);
                     break;
                 case DELETE:
                     auditDataset.setAction(EventActionCode.Delete);
-                    enrichAuditDatasetFromRequestBundle(auditDataset, bundle);
+                    auditDataset.getPolicyAndPolicySetIds().addAll(ChPpqmUtils.extractConsentIdsFromEntryUrls(bundle));
                     break;
                 default:
                     log.error("Unsupported HTTP method '{}'", method);
@@ -66,17 +66,10 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
         return auditDataset;
     }
 
-    private static void enrichAuditDatasetFromRequestBundle(ChPpqmAuditDataset auditDataset, Bundle bundle) {
+    private static void extractConsentIdsFromEntryResources(ChPpqmAuditDataset auditDataset, Bundle bundle) {
         for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
-            if (entry.hasResource()) {
-                Consent consent = (Consent) entry.getResource();
-                auditDataset.getPolicyAndPolicySetIds().add(ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID));
-            } else {
-                // TODO better extraction of the policy set ID
-                String url = entry.getRequest().getUrl();
-                int pos = url.indexOf("=");
-                auditDataset.getPolicyAndPolicySetIds().add(url.substring(pos + 1));
-            }
+            Consent consent = (Consent) entry.getResource();
+            auditDataset.getPolicyAndPolicySetIds().add(ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID));
         }
     }
 

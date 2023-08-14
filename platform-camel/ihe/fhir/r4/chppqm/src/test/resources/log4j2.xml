@@ -25,7 +25,7 @@
     </Appenders>
     
     <Loggers>
-        <Logger name="org.openehealth.ipf" level="DEBUG"/>
+        <Logger name="org.openehealth.ipf" level="WARN"/>
 
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>

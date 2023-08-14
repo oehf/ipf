@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -62,7 +61,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            var result = exchange.getMessage().getBody(IBaseResource.class);
+            var result = exchange.getMessage().getBody();
             failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
         } catch (Exception e) {
             // FHIR exception or unexpected exception
@@ -109,7 +108,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, IBaseResource response) {
+    private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, Object response) {
         return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 

@@ -18,13 +18,16 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm;
 
 import ca.uhn.fhir.context.FhirContext;
 import lombok.experimental.UtilityClass;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Consent;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Resource;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IgBasedFhirContextSupplier;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Dmytro Rud
@@ -79,13 +82,30 @@ public class ChPpqmUtils {
     }
 
     public static String extractResourceIdForDelete(Object requestData) {
-        if (requestData instanceof Resource) {
-            Resource resource = (Resource) requestData;
-            return resource.getId();
+        if (requestData instanceof Consent) {
+            Consent consent = (Consent) requestData;
+            return extractConsentId(consent, ConsentIdTypes.POLICY_SET_ID);
         } else if (requestData instanceof String) {
             return (String) requestData;
         }
         return null;
+    }
+
+    /**
+     * Extracts identifiers of consents from URLs in a bundle's entries
+     * (primarily for PPQ-4 operation DELETE).
+     */
+    public static Set<String> extractConsentIdsFromEntryUrls(Bundle bundle) {
+        Set<String> result = new HashSet<>();
+        for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
+            List<NameValuePair> params = URLEncodedUtils.parse(entry.getRequest().getUrl(), StandardCharsets.UTF_8);
+            for (NameValuePair param : params) {
+                if ("identifier".equals(param.getName())) {
+                    result.add(param.getValue());
+                }
+            }
+        }
+        return result;
     }
 
 }

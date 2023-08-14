@@ -41,18 +41,8 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
         String method = headers.get(Constants.HTTP_METHOD).toString();
         switch (method) {
             case "POST":
-                return validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.CONSENT);
-
             case "PUT":
-                Resource resource = (Resource) payload;
-                OperationOutcome outcome = validateProfileConformance(resource, ChPpqmUtils.Profiles.CONSENT);
-                if (StringUtils.isBlank(resource.getId())) {
-                    outcome.addIssue(new OperationOutcome.OperationOutcomeIssueComponent()
-                            .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                            .setCode(OperationOutcome.IssueType.REQUIRED)
-                            .setDiagnostics("Resource ID must be present for UPDATE"));
-                }
-                return outcome;
+                return validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.CONSENT);
 
             case "DELETE":
                 String resourceId = ChPpqmUtils.extractResourceIdForDelete(payload);
@@ -61,7 +51,7 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
                             .addIssue(new OperationOutcome.OperationOutcomeIssueComponent()
                                     .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                                     .setCode(OperationOutcome.IssueType.REQUIRED)
-                                    .setDiagnostics("Resource ID must be present for DELETE"));
+                                    .setDiagnostics("Identifier must be present for DELETE"));
                 }
                 return null;
 

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
+import org.hl7.fhir.r4.model.Consent;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -38,10 +39,16 @@ public class ChPpq3RequestFactory implements ClientRequestFactory<IClientExecuta
             case "POST":
                 return client.create().resource((Resource) requestData);
             case "PUT":
-                Resource resource = (Resource) requestData;
-                return client.update().resource(resource).withId(resource.getIdElement());
+                Consent consent = (Consent) requestData;
+                String consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID);
+                return client.update()
+                        .resource(consent)
+                        .conditional()
+                        .where(Consent.IDENTIFIER.exactly().identifier(consentId));
             case "DELETE":
-                return client.delete().resourceById("resource", ChPpqmUtils.extractResourceIdForDelete(requestData));
+                return client.delete()
+                        .resourceConditionalByType(Consent.class)
+                        .where(Consent.IDENTIFIER.exactly().identifier(ChPpqmUtils.extractResourceIdForDelete(requestData)));
             default:
                 throw new RuntimeException("Unknown method: " + method);
         }

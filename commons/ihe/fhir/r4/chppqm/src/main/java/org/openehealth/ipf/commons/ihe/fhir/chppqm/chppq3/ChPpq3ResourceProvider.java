@@ -48,18 +48,20 @@ public class ChPpq3ResourceProvider extends AbstractResourceProvider {
     @Update
     public MethodOutcome updateConsent(
             @ResourceParam Consent consent,
-            @IdParam IdType id,
+            @IdParam IdType resourceId,
+            @ConditionalUrlParam String condition,
             RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse)
     {
-        consent.setId(id);
         return requestAction(consent, null, httpServletRequest, httpServletResponse, requestDetails);
     }
 
     @Delete
     public MethodOutcome deleteConsent(
             @IdParam IdType id,
+            @IdParam IdType resourceId,
+            @ConditionalUrlParam String condition,
             RequestDetails requestDetails,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse)

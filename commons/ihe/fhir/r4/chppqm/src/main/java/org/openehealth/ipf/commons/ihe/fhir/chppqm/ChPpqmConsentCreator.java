@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.chppqm;
 
 import ca.uhn.fhir.model.api.TemporalPrecisionEnum;
+import lombok.experimental.UtilityClass;
 import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.codesystems.ConsentScope;
 import org.hl7.fhir.r4.model.codesystems.V3ActCode;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class ChPpqmConsentCreator {
 
     private static Consent createConsent(

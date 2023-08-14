@@ -32,10 +32,11 @@
         <saxon-he-version>11.4</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>2.7.13</spring-boot-version>
+        <velocity-version>2.3</velocity-version>
         <vertx-version>4.3.8</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <xmlsec-version>2.3.3</xmlsec-version>
         <woodstox-version>6.5.1</woodstox-version>
+        <xmlsec-version>2.3.3</xmlsec-version>
 
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
@@ -306,6 +307,11 @@
                 <artifactId>Saxon-HE</artifactId>
                 <classifier>xqj</classifier>
                 <version>${saxon-he-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity-version}</version>
             </dependency>
 
             <dependency>
