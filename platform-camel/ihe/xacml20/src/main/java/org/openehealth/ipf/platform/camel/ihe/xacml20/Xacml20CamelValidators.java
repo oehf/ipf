@@ -17,6 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20;
 
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
@@ -28,25 +31,25 @@ public class Xacml20CamelValidators {
 
     private static final Processor CH_PPQ_1_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpq1Request(exchange.getIn().getBody());
+            Xacml20MessageValidator.validateChPpq1Request(exchange.getIn().getMandatoryBody());
         }
     };
 
     private static final Processor CH_PPQ_1_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpq1Response(exchange.getIn().getBody());
+            Xacml20MessageValidator.validateChPpq1Response(exchange.getIn().getMandatoryBody(EprPolicyRepositoryResponse.class));
         }
     };
 
     private static final Processor CH_PPQ_2_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpq2Request(exchange.getIn().getBody());
+            Xacml20MessageValidator.validateChPpq2Request(exchange.getIn().getMandatoryBody(XACMLPolicyQueryType.class));
         }
     };
 
     private static final Processor CH_PPQ_2_RESPONSE_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpq2Response(exchange.getIn().getBody());
+            Xacml20MessageValidator.validateChPpq2Response(exchange.getIn().getMandatoryBody(ResponseType.class));
         }
     };
 

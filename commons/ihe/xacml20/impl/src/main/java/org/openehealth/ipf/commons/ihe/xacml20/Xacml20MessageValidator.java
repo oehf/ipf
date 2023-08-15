@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
+import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1RequestValidationProfile;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,52 +36,37 @@ import java.util.Map;
 public class Xacml20MessageValidator {
 
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator();
+    private static final CombinedXmlValidator COMBINED_XML_VALIDATOR = new CombinedXmlValidator();
 
-    private static final Map<Class<?>, String> REQUEST_SCHEMAS;
-    static {
-        REQUEST_SCHEMAS = new HashMap<>();
-        REQUEST_SCHEMAS.put(XACMLPolicyQueryType.class, "schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd");
-        REQUEST_SCHEMAS.put(AddPolicyRequest.class,     "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
-        REQUEST_SCHEMAS.put(UpdatePolicyRequest.class,  "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
-        REQUEST_SCHEMAS.put(DeletePolicyRequest.class,  "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
-    }
+    private static final Map<Class<?>, String> XML_SCHEMAS = Map.of(
+            XACMLPolicyQueryType.class, "schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd",
+            ResponseType.class, "schema/PolicyQueryResponse.xsd",
+            EprPolicyRepositoryResponse.class, "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
 
-    private static final Map<Class<?>, String> RESPONSE_SCHEMAS;
-    static {
-        RESPONSE_SCHEMAS = new HashMap<>();
-        RESPONSE_SCHEMAS.put(ResponseType.class, "schema/PolicyQueryResponse.xsd");
-        RESPONSE_SCHEMAS.put(EprPolicyRepositoryResponse.class, "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
-    }
-
-    private static void validateMessage(Object message, Map<Class<?>, String> schemaNames, Class... allowedClasses) {
-        if (message == null) {
-            throw new ValidationException("Message cannot be <null>");
-        }
-        if (!ArrayUtils.contains(allowedClasses, message.getClass())) {
-            throw new ValidationException("Unsupported message type " + message.getClass());
-        }
+    private static void validateMessage(Object message) {
         try {
             Source source = new JAXBSource(Xacml20Utils.JAXB_CONTEXT, message);
-            XSD_VALIDATOR.validate(source, schemaNames.get(message.getClass()));
+            XSD_VALIDATOR.validate(source, XML_SCHEMAS.get(message.getClass()));
         } catch (JAXBException e) {
             throw new ValidationException(e);
         }
     }
 
-    public static void validateChPpq1Request(Object request, Class... allowedClasses) {
-        validateMessage(request, REQUEST_SCHEMAS, AddPolicyRequest.class, UpdatePolicyRequest.class, DeletePolicyRequest.class);
+    public static void validateChPpq1Request(Object request) {
+        String s = XmlUtils.renderJaxb(Xacml20Utils.JAXB_CONTEXT, request, false);
+        COMBINED_XML_VALIDATOR.validate(s, new ChPpq1RequestValidationProfile());
     }
 
-    public static void validateChPpq2Request(Object request, Class... allowedClasses) {
-        validateMessage(request, REQUEST_SCHEMAS, XACMLPolicyQueryType.class);
+    public static void validateChPpq2Request(XACMLPolicyQueryType message) {
+        validateMessage(message);
     }
 
-    public static void validateChPpq1Response(Object request, Class... allowedClasses) {
-        validateMessage(request, RESPONSE_SCHEMAS, EprPolicyRepositoryResponse.class);
+    public static void validateChPpq1Response(EprPolicyRepositoryResponse message) {
+        validateMessage(message);
     }
 
-    public static void validateChPpq2Response(Object request, Class... allowedClasses) {
-        validateMessage(request, RESPONSE_SCHEMAS, ResponseType.class);
+    public static void validateChPpq2Response(ResponseType message) {
+        validateMessage(message);
     }
 
 }

@@ -52,7 +52,7 @@ public interface FhirTransactionValidator {
     class Support implements FhirTransactionValidator {
 
         @Override
-        public void validateRequest(Object payload, Map<String, Object> headers) {
+        public void validateRequest(Object payload, Map<String, Object> parameters) {
         }
 
         @Override
