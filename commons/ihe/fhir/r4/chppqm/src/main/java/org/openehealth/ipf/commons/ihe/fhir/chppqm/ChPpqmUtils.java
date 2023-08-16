@@ -20,14 +20,18 @@ import ca.uhn.fhir.context.FhirContext;
 import lombok.experimental.UtilityClass;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Consent;
+import org.hl7.fhir.r4.model.Identifier;
 import org.openehealth.ipf.commons.ihe.fhir.IgBasedFhirContextSupplier;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmytro Rud
@@ -54,8 +58,8 @@ public class ChPpqmUtils {
     }
 
     public static class Profiles {
-        public static final String CONSENT         = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmConsent";
-        public static final String REQUEST_BUNDLE  = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmRequestBundle";
+        public static final String CONSENT = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmConsent";
+        public static final String REQUEST_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmRequestBundle";
         public static final String RESPONSE_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmResponseBundle";
     }
 
@@ -81,12 +85,18 @@ public class ChPpqmUtils {
         return null;
     }
 
-    public static String extractResourceIdForDelete(Object requestData) {
-        if (requestData instanceof Consent) {
-            Consent consent = (Consent) requestData;
-            return extractConsentId(consent, ConsentIdTypes.POLICY_SET_ID);
-        } else if (requestData instanceof String) {
-            return (String) requestData;
+    public static String extractConsentIdFromUrl(String url) {
+        if (url.contains("?")) {
+            url = url.substring(url.indexOf('?') + 1);
+        }
+        if (url.contains("#")) {
+            url = url.substring(0, url.indexOf('#'));
+        }
+        List<NameValuePair> params = URLEncodedUtils.parse(url, StandardCharsets.UTF_8);
+        for (NameValuePair param : params) {
+            if (Consent.SP_IDENTIFIER.equals(param.getName())) {
+                return param.getValue();
+            }
         }
         return null;
     }
@@ -96,16 +106,57 @@ public class ChPpqmUtils {
      * (primarily for PPQ-4 operation DELETE).
      */
     public static Set<String> extractConsentIdsFromEntryUrls(Bundle bundle) {
-        Set<String> result = new HashSet<>();
-        for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
-            List<NameValuePair> params = URLEncodedUtils.parse(entry.getRequest().getUrl(), StandardCharsets.UTF_8);
-            for (NameValuePair param : params) {
-                if ("identifier".equals(param.getName())) {
-                    result.add(param.getValue());
-                }
+        return bundle.getEntry().stream()
+                .map(entry -> extractConsentIdFromUrl(entry.getRequest().getUrl()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    public static String createUrl(Consent consent) {
+        return consent.fhirType() + '?' + Consent.SP_IDENTIFIER + '=' + extractConsentId(consent, ConsentIdTypes.POLICY_SET_ID);
+    }
+
+    public static String createUrl(String consentId) {
+        return "Consent?" + Consent.SP_IDENTIFIER + '=' + consentId;
+    }
+
+    public static Bundle createPpq4SubmitRequestBundle(Collection<Consent> consents, Bundle.HTTPVerb httpMethod) {
+        Bundle bundle = new Bundle();
+        bundle.setId(UUID.randomUUID().toString());
+        bundle.setType(Bundle.BundleType.TRANSACTION);
+        bundle.getMeta().addProfile(Profiles.REQUEST_BUNDLE);
+        for (Consent consent : consents) {
+            Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
+            entry.getRequest().setMethod(httpMethod);
+            entry.setResource(consent);
+            switch (httpMethod) {
+                case POST:
+                    entry.getRequest().setUrl(consent.fhirType());
+                    break;
+                case PUT:
+                    entry.setResource(consent);
+                    entry.getRequest().setUrl(createUrl(consent));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported HTTP method " + httpMethod);
             }
+            bundle.getEntry().add(entry);
         }
-        return result;
+        return bundle;
+    }
+
+    public static Bundle createPpq4DeleteRequestBundle(Collection<String> consentIds) {
+        Bundle bundle = new Bundle();
+        bundle.setId(UUID.randomUUID().toString());
+        bundle.setType(Bundle.BundleType.TRANSACTION);
+        bundle.getMeta().addProfile(Profiles.REQUEST_BUNDLE);
+        for (String consentId : consentIds) {
+            Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
+            entry.getRequest().setMethod(Bundle.HTTPVerb.DELETE);
+            entry.getRequest().setUrl(createUrl(consentId));
+            bundle.getEntry().add(entry);
+        }
+        return bundle;
     }
 
 }

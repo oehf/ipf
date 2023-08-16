@@ -16,28 +16,38 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.translation
 
+import org.apache.commons.lang3.StringUtils
+import org.apache.http.NameValuePair
+import org.apache.http.client.utils.URLEncodedUtils
 import org.apache.velocity.VelocityContext
 import org.herasaf.xacml.core.policy.impl.PolicySetType
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Consent
+import org.hl7.fhir.r4.model.Patient
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
 import org.openehealth.ipf.commons.ihe.xacml20.ChPpqMessageCreator
 import org.openehealth.ipf.commons.ihe.xacml20.ChPpqPolicySetCreator
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType
 
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
 class FhirToXacmlTranslator {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat('yyyy-MM-dd')
 
-    private ChPpqMessageCreator ppqMessageCreator
+    private final ChPpqMessageCreator ppqMessageCreator
 
-    FhirToXacmlTranslator(String homeCommunityId) {
-        this.ppqMessageCreator = new ChPpqMessageCreator(homeCommunityId)
+    FhirToXacmlTranslator(ChPpqMessageCreator ppqMessageCreator) {
+        this.ppqMessageCreator = ppqMessageCreator
     }
 
-    static PolicySetType toPolicySet(Consent consent) {
+    /**
+     * Translates a single FHIR Consent to a XACML Policy Set.
+     */
+    PolicySetType toPolicySet(Consent consent) {
         VelocityContext substitutions = new VelocityContext()
         substitutions.put('id', consent.identifier[0].value)
         substitutions.put('eprSpid', consent.patient.identifier.value)
@@ -70,28 +80,52 @@ class FhirToXacmlTranslator {
     }
 
     /**
-     * Converts a CH:PPQ-4 request to a CH:PPQ-1 request.
+     * Translates a CH:PPQ-4 request into a CH:PPQ-1 request.
+     *
+     * @param bundle request bundle
+     * @return PPQ-1 request POJO
      */
-    AssertionBasedRequestType toPpq1Request(Bundle bundle) {
+    AssertionBasedRequestType translatePpq4To1Request(Bundle bundle) {
         if ((bundle == null) || bundle.entry.empty) {
             return null
         }
         def method = bundle.entry[0].request.method
-
         if (method == Bundle.HTTPVerb.DELETE) {
             return ppqMessageCreator.createDeletePolicyRequest(ChPpqmUtils.extractConsentIdsFromEntryUrls(bundle))
         }
-
-        def policySets = bundle.entry.collect { toPolicySet(it.resource as Consent) }
-
+        def policySets = bundle.entry.collect { toPolicySet(it.getResource() as Consent) }
         switch (method) {
             case Bundle.HTTPVerb.POST:
                 return ppqMessageCreator.createAddPolicyRequest(policySets)
             case Bundle.HTTPVerb.PUT:
                 return ppqMessageCreator.createUpdatePolicyRequest(policySets)
             default:
-                throw new Exception('Unknown method: ' + method)
+                throw new Exception('Unsupported method: ' + method)
         }
     }
+
+    /**
+     * Translates a CH:PPQ-5 request into a CH:PPQ-2 request.
+     *
+     * @param httpQuery
+     * @return
+     */
+    XACMLPolicyQueryType translatePpq5To2Request(String httpQuery) {
+        List<NameValuePair> params = URLEncodedUtils.parse(httpQuery, StandardCharsets.UTF_8);
+        def policySetId = params.find { it.name == Consent.SP_IDENTIFIER }?.value
+        if (policySetId) {
+            return ppqMessageCreator.createPolicyQuery([policySetId])
+        }
+        def patientId = params.find { it.name == Consent.SP_PATIENT + ':' + Patient.SP_IDENTIFIER }?.value
+        if (patientId) {
+            def fragments = StringUtils.split(patientId, '|' as char)
+            return ppqMessageCreator.createPolicyQuery(new II(
+                    extension: fragments[0],
+                    root: fragments[1].substring(8),
+            ))
+        }
+        throw new Exception('Either policy set ID or patient ID shall be specified')
+    }
+
 
 }

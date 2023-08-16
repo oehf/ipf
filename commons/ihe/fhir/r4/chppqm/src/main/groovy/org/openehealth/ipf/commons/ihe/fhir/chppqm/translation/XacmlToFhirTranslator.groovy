@@ -16,16 +16,37 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.translation
 
+import ca.uhn.fhir.rest.api.MethodOutcome
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
+import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import org.apache.cxf.binding.soap.Soap12
+import org.apache.cxf.binding.soap.SoapFault
+import org.apache.cxf.binding.soap.SoapMessage
+import org.apache.cxf.binding.soap.interceptor.Soap12FaultOutInterceptor
 import org.herasaf.xacml.core.policy.impl.PolicySetType
+import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Consent
-import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*
+import org.hl7.fhir.r4.model.IdType
+import org.hl7.fhir.r4.model.OperationOutcome
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLPolicyStatementType
 import org.openehealth.ipf.commons.xml.XmlUtils
 
+import javax.xml.stream.XMLOutputFactory
+import javax.xml.stream.XMLStreamWriter
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
+
+import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*
 
 class XacmlToFhirTranslator {
 
@@ -83,6 +104,143 @@ class XacmlToFhirTranslator {
 
     private static String extractAttributeValue(GPathResult subjectMatches, String designator) {
         return subjectMatches.find { it.SubjectAttributeDesignator.@AttributeId.text() == designator }.AttributeValue.text()
+    }
+
+    private static OperationOutcome positiveOperationOutcome() {
+        return new OperationOutcome(
+                issue: [
+                        new OperationOutcome.OperationOutcomeIssueComponent(
+                                severity: OperationOutcome.IssueSeverity.INFORMATION,
+                                code: OperationOutcome.IssueType.INFORMATIONAL,
+                        ),
+                ],
+        )
+    }
+
+    private static OperationOutcome negativeOperationOutcome() {
+        return new OperationOutcome(
+                issue: [
+                        new OperationOutcome.OperationOutcomeIssueComponent(
+                                severity: OperationOutcome.IssueSeverity.ERROR,
+                                code: OperationOutcome.IssueType.PROCESSING,
+                        ),
+                ],
+        )
+    }
+
+    /**
+     * Translates a CH:PPQ-1 response into a CH:PPQ-3 response.
+     */
+    static MethodOutcome translatePpq1To3Response(
+            Consent ppq3Request,
+            AssertionBasedRequestType ppq1Request,
+            EprPolicyRepositoryResponse ppq1Response)
+    {
+        if (ppq1Response.status == 'urn:e-health-suisse:2015:response-status:success') {
+            return new MethodOutcome(
+                    id: new IdType(UUID.randomUUID().toString()),
+                    responseStatusCode: (ppq1Request instanceof AddPolicyRequest) ? 201 : 200,
+                    resource: ppq3Request,
+                    created: (ppq1Request instanceof AddPolicyRequest),
+                    operationOutcome: positiveOperationOutcome(),
+            )
+        } else {
+            return new MethodOutcome(
+                    id: new IdType(UUID.randomUUID().toString()),
+                    responseStatusCode: 400,
+                    operationOutcome: negativeOperationOutcome(),
+            )
+        }
+    }
+
+    static final Map<String, OperationOutcome.IssueType> SOAP_FAULT_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING = [
+            'VersionMismatch'    : OperationOutcome.IssueType.STRUCTURE,
+            'MustUnderstand'     : OperationOutcome.IssueType.NOTSUPPORTED,
+            'DataEncodingUnknown': OperationOutcome.IssueType.STRUCTURE,
+            'Sender'             : OperationOutcome.IssueType.INVALID,
+            'Receiver'           : OperationOutcome.IssueType.TRANSIENT,
+    ]
+
+    static final Map<String, Integer> SOAP_FAULT_CODE_TO_HTTP_STATUS_CODE_MAPPING = [
+            'VersionMismatch'    : 500,
+            'MustUnderstand'     : 500,
+            'DataEncodingUnknown': 500,
+            'Sender'             : 400,
+            'Receiver'           : 503,
+    ]
+
+    private static String serializeSoapFault(SoapFault soapFault) {
+        // inspired by org.apache.cxf.binding.soap.interceptor.SoapFaultSerializerTest
+        SoapMessage soapMessage = new SoapMessage(Soap12.instance)
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+        XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(outputStream)
+        soapMessage.setContent(XMLStreamWriter.class, writer)
+        soapMessage.setContent(Exception.class, soapFault)
+        new Soap12FaultOutInterceptor.Soap12FaultOutInterceptorInternal().handleMessage(soapMessage)
+        writer.close()
+        return outputStream.toString(StandardCharsets.UTF_8)
+    }
+
+    /**
+     * Rethrows a SOAP Fault as a FHIR exception
+     */
+    static void translateSoapFault(SoapFault soapFault) throws BaseServerResponseException {
+        throw new UnclassifiedServerFailureException(
+                SOAP_FAULT_CODE_TO_HTTP_STATUS_CODE_MAPPING.getOrDefault(soapFault.faultCode.localPart, 500),
+                soapFault.reason,
+                new OperationOutcome(
+                        issue: [
+                                new OperationOutcome.OperationOutcomeIssueComponent(
+                                        severity: OperationOutcome.IssueSeverity.ERROR,
+                                        code: SOAP_FAULT_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING.getOrDefault(
+                                                soapFault.faultCode.localPart, OperationOutcome.IssueType.UNKNOWN),
+                                        diagnostics: serializeSoapFault(soapFault),
+                                ),
+                        ],
+                )
+        )
+    }
+
+    /**
+     * Translates a CH:PPQ-1 response into a CH:PPQ-4 response.
+     */
+    static Bundle translatePpq1To4Response(
+            Bundle ppq4Request,
+            AssertionBasedRequestType ppq1Request,
+            EprPolicyRepositoryResponse ppq1Response) throws BaseServerResponseException
+    {
+        if (ppq1Response.status == 'urn:e-health-suisse:2015:response-status:success') {
+            Bundle ppq4Response = new Bundle(
+                    id: UUID.randomUUID().toString(),
+                    type: Bundle.BundleType.TRANSACTIONRESPONSE,
+            )
+            for (ppq4RequestEntry in ppq4Request.entry) {
+                def consent = (Consent) ppq4RequestEntry.getResource()
+                def consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID)
+                ppq4Response.entry << new Bundle.BundleEntryComponent(
+                        fullUrl: 'Consent?identifier=' + consentId,
+                        response: new Bundle.BundleEntryResponseComponent(
+                                status: (ppq1Request instanceof AddPolicyRequest) ? '201' : '200',
+                        ),
+                )
+            }
+            return ppq4Response
+        } else {
+            throw new UnclassifiedServerFailureException(400, 'PPQ-1 request failed')
+        }
+    }
+
+    /**
+     * Translates a CH:PPQ-2 response into a CH:PPQ-5 response.
+     */
+    static List<Consent> translatePpq2To5Response(ResponseType ppq2Response) throws BaseServerResponseException {
+        if (ppq2Response.status.statusCode.value == Xacml20Utils.SAML20_STATUS_SUCCESS) {
+            def assertion = ppq2Response.assertionOrEncryptedAssertion[0] as AssertionType
+            def statement = assertion.statementOrAuthnStatementOrAuthzDecisionStatement[0] as XACMLPolicyStatementType
+            return statement.policyOrPolicySet.collect { toConsent(it as PolicySetType) }
+        } else {
+            throw new UnclassifiedServerFailureException(400, 'PPQ-2 request failed')
+        }
     }
 
 }

@@ -23,6 +23,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Consent;
 import org.hl7.fhir.r4.model.IdType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +67,8 @@ public class ChPpq3ResourceProvider extends AbstractResourceProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse)
     {
-        return requestAction(id, null, httpServletRequest, httpServletResponse, requestDetails);
+        String consentId = ChPpqmUtils.extractConsentIdFromUrl(condition);
+        return requestAction(consentId, null, httpServletRequest, httpServletResponse, requestDetails);
     }
 
 }

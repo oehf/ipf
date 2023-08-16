@@ -18,10 +18,13 @@ package org.openehealth.ipf.commons.ihe.xacml20
 
 import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
+import org.apache.velocity.app.Velocity
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
 import org.herasaf.xacml.core.policy.impl.PolicySetType
 import org.openehealth.ipf.commons.xml.XmlUtils
+
+import javax.xml.bind.JAXBElement
 
 class ChPpqPolicySetCreator {
 
@@ -30,11 +33,12 @@ class ChPpqPolicySetCreator {
 
     static {
         Properties velocityProperties = new Properties()
-        velocityProperties.setProperty('classpath.resource.loader.class', ClasspathResourceLoader.class.getName());
+        velocityProperties.setProperty('resource.loaders', 'classpath')
+        velocityProperties.setProperty('resource.loader.classpath.class', ClasspathResourceLoader.class.getName());
         VELOCITY = new VelocityEngine(velocityProperties)
         VELOCITY.init()
         POLICY_SET_TEMPLATES = ['201', '202', '203', '301', '302', '303'].collectEntries { templateId ->
-            [templateId, VELOCITY.getTemplate("translation/policy-set-template-${templateId}.xml")]
+            [templateId, VELOCITY.getTemplate("templates/policy-set-template-${templateId}.xml")]
         }
     }
 
@@ -46,7 +50,8 @@ class ChPpqPolicySetCreator {
 
     static PolicySetType createPolicySet(String templateId, VelocityContext substitutions) {
         String s = createPolicySetString(templateId, substitutions)
-        return (PolicySetType) Xacml20Utils.JAXB_CONTEXT.createUnmarshaller().unmarshal(XmlUtils.source(s))
+        JAXBElement jaxbElement = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller().unmarshal(XmlUtils.source(s))
+        return jaxbElement.value as PolicySetType
     }
 
 }

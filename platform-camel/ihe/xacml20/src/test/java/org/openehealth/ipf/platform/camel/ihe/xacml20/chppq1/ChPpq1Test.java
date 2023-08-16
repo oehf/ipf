@@ -122,12 +122,12 @@ public class ChPpq1Test extends StandardTestContainer {
             var participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("COLA-fd27a474-c9cf-4272-9dee-55f2721d2f8d", participant.getParticipantObjectID());
+            assertEquals("urn:uuid:58bbfa76-4d65-4fa1-b0af-c862b52a20d4", participant.getParticipantObjectID());
 
             participant = message.getParticipantObjectIdentifications().get(1);
             assertEquals(ParticipantObjectTypeCode.Person, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Patient, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("761337610411265304^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
+            assertEquals("761337611194602836^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
         }
     }
 
@@ -183,12 +183,12 @@ public class ChPpq1Test extends StandardTestContainer {
             var participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("COLA-0219ed1a-3b5d-4fb3-a5be-08bba51757b1", participant.getParticipantObjectID());
+            assertEquals("urn:uuid:58bbfa76-4d65-4fa1-b0af-c862b52a20d4", participant.getParticipantObjectID());
 
             participant = message.getParticipantObjectIdentifications().get(1);
             assertEquals(ParticipantObjectTypeCode.Person, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Patient, participant.getParticipantObjectTypeCodeRole());
-            assertEquals("761337610411265304^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
+            assertEquals("761337611194602836^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());
         }
     }
 
@@ -243,7 +243,7 @@ public class ChPpq1Test extends StandardTestContainer {
                 var participant = message.getParticipantObjectIdentifications().get(i);
                 assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
                 assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
-                assertEquals("10a3f268-d9d6-4772-b908-9d852116" + i, participant.getParticipantObjectID());
+                assertEquals("urn:uuid:10a3f268-d9d6-4772-b908-9d852116" + i, participant.getParticipantObjectID());
             }
         }
     }

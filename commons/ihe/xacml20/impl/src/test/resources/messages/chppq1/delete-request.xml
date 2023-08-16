@@ -21,11 +21,11 @@
                     IssueInstant="2016-02-09T09:30:10.5Z">
         <saml:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:2.999.1</saml:Issuer>
         <saml:Statement xsi:type="epr:XACMLPolicySetIdReferenceStatementType">
-            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521160</xacml:PolicySetIdReference>
-            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521161</xacml:PolicySetIdReference>
-            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521162</xacml:PolicySetIdReference>
-            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521163</xacml:PolicySetIdReference>
-            <xacml:PolicySetIdReference>10a3f268-d9d6-4772-b908-9d8521164</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>urn:uuid:10a3f268-d9d6-4772-b908-9d8521160</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>urn:uuid:10a3f268-d9d6-4772-b908-9d8521161</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>urn:uuid:10a3f268-d9d6-4772-b908-9d8521162</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>urn:uuid:10a3f268-d9d6-4772-b908-9d8521163</xacml:PolicySetIdReference>
+            <xacml:PolicySetIdReference>urn:uuid:10a3f268-d9d6-4772-b908-9d8521164</xacml:PolicySetIdReference>
         </saml:Statement>
     </saml:Assertion>
 </epr:DeletePolicyRequest>

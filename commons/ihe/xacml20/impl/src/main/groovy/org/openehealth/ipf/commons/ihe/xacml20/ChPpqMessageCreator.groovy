@@ -17,10 +17,13 @@
 package org.openehealth.ipf.commons.ihe.xacml20
 
 import org.apache.commons.lang3.Validate
+import org.herasaf.xacml.core.context.impl.ActionType
 import org.herasaf.xacml.core.context.impl.AttributeType
 import org.herasaf.xacml.core.context.impl.AttributeValueType
+import org.herasaf.xacml.core.context.impl.EnvironmentType
 import org.herasaf.xacml.core.context.impl.RequestType
 import org.herasaf.xacml.core.context.impl.ResourceType
+import org.herasaf.xacml.core.context.impl.SubjectType
 import org.herasaf.xacml.core.policy.impl.IdReferenceType
 import org.herasaf.xacml.core.policy.impl.PolicySetType
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute
@@ -32,6 +35,9 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.XACMLPolicySetI
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.NameIDType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusCodeType
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLPolicyStatementType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType
 
@@ -56,7 +62,7 @@ class ChPpqMessageCreator {
                 issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
                 version: '2.0',
                 issuer: new NameIDType(
-                        nameQualifier: 'urn:e-health-suisse:community-index',
+                        nameQualifier: PpqConstants.NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX,
                         value: homeCommunityId,
                 ),
         )
@@ -90,40 +96,72 @@ class ChPpqMessageCreator {
         return new DeletePolicyRequest(assertion: createDeleteAssertion(policySetIds))
     }
 
-    XACMLPolicyQueryType createRetrievePolicyRequest(II patientId) {
+    private static XACMLPolicyQueryType createPolicyQueryElement() {
         return new XACMLPolicyQueryType(
-                requestOrPolicySetIdReferenceOrPolicyIdReference: [
-                        XACML_CONTEXT_OBJECT_FACTORY.createRequest(new RequestType(
-                                subjects: [],
-                                resources: [
-                                        new ResourceType(
-                                                attributes: [
-                                                        new AttributeType(
-                                                                attributeId: PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID,
-                                                                dataType: new IiDataTypeAttribute(),
-                                                                attributeValues: [
-                                                                        new AttributeValueType(
-                                                                                content: [
-                                                                                        HL7V3_OBJECT_FACTORY.createInstanceIdentifier(patientId),
-                                                                                ],
-                                                                        ),
-                                                                ],
-                                                        ),
-                                                ]
-                                        ),
-                                ],
-                                action: [],
-                                environment: [],
-                        )),
-                ],
+                ID: '_' + UUID.randomUUID(),
+                issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
+                version: '2.0',
         )
     }
 
-    XACMLPolicyQueryType createRetrievePolicyRequest(List<String> policySetIds) {
-        return new XACMLPolicyQueryType(
-                requestOrPolicySetIdReferenceOrPolicyIdReference: policySetIds.collect { id ->
-                    XACML_POLICY_OBJECT_FACTORY.createPolicySetIdReference(new IdReferenceType(value: id))
-                },
+    XACMLPolicyQueryType createPolicyQuery(II patientId) {
+        def query = createPolicyQueryElement()
+        query.requestOrPolicySetIdReferenceOrPolicyIdReference << XACML_CONTEXT_OBJECT_FACTORY.createRequest(
+                new RequestType(
+                        subjects: [
+                                new SubjectType(),
+                        ],
+                        resources: [
+                                new ResourceType(
+                                        attributes: [
+                                                new AttributeType(
+                                                        attributeId: PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID,
+                                                        dataType: new IiDataTypeAttribute(),
+                                                        attributeValues: [
+                                                                new AttributeValueType(
+                                                                        content: [
+                                                                                HL7V3_OBJECT_FACTORY.createInstanceIdentifier(patientId),
+                                                                        ],
+                                                                ),
+                                                        ],
+                                                ),
+                                        ]
+                                ),
+                        ],
+                        action: new ActionType(),
+                        environment: new EnvironmentType(),
+                )
+        )
+        return query
+    }
+
+    XACMLPolicyQueryType createPolicyQuery(List<String> policySetIds) {
+        def query = createPolicyQueryElement()
+        query.getRequestOrPolicySetIdReferenceOrPolicyIdReference().addAll(policySetIds.collect { id ->
+            XACML_POLICY_OBJECT_FACTORY.createPolicySetIdReference(new IdReferenceType(value: id))
+        })
+        return query
+    }
+
+    ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets) {
+        def assertion = createAssertion()
+        assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
+                policyOrPolicySet: policySets,
+        )
+        return new ResponseType(
+                status: new StatusType(
+                        statusCode: new StatusCodeType(value: Xacml20Utils.SAML20_STATUS_SUCCESS),
+                ),
+                assertionOrEncryptedAssertion: [assertion],
+        )
+    }
+
+    ResponseType createNegativePolicyQueryResponse(String statusCode) {
+        return new ResponseType(
+                status: new StatusType(
+                        statusCode: new StatusCodeType(value: statusCode),
+                ),
+                assertionOrEncryptedAssertion: [createAssertion()],
         )
     }
 

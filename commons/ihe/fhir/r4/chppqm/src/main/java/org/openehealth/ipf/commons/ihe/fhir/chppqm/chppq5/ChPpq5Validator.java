@@ -31,7 +31,7 @@ public class ChPpq5Validator extends IgBasedInstanceValidator {
 
 /*
     @Override
-    public void validateRequest(Object payload, Map<String, Object> headers) {
+    public void validateRequest(Object payload, Map<String, Object> parameters) {
         ChPpq5SearchParameters params = (ChPpq5SearchParameters) payload;
         OperationOutcome outcome = new OperationOutcome();
         if (params.getPatientId() == null) {

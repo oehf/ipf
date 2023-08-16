@@ -33,19 +33,19 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> headers) {
-        handleOperationOutcome(doValidateRequest(payload, headers));
+    public void validateRequest(Object payload, Map<String, Object> parameters) {
+        handleOperationOutcome(doValidateRequest(payload, parameters));
     }
 
-    private OperationOutcome doValidateRequest(Object payload, Map<String, Object> headers) {
-        String method = headers.get(Constants.HTTP_METHOD).toString();
+    private OperationOutcome doValidateRequest(Object payload, Map<String, Object> parameters) {
+        String method = parameters.get(Constants.HTTP_METHOD).toString();
         switch (method) {
             case "POST":
             case "PUT":
                 return validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.CONSENT);
 
             case "DELETE":
-                String resourceId = ChPpqmUtils.extractResourceIdForDelete(payload);
+                String resourceId = (String) payload;
                 if (StringUtils.isBlank(resourceId)) {
                     return new OperationOutcome()
                             .addIssue(new OperationOutcome.OperationOutcomeIssueComponent()

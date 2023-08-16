@@ -26,6 +26,8 @@ import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 
+import java.util.Comparator;
+
 /**
  * Validator which uses Implementation Guides to validate FHIR resources.
  *
@@ -83,7 +85,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
         if (outcome == null) {
             return;
         }
-        outcome.getIssue().sort((issue1, issue2) -> issue1.getSeverity().compareTo(issue2.getSeverity()));
+        outcome.getIssue().sort(Comparator.comparing(OperationOutcome.OperationOutcomeIssueComponent::getSeverity));
         for (OperationOutcome.OperationOutcomeIssueComponent issue : outcome.getIssue()) {
             if ((issue.getSeverity() == OperationOutcome.IssueSeverity.FATAL) || (issue.getSeverity() == OperationOutcome.IssueSeverity.ERROR)) {
                 throw FhirUtils.exception(UnprocessableEntityException::new, outcome, "Validation Failed");
