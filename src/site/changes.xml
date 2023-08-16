@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action issue="423" dev="unixoid" type="add">
+                Add Schematron validation for CH:PPQ-1 requests
+            </action>
             <action issue="422" dev="unixoid" type="add">
                 Support JSON representation of the HPD DSMLv2 data model
             </action>
