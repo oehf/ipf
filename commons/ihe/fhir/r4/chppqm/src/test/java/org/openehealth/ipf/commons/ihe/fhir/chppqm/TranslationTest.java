@@ -150,16 +150,14 @@ public class TranslationTest {
     @Test
     public void testPpq3To1RequestTranslation() {
         Consent consent = create303Consent(createUuid(), "123456789012345678", "rep123", null, null);
-        String consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID);
-        PolicySetType policySet = FHIR_TO_XACML_TRANSLATOR.toPolicySet(consent);
 
-        AddPolicyRequest addRequest = PPQ_MESSAGE_CREATOR.createAddPolicyRequest(Collections.singletonList(policySet));
+        AddPolicyRequest addRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq3To1Request(consent, "POST");
         Xacml20MessageValidator.validateChPpq1Request(addRequest);
 
-        UpdatePolicyRequest updateRequest = PPQ_MESSAGE_CREATOR.createUpdatePolicyRequest(Collections.singletonList(policySet));
+        UpdatePolicyRequest updateRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq3To1Request(consent, "PUT");
         Xacml20MessageValidator.validateChPpq1Request(updateRequest);
 
-        DeletePolicyRequest deleteRequest = PPQ_MESSAGE_CREATOR.createDeletePolicyRequest(Collections.singletonList(consentId));
+        DeletePolicyRequest deleteRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq3To1Request(consent, "DELETE");
         Xacml20MessageValidator.validateChPpq1Request(deleteRequest);
 
         log.info("");

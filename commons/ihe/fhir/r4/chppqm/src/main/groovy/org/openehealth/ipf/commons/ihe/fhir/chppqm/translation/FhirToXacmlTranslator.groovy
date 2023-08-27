@@ -80,25 +80,47 @@ class FhirToXacmlTranslator {
     }
 
     /**
+     * Translates a CH:PPQ-3 request into a CH:PPQ-1 request.
+     *
+     * @param request Consent instance for PUT and POST, String for DELETE
+     * @param method HTTP method
+     * @return PPQ-1 request POJO
+     */
+    <T extends AssertionBasedRequestType> T translatePpq3To1Request(Object request, String method) {
+        if (method == 'DELETE') {
+            return (T) ppqMessageCreator.createDeletePolicyRequest([request as String])
+        }
+        def policySet = toPolicySet(request as Consent)
+        switch (method) {
+            case 'POST':
+                return (T) ppqMessageCreator.createAddPolicyRequest([policySet])
+            case 'PUT':
+                return (T) ppqMessageCreator.createUpdatePolicyRequest([policySet])
+            default:
+                throw new Exception('Unsupported method: ' + method)
+        }
+    }
+
+    /**
      * Translates a CH:PPQ-4 request into a CH:PPQ-1 request.
      *
      * @param bundle request bundle
      * @return PPQ-1 request POJO
      */
-    AssertionBasedRequestType translatePpq4To1Request(Bundle bundle) {
+    <T extends AssertionBasedRequestType> T translatePpq4To1Request(Bundle bundle) {
         if ((bundle == null) || bundle.entry.empty) {
             return null
         }
         def method = bundle.entry[0].request.method
         if (method == Bundle.HTTPVerb.DELETE) {
-            return ppqMessageCreator.createDeletePolicyRequest(ChPpqmUtils.extractConsentIdsFromEntryUrls(bundle))
+            return (T) ppqMessageCreator.createDeletePolicyRequest(ChPpqmUtils.extractConsentIdsFromEntryUrls(bundle))
         }
         def policySets = bundle.entry.collect { toPolicySet(it.getResource() as Consent) }
         switch (method) {
             case Bundle.HTTPVerb.POST:
-                return ppqMessageCreator.createAddPolicyRequest(policySets)
+                return (T) ppqMessageCreator.createAddPolicyRequest(policySets)
             case Bundle.HTTPVerb.PUT:
-                return ppqMessageCreator.createUpdatePolicyRequest(policySets)
+                return (T) ppqMessageCreator.createUpdatePolicyRequest(policySets)
             default:
                 throw new Exception('Unsupported method: ' + method)
         }
