@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
@@ -36,7 +35,6 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-@Slf4j
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     public FhirProducer(Endpoint endpoint) {
