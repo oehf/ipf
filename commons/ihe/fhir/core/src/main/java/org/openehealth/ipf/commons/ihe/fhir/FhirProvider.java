@@ -100,7 +100,7 @@ public abstract class FhirProvider implements Serializable {
         enriched.put(Constants.HTTP_USER, httpServletRequest.getUserPrincipal());
 
         var headers = extractHttpHeaders(httpServletRequest);
-        enriched.put(Constants.HTTP_HEADERS, headers);
+        enriched.put(Constants.HTTP_INCOMING_HEADERS, headers);
 
         var cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
         if (cipherSuite != null) {

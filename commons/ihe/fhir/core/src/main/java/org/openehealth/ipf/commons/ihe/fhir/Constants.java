@@ -43,7 +43,13 @@ public interface Constants {
     String HTTP_CLIENT_IP_ADDRESS = "FhirHttpClientIpAddress";
     String HTTP_LOCALES = "FhirHttpAcceptLanguage";
     String HTTP_USER = "FhirHttpUserPrincipal";
-    String HTTP_HEADERS = "FhirHttpHeaders";
+    String HTTP_INCOMING_HEADERS = "FhirHttpHeaders";
+    String HTTP_OUTGOING_HEADERS = "FhirHttpOutgoingHeaders";
+    /**
+     * @deprecated use {@link #HTTP_INCOMING_HEADERS} instead
+     */
+    @Deprecated
+    String HTTP_HEADERS = HTTP_INCOMING_HEADERS;
     String HTTP_X509_CERTIFICATES = "FhirHttpCertificates";
 
     String FHIR_RESOURCE_TYPE_HEADER = "RESOURCE_TYPE_HEADER";

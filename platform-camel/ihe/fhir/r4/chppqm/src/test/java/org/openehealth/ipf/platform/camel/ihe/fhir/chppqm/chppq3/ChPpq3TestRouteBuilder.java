@@ -18,11 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.chppqm.chppq3;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.apache.camel.builder.RouteBuilder;
-import org.hl7.fhir.r4.model.Consent;
 import org.hl7.fhir.r4.model.IdType;
+import static org.junit.jupiter.api.Assertions.*;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators.*;
@@ -36,6 +38,10 @@ public class ChPpq3TestRouteBuilder extends RouteBuilder {
                 .setHeader(VALIDATION_MODE, constant(MODEL))
                 .process(itiRequestValidator())
                 .process(exchange -> {
+                    Map<String, List<String>> httpHeaders = (Map<String, List<String>>) exchange.getMessage().getHeader(Constants.HTTP_INCOMING_HEADERS);
+                    assertEquals(1, httpHeaders.get("Authorization").size());
+                    assertEquals(3, httpHeaders.get("Header2").size());
+
                     //Consent request = exchange.getMessage().getMandatoryBody(Consent.class);
                     log.info("Method = {}", exchange.getMessage().getHeader(Constants.HTTP_METHOD));
                     exchange.getMessage().setBody(new MethodOutcome(new IdType(UUID.randomUUID().toString())));

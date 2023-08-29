@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
@@ -28,12 +29,14 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.HapiClientAuditInterceptor;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Christian Ohr
  * @since 3.1
  */
+@Slf4j
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     public FhirProducer(Endpoint endpoint) {
@@ -94,6 +97,17 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
                 getClient(exchange),
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
+
+        Object httpHeadersObject = exchange.getIn().getHeader(Constants.HTTP_OUTGOING_HEADERS);
+        if (httpHeadersObject instanceof Map) {
+            Map<String, List<String>> headers = (Map<String, List<String>>) httpHeadersObject;
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                for (String value : entry.getValue()) {
+                    executableClient.withAdditionalHeader(entry.getKey(), value);
+                }
+            }
+        }
+
         var result = executableClient.execute();
         var resultMessage = Exchanges.resultMessage(exchange);
         resultMessage.setBody(result);

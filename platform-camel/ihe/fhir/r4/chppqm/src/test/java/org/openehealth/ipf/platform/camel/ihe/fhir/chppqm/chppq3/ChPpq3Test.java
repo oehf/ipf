@@ -35,6 +35,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -68,6 +69,10 @@ public class ChPpq3Test extends FhirTestContainer {
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);
         exchange.getMessage().setBody(request);
         exchange.getMessage().setHeader(Constants.HTTP_METHOD, httpMethod);
+        exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of(
+                "Authorization", List.of("Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw=="),
+                "Header2", List.of("Value1", "Value2", "Value3")
+        ));
         exchange = producerTemplate.send("ch-ppq3://localhost:" + DEMO_APP_PORT, exchange);
         Exception exception = Exchanges.extractException(exchange);
         if (exception != null) {
@@ -113,6 +118,10 @@ public class ChPpq3Test extends FhirTestContainer {
                 .resource(consent)
                 .conditional()
                 .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))
+                .withAdditionalHeader("Header2", "Value2")
+                .withAdditionalHeader("Authorization", "Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw==")
+                .withAdditionalHeader("Header2", "Value3")
+                .withAdditionalHeader("Header2", "Value1")
                 .execute();
 
         List<AuditMessage> auditMessages = auditSender.getMessages();
@@ -126,6 +135,10 @@ public class ChPpq3Test extends FhirTestContainer {
         MethodOutcome methodOutcome = client.delete()
                 .resourceConditionalByType(Consent.class)
                 .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))
+                .withAdditionalHeader("Header2", "Value2")
+                .withAdditionalHeader("Authorization", "Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw==")
+                .withAdditionalHeader("Header2", "Value3")
+                .withAdditionalHeader("Header2", "Value1")
                 .execute();
 
         List<AuditMessage> auditMessages = auditSender.getMessages();
