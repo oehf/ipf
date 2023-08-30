@@ -24,11 +24,20 @@
     </properties>
     <body>
         <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action issue="427" dev="thopap" type="update">
+                Dependency updates (Groovy, HAPI-FHIR, Sprong Boot, etc.)
+            </action>
+            <action issue="426" dev="unixoid" type="fix">
+                Fixed Schematron validation of ITI-45 requests
+            </action>
             <action issue="423" dev="unixoid" type="add">
                 Add Schematron validation for CH:PPQ-1 requests
             </action>
             <action issue="422" dev="unixoid" type="add">
                 Support JSON representation of the HPD DSMLv2 data model
+            </action>
+            <action issue="402" dev="unixoid" type="add">
+                Possibility to add HTTP headers in FHIR requests
             </action>
             <action issue="391" dev="unixoid" type="add">
                 Early support for the Swiss EPR integration profile CH:PPQm

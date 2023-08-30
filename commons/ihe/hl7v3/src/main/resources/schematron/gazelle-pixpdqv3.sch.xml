@@ -717,7 +717,7 @@ Already fixed via schema.
       Error: The attribute PRPA_IN201309UV02/controlActProcess/code/@code shall have the value PRPA_TE201309UV02.
       See Table 3.45.4.1.2-4.
    </assert>
-			<assert test='msg:authorOrPerformer[@typeCode="AUT"]'>
+			<assert test='not(msg:authorOrPerformer) or msg:authorOrPerformer[@typeCode="AUT"]'>
       Error: The element authorOrPerformer/@typeCode shall be set to AUT.
       See Table 3.45.4.1.2-4.
    </assert>
