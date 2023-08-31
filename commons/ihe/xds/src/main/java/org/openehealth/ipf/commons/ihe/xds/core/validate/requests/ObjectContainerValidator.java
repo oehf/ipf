@@ -61,6 +61,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final CXiValidator cxiValidator = new CXiValidator();
     private final UUIDValidator uuidValidator = new UUIDValidator();
     private final IdentifierValidator identifierValidator = new IdentifierValidator();
+    private final MimeTypeValidator mimeTypeValidator = new MimeTypeValidator();
 
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
@@ -281,6 +282,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
             var mimeType = docEntry.getMimeType();
             metaDataAssert(StringUtils.isNotEmpty(mimeType), MIME_TYPE_MUST_BE_SPECIFIED);
+            mimeTypeValidator.validate(mimeType);
 
             if ((profile == XDS.Interactions.ITI_57) || (profile == RMU.Interactions.ITI_92)) {
                 validateUpdateObject(docEntry, container, profile);

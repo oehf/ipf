@@ -103,6 +103,7 @@ public enum ValidationMessage {
     ON_DEMAND_DOC_ID_MUST_DIFFER("New ID of the document should differ from the On-Demand document entry ID"),
     WRONG_DOCUMENT_ENTRY_TYPE("Wrong document entry type (stable/on-demand): %s"),
     MIME_TYPE_MUST_BE_SPECIFIED("The document MIME type is missing"),
+    MIME_TYPE_FORMAT("The specified document MIME type %s is invalid"),
     INVALID_STATUS_IN_RESPONSE("Invalid status in response"),
     INVALID_ERROR_INFO_IN_RESPONSE("Invalid error info in response"),
     INVALID_ERROR_CODE_IN_RESPONSE("Invalid error code in response"),
