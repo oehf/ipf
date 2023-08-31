@@ -24,8 +24,11 @@
     </properties>
     <body>
         <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action issue="429" dev="unixoid" type="add">
+                Add Spring Boot starter for CH:PPQ
+            </action>
             <action issue="428" dev="thopap" type="add">
-                Add basic mimetype validation to XDS Documententry.mimetype attribute
+                Add basic mimetype validation to XDS DocumentEntry.mimetype attribute
             </action>
             <action issue="427" dev="thopap" type="update">
                 Dependency updates (Groovy, HAPI-FHIR, Spring Boot, etc.)
