@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -36,6 +37,7 @@ import static java.util.Objects.requireNonNull;
  * @author Christian Ohr
  * @since 3.1
  */
+@Slf4j
 public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         extends InterceptorSupport
         implements AuditInterceptor<AuditDatasetType> {
@@ -50,16 +52,25 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
-        determineParticipantsAddresses(exchange, auditDataset);
+        AuditDatasetType auditDataset = null;
+        try {
+            auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
+            determineParticipantsAddresses(exchange, auditDataset);
+        } catch (Exception e) {
+            log.error("Error while enriching audit dataset from request", e);
+        }
 
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
-            if (!failed) {
-                var result = exchange.getMessage().getBody();
-                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
+            if ((!failed) && (auditDataset != null)) {
+                try {
+                    var result = exchange.getMessage().getBody();
+                    failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
+                } catch (Exception e) {
+                    log.error("Error while enriching audit dataset from response", e);
+                }
             }
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an

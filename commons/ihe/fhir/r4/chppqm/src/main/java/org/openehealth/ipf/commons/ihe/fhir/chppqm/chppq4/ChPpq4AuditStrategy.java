@@ -76,16 +76,20 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     @Override
     public boolean enrichAuditDatasetFromResponse(ChPpqmAuditDataset auditDataset, Object response, AuditContext auditContext) {
         if (super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext)) {
-            Bundle bundle = (Bundle) response;
-            for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
-                String status = entry.getResponse().getStatus();
-                if (!status.startsWith("2")) {
-                    auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);
-                    break;
+            if (response instanceof Bundle) {
+                Bundle bundle = (Bundle) response;
+                for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
+                    String status = entry.getResponse().getStatus();
+                    if ((status != null) && status.startsWith("2")) {
+                        if ((auditDataset.getAction() == EventActionCode.Update) && status.startsWith("201")) {
+                            auditDataset.setAction(EventActionCode.Create);
+                        }
+                    } else {
+                        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);
+                    }
                 }
-                if ((auditDataset.getAction() == EventActionCode.Update) && status.startsWith("201")) {
-                    auditDataset.setAction(EventActionCode.Create);
-                }
+            } else {
+                auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);
             }
         }
         return (auditDataset.getEventOutcomeIndicator() == EventOutcomeIndicator.Success);

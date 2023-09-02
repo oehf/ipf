@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm;
 
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import lombok.extern.slf4j.Slf4j;
@@ -48,12 +47,12 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import javax.xml.namespace.QName;
-import javax.xml.ws.soap.SOAPFaultException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @Slf4j
@@ -275,7 +274,7 @@ public class TranslationTest {
         try {
             SoapFault soapFault = new SoapFault("Error1", new QName(Soap12.SOAP_NAMESPACE, "Receiver"));
             XacmlToFhirTranslator.translateSoapFault(soapFault);
-        } catch (BaseServerResponseException e) {
+        } catch (UnclassifiedServerFailureException e) {
             OperationOutcome operationOutcome = (OperationOutcome) e.getOperationOutcome();
             assertEquals(1, operationOutcome.getIssue().size());
             assertTrue(operationOutcome.getIssue().get(0).getDiagnostics().startsWith("<ns1:Fault"));

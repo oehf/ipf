@@ -149,6 +149,9 @@ class ChPpqMessageCreator {
                 policyOrPolicySet: policySets,
         )
         return new ResponseType(
+                ID: '_' + UUID.randomUUID(),
+                issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
+                version: '2.0',
                 status: new StatusType(
                         statusCode: new StatusCodeType(value: Xacml20Utils.SAML20_STATUS_SUCCESS),
                 ),
@@ -158,6 +161,9 @@ class ChPpqMessageCreator {
 
     ResponseType createNegativePolicyQueryResponse(String statusCode) {
         return new ResponseType(
+                ID: '_' + UUID.randomUUID(),
+                issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
+                version: '2.0',
                 status: new StatusType(
                         statusCode: new StatusCodeType(value: statusCode),
                 ),

@@ -136,7 +136,7 @@ class XacmlToFhirTranslator {
             AssertionBasedRequestType ppq1Request,
             EprPolicyRepositoryResponse ppq1Response)
     {
-        if (ppq1Response.status == 'urn:e-health-suisse:2015:response-status:success') {
+        if (ppq1Response.status == PpqConstants.StatusCode.SUCCESS) {
             return new MethodOutcome(
                     id: new IdType(UUID.randomUUID().toString()),
                     responseStatusCode: (ppq1Request instanceof AddPolicyRequest) ? 201 : 200,
@@ -184,7 +184,7 @@ class XacmlToFhirTranslator {
     /**
      * Rethrows a SOAP Fault as a FHIR exception
      */
-    static void translateSoapFault(SoapFault soapFault) throws BaseServerResponseException {
+    static void translateSoapFault(SoapFault soapFault) throws UnclassifiedServerFailureException {
         throw new UnclassifiedServerFailureException(
                 SOAP_FAULT_CODE_TO_HTTP_STATUS_CODE_MAPPING.getOrDefault(soapFault.faultCode.localPart, 500),
                 soapFault.reason,

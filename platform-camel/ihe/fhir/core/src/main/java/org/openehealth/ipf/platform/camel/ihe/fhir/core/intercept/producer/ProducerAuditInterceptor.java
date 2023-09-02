@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -36,6 +37,7 @@ import static java.util.Objects.requireNonNull;
  * @author Christian Ohr
  * @since 3.1
  */
+@Slf4j
 public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         extends InterceptorSupport
         implements AuditInterceptor<AuditDatasetType> {
@@ -52,8 +54,13 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     public void process(Exchange exchange) throws Exception {
         var msg = exchange.getIn().getBody();
 
-        var auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
-        determineParticipantsAddresses(exchange, auditDataset);
+        AuditDatasetType auditDataset = null;
+        try {
+            auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+            determineParticipantsAddresses(exchange, auditDataset);
+        } catch (Exception e) {
+            log.error("Error while enriching audit dataset from request", e);
+        }
 
         // Pass in AuditDataset for Client Interceptor
         exchange.getIn().setHeader(Constants.FHIR_AUDIT_HEADER, auditDataset);
@@ -61,8 +68,14 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         var failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            var result = exchange.getMessage().getBody();
-            failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+            if (auditDataset != null) {
+                try {
+                    var result = exchange.getMessage().getBody();
+                    failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+                } catch (Exception e) {
+                    log.error("Error while enriching audit dataset from response", e);
+                }
+            }
         } catch (Exception e) {
             // FHIR exception or unexpected exception
             failed = true;

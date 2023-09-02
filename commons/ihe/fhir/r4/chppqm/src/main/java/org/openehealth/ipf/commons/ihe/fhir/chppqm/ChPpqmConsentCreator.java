@@ -81,6 +81,7 @@ public class ChPpqmConsentCreator {
                                         pou.getCode().getDisplayName()))
                                 .collect(Collectors.toList())));
 
+        consent.setId(consentId);
         consent.getMeta().addProfile(ChPpqmUtils.Profiles.CONSENT);
         return consent;
     }
