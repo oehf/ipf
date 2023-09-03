@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.translation
 
 import ca.uhn.fhir.rest.api.MethodOutcome
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
@@ -33,6 +33,7 @@ import org.hl7.fhir.r4.model.OperationOutcome
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse
@@ -145,11 +146,7 @@ class XacmlToFhirTranslator {
                     operationOutcome: positiveOperationOutcome(),
             )
         } else {
-            return new MethodOutcome(
-                    id: new IdType(UUID.randomUUID().toString()),
-                    responseStatusCode: 400,
-                    operationOutcome: negativeOperationOutcome(),
-            )
+            throw new UnclassifiedServerFailureException(400, 'PPQ-1 request failed', negativeOperationOutcome())
         }
     }
 
@@ -181,24 +178,45 @@ class XacmlToFhirTranslator {
         return outputStream.toString(StandardCharsets.UTF_8)
     }
 
-    /**
-     * Rethrows a SOAP Fault as a FHIR exception
-     */
-    static void translateSoapFault(SoapFault soapFault) throws UnclassifiedServerFailureException {
+    private static translateNegativeResponse(
+            String key,
+            String message,
+            Map<String, Integer> statusCodeMap,
+            Map<String, OperationOutcome.IssueType> issueTypeMap,
+            String diagnostics)
+    {
         throw new UnclassifiedServerFailureException(
-                SOAP_FAULT_CODE_TO_HTTP_STATUS_CODE_MAPPING.getOrDefault(soapFault.faultCode.localPart, 500),
-                soapFault.reason,
+                statusCodeMap.getOrDefault(key, 500),
+                message,
                 new OperationOutcome(
                         issue: [
                                 new OperationOutcome.OperationOutcomeIssueComponent(
                                         severity: OperationOutcome.IssueSeverity.ERROR,
-                                        code: SOAP_FAULT_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING.getOrDefault(
-                                                soapFault.faultCode.localPart, OperationOutcome.IssueType.UNKNOWN),
-                                        diagnostics: serializeSoapFault(soapFault),
+                                        code: issueTypeMap.getOrDefault(key, OperationOutcome.IssueType.UNKNOWN),
+                                        diagnostics: diagnostics,
                                 ),
                         ],
                 )
         )
+    }
+
+    /**
+     * Rethrows a generic SOAP Fault as a FHIR exception.
+     */
+    static void translateSoapFault(SoapFault soapFault) {
+        translateNegativeResponse(
+                soapFault.faultCode.localPart,
+                soapFault.reason,
+                SOAP_FAULT_CODE_TO_HTTP_STATUS_CODE_MAPPING,
+                SOAP_FAULT_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING,
+                serializeSoapFault(soapFault))
+    }
+
+    /**
+     * Rethrows a UnknownPolicySetIdFault as a FHIR exception.
+     */
+    static void translateUnknownPolicySetIdFault(UnknownPolicySetIdFaultMessage fault) {
+        throw new ResourceNotFoundException("Unknown policy set " + fault.getFaultInfo().getMessage());
     }
 
     /**
@@ -207,7 +225,7 @@ class XacmlToFhirTranslator {
     static Bundle translatePpq1To4Response(
             Bundle ppq4Request,
             AssertionBasedRequestType ppq1Request,
-            EprPolicyRepositoryResponse ppq1Response) throws BaseServerResponseException
+            EprPolicyRepositoryResponse ppq1Response)
     {
         if (ppq1Response.status == 'urn:e-health-suisse:2015:response-status:success') {
             Bundle ppq4Response = new Bundle(
@@ -215,8 +233,13 @@ class XacmlToFhirTranslator {
                     type: Bundle.BundleType.TRANSACTIONRESPONSE,
             )
             for (ppq4RequestEntry in ppq4Request.entry) {
-                def consent = (Consent) ppq4RequestEntry.getResource()
-                def consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID)
+                def consentId
+                if (ppq4RequestEntry.hasResource()) {
+                    def consent = (Consent) ppq4RequestEntry.getResource()
+                    consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID)
+                } else {
+                    ppq4RequestEntry.request.url
+                }
                 ppq4Response.entry << new Bundle.BundleEntryComponent(
                         fullUrl: 'Consent?identifier=' + consentId,
                         response: new Bundle.BundleEntryResponseComponent(
@@ -226,20 +249,38 @@ class XacmlToFhirTranslator {
             }
             return ppq4Response
         } else {
-            throw new UnclassifiedServerFailureException(400, 'PPQ-1 request failed')
+            throw new UnclassifiedServerFailureException(400, 'PPQ-1 request failed', negativeOperationOutcome())
         }
     }
+
+    static final Map<String, OperationOutcome.IssueType> SAML_STATUS_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING = [
+            'urn:oasis:names:tc:SAML: 2.0:status:Requester'      : OperationOutcome.IssueType.INVALID,
+            'urn:oasis:names:tc:SAML: 2.0:status:Responder'      : OperationOutcome.IssueType.INVALID,
+            'urn:oasis:names:tc:SAML: 2.0:status:VersionMismatch': OperationOutcome.IssueType.STRUCTURE,
+    ]
+
+    static final Map<String, Integer> SAML_STATUS_CODE_TO_HTTP_STATUS_CODE_MAPPING = [
+            'urn:oasis:names:tc:SAML: 2.0:status:Requester'      : 400,
+            'urn:oasis:names:tc:SAML: 2.0:status:Responder'      : 500,
+            'urn:oasis:names:tc:SAML: 2.0:status:VersionMismatch': 500,
+    ]
 
     /**
      * Translates a CH:PPQ-2 response into a CH:PPQ-5 response.
      */
-    static List<Consent> translatePpq2To5Response(ResponseType ppq2Response) throws BaseServerResponseException {
-        if (ppq2Response.status.statusCode.value == Xacml20Utils.SAML20_STATUS_SUCCESS) {
+    static List<Consent> translatePpq2To5Response(ResponseType ppq2Response) {
+        def statusCode = ppq2Response.status.statusCode.value
+        if (statusCode == Xacml20Utils.SAML20_STATUS_SUCCESS) {
             def assertion = ppq2Response.assertionOrEncryptedAssertion[0] as AssertionType
             def statement = assertion.statementOrAuthnStatementOrAuthzDecisionStatement[0] as XACMLPolicyStatementType
             return statement.policyOrPolicySet.collect { toConsent(it as PolicySetType) }
         } else {
-            throw new UnclassifiedServerFailureException(400, 'PPQ-2 request failed')
+            translateNegativeResponse(
+                    statusCode,
+                    ppq2Response.status.statusMessage ?: 'PPQ-2 request failed',
+                    SAML_STATUS_CODE_TO_HTTP_STATUS_CODE_MAPPING,
+                    SAML_STATUS_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING,
+                    null)
         }
     }
 

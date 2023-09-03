@@ -259,7 +259,7 @@ public class TranslationTest {
     public void testPpq2To5ResponseTranslation2() {
         boolean correct = false;
         try {
-            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativePolicyQueryResponse("failure");
+            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativePolicyQueryResponse("urn:oasis:names:tc:SAML: 2.0:status:Requester");
             XacmlToFhirTranslator.translatePpq2To5Response(ppq2Response);
         } catch (UnclassifiedServerFailureException e) {
             assertEquals(400, e.getStatusCode());
