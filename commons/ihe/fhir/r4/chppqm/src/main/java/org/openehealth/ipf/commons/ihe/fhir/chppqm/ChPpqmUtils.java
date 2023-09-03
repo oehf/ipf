@@ -27,8 +27,6 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.openehealth.ipf.commons.ihe.fhir.IgBasedFhirContextSupplier;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;

@@ -254,15 +254,15 @@ class XacmlToFhirTranslator {
     }
 
     static final Map<String, OperationOutcome.IssueType> SAML_STATUS_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING = [
-            'urn:oasis:names:tc:SAML: 2.0:status:Requester'      : OperationOutcome.IssueType.INVALID,
-            'urn:oasis:names:tc:SAML: 2.0:status:Responder'      : OperationOutcome.IssueType.INVALID,
-            'urn:oasis:names:tc:SAML: 2.0:status:VersionMismatch': OperationOutcome.IssueType.STRUCTURE,
+            'urn:oasis:names:tc:SAML:2.0:status:Requester'      : OperationOutcome.IssueType.INVALID,
+            'urn:oasis:names:tc:SAML:2.0:status:Responder'      : OperationOutcome.IssueType.INVALID,
+            'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch': OperationOutcome.IssueType.STRUCTURE,
     ]
 
     static final Map<String, Integer> SAML_STATUS_CODE_TO_HTTP_STATUS_CODE_MAPPING = [
-            'urn:oasis:names:tc:SAML: 2.0:status:Requester'      : 400,
-            'urn:oasis:names:tc:SAML: 2.0:status:Responder'      : 500,
-            'urn:oasis:names:tc:SAML: 2.0:status:VersionMismatch': 500,
+            'urn:oasis:names:tc:SAML:2.0:status:Requester'      : 400,
+            'urn:oasis:names:tc:SAML:2.0:status:Responder'      : 500,
+            'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch': 500,
     ]
 
     /**
