@@ -238,7 +238,7 @@ class XacmlToFhirTranslator {
                     def consent = (Consent) ppq4RequestEntry.getResource()
                     consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID)
                 } else {
-                    consentId = ChPpqmUtils.extractConsentIdFromUrl(ppq4RequestEntry.request.url)
+                    ppq4RequestEntry.request.url
                 }
                 ppq4Response.entry << new Bundle.BundleEntryComponent(
                         fullUrl: 'Consent?identifier=' + consentId,
