@@ -51,12 +51,12 @@ public class TransactionalMessagingRouteBuilder extends RouteBuilder {
         // destinations
         // -----------------------------------------------------------------
         
-        from("amqProcess:queue:txm-input")
-        // on exception rollback transaction and send to txm-error
-        .onException(Exception.class).to("mock:txm-error").end()
-        .multicast()
-        .to("direct:intern-1")
-        .to("direct:intern-2");
+        from("amq:queue:noRedeliveryQueue")
+            // on exception rollback transaction and send to txm-error
+            .onException(Exception.class).to("mock:txm-error").end()
+            .multicast()
+                .to("direct:intern-1")
+                .to("direct:intern-2");
         
         // -----------------------------------------------------------------
         // Read from first internal endpoint and route to output JMS queue 1
@@ -64,7 +64,7 @@ public class TransactionalMessagingRouteBuilder extends RouteBuilder {
         // -----------------------------------------------------------------
         
         from("direct:intern-1")
-        .to("amqProcess:queue:txm-output-1");
+            .to("amq:queue:redeliveryQueue.1");
         
         // -----------------------------------------------------------------
         // Read from second internal endpoint and route to output JMS queue 2
@@ -91,11 +91,11 @@ public class TransactionalMessagingRouteBuilder extends RouteBuilder {
         // the noErrorHandler() can be omitted here if an explicit
         // transactionErrorHandler(...) is configured for endpoint
         // amqProcess:queue:txm-input
-        .errorHandler(noErrorHandler())
-        // throw exception if body equals "blah"
-        .process(new FailureProcessor("blah"))
-        // otherwise send to output queue 2
-        .to("amqProcess:queue:txm-output-2"); 
+            .errorHandler(noErrorHandler())
+            // throw exception if body equals "blah"
+            .process(new FailureProcessor("blah"))
+            // otherwise send to output queue 2
+            .to("amq:queue:redeliveryQueue.2");
 
         
         // -----------------------------------------------------------------
@@ -105,19 +105,19 @@ public class TransactionalMessagingRouteBuilder extends RouteBuilder {
         // without further message processing. 
         // -----------------------------------------------------------------
         
-        from("amqDelivery:queue:txm-output-1")
+        from("amq:queue:redeliveryQueue.1")
         // on exception rollback transaction and send to txm-error
-        .onException(Exception.class).to("mock:txm-error").end()
-        // throw exception if body equals "blub"
-        .process(new FailureProcessor("blub"))
-        .to("mock:txm-mock");
+            .onException(Exception.class).to("mock:txm-error").end()
+            // throw exception if body equals "blub"
+            .process(new FailureProcessor("blub"))
+            .to("mock:txm-mock");
         
         // -----------------------------------------------------------------
         // Read from transacted output queue and send to txm-mock.
         // -----------------------------------------------------------------
         
-        from("amqDelivery:queue:txm-output-2")
-        .to("mock:txm-mock");
+        from("amq:queue:redeliveryQueue.1")
+            .to("mock:txm-mock");
         
     }
 

@@ -1,21 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-platform-camel-core</artifactId>
     <name>ipf-platform-camel-core</name>
     <description>Apache Camel extensions</description>
 
-    
+
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel</artifactId>
         <version>5.0-SNAPSHOT</version>
     </parent>
-    
+
     <properties>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension</ipf.extension.classes>
     </properties>
-    
+
     <dependencies>
         <!-- dependencies for production -->
         <dependency>
@@ -77,32 +78,20 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-broker</artifactId>
-            <version>${activemq-version}</version>
+            <artifactId>artemis-junit-5</artifactId>
+            <version>${activemq-artemis-version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>artemis-jms-client</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-client-jakarta</artifactId>
-            <version>${activemq-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
-            <version>${activemq-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-kahadb-store</artifactId>
-            <version>${activemq-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-spring</artifactId>
-            <version>${activemq-version}</version>
+            <artifactId>artemis-jakarta-client</artifactId>
+            <version>${activemq-artemis-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

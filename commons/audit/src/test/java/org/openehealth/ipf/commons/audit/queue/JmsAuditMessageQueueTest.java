@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.commons.audit.queue;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.broker.BrokerService;
-import org.junit.jupiter.api.*;
-import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.junit.EmbeddedActiveMQExtension;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -35,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Dmytro Rud
  */
-@Disabled("JEE 10")
 public class JmsAuditMessageQueueTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
@@ -48,16 +50,13 @@ public class JmsAuditMessageQueueTest {
     private RecordingAuditMessageTransmission recorder;
 
 
-    @BeforeAll
-    public static void beforeClass() throws Exception {
-        Locale.setDefault(Locale.ENGLISH);
+    @RegisterExtension
+    private static EmbeddedActiveMQExtension server = new EmbeddedActiveMQExtension("transient-artemis.xml");
 
-        var jmsBroker = new BrokerService();
-        jmsBroker.addConnector(JMS_BROKER_URL);
-        jmsBroker.setUseJmx(false);
-        jmsBroker.setPersistent(false);
-        jmsBroker.deleteAllMessages();
-        jmsBroker.start();
+
+    @BeforeAll
+    public static void beforeClass()  {
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     @BeforeEach
@@ -79,19 +78,17 @@ public class JmsAuditMessageQueueTest {
     @Test
     public void testActiveMQ() throws Exception {
         var connectionFactory = new ActiveMQConnectionFactory(JMS_BROKER_URL);
-        var pooledConnectionFactory = new JmsPoolConnectionFactory();
-        pooledConnectionFactory.setConnectionFactory(connectionFactory);
         var messageListener = new JmsAuditMessageListener(auditContext);
 
         // Setup Consumer
         var messageListenerContainer = new SimpleMessageListenerContainer();
         messageListenerContainer.setupMessageListener(messageListener);
-        messageListenerContainer.setConnectionFactory(pooledConnectionFactory);
+        messageListenerContainer.setConnectionFactory(connectionFactory);
         messageListenerContainer.setDestinationName(JMS_QUEUE_NAME);
         messageListenerContainer.start();
 
         // Setup producer
-        atnaQueue = new JmsAuditMessageQueue(pooledConnectionFactory, JMS_QUEUE_NAME, null, null);
+        atnaQueue = new JmsAuditMessageQueue(connectionFactory, JMS_QUEUE_NAME, null, null);
         auditContext.setAuditMessageQueue(atnaQueue);
 
         sendAudit();
