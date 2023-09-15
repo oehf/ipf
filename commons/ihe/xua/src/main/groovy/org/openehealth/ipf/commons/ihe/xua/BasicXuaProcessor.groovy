@@ -52,6 +52,7 @@ class BasicXuaProcessor implements XuaProcessor {
     static final String WSSE_NS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
     static final String SAML20_NS = "urn:oasis:names:tc:SAML:2.0:assertion"
 
+    static final String SWISS_USER_POU_OID  = '2.16.756.5.30.1.127.3.10.5'
     static final String SWISS_USER_ROLE_OID = '2.16.756.5.30.1.127.3.10.6'
 
     static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = 'urn:oasis:names:tc:xspa:1.0:subject:purposeofuse'
@@ -81,12 +82,6 @@ class BasicXuaProcessor implements XuaProcessor {
         message.getExchange().put(XUA_SAML_ASSERTION, assertion)
         def gpath = new XmlSlurper(false, true).parseText(StaxUtils.toString(assertion))
 
-        // extract data related to human users
-        def iheUser = createIheUser(gpath)
-        def mainEpdUser = createMainEpdUser(gpath, iheUser)
-        def additionalEpdUser = createAdditionalEpdUser(gpath, iheUser)
-        auditDataset.humanUsers.addAll([iheUser, mainEpdUser, additionalEpdUser].findAll { !it.isEmpty() })
-
         // extract purpose of use, patient id, etc.
         def purposesOfUse = []
         for (pou in gpath.AttributeStatement.Attribute.findAll { it.@Name == PURPOSE_OF_USE_ATTRIBUTE_NAME }.AttributeValue.PurposeOfUse) {
@@ -94,6 +89,12 @@ class BasicXuaProcessor implements XuaProcessor {
         }
         auditDataset.purposesOfUse = purposesOfUse as PurposeOfUse[]
         auditDataset.xuaPatientId = gpath.AttributeStatement.Attribute.find { it.@Name == PATIENT_ID_ATTRIBUTE_NAME }.AttributeValue[0].text()
+
+        // extract data related to human users
+        def iheUser = createIheUser(gpath)
+        def mainEpdUser = createMainEpdUser(gpath, iheUser)
+        def additionalEpdUser = createAdditionalEpdUser(gpath, iheUser, purposesOfUse)
+        auditDataset.humanUsers.addAll([iheUser, mainEpdUser, additionalEpdUser].findAll { !it.isEmpty() })
     }
 
 
@@ -150,13 +151,17 @@ class BasicXuaProcessor implements XuaProcessor {
         return user
     }
 
-    private static HumanUser createAdditionalEpdUser(GPathResult gpath, HumanUser iheUser) {
+    private static HumanUser createAdditionalEpdUser(GPathResult gpath, HumanUser iheUser, List<PurposeOfUse> purposesOfUse) {
         def user = new HumanUser()
         user.id = gpath.Subject.SubjectConfirmation.NameID[0].text()
         user.name = gpath.Subject.SubjectConfirmation.SubjectConfirmationData.AttributeStatement.Attribute.find { it.@Name == SUBJECT_NAME_ATTRIBUTE_NAME }.AttributeValue[0].text()
         switch (iheUser.roles.find { it.codeSystemName == SWISS_USER_ROLE_OID }?.code) {
             case 'HCP':
-                user.roles << ActiveParticipantRoleId.of('ASS', SWISS_USER_ROLE_OID, 'Assistant')
+                if (purposesOfUse.find { (it.codeSystemName == SWISS_USER_POU_OID) && it.code.contains('AUTO') }) {
+                    user.roles << ActiveParticipantRoleId.of('TCU', SWISS_USER_ROLE_OID, 'Technical User')
+                } else {
+                    user.roles << ActiveParticipantRoleId.of('ASS', SWISS_USER_ROLE_OID, 'Assistant')
+                }
                 break
             case 'PAT':
                 user.roles << ActiveParticipantRoleId.of('REP', SWISS_USER_ROLE_OID, 'Representative')
