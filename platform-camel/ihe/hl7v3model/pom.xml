@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ipf-platform-camel-ihe-hl7v3model</artifactId>
+    <name>ipf-platform-camel-ihe-hl7v3model</name>
+    <description>HL7v3 web service IHE components for Apache Camel with HL7v3 model converters</description>
+
+
+    <parent>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe</artifactId>
+        <version>5.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-hl7v3model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
