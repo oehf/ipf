@@ -65,10 +65,12 @@ class TestIti41Environment extends XdsStandardTestContainer {
     }
 
     private static void resetSystemProperties() {
-        System.setProperty("javax.net.ssl.keyStore", sysProperties.get("javax.net.ssl.keyStore").toString())
-        System.setProperty("javax.net.ssl.trustStore", sysProperties.get("javax.net.ssl.trustStore").toString())
-        System.setProperty("javax.net.ssl.keyStorePassword", sysProperties.get("javax.net.ssl.keyStorePassword").toString())
-        System.setProperty("javax.net.debug", sysProperties.get("javax.net.debug").toString())
+        if (sysProperties != null) {
+            System.setProperty("javax.net.ssl.keyStore", sysProperties.get("javax.net.ssl.keyStore").toString())
+            System.setProperty("javax.net.ssl.trustStore", sysProperties.get("javax.net.ssl.trustStore").toString())
+            System.setProperty("javax.net.ssl.keyStorePassword", sysProperties.get("javax.net.ssl.keyStorePassword").toString())
+            System.setProperty("javax.net.debug", sysProperties.get("javax.net.debug").toString())
+        }
     }
     
     @BeforeEach

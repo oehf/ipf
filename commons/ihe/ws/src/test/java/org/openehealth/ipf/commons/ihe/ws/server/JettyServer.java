@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -38,7 +35,7 @@ public class JettyServer extends ServletServer {
     public void start() {
         server = new Server();
         var connector = isSecure()
-                ? new ServerConnector(server, createSecureConnectionFactory())
+                ? secureServerConnector(getPort())
                 : new ServerConnector(server);
 
         server.addConnector(connector);
@@ -66,6 +63,20 @@ public class JettyServer extends ServletServer {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+    }
+
+    private ServerConnector secureServerConnector(int port) {
+        return new ServerConnector(server,
+                createSecureConnectionFactory(),
+                createHttpsConnectionFactory(port));
+    }
+
+    private HttpConnectionFactory createHttpsConnectionFactory(int port) {
+        var httpsConfig = new HttpConfiguration();
+        httpsConfig.setSecureScheme("https");
+        httpsConfig.setSecurePort(port);
+        httpsConfig.addCustomizer(new SecureRequestCustomizer());
+        return new HttpConnectionFactory(httpsConfig);
     }
 
     private SslConnectionFactory createSecureConnectionFactory() {

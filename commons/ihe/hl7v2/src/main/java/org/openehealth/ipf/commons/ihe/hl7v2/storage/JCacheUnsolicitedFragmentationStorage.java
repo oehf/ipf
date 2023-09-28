@@ -17,16 +17,34 @@ package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
 import javax.cache.Cache;
 
+import static java.util.Objects.requireNonNull;
+
 
 /**
  * A storage of HL7 v2 unsolicited fragmentation accumulators.
  * @author Dmytro Rud
- * @deprecated
  */
-@Deprecated(forRemoval = true)
-public class EhcacheUnsolicitedFragmentationStorage extends JCacheUnsolicitedFragmentationStorage {
+public class JCacheUnsolicitedFragmentationStorage implements UnsolicitedFragmentationStorage {
 
-    public EhcacheUnsolicitedFragmentationStorage(Cache<String, StringBuilder> cache) {
-        super(cache);
+    private final Cache<String, StringBuilder> cache;
+
+    public JCacheUnsolicitedFragmentationStorage(Cache<String, StringBuilder> cache) {
+        requireNonNull(cache);
+        this.cache = cache;
+    }
+
+    @Override
+    public void put(String key, StringBuilder accumulator) {
+        cache.put(key, accumulator);
+    }
+
+    @Override
+    public StringBuilder getAndRemove(String key) {
+        var value = cache.get(key);
+        if (value != null) {
+            cache.remove(key);
+            return value;
+        }
+        return null;
     }
 }

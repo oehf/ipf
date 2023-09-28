@@ -20,21 +20,21 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
+import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
-import org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import java.nio.charset.StandardCharsets
 
-import static org.junit.jupiter.api.Assertions.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Tests for ITI-47.
@@ -125,10 +125,6 @@ class TestIti47 extends HL7v3StandardTestContainer {
             assertEquals(subjectCount.toString(), subject.registrationEvent.subject1.patient.id.@extension.text())
         }
         assertEquals(7, subjectCount)
-
-        // check whether cancel message has had effect
-        EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
-        assertFalse(storage.ehcache.iterator().hasNext())
 
         assert auditSender.messages.size() == 2
         auditSender.messages.each {
@@ -224,8 +220,5 @@ class TestIti47 extends HL7v3StandardTestContainer {
         assertEquals('4', response.controlActProcess.queryAck.resultCurrentQuantity.@value.text())
         assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
 
-        // check whether HL7 v2 continuation has really been used
-        EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
-        assertTrue(storage.ehcache.iterator().hasNext())
     }
 }

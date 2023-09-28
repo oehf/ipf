@@ -43,6 +43,8 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     
 	<ipf:globalContext id="globalContext"/>
 
+    <import resource="cache-spring.xml"/>
+
     <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
         <property name="charset" value="iso-8859-1"/>
         <property name="produceString" value="false" />
