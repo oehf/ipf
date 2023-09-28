@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters;
 
+import net.ihe.gazelle.hl7v3.prpain201305UV02.PRPAIN201305UV02Type;
+import net.ihe.gazelle.hl7v3.prpain201306UV02.PRPAIN201306UV02Type;
 import org.apache.camel.TypeConverterLoaderException;
 import org.apache.camel.spi.TypeConverterLoader;
 import org.apache.camel.spi.TypeConverterRegistry;
@@ -36,14 +38,14 @@ public final class Iti47ConvertersLoader implements TypeConverterLoader {
     }
 
     private void registerConverters(TypeConverterRegistry registry) {
-        addTypeConverter(registry, java.lang.String.class, net.ihe.gazelle.hl7v3.prpain201305UV02.PRPAIN201305UV02Type.class, false,
-                (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti47Converters.prpaRequestToXml((net.ihe.gazelle.hl7v3.prpain201305UV02.PRPAIN201305UV02Type) value));
-        addTypeConverter(registry, java.lang.String.class, net.ihe.gazelle.hl7v3.prpain201306UV02.PRPAIN201306UV02Type.class, false,
-                (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti47Converters.prpaResponseToXml((net.ihe.gazelle.hl7v3.prpain201306UV02.PRPAIN201306UV02Type) value));
-        addTypeConverter(registry, net.ihe.gazelle.hl7v3.prpain201305UV02.PRPAIN201305UV02Type.class, java.lang.String.class, false,
-                (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti47Converters.xmlToPrpaRequest((java.lang.String) value));
-        addTypeConverter(registry, net.ihe.gazelle.hl7v3.prpain201306UV02.PRPAIN201306UV02Type.class, java.lang.String.class, false,
-                (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti47Converters.xmlToPrpaResponse((java.lang.String) value));
+        addTypeConverter(registry, String.class, PRPAIN201305UV02Type.class, false,
+                (type, exchange, value) -> Iti47Converters.prpaRequestToXml((PRPAIN201305UV02Type) value));
+        addTypeConverter(registry, String.class, PRPAIN201306UV02Type.class, false,
+                (type, exchange, value) -> Iti47Converters.prpaResponseToXml((PRPAIN201306UV02Type) value));
+        addTypeConverter(registry, PRPAIN201305UV02Type.class, String.class, false,
+                (type, exchange, value) -> Iti47Converters.xmlToPrpaRequest((String) value));
+        addTypeConverter(registry, PRPAIN201306UV02Type.class, String.class, false,
+                (type, exchange, value) -> Iti47Converters.xmlToPrpaResponse((String) value));
     }
 
     private static void addTypeConverter(TypeConverterRegistry registry, Class<?> toType, Class<?> fromType, boolean allowNull, SimpleTypeConverter.ConversionMethod method) {

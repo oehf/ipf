@@ -30,6 +30,7 @@
         <module>hl7v2</module>
         <module>mllp</module>
         <module>hl7v3</module>
+        <module>hl7v3model</module>
         <module>hl7v2ws</module>
         <module>continua</module>
         <!--<module>fhir</module>-->

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses;
 
+import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformerTest;
 import net.ihe.gazelle.hl7v3.coctmt150003UV03.COCTMT150003UV03Organization;
 import net.ihe.gazelle.hl7v3.datatypes.*;
 import net.ihe.gazelle.hl7v3.mccimt000300UV01.MCCIMT000300UV01AcknowledgementDetail;
@@ -27,13 +28,13 @@ import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
+
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformerTest.*;
 
 @Disabled("disabled due to javax dependency in gazelle lib")
 public class PixV3QueryResponseTransformerTest {
@@ -65,17 +66,17 @@ public class PixV3QueryResponseTransformerTest {
         final var parsedResponse = transformer.fromPrpa(parsedPrpain201310UV02Type);
 
         // The two simple responses should be equal
-        assertIiEquals(response.getQueryPatientId(), parsedResponse.getQueryPatientId());
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getQueryPatientId(), parsedResponse.getQueryPatientId());
         assertEquals(response.getDataSourceOids(), parsedResponse.getDataSourceOids());
-        assertIiEquals(response.getMessageId(), parsedResponse.getMessageId());
-        assertIiEquals(response.getQueryId(), parsedResponse.getQueryId());
-        assertDeviceEquals(response.getReceiver(), parsedResponse.getReceiver());
-        assertDeviceEquals(response.getSender(), parsedResponse.getSender());
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getMessageId(), parsedResponse.getMessageId());
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getQueryId(), parsedResponse.getQueryId());
+        PixV3QueryRequestTransformerTest.assertDeviceEquals(response.getReceiver(), parsedResponse.getReceiver());
+        PixV3QueryRequestTransformerTest.assertDeviceEquals(response.getSender(), parsedResponse.getSender());
         assertEquals(HL7DTM.toSimpleString(response.getCreationTime()), HL7DTM.toSimpleString(parsedResponse.getCreationTime()));
-        assertIiEquals(response.getTargetMessageId(), parsedResponse.getTargetMessageId());
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getTargetMessageId(), parsedResponse.getTargetMessageId());
         assertEquals(response.getAcknowledgementTypeCode(), parsedResponse.getAcknowledgementTypeCode());
         assertEquals(response.getQueryResponseCode(), parsedResponse.getQueryResponseCode());
-        assertIiEquals(response.getPatientIds().get(0), parsedResponse.getPatientIds().get(0));
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getPatientIds().get(0), parsedResponse.getPatientIds().get(0));
         assertEquals(response.getCustodianOid(), parsedResponse.getCustodianOid());
         assertEquals(response.getAcknowledgementDetails().get(0).getCode().getCode(),
                 parsedResponse.getAcknowledgementDetails().get(0).getCode().getCode());
@@ -86,13 +87,13 @@ public class PixV3QueryResponseTransformerTest {
         assertEquals(response.getProviderOrganization().getName().get(0).mixed,
                 parsedResponse.getProviderOrganization().getName().get(0).mixed);
         assertEquals(response.getPersonName().mixed, parsedResponse.getPersonName().mixed);
-        assertIiEquals(response.getPersonIds().get(0), parsedResponse.getPersonIds().get(0));
-        assertIiEquals(response.getAsOtherIDs().get(0).getId().get(0),
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getPersonIds().get(0), parsedResponse.getPersonIds().get(0));
+        PixV3QueryRequestTransformerTest.assertIiEquals(response.getAsOtherIDs().get(0).getId().get(0),
                 parsedResponse.getAsOtherIDs().get(0).getId().get(0));
     }
 
     public static PixV3QueryResponse getSampleResponse() {
-        final var response = PixV3QueryResponse.fromQuery(getSampleQuery());
+        final var response = PixV3QueryResponse.fromQuery(PixV3QueryRequestTransformerTest.getSampleQuery());
         response.setDataFound();
         response.setTargetMessageId(new II("m1", "1.3.5"));
         response.setMessageId(new II("m2", "1.3.5"));
