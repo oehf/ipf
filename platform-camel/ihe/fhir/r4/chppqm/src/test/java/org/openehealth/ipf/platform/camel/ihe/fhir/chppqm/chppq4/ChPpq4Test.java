@@ -35,6 +35,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*;
@@ -48,13 +49,6 @@ public class ChPpq4Test extends FhirTestContainer {
     }
 
     public static void startServer(String contextDescriptor) {
-        try {
-            // TODO: investigate the race condition
-            Thread.sleep(5000L);
-        } catch (InterruptedException e) {
-            // nop
-        }
-
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
 
@@ -90,6 +84,7 @@ public class ChPpq4Test extends FhirTestContainer {
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);
         exchange.getMessage().setBody(requestBundle);
         exchange.getMessage().setHeader(Constants.HTTP_METHOD, "POST");
+        exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of("Connection", List.of("close")));
         exchange = producerTemplate.send("ch-ppq4://localhost:" + DEMO_APP_PORT, exchange);
         Exception exception = Exchanges.extractException(exchange);
         if (exception != null) {

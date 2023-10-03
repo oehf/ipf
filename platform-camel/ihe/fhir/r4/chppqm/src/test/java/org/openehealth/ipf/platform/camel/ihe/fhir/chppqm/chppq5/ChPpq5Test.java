@@ -91,6 +91,7 @@ public class ChPpq5Test extends FhirTestContainer {
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);
         exchange.getMessage().setBody(criteria);
         exchange.getMessage().setHeader(Constants.HTTP_METHOD, "POST");
+        exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of("Connection", List.of("close")));
         exchange = producerTemplate.send("ch-ppq5://localhost:" + DEMO_APP_PORT, exchange);
         Exception exception = Exchanges.extractException(exchange);
         if (exception != null) {
