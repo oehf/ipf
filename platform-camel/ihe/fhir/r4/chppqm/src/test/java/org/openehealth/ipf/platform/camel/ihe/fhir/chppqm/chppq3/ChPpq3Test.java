@@ -71,7 +71,8 @@ public class ChPpq3Test extends FhirTestContainer {
         exchange.getMessage().setHeader(Constants.HTTP_METHOD, httpMethod);
         exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of(
                 "Authorization", List.of("Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw=="),
-                "Header2", List.of("Value1", "Value2", "Value3")
+                "Header2", List.of("Value1", "Value2", "Value3"),
+                "Connection", List.of("close")
         ));
         exchange = producerTemplate.send("ch-ppq3://localhost:" + DEMO_APP_PORT, exchange);
         Exception exception = Exchanges.extractException(exchange);
