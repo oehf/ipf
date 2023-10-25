@@ -17,20 +17,14 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.chppqm.chppq5;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Consent;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator;
-import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq5.ChPpq5SearchParameters;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*;
-import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.createUuid;
 import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators.*;
 
 public class ChPpq5TestRouteBuilder extends RouteBuilder {

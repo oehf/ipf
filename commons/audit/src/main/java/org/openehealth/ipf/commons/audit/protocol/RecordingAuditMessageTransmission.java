@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 
 import java.util.*;
 
@@ -29,6 +30,15 @@ import java.util.*;
  * @since 3.5
  */
 public class RecordingAuditMessageTransmission implements AuditTransmissionProtocol {
+
+    public RecordingAuditMessageTransmission() {
+    }
+
+    /**
+     * This constructor is required to allow instantiation by the Spring Boot starter.
+     */
+    public RecordingAuditMessageTransmission(TlsParameters dummy) {
+    }
 
     private final List<String> messages = new ArrayList<>();
 
