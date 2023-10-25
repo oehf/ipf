@@ -46,11 +46,13 @@ public class Iti81AuditStrategy extends FhirAuditStrategy<FhirAuditEventQueryAud
 
     @Override
     public boolean enrichAuditDatasetFromResponse(FhirAuditEventQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        var bundle = (Bundle) response;
-        bundle.getEntry().stream()
-                        .filter(bundleEntryComponent -> bundleEntryComponent.getResource() instanceof AuditEvent)
-                        .map(Bundle.BundleEntryComponent::getFullUrl)
-                        .forEach(uri -> auditDataset.getAuditEventUris().add(uri));
+        if (response instanceof Bundle) {
+            var bundle = (Bundle) response;
+            bundle.getEntry().stream()
+                    .filter(bundleEntryComponent -> bundleEntryComponent.getResource() instanceof AuditEvent)
+                    .map(Bundle.BundleEntryComponent::getFullUrl)
+                    .forEach(uri -> auditDataset.getAuditEventUris().add(uri));
+        }
         return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 }
