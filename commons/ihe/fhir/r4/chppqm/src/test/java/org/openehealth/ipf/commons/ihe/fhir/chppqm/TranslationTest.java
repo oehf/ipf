@@ -185,17 +185,17 @@ public class TranslationTest {
         {
             Bundle ppq4Request = ChPpqmUtils.createPpq4SubmitRequestBundle(consents, Bundle.HTTPVerb.POST);
             assert ppq4Request.getMeta().getProfile().stream()
-                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.REQUEST_BUNDLE.equals(canonicalType.getValue()));
+                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE.equals(canonicalType.getValue()));
             new ChPpq4Validator(ChPpqmUtils.FHIR_CONTEXT).validateRequest(ppq4Request, null);
-            AddPolicyRequest addRequest = (AddPolicyRequest) FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
+            AddPolicyRequest addRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
             Xacml20MessageValidator.validateChPpq1Request(addRequest);
         }
         {
             Bundle ppq4Request = ChPpqmUtils.createPpq4SubmitRequestBundle(consents, Bundle.HTTPVerb.PUT);
             assert ppq4Request.getMeta().getProfile().stream()
-                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.REQUEST_BUNDLE.equals(canonicalType.getValue()));
+                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE.equals(canonicalType.getValue()));
             new ChPpq4Validator(ChPpqmUtils.FHIR_CONTEXT).validateRequest(ppq4Request, null);
-            UpdatePolicyRequest updateRequest = (UpdatePolicyRequest) FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
+            UpdatePolicyRequest updateRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
             Xacml20MessageValidator.validateChPpq1Request(updateRequest);
         }
         {
@@ -204,9 +204,9 @@ public class TranslationTest {
                     .collect(Collectors.toSet());
             Bundle ppq4Request = ChPpqmUtils.createPpq4DeleteRequestBundle(consentIds);
             assert ppq4Request.getMeta().getProfile().stream()
-                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.REQUEST_BUNDLE.equals(canonicalType.getValue()));
+                    .anyMatch(canonicalType -> ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE.equals(canonicalType.getValue()));
             new ChPpq4Validator(ChPpqmUtils.FHIR_CONTEXT).validateRequest(ppq4Request, null);
-            DeletePolicyRequest deleteRequest = (DeletePolicyRequest) FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
+            DeletePolicyRequest deleteRequest = FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
             Xacml20MessageValidator.validateChPpq1Request(deleteRequest);
         }
 
@@ -221,7 +221,7 @@ public class TranslationTest {
                 create203Consent(createUuid(), "123456789012345678", "urn:e-health-suisse:2015:policies:provide-level:restricted"));
 
         Bundle ppq4Request = ChPpqmUtils.createPpq4SubmitRequestBundle(consents, Bundle.HTTPVerb.POST);
-        AddPolicyRequest ppq1Request = (AddPolicyRequest) FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
+        AddPolicyRequest ppq1Request = FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
         EprPolicyRepositoryResponse ppq1Response = new EprPolicyRepositoryResponse();
         ppq1Response.setStatus(PpqConstants.StatusCode.SUCCESS);
         Bundle ppq4Response = XacmlToFhirTranslator.translatePpq1To4Response(ppq4Request, ppq1Request, ppq1Response);

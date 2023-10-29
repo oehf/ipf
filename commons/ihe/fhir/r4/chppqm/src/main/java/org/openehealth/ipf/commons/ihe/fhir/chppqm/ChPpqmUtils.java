@@ -57,8 +57,8 @@ public class ChPpqmUtils {
 
     public static class Profiles {
         public static final String CONSENT = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmConsent";
-        public static final String REQUEST_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmRequestBundle";
-        public static final String RESPONSE_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmResponseBundle";
+        public static final String FEED_REQUEST_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmFeedRequestBundle";
+        public static final String RETRIEVE_RESPONSE_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmRetrieveResponseBundle";
     }
 
     public static class CodingSystems {
@@ -122,7 +122,7 @@ public class ChPpqmUtils {
         Bundle bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile(Profiles.REQUEST_BUNDLE);
+        bundle.getMeta().addProfile(Profiles.FEED_REQUEST_BUNDLE);
         for (Consent consent : consents) {
             Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
             entry.getRequest().setMethod(httpMethod);
@@ -147,7 +147,7 @@ public class ChPpqmUtils {
         Bundle bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile(Profiles.REQUEST_BUNDLE);
+        bundle.getMeta().addProfile(Profiles.FEED_REQUEST_BUNDLE);
         for (String consentId : consentIds) {
             Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
             entry.getRequest().setMethod(Bundle.HTTPVerb.DELETE);

@@ -70,7 +70,7 @@ public class ChPpq4Test extends FhirTestContainer {
                 create202Consent(createUuid(), "123456789012345678", "urn:e-health-suisse:2015:policies:access-level:normal"),
                 create203Consent(createUuid(), "123456789012345678", "urn:e-health-suisse:2015:policies:provide-level:restricted"));
         Bundle requestBundle = new Bundle();
-        requestBundle.getMeta().addProfile(ChPpqmUtils.Profiles.REQUEST_BUNDLE);
+        requestBundle.getMeta().addProfile(ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE);
         requestBundle.setId(createUuid());
         requestBundle.setType(Bundle.BundleType.TRANSACTION);
         for (Consent consent : consents) {

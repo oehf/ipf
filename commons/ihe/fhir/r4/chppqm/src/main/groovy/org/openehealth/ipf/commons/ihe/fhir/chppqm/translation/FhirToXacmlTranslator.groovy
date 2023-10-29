@@ -129,8 +129,8 @@ class FhirToXacmlTranslator {
     /**
      * Translates a CH:PPQ-5 request into a CH:PPQ-2 request.
      *
-     * @param httpQuery
-     * @return
+     * @param httpQuery HTTP query string
+     * @return PPQ-2 request POJO
      */
     XACMLPolicyQueryType translatePpq5To2Request(String httpQuery) {
         List<NameValuePair> params = URLEncodedUtils.parse(httpQuery, StandardCharsets.UTF_8);

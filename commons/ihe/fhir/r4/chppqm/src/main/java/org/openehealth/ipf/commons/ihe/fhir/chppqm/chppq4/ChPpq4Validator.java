@@ -33,7 +33,7 @@ public class ChPpq4Validator extends IgBasedInstanceValidator {
 
     @Override
     public void validateRequest(Object payload, Map<String, Object> parameters) {
-        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.REQUEST_BUNDLE));
+        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE));
     }
 
     @Override
