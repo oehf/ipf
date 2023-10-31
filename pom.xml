@@ -57,6 +57,7 @@
         <easymock-version>5.1.0</easymock-version>
         <guava-version>32.1.1-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
+        <lombok-version>1.18.30</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>9.0.82</tomcat-version>
@@ -281,6 +282,7 @@
             <artifactId>lombok</artifactId>
             <!-- scope "provided" is used here in the sense
                 "necessary for compilation, not necessary at runtime" -->
+            <version>${lombok-version}</version>
             <scope>provided</scope>
         </dependency>
 
