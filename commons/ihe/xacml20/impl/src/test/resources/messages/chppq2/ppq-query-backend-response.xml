@@ -24,7 +24,7 @@
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
     </samlp:Status>
     <saml:Assertion ID="id2" Version="2.0" IssueInstant="2016-02-09T09:30:10.5Z">
-        <saml:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:2.999.1</saml:Issuer>
+        <saml:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:1.2.3</saml:Issuer>
         <saml:Statement xsi:type="xacml-saml:XACMLPolicyStatementType">
             <ns5:PolicySet xmlns:ns3="urn:ihe-d:hl7-org:v3"
                            xmlns:ns5="urn:oasis:names:tc:xacml:2.0:policy:schema:os"

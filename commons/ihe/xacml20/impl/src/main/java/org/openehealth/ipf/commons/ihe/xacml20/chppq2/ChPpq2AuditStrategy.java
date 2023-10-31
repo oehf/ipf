@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes;
@@ -86,7 +87,7 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
     public EventOutcomeIndicator getEventOutcomeIndicator(ChPpqAuditDataset auditDataset, Object responseObject) {
         var response = (ResponseType) responseObject;
         try {
-            if (!Xacml20Utils.SAML20_STATUS_SUCCESS.equals(response.getStatus().getStatusCode().getValue())) {
+            if (!Xacml20Status.SUCCESS.getCode().equals(response.getStatus().getStatusCode().getValue())) {
                 return EventOutcomeIndicator.SeriousFailure;
             }
             if (response.getAssertionOrEncryptedAssertion().isEmpty()) {

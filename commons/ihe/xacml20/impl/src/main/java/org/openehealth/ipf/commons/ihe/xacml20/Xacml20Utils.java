@@ -24,16 +24,10 @@ import org.herasaf.xacml.core.simplePDP.initializers.api.Initializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3DataTypesInitializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3FunctionsInitializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UpdatePolicyRequest;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.XACMLPolicySetIdReferenceStatementType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusCodeType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.StatusType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLPolicyStatementType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
@@ -51,8 +45,6 @@ import java.util.stream.Stream;
  * @author Dmytro Rud
  */
 public class Xacml20Utils {
-
-    public static final String SAML20_STATUS_SUCCESS = "urn:oasis:names:tc:SAML:2.0:status:Success";
 
     public static final String ATTRIBUTE_TYPE_PATIENT_ID = "urn:e-health-suisse:2015:epr-spid";
     public static final String ELEMENT_NAME_PATIENT_ID = "InstanceIdentifier";
@@ -97,16 +89,6 @@ public class Xacml20Utils {
         initializers.addAll(Arrays.asList(customInitializers));
         InitializerExecutor.setInitalizers(initializers);
         InitializerExecutor.runInitializers();
-    }
-
-    public static ResponseType createXacmlQueryResponse(String status) {
-        var statusCodeType = new StatusCodeType();
-        statusCodeType.setValue(status);
-        var statusType = new StatusType();
-        statusType.setStatusCode(statusCodeType);
-        var responseType = new ResponseType();
-        responseType.setStatus(statusType);
-        return responseType;
     }
 
     /**

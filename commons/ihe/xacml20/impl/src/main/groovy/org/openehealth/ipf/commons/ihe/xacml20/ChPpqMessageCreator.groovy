@@ -53,7 +53,7 @@ class ChPpqMessageCreator {
     private final String homeCommunityId
 
     ChPpqMessageCreator(String homeCommunityId) {
-        this.homeCommunityId = Validate.notEmpty(homeCommunityId)
+        this.homeCommunityId = Validate.notEmpty(homeCommunityId as String, 'Home community ID shall be provided')
     }
 
     private AssertionType createAssertion() {
@@ -143,32 +143,35 @@ class ChPpqMessageCreator {
         return query
     }
 
-    ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets) {
-        def assertion = createAssertion()
-        assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
-                policyOrPolicySet: policySets,
-        )
+    private static ResponseType createResponse(Xacml20Status status, String statusMessage, AssertionType assertion) {
         return new ResponseType(
                 ID: '_' + UUID.randomUUID(),
                 issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
                 version: '2.0',
                 status: new StatusType(
-                        statusCode: new StatusCodeType(value: Xacml20Utils.SAML20_STATUS_SUCCESS),
+                        statusCode: new StatusCodeType(value: status.code),
+                        statusMessage: statusMessage,
                 ),
                 assertionOrEncryptedAssertion: [assertion],
         )
     }
 
-    ResponseType createNegativePolicyQueryResponse(String statusCode) {
-        return new ResponseType(
-                ID: '_' + UUID.randomUUID(),
-                issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
-                version: '2.0',
-                status: new StatusType(
-                        statusCode: new StatusCodeType(value: statusCode),
-                ),
-                assertionOrEncryptedAssertion: [createAssertion()],
+    ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets) {
+        def assertion = createAssertion()
+        assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
+                policyOrPolicySet: policySets,
         )
+        return createResponse(Xacml20Status.SUCCESS, null, assertion)
+    }
+
+    ResponseType createNegativePolicyQueryResponse(Xacml20Status status, String statusMessage) {
+        return createResponse(status, statusMessage, createAssertion())
+    }
+
+    ResponseType createNegativePolicyQueryResponse(Exception exception) {
+        return (exception instanceof Xacml20Exception)
+                ? createNegativePolicyQueryResponse(exception.status, exception.message)
+                : createNegativePolicyQueryResponse(Xacml20Status.RESPONDER_ERROR, exception.message)
     }
 
 }

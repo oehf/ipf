@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="4.x.x" description="IPF 4.x.x" date="tbd">
+            <action issue="431" dev="unixoid" type="fix">
+                Fix error handling in CH:PPQ-2
+            </action>
+            <action issue="430" dev="stanojevic-boris" type="update">
+                Relaxed CXi validation in XDS according to CP-ITI-1292
+            </action>
             <action issue="429" dev="unixoid" type="add">
                 Add Spring Boot starter for CH:PPQ
             </action>

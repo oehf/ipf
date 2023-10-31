@@ -25,7 +25,9 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
@@ -77,17 +79,19 @@ public class ChPpq2Test extends StandardTestContainer {
 
     @Test
     public void testQueryPerPatientIdSuccess() throws Exception {
-        testQueryPerPatientId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
+        testQueryPerPatientId("success", Xacml20Status.SUCCESS, EventOutcomeIndicator.Success, "urn:oid:1.2.3");
     }
 
     @Test
     public void testQueryPerPatientIdFailure() throws Exception {
-        testQueryPerPatientId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
+        testQueryPerPatientId("failure", Xacml20Status.RESPONDER_ERROR, EventOutcomeIndicator.SeriousFailure, "urn:oid:1.2.4");
     }
 
-    private void testQueryPerPatientId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
+    private void testQueryPerPatientId(String suffix, Xacml20Status status, EventOutcomeIndicator outcomeIndicator, String homeCommunityId) throws Exception {
         var response = (ResponseType) send(getUri(suffix), loadFile("query-per-patient-id.xml"), ResponseType.class);
-        assertEquals(statusCode, response.getStatus().getStatusCode().getValue());
+        assertEquals(status.getCode(), response.getStatus().getStatusCode().getValue());
+        var assertion = (AssertionType) response.getAssertionOrEncryptedAssertion().get(0);
+        assertEquals(homeCommunityId, assertion.getIssuer().getValue());
 
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
@@ -128,17 +132,17 @@ public class ChPpq2Test extends StandardTestContainer {
 
     @Test
     public void testQueryPerPolicyIdSuccess() throws Exception {
-        testQueryPerPolicyId("success", "urn:oasis:names:tc:SAML:2.0:status:Success", EventOutcomeIndicator.Success);
+        testQueryPerPolicyId("success", Xacml20Status.SUCCESS, EventOutcomeIndicator.Success);
     }
 
     @Test
     public void testQueryPerPolicyIdFailure() throws Exception {
-        testQueryPerPolicyId("failure", "urn:oasis:names:tc:SAML:2.0:status:Responder", EventOutcomeIndicator.SeriousFailure);
+        testQueryPerPolicyId("failure", Xacml20Status.RESPONDER_ERROR, EventOutcomeIndicator.SeriousFailure);
     }
 
-    private void testQueryPerPolicyId(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
+    private void testQueryPerPolicyId(String suffix, Xacml20Status status, EventOutcomeIndicator outcomeIndicator) throws Exception {
         var response = (ResponseType) send(getUri(suffix), loadFile("query-per-policy-id.xml"), ResponseType.class);
-        assertEquals(statusCode, response.getStatus().getStatusCode().getValue());
+        assertEquals(status.getCode(), response.getStatus().getStatusCode().getValue());
 
         List messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());

@@ -35,7 +35,7 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
         // sends a correct response with status "success"
-        from("ch-ppq2:ch-ppq-success")
+        from("ch-ppq2:ch-ppq-success?homeCommunityId=urn:oid:1.2.3")
                 .process(chPpq2RequestValidator())
                 .process(exchange -> {
                     var stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq2/ppq-query-backend-response.xml");
@@ -51,7 +51,7 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
                 .process(chPpq2ResponseValidator());
 
         // sends a correct response with status "failure"
-        from("ch-ppq2:ch-ppq-failure")
+        from("ch-ppq2:ch-ppq-failure?homeCommunityId=urn:oid:1.2.4")
                 .process(chPpq2RequestValidator())
                 .throwException(new RuntimeException("Alles schlimm..."));
 

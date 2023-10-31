@@ -35,9 +35,7 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3Validator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4.ChPpq4Validator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.FhirToXacmlTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.XacmlToFhirTranslator;
-import org.openehealth.ipf.commons.ihe.xacml20.ChPpqMessageCreator;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.commons.ihe.xacml20.*;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
@@ -259,7 +257,7 @@ public class TranslationTest {
     public void testPpq2To5ResponseTranslation2() {
         boolean correct = false;
         try {
-            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativePolicyQueryResponse("urn:oasis:names:tc:SAML:2.0:status:Requester");
+            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativePolicyQueryResponse(new Xacml20Exception(Xacml20Status.REQUESTER_ERROR));
             XacmlToFhirTranslator.translatePpq2To5Response(ppq2Response);
         } catch (UnclassifiedServerFailureException e) {
             assertEquals(400, e.getStatusCode());

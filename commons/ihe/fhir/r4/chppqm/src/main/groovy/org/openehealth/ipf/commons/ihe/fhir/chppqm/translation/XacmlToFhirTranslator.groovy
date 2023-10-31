@@ -31,6 +31,7 @@ import org.hl7.fhir.r4.model.Consent
 import org.hl7.fhir.r4.model.IdType
 import org.hl7.fhir.r4.model.OperationOutcome
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage
@@ -254,15 +255,15 @@ class XacmlToFhirTranslator {
     }
 
     static final Map<String, OperationOutcome.IssueType> SAML_STATUS_CODE_TO_FHIR_ISSUE_TYPE_CODE_MAPPING = [
-            'urn:oasis:names:tc:SAML:2.0:status:Requester'      : OperationOutcome.IssueType.INVALID,
-            'urn:oasis:names:tc:SAML:2.0:status:Responder'      : OperationOutcome.IssueType.INVALID,
-            'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch': OperationOutcome.IssueType.STRUCTURE,
+            (Xacml20Status.REQUESTER_ERROR.code) : OperationOutcome.IssueType.INVALID,
+            (Xacml20Status.RESPONDER_ERROR.code) : OperationOutcome.IssueType.INVALID,
+            (Xacml20Status.VERSION_MISMATCH.code): OperationOutcome.IssueType.STRUCTURE,
     ]
 
     static final Map<String, Integer> SAML_STATUS_CODE_TO_HTTP_STATUS_CODE_MAPPING = [
-            'urn:oasis:names:tc:SAML:2.0:status:Requester'      : 400,
-            'urn:oasis:names:tc:SAML:2.0:status:Responder'      : 500,
-            'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch': 500,
+            (Xacml20Status.REQUESTER_ERROR.code) : 400,
+            (Xacml20Status.RESPONDER_ERROR.code) : 500,
+            (Xacml20Status.VERSION_MISMATCH.code): 500,
     ]
 
     /**
@@ -270,7 +271,7 @@ class XacmlToFhirTranslator {
      */
     static List<Consent> translatePpq2To5Response(ResponseType ppq2Response) {
         def statusCode = ppq2Response.status.statusCode.value
-        if (statusCode == Xacml20Utils.SAML20_STATUS_SUCCESS) {
+        if (statusCode == Xacml20Status.SUCCESS.code) {
             def assertion = ppq2Response.assertionOrEncryptedAssertion[0] as AssertionType
             def statement = assertion.statementOrAuthnStatementOrAuthzDecisionStatement[0] as XACMLPolicyStatementType
             return statement.policyOrPolicySet.collect { toConsent(it as PolicySetType) }
