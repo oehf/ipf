@@ -35,6 +35,24 @@ public class CXiValidatorTest {
     }
 
     @Test
+    public void testValidateCp1292() throws XDSMetaDataException {
+        String value = "11379^^^ABCD^urn:ihe:iti:xds:2013:uniqueId^&1.3.6.1.4.1.21367.2017.2.6.19&ISO^";
+        String invalidCx6value = "11379^^^ABCD^urn:ihe:iti:xds:2013:uniqueId^&1.3.6.1.4.1.21367.2017.2.6.19&SORYSO^";
+        String propertyName = "XDS_VALIDATION_CP_1292";
+        System.setProperty(propertyName, "1");
+        validator.validate(value);
+        assertFails(invalidCx6value);
+        System.setProperty(propertyName, "true");
+        validator.validate(value);
+        assertFails(invalidCx6value);
+        System.setProperty(propertyName, "false");
+        assertFails(value);
+        System.setProperty(propertyName, "0");
+        assertFails(value);
+        System.clearProperty(propertyName);
+    }
+
+    @Test
     public void testValidateBadCase() throws XDSMetaDataException {
         assertFails("");
         assertFails("11379^^^");
@@ -43,6 +61,7 @@ public class CXiValidatorTest {
         assertFails("^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^^^");
         assertFails("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^wrong");
         assertFails("11379^^^&1.3.6367.3.7&ISO^^^");
+        assertFails("11379^^^&1.3.6367.3.7&ISO^^&urn:oid:1.3.6.1.4.1.21367.2017.2.6.19&ISO^");
     }
 
     private static void assertFails(String value) {

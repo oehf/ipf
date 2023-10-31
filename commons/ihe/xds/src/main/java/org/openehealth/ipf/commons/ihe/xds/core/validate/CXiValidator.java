@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isNotEmptyField;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CXI_INCOMPLETE_ASSIGNING_AUTHORITY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CXI_NEEDS_ID_TYPE_CODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CXI_TOO_MANY_COMPONENTS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_NEEDS_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -29,6 +34,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Dmytro Rud
  */
 public class CXiValidator implements ValueValidator {
+
+    private static final String XDS_VALIDATION_CP_1292_PROPERTY = "XDS_VALIDATION_CP_1292";
+    private static final HDValidator HD_VALIDATOR = new HDValidator();
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
@@ -40,7 +48,11 @@ public class CXiValidator implements ValueValidator {
         // prohibited fields
         metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CXI_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CXI_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmptyField(cx.getCx6_AssigningFacility()), CXI_TOO_MANY_COMPONENTS);
+        if (isCP1292ValidationEnabled() && isNotEmptyField(cx.getCx6_AssigningFacility())) {
+            HD_VALIDATOR.validate(cx.getCx6_AssigningFacility(), hl7CX);
+        } else {
+            metaDataAssert(isEmptyField(cx.getCx6_AssigningFacility()), CXI_TOO_MANY_COMPONENTS);
+        }
         metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CXI_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CXI_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CXI_TOO_MANY_COMPONENTS);
@@ -57,6 +69,11 @@ public class CXiValidator implements ValueValidator {
             var cx43filled = isNotEmpty(assigningAuthority.getHd3_UniversalIDType().getValue());
             metaDataAssert(cx41filled || (cx42filled && cx43filled), CXI_INCOMPLETE_ASSIGNING_AUTHORITY);
         }
+    }
+
+    private static boolean isCP1292ValidationEnabled() {
+        String cp1292Value = System.getProperty(XDS_VALIDATION_CP_1292_PROPERTY, "false");
+        return BooleanUtils.toBoolean(cp1292Value);
     }
 
 }
