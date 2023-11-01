@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.chppq2.ChPpq2PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
@@ -30,21 +31,23 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 @Slf4j
 public class ChPpq2Service extends AbstractWebService implements ChPpq2PortType {
 
-    private final ChPpqMessageCreator messageCreator;
+    private final String homeCommunityId;
 
     public ChPpq2Service(String homeCommunityId) {
-        this.messageCreator = new ChPpqMessageCreator(homeCommunityId);
+        this.homeCommunityId = homeCommunityId;
     }
 
     @Override
     public ResponseType policyQuery(XACMLPolicyQueryType request) {
-        var result = process(request);
-        var exception = Exchanges.extractException(result);
+        var exchange = process(request);
+        var exception = Exchanges.extractException(exchange);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
+            var homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
+            var messageCreator = new ChPpqMessageCreator(homeCommunityId);
             return messageCreator.createNegativePolicyQueryResponse(exception);
         }
-        return result.getMessage().getBody(ResponseType.class);
+        return exchange.getMessage().getBody(ResponseType.class);
     }
 
 }

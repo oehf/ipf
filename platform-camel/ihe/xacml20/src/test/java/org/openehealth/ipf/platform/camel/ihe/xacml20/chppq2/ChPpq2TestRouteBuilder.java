@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
@@ -35,18 +36,19 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
         // sends a correct response with status "success"
-        from("ch-ppq2:ch-ppq-success?homeCommunityId=urn:oid:1.2.3")
+        from("ch-ppq2:ch-ppq-success")
                 .process(chPpq2RequestValidator())
                 .process(exchange -> {
                     var stream = ChPpq2TestRouteBuilder.class.getClassLoader().getResourceAsStream("messages/chppq2/ppq-query-backend-response.xml");
                     var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
                     JAXBElement<?> jaxbElement = (JAXBElement) unmarshaller.unmarshal(stream);
-                    exchange.getOut().setBody(jaxbElement.getValue());
+                    exchange.getMessage().setBody(jaxbElement.getValue());
                     var marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                     var writer = new StringWriter();
-                    marshaller.marshal(exchange.getOut().getBody(), writer);
+                    marshaller.marshal(exchange.getMessage().getBody(), writer);
                     log.debug("PPQ output message:\n{}", writer.toString());
+                    exchange.setProperty(HomeCommunityUtils.HOME_COMMUNITY_ID_NAME, "urn:oid:1.2.3");
                 })
                 .process(chPpq2ResponseValidator());
 
