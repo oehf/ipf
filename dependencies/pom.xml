@@ -18,7 +18,7 @@
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <gazelle-hl7v3-jar-version>1.3.7</gazelle-hl7v3-jar-version>
         <groovy-version>3.0.19</groovy-version>
-        <hapi-version>2.3</hapi-version>
+        <hapi-version>2.4.1</hapi-version>
         <hapi-fhir-version>6.8.3</hapi-fhir-version>
         <herasaf-version>2.0.4</herasaf-version>
         <ipf-gazelle-version>2.3.0</ipf-gazelle-version>
@@ -890,7 +890,7 @@
 
     <organization>
         <name>Open eHealth Foundation</name>
-        <url>http://www.openehealth.org/</url>
+        <url>https://github.com/oehf</url>
     </organization>
 
     <developers>
@@ -969,9 +969,7 @@
         <developer>
             <id>thopap</id>
             <name>Thomas Papke</name>
-            <email>thomas.papke@x-tention.de</email>
-            <organization>x-tention Informationstechnologie GmbH</organization>
-            <organizationUrl>https://x-tention.com/</organizationUrl>
+            <email>ipf@thopap.de</email>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -987,7 +985,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

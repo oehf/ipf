@@ -60,7 +60,7 @@ class SegmentTest {
 
     @Test
     fun testSet() {
-        val msg = msg1.copy()
+        val msg = msg1.copy() as ADT_A01
         msh[3] = "SAP-XXX"
         assertEquals("SAP-ISH", msg.msh[3].value)
         msg.msh.from(msh)
@@ -155,7 +155,7 @@ class SegmentTest {
 
     @Test
     fun testCompositeSetAt() {
-        val nk1Copy = msg1.copy().getNK1(0)
+        val nk1Copy = (msg1.copy() as ADT_A01).getNK1(0)
         nk1Copy[4][4] = "XY"
         assertEquals("NW", nk1[4][4].value)
         nk1[4] = nk1Copy[4]

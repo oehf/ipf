@@ -5,14 +5,14 @@
 
 ## IPF Overview
 
-The eHealth Integration Framework (IPF) is an extension of the Apache Camel routing and mediation engine and comes with
+The eHealth Integration Framework (IPF) is an extension of the [Apache Camel](https://camel.apache.org/) routing and mediation engine and comes with
 comprehensive support for message processing and connecting information systems in the healthcare sector.
 It is available under the Apache License version 2.0.
 
 IPF focuses on a domain-specific language (DSL) to implement Enterprise Integration Patterns (EIPs) in integration solutions.
 IPF is based on the Java and Groovy programming languages for application development and for designing project-specific DSLs.
 
-IPF provides highl-level building blocks for implementing IHE profiles such as XDS, PIX, PDQ or XCPD.
+IPF provides highl-level building blocks for implementing IHE profiles such as [XDS](https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html), [PIX](https://profiles.ihe.net/ITI/TF/Volume1/ch-5.html), [PDQ](https://profiles.ihe.net/ITI/TF/Volume1/ch-8.html) or [XCPD](https://profiles.ihe.net/ITI/TF/Volume1/ch-27.html).
 Other supported standards are HL7v2 and HL7v3 (CDA and CCD) for which IPF provides domain-specific languages (DSLs) for
 creation, parsing, rendering, navigation and modification.
 
