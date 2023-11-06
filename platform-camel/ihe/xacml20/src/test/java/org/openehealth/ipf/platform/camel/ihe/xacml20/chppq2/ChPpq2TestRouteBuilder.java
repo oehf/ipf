@@ -48,13 +48,13 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
                     var writer = new StringWriter();
                     marshaller.marshal(exchange.getMessage().getBody(), writer);
                     log.debug("PPQ output message:\n{}", writer.toString());
-                    exchange.setProperty(HomeCommunityUtils.HOME_COMMUNITY_ID_NAME, "urn:oid:1.2.3");
                 })
                 .process(chPpq2ResponseValidator());
 
         // sends a correct response with status "failure"
-        from("ch-ppq2:ch-ppq-failure?homeCommunityId=urn:oid:1.2.4")
+        from("ch-ppq2:ch-ppq-failure?homeCommunityId=urn:oid:1.2.777")
                 .process(chPpq2RequestValidator())
+                .setProperty(HomeCommunityUtils.HOME_COMMUNITY_ID_NAME, constant("urn:oid:1.2.4"))
                 .throwException(new RuntimeException("Alles schlimm..."));
 
     }

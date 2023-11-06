@@ -72,7 +72,7 @@ class XacmlToFhirTranslator {
         }
 
         GPathResult subjectMatches = xacml.Target.Subjects.Subject.SubjectMatch
-        for (subjectMatch in (subjectMatches)) {
+        for (subjectMatch in subjectMatches) {
             def cv = subjectMatch.AttributeValue.CodedValue
 
             if ((cv.@codeSystem.text() == PpqConstants.CodingSystemIds.SWISS_PURPOSE_OF_USE) && (cv.@code.text() == 'EMER')) {
