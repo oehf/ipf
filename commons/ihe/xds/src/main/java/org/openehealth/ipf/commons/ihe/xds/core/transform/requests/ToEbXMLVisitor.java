@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query.Visitor;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.*;
 
 /**
@@ -27,139 +28,164 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.*;
  * @author Jens Riemschneider
  */
 final class ToEbXMLVisitor implements Visitor {
-    private final EbXMLAdhocQueryRequest ebXML;
+    private final EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML;
 
     /**
      * Constructs the visitor.
      * @param ebXML
      *          the ebXML result.
      */
-    ToEbXMLVisitor(EbXMLAdhocQueryRequest ebXML) {
+    ToEbXMLVisitor(EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML) {
         this.ebXML = requireNonNull(ebXML, "ebXML cannot be null");
     }
 
     @Override
     public void visit(FindDocumentsQuery query) {
-        new FindDocumentsQueryTransformer<>().toEbXML(query, ebXML);
+        FindDocumentsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindDocumentsForMultiplePatientsQuery query) {
-       new FindDocumentsForMultiplePatientsQueryTransformer().toEbXML(query, ebXML);
+       FindDocumentsForMultiplePatientsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindFoldersQuery query) {
-        new FindFoldersQueryTransformer().toEbXML(query, ebXML);
+        FindFoldersQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindFoldersForMultiplePatientsQuery query) {
-        new FindFoldersForMultiplePatientsQueryTransformer().toEbXML(query, ebXML);
+        FindFoldersForMultiplePatientsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetSubmissionSetsQuery query) {
-        new GetSubmissionSetsQueryTransformer().toEbXML(query, ebXML);
+        GetSubmissionSetsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetSubmissionSetAndContentsQuery query) {
-        new GetSubmissionSetAndContentsQueryTransformer().toEbXML(query, ebXML);
+        GetSubmissionSetAndContentsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetRelatedDocumentsQuery query) {
-        new GetRelatedDocumentsQueryTransformer().toEbXML(query, ebXML);
+        GetRelatedDocumentsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFoldersQuery query) {
-        new GetFoldersQueryTransformer().toEbXML(query, ebXML);
+        GetFoldersQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFoldersForDocumentQuery query) {
-        new GetFoldersForDocumentQueryTransformer().toEbXML(query, ebXML);
+        GetFoldersForDocumentQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetFolderAndContentsQuery query) {
-        new GetFolderAndContentsQueryTransformer().toEbXML(query, ebXML);
+        GetFolderAndContentsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetDocumentsQuery query) {
-        new GetDocumentsQueryTransformer().toEbXML(query, ebXML);
+        GetDocumentsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetDocumentsAndAssociationsQuery query) {
-        new GetDocumentsAndAssociationsQueryTransformer().toEbXML(query, ebXML);
+        GetDocumentsAndAssociationsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetAssociationsQuery query) {
-        new GetAssociationsQueryTransformer().toEbXML(query, ebXML);
+        GetAssociationsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(GetAllQuery query) {
-        new GetAllQueryTransformer().toEbXML(query, ebXML);
+        GetAllQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindSubmissionSetsQuery query) {
-        new FindSubmissionSetsQueryTransformer().toEbXML(query, ebXML);
+        FindSubmissionSetsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FetchQuery query) {
-        new FetchQueryTransformer().toEbXML(query, ebXML);
+        FetchQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindDocumentsByReferenceIdQuery query) {
-        new FindDocumentsByReferenceIdQueryTransformer().toEbXML(query, ebXML);
+        FindDocumentsByReferenceIdQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindMedicationTreatmentPlansQuery query) {
-        new FindMedicationTreatmentPlansQueryTransformer().toEbXML(query, ebXML);
+        FindMedicationTreatmentPlansQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindPrescriptionsQuery query) {
-        new FindPrescriptionsQueryTransformer().toEbXML(query, ebXML);
+        FindPrescriptionsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindDispensesQuery query) {
-        new FindDispensesQueryTransformer().toEbXML(query, ebXML);
+        FindDispensesQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindMedicationAdministrationsQuery query) {
-        new FindMedicationAdministrationsQueryTransformer().toEbXML(query, ebXML);
+        FindMedicationAdministrationsQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindPrescriptionsForValidationQuery query) {
-        new FindPrescriptionsForValidationQueryTransformer().toEbXML(query, ebXML);
+        FindPrescriptionsForValidationQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindPrescriptionsForDispenseQuery query) {
-        new FindPrescriptionsForDispenseQueryTransformer().toEbXML(query, ebXML);
+        FindPrescriptionsForDispenseQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindMedicationListQuery query) {
-        new FindMedicationListQueryTransformer().toEbXML(query, ebXML);
+        FindMedicationListQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 
     @Override
     public void visit(FindDocumentsByTitleQuery query) {
-        new FindDocumentsByTitleQueryTransformer().toEbXML(query, ebXML);
+        FindDocumentsByTitleQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(SubscriptionForDocumentEntryQuery query) {
+        SubscriptionForDocumentEntryQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(SubscriptionForPatientIndependentDocumentEntryQuery query) {
+        SubscriptionForPatientIndependentDocumentEntryQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(SubscriptionForSubmissionSetQuery query) {
+        SubscriptionForSubmissionSetQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(SubscriptionForPatientIndependentSubmissionSetQuery query) {
+        SubscriptionForPatientIndependentSubmissionSetQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(SubscriptionForFolderQuery query) {
+        SubscriptionForFolderQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
 }

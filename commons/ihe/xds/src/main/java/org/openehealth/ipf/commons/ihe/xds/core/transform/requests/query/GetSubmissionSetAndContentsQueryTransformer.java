@@ -15,20 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetSubmissionSetAndContentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetSubmissionSetAndContentsQuery> {
+
+    @Getter
+    private static final GetSubmissionSetAndContentsQueryTransformer instance = new GetSubmissionSetAndContentsQueryTransformer();
+
     /**
      * Constructs the transformer.
      */
-    public GetSubmissionSetAndContentsQueryTransformer() {
+    private GetSubmissionSetAndContentsQueryTransformer() {
         super(SUBMISSION_SET_UUID, 
                 SUBMISSION_SET_UNIQUE_ID, 
                 DOC_ENTRY_FORMAT_CODE, 
@@ -38,25 +43,15 @@ public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodes
     }
 
     @Override
-    public void toEbXML(GetSubmissionSetAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetSubmissionSetAndContentsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
     @Override
-    public void fromEbXML(GetSubmissionSetAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetSubmissionSetAndContentsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

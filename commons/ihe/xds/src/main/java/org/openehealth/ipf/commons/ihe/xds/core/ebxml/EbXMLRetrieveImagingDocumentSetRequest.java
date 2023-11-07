@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Clay Sebourn
  */
-public interface EbXMLRetrieveImagingDocumentSetRequest
+public interface EbXMLRetrieveImagingDocumentSetRequest<E>
 {
     /**
      * Sets the retrieveStudies of the request.
@@ -54,5 +54,5 @@ public interface EbXMLRetrieveImagingDocumentSetRequest
     /**
      * @return the ebXML object being wrapped by this class. 
      */
-    Object getInternal();
+    E getInternal();
 }

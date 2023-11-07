@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
@@ -58,23 +59,23 @@ public class CodeValidation implements QueryParameterValidation {
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var slotValues = request.getSlotValues(param.getSlotName());
-        for (var slotValue : slotValues) {
+        slotValues.forEach(slotValue -> {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
-        }
+        });
 
         var slots = new QuerySlotHelper(request);
         var codes = slots.toCodeList(param);
 
         if (codes != null) {
-            for (var code : codes) {
+            codes.forEach(code -> {
                 metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getSchemeName() != null, INVALID_QUERY_PARAMETER_VALUE, param);
-            }
+            });
         } else {
             metaDataAssert(optional, MISSING_REQUIRED_QUERY_PARAMETER, param);
         }

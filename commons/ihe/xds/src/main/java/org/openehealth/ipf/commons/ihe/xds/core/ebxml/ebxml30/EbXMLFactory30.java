@@ -31,7 +31,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 
 
@@ -95,7 +99,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLSubmitObjectsRequest createSubmitObjectsRequest() {
+    public EbXMLSubmitObjectsRequest<SubmitObjectsRequest> createSubmitObjectsRequest() {
         var request = LCM_FACTORY.createSubmitObjectsRequest();
         request.setRegistryObjectList(RIM_FACTORY.createRegistryObjectListType());
         request.setRequestSlotList(RIM_FACTORY.createSlotListType());
@@ -103,24 +107,24 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary objectLibrary) {
+    public EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary objectLibrary) {
         var request = new ProvideAndRegisterDocumentSetRequestType();
-        request.setSubmitObjectsRequest((SubmitObjectsRequest) createSubmitObjectsRequest().getInternal());
+        request.setSubmitObjectsRequest(createSubmitObjectsRequest().getInternal());
         return new EbXMLProvideAndRegisterDocumentSetRequest30(request, objectLibrary);
     }
 
     @Override
-    public EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest() {
+    public EbXMLNonconstructiveDocumentSetRequest<RetrieveDocumentSetRequestType> createRetrieveDocumentSetRequest() {
         return new EbXMLNonconstructiveDocumentSetRequest30<>(new RetrieveDocumentSetRequestType());
     }
 
     @Override
-    public EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest() {
+    public EbXMLNonconstructiveDocumentSetRequest<RemoveDocumentsRequestType> createRemoveDocumentsRequest() {
         return new EbXMLNonconstructiveDocumentSetRequest30<>(new RemoveDocumentsRequestType());
     }
 
     @Override
-    public EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest() {
+    public EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType> createRetrieveImagingDocumentSetRequest() {
         return new EbXMLRetrieveImagingDocumentSetRequest30(new RetrieveImagingDocumentSetRequestType());
     }
 
@@ -130,19 +134,19 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLRegistryResponse createRegistryResponse() {
+    public EbXMLRegistryResponse<RegistryResponseType> createRegistryResponse() {
         return new EbXMLRegistryResponse30(RS_FACTORY.createRegistryResponseType());
     }
 
     @Override
-    public EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
+    public EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> createRetrieveDocumentSetResponse() {
         var response = new RetrieveDocumentSetResponseType();
         response.setRegistryResponse(RS_FACTORY.createRegistryResponseType());
         return new EbXMLRetrieveDocumentSetResponse30(response);
     }
 
     @Override
-    public EbXMLAdhocQueryRequest createAdhocQueryRequest() {
+    public EbXMLAdhocQueryRequest<AdhocQueryRequest> createAdhocQueryRequest() {
         var request = QUERY_FACTORY.createAdhocQueryRequest();
 
         var responseOption = QUERY_FACTORY.createResponseOptionType();
@@ -156,7 +160,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
+    public EbXMLQueryResponse<AdhocQueryResponse> createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
         var response = QUERY_FACTORY.createAdhocQueryResponse();
         response.setRegistryObjectList(RIM_FACTORY.createRegistryObjectListType());
         return new EbXMLQueryResponse30(response, objectLibrary);
@@ -169,7 +173,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLRemoveMetadataRequest createRemoveMetadataRequest() {
+    public EbXMLRemoveMetadataRequest<RemoveObjectsRequest> createRemoveMetadataRequest() {
         var removeObjectsRequest = LCM_FACTORY.createRemoveObjectsRequest();
         return new EbXMLRemoveMetadataRequest30(removeObjectsRequest);
     }

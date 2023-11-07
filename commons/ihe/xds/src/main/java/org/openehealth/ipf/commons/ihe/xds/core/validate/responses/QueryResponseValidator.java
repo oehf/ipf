@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
@@ -41,21 +42,25 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * Validate a {@link EbXMLQueryResponse}.
  * @author Jens Riemschneider
  */
-public class QueryResponseValidator implements Validator<EbXMLQueryResponse, ValidationProfile> {
-    private final RegistryResponseValidator regResponseValidator = new RegistryResponseValidator();
-    private final ObjectContainerValidator objectContainerValidator = new ObjectContainerValidator();
+public class QueryResponseValidator implements Validator<EbXMLQueryResponse<?>, ValidationProfile> {
+    private final RegistryResponseValidator regResponseValidator = RegistryResponseValidator.getInstance();
+    private final ObjectContainerValidator objectContainerValidator = ObjectContainerValidator.getInstance();
+
+    @Getter
+    private static final QueryResponseValidator instance = new QueryResponseValidator();
+
+    private QueryResponseValidator() {
+    }
 
     @Override
-    public void validate(EbXMLQueryResponse response, ValidationProfile profile) {
+    public void validate(EbXMLQueryResponse<?> response, ValidationProfile profile) {
         requireNonNull(response, "response cannot be null");
         
         regResponseValidator.validate(response, profile);
         objectContainerValidator.validate(response, profile);
 
         var references = response.getReferences();
-        for (var objRef : references) {
-            metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF);
-        }
+        references.forEach(objRef -> metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF));
 
         if (profile != ITI_51) {
             validatePatientIdsAreIdentical(response);

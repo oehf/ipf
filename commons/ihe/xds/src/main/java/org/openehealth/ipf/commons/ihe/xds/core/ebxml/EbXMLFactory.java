@@ -16,6 +16,17 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
+
 /**
  * Serves as a factory for ebXML objects.
  * <p>
@@ -72,7 +83,7 @@ public interface EbXMLFactory {
      * Creates a new request to submit objects.
      * @return the created object.
      */
-    EbXMLSubmitObjectsRequest createSubmitObjectsRequest();
+    EbXMLSubmitObjectsRequest<SubmitObjectsRequest> createSubmitObjectsRequest();
     
     /**
      * Creates a new request to provide and register documents.
@@ -80,31 +91,31 @@ public interface EbXMLFactory {
      *          the object library to use.
      * @return the created object.
      */
-    EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary library);
+    EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary library);
 
     /**
      * Creates a new request to retrieve documents.
      * @return the created object.
      */
-    EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest();
+    EbXMLNonconstructiveDocumentSetRequest<RetrieveDocumentSetRequestType> createRetrieveDocumentSetRequest();
 
     /**
      * Creates a new request to remove documents.
      * @return the created object.
      */
-    EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest();
+    EbXMLNonconstructiveDocumentSetRequest<RemoveDocumentsRequestType> createRemoveDocumentsRequest();
 
     /**
      * Creates a new request to retrieve imaging documents.
      * @return the created object.
      */
-    EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest();
+    EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType> createRetrieveImagingDocumentSetRequest();
 
     /**
      * Creates a new request to query a registry.
      * @return the created object.
      */
-    EbXMLAdhocQueryRequest createAdhocQueryRequest();
+    EbXMLAdhocQueryRequest<AdhocQueryRequest> createAdhocQueryRequest();
 
     /**
      * Creates a new response for a query request.
@@ -119,19 +130,19 @@ public interface EbXMLFactory {
      *          therefore the object library would produce unwanted query results. 
      * @return the created object.
      */
-    EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs);
+    EbXMLQueryResponse<AdhocQueryResponse> createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs);
 
     /**
      * Creates a new response for a registry request.
      * @return the created object.
      */
-    EbXMLRegistryResponse createRegistryResponse();
+    EbXMLRegistryResponse<RegistryResponseType> createRegistryResponse();
 
     /**
      * Creates a new response for a retrieve document request.
      * @return the created object.
      */
-    EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse();
+    EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> createRetrieveDocumentSetResponse();
 
     /**
      * Creates a new registry error object.
@@ -143,5 +154,5 @@ public interface EbXMLFactory {
      * Creates a new remove metadata request.
      * @return the created object.
      */
-    EbXMLRemoveMetadataRequest createRemoveMetadataRequest();
+    EbXMLRemoveMetadataRequest<RemoveObjectsRequest> createRemoveMetadataRequest();
 }

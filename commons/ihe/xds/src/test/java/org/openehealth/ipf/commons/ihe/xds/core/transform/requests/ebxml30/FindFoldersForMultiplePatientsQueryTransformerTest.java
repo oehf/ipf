@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindFoldersForMultiplePatientsQueryTransformer;
 
@@ -41,11 +42,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FindFoldersForMultiplePatientsQueryTransformerTest {
     private FindFoldersForMultiplePatientsQueryTransformer transformer;
     private FindFoldersForMultiplePatientsQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML;
     
     @BeforeEach
     public void setUp() {
-        transformer = new FindFoldersForMultiplePatientsQueryTransformer();
+        transformer = FindFoldersForMultiplePatientsQueryTransformer.getInstance();
         query = new FindFoldersForMultiplePatientsQuery();
 
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("uni2", "uniType2"))));

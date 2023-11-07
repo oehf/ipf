@@ -19,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 
 /**
@@ -35,7 +36,7 @@ public class RetrieveDocumentSetResponseTransformer {
      *          the factory for ebXML objects.
      */
     public RetrieveDocumentSetResponseTransformer(EbXMLFactory factory) {
-        this.factory = requireNonNull(factory, "factory cannot be null");;
+        this.factory = requireNonNull(factory, "factory cannot be null");
         this.errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
 
@@ -45,7 +46,7 @@ public class RetrieveDocumentSetResponseTransformer {
      *          the response. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLRetrieveDocumentSetResponse toEbXML(RetrievedDocumentSet response) {
+    public EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> toEbXML(RetrievedDocumentSet response) {
         if (response == null) {
             return null;
         }
@@ -65,7 +66,7 @@ public class RetrieveDocumentSetResponseTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the response. <code>null</code> if the input was <code>null</code>.
      */
-    public RetrievedDocumentSet fromEbXML(EbXMLRetrieveDocumentSetResponse ebXML) {
+    public RetrievedDocumentSet fromEbXML(EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> ebXML) {
         if (ebXML == null) {
             return null;
         }

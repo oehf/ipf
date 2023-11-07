@@ -47,7 +47,7 @@ public class RemoveMetadataRequestValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new RemoveMetadataRequestValidator();
+        validator = RemoveMetadataRequestValidator.getInstance();
         request = SampleData.createRemoveMetadata();
         transformer = new RemoveMetadataRequestTransformer();
     }
@@ -73,7 +73,7 @@ public class RemoveMetadataRequestValidatorTest {
             reference.setId(uuid);
             request.getObjectRefList().getObjectRef().add(reference);
         }
-        EbXMLRemoveMetadataRequest ebXml = new EbXMLRemoveMetadataRequest30(request);
+        var ebXml = new EbXMLRemoveMetadataRequest30(request);
         validator.validate(ebXml, ITI_62);
     }
 
@@ -81,11 +81,11 @@ public class RemoveMetadataRequestValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(request));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest ebXML) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest<RemoveObjectsRequest> ebXML) {
         expectFailure(expectedMessage, ebXML, ITI_62);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest ebXML, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest<RemoveObjectsRequest> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

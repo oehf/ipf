@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -43,17 +44,14 @@ public class XcdrRequestTest {
 
     @BeforeEach
     public void before() {
-        validator = new ProvideAndRegisterDocumentSetRequestValidator();
+        validator = ProvideAndRegisterDocumentSetRequestValidator.getInstance();
         transformer = new ProvideAndRegisterDocumentSetTransformer(new EbXMLFactory30());
     }
 
     @Test
     public void testPatientIdValidationXcdr() {
         var request = SampleData.createProvideAndRegisterDocumentSet();
-        EbXMLProvideAndRegisterDocumentSetRequest ebXml;
-
-        // correct patient ID --> both ITI-41 and ITI-80 are happy
-        ebXml = transformer.toEbXML(request);
+        var ebXml = transformer.toEbXML(request);
         validator.validate(ebXml, ITI_41);
         validator.validate(ebXml, ITI_80);
 
@@ -62,20 +60,22 @@ public class XcdrRequestTest {
         request.getSubmissionSet().setPatientId(wrongPatientId);
         request.getDocuments().forEach(document -> document.getDocumentEntry().setPatientId(wrongPatientId));
         request.getFolders().forEach(folder -> folder.setPatientId(wrongPatientId));
-        ebXml = transformer.toEbXML(request);
-        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXml, ITI_41);
-        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXml, ITI_80);
+
+        var ebXml2 = transformer.toEbXML(request);
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXml2, ITI_41);
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXml2, ITI_80);
 
         // missing patient ID --> ITI-41 validation fails, ITI-80 validation passes
         request.getSubmissionSet().setPatientId(null);
         request.getDocuments().forEach(document -> document.getDocumentEntry().setPatientId(null));
         request.getFolders().forEach(folder -> folder.setPatientId(null));
-        ebXml = transformer.toEbXML(request);
-        expectFailure(MISSING_EXTERNAL_IDENTIFIER, ebXml, ITI_41);
-        validator.validate(ebXml, ITI_80);
+
+        var ebXml3 = transformer.toEbXML(request);
+        expectFailure(MISSING_EXTERNAL_IDENTIFIER, ebXml3, ITI_41);
+        validator.validate(ebXml3, ITI_80);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

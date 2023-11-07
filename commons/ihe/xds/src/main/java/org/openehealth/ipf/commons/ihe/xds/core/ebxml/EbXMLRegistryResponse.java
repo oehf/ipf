@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
  * Represents a ebXML {@code RegistryResponseType}.
  * @author Jens Riemschneider
  */
-public interface EbXMLRegistryResponse {
+public interface EbXMLRegistryResponse<E> {
     /**
      * @param status
      *          the status result.
@@ -49,5 +49,5 @@ public interface EbXMLRegistryResponse {
     /**
      * @return the ebXML object being wrapped by this class.
      */
-    Object getInternal();
+    E getInternal();
 }

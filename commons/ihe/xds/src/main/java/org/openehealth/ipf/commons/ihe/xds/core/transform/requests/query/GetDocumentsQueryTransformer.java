@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
 
@@ -25,48 +26,29 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Jens Riemschneider
  */
 public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDocumentsQuery> {
+
+    @Getter
+    private static final GetDocumentsQueryTransformer instance = new GetDocumentsQueryTransformer();
+
     /**
      * Constructs the transformer.
      */
-    public GetDocumentsQueryTransformer() {
+    private GetDocumentsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
     }
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
     @Override
-    public void toEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetDocumentsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStringList(DOC_ENTRY_LOGICAL_ID, query.getLogicalUuid());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
     @Override
-    public void fromEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetDocumentsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setLogicalUuid(slots.toStringList(DOC_ENTRY_LOGICAL_ID));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
+
 }

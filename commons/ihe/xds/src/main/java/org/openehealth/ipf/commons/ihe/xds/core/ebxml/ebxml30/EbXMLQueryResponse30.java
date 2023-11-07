@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  * Encapsulation of {@link AdhocQueryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXMLQueryResponse {
+public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXMLQueryResponse<AdhocQueryResponse> {
     private final AdhocQueryResponse response;
 
     /**

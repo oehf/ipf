@@ -213,7 +213,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     /**
      * Fake enclosing element for an HL7 v2 sub-component, necessary for correct rendering and parsing.
      */
-    static class Holder<T extends Type> extends AbstractType implements Composite {
+    public static class Holder<T extends Type> extends AbstractType implements Composite {
         private static final long serialVersionUID = -9084300955263787034L;
 
         private final Type[] data = new Type[1];

@@ -65,7 +65,7 @@ public class QueryListTest {
     @SuppressWarnings({"unchecked"})
     private <T> void checkSerialization(JAXBContext jaxbContext, String name, T object) throws Exception {
         var qname = new QName("http://www.openehealth.org/ipf/xds", name);
-        var jaxbElement = new JAXBElement<T>(qname, (Class<T>) object.getClass(), object);
+        var jaxbElement = new JAXBElement<>(qname, (Class<T>) object.getClass(), object);
         var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         // marshaller.marshal(jaxbElement, System.out);

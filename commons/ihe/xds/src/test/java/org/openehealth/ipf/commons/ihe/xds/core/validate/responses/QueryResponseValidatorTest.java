@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -43,7 +44,7 @@ public class QueryResponseValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new QueryResponseValidator();
+        validator = QueryResponseValidator.getInstance();
         EbXMLFactory factory = new EbXMLFactory30();
         
         response = SampleData.createQueryResponseWithLeafClass();
@@ -136,7 +137,7 @@ public class QueryResponseValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(response));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLQueryResponse ebXMLQueryResponse) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLQueryResponse<AdhocQueryResponse> ebXMLQueryResponse) {
         try {
             validator.validate(ebXMLQueryResponse, ITI_18);
             fail("Expected exception: " + XDSMetaDataException.class);

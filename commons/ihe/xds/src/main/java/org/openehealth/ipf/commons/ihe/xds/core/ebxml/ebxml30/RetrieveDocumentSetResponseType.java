@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import javax.activation.DataHandler;
@@ -25,9 +27,9 @@ import java.util.List;
 
 /**
  * <p>Java class for RetrieveDocumentSetResponseType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RetrieveDocumentSetResponseType">
  *   &lt;complexContent>
@@ -58,8 +60,8 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlRootElement(name = "RetrieveDocumentSetResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -69,34 +71,12 @@ import java.util.List;
 })
 public class RetrieveDocumentSetResponseType {
 
+    @Setter
+    @Getter
     @XmlElement(name = "RegistryResponse", namespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", required = true)
     private RegistryResponseType registryResponse;
     @XmlElement(name = "DocumentResponse")
     private List<RetrieveDocumentSetResponseType.DocumentResponse> documentResponse;
-
-    /**
-     * Gets the value of the registryResponse property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RegistryResponseType }
-     *     
-     */
-    public RegistryResponseType getRegistryResponse() {
-        return registryResponse;
-    }
-
-    /**
-     * Sets the value of the registryResponse property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RegistryResponseType }
-     *     
-     */
-    public void setRegistryResponse(RegistryResponseType value) {
-        registryResponse = value;
-    }
 
     /**
      * Gets the value of the documentResponse property.
@@ -131,9 +111,9 @@ public class RetrieveDocumentSetResponseType {
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -149,9 +129,10 @@ public class RetrieveDocumentSetResponseType {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
+    @Getter @Setter
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "homeCommunityId",
@@ -166,155 +147,25 @@ public class RetrieveDocumentSetResponseType {
 
         @XmlElement(name = "HomeCommunityId")
         private String homeCommunityId;
+
         @XmlElement(name = "RepositoryUniqueId", required = true)
         private String repositoryUniqueId;
+
         @XmlElement(name = "DocumentUniqueId", required = true)
         private String documentUniqueId;
+
         @XmlElement(name = "NewRepositoryUniqueId")
         private String newRepositoryUniqueId;
+
         @XmlElement(name = "NewDocumentUniqueId")
         private String newDocumentUniqueId;
+
         @XmlElement(required = true)
         private String mimeType;
+
         @XmlElement(name = "Document", required = true)
         @XmlMimeType("application/octet-stream")
         private DataHandler document;
-
-        /**
-         * Gets the value of the homeCommunityId property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getHomeCommunityId() {
-            return homeCommunityId;
-        }
-
-        /**
-         * Sets the value of the homeCommunityId property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setHomeCommunityId(String value) {
-            homeCommunityId = value;
-        }
-
-        /**
-         * Gets the value of the repositoryUniqueId property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getRepositoryUniqueId() {
-            return repositoryUniqueId;
-        }
-
-        /**
-         * Sets the value of the repositoryUniqueId property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setRepositoryUniqueId(String value) {
-            repositoryUniqueId = value;
-        }
-
-        /**
-         * Gets the value of the documentUniqueId property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getDocumentUniqueId() {
-            return documentUniqueId;
-        }
-
-        /**
-         * Sets the value of the documentUniqueId property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setDocumentUniqueId(String value) {
-            documentUniqueId = value;
-        }
-
-        public String getNewRepositoryUniqueId() {
-            return newRepositoryUniqueId;
-        }
-
-        public void setNewRepositoryUniqueId(String newRepositoryUniqueId) {
-            this.newRepositoryUniqueId = newRepositoryUniqueId;
-        }
-
-        public String getNewDocumentUniqueId() {
-            return newDocumentUniqueId;
-        }
-
-        public void setNewDocumentUniqueId(String newDocumentUniqueId) {
-            this.newDocumentUniqueId = newDocumentUniqueId;
-        }
-
-        /**
-         * Gets the value of the mimeType property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMimeType() {
-            return mimeType;
-        }
-
-        /**
-         * Sets the value of the mimeType property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMimeType(String value) {
-            mimeType = value;
-        }
-
-        /**
-         * Gets the value of the document property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link DataHandler }
-         *     
-         */
-        public DataHandler getDocument() {
-            return document;
-        }
-
-        /**
-         * Sets the value of the document property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link DataHandler }
-         *     
-         */
-        public void setDocument(DataHandler value) {
-            document = value;
-        }
 
     }
 

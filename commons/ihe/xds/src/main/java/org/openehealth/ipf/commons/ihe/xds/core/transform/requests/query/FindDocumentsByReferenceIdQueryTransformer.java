@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsByReferenceIdQuery;
 
@@ -24,28 +25,24 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * Transforms between a {@link FindDocumentsByReferenceIdQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Dmytro Rud
  */
-public class FindDocumentsByReferenceIdQueryTransformer extends FindDocumentsQueryTransformer<FindDocumentsByReferenceIdQuery> {
+public class FindDocumentsByReferenceIdQueryTransformer extends AbstractFindDocumentsQueryTransformer<FindDocumentsByReferenceIdQuery> {
+
+    @Getter
+    private static final FindDocumentsByReferenceIdQueryTransformer instance = new FindDocumentsByReferenceIdQueryTransformer();
+
+    private FindDocumentsByReferenceIdQueryTransformer() {
+        super();
+    }
 
     @Override
-    public void toEbXML(FindDocumentsByReferenceIdQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(FindDocumentsByReferenceIdQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStringList(DOC_ENTRY_REFERENCE_IDS, query.getReferenceIds());
     }
 
-
     @Override
-    public void fromEbXML(FindDocumentsByReferenceIdQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(FindDocumentsByReferenceIdQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setReferenceIds(slots.toStringQueryList(DOC_ENTRY_REFERENCE_IDS));
     }
 }

@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Clay Sebourn
  */
-public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveImagingDocumentSetRequest {
+public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType> {
     private final RetrieveImagingDocumentSetRequestType request;
 
     /**

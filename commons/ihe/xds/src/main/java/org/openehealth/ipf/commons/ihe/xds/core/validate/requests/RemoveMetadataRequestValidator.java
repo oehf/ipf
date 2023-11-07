@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_62;
@@ -28,7 +30,13 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * Validates a {@link EbXMLRemoveMetadataRequest} request.
  * @author Boris Stanojevic
  */
-public class RemoveMetadataRequestValidator implements Validator<EbXMLRemoveMetadataRequest, ValidationProfile> {
+public class RemoveMetadataRequestValidator implements Validator<EbXMLRemoveMetadataRequest<RemoveObjectsRequest>, ValidationProfile> {
+
+    @Getter
+    private static final RemoveMetadataRequestValidator instance = new RemoveMetadataRequestValidator();
+
+    private RemoveMetadataRequestValidator() {
+    }
 
     /**
      * Validates the request.
@@ -38,9 +46,9 @@ public class RemoveMetadataRequestValidator implements Validator<EbXMLRemoveMeta
      *          if the validation failed.
      */
     @Override
-    public void validate(EbXMLRemoveMetadataRequest request, ValidationProfile profile)  {
+    public void validate(EbXMLRemoveMetadataRequest<RemoveObjectsRequest> request, ValidationProfile profile)  {
         if (profile == ITI_62) {
-            metaDataAssert(request.getReferences().size() > 0, EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
+            metaDataAssert(!request.getReferences().isEmpty(), EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&
                            request.getSlots().isEmpty(), OBJECT_SHALL_NOT_BE_SPECIFIED, "AdhocQuery");

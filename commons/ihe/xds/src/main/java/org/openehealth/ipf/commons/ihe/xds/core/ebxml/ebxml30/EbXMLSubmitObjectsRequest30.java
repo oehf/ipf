@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
  * Encapsulation of {@link SubmitObjectsRequest}
  * @author Jens Riemschneider
  */
-public class EbXMLSubmitObjectsRequest30 extends EbXMLObjectContainer30 implements EbXMLSubmitObjectsRequest {
+public class EbXMLSubmitObjectsRequest30 extends EbXMLObjectContainer30 implements EbXMLSubmitObjectsRequest<SubmitObjectsRequest> {
     private final SubmitObjectsRequest submitObjectsRequest;
 
     /**

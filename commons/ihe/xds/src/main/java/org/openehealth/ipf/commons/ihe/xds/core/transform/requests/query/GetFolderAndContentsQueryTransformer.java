@@ -15,20 +15,26 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetFolderAndContentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetFolderAndContentsQuery> {
+
+    @Getter
+    private static final GetFolderAndContentsQueryTransformer instance = new GetFolderAndContentsQueryTransformer();
+
+
     /**
      * Constructs the transformer.
      */
-    public GetFolderAndContentsQueryTransformer() {
+    private GetFolderAndContentsQueryTransformer() {
         super(FOLDER_UUID, 
                 FOLDER_UNIQUE_ID, 
                 DOC_ENTRY_FORMAT_CODE, 
@@ -38,26 +44,16 @@ public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTr
     }
 
     @Override
-    public void toEbXML(GetFolderAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetFolderAndContentsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
     @Override
-    public void fromEbXML(GetFolderAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetFolderAndContentsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));

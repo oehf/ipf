@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
@@ -27,28 +28,25 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Dmytro Rud
  */
 public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery> {
+
+    @Getter
+    private static final FetchQueryTransformer instance = new FetchQueryTransformer();
+
+    private FetchQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(FetchQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(FetchQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
     }
 
-
     @Override
-    public void fromEbXML(FetchQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(FetchQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
     }
+
+
 }

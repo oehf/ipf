@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
@@ -45,8 +44,8 @@ public class RegistryResponseValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new RegistryResponseValidator();
-        EbXMLFactory factory = new EbXMLFactory30();
+        validator = RegistryResponseValidator.getInstance();
+        var factory = new EbXMLFactory30();
         transformer = new ResponseTransformer(factory);
         response = SampleData.createResponse();
     }
@@ -71,7 +70,7 @@ public class RegistryResponseValidatorTest {
     @Test
     public void testInvalidSeverity() {
         var ebXML = transformer.toEbXML(response);
-        ((RegistryResponseType)ebXML.getInternal()).getRegistryErrorList().getRegistryError().get(0).setSeverity("lol");
+        ebXML.getInternal().getRegistryErrorList().getRegistryError().get(0).setSeverity("lol");
         expectFailure(INVALID_SEVERITY_IN_RESPONSE, ebXML);
     }    
 
@@ -79,7 +78,7 @@ public class RegistryResponseValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(response));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRegistryResponse ebXMLRegistryResponse) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRegistryResponse<RegistryResponseType> ebXMLRegistryResponse) {
         try {
             validator.validate(ebXMLRegistryResponse, ITI_18);
             fail("Expected exception: " + XDSMetaDataException.class);

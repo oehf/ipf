@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAssociationsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.METADATA_LEVEL;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.UUID;
 
 /**
  * Transforms between {@link GetAssociationsQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -27,42 +29,28 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSets
  * @author Jens Riemschneider
  */
 public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer<GetSubmissionSetsQuery> {
+
+    @Getter
+    private static final GetSubmissionSetsQueryTransformer instance = new GetSubmissionSetsQueryTransformer();
+
+
     /**
      * Constructs the transformer.
      */
-    public GetSubmissionSetsQueryTransformer() {
+    private GetSubmissionSetsQueryTransformer() {
         super(UUID);
     }
 
-    /**
-     * @param query the query. Can be <code>null</code>.
-     * @param ebXML ebXML request
-     */
     @Override
-    public void toEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetSubmissionSetsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
-    /**
-     * @param query the query. Can be <code>null</code>.
-     * @param ebXML ebXML request
-     */
     @Override
-    public void fromEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetSubmissionSetsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
+
 }

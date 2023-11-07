@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import org.apache.commons.lang3.BooleanUtils;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;

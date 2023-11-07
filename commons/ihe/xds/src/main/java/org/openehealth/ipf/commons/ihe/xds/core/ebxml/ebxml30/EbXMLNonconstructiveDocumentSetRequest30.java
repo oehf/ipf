@@ -28,20 +28,20 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
  * The ebXML 3.0 version of the {@link EbXMLNonconstructiveDocumentSetRequest}.
  * @author Jens Riemschneider
  */
-public class EbXMLNonconstructiveDocumentSetRequest30<T extends RetrieveDocumentSetRequestType> implements EbXMLNonconstructiveDocumentSetRequest {
-    private final T request;
+public class EbXMLNonconstructiveDocumentSetRequest30<E extends RetrieveDocumentSetRequestType> implements EbXMLNonconstructiveDocumentSetRequest<E> {
+    private final E request;
 
     /**
      * Constructs a request by wrapping the given ebXML 3.0 object.
      * @param request
      *          the object to wrap.
      */
-    public EbXMLNonconstructiveDocumentSetRequest30(T request) {
-        this.request = requireNonNull(request, "request cannot be null");;
+    public EbXMLNonconstructiveDocumentSetRequest30(E request) {
+        this.request = requireNonNull(request, "request cannot be null");
     }
 
     @Override
-    public T getInternal() {
+    public E getInternal() {
         return request;
     }
 

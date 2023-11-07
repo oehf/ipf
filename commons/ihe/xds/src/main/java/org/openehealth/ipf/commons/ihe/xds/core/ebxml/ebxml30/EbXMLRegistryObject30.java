@@ -191,11 +191,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public EbXMLClassification getSingleClassification(String scheme) {
         var filtered = getClassifications(scheme);
-        if (filtered.isEmpty()) {
-            return null;
-        }
-
-        return filtered.get(0);
+        return filtered.isEmpty() ? null : filtered.get(0);
     }
 
     @Override

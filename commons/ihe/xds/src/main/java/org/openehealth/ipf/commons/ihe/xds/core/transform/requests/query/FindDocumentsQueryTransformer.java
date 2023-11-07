@@ -15,49 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends DocumentsQueryTransformer<T> {
+public class FindDocumentsQueryTransformer extends AbstractFindDocumentsQueryTransformer<FindDocumentsQuery> {
 
-    @Override
-    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
+    @Getter
+    private static final FindDocumentsQueryTransformer instance = new FindDocumentsQueryTransformer();
 
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
-        slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
-        slots.fromDocumentAvailability(DOC_ENTRY_DOCUMENT_AVAILABILITY, query.getDocumentAvailability());
-        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    private FindDocumentsQueryTransformer() {
+        super();
     }
 
-
-    @Override
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-        var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
-        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
-        query.setDocumentAvailability(slots.toDocumentAvailability(DOC_ENTRY_DOCUMENT_AVAILABILITY));
-        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
-    }
 }

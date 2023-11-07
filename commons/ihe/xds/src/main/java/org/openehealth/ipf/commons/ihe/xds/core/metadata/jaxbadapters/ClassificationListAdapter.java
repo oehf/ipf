@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationTy
 public class ClassificationListAdapter extends XmlAdapter<ClassificationList, List<EbXMLClassification>> {
 
     @Override
-    public List<EbXMLClassification> unmarshal(ClassificationList classificationList) throws Exception {
+    public List<EbXMLClassification> unmarshal(ClassificationList classificationList) {
         if (classificationList == null) {
             return null;
         }
@@ -41,7 +41,7 @@ public class ClassificationListAdapter extends XmlAdapter<ClassificationList, Li
     }
 
     @Override
-    public ClassificationList marshal(List<EbXMLClassification> ebXMLClassifications) throws Exception {
+    public ClassificationList marshal(List<EbXMLClassification> ebXMLClassifications) {
         if (ebXMLClassifications == null) {
             return null;
         }

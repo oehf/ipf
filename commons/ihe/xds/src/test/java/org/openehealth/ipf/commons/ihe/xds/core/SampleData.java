@@ -25,6 +25,7 @@ import javax.activation.DataHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Utility class to create sample data used in tests.
@@ -261,7 +262,7 @@ public abstract class SampleData {
      */
     public static DocumentEntry createDocumentEntry(Identifiable patientID) {
         var author = new Author();
-        Name name = new XpnName();
+        var name = new XpnName();
         name.setFamilyName("Norbi");
         author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), name));
         author.getAuthorInstitution().add(new Organization("authorOrg", null, null));
@@ -443,6 +444,71 @@ public abstract class SampleData {
 
         return new QueryRegistry(query);
     }
+
+    public static QueryRegistry createFindDocumentsByTitleQuery() {
+        var query = new FindDocumentsByTitleQuery();
+        populateDocumentsQuery(query);
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
+        query.setTitle(List.of("myTitle"));
+
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for find documents by reference ID.
+     */
+    public static QueryRegistry createSubscriptionForDocumentEntryQuery() {
+        var query = new SubscriptionForDocumentEntryQuery();
+        populateDocumentsQuery(query);
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+
+        var referenceIds = new QueryList<ReferenceId>();
+        referenceIds.getOuterList().add(Arrays.asList(
+                new ReferenceId("ref-id-11", new CXiAssigningAuthority("", "1.1.1.1", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_UNIQUE_ID),
+                new ReferenceId("ref-id-12", null, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID),
+                new ReferenceId("ref-id-13", null, ReferenceId.ID_TYPE_CODE_REFERRAL)));
+        referenceIds.getOuterList().add(Arrays.asList(
+                new ReferenceId("ref-id-21", new CXiAssigningAuthority("", "1.1.1.2", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_ACCESSION),
+                new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER)));
+        query.setTypedReferenceIds(referenceIds);
+
+        return new QueryRegistry(query);
+    }
+
+    public static QueryRegistry createSubscriptionForFolderQuery() {
+        var query = new SubscriptionForFolderQuery();
+        query.setPatientId(new Identifiable("st3498702", new AssigningAuthority("1.3.6.1.4.1.21367.2005.3.7")));
+        var codes = new QueryList<Code>();
+        codes.getOuterList().add(Collections.singletonList(new Code("FolderCodeExample", null, "folderCodeListCodingScheme")));
+        query.setCodes(codes);
+        return new QueryRegistry(query);
+    }
+
+    public static QueryRegistry createSubscriptionForSubmissionSetQuery() {
+        var query = new SubscriptionForSubmissionSetQuery();
+        query.setPatientId(new Identifiable("st3498702", new AssigningAuthority("1.3.6.1.4.1.21367.2005.3.7")));
+        query.setIntendedRecipients(List.of("Some Hospital%", "|Welby%"));
+        return new QueryRegistry(query);
+    }
+
+    public static QueryRegistry createSubscriptionForPatientIndependentSubmissionSetQuery() {
+        var query = new SubscriptionForPatientIndependentSubmissionSetQuery();
+        query.setIntendedRecipients(List.of("Some Hospital%", "|Welby%"));
+        query.setSourceIds(List.of("1.2.5.7.8"));
+        return new QueryRegistry(query);
+    }
+
+    public static QueryRegistry createSubscriptionForPatientIndependentDocumentEntryQuery() {
+        var query = new SubscriptionForPatientIndependentDocumentEntryQuery();
+        query.setHealthcareFacilityTypeCodes(List.of(new Code("Emergency Department", null, "healthcareFacilityCodingScheme")));
+        return new QueryRegistry(query);
+    }
+
+
 
     private static void populateDocumentsQuery(DocumentsQuery query) {
         

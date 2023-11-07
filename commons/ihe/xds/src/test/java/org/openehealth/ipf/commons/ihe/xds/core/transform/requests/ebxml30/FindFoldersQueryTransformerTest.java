@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -27,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindFoldersQueryTransformer;
 
 import java.util.Arrays;
@@ -38,15 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link FindFoldersQueryTransformer}.
  * @author Jens Riemschneider
  */
-public class FindFoldersQueryTransformerTest {
-    private FindFoldersQueryTransformer transformer;
-    private FindFoldersQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class FindFoldersQueryTransformerTest extends AbstractQueryTransformerTest<FindFoldersQuery, FindFoldersQueryTransformer> {
     
     @BeforeEach
     public void setUp() {
-        transformer = new FindFoldersQueryTransformer();
-        query = new FindFoldersQuery();
+        transformer = FindFoldersQueryTransformer.getInstance();
+        query = emptyQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
         query.getLastUpdateTime().setFrom("20150102030405");
@@ -89,29 +86,6 @@ public class FindFoldersQueryTransformerTest {
     }
     
     @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-    
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new FindFoldersQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-
-
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new FindFoldersQuery();
-        transformer.fromEbXML(result, ebXML);
-        
-        assertEquals(query, result);
-    }
-    
-    @Test
     public void testFromEbXMLLineBreakInAValueList() {
         transformer.toEbXML(query, ebXML);
         ebXML.getSlots().get(5).getValueList().clear();
@@ -121,18 +95,9 @@ public class FindFoldersQueryTransformerTest {
         
         assertEquals(query, result);
     }
-    
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new FindFoldersQuery();
-        transformer.fromEbXML(result, null);        
-        assertEquals(new FindFoldersQuery(), result);
-    }
-        
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new FindFoldersQuery();
-        transformer.fromEbXML(result, ebXML);        
-        assertEquals(new FindFoldersQuery().toString(), result.toString());
+
+    @Override
+    protected FindFoldersQuery emptyQuery() {
+        return new FindFoldersQuery();
     }
 }

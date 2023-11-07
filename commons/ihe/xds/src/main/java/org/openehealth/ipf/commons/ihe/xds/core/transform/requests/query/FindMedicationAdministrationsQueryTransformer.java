@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationAdministrationsQuery;
 
@@ -24,4 +25,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationAdm
  * @since 3.7
  */
 public class FindMedicationAdministrationsQueryTransformer extends PharmacyStableDocumentsQueryTransformer<FindMedicationAdministrationsQuery> {
+
+    @Getter
+    private static final FindMedicationAdministrationsQueryTransformer instance = new FindMedicationAdministrationsQueryTransformer();
+
+    private FindMedicationAdministrationsQueryTransformer() {
+    }
 }

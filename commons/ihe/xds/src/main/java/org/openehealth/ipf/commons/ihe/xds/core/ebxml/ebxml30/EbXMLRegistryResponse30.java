@@ -30,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  * The ebXML 3.0 version of the {@link EbXMLRegistryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
+public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse<RegistryResponseType> {
     private final RegistryResponseType regResponse;
 
     /**

@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class PatientInfoTest {
 
-    private static final SubmitObjectsRequestValidator SUBMIT_OBJECTS_REQUEST_VALIDATOR = new SubmitObjectsRequestValidator();
+    private static final SubmitObjectsRequestValidator SUBMIT_OBJECTS_REQUEST_VALIDATOR = SubmitObjectsRequestValidator.getInstance();
     private static final RegisterDocumentSetTransformer REGISTER_DOCUMENT_SET_TRANSFORMER = new RegisterDocumentSetTransformer(new EbXMLFactory30());
     private static final PatientInfoTransformer PATIENT_INFO_TRANSFORMER = new PatientInfoTransformer();
 

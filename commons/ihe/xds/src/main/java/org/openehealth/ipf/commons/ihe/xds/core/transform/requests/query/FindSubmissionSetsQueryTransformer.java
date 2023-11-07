@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between {@link FindSubmissionSetsQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -28,70 +29,34 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSet
  */
 public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTransformer<FindSubmissionSetsQuery> {
 
-    /**
-     * Transforms the query into its EbXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query to transform.
-     * @param ebXML
-     *          the EbXML representation.
-     */
+    @Getter
+    private static final FindSubmissionSetsQueryTransformer instance = new FindSubmissionSetsQueryTransformer();
+
+    private FindSubmissionSetsQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(FindSubmissionSetsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-        
         slots.fromStringList(SUBMISSION_SET_SOURCE_ID, query.getSourceIds());
-        
         slots.fromTimestamp(SUBMISSION_SET_SUBMISSION_TIME_FROM, query.getSubmissionTime().getFrom());
         slots.fromTimestamp(SUBMISSION_SET_SUBMISSION_TIME_TO, query.getSubmissionTime().getTo());
-
         slots.fromString(SUBMISSION_SET_AUTHOR_PERSON, query.getAuthorPerson());
-        
         slots.fromCode(SUBMISSION_SET_CONTENT_TYPE_CODE, query.getContentTypeCodes());
-        
         slots.fromStatus(SUBMISSION_SET_STATUS, query.getStatus());
     }
-    
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+
     @Override
-    public void fromEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void fromEbXML(FindSubmissionSetsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         var patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-        
         query.setSourceIds(slots.toStringList(SUBMISSION_SET_SOURCE_ID));
-        
         query.getSubmissionTime().setFrom(slots.toTimestamp(SUBMISSION_SET_SUBMISSION_TIME_FROM));
         query.getSubmissionTime().setTo(slots.toTimestamp(SUBMISSION_SET_SUBMISSION_TIME_TO));
-        
         query.setAuthorPerson(slots.toString(SUBMISSION_SET_AUTHOR_PERSON));
-        
         query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE));
-        
         query.setStatus(slots.toStatus(SUBMISSION_SET_STATUS));
     }
 }

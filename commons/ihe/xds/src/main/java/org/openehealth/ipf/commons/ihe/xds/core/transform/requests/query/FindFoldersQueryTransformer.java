@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link FindFoldersQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -28,62 +29,31 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
  */
 public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<FindFoldersQuery>{
 
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+    @Getter
+    private static final FindFoldersQueryTransformer instance = new FindFoldersQueryTransformer();
+
+    private FindFoldersQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(FindFoldersQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromString(FOLDER_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-        
         slots.fromTimestamp(FOLDER_LAST_UPDATE_TIME_FROM, query.getLastUpdateTime().getFrom());
         slots.fromTimestamp(FOLDER_LAST_UPDATE_TIME_TO, query.getLastUpdateTime().getTo());
-
         slots.fromCode(FOLDER_CODES, query.getCodes());
-        
         slots.fromStatus(FOLDER_STATUS, query.getStatus());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
-    
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+
     @Override
-    public void fromEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(FindFoldersQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         var patientId = slots.toString(FOLDER_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-        
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));
-        
         query.getLastUpdateTime().setFrom(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_FROM));
         query.getLastUpdateTime().setTo(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_TO));
-        
         query.setStatus(slots.toStatus(FOLDER_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

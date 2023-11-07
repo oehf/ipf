@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindPrescriptionsForValidationQuery;
 
@@ -24,4 +25,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindPrescriptions
  * @since 3.7
  */
 public class FindPrescriptionsForValidationQueryTransformer extends PharmacyStableDocumentsQueryTransformer<FindPrescriptionsForValidationQuery> {
+
+    @Getter
+    private static final FindPrescriptionsForValidationQueryTransformer instance = new FindPrescriptionsForValidationQueryTransformer();
+
+    private FindPrescriptionsForValidationQueryTransformer() {
+    }
 }

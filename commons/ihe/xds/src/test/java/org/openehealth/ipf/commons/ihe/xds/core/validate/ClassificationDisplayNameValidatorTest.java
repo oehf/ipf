@@ -48,7 +48,7 @@ public class ClassificationDisplayNameValidatorTest {
     private EbXMLExtrinsicObject extrinsicObject;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         var ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
     }
@@ -102,7 +102,7 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     
-    private EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest() {
+    private EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> createProvideAndRegisterDocumentSetRequest() {
         EbXMLFactory factory = new EbXMLFactory30();
         var request = SampleData.createProvideAndRegisterDocumentSet();
         var transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
@@ -113,12 +113,12 @@ public class ClassificationDisplayNameValidatorTest {
      * @param ebXML ebXML object
      */
     @SuppressWarnings("unused")
-    private void marshalEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
+    private void marshalEbXML(EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> ebXML) {
         try {
             var context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
             var marshaller = context.createMarshaller();
             var outputStream = new ByteArrayOutputStream();
-            var request = (ProvideAndRegisterDocumentSetRequestType) ebXML.getInternal();
+            var request = ebXML.getInternal();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(request.getSubmitObjectsRequest(), outputStream);
             // System.out.println(new String(outputStream.toByteArray()));

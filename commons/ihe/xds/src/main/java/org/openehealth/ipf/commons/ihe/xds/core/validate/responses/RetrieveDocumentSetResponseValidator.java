@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
@@ -34,36 +36,36 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  *
  * @author Jens Riemschneider
  */
-public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetrieveDocumentSetResponse, ValidationProfile> {
-    private final RegistryResponseValidator regResponseValidator = new RegistryResponseValidator();
+public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType>, ValidationProfile> {
+    private final RegistryResponseValidator regResponseValidator = RegistryResponseValidator.getInstance();
     private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
 
+    @Getter
+    private static final RetrieveDocumentSetResponseValidator instance = new RetrieveDocumentSetResponseValidator();
+
+    private RetrieveDocumentSetResponseValidator() {
+    }
+
     @Override
-    public void validate(EbXMLRetrieveDocumentSetResponse response, ValidationProfile profile) {
+    public void validate(EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> response, ValidationProfile profile) {
         requireNonNull(response, "response cannot be null");
 
         regResponseValidator.validate(response, profile);
 
-        for (var doc : response.getDocuments()) {
+        response.getDocuments().forEach(doc -> {
             var requestData = doc.getRequestData();
-
             var repoId = requestData.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
-
             var docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
-
             var newDocId = doc.getNewDocumentUniqueId();
             metaDataAssert(!docId.equals(newDocId), ON_DEMAND_DOC_ID_MUST_DIFFER);
-
             var mimeType = doc.getMimeType();
             metaDataAssert(mimeType != null && !mimeType.isEmpty(), MIME_TYPE_MUST_BE_SPECIFIED);
-
             if (profile.getInteractionProfile().getHomeCommunityIdOptionality() != XdsIntegrationProfile.HomeCommunityIdOptionality.NEVER) {
                 hcValidator.validate(requestData.getHomeCommunityId());
             }
-
             metaDataAssert(doc.getDataHandler() != null, MISSING_DOCUMENT_FOR_DOC_ENTRY, docId);
-        }
+        });
     }
 }

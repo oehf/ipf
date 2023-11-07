@@ -18,11 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsByReferenceIdQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsByReferenceIdQueryTransformer;
 
 import java.util.Arrays;
@@ -34,14 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link FindDocumentsByReferenceIdQueryTransformer}.
  * @author Dmytro Rud
  */
-public class FindDocumentsByReferenceIdQueryTransformerTest {
-    private FindDocumentsByReferenceIdQueryTransformer transformer;
-    private FindDocumentsByReferenceIdQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class FindDocumentsByReferenceIdQueryTransformerTest extends AbstractQueryTransformerTest<FindDocumentsByReferenceIdQuery, FindDocumentsByReferenceIdQueryTransformer> {
     
     @BeforeEach
     public void setUp() {
-        transformer = new FindDocumentsByReferenceIdQueryTransformer();
+        transformer = FindDocumentsByReferenceIdQueryTransformer.getInstance();
         query = (FindDocumentsByReferenceIdQuery) SampleData.createFindDocumentsByReferenceIdQuery().getQuery();
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -68,38 +65,8 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
                 referenceIdSlots.get(1).getValueList());
     }
 
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
+    @Override
+    protected FindDocumentsByReferenceIdQuery emptyQuery() {
+        return new FindDocumentsByReferenceIdQuery();
     }
-
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new FindDocumentsByReferenceIdQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new FindDocumentsByReferenceIdQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(query, result);
-    }
-
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new FindDocumentsByReferenceIdQuery();
-        transformer.fromEbXML(result, null);        
-        assertEquals(new FindDocumentsByReferenceIdQuery(), result);
-    }
-
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new FindDocumentsByReferenceIdQuery();
-        transformer.fromEbXML(result, ebXML);        
-        assertEquals(new FindDocumentsByReferenceIdQuery(), result);
-    }
-
 }

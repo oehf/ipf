@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
@@ -25,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetA
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetSubmissionSetAndContentsQueryTransformer;
 
@@ -37,15 +37,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link GetDocumentsQueryTransformer}.
  * @author Jens Riemschneider
  */
-public class GetSubmissionSetAndContentsQueryTransformerTest {
-    private GetSubmissionSetAndContentsQueryTransformer transformer;
-    private GetSubmissionSetAndContentsQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class GetSubmissionSetAndContentsQueryTransformerTest extends AbstractQueryTransformerTest<GetSubmissionSetAndContentsQuery, GetSubmissionSetAndContentsQueryTransformer> {
     
     @BeforeEach
     public void setUp() {
-        transformer = new GetSubmissionSetAndContentsQueryTransformer();
-        query = new GetSubmissionSetAndContentsQuery();
+        transformer = GetSubmissionSetAndContentsQueryTransformer.getInstance();
+        query = emptyQuery();
 
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
@@ -88,41 +85,9 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
 
         assertEquals(6, ebXML.getSlots().size());
     }
-    
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-    
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new GetSubmissionSetAndContentsQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
 
-    
-    
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new GetSubmissionSetAndContentsQuery();
-        transformer.fromEbXML(result, ebXML);
-        
-        assertEquals(query, result);
-    }
-    
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new GetSubmissionSetAndContentsQuery();
-        transformer.fromEbXML(result, null);        
-        assertEquals(new GetSubmissionSetAndContentsQuery(), result);
-    }
-        
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new GetSubmissionSetAndContentsQuery();
-        transformer.fromEbXML(result, ebXML);        
-        assertEquals(new GetSubmissionSetAndContentsQuery(), result);
+    @Override
+    protected GetSubmissionSetAndContentsQuery emptyQuery() {
+        return new GetSubmissionSetAndContentsQuery();
     }
 }

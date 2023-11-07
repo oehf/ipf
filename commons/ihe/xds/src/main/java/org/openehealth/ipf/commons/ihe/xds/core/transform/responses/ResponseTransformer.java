@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Transforms between {@link Response} and the ebXML representation.
@@ -35,7 +36,7 @@ public class ResponseTransformer {
      *          the factory for ebXML objects.
      */
     public ResponseTransformer(EbXMLFactory factory) {
-        this.factory = requireNonNull(factory, "factory cannot be null");;
+        this.factory = requireNonNull(factory, "factory cannot be null");
         this.errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
 
@@ -45,7 +46,7 @@ public class ResponseTransformer {
      *          the response. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLRegistryResponse toEbXML(Response response) {
+    public EbXMLRegistryResponse<RegistryResponseType> toEbXML(Response response) {
         requireNonNull(response, "response cannot be null");
 
         var ebXML = factory.createRegistryResponse();
@@ -64,7 +65,7 @@ public class ResponseTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the response. <code>null</code> if the input was <code>null</code>.
      */
-    public Response fromEbXML(EbXMLRegistryResponse ebXML) {
+    public Response fromEbXML(EbXMLRegistryResponse<RegistryResponseType> ebXML) {
         requireNonNull(ebXML, "ebXML cannot be null");
 
         var response = new Response();

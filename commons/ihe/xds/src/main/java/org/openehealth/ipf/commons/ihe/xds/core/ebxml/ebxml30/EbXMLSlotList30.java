@@ -80,7 +80,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
     @Override
     public String getSingleSlotValue(String slotName) {
         var slotValues = getSlotValues(slotName);
-        return slotValues.size() > 0 ? slotValues.get(0) : null;
+        return !slotValues.isEmpty() ? slotValues.get(0) : null;
     }
 
     @Override

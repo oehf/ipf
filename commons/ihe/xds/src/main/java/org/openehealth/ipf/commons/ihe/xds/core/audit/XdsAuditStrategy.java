@@ -47,7 +47,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
      * @param response registry to analyze.
      * @return outcome code.
      */
-    private static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+    private static EventOutcomeIndicator getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse<RegistryResponseType> response) {
         try {
             if (response.getStatus() == Status.SUCCESS) {
                 return EventOutcomeIndicator.Success;
@@ -67,7 +67,7 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
         }
     }
 
-    private static String getEventOutcomeDescriptionFromRegistryResponse(EbXMLRegistryResponse response) {
+    private static String getEventOutcomeDescriptionFromRegistryResponse(EbXMLRegistryResponse<RegistryResponseType> response) {
         if (response.getErrors().isEmpty()) {
             return null;
         }
@@ -83,14 +83,14 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        EbXMLRegistryResponse<RegistryResponseType> ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 
     @Override
     public String getEventOutcomeDescription(T auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
+        EbXMLRegistryResponse<RegistryResponseType> ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
     }
 

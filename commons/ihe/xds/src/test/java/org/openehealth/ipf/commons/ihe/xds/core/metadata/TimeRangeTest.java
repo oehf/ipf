@@ -43,7 +43,7 @@ public class TimeRangeTest {
     @SuppressWarnings({"unchecked"})
     private <T> void checkSerialization(String name, T object) throws Exception {
         var qname = new QName("http://www.openehealth.org/ipf/xds", name);
-        var jaxbElement = new JAXBElement<T>(qname, (Class<T>) object.getClass(), object);
+        var jaxbElement = new JAXBElement<>(qname, (Class<T>) object.getClass(), object);
         var jaxbContext = JAXBContext.newInstance(TimeRange.class);
         var marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

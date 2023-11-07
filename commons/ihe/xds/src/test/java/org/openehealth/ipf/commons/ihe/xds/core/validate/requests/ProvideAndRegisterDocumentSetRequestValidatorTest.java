@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
@@ -47,7 +48,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new ProvideAndRegisterDocumentSetRequestValidator();
+        validator = ProvideAndRegisterDocumentSetRequestValidator.getInstance();
         EbXMLFactory factory = new EbXMLFactory30();
 
         request = SampleData.createProvideAndRegisterDocumentSet();
@@ -110,7 +111,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(request), ITI_41);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

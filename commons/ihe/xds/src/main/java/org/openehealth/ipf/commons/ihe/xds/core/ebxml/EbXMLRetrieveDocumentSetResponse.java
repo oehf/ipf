@@ -26,7 +26,7 @@ import java.util.List;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLRetrieveDocumentSetResponse extends EbXMLRegistryResponse {
+public interface EbXMLRetrieveDocumentSetResponse<E> extends EbXMLRegistryResponse<E> {
     /**
      * Sets the documents returned by the response.
      * @param documents

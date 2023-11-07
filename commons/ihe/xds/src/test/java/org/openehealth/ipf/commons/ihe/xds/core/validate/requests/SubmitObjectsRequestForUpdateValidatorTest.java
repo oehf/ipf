@@ -38,7 +38,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
  * @author Boris Stanojevic
  */
 public class SubmitObjectsRequestForUpdateValidatorTest {
-    private SubmitObjectsRequestValidator validator = new SubmitObjectsRequestValidator();
+    private final SubmitObjectsRequestValidator validator = SubmitObjectsRequestValidator.getInstance();
 
     @Test
     public void testOKFromRealEbXML() throws Exception {
@@ -66,7 +66,7 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
         validator.validate(request, ITI_57);
     }
 
-    private void expectXdsMetadataException(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
+    private void expectXdsMetadataException(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
@@ -76,7 +76,7 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
         }
     }
 
-    private void expectXdsRuntimeException(ErrorCode expectedErrorCode, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
+    private void expectXdsRuntimeException(ErrorCode expectedErrorCode, EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XdsRuntimeException.class);

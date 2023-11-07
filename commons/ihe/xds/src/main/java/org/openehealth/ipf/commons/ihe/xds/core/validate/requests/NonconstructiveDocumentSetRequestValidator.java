@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
@@ -30,23 +31,27 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * Validates a {@link EbXMLNonconstructiveDocumentSetRequest}.
  * @author Jens Riemschneider
  */
-public class NonconstructiveDocumentSetRequestValidator implements Validator<EbXMLNonconstructiveDocumentSetRequest, ValidationProfile> {
+public class NonconstructiveDocumentSetRequestValidator implements Validator<EbXMLNonconstructiveDocumentSetRequest<?>, ValidationProfile> {
     private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
 
+    @Getter
+    private static final NonconstructiveDocumentSetRequestValidator instance = new NonconstructiveDocumentSetRequestValidator();
+
+    private NonconstructiveDocumentSetRequestValidator() {
+    }
+
     @Override
-    public void validate(EbXMLNonconstructiveDocumentSetRequest request, ValidationProfile profile) {
+    public void validate(EbXMLNonconstructiveDocumentSetRequest<?> request, ValidationProfile profile) {
         requireNonNull(request, "request cannot be null");
-        
-        for (var document : request.getDocuments()) {
+
+        request.getDocuments().forEach(document -> {
             var repoId = document.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
-
             var docId = document.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
-
             if (profile.getInteractionProfile().getHomeCommunityIdOptionality() != XdsIntegrationProfile.HomeCommunityIdOptionality.NEVER) {
                 hcValidator.validate(document.getHomeCommunityId());
             }
-        }
+        });
     }
 }

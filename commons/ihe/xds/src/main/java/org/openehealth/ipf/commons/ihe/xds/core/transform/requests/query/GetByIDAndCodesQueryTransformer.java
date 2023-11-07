@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdAndCodesQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
@@ -49,11 +48,11 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      * @param confCodeSchemeParam
      *          the parameter name of the confidentiality code scheme.
      */
-    public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter formatCodeSchemeParam, QueryParameter confCodeParam, QueryParameter confCodeSchemeParam) {
+    protected GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter formatCodeSchemeParam, QueryParameter confCodeParam, QueryParameter confCodeSchemeParam) {
         requireNonNull(uniqueIdParam, "uniqueIdParam cannot be null");
-        requireNonNull(uuidParam, "uuidParam cannot be null");        
+        requireNonNull(uuidParam, "uuidParam cannot be null");
         requireNonNull(formatCodeParam, "formatCodeParam cannot be null");
-        requireNonNull(formatCodeSchemeParam, "formatCodeSchemeParam cannot be null");        
+        requireNonNull(formatCodeSchemeParam, "formatCodeSchemeParam cannot be null");
         requireNonNull(confCodeParam, "confCodeParam cannot be null");
         requireNonNull(confCodeSchemeParam, "confCodeSchemeParam cannot be null");
         
@@ -64,54 +63,21 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         this.uuidParam = uuidParam;
     }
 
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query,  ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(T query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromCode(formatCodeParam, query.getFormatCodes());
         slots.fromCode(confCodeParam, query.getConfidentialityCodes());
         slots.fromString(uuidParam, query.getUuid());
         slots.fromString(uniqueIdParam, query.getUniqueId());
     }
 
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-        
+    protected void fromEbXML(T query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setFormatCodes(slots.toCodeList(formatCodeParam));
         query.setConfidentialityCodes(slots.toCodeQueryList(confCodeParam, confCodeSchemeParam));
         query.setUniqueId(slots.toString(uniqueIdParam));
         query.setUuid(slots.toString(uuidParam));
     }
-
 }

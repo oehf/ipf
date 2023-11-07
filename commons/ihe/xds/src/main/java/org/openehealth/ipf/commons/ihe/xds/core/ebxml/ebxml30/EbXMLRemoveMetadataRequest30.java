@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * Encapsulation of {@link RemoveObjectsRequest}
  * @author Boris Stanojevic
  */
-public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest {
+public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest<RemoveObjectsRequest> {
     private final RemoveObjectsRequest removeObjectsRequest;
 
     /**

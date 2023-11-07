@@ -140,10 +140,9 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[0]));
 
         if (! docEntry.getReferenceIdList().isEmpty()) {
-            var referenceIdValues = new String[docEntry.getReferenceIdList().size()];
-            for (var i = 0; i < docEntry.getReferenceIdList().size(); ++i) {
-                referenceIdValues[i] = Hl7v2Based.render(docEntry.getReferenceIdList().get(i));
-            }
+            var referenceIdValues = docEntry.getReferenceIdList().stream()
+                    .map(Hl7v2Based::render)
+                    .toArray(String[]::new);
             extrinsic.addSlot(SLOT_NAME_REFERENCE_ID_LIST, referenceIdValues);
         }
     }
@@ -152,9 +151,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     protected void addClassificationsFromEbXML(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic) {
         super.addClassificationsFromEbXML(docEntry, extrinsic);
 
-        for (var author : extrinsic.getClassifications(DOC_ENTRY_AUTHOR_CLASS_SCHEME)) {
-            docEntry.getAuthors().add(authorTransformer.fromEbXML(author));
-        }
+        extrinsic.getClassifications(DOC_ENTRY_AUTHOR_CLASS_SCHEME)
+                .forEach(author -> docEntry.getAuthors().add(authorTransformer.fromEbXML(author)));
 
         var classCode = extrinsic.getSingleClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
         docEntry.setClassCode(codeTransformer.fromEbXML(classCode));
@@ -186,11 +184,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     @Override
     protected void addClassifications(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(docEntry, extrinsic, objectLibrary);
-        
-        for (var author : docEntry.getAuthors()) {
-            var authorClasification = authorTransformer.toEbXML(author, objectLibrary);
-            extrinsic.addClassification(authorClasification, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
-        }
+
+        docEntry.getAuthors().stream()
+                .map(author -> authorTransformer.toEbXML(author, objectLibrary))
+                .forEach(authorClassification -> extrinsic.addClassification(authorClassification, DOC_ENTRY_AUTHOR_CLASS_SCHEME));
 
         var classCode = codeTransformer.toEbXML(docEntry.getClassCode(), objectLibrary);
         extrinsic.addClassification(classCode, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
@@ -206,15 +203,13 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
 
         var typeCode = codeTransformer.toEbXML(docEntry.getTypeCode(), objectLibrary);
         extrinsic.addClassification(typeCode, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
-        
-        for (var confCode : docEntry.getConfidentialityCodes()) {
-            var conf = codeTransformer.toEbXML(confCode, objectLibrary);
-            extrinsic.addClassification(conf, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME);
-        }
-        
-        for (var eventCode : docEntry.getEventCodeList()) {
-            var event = codeTransformer.toEbXML(eventCode, objectLibrary);
-            extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
-        }
+
+        docEntry.getConfidentialityCodes().stream()
+                .map(confCode -> codeTransformer.toEbXML(confCode, objectLibrary))
+                .forEach(conf -> extrinsic.addClassification(conf, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME));
+
+        docEntry.getEventCodeList().stream()
+                .map(eventCode -> codeTransformer.toEbXML(eventCode, objectLibrary))
+                .forEach(event -> extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME));
     }
 }

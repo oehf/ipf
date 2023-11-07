@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
@@ -35,37 +37,38 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  *
  * @author Clay Sebourn
  */
-public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbXMLRetrieveImagingDocumentSetRequest, ValidationProfile> {
+public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType>, ValidationProfile> {
     private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
 
+    @Getter
+    private static final RetrieveImagingDocumentSetRequestValidator instance = new RetrieveImagingDocumentSetRequestValidator();
+
+    private RetrieveImagingDocumentSetRequestValidator() {
+    }
+
     @Override
-    public void validate(EbXMLRetrieveImagingDocumentSetRequest request, ValidationProfile profile) {
+    public void validate(EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType> request, ValidationProfile profile) {
         requireNonNull(request, "request cannot be null");
 
-        for (var retrieveStudy : request.getRetrieveStudies()) {
+        request.getRetrieveStudies().forEach(retrieveStudy -> {
             var studyInstanceUID = retrieveStudy.getStudyInstanceUID();
             metaDataAssert(isNotEmpty(studyInstanceUID), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
-
             var transferSyntaxUIDList = request.getTransferSyntaxUIDList();
             metaDataAssert(transferSyntaxUIDList != null && !transferSyntaxUIDList.isEmpty(), TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED);
-
-            for (var retrieveSeries : retrieveStudy.getRetrieveSerieses()) {
+            retrieveStudy.getRetrieveSerieses().forEach(retrieveSeries -> {
                 var seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
                 metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
-
-                for (var document : retrieveSeries.getDocuments()) {
-                    //todo: Eliminate this duplicate code from DocumentRequest?
+                //todo: Eliminate this duplicate code from DocumentRequest?
+                retrieveSeries.getDocuments().forEach(document -> {
                     var repoId = document.getRepositoryUniqueId();
                     metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);
-
                     var docId = document.getDocumentUniqueId();
                     metaDataAssert(isNotEmpty(docId), DOC_ID_MUST_BE_SPECIFIED);
-
                     if (profile.getInteractionProfile().getHomeCommunityIdOptionality() != XdsIntegrationProfile.HomeCommunityIdOptionality.NEVER) {
                         hcValidator.validate(document.getHomeCommunityId());
                     }
-                }
-            }
-        }
+                });
+            });
+        });
     }
 }

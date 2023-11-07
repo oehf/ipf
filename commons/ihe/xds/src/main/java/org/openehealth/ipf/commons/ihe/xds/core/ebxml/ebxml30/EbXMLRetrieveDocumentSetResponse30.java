@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
  * The ebXML 3.0 version of the {@link EbXMLRetrieveDocumentSetResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocumentSetResponse {
+public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> {
     private final RetrieveDocumentSetResponseType response;
 
     /**
@@ -58,21 +58,24 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
             requestData.setHomeCommunityId(documentResponse.getHomeCommunityId());
             requestData.setRepositoryUniqueId(documentResponse.getRepositoryUniqueId());
-
-            var doc = new RetrievedDocument();
-            doc.setDataHandler(documentResponse.getDocument());
-            doc.setRequestData(requestData);
-            doc.setNewRepositoryUniqueId(documentResponse.getNewRepositoryUniqueId());
-            doc.setNewDocumentUniqueId(documentResponse.getNewDocumentUniqueId());
-            if (documentResponse.getMimeType() != null) {
-                doc.setMimeType(documentResponse.getMimeType());
-            } else if (documentResponse.getDocument() != null) {
-                doc.setMimeType(documentResponse.getDocument().getContentType());
-            }
-
+            var doc = getRetrievedDocument(documentResponse, requestData);
             docs.add(doc);
         }
         return docs;
+    }
+
+    private static RetrievedDocument getRetrievedDocument(DocumentResponse documentResponse, DocumentReference requestData) {
+        var doc = new RetrievedDocument();
+        doc.setDataHandler(documentResponse.getDocument());
+        doc.setRequestData(requestData);
+        doc.setNewRepositoryUniqueId(documentResponse.getNewRepositoryUniqueId());
+        doc.setNewDocumentUniqueId(documentResponse.getNewDocumentUniqueId());
+        if (documentResponse.getMimeType() != null) {
+            doc.setMimeType(documentResponse.getMimeType());
+        } else if (documentResponse.getDocument() != null) {
+            doc.setMimeType(documentResponse.getDocument().getContentType());
+        }
+        return doc;
     }
 
     @Override

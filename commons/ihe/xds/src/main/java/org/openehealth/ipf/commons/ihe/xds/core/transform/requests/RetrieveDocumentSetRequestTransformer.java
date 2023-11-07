@@ -19,7 +19,9 @@ import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+
 
 /**
  * Transforms between a {@link EbXMLNonconstructiveDocumentSetRequest} and its ebXML representation.
@@ -44,7 +46,7 @@ public class RetrieveDocumentSetRequestTransformer {
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLNonconstructiveDocumentSetRequest toEbXML(RetrieveDocumentSet request) {
+    public EbXMLNonconstructiveDocumentSetRequest<RetrieveDocumentSetRequestType> toEbXML(RetrieveDocumentSet request) {
         if (request == null) {
             return null;
         }
@@ -60,7 +62,7 @@ public class RetrieveDocumentSetRequestTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public RetrieveDocumentSet fromEbXML(EbXMLNonconstructiveDocumentSetRequest ebXML) {
+    public RetrieveDocumentSet fromEbXML(EbXMLNonconstructiveDocumentSetRequest<RetrieveDocumentSetRequestType> ebXML) {
         if (ebXML == null) {
             return null;
         }

@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlot30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
@@ -53,7 +54,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new SubmitObjectsRequestValidator();
+        validator = SubmitObjectsRequestValidator.getInstance();
         factory = new EbXMLFactory30();
 
         request = SampleData.createProvideAndRegisterDocumentSet();
@@ -256,8 +257,7 @@ public class SubmitObjectsRequestValidatorTest {
         ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
                 .filter(x -> !isAuthorClassification(x))
                 .findAny()
-                .get()
-                .setNodeRepresentation(null);
+                .ifPresent(e -> e.setNodeRepresentation(null));
         expectFailure(NODE_REPRESENTATION_MISSING, ebXML);
     }
 
@@ -276,9 +276,9 @@ public class SubmitObjectsRequestValidatorTest {
     public void testProhibitedNodeRepresentationIsNotEmpty() {
         var ebXML = transformer.toEbXML(request);
         var classification = ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
-                .filter(x -> isAuthorClassification(x))
+                .filter(SubmitObjectsRequestValidatorTest::isAuthorClassification)
                 .findAny()
-                .get();
+                .orElseThrow(AssertionError::new);
 
         classification.setNodeRepresentation(null);
         validator.validate(ebXML, ITI_42);
@@ -507,7 +507,7 @@ public class SubmitObjectsRequestValidatorTest {
     public void testAuthorValidation() {
         request.getSubmissionSet().getAuthors().clear();
         var ebXml = transformer.toEbXML(request);
-        new ObjectContainerValidator().validate(ebXml, ITI_42);
+        ObjectContainerValidator.getInstance().validate(ebXml, ITI_42);
 
         var author = new Author();
         author.getAuthorRole().add(new Identifiable("clown", new AssigningAuthority("1.3.14.15", "ISO")));
@@ -516,7 +516,7 @@ public class SubmitObjectsRequestValidatorTest {
 
         var failed = false;
         try {
-            new ObjectContainerValidator().validate(ebXml, ITI_42);
+            ObjectContainerValidator.getInstance().validate(ebXml, ITI_42);
         } catch (XDSMetaDataException e) {
             failed = true;
         }
@@ -536,11 +536,11 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(request));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest<ProvideAndRegisterDocumentSetRequestType> ebXML) {
         expectFailure(expectedMessage, ebXML, ITI_42);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest<ProvideAndRegisterDocumentSetRequestType> ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

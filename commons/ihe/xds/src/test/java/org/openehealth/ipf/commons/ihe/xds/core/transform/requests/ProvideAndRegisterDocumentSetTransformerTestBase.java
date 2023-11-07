@@ -38,7 +38,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
     private DataHandler dataHandler;    
     
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         var factory = createFactory();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 

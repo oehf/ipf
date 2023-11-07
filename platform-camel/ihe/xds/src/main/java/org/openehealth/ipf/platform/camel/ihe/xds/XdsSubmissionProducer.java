@@ -69,8 +69,6 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
             homeCommunityIdElement.setTextContent(targetHomeCommunityId);
 
             var blockElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART);
-            //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "role", "urn:ihe:iti:xd:id");
-            //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "relay", "true");
             blockElement.appendChild(homeCommunityIdElement);
 
             var bindingProvider = (BindingProvider) client;
