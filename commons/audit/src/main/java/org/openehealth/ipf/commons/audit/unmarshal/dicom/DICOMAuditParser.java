@@ -166,7 +166,7 @@ public class DICOMAuditParser implements AuditParser {
         poi.setParticipantObjectSensitivity(element.getAttributeValue(PARTICIPANT_OBJECT_SENSITIVITY));
         poi.setParticipantObjectName(element.getChildText(PARTICIPANT_OBJECT_NAME));
         if (element.getChild(PARTICIPANT_OBJECT_QUERY) != null) {
-            poi.setParticipantObjectQuery(Base64.getDecoder().decode(element.getChildText(PARTICIPANT_OBJECT_QUERY)));
+            poi.setParticipantObjectQuery(Base64.getDecoder().decode(element.getChildTextTrim(PARTICIPANT_OBJECT_QUERY)));
         }
         mapInto(poi.getParticipantObjectDetails(), element, PARTICIPANT_OBJECT_DETAIL, this::valuePair);
         mapInto(poi.getParticipantObjectDescriptions(), element, PARTICIPANT_OBJECT_DESCRIPTION, this::partipantObjectDescription);
