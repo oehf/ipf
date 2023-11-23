@@ -39,7 +39,7 @@
         <velocity-version>2.3</velocity-version>
         <vertx-version>4.5.1</vertx-version>
         <vibur-version>25.0</vibur-version>
-        <woodstox-version>6.6.1</woodstox-version>
+        <woodstox-version>6.5.1</woodstox-version>
         <xmlsec-version>3.0.2</xmlsec-version>
         <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
         <jackson-version>2.15.3</jackson-version>
