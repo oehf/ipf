@@ -21,20 +21,22 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
- * EventTypes for CH:PPQ transactions in this module
+ * EventTypes for transactions in this module
  *
  * @since 3.5.1
  */
-public enum PpqEventTypeCodes implements EventType, EnumeratedCodedValue<EventType> {
-    PrivacyPolicyFeed    ("PPQ-1", "Privacy Policy Feed"),
-    PrivacyPolicyRetrieve("PPQ-2", "Privacy Policy Retrieve"),
+public enum Xacml20EventTypeCodes implements EventType, EnumeratedCodedValue<EventType> {
+    PrivacyPolicyFeed             ("PPQ-1",  "e-health-suisse",  "Privacy Policy Feed"),
+    PrivacyPolicyRetrieve         ("PPQ-2",  "e-health-suisse",  "Privacy Policy Retrieve"),
+    AuthorizationDecisionsQueryIhe("ITI-79", "IHE Transactions", "Authorization Decisions Query"),
+    AuthorizationDecisionsQueryAdr("ADR",    "e-health-suisse",  "Authorization Decisions Query"),
     ;
 
     @Getter
     private final EventType value;
 
-    PpqEventTypeCodes(String code, String displayName) {
-        this.value = EventType.of(code, "e-health-suisse", displayName);
+    Xacml20EventTypeCodes(String code, String codeSystemName, String displayName) {
+        this.value = EventType.of(code, codeSystemName, displayName);
     }
 
 }

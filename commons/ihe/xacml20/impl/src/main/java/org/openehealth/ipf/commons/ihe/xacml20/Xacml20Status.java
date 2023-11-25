@@ -26,6 +26,9 @@ public enum Xacml20Status {
     REQUESTER_ERROR("urn:oasis:names:tc:SAML:2.0:status:Requester"),
     RESPONDER_ERROR("urn:oasis:names:tc:SAML:2.0:status:Responder"),
     VERSION_MISMATCH("urn:oasis:names:tc:SAML:2.0:status:VersionMismatch"),
+
+    // only for CH:ADR
+    EPR_NOT_HOLDER("urn:e-health-suisse:2015:error:not-holder-of-patient-policies"),
     ;
 
     @Getter

@@ -32,7 +32,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
-import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes;
+import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
@@ -54,12 +54,12 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        var builder = new QueryInformationBuilder<>(auditContext, auditDataset, PpqEventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
+        var builder = new QueryInformationBuilder<>(auditContext, auditDataset, Xacml20EventTypeCodes.PrivacyPolicyRetrieve, auditDataset.getPurposesOfUse());
         return builder
                 .addPatients(auditDataset.getPatientId())
                 .setQueryParameters(
                         auditDataset.getQueryId(),
-                        ParticipantObjectIdType.of(PpqEventTypeCodes.PrivacyPolicyRetrieve),
+                        ParticipantObjectIdType.of(Xacml20EventTypeCodes.PrivacyPolicyRetrieve),
                         auditDataset.getRequestPayload(),
                         StringUtils.isNotEmpty(auditDataset.getRequestPayload()) ?
                                 Collections.singletonList(builder.getTypeValuePair(QUERY_ENCODING, Charset.defaultCharset().toString())) :
@@ -85,8 +85,8 @@ public class ChPpq2AuditStrategy extends AuditStrategySupport<ChPpqAuditDataset>
 
     @Override
     public EventOutcomeIndicator getEventOutcomeIndicator(ChPpqAuditDataset auditDataset, Object responseObject) {
-        var response = (ResponseType) responseObject;
         try {
+            var response = (ResponseType) responseObject;
             if (!Xacml20Status.SUCCESS.getCode().equals(response.getStatus().getStatusCode().getValue())) {
                 return EventOutcomeIndicator.SeriousFailure;
             }

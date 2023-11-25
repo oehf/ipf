@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2023 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<ns11:Response ID="_869b8825-4bac-40f8-80a4-06dc52b63f94" Version="2.0" IssueInstant="2021-09-04T23:46:45.772Z"
+               xmlns="urn:oasis:names:tc:xacml:2.0:context:schema:os" xmlns:ns6="http://www.w3.org/2004/08/xop/include"
+               xmlns:ns5="http://www.w3.org/2001/04/xmlenc#"
+               xmlns:ns8="urn:oasis:names:tc:SAML:2.0:conditions:delegation"
+               xmlns:ns7="urn:e-health-suisse:2015:policy-administration"
+               xmlns:ns9="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion"
+               xmlns:ns12="urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol"
+               xmlns:ns11="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:ns10="urn:hl7-org:v3"
+               xmlns:ns2="urn:oasis:names:tc:xacml:2.0:policy:schema:os" xmlns:ns4="http://www.w3.org/2000/09/xmldsig#"
+               xmlns:ns3="urn:oasis:names:tc:SAML:2.0:assertion">
+    <ns11:Status>
+        <ns11:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+    </ns11:Status>
+    <ns3:Assertion Version="2.0" ID="_d7a7d69d-8235-4012-a7ba-5c4bdaea5656" IssueInstant="2021-09-04T23:46:45.772Z">
+        <ns3:Issuer NameQualifier="urn:e-health-suisse:community-index">urn:oid:1.44.567</ns3:Issuer>
+        <ns3:Statement xsi:type="ns9:XACMLAuthzDecisionStatementType"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Response>
+                <Result ResourceId="urn:uuid:a928a3d3-bf47-4d29-9526-b1fe886c0184">
+                    <Decision>Permit</Decision>
+                    <Status>
+                        <StatusCode Value="urn:oasis:names:tc:xacml:1.0:status:ok"/>
+                    </Status>
+                </Result>
+            </Response>
+        </ns3:Statement>
+    </ns3:Assertion>
+</ns11:Response>

@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
+package org.openehealth.ipf.platform.camel.ihe.xacml20.iti79;
 
-import org.openehealth.ipf.commons.ihe.xacml20.chppq2.ChPpq2PortType;
+import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20QueryService;
 
 /**
- * @since 3.5.1
  * @author Dmytro Rud
+ * @since 4.8.0
  */
-public class ChPpq2Service extends Xacml20QueryService implements ChPpq2PortType {
+public class Iti79Service extends Xacml20QueryService implements Iti79PortType {
 
-    public ChPpq2Service(String homeCommunityId) {
+    public Iti79Service(String homeCommunityId) {
         super(homeCommunityId);
     }
 
     @Override
-    public ResponseType policyQuery(XACMLPolicyQueryType request) {
+    public ResponseType authorizationDecisionQuery(XACMLAuthzDecisionQueryType request) {
         return doProcessRequest(request);
     }
 

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 
-import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes.PrivacyPolicyFeed;
+import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes.PrivacyPolicyFeed;
 
 /**
  * @author Dmytro Rud

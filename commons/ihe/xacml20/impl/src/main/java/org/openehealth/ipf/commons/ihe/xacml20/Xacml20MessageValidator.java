@@ -19,6 +19,7 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1RequestValidationProfile;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 import org.openehealth.ipf.commons.xml.XmlUtils;
@@ -40,6 +41,7 @@ public class Xacml20MessageValidator {
 
     private static final Map<Class<?>, String> XML_SCHEMAS = Map.of(
             XACMLPolicyQueryType.class, "schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd",
+            XACMLAuthzDecisionQueryType.class, "schema/xacml-2.0-profile-saml2.0-v2-schema-protocol-wd-14.xsd",
             ResponseType.class, "schema/PolicyQueryResponse.xsd",
             EprPolicyRepositoryResponse.class, "schema/epr-policy-administration-combined-schema-1.3-local.xsd");
 
@@ -61,11 +63,19 @@ public class Xacml20MessageValidator {
         validateMessage(message);
     }
 
+    public static void validateIti79Request(XACMLAuthzDecisionQueryType message) {
+        validateMessage(message);
+    }
+
+    public static void validateChAdrRequest(XACMLAuthzDecisionQueryType message) {
+        validateMessage(message);
+    }
+
     public static void validateChPpq1Response(EprPolicyRepositoryResponse message) {
         validateMessage(message);
     }
 
-    public static void validateChPpq2Response(ResponseType message) {
+    public static void validateQueryResponse(ResponseType message) {
         validateMessage(message);
     }
 

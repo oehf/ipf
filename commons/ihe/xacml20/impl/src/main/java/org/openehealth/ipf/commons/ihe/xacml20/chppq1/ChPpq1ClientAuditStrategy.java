@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 
-import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.PpqEventTypeCodes.PrivacyPolicyFeed;
+import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes.PrivacyPolicyFeed;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 the original author or authors.
  *
@@ -20,12 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
+
 import org.herasaf.xacml.core.context.impl.RequestType;
 import org.herasaf.xacml.core.policy.impl.PolicySetType;
 import org.herasaf.xacml.core.policy.impl.PolicyType;
@@ -63,6 +58,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.Refer
 @XmlType(name = "XACMLAuthzDecisionQueryType", propOrder = {
     "rest"
 })
+@XmlRootElement(name = "XACMLAuthzDecisionQuery")
 public class XACMLAuthzDecisionQueryType
     extends RequestAbstractType
 {

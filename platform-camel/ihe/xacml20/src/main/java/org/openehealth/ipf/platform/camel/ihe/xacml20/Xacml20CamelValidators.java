@@ -19,6 +19,7 @@ import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
@@ -47,9 +48,21 @@ public class Xacml20CamelValidators {
         }
     };
 
-    private static final Processor CH_PPQ_2_RESPONSE_VALIDATOR = exchange -> {
+    private static final Processor ITI_79_REQUEST_VALIDATOR = exchange -> {
         if (validationEnabled(exchange)) {
-            Xacml20MessageValidator.validateChPpq2Response(exchange.getIn().getMandatoryBody(ResponseType.class));
+            Xacml20MessageValidator.validateIti79Request(exchange.getIn().getMandatoryBody(XACMLAuthzDecisionQueryType.class));
+        }
+    };
+
+    private static final Processor CH_ADR_REQUEST_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            Xacml20MessageValidator.validateChAdrRequest(exchange.getIn().getMandatoryBody(XACMLAuthzDecisionQueryType.class));
+        }
+    };
+
+    private static final Processor QUERY_RESPONSE_VALIDATOR = exchange -> {
+        if (validationEnabled(exchange)) {
+            Xacml20MessageValidator.validateQueryResponse(exchange.getIn().getMandatoryBody(ResponseType.class));
         }
     };
 
@@ -66,7 +79,23 @@ public class Xacml20CamelValidators {
     }
 
     public static Processor chPpq2ResponseValidator() {
-        return CH_PPQ_2_RESPONSE_VALIDATOR;
+        return QUERY_RESPONSE_VALIDATOR;
+    }
+
+    public static Processor iti79RequestValidator() {
+        return ITI_79_REQUEST_VALIDATOR;
+    }
+
+    public static Processor iti79ResponseValidator() {
+        return QUERY_RESPONSE_VALIDATOR;
+    }
+
+    public static Processor chAdrRequestValidator() {
+        return CH_ADR_REQUEST_VALIDATOR;
+    }
+
+    public static Processor chAdrResponseValidator() {
+        return QUERY_RESPONSE_VALIDATOR;
     }
 
 }

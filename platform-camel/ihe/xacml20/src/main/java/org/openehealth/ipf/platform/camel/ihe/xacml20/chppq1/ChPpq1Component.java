@@ -40,7 +40,7 @@ public class ChPpq1Component extends AbstractWsComponent<ChPpqAuditDataset, WsTr
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Xacml20Endpoint(uri, remaining, this, parameters, ChPpq1Service.class) {
+        return new Xacml20Endpoint<>(uri, remaining, this, parameters, ChPpq1Service.class) {
             @Override
             public AbstractWsProducer<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ?, ?> getProducer(
                     AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> endpoint,

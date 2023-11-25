@@ -53,7 +53,7 @@ public class MessageValidationTest {
 
         validateChPpq2Request(loadFile("chppq2/query-per-patient-id.xml"));
         validateChPpq2Request(loadFile("chppq2/query-per-policy-id.xml"));
-        validateChPpq2Response(loadFile("chppq2/query-response.xml"));
+        validateQueryResponse(loadFile("chppq2/query-response.xml"));
     }
 }
 

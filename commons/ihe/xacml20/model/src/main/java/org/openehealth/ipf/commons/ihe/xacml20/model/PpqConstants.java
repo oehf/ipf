@@ -48,8 +48,15 @@ public class PpqConstants {
     }
 
     public static class ActionIds {
-        public static final String PPQ_ADD_POLICY   = "urn:e-health-suisse:2015:policy-administration:AddPolicy";
-        public static final String XDS_STORED_QUERY = "urn:ihe:iti:2007:RegistryStoredQuery";
+        public static final String ITI_18       = "urn:ihe:iti:2007:RegistryStoredQuery";
+        public static final String ITI_42       = "urn:ihe:iti:2007:RegisterDocumentSet-b";
+        public static final String ITI_57       = "urn:ihe:iti:2010:UpdateDocumentSet";
+        public static final String ITI_81       = "urn:e-health-suisse:2015:patient-audit-administration:RetrieveAtnaAudit";
+        public static final String ITI_92       = "urn:ihe:iti:2018:RestrictedUpdateDocumentSet";
+        public static final String PPQ_1_ADD    = "urn:e-health-suisse:2015:policy-administration:AddPolicy";
+        public static final String PPQ_1_UPDATE = "urn:e-health-suisse:2015:policy-administration:UpdatePolicy";
+        public static final String PPQ_1_DELETE = "urn:e-health-suisse:2015:policy-administration:DeletePolicy";
+        public static final String PPQ_2        = "urn:e-health-suisse:2015:policy-administration:PolicyQuery";
     }
 
     public static class CodingSystemIds {
@@ -64,9 +71,6 @@ public class PpqConstants {
         public static final String FAILURE = "urn:e-health-suisse:2015:response-status:failure";
     }
 
-    public final String POLICY_ID_EXCLUSION_LIST = "urn:e-health-suisse:2015:policies:exclusion-list";
-
     public final String NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX = "urn:e-health-suisse:community-index";
-
 
 }

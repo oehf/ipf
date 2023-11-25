@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20;
 
 import org.openehealth.ipf.commons.ihe.ws.*;
-import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -27,12 +27,12 @@ import java.util.Map;
  * @since 3.5.1
  * @author Dmytro Rud
  */
-abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> {
+abstract public class Xacml20Endpoint<T extends WsAuditDataset> extends AbstractWsEndpoint<T, WsTransactionConfiguration<T>> {
 
     public Xacml20Endpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>>> component,
+            AbstractWsComponent<T, WsTransactionConfiguration<T>, ? extends WsInteractionId<WsTransactionConfiguration<T>>> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass)
     {
@@ -40,7 +40,7 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
     }
 
     @Override
-    public JaxWsClientFactory<ChPpqAuditDataset> getJaxWsClientFactory() {
+    public JaxWsClientFactory<T> getJaxWsClientFactory() {
         return new JaxWsRequestClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
@@ -55,7 +55,7 @@ abstract public class Xacml20Endpoint extends AbstractWsEndpoint<ChPpqAuditDatas
     }
 
     @Override
-    public JaxWsServiceFactory<ChPpqAuditDataset> getJaxWsServiceFactory() {
+    public JaxWsServiceFactory<T> getJaxWsServiceFactory() {
         return new JaxWsRequestServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),

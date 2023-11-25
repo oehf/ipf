@@ -42,6 +42,9 @@
             <action issue="426" dev="unixoid" type="fix">
                 Fixed Schematron validation of ITI-45 requests
             </action>
+            <action issue="424" dev="unixoid" type="add">
+                Support for the IHE profile "Secure Retrieve" and the Swiss EPR integration profile CH:ADR
+            </action>
             <action issue="423" dev="unixoid" type="add">
                 Add Schematron validation for CH:PPQ-1 requests
             </action>
@@ -52,7 +55,7 @@
                 Possibility to add HTTP headers in FHIR requests
             </action>
             <action issue="391" dev="unixoid" type="add">
-                Early support for the Swiss EPR integration profile CH:PPQm
+                Support for the Swiss EPR integration profile CH:PPQm
             </action>
         </release>
         <release version="4.7.0" description="IPF 4.7.0" date="10 Jul 2023">

@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20Endpoint;
 
 import java.util.Map;
 
-public class ChPpq2Endpoint extends Xacml20Endpoint {
+public class ChPpq2Endpoint extends Xacml20Endpoint<ChPpqAuditDataset> {
 
     public ChPpq2Endpoint(
             String endpointUri,
