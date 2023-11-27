@@ -17,16 +17,19 @@ package org.openehealth.ipf.commons.ihe.xacml20.chadr;
 
 import lombok.extern.slf4j.Slf4j;
 import org.herasaf.xacml.core.context.impl.AttributeType;
+import org.herasaf.xacml.core.context.impl.ResourceType;
+import org.herasaf.xacml.core.context.impl.ResultType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20AuditUtils;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20ParticipantIdType;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
@@ -36,9 +39,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACML
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmytro Rud
@@ -59,48 +60,58 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChAdrAuditDataset auditDataset) {
         var builder = new QueryInformationBuilder<>(auditContext, auditDataset, Xacml20EventTypeCodes.AuthorizationDecisionsQueryAdr, auditDataset.getPurposesOfUse());
-        return builder
-            .setQueryParameters(
+        builder.setQueryParameters(
                 auditDataset.getSubjectId(),
                 auditDataset.getSubjectRole(),
                 null,
                 ParticipantObjectTypeCode.Person,
                 ParticipantObjectTypeCodeRole.SecurityUserEntity,
-                Collections.emptyList())
-            .setQueryParameters(
-                auditDataset.getResourceId(),
+                Collections.emptyList());
+
+        for (Map.Entry<String, String> entry : auditDataset.getDecisionsByResourceIds().entrySet()) {
+            builder.setQueryParameters(
+                entry.getKey(),
                 Xacml20ParticipantIdType.AuthorizationDecisionsQueryAdr,
                 null,
                 ParticipantObjectTypeCode.System,
                 auditDataset.getObjectRole(),
-                (auditDataset.getDecision() != null)
-                    ? Collections.singletonList(new TypeValuePairType("decision", auditDataset.getDecision()))
-                    : Collections.emptyList())
-            .getMessages();
+                (entry.getValue() != null)
+                    ? Collections.singletonList(new TypeValuePairType("decision", entry.getValue()))
+                    : Collections.emptyList());
+        }
+
+        return builder.getMessages();
     }
 
     @Override
     public ChAdrAuditDataset enrichAuditDatasetFromRequest(ChAdrAuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         var query = (XACMLAuthzDecisionQueryType) requestObject;
-        for (AttributeType attribute : Xacml20AuditUtils.extractSubjectAttributes(query)) {
+        var authzRequest = Xacml20Utils.extractAuthzRequest(query);
+        for (AttributeType attribute : authzRequest.getSubjects().get(0).getAttributes()) {
             switch (attribute.getAttributeId()) {
                 case PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID:
-                    auditDataset.setSubjectId(Xacml20AuditUtils.extractStringAttributeValue(attribute));
+                    auditDataset.setSubjectId(Xacml20Utils.extractStringAttributeValue(attribute));
                     break;
                 case PpqConstants.AttributeIds.XACML_2_0_SUBJECT_ROLE:
-                    auditDataset.setSubjectRole(Xacml20AuditUtils.extractCodeAttributeValue(attribute));
+                    var cv = Xacml20Utils.extractCodeAttributeValue(attribute);
+                    if (cv != null) {
+                        auditDataset.setSubjectRole(ParticipantObjectIdType.of(cv.getCode(), cv.getCodeSystem(), cv.getDisplayName()));
+                    }
                     break;
             }
         }
-        for (AttributeType attribute : Xacml20AuditUtils.extractResourceAttributes(query)) {
-            if (PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID.equals(attribute.getAttributeId())) {
-                auditDataset.setResourceId(Xacml20AuditUtils.extractStringAttributeValue(attribute));
-                break;
+        for (ResourceType resource : authzRequest.getResources()) {
+            for (AttributeType attribute : resource.getAttributes()) {
+                if (PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID.equals(attribute.getAttributeId())) {
+                    String resourceId = Xacml20Utils.extractStringAttributeValue(attribute);
+                    auditDataset.getDecisionsByResourceIds().put(resourceId, null);
+                    break;
+                }
             }
         }
-        for (AttributeType attribute : Xacml20AuditUtils.extractActionAttributes(query)) {
+        for (AttributeType attribute : authzRequest.getAction().getAttributes()) {
             if (PpqConstants.AttributeIds.XACML_1_0_ACTION_ID.equals(attribute.getAttributeId())) {
-                String action = Xacml20AuditUtils.extractStringAttributeValue(attribute);
+                String action = Xacml20Utils.extractStringAttributeValue(attribute);
                 if (action != null) {
                     switch (action) {
                         case PpqConstants.ActionIds.ITI_18:
@@ -135,15 +146,8 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
                 var assertion = (AssertionType) response.getAssertionOrEncryptedAssertion().get(0);
                 var statement = (XACMLAuthzDecisionStatementType) assertion.getStatementOrAuthnStatementOrAuthzDecisionStatement().get(0);
-                var decisions = statement.getResponse().getResults().stream()
-                    .map(result -> result.getDecision().value())
-                    .collect(Collectors.toSet());
-                // the order matters, the first one who is present wins
-                for (String decision : List.of("Deny", "Permit", "NotApplicable", "Indeterminate")) {
-                    if (decisions.contains(decision)) {
-                        auditDataset.setDecision(decision);
-                        break;
-                    }
+                for (ResultType result : statement.getResponse().getResults()) {
+                    auditDataset.getDecisionsByResourceIds().put(result.getResourceId(), result.getDecision().value());
                 }
             } else {
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.SeriousFailure);

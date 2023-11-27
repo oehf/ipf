@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import javax.xml.bind.JAXBElement;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,19 +79,19 @@ public class ChAdrTest extends StandardTestContainer {
 
     @Test
     public void testQuerySuccess() throws Exception {
-        doTestQuery("success", Xacml20Status.SUCCESS, EventOutcomeIndicator.Success, "Permit", "urn:oid:1.44.567");
+        doTestQuery("success", Xacml20Status.SUCCESS, EventOutcomeIndicator.Success, true, "urn:oid:1.44.567");
     }
 
     @Test
     public void testQueryFailure() throws Exception {
-        doTestQuery("failure", Xacml20Status.RESPONDER_ERROR, EventOutcomeIndicator.SeriousFailure, "[unknown]", "urn:oid:1.2.4");
+        doTestQuery("failure", Xacml20Status.RESPONDER_ERROR, EventOutcomeIndicator.SeriousFailure, false, "urn:oid:1.2.4");
     }
 
     private void doTestQuery(
         String suffix,
         Xacml20Status status,
         EventOutcomeIndicator outcomeIndicator,
-        String decision,
+        boolean decisionPresent,
         String issuerId) throws Exception
     {
         var response = (ResponseType) send(getUri(suffix), loadFile("chadr-request-1.xml"), ResponseType.class);
@@ -119,7 +120,7 @@ public class ChAdrTest extends StandardTestContainer {
             assertEquals(1, message.getActiveParticipants().get(1).getRoleIDCodes().size());
             checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
 
-            assertEquals(2, message.getParticipantObjectIdentifications().size());
+            assertEquals(4, message.getParticipantObjectIdentifications().size());
 
             {
                 var requesterParticipant = message.getParticipantObjectIdentifications().get(0);
@@ -130,16 +131,28 @@ public class ChAdrTest extends StandardTestContainer {
                 assertEquals(0, requesterParticipant.getParticipantObjectQuery().length);
                 assertTrue(requesterParticipant.getParticipantObjectDetails().isEmpty());
             }
-            {
-                var resourceParticipant = message.getParticipantObjectIdentifications().get(1);
+
+            Map<String, String> expectedDecisionsByResourceIds = new java.util.HashMap<>(Map.of(
+                "urn:uuid:5a478b92-0b20-40a9-9bee-30ce7d831ca2", "Permit",
+                "urn:uuid:a43e8041-5afd-40bf-9c7c-9d9fc6f8c1a8", "Permit",
+                "urn:uuid:1d78d91d-73c9-49b7-94f5-76b2a44e1c9c", "NotApplicable"));
+
+            for (int i = 0; i < 3; ++i) {
+                var resourceParticipant = message.getParticipantObjectIdentifications().get(i + 1);
                 assertEquals(ParticipantObjectTypeCode.System, resourceParticipant.getParticipantObjectTypeCode());
                 assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, resourceParticipant.getParticipantObjectTypeCodeRole());
                 checkCodeValueType(resourceParticipant.getParticipantObjectIDTypeCode(), new String[]{"ADR", "e-health-suisse", "Authorization Decisions Query"});
-                assertEquals("urn:uuid:5a478b92-0b20-40a9-9bee-30ce7d831ca2", resourceParticipant.getParticipantObjectID());
+                String resourceId = resourceParticipant.getParticipantObjectID();
+                assertTrue(expectedDecisionsByResourceIds.containsKey(resourceId));
                 assertEquals(0, resourceParticipant.getParticipantObjectQuery().length);
-                assertEquals(1, resourceParticipant.getParticipantObjectDetails().size());
-                assertEquals("decision", resourceParticipant.getParticipantObjectDetails().get(0).getType());
-                assertEquals(decision, new String(resourceParticipant.getParticipantObjectDetails().get(0).getValue()));
+                if (decisionPresent) {
+                    assertEquals(1, resourceParticipant.getParticipantObjectDetails().size());
+                    assertEquals("decision", resourceParticipant.getParticipantObjectDetails().get(0).getType());
+                    assertEquals(expectedDecisionsByResourceIds.get(resourceId), new String(resourceParticipant.getParticipantObjectDetails().get(0).getValue()));
+                } else {
+                    assertTrue(resourceParticipant.getParticipantObjectDetails().isEmpty());
+                }
+                expectedDecisionsByResourceIds.remove(resourceId);
             }
         }
     }

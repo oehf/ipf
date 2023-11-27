@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xacml20;
 
 import org.apache.commons.lang3.StringUtils;
+import org.herasaf.xacml.core.context.impl.AttributeType;
 import org.herasaf.xacml.core.context.impl.RequestType;
 import org.herasaf.xacml.core.policy.Evaluatable;
 import org.herasaf.xacml.core.policy.impl.IdReferenceType;
@@ -25,10 +26,12 @@ import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3DataTypesInitializer
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.Hl7v3FunctionsInitializer;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.CV;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLPolicyStatementType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
 
 import javax.xml.bind.JAXBContext;
@@ -204,6 +207,39 @@ public class Xacml20Utils {
             }
         }
         return Optional.empty();
+    }
+
+    public static RequestType extractAuthzRequest(XACMLAuthzDecisionQueryType query) {
+        for (JAXBElement<?> jaxbElement : query.getRest()) {
+            if (jaxbElement.getValue() instanceof RequestType) {
+                return (RequestType) jaxbElement.getValue();
+            }
+        }
+        throw new IllegalArgumentException("Could not extract authorization request");
+    }
+
+    public static String extractStringAttributeValue(AttributeType attribute) {
+        try {
+            return (String) attribute.getAttributeValues().get(0).getContent().get(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static CV extractCodeAttributeValue(AttributeType attribute) {
+        try {
+            for (Object o : attribute.getAttributeValues().get(0).getContent()) {
+                if (o instanceof JAXBElement) {
+                    var value = ((JAXBElement<?>) o).getValue();
+                    if (value instanceof CV) {
+                        return (CV) value;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // nop
+        }
+        return null;
     }
 
 }

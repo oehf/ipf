@@ -32,8 +32,20 @@
         <ns3:Statement xsi:type="ns9:XACMLAuthzDecisionStatementType"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <Response>
-                <Result ResourceId="urn:uuid:a928a3d3-bf47-4d29-9526-b1fe886c0184">
+                <Result ResourceId="urn:uuid:5a478b92-0b20-40a9-9bee-30ce7d831ca2">
                     <Decision>Permit</Decision>
+                    <Status>
+                        <StatusCode Value="urn:oasis:names:tc:xacml:1.0:status:ok"/>
+                    </Status>
+                </Result>
+                <Result ResourceId="urn:uuid:a43e8041-5afd-40bf-9c7c-9d9fc6f8c1a8">
+                    <Decision>Permit</Decision>
+                    <Status>
+                        <StatusCode Value="urn:oasis:names:tc:xacml:1.0:status:ok"/>
+                    </Status>
+                </Result>
+                <Result ResourceId="urn:uuid:1d78d91d-73c9-49b7-94f5-76b2a44e1c9c">
+                    <Decision>NotApplicable</Decision>
                     <Status>
                         <StatusCode Value="urn:oasis:names:tc:xacml:1.0:status:ok"/>
                     </Status>

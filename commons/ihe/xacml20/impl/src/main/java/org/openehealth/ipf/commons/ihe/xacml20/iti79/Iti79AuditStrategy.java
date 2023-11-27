@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20AuditUtils;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20ParticipantIdType;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
@@ -77,9 +77,10 @@ public class Iti79AuditStrategy extends AuditStrategySupport<Iti79AuditDataset> 
     @Override
     public Iti79AuditDataset enrichAuditDatasetFromRequest(Iti79AuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         var query = (XACMLAuthzDecisionQueryType) requestObject;
-        for (AttributeType attribute : Xacml20AuditUtils.extractSubjectAttributes(query)) {
+        var request = Xacml20Utils.extractAuthzRequest(query);
+        for (AttributeType attribute : request.getSubjects().get(0).getAttributes()) {
             if (PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID.equals(attribute.getAttributeId())) {
-                auditDataset.setRequesterId(Xacml20AuditUtils.extractStringAttributeValue(attribute));
+                auditDataset.setRequesterId(Xacml20Utils.extractStringAttributeValue(attribute));
             }
         }
         auditDataset.setQueryId(query.getID());
