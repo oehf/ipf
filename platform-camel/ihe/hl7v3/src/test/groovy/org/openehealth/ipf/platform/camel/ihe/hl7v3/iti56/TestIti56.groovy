@@ -113,7 +113,7 @@ class TestIti56 extends HL7v3StandardTestContainer {
     }
     
     
-    private void send(
+    private static void send(
         String endpointUri,
         int n,
         String responseEndpointUri = null)

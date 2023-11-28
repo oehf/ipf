@@ -78,7 +78,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
     }
     
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         allResponsesMockEndpoint      = camelContext.getEndpoint('mock:response')
         asyncResponsesMockEndpoint    = camelContext.getEndpoint('mock:asyncResponse')
         deferredResponsesMockEndpoint = camelContext.getEndpoint('mock:deferredResponse')

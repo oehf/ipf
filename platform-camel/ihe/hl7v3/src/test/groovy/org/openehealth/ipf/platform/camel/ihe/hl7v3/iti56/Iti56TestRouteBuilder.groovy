@@ -37,7 +37,7 @@ class Iti56TestRouteBuilder extends RouteBuilder {
     
     static final String RESPONSE = StandardTestContainer.readFile('iti56/iti56-sample-response.xml')
 
-    private final CountDownLatch countDownLatch, asyncCountDownLatch
+    final CountDownLatch countDownLatch, asyncCountDownLatch
 
     static final int TASKS_COUNT = 5
 

@@ -288,6 +288,12 @@
                 <groupId>org.apache.camel.springboot</groupId>
                 <artifactId>camel-hl7-starter</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ca.uhn.hapi</groupId>
+                        <artifactId>hapi-base</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.zipkin.brave</groupId>

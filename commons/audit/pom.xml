@@ -58,7 +58,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-client-jakarta</artifactId>
+            <artifactId>activemq-client</artifactId>
             <version>${activemq-version}</version>
             <scope>test</scope>
         </dependency>

@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment;
 
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-
-import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Type;
@@ -36,7 +33,7 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
  * QPD-3: PIX Query parameter<br>
  * QPD-4: What domains returned
   */
-@SuppressWarnings("serial")
+
 public class QPD extends AbstractSegment {
 
     /**
@@ -46,14 +43,10 @@ public class QPD extends AbstractSegment {
     public QPD(Group parentGroup, ModelClassFactory modelFactory) {
         super(parentGroup, modelFactory);
         var msg = getMessage();
-        try {
-        	add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
-            add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
-            add(CX.class, true, 1, 256, new Object[]{msg}, "Person Identifier");
-            add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
-        } catch (HL7Exception e) {
-            throw new HL7v2Exception(e);
-        }
+        add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
+        add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
+        add(CX.class, true, 1, 256, new Object[]{msg}, "Person Identifier");
+        add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
     }
 
     /**

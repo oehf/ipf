@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.segment;
 
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-
-import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.v25.datatype.EI;
@@ -38,7 +35,6 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
  * 
  * @author Christian Ohr
  */
-@SuppressWarnings("serial")
 public class ZBE extends AbstractSegment {
 
     /**
@@ -48,14 +44,10 @@ public class ZBE extends AbstractSegment {
     public ZBE(Group parent, ModelClassFactory factory) {
         super(parent, factory);
         var message = getMessage();
-        try {
-            add(EI.class, true, 0, 999, new Object[] { message }, null);
-            add(TS.class, true, 1, 26, new Object[] { message }, null);
-            add(TS.class, false, 1, 26, new Object[] { message }, null);
-            add(ST.class, true, 1, 10, new Object[] { message }, null);
-        } catch (HL7Exception he) {
-            throw new HL7v2Exception(he);
-        }
+        add(EI.class, true, 0, 999, new Object[] { message }, null);
+        add(TS.class, true, 1, 26, new Object[] { message }, null);
+        add(TS.class, false, 1, 26, new Object[] { message }, null);
+        add(ST.class, true, 1, 10, new Object[] { message }, null);
     }
 
     /**

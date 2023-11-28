@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
@@ -41,7 +41,7 @@ public class JettyServer extends ServletServer {
         server.addConnector(connector);
         connector.setPort(getPort());
         var context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        context.setResourceBase("/");
+        context.setContextPath("/");
         var listener = new ContextLoaderListener();
 
         context.getInitParams().put("contextConfigLocation", getContextResource());
