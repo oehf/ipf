@@ -11,19 +11,23 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.76</bouncycastle-version>
         <brave-version>5.16.0</brave-version>
-        <camel-version>4.0.1</camel-version>
+        <camel-version>4.0.3</camel-version>
+        <!-- resolve dependency convergence between guava and hapi caffeine -->
+        <checker-qual-version>3.19.0</checker-qual-version>
         <cxf-version>4.0.3</cxf-version>
         <commons-io-version>2.15.0</commons-io-version>
         <commons-compress-version>1.26.1</commons-compress-version>
         <equinox-app.version>1.3.200-v20130910-1609</equinox-app.version>
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <groovy-version>4.0.15</groovy-version>
-        <hapi-version>2.3</hapi-version>
+        <hapi-version>2.5.1</hapi-version>
         <hapi-fhir-version>6.10.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jaxb-version>4.0.3</jaxb-version>
+        <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
+        <jackson-version>2.15.3</jackson-version>
+        <jaxb-version>4.0.4 </jaxb-version>
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <kotlin.dokka.version>1.8.10</kotlin.dokka.version>
@@ -35,17 +39,14 @@
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>12.3</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>3.1.4</spring-boot-version>
+        <spring-boot-version>3.2.0</spring-boot-version>
         <velocity-version>2.3</velocity-version>
         <vertx-version>4.5.1</vertx-version>
         <vibur-version>25.0</vibur-version>
         <woodstox-version>6.5.1</woodstox-version>
         <xmlsec-version>3.0.2</xmlsec-version>
-        <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
-        <jackson-version>2.15.3</jackson-version>
 
-        <!-- resolve dependency convergence between guava and hapi caffeine -->
-        <checker-qual-version>3.19.0</checker-qual-version>
+
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
