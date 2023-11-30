@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,6 +33,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocume
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.CLASSIFICATION_OBJECT_TYPE;
 
 /**
  * Factory for EbXML 3.0 objects.
@@ -65,7 +67,9 @@ public class EbXMLFactory30 implements EbXMLFactory {
 
     @Override
     public EbXMLClassification createClassification(EbXMLObjectLibrary objectLibrary) {
-        return new EbXMLClassification30(RIM_FACTORY.createClassificationType());
+        var classificationType = RIM_FACTORY.createClassificationType();
+        classificationType.setObjectType(CLASSIFICATION_OBJECT_TYPE);
+        return new EbXMLClassification30(classificationType);
     }
 
     @Override
@@ -91,7 +95,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
         objectLibrary.put(id, association);
         return new EbXMLAssociation30(association, objectLibrary);
     }
-    
+
     @Override
     public EbXMLSubmitObjectsRequest createSubmitObjectsRequest() {
         var request = LCM_FACTORY.createSubmitObjectsRequest();
@@ -138,7 +142,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
         response.setRegistryResponse(RS_FACTORY.createRegistryResponseType());
         return new EbXMLRetrieveDocumentSetResponse30(response);
     }
-    
+
     @Override
     public EbXMLAdhocQueryRequest createAdhocQueryRequest() {
         var request = QUERY_FACTORY.createAdhocQueryRequest();
@@ -149,10 +153,10 @@ public class EbXMLFactory30 implements EbXMLFactory {
 
         var query = RIM_FACTORY.createAdhocQueryType();
         request.setAdhocQuery(query);
-        
-        return new EbXMLAdhocQueryRequest30(request);        
+
+        return new EbXMLAdhocQueryRequest30(request);
     }
-    
+
     @Override
     public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
         var response = QUERY_FACTORY.createAdhocQueryResponse();
