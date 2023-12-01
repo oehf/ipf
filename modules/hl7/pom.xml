@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules</artifactId>
-        <version>4.8-m3</version>
+        <version>4.8-SNAPSHOT</version>
     </parent>
     
     <dependencies>
