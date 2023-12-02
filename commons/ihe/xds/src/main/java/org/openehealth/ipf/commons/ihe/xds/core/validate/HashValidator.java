@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
 
@@ -31,7 +31,7 @@ public class HashValidator implements ValueValidator {
 
     @Override
     public void validate(String value) throws XDSMetaDataException {
-        notNull(value, "value cannot be null");
+        requireNonNull(value, "value cannot be null");
         metaDataAssert(HASH_PATTERN.matcher(value).matches(),
                 INVALID_HASH_CODE, value);
     }

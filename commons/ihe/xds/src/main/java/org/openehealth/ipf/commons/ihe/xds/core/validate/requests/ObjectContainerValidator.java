@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
@@ -174,8 +174,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     @Override
     public void validate(EbXMLObjectContainer container, ValidationProfile profile) {
-        notNull(container, "container cannot be null");
-        notNull(profile, "profile must be set");
+        requireNonNull(container, "container cannot be null");
+        requireNonNull(profile, "profile must be set");
 
         slotLengthAndNameUniquenessValidator.validateContainer(container);
 

@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms between a {@link EbXMLNonconstructiveDocumentSetRequest} and its ebXML representation.
@@ -34,8 +34,7 @@ public class RemoveDocumentsRequestTransformer {
      *          factory for version independent ebXML objects.
      */
     public RemoveDocumentsRequestTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
-        this.factory = factory;
+        this.factory = requireNonNull(factory, "factory cannot be null");
     }
 
     /**

@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents a list of query parameters.
@@ -85,7 +85,7 @@ public class QueryList<T> implements Serializable {
      *          the other list.
      */
     public QueryList(QueryList<T> other) {
-        notNull(other, "other cannot be null");
+        requireNonNull(other, "other cannot be null");
         noNullElements(other.getOuterList(), "other.getOuterList() cannot contain null elements");
         for (var innerList : other.getOuterList()) {
             noNullElements(innerList, "innerList cannot contain null elements");
@@ -99,7 +99,7 @@ public class QueryList<T> implements Serializable {
      *          the only initial element in the list.
      */
     public QueryList(T singleElement) {
-        notNull(singleElement, "singleElement cannot be null");
+        requireNonNull(singleElement, "singleElement cannot be null");
         outerList.add(Collections.singletonList(singleElement));
     }
 

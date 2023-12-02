@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
@@ -33,7 +33,7 @@ public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
      *          the object to wrap.
      */
     public EbXMLExternalIdentifier30(ExternalIdentifierType externalIdentifierType) {
-        notNull(externalIdentifierType, "externalIdentifierType cannot be null");
+        requireNonNull(externalIdentifierType, "externalIdentifierType cannot be null");
         externalIdentifierType.setObjectType(EXTERNAL_IDENTIFIER_OBJECT_TYPE);
         externalIdentifier = externalIdentifierType;
     }

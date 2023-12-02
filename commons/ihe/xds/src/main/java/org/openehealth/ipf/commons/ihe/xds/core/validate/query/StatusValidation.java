@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
@@ -45,8 +45,7 @@ public class StatusValidation implements QueryParameterValidation {
      *          parameter to validate.
      */
     public StatusValidation(QueryParameter param) {
-        notNull(param, "param cannot be null");
-        this.param = param;
+        this.param = requireNonNull(param, "param cannot be null");
     }
 
     @Override

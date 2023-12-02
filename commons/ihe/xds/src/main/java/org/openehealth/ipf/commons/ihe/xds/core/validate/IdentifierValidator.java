@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_IDENTIFIER;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -31,7 +31,7 @@ public class IdentifierValidator implements ValueValidator {
 
     @Override
     public void validate(String identifier) throws XDSMetaDataException {
-        notNull(identifier, "identifier cannot be null");
+        requireNonNull(identifier, "identifier cannot be null");
         metaDataAssert(PATTERN.matcher(identifier).matches(), INVALID_IDENTIFIER, identifier);
     }
 }

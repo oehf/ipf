@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms between a {@link EbXMLRetrieveImagingDocumentSetRequest} and its ebXML representation.
@@ -36,7 +36,7 @@ public class RetrieveImagingDocumentSetRequestTransformer
      *          factory for version independent ebXML objects.
      */
     public RetrieveImagingDocumentSetRequestTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
+        requireNonNull(factory, "factory cannot be null");
         this.factory = factory;
     }
     

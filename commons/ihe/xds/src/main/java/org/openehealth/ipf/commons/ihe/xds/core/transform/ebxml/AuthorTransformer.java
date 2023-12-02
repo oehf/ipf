@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import ca.uhn.hl7v2.model.Composite;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
@@ -34,15 +34,14 @@ import java.util.List;
  */
 public class AuthorTransformer {
     private final EbXMLFactory factory;
-    
+
     /**
      * Constructs the transformer
      * @param ebXMLFactory
-     *          factory for version independent ebXML objects. 
+     *          factory for version independent ebXML objects.
      */
     public AuthorTransformer(EbXMLFactory ebXMLFactory) {
-        notNull(ebXMLFactory, "ebXMLFactory cannot be null");
-        factory = ebXMLFactory;
+        factory = requireNonNull(ebXMLFactory, "ebXMLFactory cannot be null");
     }
 
     /**
@@ -54,8 +53,8 @@ public class AuthorTransformer {
      * @return the classification. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLClassification toEbXML(Author author, EbXMLObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objectLibrary cannot be null");
-        
+        requireNonNull(objectLibrary, "objectLibrary cannot be null");
+
         if (author == null) {
             return null;
         }
@@ -75,16 +74,16 @@ public class AuthorTransformer {
 
         return classification;
     }
-    
+
     /**
-     * Transforms an a {@link EbXMLClassification} to {@link Author}. 
+     * Transforms an a {@link EbXMLClassification} to {@link Author}.
      * @param classification
      *          the classification. Can be <code>null</code>.
      * @return the author. <code>null</code> if the input was <code>null</code>.
      */
     public Author fromEbXML(EbXMLClassification classification) {
         if (classification == null) {
-            return null;        
+            return null;
         }
 
         var author = new Author();

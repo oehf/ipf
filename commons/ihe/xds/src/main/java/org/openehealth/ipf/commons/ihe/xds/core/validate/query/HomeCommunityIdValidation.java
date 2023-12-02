@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -56,7 +55,7 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
                 homeCommunityRequired = patientIdMissing(request);
                 break;
             default:
-                throw new NotImplementedException("Cannot handle optionality " + optionality);
+                throw new UnsupportedOperationException("Cannot handle optionality " + optionality);
         }
 
         var validator = new HomeCommunityIdValidator(homeCommunityRequired);

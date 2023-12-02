@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -58,7 +58,7 @@ public class TimeValidator implements ValueValidator {
 
     @Override
     public void validate(String time) throws XDSMetaDataException {
-        notNull(time, "time cannot be null");
+        requireNonNull(time, "time cannot be null");
         metaDataAssert(TIME_PATTERN.matcher(time).matches(), INVALID_TIME, time);
         metaDataAssert((minLen < 0) || (time.length() >= minLen), TIME_PRECISION_TOO_LOW, time);
     }

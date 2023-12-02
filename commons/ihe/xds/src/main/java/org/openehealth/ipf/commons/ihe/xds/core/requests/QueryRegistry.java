@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -75,7 +75,7 @@ public class QueryRegistry implements Serializable {
      *          the query to use. Cannot be <code>null</code>.
      */
     public QueryRegistry(Query query) {
-        notNull(query, "query cannot be null");
+        requireNonNull(query, "query cannot be null");
         this.query = query;
     }
 

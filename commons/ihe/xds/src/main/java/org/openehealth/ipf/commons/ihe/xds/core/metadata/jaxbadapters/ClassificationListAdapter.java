@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLClassification30;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLClassification30;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
 
 /**
  * @author Dmytro Rud
@@ -50,7 +50,7 @@ public class ClassificationListAdapter extends XmlAdapter<ClassificationList, Li
             if (ebXml instanceof EbXMLClassification30) {
                 classifications.add(((EbXMLClassification30) ebXml).getInternal());
             } else {
-                throw new NotImplementedException("Only ebXML 3.0 is supported at the moment");
+                throw new UnsupportedOperationException("Only ebXML 3.0 is supported at the moment");
             }
         }
         ClassificationList result = new ClassificationList();

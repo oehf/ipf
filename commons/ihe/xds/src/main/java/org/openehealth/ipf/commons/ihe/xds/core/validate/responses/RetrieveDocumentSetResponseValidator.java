@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRe
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MIME_TYPE_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
@@ -40,7 +40,7 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
 
     @Override
     public void validate(EbXMLRetrieveDocumentSetResponse response, ValidationProfile profile) {
-        notNull(response, "response cannot be null");
+        requireNonNull(response, "response cannot be null");
 
         regResponseValidator.validate(response, profile);
 

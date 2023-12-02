@@ -1,12 +1,12 @@
 /*
  * Copyright 2009-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Encapsulation of {@link RegistryObjectType}.
@@ -36,19 +36,17 @@ import static org.apache.commons.lang3.Validate.notNull;
 public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implements EbXMLRegistryObject {
     private final E registryEntry;
     private final EbXMLObjectLibrary objectLibrary;
-    
+
     /**
-     * Constructs a registry entry by wrapping the given ebXML 3.0 object. 
+     * Constructs a registry entry by wrapping the given ebXML 3.0 object.
      * @param registryEntry
      *          the object to wrap.
      * @param objectLibrary
      *          the object library to use.
      */
     protected EbXMLRegistryObject30(E registryEntry, EbXMLObjectLibrary objectLibrary) {
-        notNull(registryEntry, "registryEntry cannot be null");
-        notNull(objectLibrary, "objectLibrary cannot be null");
-        this.registryEntry = registryEntry;
-        this.objectLibrary = objectLibrary;
+        this.registryEntry = requireNonNull(registryEntry, "registryEntry cannot be null");
+        this.objectLibrary = requireNonNull(objectLibrary, "objectLibrary cannot be null");
     }
 
     /**
@@ -60,8 +58,8 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public void addClassification(EbXMLClassification classification, String scheme) {
-        notNull(scheme, "scheme cannot be null");
-     
+        requireNonNull(scheme, "scheme cannot be null");
+
         if (classification != null) {
             classification.setClassificationScheme(scheme);
             classification.setClassifiedObject(registryEntry.getId());
@@ -73,13 +71,13 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public void addExternalIdentifier(String value, String scheme, String name) {
-        notNull(name, "name cannot be null");
-        notNull(scheme, "scheme cannot be null");
+        requireNonNull(name, "name cannot be null");
+        requireNonNull(scheme, "scheme cannot be null");
 
         if (value != null) {
             var identifier = EbXMLFactory30.RIM_FACTORY.createExternalIdentifierType();
             EbXMLExternalIdentifier externalIdentifier = new EbXMLExternalIdentifier30(identifier);
-            
+
             externalIdentifier.setValue(value);
             externalIdentifier.setIdentificationScheme(scheme);
             externalIdentifier.setRegistryObject(registryEntry.getId());
@@ -103,8 +101,8 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
 
     @Override
     public List<EbXMLClassification> getClassifications(String scheme) {
-        notNull(scheme, "scheme cannot be null");
-        
+        requireNonNull(scheme, "scheme cannot be null");
+
         return registryEntry.getClassification().stream()
                 .filter(classification -> scheme.equals(classification.getClassificationScheme()))
                 .map(EbXMLClassification30::new)
@@ -119,13 +117,13 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     }
 
     @Override
-    public String getExternalIdentifierValue(String scheme) {        
+    public String getExternalIdentifierValue(String scheme) {
         for (var identifier : registryEntry.getExternalIdentifier()) {
             if (scheme.equals(identifier.getIdentificationScheme())) {
                 return identifier.getValue();
             }
         }
-        
+
         return null;
     }
 
@@ -193,10 +191,10 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public EbXMLClassification getSingleClassification(String scheme) {
         var filtered = getClassifications(scheme);
-        if (filtered.size() == 0) {
+        if (filtered.isEmpty()) {
             return null;
         }
-        
+
         return filtered.get(0);
     }
 
@@ -239,5 +237,5 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Delegate
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(registryEntry.getSlot());
-    }    
+    }
 }

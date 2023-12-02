@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -35,8 +35,7 @@ final class ToEbXMLVisitor implements Visitor {
      *          the ebXML result.
      */
     ToEbXMLVisitor(EbXMLAdhocQueryRequest ebXML) {
-        notNull(ebXML, "ebXML cannot be null");
-        this.ebXML = ebXML;
+        this.ebXML = requireNonNull(ebXML, "ebXML cannot be null");
     }
 
     @Override

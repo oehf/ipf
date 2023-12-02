@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_UUID;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -37,7 +37,7 @@ public class UUIDValidator implements ValueValidator {
 
     @Override
     public void validate(String uuid) throws XDSMetaDataException {
-        notNull(uuid, "uuid cannot be null");
+        requireNonNull(uuid, "uuid cannot be null");
         metaDataAssert(UUID_PATTERN.matcher(uuid).matches(), INVALID_UUID, uuid);
     }
 

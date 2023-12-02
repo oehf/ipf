@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
@@ -57,7 +57,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
      *          the object library to use.
      */
     EbXMLObjectContainer30(EbXMLObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objLibrary cannot be null");
+        requireNonNull(objectLibrary, "objLibrary cannot be null");
         this.objectLibrary = objectLibrary;
     }
     
@@ -146,7 +146,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLRegistryPackage> getRegistryPackages(String classificationNode) {
-        notNull(classificationNode, "classificationNode cannot be null");
+        requireNonNull(classificationNode, "classificationNode cannot be null");
 
         var acceptedIds = getAcceptedIds(classificationNode);
         

@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import static java.util.Objects.requireNonNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NODE_REPRESENTATION_MISSING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NODE_REPRESENTATION_PROHIBITED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NO_CLASSIFICATION_NAME_OBJ;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NO_CLASSIFIED_OBJ;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_CLASSIFIED_OBJ;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NUMBER_OF_CLASSIFICATIONS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.NodeRepresentationUsage;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates a classification.
@@ -79,10 +84,10 @@ public class ClassificationValidation implements RegistryObjectValidator {
     public ClassificationValidation(String classScheme, int min, int max, DisplayNameUsage displayNameUsage,
                                     NodeRepresentationUsage nodeRepresentationUsage, SlotValueValidation[] slotValidations)
     {
-        this.classScheme = Validate.notNull(classScheme);
+        this.classScheme = requireNonNull(classScheme);
         this.min = min;
         this.max = max;
-        this.displayNameUsage = Validate.notNull(displayNameUsage);
+        this.displayNameUsage = requireNonNull(displayNameUsage);
         this.nodeRepresentationUsage = nodeRepresentationUsage;
         this.slotValidations = slotValidations;
     }
@@ -93,10 +98,10 @@ public class ClassificationValidation implements RegistryObjectValidator {
         metaDataAssert(classifications.size() >= min && classifications.size() <= max,
                 WRONG_NUMBER_OF_CLASSIFICATIONS, classScheme, min, max, classifications.size());
         for (var classification : classifications) {
-            metaDataAssert(classification.getClassifiedObject() != null, 
+            metaDataAssert(classification.getClassifiedObject() != null,
                     NO_CLASSIFIED_OBJ, classScheme);
 
-            metaDataAssert(classification.getClassifiedObject().equals(obj.getId()), 
+            metaDataAssert(classification.getClassifiedObject().equals(obj.getId()),
                     WRONG_CLASSIFIED_OBJ, obj.getId(), classification.getClassifiedObject());
 
             switch (nodeRepresentationUsage) {
@@ -127,12 +132,12 @@ public class ClassificationValidation implements RegistryObjectValidator {
             }
         }
     }
-    
+
     public static void assertDisplayNamePresent(EbXMLClassification classification, String classificationScheme) {
-        metaDataAssert(classification.getName() != null, NO_CLASSIFICATION_NAME_OBJ, 
+        metaDataAssert(classification.getName() != null, NO_CLASSIFICATION_NAME_OBJ,
                 classificationScheme, classification.getClassifiedObject());
-        metaDataAssert(classification.getName().getValue() != null, NO_CLASSIFICATION_NAME_OBJ, 
+        metaDataAssert(classification.getName().getValue() != null, NO_CLASSIFICATION_NAME_OBJ,
                 classificationScheme, classification.getClassifiedObject());
     }
- 
+
 }

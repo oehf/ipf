@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByUuidQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Base class of transformers for {@link GetByUuidQuery}.
@@ -29,21 +29,20 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extends AbstractStoredQueryTransformer<T> {
     private final QueryParameter uuidParam;
-    
+
     /**
      * Constructs the transformer.
      * @param uuidParam
      *          the parameter name of the UUID parameter.
      */
     protected GetByUUIDQueryTransformer(QueryParameter uuidParam) {
-        notNull(uuidParam, "uuidParam cannot be null");
-        this.uuidParam = uuidParam;
+        this.uuidParam = requireNonNull(uuidParam, "uuidParam cannot be null");
     }
 
     /**
      * Transforms the query into its ebXML representation.
      * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * Does not perform any transformation if one of the parameters is <code>null</code>.
      * @param query
      *          the query. Can be <code>null</code>.
      * @param ebXML
@@ -66,7 +65,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extend
     /**
      * Transforms the ebXML representation of a query into a query object.
      * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * Does not perform any transformation if one of the parameters is <code>null</code>.
      * @param query
      *          the query. Can be <code>null</code>.
      * @param ebXML
@@ -80,7 +79,7 @@ public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
 
         super.fromEbXML(query, ebXML);
 
-       var slots = new QuerySlotHelper(ebXML);
+        var slots = new QuerySlotHelper(ebXML);
         query.setUuids(slots.toStringList(uuidParam));
 
         fromEbXML(query, slots);

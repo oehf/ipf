@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
@@ -39,7 +39,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * This class ensures that the various encoding rules of query parameter
  * values are met.
  * <p>
- * Note that this class is only used for ebXML 3.0! 
+ * Note that this class is only used for ebXML 3.0!
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
@@ -53,8 +53,7 @@ public class QuerySlotHelper {
      *          the wrapped object.
      */
     public QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
-        notNull(ebXML, "ebXML cannot be null");
-        this.ebXML = ebXML;
+        this.ebXML = requireNonNull(ebXML, "ebXML cannot be null");
     }
 
     /**
@@ -67,7 +66,7 @@ public class QuerySlotHelper {
         var value = ebXML.getSingleSlotValue(param.getSlotName());
         return decodeString(value);
     }
-    
+
     /**
      * Stores a string-valued parameter into a slot.
      * @param param
@@ -82,7 +81,7 @@ public class QuerySlotHelper {
     }
 
     /**
-     * Stores a list of codes into a slot. 
+     * Stores a list of codes into a slot.
      * @param param
      *          the parameter.
      * @param codes
@@ -92,7 +91,7 @@ public class QuerySlotHelper {
         if (codes == null) {
             return;
         }
-        
+
         var slotValues = new ArrayList<String>();
         for (var code : codes) {
             var hl7CE = Hl7v2Based.render(code);
@@ -112,7 +111,7 @@ public class QuerySlotHelper {
         if (queryList == null) {
             return;
         }
-        
+
         for (var codes : queryList.getOuterList()) {
             fromCode(param, codes);
         }
@@ -169,7 +168,7 @@ public class QuerySlotHelper {
         }
         return queryList;
     }
-    
+
     /**
      * Stores a list of strings into a slot.
      * @param param
@@ -240,7 +239,7 @@ public class QuerySlotHelper {
         if (slotValues.isEmpty()) {
             return null;
         }
-        
+
         var values = new ArrayList<String>();
         for (var slotValue : slotValues) {
             values.addAll(decodeStringList(slotValue));
@@ -307,7 +306,7 @@ public class QuerySlotHelper {
     public QueryList<Code> toCodeQueryList(QueryParameter param, QueryParameter schemeParam) {
         var codes = toCodeQueryList(param);
         if (codes == null) {
-            return null;            
+            return null;
         }
 
         var schemes = toStringQueryList(schemeParam);
@@ -324,7 +323,7 @@ public class QuerySlotHelper {
         }
         return codes;
     }
-    
+
     /**
      * Stores a numbered parameter into a slot.
      * @param param
@@ -337,7 +336,7 @@ public class QuerySlotHelper {
     public void fromNumber(QueryParameter param, String value) {
         ebXML.addSlot(param.getSlotName(), value);
     }
-    
+
     /**
      * Retrieves a numbered parameter from a slot.
      * @param param
@@ -429,9 +428,9 @@ public class QuerySlotHelper {
                 .collect(Collectors.toList());
         fromStringList(param, opcodes);
     }
-    
+
     /**
-     * Retrieves an association parameter from a slot. 
+     * Retrieves an association parameter from a slot.
      * @param param
      *          the parameter.
      * @return the list of association types.
@@ -473,7 +472,7 @@ public class QuerySlotHelper {
         if (slotValues.isEmpty()) {
             return null;
         }
-        
+
         var codes = new ArrayList<Code>();
         for (var slotValue : slotValues) {
             for (var hl7CE : decodeStringList(slotValue)) {
@@ -559,7 +558,7 @@ public class QuerySlotHelper {
         }
         return result;
     }
-    
+
     public static String encodeAsString(String value) {
         if (value == null) {
             return null;
@@ -571,7 +570,7 @@ public class QuerySlotHelper {
         if (value == null) {
             return null;
         }
-        
+
         if (value.startsWith("'") && value.endsWith("'")) {
             value = value.substring(1, value.length() - 1);
         }

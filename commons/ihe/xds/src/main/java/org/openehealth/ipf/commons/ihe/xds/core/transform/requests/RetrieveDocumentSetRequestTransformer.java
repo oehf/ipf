@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
@@ -34,7 +34,7 @@ public class RetrieveDocumentSetRequestTransformer {
      *          factory for version independent ebXML objects.
      */
     public RetrieveDocumentSetRequestTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
+        requireNonNull(factory, "factory cannot be null");
         this.factory = factory;
     }
 

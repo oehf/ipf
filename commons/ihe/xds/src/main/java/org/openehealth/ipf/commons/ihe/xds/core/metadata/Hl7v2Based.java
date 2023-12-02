@@ -15,19 +15,26 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import ca.uhn.hl7v2.HL7Exception;
+import static java.util.Objects.requireNonNull;
+
+import javax.xml.bind.annotation.XmlTransient;
+
+import java.io.Serializable;
+
 import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.model.*;
+import ca.uhn.hl7v2.model.AbstractType;
+import ca.uhn.hl7v2.model.Composite;
+import ca.uhn.hl7v2.model.DataTypeException;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.MessageVisitor;
+import ca.uhn.hl7v2.model.Primitive;
+import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
 import ca.uhn.hl7v2.parser.PipeParser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-
-import javax.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * An XDS model object backed up by an HL7 v2 element.
@@ -64,7 +71,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      HAPI composite object.
      */
     protected Hl7v2Based(C hapiObject) {
-        this.hapiObject = Validate.notNull(hapiObject, "HAPI object");
+        this.hapiObject = requireNonNull(hapiObject, "HAPI object");
     }
 
 
@@ -82,6 +89,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      generated XDS model object or <code>null</code> when the given
      *      HL7 v2 element is <code>null</code> or empty.
      */
+    @SneakyThrows
     public static <C extends Composite, T extends Hl7v2Based<C>> T parse(
             String hl7String,
             Class<T> xdsModelClass)
@@ -89,14 +97,9 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         if (StringUtils.isEmpty(hl7String)) {
             return null;
         }
-
-        try {
-            var xdsModelObject = xdsModelClass.getConstructor().newInstance();
-            MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
-            return xdsModelObject.isEmpty() ? null : xdsModelObject;
-        } catch (InstantiationException | IllegalAccessException | HL7Exception | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        var xdsModelObject = xdsModelClass.getConstructor().newInstance();
+        MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
+        return xdsModelObject.isEmpty() ? null : xdsModelObject;
     }
 
 
@@ -165,15 +168,12 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     }
 
 
+    @SneakyThrows
     protected static void setValue(Primitive p, String value) {
         if (value == null) {
             p.clear();
         } else {
-            try {
-                p.setValue(value);
-            } catch (DataTypeException e) {
-                throw new RuntimeException(e);
-            }
+            p.setValue(value);
         }
     }
 

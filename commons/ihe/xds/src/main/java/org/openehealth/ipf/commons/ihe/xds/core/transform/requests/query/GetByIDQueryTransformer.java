@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -39,7 +39,7 @@ public abstract class GetByIDQueryTransformer<T extends GetByIdQuery> extends Ge
      */
     protected GetByIDQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam) {
         super(uuidParam);
-        notNull(uniqueIdParam, "uniqueIdParam cannot be null");
+        requireNonNull(uniqueIdParam, "uniqueIdParam cannot be null");
         this.uniqueIdParam = uniqueIdParam;
     }
 

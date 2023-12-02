@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocume
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
@@ -35,7 +35,7 @@ public class NonconstructiveDocumentSetRequestValidator implements Validator<EbX
 
     @Override
     public void validate(EbXMLNonconstructiveDocumentSetRequest request, ValidationProfile profile) {
-        notNull(request, "request cannot be null");
+        requireNonNull(request, "request cannot be null");
         
         for (var document : request.getDocuments()) {
             var repoId = document.getRepositoryUniqueId();

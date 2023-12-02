@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Encapsulation of {@link AdhocQueryResponse}.
@@ -48,7 +48,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
      */
     public EbXMLQueryResponse30(AdhocQueryResponse response, EbXMLObjectLibrary objectLibrary) {
         super(objectLibrary);
-        notNull(response, "response cannot be null");
+        requireNonNull(response, "response cannot be null");
         this.response = response;
     }
     

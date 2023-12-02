@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -36,24 +36,23 @@ public class AssociationTransformer {
     /**
      * Constructs the transformer
      * @param factory
-     *          factory for version independent ebXML objects. 
+     *          factory for version independent ebXML objects.
      */
     public AssociationTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
-        this.factory = factory;
+        this.factory = requireNonNull(factory, "factory cannot be null");
         codeTransformer = new CodeTransformer(factory);
     }
-    
+
     /**
      * Transforms the given association to its ebXML representation.
      * @param association
      *          the association to transform. Can be <code>null</code>.
-     * @param objectLibrary 
+     * @param objectLibrary
      *          the object library.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLAssociation toEbXML(Association association, EbXMLObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objectLibrary cannot be null");
+        requireNonNull(objectLibrary, "objectLibrary cannot be null");
         if (association == null) {
             return null;
         }
@@ -85,12 +84,12 @@ public class AssociationTransformer {
 
         return result;
     }
-    
+
     /**
-     * Transforms the given ebXML representation into an {@link Association}. 
+     * Transforms the given ebXML representation into an {@link Association}.
      * @param association
      *          the ebXML association. Can be <code>null</code>.
-     * @return the created {@link Association} instance. <code>null</code> if the input 
+     * @return the created {@link Association} instance. <code>null</code> if the input
      *          was <code>null</code>.
      */
     public Association fromEbXML(EbXMLAssociation association) {

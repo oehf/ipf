@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import org.apache.commons.lang3.Validate;
+import static java.util.Objects.requireNonNull;
+
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
@@ -27,8 +28,7 @@ public class EbXMLRegistryError30 implements EbXMLRegistryError {
     private final RegistryError error;
 
     public EbXMLRegistryError30(RegistryError error) {
-        Validate.notNull(error, "registry error object cannot be null");
-        this.error = error;
+        this.error = requireNonNull(error, "registry error object cannot be null");;
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The ebXML 3.0 version of the {@link EbXMLRetrieveImagingDocumentSetRequest}.
@@ -42,8 +42,7 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
      * @param request   the object to wrap.
      */
     public EbXMLRetrieveImagingDocumentSetRequest30(RetrieveImagingDocumentSetRequestType request) {
-        notNull(request, "request cannot be null");
-        this.request = request;
+        this.request = requireNonNull(request, "request cannot be null");
     }
 
     @Override

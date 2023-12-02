@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
@@ -68,7 +68,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
             String limitedMetadataAttributeName,
             EbXMLFactory factory) {
         
-        this.factory = notNull(factory, "factory cannot be null");
+        this.factory = requireNonNull(factory, "factory cannot be null");
         
         this.patientIdExternalId = patientIdExternalId;
         this.patientIdLocalizedString = patientIdLocalizedString;
@@ -86,7 +86,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public E toEbXML(C metaData, EbXMLObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objectLibrary cannot be null");
+        requireNonNull(objectLibrary, "objectLibrary cannot be null");
         
         if (metaData == null) {
             return null;

@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER;
 
@@ -48,8 +48,7 @@ public class ChoiceValidation implements QueryParameterValidation {
      *          whether all parameters are optional ({@code true}) or one parameter must be specified ({@code false}).
      */
     public ChoiceValidation(boolean optional, QueryParameter... params) {
-        notNull(params, "params cannot be null");        
-        this.params = params;
+        this.params = requireNonNull(params, "params cannot be null");
         this.optional = optional;
     }
 

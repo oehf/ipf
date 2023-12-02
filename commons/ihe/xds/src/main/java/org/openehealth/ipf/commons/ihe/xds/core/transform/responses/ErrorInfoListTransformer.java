@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
+import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 
 /**
  * Transforms between lists of {@link ErrorInfo} objects and their ebXML representations.
@@ -39,13 +38,12 @@ public class ErrorInfoListTransformer {
      *          the factory for ebXML objects.
      */
     public ErrorInfoListTransformer(EbXMLFactory factory) {
-        Validate.notNull(factory, "ebXML factory must be not null");
-        this.factory = factory;
+        this.factory = requireNonNull(factory, "ebXML factory must be not null");
     }
 
 
     public List<EbXMLRegistryError> toEbXML(List<ErrorInfo> errorInfoList) {
-        notNull(errorInfoList, "error info list cannot be null");
+        requireNonNull(errorInfoList, "error info list cannot be null");
         return errorInfoList.stream()
                 .map(this::toEbXML)
                 .collect(Collectors.toList());
@@ -53,7 +51,7 @@ public class ErrorInfoListTransformer {
 
 
     public List<ErrorInfo> fromEbXML(List<EbXMLRegistryError> registryErrorList) {
-        notNull(registryErrorList, "registry error list cannot be null");
+        requireNonNull(registryErrorList, "registry error list cannot be null");
 
         return registryErrorList.stream()
                 .map(this::fromEbXML)
@@ -62,7 +60,7 @@ public class ErrorInfoListTransformer {
 
 
     public EbXMLRegistryError toEbXML(ErrorInfo errorInfo) {
-        notNull(errorInfo, "error info cannot be null");
+        requireNonNull(errorInfo, "error info cannot be null");
 
         var regError = factory.createRegistryError();
 

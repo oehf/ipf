@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
@@ -44,7 +44,7 @@ public class RegisterDocumentSetTransformer {
      *          factory for version independent ebXML objects. 
      */
     public RegisterDocumentSetTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
+        requireNonNull(factory, "factory cannot be null");
         this.factory = factory;
         
         submissionSetTransformer = new SubmissionSetTransformer(factory);
@@ -60,7 +60,7 @@ public class RegisterDocumentSetTransformer {
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLSubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
-        notNull(request, "request cannot be null");
+        requireNonNull(request, "request cannot be null");
 
         var ebXML = factory.createSubmitObjectsRequest();
         var library = ebXML.getObjectLibrary();
@@ -93,7 +93,7 @@ public class RegisterDocumentSetTransformer {
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
     public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest ebXML) {
-        notNull(ebXML, "ebXML cannot be null");
+        requireNonNull(ebXML, "ebXML cannot be null");
 
         var request = new RegisterDocumentSet();
         

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ERROR_CODE_IN_RESPONSE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ERROR_INFO_IN_RESPONSE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_SEVERITY_IN_RESPONSE;
@@ -38,7 +38,7 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
 
     @Override
     public void validate(EbXMLRegistryResponse response, ValidationProfile profile) {
-        notNull(response, "response cannot be null");
+        requireNonNull(response, "response cannot be null");
 
         metaDataAssert(response.getStatus() != null, INVALID_STATUS_IN_RESPONSE);
         for (var registryError : response.getErrors()) {

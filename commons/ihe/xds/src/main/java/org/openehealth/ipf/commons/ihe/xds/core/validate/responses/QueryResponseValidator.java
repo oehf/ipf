@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContaine
 
 import java.util.List;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_CLASS_NODE;
@@ -47,7 +47,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
 
     @Override
     public void validate(EbXMLQueryResponse response, ValidationProfile profile) {
-        notNull(response, "response cannot be null");
+        requireNonNull(response, "response cannot be null");
         
         regResponseValidator.validate(response, profile);
         objectContainerValidator.validate(response, profile);

@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.CMPD.Interactions.PHARM_1;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
@@ -208,6 +208,28 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new DocumentEntryTypeValidation(),
                 };
 
+            case FIND_DOCUMENTS_BY_TITLE:
+                return new QueryParameterValidation[]{
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                        new StringListValidation(DOC_ENTRY_TITLE, nopValidator),
+                        new StatusValidation(DOC_ENTRY_STATUS),
+                        new DocumentEntryTypeValidation(),
+                };
+
             case FIND_DOCUMENTS_BY_REFERENCE_ID:
                 return new QueryParameterValidation[]{
                         new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
@@ -227,7 +249,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                         new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
-                        new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
+                        new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator)
                 };
 
             case FIND_SUBMISSION_SETS:
@@ -379,7 +401,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request, ValidationProfile profile) {
-        notNull(request, "request cannot be null");
+        requireNonNull(request, "request cannot be null");
 
         if (profile == ITI_63) {
             metaDataAssert(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM.getCode().equals(request.getReturnType()),

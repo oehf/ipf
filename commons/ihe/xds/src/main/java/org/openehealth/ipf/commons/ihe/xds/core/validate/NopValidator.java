@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class NopValidator implements ValueValidator {
     @Override
     public void validate(String value) throws XDSMetaDataException {
-        notNull(value, "value cannot be null");
+        requireNonNull(value, "value cannot be null");
         // Does nothing by design.
     }
 }

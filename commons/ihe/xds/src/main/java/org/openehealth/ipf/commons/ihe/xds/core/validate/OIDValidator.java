@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -32,7 +32,7 @@ public class OIDValidator implements ValueValidator {
 
     @Override
     public void validate(String oid) throws XDSMetaDataException {
-        notNull(oid, "oid cannot be null");
+        requireNonNull(oid, "oid cannot be null");
         
         metaDataAssert(oid.length() <= 64, OID_TOO_LONG, oid);
         metaDataAssert(OID_PATTERN.matcher(oid).matches(), INVALID_OID, oid);

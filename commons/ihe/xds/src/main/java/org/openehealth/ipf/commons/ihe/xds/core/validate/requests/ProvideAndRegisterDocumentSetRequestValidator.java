@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
@@ -38,7 +38,7 @@ public class ProvideAndRegisterDocumentSetRequestValidator implements Validator<
     
     @Override
     public void validate(EbXMLProvideAndRegisterDocumentSetRequest request, ValidationProfile profile) {
-        notNull(request, "request cannot be null");
+        requireNonNull(request, "request cannot be null");
 
         submitObjectsRequestValidator.validate(request, profile);
         

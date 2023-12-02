@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -41,8 +41,8 @@ public class NumberValidation implements QueryParameterValidation {
      *          validator to use on the parameter value.
      */
     public NumberValidation(QueryParameter param, ValueValidator validator) {
-        notNull(param, "param cannot be null");
-        notNull(validator, "validator cannot be null");
+        requireNonNull(param, "param cannot be null");
+        requireNonNull(validator, "validator cannot be null");
         
         this.param = param;
         this.validator = validator;

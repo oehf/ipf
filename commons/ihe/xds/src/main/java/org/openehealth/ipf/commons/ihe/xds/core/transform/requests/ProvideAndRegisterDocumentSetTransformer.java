@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import javax.activation.DataHandler;
 
@@ -48,7 +48,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
      *          factory for version independent ebXML objects. 
      */
     public ProvideAndRegisterDocumentSetTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
+        requireNonNull(factory, "factory cannot be null");
         this.factory = factory;
         
         submissionSetTransformer = new SubmissionSetTransformer(factory);

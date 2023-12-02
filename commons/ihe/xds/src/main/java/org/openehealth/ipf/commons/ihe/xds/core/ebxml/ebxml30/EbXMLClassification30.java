@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationTy
 
 import java.util.UUID;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Encapsulation of {@link ClassificationType}.
@@ -37,7 +37,7 @@ public class EbXMLClassification30 implements EbXMLClassification {
      *          the object to wrap.
      */
     public EbXMLClassification30(ClassificationType classification) {
-        notNull(classification, "classification cannot be null");
+        requireNonNull(classification, "classification cannot be null");
         classification.setObjectType(CLASSIFICATION_OBJECT_TYPE);
         this.classification = classification;
     }

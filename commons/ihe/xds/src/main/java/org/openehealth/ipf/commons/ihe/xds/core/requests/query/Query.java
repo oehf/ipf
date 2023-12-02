@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -49,8 +49,7 @@ public abstract class Query implements Serializable {
      *          the type of the query.
      */
     protected Query(QueryType type) {
-        notNull(type, "type cannot be null");
-        this.type = type;
+        this.type = requireNonNull(type, "type cannot be null");
     }
 
     /**

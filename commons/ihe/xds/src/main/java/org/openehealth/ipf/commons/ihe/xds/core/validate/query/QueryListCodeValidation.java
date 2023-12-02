@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
@@ -44,8 +44,8 @@ public class QueryListCodeValidation implements QueryParameterValidation {
      *          parameter of the scheme to validate.
      */
     public QueryListCodeValidation(QueryParameter param, QueryParameter schemeParam) {
-        notNull(param, "param cannot be null");
-        notNull(schemeParam, "schemeParam cannot be null");
+        requireNonNull(param, "param cannot be null");
+        requireNonNull(schemeParam, "schemeParam cannot be null");
         
         this.param = param;
         this.schemeParam = schemeParam;

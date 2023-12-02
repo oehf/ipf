@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdAndCodesQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Base class of transformers for {@link GetByIdAndCodesQuery}.
@@ -50,12 +50,12 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      *          the parameter name of the confidentiality code scheme.
      */
     public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter formatCodeSchemeParam, QueryParameter confCodeParam, QueryParameter confCodeSchemeParam) {
-        notNull(uniqueIdParam, "uniqueIdParam cannot be null");
-        notNull(uuidParam, "uuidParam cannot be null");        
-        notNull(formatCodeParam, "formatCodeParam cannot be null");
-        notNull(formatCodeSchemeParam, "formatCodeSchemeParam cannot be null");        
-        notNull(confCodeParam, "confCodeParam cannot be null");
-        notNull(confCodeSchemeParam, "confCodeSchemeParam cannot be null");
+        requireNonNull(uniqueIdParam, "uniqueIdParam cannot be null");
+        requireNonNull(uuidParam, "uuidParam cannot be null");        
+        requireNonNull(formatCodeParam, "formatCodeParam cannot be null");
+        requireNonNull(formatCodeSchemeParam, "formatCodeSchemeParam cannot be null");        
+        requireNonNull(confCodeParam, "confCodeParam cannot be null");
+        requireNonNull(confCodeSchemeParam, "confCodeSchemeParam cannot be null");
         
         this.formatCodeParam = formatCodeParam;
         this.confCodeParam = confCodeParam;

@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.DefaultEscaping;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.Escaping;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
@@ -91,12 +92,9 @@ public abstract class XdsHl7v2Renderer {
         throw new IllegalStateException("cannot instantiate helper class");
     }
 
+    @SneakyThrows
     public static boolean isEmpty(Hl7v2Based hl7v2based) {
-        try {
-            return isEmpty(hl7v2based.getHapiObject(), "\n" + hl7v2based.getClass().getSimpleName());
-        } catch (HL7Exception e) {
-            throw new RuntimeException(e);
-        }
+        return isEmpty(hl7v2based.getHapiObject(), "\n" + hl7v2based.getClass().getSimpleName());
     }
 
     private static boolean isEmpty(Composite composite, String keyModifier) throws HL7Exception {

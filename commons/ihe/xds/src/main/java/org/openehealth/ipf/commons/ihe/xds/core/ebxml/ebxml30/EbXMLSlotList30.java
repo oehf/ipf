@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents a list of slots.
@@ -31,17 +31,16 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class EbXMLSlotList30 implements EbXMLSlotList {
     private final List<SlotType1> slotListObj;
-    
+
     /**
      * Constructs the slot list by wrapping the given ebXML 3.0 object.
      * @param slotListObj
      *          the object to wrap.
      */
     public EbXMLSlotList30(List<SlotType1> slotListObj) {
-        notNull(slotListObj, "slotListObj cannot be null");
-        this.slotListObj = slotListObj;
+        this.slotListObj = requireNonNull(slotListObj, "slotListObj cannot be null");
     }
-    
+
     @Override
     public void addSlot(String slotName, String... slotValues) {
         if (slotValues == null || slotValues.length == 0) {
@@ -60,7 +59,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
         slotEbXML.setName(slotName);
         slotEbXML.setValueList(valueList);
         var slot = new EbXMLSlot30(slotEbXML);
-        
+
         if (!slot.getValueList().isEmpty()) {
             slotListObj.add(slotEbXML);
         }
@@ -68,13 +67,13 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
 
     @Override
     public List<String> getSlotValues(String slotName) {
-        notNull(slotName, "slotName cannot be null");
+        requireNonNull(slotName, "slotName cannot be null");
         for (var slot30 : slotListObj) {
             if (slotName.equals(slot30.getName())) {
                 return slot30.getValueList().getValue();
             }
         }
-        
+
         return Collections.emptyList();
     }
 
@@ -93,7 +92,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
 
     @Override
     public List<EbXMLSlot> getSlots(String slotName) {
-        notNull(slotName, "slotName cannot be null");
+        requireNonNull(slotName, "slotName cannot be null");
         return slotListObj.stream()
                 .filter(slot30 -> slotName.equals(slot30.getName()))
                 .map(EbXMLSlot30::new)

@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTra
 
 import javax.activation.DataHandler;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms between {@link QueryResponse} and the {@link EbXMLQueryResponse} representation.
@@ -50,8 +50,7 @@ public class QueryResponseTransformer {
      * @param factory the factory for ebXML objects.
      */
     public QueryResponseTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
-        this.factory = factory;
+        this.factory = requireNonNull(factory, "factory cannot be null");
 
         submissionSetTransformer = new SubmissionSetTransformer(factory);
         documentEntryTransformer = new DocumentEntryTransformer(factory);

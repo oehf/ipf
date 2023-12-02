@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
@@ -37,9 +39,9 @@ public class XdsRuntimeException extends RuntimeException {
             String location)
     {
         super();
-        this.errorCode   = Validate.notNull(errorCode);
+        this.errorCode   = Objects.requireNonNull(errorCode);
         this.codeContext = Validate.notEmpty(codeContext);
-        this.severity    = Validate.notNull(severity);
+        this.severity    = Objects.requireNonNull(severity);
         this.location    = location;
     }
 

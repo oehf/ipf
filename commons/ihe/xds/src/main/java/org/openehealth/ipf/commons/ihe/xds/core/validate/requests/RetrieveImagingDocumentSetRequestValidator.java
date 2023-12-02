@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidato
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SERIES_INSTANCE_UID_MUST_BE_SPECIFIED;
@@ -40,7 +40,7 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
 
     @Override
     public void validate(EbXMLRetrieveImagingDocumentSetRequest request, ValidationProfile profile) {
-        notNull(request, "request cannot be null");
+        requireNonNull(request, "request cannot be null");
 
         for (var retrieveStudy : request.getRetrieveStudies()) {
             var studyInstanceUID = retrieveStudy.getStudyInstanceUID();

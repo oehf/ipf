@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySl
 import org.openehealth.ipf.commons.ihe.xds.core.validate.TimeValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Query parameter validation for parameters that are timestamp-based.
@@ -38,7 +38,7 @@ public class TimestampValidation implements QueryParameterValidation {
      *          parameter to validate.
      */
     public TimestampValidation(QueryParameter param) {
-        this.param = notNull(param, "param cannot be null");
+        this.param = requireNonNull(param, "param cannot be null");
         this.validator = new TimeValidator();
     }
 
