@@ -60,10 +60,12 @@ public class CustomValidationSupport extends DefaultProfileValidationSupport {
         var path = prefix + resourceName + ".xml";
         var is = getClass().getClassLoader().getResourceAsStream(path);
         if (is != null) {
-            var profileText = new Scanner(getClass().getClassLoader().getResourceAsStream(path), StandardCharsets.UTF_8).useDelimiter("\\A").next();
-            var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(getFhirContext());
-            var structureDefinition = parser.parseResource(clazz, profileText);
-            return Optional.of(structureDefinition);
+            try (var scanner = new Scanner(is, StandardCharsets.UTF_8)) {
+                var profileText = scanner.useDelimiter("\\A").next();
+                var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(getFhirContext());
+                var structureDefinition = parser.parseResource(clazz, profileText);
+                return Optional.of(structureDefinition);
+            }
         }
         return Optional.empty();
     }
