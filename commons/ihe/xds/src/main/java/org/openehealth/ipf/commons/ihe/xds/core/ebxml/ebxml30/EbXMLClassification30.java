@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,17 +30,18 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class EbXMLClassification30 implements EbXMLClassification {
     private final ClassificationType classification;
-    
+
     /**
      * Constructs a classification by wrapping the given ebXML 3.0 object.
      * @param classification
      *          the object to wrap.
      */
     public EbXMLClassification30(ClassificationType classification) {
-        notNull(classification, "classification cannot be null");        
+        notNull(classification, "classification cannot be null");
+        classification.setObjectType(CLASSIFICATION_OBJECT_TYPE);
         this.classification = classification;
     }
-    
+
     @Override
     public String getClassificationScheme() {
         return classification.getClassificationScheme();
@@ -68,7 +69,7 @@ public class EbXMLClassification30 implements EbXMLClassification {
 
     @Override
     public void setNodeRepresentation(String nodeRepresentation) {
-        classification.setNodeRepresentation(nodeRepresentation);        
+        classification.setNodeRepresentation(nodeRepresentation);
     }
 
     @Override
@@ -85,12 +86,12 @@ public class EbXMLClassification30 implements EbXMLClassification {
     public void setName(LocalizedString name) {
         classification.setName(new EbXMLInternationalString30(name).getInternal());
     }
-    
+
     @Override
     public void setClassificationNode(String classificationNode) {
         classification.setClassificationNode(classificationNode);
     }
-    
+
     @Override
     public String getClassificationNode() {
         return classification.getClassificationNode();

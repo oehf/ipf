@@ -23,6 +23,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
  * @author Jens Riemschneider
  */
 public interface EbXMLExternalIdentifier {
+    /** ObjectType for External Identifiers */
+    String EXTERNAL_IDENTIFIER_OBJECT_TYPE = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier";
+
     /**
      * @return the value of the identifier.
      */

@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
  * @author Jens Riemschneider
  */
 public interface EbXMLRegistryPackage extends EbXMLRegistryObject {
+    String REGISTRY_PACKAGE_OBJECT_TYPE = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:RegistryPackage";
+
     /**
      * @return the status of this entry.
      */

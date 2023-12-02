@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
  * @author Jens Riemschneider
  */
 public interface EbXMLClassification extends EbXMLSlotList {
+    /** ObjectType for Classifications */
+    String CLASSIFICATION_OBJECT_TYPE = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification";
+
     /**
      * @return the object being classified by this classification.
      */

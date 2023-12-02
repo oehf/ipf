@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     protected void setHomeAware(boolean homeAware) {
         this.homeAware = homeAware;
     }
-    
+
     @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
@@ -113,19 +114,19 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     public void testToEbXML() {
         var ebXML = transformer.toEbXML(set, objectLibrary);
         assertNotNull(ebXML);
-        
+
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
-        assertNull(ebXML.getObjectType());
+        assertEquals(EbXMLRegistryPackage.REGISTRY_PACKAGE_OBJECT_TYPE, ebXML.getObjectType());
         if (homeAware) {
             assertEquals("123.456", ebXML.getHome());
         }
 
-        assertEquals(createLocal(10), ebXML.getDescription());        
+        assertEquals(createLocal(10), ebXML.getDescription());
         assertEquals(createLocal(11), ebXML.getName());
-        
+
         assertSlot(SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "20150102030405");
-        
+
         assertSlot(SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(),
                 "orgName 20^^^^^&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^degree 22^^&uni 22&uniType 22",
                 "orgName 21^^^^^&uni 21&uniType 21^^^^id 21",
@@ -148,7 +149,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
 
         classification = assertClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
-        
+
         assertExternalIdentifier(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, ebXML,
                 "id 3^^^&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
 
@@ -169,39 +170,39 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     public void testToEbXMLNull() {
         assertNull(transformer.toEbXML(null, objectLibrary));
     }
-   
+
     @Test
     public void testToEbXMLEmpty() {
         var ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
         assertNotNull(ebXML);
-        
+
         assertNull(ebXML.getStatus());
         assertNull(ebXML.getId());
-        
-        assertNull(ebXML.getDescription());        
+
+        assertNull(ebXML.getDescription());
         assertNull(ebXML.getName());
-        
+
         assertEquals(0, ebXML.getSlots().size());
         assertEquals(0, ebXML.getClassifications().size());
         assertEquals(0, ebXML.getExternalIdentifiers().size());
     }
-    
-    
-    
+
+
+
     @Test
     public void testFromEbXML() {
         var ebXML = transformer.toEbXML(set, objectLibrary);
         var result = transformer.fromEbXML(ebXML);
-        
+
         assertNotNull(result);
         assertEquals(set, result);
     }
-    
+
     @Test
     public void testFromEbXMLNull() {
         assertNull(transformer.fromEbXML(null));
     }
-    
+
     @Test
     public void testFromEbXMLEmpty() {
         var ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);

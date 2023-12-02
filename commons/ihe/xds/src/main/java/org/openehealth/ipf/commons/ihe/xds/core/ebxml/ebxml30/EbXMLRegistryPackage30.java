@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@ import java.util.Map;
  * @author Jens Riemschneider
  */
 public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackageType> implements EbXMLRegistryPackage, ExtraMetadataHolder {
+
     /**
      * Constructs a registry package by wrapping the given ebXML 3.0 object.
      * @param registryPackage
@@ -38,6 +39,7 @@ public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackag
      */
     public EbXMLRegistryPackage30(RegistryPackageType registryPackage, EbXMLObjectLibrary objectLibrary) {
         super(registryPackage, objectLibrary);
+        registryPackage.setObjectType(REGISTRY_PACKAGE_OBJECT_TYPE);
     }
 
     @Override

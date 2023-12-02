@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifi
  */
 public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
     private final ExternalIdentifierType externalIdentifier;
-    
     /**
      * Constructs an external identifier by wrapping the given ebXML 3.0 object.
      * @param externalIdentifierType
@@ -35,9 +34,10 @@ public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
      */
     public EbXMLExternalIdentifier30(ExternalIdentifierType externalIdentifierType) {
         notNull(externalIdentifierType, "externalIdentifierType cannot be null");
+        externalIdentifierType.setObjectType(EXTERNAL_IDENTIFIER_OBJECT_TYPE);
         externalIdentifier = externalIdentifierType;
     }
-    
+
     @Override
     public String getIdentificationScheme() {
         return externalIdentifier.getIdentificationScheme();
@@ -55,7 +55,7 @@ public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
 
     @Override
     public void setIdentificationScheme(String identificationScheme) {
-        externalIdentifier.setIdentificationScheme(identificationScheme);        
+        externalIdentifier.setIdentificationScheme(identificationScheme);
     }
 
     @Override

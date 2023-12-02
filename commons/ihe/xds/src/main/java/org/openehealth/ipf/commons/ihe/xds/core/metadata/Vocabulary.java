@@ -79,10 +79,6 @@ public abstract class Vocabulary {
     /** Localized String used for the unique ID external identifier of a document entry */
     public static final String DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID = "XDSDocumentEntry.uniqueId";
 
-
-    /** ObjectType for Classifications */
-    public static final String CLASSIFICATION_OBJECT_TYPE = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification";
-
     /** XDSFolder classification node */
     public static final String FOLDER_CLASS_NODE =
         "urn:uuid:d9d542f3-6cc4-48b6-8870-ea235fbc94c2";

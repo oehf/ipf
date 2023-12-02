@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage.REGISTRY_PACKAGE_OBJECT_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.assertClassification;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.assertExternalIdentifier;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.assertSlot;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.createCode;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.createIdentifiable;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.createLocal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
 /**
  * Tests for {@link FolderTransformer}.
@@ -42,13 +50,13 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     protected void setHomeAware(boolean homeAware) {
         this.homeAware = homeAware;
     }
-    
+
     @BeforeEach
     public final void baseSetUp() {
         var factory = createFactory();
         transformer = new FolderTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
-        
+
         folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.setComments(createLocal(10));
@@ -70,17 +78,17 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     public void testToEbXML() {
         var ebXML = transformer.toEbXML(folder, objectLibrary);
         assertNotNull(ebXML);
-        
+
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
-        assertNull(ebXML.getObjectType());
+        assertEquals(REGISTRY_PACKAGE_OBJECT_TYPE, ebXML.getObjectType());
         if (homeAware) {
             assertEquals("123.456", ebXML.getHome());
         }
-        
-        assertEquals(createLocal(10), ebXML.getDescription());        
+
+        assertEquals(createLocal(10), ebXML.getDescription());
         assertEquals(createLocal(11), ebXML.getName());
-        
+
         assertSlot(Vocabulary.SLOT_NAME_LAST_UPDATE_TIME, ebXML.getSlots(), "20150102030405");
 
         var classification =
@@ -89,11 +97,11 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
 
         classification = assertClassification(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, ebXML, 1, "code 7", 7);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 7");
-        
-        assertExternalIdentifier(Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID, ebXML, 
+
+        assertExternalIdentifier(Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID, ebXML,
                 "id 3^^^&uni 3&uniType 3", Vocabulary.FOLDER_LOCALIZED_STRING_PATIENT_ID);
 
-        assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML, 
+        assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML,
                 "1.2.3", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);
 
         assertClassification(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
@@ -107,37 +115,37 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     public void testToEbXMLNull() {
         assertNull(transformer.toEbXML(null, objectLibrary));
     }
-   
+
     @Test
     public void testToEbXMLEmpty() {
         var ebXML = transformer.toEbXML(new Folder(), objectLibrary);
         assertNotNull(ebXML);
-        
+
         assertNull(ebXML.getStatus());
         assertNull(ebXML.getId());
-        
-        assertNull(ebXML.getDescription());        
+
+        assertNull(ebXML.getDescription());
         assertNull(ebXML.getName());
-        
+
         assertEquals(0, ebXML.getSlots().size());
         assertEquals(0, ebXML.getClassifications().size());
         assertEquals(0, ebXML.getExternalIdentifiers().size());
     }
-    
+
     @Test
     public void testFromEbXML() {
         var ebXML = transformer.toEbXML(folder, objectLibrary);
         var result = transformer.fromEbXML(ebXML);
-        
+
         assertNotNull(result);
         assertEquals(folder, result);
     }
-    
+
     @Test
     public void testFromEbXMLNull() {
         assertNull(transformer.fromEbXML(null));
     }
-    
+
     @Test
     public void testFromEbXMLEmpty() {
         var ebXML = transformer.toEbXML(new Folder(), objectLibrary);

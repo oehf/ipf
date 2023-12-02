@@ -34,7 +34,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.CLASSIFICATION_OBJECT_TYPE;
 
 /**
  * Factory for EbXML 3.0 objects.
@@ -68,7 +67,6 @@ public class EbXMLFactory30 implements EbXMLFactory {
     @Override
     public EbXMLClassification createClassification(EbXMLObjectLibrary objectLibrary) {
         var classificationType = RIM_FACTORY.createClassificationType();
-        classificationType.setObjectType(CLASSIFICATION_OBJECT_TYPE);
         return new EbXMLClassification30(classificationType);
     }
 

@@ -108,7 +108,7 @@ public class ExtraMetadataMarshalingTest {
             String classificationScheme,
             String nodeRepresentation)
     {
-        var classification = new EbXMLClassification30(new ClassificationType());
+        EbXMLClassification classification = new EbXMLClassification30(new ClassificationType());
         classification.setClassificationScheme(classificationScheme);
         classification.setNodeRepresentation(nodeRepresentation);
         return classification;
