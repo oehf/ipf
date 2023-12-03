@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,19 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static java.util.Objects.requireNonNull;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
 import javax.activation.DataHandler;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FolderTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformer;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
@@ -35,28 +30,17 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
  * Transforms between a {@link ProvideAndRegisterDocumentSet} and its ebXML representation.
  * @author Jens Riemschneider
  */
-public class ProvideAndRegisterDocumentSetTransformer {
-    private final EbXMLFactory factory;    
-    private final SubmissionSetTransformer submissionSetTransformer;
-    private final DocumentEntryTransformer documentEntryTransformer;
-    private final FolderTransformer folderTransformer;
-    private final AssociationTransformer associationTransformer;
-    
+public class ProvideAndRegisterDocumentSetTransformer extends LeafClassTransformer {
+
     /**
      * Constructs the transformer
      * @param factory
-     *          factory for version independent ebXML objects. 
+     *          factory for version independent ebXML objects.
      */
     public ProvideAndRegisterDocumentSetTransformer(EbXMLFactory factory) {
-        requireNonNull(factory, "factory cannot be null");
-        this.factory = factory;
-        
-        submissionSetTransformer = new SubmissionSetTransformer(factory);
-        documentEntryTransformer = new DocumentEntryTransformer(factory);
-        folderTransformer = new FolderTransformer(factory);
-        associationTransformer = new AssociationTransformer(factory);
+        super(factory);
     }
-    
+
     /**
      * Transforms a request into its ebXML representation.
      * @param request
@@ -70,7 +54,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
 
         var library = factory.createObjectLibrary();
         var ebXML = factory.createProvideAndRegisterDocumentSetRequest(library);
-        
+
         for (var doc : request.getDocuments()) {
             var docEntry = doc.getDocumentEntry();
             if (docEntry != null) {
@@ -78,17 +62,13 @@ public class ProvideAndRegisterDocumentSetTransformer {
                 ebXML.addDocument(docEntry.getEntryUuid(), doc.getContent(DataHandler.class));
             }
         }
-        
+
         for (var folder : request.getFolders()) {
-            ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUuid(), FOLDER_CLASS_NODE, library);
+            handleFolder(folder, ebXML, library);
         }
 
-        var submissionSet = request.getSubmissionSet();
-        ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
-        var entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
-        addClassification(ebXML, entryUUID, SUBMISSION_SET_CLASS_NODE, library);
-        
+        handleSubmissionSet(request.getSubmissionSet(), ebXML, library);
+
         for (var association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
@@ -136,7 +116,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
-        
+
         for (var association : ebXML.getAssociations()) {
             request.getAssociations().add(associationTransformer.fromEbXML(association));
         }
@@ -146,11 +126,4 @@ public class ProvideAndRegisterDocumentSetTransformer {
         return request;
     }
 
-    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        var classification = factory.createClassification(library);
-        classification.setClassifiedObject(classified);
-        classification.setClassificationNode(node);
-        classification.assignUniqueId();
-        ebXML.addClassification(classification);
-    }    
 }

@@ -234,6 +234,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     protected void addClassificationsFromEbXML(C metaData, E ebXML) {
         List<EbXMLClassification> extraClassifications = ebXML.getClassifications().stream()
                 .filter(c -> Vocabulary.isNonStandardUuid(c.getClassificationScheme()))
+                .filter(c -> !(Vocabulary.SUBMISSION_SET_CLASS_NODE.equals(c.getClassificationNode()) || Vocabulary.FOLDER_CLASS_NODE.equals(c.getClassificationNode())))
                 .collect(Collectors.toList());
         if (!extraClassifications.isEmpty()) {
             metaData.setExtraClassifications(extraClassifications);

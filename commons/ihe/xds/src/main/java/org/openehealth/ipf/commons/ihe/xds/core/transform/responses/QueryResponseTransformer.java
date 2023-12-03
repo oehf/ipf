@@ -16,32 +16,21 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FolderTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
 import javax.activation.DataHandler;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms between {@link QueryResponse} and the {@link EbXMLQueryResponse} representation.
  *
  * @author Jens Riemschneider
  */
-public class QueryResponseTransformer {
-    private final EbXMLFactory factory;
-    private final SubmissionSetTransformer submissionSetTransformer;
-    private final DocumentEntryTransformer documentEntryTransformer;
-    private final FolderTransformer folderTransformer;
-    private final AssociationTransformer associationTransformer;
+public class QueryResponseTransformer extends LeafClassTransformer {
     private final ErrorInfoListTransformer errorInfoListTransformer;
 
     /**
@@ -50,12 +39,7 @@ public class QueryResponseTransformer {
      * @param factory the factory for ebXML objects.
      */
     public QueryResponseTransformer(EbXMLFactory factory) {
-        this.factory = requireNonNull(factory, "factory cannot be null");
-
-        submissionSetTransformer = new SubmissionSetTransformer(factory);
-        documentEntryTransformer = new DocumentEntryTransformer(factory);
-        folderTransformer = new FolderTransformer(factory);
-        associationTransformer = new AssociationTransformer(factory);
+        super(factory);
         errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
 
@@ -90,13 +74,11 @@ public class QueryResponseTransformer {
         }
 
         for (var folder : response.getFolders()) {
-            ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
+            handleFolder(folder, ebXML, library);
         }
 
-        for (var set : response.getSubmissionSets()) {
-            ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
-            addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
+        for (var submissionSet : response.getSubmissionSets()) {
+            handleSubmissionSet(submissionSet, ebXML, library);
         }
 
         for (var association : response.getAssociations()) {
@@ -162,11 +144,4 @@ public class QueryResponseTransformer {
         return response;
     }
 
-    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        var classification = factory.createClassification(library);
-        classification.setClassifiedObject(classified);
-        classification.setClassificationNode(node);
-        classification.assignUniqueId();
-        ebXML.addClassification(classification);
-    }
 }
