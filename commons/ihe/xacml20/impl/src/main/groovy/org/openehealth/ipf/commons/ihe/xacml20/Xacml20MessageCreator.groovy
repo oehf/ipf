@@ -16,8 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xacml20
 
 import org.apache.commons.lang3.Validate
+import org.herasaf.xacml.core.context.impl.ObjectFactory as XacmlContextObjectFactory
+import org.herasaf.xacml.core.policy.impl.ObjectFactory as XacmlPolicyObjectFactory
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
-import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory
+import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory as Hl7v3ObjectFactory
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.NameIDType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
@@ -32,9 +34,9 @@ import javax.xml.datatype.DatatypeFactory
  */
 class Xacml20MessageCreator {
 
-    protected static final ObjectFactory HL7V3_OBJECT_FACTORY = new ObjectFactory()
-    protected static final org.herasaf.xacml.core.context.impl.ObjectFactory XACML_CONTEXT_OBJECT_FACTORY = new org.herasaf.xacml.core.context.impl.ObjectFactory()
-    protected static final org.herasaf.xacml.core.policy.impl.ObjectFactory XACML_POLICY_OBJECT_FACTORY = new org.herasaf.xacml.core.policy.impl.ObjectFactory()
+    protected static final Hl7v3ObjectFactory HL7V3_OBJECT_FACTORY = new Hl7v3ObjectFactory()
+    protected static final XacmlContextObjectFactory XACML_CONTEXT_OBJECT_FACTORY = new XacmlContextObjectFactory()
+    protected static final XacmlPolicyObjectFactory XACML_POLICY_OBJECT_FACTORY = new XacmlPolicyObjectFactory()
     protected static final DatatypeFactory XML_OBJECT_FACTORY = DatatypeFactory.newInstance()
 
     private final String homeCommunityId
