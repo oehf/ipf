@@ -24,8 +24,11 @@
     </properties>
     <body>
         <release version="4.8.0" description="IPF 4.8.0" date="tbd">
+            <action issue="435" dev="unixoid" type="add">
+                Control whether XDS marker classifications are be created inside or outside SubmissionSets and Folders
+            </action>
             <action issue="434" dev="thopap" type="fix">
-                Fix missing objectType attribute for XML element classification (for SubmissionSet and Folder).
+                Fix missing objectType attribute for XML element classification (for SubmissionSet and Folder)
             </action>
             <action issue="431" dev="unixoid" type="fix">
                 Fix error handling in CH:PPQ-2
