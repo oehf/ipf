@@ -28,6 +28,8 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti105.Iti105AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti105.Iti105TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66ClientRequestFactory;
@@ -117,6 +119,14 @@ public class MHD implements IntegrationProfile {
         private final TransactionConfiguration<FhirAuditDataset> transactionConfiguration;
     }
 
+    @AllArgsConstructor
+    public enum SimplifiedPublishInteractions implements FhirInteractionId<Iti105AuditDataset> {
+        ITI_105(ITI_105_CONFIG);
+
+        @Getter
+        private final FhirTransactionConfiguration<Iti105AuditDataset> fhirTransactionConfiguration;
+    }
+
     @Override
     public List<InteractionId> getInteractionIds() {
         var interactions = new ArrayList<InteractionId>();
@@ -131,4 +141,6 @@ public class MHD implements IntegrationProfile {
     private static final Iti67TransactionConfiguration ITI_67_CONFIG = new Iti67TransactionConfiguration();
     private static final Iti68TransactionConfiguration ITI_68_CONFIG = new Iti68TransactionConfiguration();
     private static final Iti68BinaryTransactionConfiguration ITI_68_BIN_CONFIG = new Iti68BinaryTransactionConfiguration();
+    private static final Iti105TransactionConfiguration ITI_105_CONFIG = new Iti105TransactionConfiguration();
 }
+
