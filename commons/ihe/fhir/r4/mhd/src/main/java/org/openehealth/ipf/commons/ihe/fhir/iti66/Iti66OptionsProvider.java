@@ -33,7 +33,7 @@ public class Iti66OptionsProvider implements FhirTransactionOptionsProvider<Fhir
 
     @Override
     public Iti66Options getDefaultOption() {
-        return Iti66Options.LENIENT;
+        return Iti66Options.COMPATIBILITY;
     }
 
     @Override

@@ -22,32 +22,21 @@ import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
 import org.hl7.fhir.r4.model.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.audit.codes.EventActionCode;
-import org.openehealth.ipf.commons.audit.codes.EventIdCode;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
-import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.model.SimplifiedPublishDocumentReference;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.URN_IETF_RFC_3986;
-import static org.openehealth.ipf.commons.ihe.fhir.iti105.Iti105Validator.ITI105_PROFILE;
 
 /**
  *
@@ -86,7 +75,7 @@ public class TestIti105Success extends FhirTestContainer {
     }
 
     @Test
-    public void testSendRemoteSimplifiedPublish() throws Exception {
+    public void testSendRemoteSimplifiedPublish() {
         var result = client.create()
             .resource(documentReference())
             .encodedXml()
@@ -141,35 +130,31 @@ public class TestIti105Success extends FhirTestContainer {
     }
 
     @Test
-    public void testSendOverDirectEndpointSimplifiedPublish() throws Exception {
+    public void testSendOverDirectEndpointSimplifiedPublish() {
         producerTemplate.requestBody("direct:input", documentReference(), MethodOutcome.class);
         var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
     }
 
-    private static DocumentReference documentReference() throws NoSuchAlgorithmException {
+    private static DocumentReference documentReference()  {
         var documentContent = "Hello IHE World".getBytes();
         var practitioner = new Practitioner();
         practitioner.setId("987");
         practitioner.addName(new HumanName()
             .setFamily("Soo")
             .setGiven(Collections.singletonList(new StringType("Yun"))));
-
         var patient = new Patient();
         patient.setId("123");
         patient.getName().add(new HumanName()
             .setFamily("Foo")
             .setGiven(Collections.singletonList(new StringType("Barbara"))));
-        var reference = new DocumentReference();
-        reference.getMeta().addProfile(ITI105_PROFILE);
         var timestamp = Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+        var reference = new SimplifiedPublishDocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
 
         reference
-            .setMasterIdentifier(
-                new Identifier()
-                    .setSystem(URN_IETF_RFC_3986)
-                    .setValue("urn:oid:129.6.58.92.88336"))
+            .setUniqueIdIdentifier(URN_IETF_RFC_3986, "urn:oid:129.6.58.92.88336")
+            .setContent("text/plain", documentContent)
             .addIdentifier(new Identifier()
                 .setSystem(URN_IETF_RFC_3986)
                 .setValue("urn:oid:129.6.58.92.88336"))
@@ -178,20 +163,14 @@ public class TestIti105Success extends FhirTestContainer {
             .setSubject(new Reference(patient))
             .addAuthor(new Reference(practitioner))
             .setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
+
         reference.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         reference.getText().setDivAsString("<div>empty</div>");
         reference.getType().addCoding()
             .setSystem("http://ihe.net/connectathon/classCodes")
             .setCode("History and Physical")
             .setDisplay("History and Physical");
-        reference.addContent()
-            .setAttachment(
-                new Attachment()
-                    .setContentType("text/plain")
-                    .setLanguage("en/us")
-                    .setSize(documentContent.length)
-                    .setHash(MessageDigest.getInstance("SHA-1").digest(documentContent))
-                    .setUrl("urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb"))
+        reference.getContentFirstRep()
             .setFormat(new Coding("urn:oid:1.3.6.1.4.1.19376.1.2.3", "urn:ihe:pcc:handp:2008", null));
         return reference;
     }

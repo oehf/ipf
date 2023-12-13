@@ -26,6 +26,7 @@ import org.hl7.fhir.r4.model.OperationOutcome;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
+import javax.servlet.Servlet;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,17 +38,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FhirTestContainer extends StandardTestContainer {
 
     protected static IGenericClient client;
-    protected static FhirContext context;
+    protected static FhirContext clientFhirContext;
+    protected static FhirContext serverFhirContext;
+
+    public static void startServer(Servlet servlet, String appContextName, boolean secure, int serverPort, String servletName) {
+        StandardTestContainer.startServer(servlet, appContextName, secure, serverPort, servletName);
+        serverFhirContext = appContext.getBean("fhirContext", FhirContext.class);
+    }
 
     protected static IGenericClient startClient(String base) {
         return startClient(base, fhirContext -> {});
     }
 
     protected static IGenericClient startClient(String base, Consumer<FhirContext> fhirContextCustomizer) {
-        context = FhirContext.forR4();
-        fhirContextCustomizer.accept(context);
-        context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
-        client = context.newRestfulGenericClient(base);
+        clientFhirContext = FhirContext.forR4();
+        fhirContextCustomizer.accept(clientFhirContext);
+        clientFhirContext.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
+        client = clientFhirContext.newRestfulGenericClient(base);
         return client;
     }
 
@@ -72,7 +79,7 @@ public class FhirTestContainer extends StandardTestContainer {
     }
 
     protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
-        var parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(context);
+        var parser = EncodingEnum.detectEncodingNoDefault(e.getResponseBody()).newParser(clientFhirContext);
         var oo = parser.parseResource(OperationOutcome.class, e.getResponseBody());
         assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
         assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
@@ -89,6 +96,6 @@ public class FhirTestContainer extends StandardTestContainer {
 
     // For quickly checking output
     protected void printAsXML(IBaseResource resource) {
-        System.out.println(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
+        System.out.println(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 }

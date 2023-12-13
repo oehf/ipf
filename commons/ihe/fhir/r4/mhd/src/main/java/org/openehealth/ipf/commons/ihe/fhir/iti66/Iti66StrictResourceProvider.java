@@ -46,12 +46,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
- * Resource Provider for MHD (ITI-66)
+ * Resource Provider for MHD (ITI-66 DocumentManifest)
  *
  * @author Christian Ohr
  * @since 4.1
  */
 public class Iti66StrictResourceProvider extends AbstractPlainProvider {
+
+    // Supported with MHD 3.2.0
 
     @SuppressWarnings("unused")
     @Search(type = DocumentManifest.class)

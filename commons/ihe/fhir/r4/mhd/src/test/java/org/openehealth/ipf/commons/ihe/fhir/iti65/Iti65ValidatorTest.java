@@ -40,8 +40,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_MANIFEST_PROFILE;
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_DOCUMENT_REFERENCE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.*;
 
 /**
  * @author Christian Ohr
@@ -68,7 +67,7 @@ public class Iti65ValidatorTest {
 
     private Bundle provideAndRegister() throws Exception {
         var bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addProfile(Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE);
+        bundle.getMeta().addProfile(ITI65_MINIMAL_METADATA_PROFILE);
 
         // Manifest
 

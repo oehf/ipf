@@ -35,7 +35,7 @@ public class Iti67TransactionConfiguration extends FhirTransactionConfiguration<
                 new Iti67AuditStrategy(false),
                 new Iti67AuditStrategy(true),
                 FhirVersionEnum.R4,
-                new Iti67ResourceProvider(),                    // Consumer side. accept registrations
+                new Iti67ResourceProvider(),
                 new Iti67ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);
         setSupportsLazyLoading(true);

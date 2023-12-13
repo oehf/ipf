@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti65.v320;
 
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.r4.model.CapabilityStatement;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;

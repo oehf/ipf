@@ -20,10 +20,10 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="common-fhir-beans.xml"/>
+    <import resource="../common-fhir-beans.xml"/>
 
     <bean id="routeBuilder"
-          class="org.openehealth.ipf.platform.camel.ihe.fhir.iti66.Iti66TestRouteBuilder">
+          class="org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v320.Iti66TestRouteBuilder">
         <constructor-arg value="false"/>
     </bean>
 

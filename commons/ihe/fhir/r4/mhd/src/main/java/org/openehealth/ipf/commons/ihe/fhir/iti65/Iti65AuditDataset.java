@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.r4.model.DocumentManifest;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.model.SubmissionSetList;
 
 /**
  * @author Christian Ohr
@@ -27,9 +28,9 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
  */
 public class Iti65AuditDataset extends FhirAuditDataset {
 
-    // Document manifest unique ID
+    // Submission Set unique ID
     @Getter @Setter
-    private String documentManifestUuid;
+    private String submissionSetUuid;
 
     public Iti65AuditDataset(boolean serverSide) {
         super(serverSide);
@@ -41,9 +42,20 @@ public class Iti65AuditDataset extends FhirAuditDataset {
         getPatientIds().add(reference.getResource() != null ?
                 reference.getResource().getIdElement().getValue() :
                 reference.getReference());
-        // If available, use the documentManifest identifier as documentManifestUuid
+        // If available, use the documentManifest identifier as submissionSetUuid
         if (!documentManifest.getIdentifier().isEmpty()) {
-            this.documentManifestUuid = documentManifest.getIdentifier().get(0).getValue();
+            this.submissionSetUuid = documentManifest.getIdentifier().get(0).getValue();
+        }
+    }
+
+    public void enrichDatasetFromSubmissionSetList(SubmissionSetList<?> submissionSetList) {
+        var reference = submissionSetList.getSubject();
+        getPatientIds().add(reference.getResource() != null ?
+            reference.getResource().getIdElement().getValue() :
+            reference.getReference());
+        // If available, use the submissionSetList identifier as submissionSetUuid
+        if (!submissionSetList.getIdentifier().isEmpty()) {
+            this.submissionSetUuid = submissionSetList.getIdentifier().get(0).getValue();
         }
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v320;
 
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class TestIti66MissingParameter extends AbstractTestIti66 {
 
-    private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
+    private static final String CONTEXT_DESCRIPTOR = "v320/iti-66-error.xml";
 
     @BeforeAll
     public static void setUpClass() {

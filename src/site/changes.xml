@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="4.8.0" description="IPF 4.8.0" date="tbd">
+            <action issue="437" dev="stanojevic-boris" type="add">
+                Implement the new SimplifiedPublish ITI-105 Component
+            </action>
             <action issue="435" dev="unixoid" type="add">
                 Control whether XDS marker classifications are be created inside or outside SubmissionSets and Folders
             </action>
@@ -62,6 +65,9 @@
             </action>
             <action issue="391" dev="unixoid" type="add">
                 Support for the Swiss EPR integration profile CH:PPQm
+            </action>
+            <action issue="369" dev="unixoid" type="add">
+                Support for IHE MHD 4.2.1
             </action>
         </release>
         <release version="4.7.0" description="IPF 4.7.0" date="10 Jul 2023">

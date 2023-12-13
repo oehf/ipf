@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v320;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
  */
-public class TestIti65Error extends AbstractTestIti65 {
+public class TestIti66Error extends AbstractTestIti66 {
 
-    private static final String CONTEXT_DESCRIPTOR = "iti-65-error.xml";
+    private static final String CONTEXT_DESCRIPTOR = "v320/iti-66-error.xml";
 
     @BeforeAll
     public static void setUpClass() {
@@ -36,15 +37,13 @@ public class TestIti65Error extends AbstractTestIti65 {
 
     @Test
     public void testSendManuallyReturningError() {
-        Assertions.assertThrows(InternalErrorException.class, () -> {
+        assertThrows(InternalErrorException.class, ()-> {
             try {
-                sendManually(provideAndRegister());
+                sendManually(manifestPatientIdentifierParameter(), statusParameter());
             } catch (InternalErrorException e) {
                 assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
             }
         });
-
-
     }
 
 }

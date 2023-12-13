@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v320;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
@@ -56,7 +56,7 @@ public class Iti66TestRouteBuilder extends RouteBuilder {
         public Object evaluate(Exchange exchange) {
             if (!returnError) {
                 var resource = FhirContext.forR4().newXmlParser()
-                        .parseResource(Bundle.class, new InputStreamReader(getClass().getResourceAsStream("/FindSubmissionSetsResponse.xml")));
+                        .parseResource(Bundle.class, new InputStreamReader(getClass().getResourceAsStream("/v320/FindSubmissionSetsResponse.xml")));
                 // The endpoint expects a list of resources rather than a bundle
                 return resource.getEntry().stream()
                         .map(Bundle.BundleEntryComponent::getResource)

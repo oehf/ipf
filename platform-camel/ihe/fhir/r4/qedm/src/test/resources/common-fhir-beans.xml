@@ -30,6 +30,8 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <camel:jmxAgent id="agent" disabled="false"/>
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
+
+    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forR4"/>
     
 	<ipf:globalContext id="globalContext"/>
 

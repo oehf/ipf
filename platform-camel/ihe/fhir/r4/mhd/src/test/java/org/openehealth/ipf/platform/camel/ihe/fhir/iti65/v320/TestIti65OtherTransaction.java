@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti65.v320;
 
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.junit.jupiter.api.BeforeAll;

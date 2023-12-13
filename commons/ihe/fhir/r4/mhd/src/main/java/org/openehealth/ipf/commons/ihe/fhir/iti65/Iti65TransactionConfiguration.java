@@ -21,9 +21,8 @@ import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
 
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_COMPREHENSIVE_METADATA_PROFILE;
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_LEGACY_METADATA_PROFILE;
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.*;
 
 /**
  * Standard Configuration for Iti65Component.
@@ -44,9 +43,12 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
                 Iti65Validator::new);
         setStaticConsumerSelector(new BundleProfileSelector(
-                ITI65_COMPREHENSIVE_METADATA_PROFILE,
-                ITI65_MINIMAL_METADATA_PROFILE,
-                ITI65_LEGACY_METADATA_PROFILE));
+            ITI65_LEGACY_METADATA_PROFILE,
+            ITI65_COMPREHENSIVE_METADATA_PROFILE,
+            ITI65_MINIMAL_METADATA_PROFILE,
+            ITI65_COMPREHENSIVE_BUNDLE_PROFILE,
+            ITI65_MINIMAL_BUNDLE_PROFILE,
+            ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE));
     }
 
     @Override

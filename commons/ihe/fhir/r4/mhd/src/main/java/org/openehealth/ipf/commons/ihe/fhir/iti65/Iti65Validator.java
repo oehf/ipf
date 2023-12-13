@@ -124,7 +124,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     private Optional<StructureDefinition> findProfile(
             ValidationSupportChain snaphotGenerationSupport,
             String name) {
-        var path = "META-INF/profiles/" + name + ".xml";
+        var path = "META-INF/profiles/320/" + name + ".xml";
         var url = IHE_PROFILE_PREFIX + name;
         var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
         if (is != null) {

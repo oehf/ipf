@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti65.v320;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
-import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -30,7 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -161,7 +162,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected void printAsXML(IBaseResource resource) {
-        LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
+        LOG.info(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 
 

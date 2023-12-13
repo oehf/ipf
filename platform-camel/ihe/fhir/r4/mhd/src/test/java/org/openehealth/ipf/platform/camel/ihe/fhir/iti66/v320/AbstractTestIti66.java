@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v320;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
