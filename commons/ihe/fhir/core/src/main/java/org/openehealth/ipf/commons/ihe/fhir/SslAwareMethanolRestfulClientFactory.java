@@ -156,12 +156,9 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
         @Override
         public void configureHttpClientBuilder(Methanol.Builder builder) {
             if (isSecure()) {
-                builder.sslContext(getSslContext());
-                /*
-                if (getHostnameVerifier() != null) {
-                    builder.setSSLHostnameVerifier(getHostnameVerifier());
+                if (getSslContext() != null) {
+                    builder.sslContext(getSslContext());
                 }
-                 */
             }
 
         }

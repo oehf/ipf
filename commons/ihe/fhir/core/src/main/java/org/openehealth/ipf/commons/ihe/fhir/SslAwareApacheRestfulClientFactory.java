@@ -28,15 +28,10 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
 import javax.net.ssl.HostnameVerifier;
@@ -76,7 +71,7 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
     @Override
     public IHttpClient getHttpClient(StringBuilder url, Map<String, List<String>> ifNoneExistParams, String ifNoneExistString, RequestTypeEnum theRequestType, List<Header> theHeaders) {
         return new ApacheHttpClient(getNativeHttpClient(), url, ifNoneExistParams, ifNoneExistString, theRequestType,
-                theHeaders);
+            theHeaders);
     }
 
     /**
@@ -102,37 +97,28 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
 
     protected synchronized HttpClient getNativeHttpClient() {
         if (httpClient == null) {
-            PoolingHttpClientConnectionManager connectionManager;
-            if (getSecurityInformation() != null && getSecurityInformation().isSecure()) {
-                SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                        getSecurityInformation().getSslContext(),
-                        getSecurityInformation().getHostnameVerifier());
-                Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register("https", sslsf).build();
-                connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry, null, null, null, 5000L, TimeUnit.MILLISECONDS);
-            } else {
-                connectionManager = new PoolingHttpClientConnectionManager(5000L, TimeUnit.MILLISECONDS);
-            }
-            connectionManager.setMaxTotal(getPoolMaxTotal());
-            connectionManager.setDefaultMaxPerRoute(getPoolMaxPerRoute());
             var defaultRequestConfig = RequestConfig.custom()
-                    .setSocketTimeout(getSocketTimeout())
-                    .setConnectTimeout(getConnectTimeout())
-                    .setConnectionRequestTimeout(getConnectionRequestTimeout())
-                    .setProxy(proxy)
-                    .build();
-            HttpClientBuilder builder = httpClientBuilder()
-                    // .useSystemProperties()
-                    .setConnectionManager(connectionManager)
-                    .setDefaultRequestConfig(defaultRequestConfig)
-                    .disableCookieManagement();
+                .setSocketTimeout(getSocketTimeout())
+                .setConnectTimeout(getConnectTimeout())
+                .setConnectionRequestTimeout(getConnectionRequestTimeout())
+                .setProxy(proxy)
+                .build();
+            var builder = httpClientBuilder()
+                .setDefaultRequestConfig(defaultRequestConfig)
+                .setMaxConnPerRoute(getPoolMaxPerRoute())
+                .setMaxConnTotal(getPoolMaxTotal())
+                .setConnectionTimeToLive(5000L, TimeUnit.MILLISECONDS)
+                .disableCookieManagement()
+                .useSystemProperties();
 
             // Need to authenticate against proxy
             if (proxy != null && StringUtils.isNotBlank(getProxyUsername()) && StringUtils.isNotBlank(getProxyPassword())) {
                 CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(new AuthScope(proxy.getHostName(), proxy.getPort()),
-                        new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
-                builder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-                builder.setDefaultCredentialsProvider(credentialsProvider);
+                    new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
+                builder
+                    .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy())
+                    .setDefaultCredentialsProvider(credentialsProvider);
             }
 
             // Chance to override or instrument
@@ -158,7 +144,9 @@ public class SslAwareApacheRestfulClientFactory extends SslAwareAbstractRestfulC
         @Override
         public void configureHttpClientBuilder(HttpClientBuilder builder) {
             if (isSecure()) {
-                builder.setSSLContext(getSslContext());
+                if (getSslContext() != null) {
+                    builder.setSSLContext(getSslContext());
+                }
                 if (getHostnameVerifier() != null) {
                     builder.setSSLHostnameVerifier(getHostnameVerifier());
                 }

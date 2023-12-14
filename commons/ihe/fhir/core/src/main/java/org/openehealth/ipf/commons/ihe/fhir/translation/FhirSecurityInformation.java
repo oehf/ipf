@@ -34,12 +34,4 @@ public abstract class FhirSecurityInformation<T> extends SecurityInformation {
 
     public abstract void configureHttpClientBuilder(T builder);
 
-    public SSLContext getSslContext() {
-        try {
-            return super.getSslContext() == null ? SSLContext.getDefault() : super.getSslContext();
-        } catch (NoSuchAlgorithmException e) {
-            // Should never happen
-            throw new RuntimeException("Could not create SSL Context", e);
-        }
-    }
 }
