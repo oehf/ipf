@@ -27,7 +27,8 @@ import java.util.List;
 public enum Iti67Options implements FhirTransactionOptions {
 
     STRICT(Iti67StrictResourceProvider.class),
-    LENIENT(Iti67ResourceProvider.class);
+    LENIENT(Iti67ResourceProvider.class),
+    COMPATIBILITY(Iti67ResourceProvider.class);
 
     private final List<Class<? extends FhirProvider>> resourceProviders;
 

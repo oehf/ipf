@@ -55,7 +55,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
         assertEquals(3, page1.getTotal());
         assertEquals(2, page1.getEntry().size());
 
-        var patients = BundleUtil.toListOfResourcesOfType(context, page1, PdqPatient.class);
+        var patients = BundleUtil.toListOfResourcesOfType(clientFhirContext, page1, PdqPatient.class);
 
         var page2 = nextPage(page1);
         assertEquals(Bundle.BundleType.SEARCHSET, page2.getType());
@@ -64,7 +64,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
         assertEquals(3, page2.getTotal());
         assertEquals(1, page2.getEntry().size());
 
-        patients.addAll(BundleUtil.toListOfResourcesOfType(context, page2, PdqPatient.class));
+        patients.addAll(BundleUtil.toListOfResourcesOfType(clientFhirContext, page2, PdqPatient.class));
 
         // Check order
         var names = patients.stream()

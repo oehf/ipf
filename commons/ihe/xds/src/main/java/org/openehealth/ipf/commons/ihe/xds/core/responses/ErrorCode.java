@@ -184,6 +184,10 @@ public enum ErrorCode {
     /** An error occurred when executing an SQL query. */
     @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError"),
 
+    @XmlEnumValue("UnknownRecipient") UNKNOWN_RECIPIENT("UnknownRecipient"),
+    @XmlEnumValue("UnavailableRecipient") UNAVAILABLE_RECIPIENT("UnavailableRecipient"),
+    @XmlEnumValue("FHIRDocumentNotSupported") FHIR_DOCUMENT_NOT_SUPPORTED("FHIRDocumentNotSupported"),
+
     /* --- special value for custom user-defined error codes --- */
     @XmlEnumValue("_UserDefined") _USER_DEFINED("_UserDefined");
 

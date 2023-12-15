@@ -40,7 +40,7 @@ public class Iti65ServerAuditStrategy extends Iti65AuditStrategy {
         return new PHIImportBuilder<>(auditContext, auditDataset, FhirEventTypeCode.ProvideDocumentBundle)
                 .setPatient(auditDataset.getPatientId())
                 .addImportedEntity(
-                        auditDataset.getDocumentManifestUuid(),
+                        auditDataset.getSubmissionSetUuid(),
                         ParticipantObjectIdTypeCode.XdsMetadata,
                         ParticipantObjectTypeCodeRole.Job,
                         Collections.emptyList())

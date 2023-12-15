@@ -35,9 +35,9 @@ public class Iti66TransactionConfiguration extends FhirTransactionConfiguration<
                 new Iti66AuditStrategy(false),
                 new Iti66AuditStrategy(true),
                 FhirVersionEnum.R4,
-                new Iti66ResourceProvider(),                    // Consumer side. accept registrations
+                new Iti66ListResourceProvider(),
                 new Iti66ClientRequestFactory(),
-                FhirTransactionValidator.NO_VALIDATION);        // Formulate requests
+                FhirTransactionValidator.NO_VALIDATION);
         setSupportsLazyLoading(true);
     }
 }

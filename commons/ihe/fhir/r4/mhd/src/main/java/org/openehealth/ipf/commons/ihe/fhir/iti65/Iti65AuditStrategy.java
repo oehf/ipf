@@ -21,6 +21,7 @@ import org.hl7.fhir.r4.model.DocumentManifest;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.model.SubmissionSetList;
 
 import java.util.Map;
 import java.util.Objects;
@@ -45,32 +46,53 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
     public Iti65AuditDataset enrichAuditDatasetFromRequest(Iti65AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         var bundle = (Bundle) request;
-        //
-        var documentManifest = bundle.getEntry().stream()
-                .map(Bundle.BundleEntryComponent::getResource)
-                .filter(DocumentManifest.class::isInstance)
-                .map(DocumentManifest.class::cast)
-                .findFirst().orElseThrow(() -> new RuntimeException("ITI-65 bundle must contain DocumentManifest"));
 
-        dataset.enrichDatasetFromDocumentManifest(documentManifest);
+        // MHD 3.2.0
+        bundle.getEntry().stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .filter(DocumentManifest.class::isInstance)
+            .map(DocumentManifest.class::cast)
+            .findFirst()
+            .ifPresent(dataset::enrichDatasetFromDocumentManifest);
+
+        // MHD 4.2.1
+        bundle.getEntry().stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .filter(SubmissionSetList.class::isInstance)
+            .map(SubmissionSetList.class::cast)
+            .findFirst()
+            .ifPresent(dataset::enrichDatasetFromSubmissionSetList);
+
         return dataset;
     }
 
     @Override
     public boolean enrichAuditDatasetFromResponse(Iti65AuditDataset auditDataset, Object response, AuditContext auditContext) {
         var bundle = (Bundle) response;
-        // Extract DocumentManifest (UU)IDs from the response bundle for auditing
+
+        // MHD 3.2.0 Extract DocumentManifest (UU)IDs from the response bundle for auditing
         bundle.getEntry().stream()
-                .map(Bundle.BundleEntryComponent::getResponse)
-                .filter(Objects::nonNull)
-                .filter(r -> r.getLocation() != null && r.getLocation().startsWith("DocumentManifest"))
-                .findFirst()
-                .ifPresent(r -> auditDataset.setDocumentManifestUuid(r.getLocation()));
+            .map(Bundle.BundleEntryComponent::getResponse)
+            .filter(Objects::nonNull)
+            .filter(r -> r.getLocation() != null && r.getLocation().startsWith("DocumentManifest"))
+            .findFirst()
+            .ifPresent(r -> auditDataset.setSubmissionSetUuid(r.getLocation()));
+
+        // MHD 4.2.1 Extract SubmissionSetList (UU)IDs from the response bundle for auditing
+        // TODO Lists are also representing Folders
+        bundle.getEntry().stream()
+            .map(Bundle.BundleEntryComponent::getResponse)
+            .filter(Objects::nonNull)
+            .filter(r -> r.getLocation() != null && r.getLocation().startsWith("List"))
+            .findFirst()
+            .ifPresent(r -> auditDataset.setSubmissionSetUuid(r.getLocation()));
+
         return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
     }
 
     /**
      * Look at the response codes in the bundle entries and derive the ATNA event outcome
+     *
      * @param resource FHIR resource
      * @return RFC3881EventOutcomeCode
      */
@@ -78,9 +100,9 @@ public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDat
     protected EventOutcomeIndicator getEventOutcomeCodeFromResource(Iti65AuditDataset auditDataset, IBaseResource resource) {
         var bundle = (Bundle) resource;
         var responseStatus = bundle.getEntry().stream()
-                .map(Bundle.BundleEntryComponent::getResponse)
-                .map(Bundle.BundleEntryResponseComponent::getStatus)
-                .collect(Collectors.toSet());
+            .map(Bundle.BundleEntryComponent::getResponse)
+            .map(Bundle.BundleEntryResponseComponent::getStatus)
+            .collect(Collectors.toSet());
 
         if (responseStatus.stream().anyMatch(s -> s.startsWith("4") || s.startsWith("5"))) {
             return EventOutcomeIndicator.MajorFailure;

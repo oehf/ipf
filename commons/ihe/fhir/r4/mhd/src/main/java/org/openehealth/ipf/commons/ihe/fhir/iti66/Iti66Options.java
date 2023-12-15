@@ -26,8 +26,20 @@ import java.util.List;
  */
 public enum Iti66Options implements FhirTransactionOptions {
 
+    /**
+     * Strict MHD 3.2.0 Resource Provider
+     */
     STRICT(Iti66StrictResourceProvider.class),
-    LENIENT(Iti66ResourceProvider.class);
+
+    /**
+     * Lenient MHD 3.2.0 Resource Provider, supporting some search parameters from STU3 versions
+     */
+    LENIENT(Iti66ResourceProvider.class),
+
+    /**
+     * MHD 3.2.0 and 4.2.1 Resource Provider, supporting both DocumentManifest and List resources
+     */
+    COMPATIBILITY(Iti66ListResourceProvider.class);
 
     private final List<Class<? extends FhirProvider>> resourceProviders;
 

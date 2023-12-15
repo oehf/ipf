@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
 
+import javax.servlet.Servlet
+
 /**
  * Base class for tests that are run within an embedded web container.
  * This class requires that an application context named "context.xml" is
@@ -54,7 +56,7 @@ class StandardTestContainer {
      */
     public static int DEMO_APP_PORT = 8999
 
-    static void startServer(servlet, String appContextName, boolean secure, int serverPort, String servletName = null) {
+    static void startServer(Servlet servlet, String appContextName, boolean secure, int serverPort, String servletName = null) {
         URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
 
         port = serverPort

@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright 2016 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+
+<!-- TODO -->
+
+<Bundle xmlns="http://hl7.org/fhir">
+    <meta>
+        <profile
+            value="https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentListsResponseMessage"/>
+    </meta>
+    <type value="searchset"/>
+    <total value="1"/>
+    <entry>
+        <resource>
+            <List xmlns="http://hl7.org/fhir">
+                <id value="9bc72458-49b0-11e6-8a1c-3c1620524153"/>
+                <meta>
+                    <profile value="https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.SubmissionSet"/>
+                </meta>
+                <extension
+                    url="https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType">
+                    <valueCodeableConcept>
+                        <coding>
+                            <system value="http://snomed.info/sct"/>
+                            <code value="225728007"/>
+                        </coding>
+                    </valueCodeableConcept>
+                </extension>
+                <extension
+                    url="https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-sourceId">
+                    <valueIdentifier>
+                        <value value="urn:oid:1.2.3.4"/>
+                    </valueIdentifier>
+                </extension>
+                <identifier>
+                    <use value="usual"/>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="urn:oid:1.2.840.113556.1.8000.2554.58783.21864.3474.19410.44358.58254.41281.46348"/>
+                </identifier>
+                <status value="current"/>
+                <mode value="working"/>
+                <code>
+                    <coding>
+                        <system
+                            value="https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes"/>
+                        <code value="submissionset"/>
+                    </coding>
+                </code>
+                <subject>
+                    <reference value="Patient/8294784675"/>
+                </subject>
+                <date value="2011-01-03T11:00:41+01:00"/>
+                <entry>
+                    <item>
+                        <reference value="DocumentReference/aaaaaaaa-bbbb-cccc-dddd-e00444400002"/>
+                    </item>
+                </entry>
+            </List>
+        </resource>
+    </entry>
+</Bundle>

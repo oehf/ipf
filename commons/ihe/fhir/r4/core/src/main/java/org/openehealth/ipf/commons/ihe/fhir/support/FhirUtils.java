@@ -16,13 +16,16 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.*;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,29 @@ public final class FhirUtils {
                 , LinkedHashMap::new, Collectors.toList()));
     }
 
+    /**
+     * @see ca.uhn.fhir.util.BundleUtil#toListOfResourcesOfType(FhirContext, IBaseBundle, Class)
+     */
+    public static <T extends Resource>  List<T> getResources(Bundle bundle, Class<T> clazz) {
+        return bundle.getEntry().stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .filter(c -> clazz.isAssignableFrom(c.getClass()))
+            .map(clazz::cast)
+            .collect(Collectors.toList());
+    }
+
+    public static <T extends Resource> Optional<T> getOptionalResource(Bundle bundle, Class<T> clazz) {
+        return bundle.getEntry().stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .filter(c -> clazz.isAssignableFrom(c.getClass()))
+            .map(clazz::cast)
+            .findFirst();
+    }
+
+    public static <T extends Resource> T getResource(Bundle bundle, Class<T> clazz) {
+        return getOptionalResource(bundle, clazz)
+            .orElseThrow(() -> new RuntimeException("Expected entry with resource of type " + clazz.getName()));
+    }
 
     // Generate Exceptions
 
