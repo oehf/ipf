@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionTy
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.util.List;
 import java.util.Map;
 

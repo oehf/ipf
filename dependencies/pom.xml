@@ -21,7 +21,7 @@
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <groovy-version>4.0.15</groovy-version>
         <hapi-version>2.5.1</hapi-version>
-        <hapi-fhir-version>6.10.0</hapi-fhir-version>
+        <hapi-fhir-version>6.11.7-SNAPSHOT</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -1026,6 +1026,18 @@
             <id>irisa-sumo</id>
             <name>Sumo Irisa Public Maven Repository Group</name>
             <url>https://gazelle.ihe.net/nexus/content/repositories/releases/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>shibboleth-releases</id>
+            <name>Shibboleth Releases</name>
+            <url>https://build.shibboleth.net/maven/releases/</url>
             <layout>default</layout>
             <releases>
                 <enabled>true</enabled>
