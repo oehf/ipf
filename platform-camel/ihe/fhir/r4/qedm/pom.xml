@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ipf-platform-camel-ihe-fhir-r4</artifactId>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <version>4.8-m4</version>
+        <version>4.8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
