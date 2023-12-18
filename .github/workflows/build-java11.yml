@@ -1,0 +1,27 @@
+name: Build IPF with Maven Java 11
+
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  MAVEN_OPTS: -Xmx2048m
+
+# on download timeouts, consider to disable connection pooling
+# -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3
+# or consider to restrict the ttl
+#  -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Java 11 build
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+          cache: 'maven'
+      - name: Build with Maven
+        run: mvn -B clean test --file pom.xml
