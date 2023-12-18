@@ -74,6 +74,18 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-server</artifactId>
+                <version>${hapi-fhir-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- Not needed for our purpose -->
+                        <groupId>org.simplejavamail</groupId>
+                        <artifactId>simple-java-mail</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-validation</artifactId>
                 <version>${hapi-fhir-version}</version>
                 <exclusions>
@@ -92,6 +104,16 @@
                              but since the tools are not needed, the fix also not -->
                         <groupId>commons-beanutils</groupId>
                         <artifactId>commons-beanutils</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- Not needed for our purpose -->
+                        <groupId>org.xerial</groupId>
+                        <artifactId>sqlite-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- Not needed for our purpose -->
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml-mit</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
