@@ -217,6 +217,9 @@ public enum MhdProfile implements MhdConstants, Mhd421 {
         Arrays.stream(MhdProfile.values())
             .filter(profile -> profile.resourceClass != null)
             .forEach(profile -> fhirContext.setDefaultTypeForProfile(profile.url, profile.resourceClass));
+        fhirContext.registerCustomTypes(Arrays.asList(
+            Source.class, EntryUuidIdentifier.class, SubmissionSetUniqueIdIdentifier.class, UniqueIdIdentifier.class
+        ));
     }
 
     public static Optional<MhdProfile> profileForResource(IBaseResource resource) {

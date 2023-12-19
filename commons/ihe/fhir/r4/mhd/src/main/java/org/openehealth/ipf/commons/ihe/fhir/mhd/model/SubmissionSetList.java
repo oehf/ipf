@@ -84,7 +84,7 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return this.sourceId != null && !this.sourceId.isEmpty();
     }
 
-    public List<Reference> getCitizenship() {
+    public List<Reference> getIntendedRecipient() {
         if (intendedRecipient == null) {
             intendedRecipient = new ArrayList<>();
         }
@@ -92,7 +92,7 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
     }
 
     public Reference getIntendedRecipientFirstRep() {
-        return this.getCitizenship().get(0);
+        return this.getIntendedRecipient().get(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -116,12 +116,6 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         if (this.intendedRecipient == null)
             this.intendedRecipient = new ArrayList<>();
         this.intendedRecipient.add(r);
-        return (T)this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public T setSource(Source value) {
-        super.setSource(value);
         return (T)this;
     }
 
