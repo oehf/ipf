@@ -20,12 +20,15 @@ import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.util.ElementUtil;
+import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ListResource;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST;
@@ -43,39 +46,57 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
         MHD_LIST.setProfile(this);
     }
 
-    /**
-     * Defines what this List is for (system = <a href="https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes">...</a>)
-     * <ul>
-     * <li>folder : Folder as a FHIR List</li>
-     * <li>submissionset : SubmissionSet as a FHIR List</li>
-     * </ul>
-     */
     @Child(name = "designationType")
     @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType", definedLocally = false)
     @Description(shortDefinition = "Clinical code of the List")
-    private CodeableConcept designationType;
+    private List<CodeableConcept> designationType;
 
     @Override
     public boolean isEmpty() {
         return super.isEmpty() && ElementUtil.isEmpty(designationType);
     }
 
-    public CodeableConcept getDesignationType() {
+    public List<CodeableConcept> getDesignationType() {
         if (designationType == null) {
-            designationType = new CodeableConcept();
+            designationType = new ArrayList<>();
         }
         return designationType;
     }
 
-    public T setDesignationType(CodeableConcept designationType) {
-        this.designationType = designationType;
+    public CodeableConcept addDesignationType() {
+        CodeableConcept codeableConcept = new CodeableConcept();
+        addDesignationType(codeableConcept);
+        return codeableConcept;
+    }
+
+    public T addDesignationType(CodeableConcept codeableConcept) {
+        if (codeableConcept != null) {
+            if (this.designationType == null)
+                this.designationType = new ArrayList<>();
+            this.designationType.add(codeableConcept);
+        }
         return (T)this;
     }
 
-    public boolean hasDesignationType() {
-        return this.designationType != null && !this.designationType.isEmpty();
+    /**
+     * @return The first repetition of repeating field {@link #note}, creating it if
+     *         it does not already exist
+     */
+    public CodeableConcept getDesignationTypeFirstRep() {
+        if (getDesignationType().isEmpty()) {
+            addDesignationType();
+        }
+        return getDesignationType().get(0);
     }
 
+    public boolean hasDesignationType() {
+        if (this.designationType == null)
+            return false;
+        for (CodeableConcept item : this.designationType)
+            if (!item.isEmpty())
+                return true;
+        return false;
+    }
 
     /**
      * Adds an identifier to be a EntryUuid as required by the profile
@@ -90,7 +111,12 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
     @Override
     public void copyValues(ListResource dst) {
         super.copyValues(dst);
-        ((MhdList<T>)dst).designationType = designationType == null ? null : designationType.copy();
+        MhdList<T> mhdList = (MhdList<T>) dst;
+        if (designationType != null) {
+            mhdList.designationType = new ArrayList<>();
+            for (CodeableConcept i : designationType)
+                mhdList.designationType.add(i.copy());
+        }
     }
 
     @Override
