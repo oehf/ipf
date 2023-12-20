@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 4.8
  */
-public class Iti66ListResourceProvider extends Iti66ResourceProvider {
+public class Iti66ListResourceProvider extends AbstractPlainProvider {
 
     // Supported as of MHD 4.2.1
 

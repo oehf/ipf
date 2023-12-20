@@ -33,6 +33,10 @@ import java.util.Optional;
  */
 public abstract class FhirSearchAndSortParameters<T extends IBaseResource> implements FhirSearchParameters {
 
+    @SuppressWarnings("unused")
+    public FhirSearchAndSortParameters() {
+    }
+
     /**
      * @return the sort specification as requested by the client
      */

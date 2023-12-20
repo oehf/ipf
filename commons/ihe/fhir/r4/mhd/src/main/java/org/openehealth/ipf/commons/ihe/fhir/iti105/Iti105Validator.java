@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti105;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.r4.model.Resource;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.commons.ihe.fhir.support.IgBasedInstanceValidator;
 
 import java.util.Map;
@@ -40,6 +41,6 @@ public class Iti105Validator extends IgBasedInstanceValidator {
 
     @Override
     public void validateRequest(Object payload, Map<String, Object> parameters) {
-         handleOperationOutcome(validateProfileConformance((Resource) payload, ITI105_PROFILE));
+         handleOperationOutcome(validateProfileConformance((Resource) payload, MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE));
     }
 }

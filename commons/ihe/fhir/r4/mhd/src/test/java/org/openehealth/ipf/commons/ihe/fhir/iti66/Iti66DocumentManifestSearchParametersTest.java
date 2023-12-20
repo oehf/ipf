@@ -27,11 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Christian Ohr
  */
-public class Iti66SearchParametersTest {
+public class Iti66DocumentManifestSearchParametersTest {
 
     @Test
     public void setAuthor() {
-        var searchParameters = Iti66SearchParameters.builder().build();
+        var searchParameters = Iti66DocumentManifestSearchParameters.builder().build();
 
         var param = new ReferenceAndListParam()
                 .addAnd(new ReferenceOrListParam()

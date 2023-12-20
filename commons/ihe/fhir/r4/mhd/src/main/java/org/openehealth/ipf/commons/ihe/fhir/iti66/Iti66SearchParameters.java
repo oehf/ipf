@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,114 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.hl7.fhir.r4.model.DocumentManifest;
+import lombok.experimental.SuperBuilder;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Practitioner;
-import org.hl7.fhir.r4.model.PractitionerRole;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
-
 /**
- * @since 3.6
+ * Common SearchParameter base class for ITI-66 transactions
+ * @param <T>
  */
-@Builder
-@ToString
-@AllArgsConstructor
-public class Iti66SearchParameters extends FhirSearchAndSortParameters<DocumentManifest> {
+public abstract class Iti66SearchParameters<T extends IBaseResource> extends FhirSearchAndSortParameters<T> {
 
-    @Getter @Setter private DateRangeParam created;
-    @Getter @Setter private StringParam authorFamilyName;
-    @Getter @Setter private StringParam authorGivenName;
-    @Getter @Setter private TokenOrListParam type;
-    @Getter @Setter private TokenOrListParam source;
-    @Getter @Setter private TokenOrListParam status;
-    @Getter @Setter private TokenParam identifier;
-    @Getter @Setter private ReferenceParam patientReference;
-    @Getter @Setter private TokenParam patientIdentifier;
-    @Getter @Setter private TokenParam _id;
+    public abstract Iti66SearchParameters<T> setAuthor(ReferenceAndListParam author);
 
-    @Getter @Setter private SortSpec sortSpec;
-    @Getter @Setter private Set<Include> includeSpec;
+    public abstract FhirContext getFhirContext();
 
-    @Getter
-    private final FhirContext fhirContext;
-
-    @Override
-    public List<TokenParam> getPatientIdParam() {
-        if (_id != null)
-            return Collections.singletonList(_id);
-        if (patientReference != null)
-            return Collections.singletonList(patientReference.toTokenParam(fhirContext));
-
-        return Collections.singletonList(patientIdentifier);
-    }
-
-    public Iti66SearchParameters setAuthor(ReferenceAndListParam author) {
-        if (author != null) {
-            author.getValuesAsQueryTokens().forEach(param -> {
-                var ref = param.getValuesAsQueryTokens().get(0);
-                var authorChain = ref.getChain();
-                if (Practitioner.SP_FAMILY.equals(authorChain)) {
-                    setAuthorFamilyName(ref.toStringParam(getFhirContext()));
-                } else if (Practitioner.SP_GIVEN.equals(authorChain)) {
-                    setAuthorGivenName(ref.toStringParam(getFhirContext()));
-                }
-            });
-        }
-        return this;
-    }
-
-    @Override
-    public Optional<Comparator<DocumentManifest>> comparatorFor(String paramName) {
-        if (DocumentManifest.SP_CREATED.equals(paramName)) {
-            return Optional.of(CP_CREATED);
-        } else if (DocumentManifest.SP_AUTHOR.equals(paramName)) {
-            return Optional.of(CP_AUTHOR);
-        }
-        return Optional.empty();
-    }
-
-    private static final Comparator<DocumentManifest> CP_CREATED = nullsLast(comparing(DocumentManifest::getCreated));
-
-    private static final Comparator<DocumentManifest> CP_AUTHOR = nullsLast(comparing(documentManifest -> {
-        if (!documentManifest.hasAuthor()) return null;
-        var author = documentManifest.getAuthorFirstRep();
-        if (author.getResource() instanceof PractitionerRole) {
-            var practitionerRole = (PractitionerRole) author.getResource();
-            if (!practitionerRole.hasPractitioner()) return null;
-            author = practitionerRole.getPractitioner();
-        }
-        if (author.getResource() == null) return null;
-        if (author.getResource() instanceof Practitioner) {
-            var practitioner = (Practitioner) author.getResource();
-            if (!practitioner.hasName()) return null;
-            var name = practitioner.getNameFirstRep();
-            return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
-        }
-        return null;
-    }));
 }

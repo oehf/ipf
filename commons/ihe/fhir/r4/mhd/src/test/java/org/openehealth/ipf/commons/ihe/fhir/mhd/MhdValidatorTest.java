@@ -75,7 +75,7 @@ public class MhdValidatorTest {
             .setSubmissionSetUniqueIdIdentifier(new Oid("1.2.58.92.23"))
             .setEntryUuidIdentifier(UUID.randomUUID())
             .setSourceId(new Oid("1.2.58.92.24"))
-            .setDesignationType(new CodeableConcept(
+            .addDesignationType(new CodeableConcept(
                 new Coding("http://snomed.info/sct", "225728007", "")
             ))
             .addIntendedRecipient(new Reference(practitioner))

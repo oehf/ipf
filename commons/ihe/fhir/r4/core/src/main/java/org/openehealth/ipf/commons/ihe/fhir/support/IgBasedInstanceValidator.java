@@ -35,6 +35,7 @@ import java.util.Comparator;
  */
 abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.Support {
 
+    private static final String STANDARD_PREFIX = "http://hl7.org/fhir/StructureDefinition/";
     private final FhirContext fhirContext;
 
     protected IgBasedInstanceValidator(FhirContext fhirContext) {
@@ -46,9 +47,9 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
      * @return {@link OperationOutcome} containing or not containing validation errors (never <code>null</code>).
      */
     protected OperationOutcome validateProfileConformance(Resource resource, String profileUri) {
-        String standardPrefix = "http://hl7.org/fhir/StructureDefinition/";
-        if (profileUri.startsWith(standardPrefix)) {
-            String expectedResourceType = profileUri.substring(standardPrefix.length());
+
+        if (profileUri.startsWith(STANDARD_PREFIX)) {
+            String expectedResourceType = profileUri.substring(STANDARD_PREFIX.length());
             if (resource.fhirType().equals(expectedResourceType)) {
                 return doValidate(resource);
             } else {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hl7.fhir.r4.model.ListResource;
 import org.hl7.fhir.r4.model.Practitioner;
-import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 
 import java.util.*;
 
@@ -31,25 +33,23 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 
 /**
- * @since 3.6
+ * @since 4.8
  */
 @Builder
 @ToString
-@AllArgsConstructor
-public class Iti66ListSearchParameters extends FhirSearchAndSortParameters<ListResource> {
+public class Iti66ListSearchParameters extends Iti66SearchParameters<ListResource> {
 
     @Getter @Setter private DateRangeParam date;
-    @Getter @Setter private StringParam authorFamilyName;
-    @Getter @Setter private StringParam authorGivenName;
     @Getter @Setter private TokenOrListParam code;
     @Getter @Setter private TokenOrListParam designationType;
     @Getter @Setter private TokenOrListParam sourceId;
     @Getter @Setter private TokenOrListParam status;
     @Getter @Setter private TokenParam identifier;
+    @Getter @Setter private TokenParam _id;
     @Getter @Setter private ReferenceParam patientReference;
     @Getter @Setter private TokenParam patientIdentifier;
-    @Getter @Setter private TokenParam _id;
-
+    @Getter @Setter private StringParam authorFamilyName;
+    @Getter @Setter private StringParam authorGivenName;
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 
@@ -57,15 +57,6 @@ public class Iti66ListSearchParameters extends FhirSearchAndSortParameters<ListR
     private final FhirContext fhirContext;
 
     @Override
-    public List<TokenParam> getPatientIdParam() {
-        if (_id != null)
-            return Collections.singletonList(_id);
-        if (patientReference != null)
-            return Collections.singletonList(patientReference.toTokenParam(fhirContext));
-
-        return Collections.singletonList(patientIdentifier);
-    }
-
     public Iti66ListSearchParameters setAuthor(ReferenceAndListParam author) {
         if (author != null) {
             author.getValuesAsQueryTokens().forEach(param -> {
@@ -79,6 +70,16 @@ public class Iti66ListSearchParameters extends FhirSearchAndSortParameters<ListR
             });
         }
         return this;
+    }
+
+    @Override
+    public List<TokenParam> getPatientIdParam() {
+        if (_id != null)
+            return Collections.singletonList(_id);
+        if (patientReference != null)
+            return Collections.singletonList(patientReference.toTokenParam(fhirContext));
+
+        return Collections.singletonList(patientIdentifier);
     }
 
     @Override

@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
+import java.util.Arrays;
+
 /**
  * Standard Configuration for Iti66Component. Supports lazy-loading by default.
  *
@@ -30,12 +32,12 @@ public class Iti66TransactionConfiguration extends FhirTransactionConfiguration<
 
     public Iti66TransactionConfiguration() {
         super("mhd-iti66",
-                "Find Document Manifests",
+                "Find Document Manifests or Lists",
                 true,
                 new Iti66AuditStrategy(false),
                 new Iti66AuditStrategy(true),
                 FhirVersionEnum.R4,
-                new Iti66ListResourceProvider(),
+                Arrays.asList(new Iti66ListResourceProvider(), new Iti66DocumentManifestResourceProvider()),
                 new Iti66ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);
         setSupportsLazyLoading(true);

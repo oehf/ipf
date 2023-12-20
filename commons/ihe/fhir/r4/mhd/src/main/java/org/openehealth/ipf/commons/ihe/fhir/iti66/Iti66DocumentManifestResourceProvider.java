@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti66ResourceProvider extends AbstractPlainProvider {
+public class Iti66DocumentManifestResourceProvider extends AbstractPlainProvider {
 
     // Supported with MHD 3.2.0
 
@@ -60,7 +60,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
 
-        var searchParameters = Iti66SearchParameters.builder()
+        var searchParameters = Iti66DocumentManifestSearchParameters.builder()
                 .created(created)
                 .type(type)
                 .source(source)

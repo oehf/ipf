@@ -74,7 +74,7 @@ public class Iti66StrictResourceProvider extends AbstractPlainProvider {
             HttpServletResponse httpServletResponse) {
 
 
-        var searchParameters = Iti66SearchParameters.builder()
+        var searchParameters = Iti66DocumentManifestSearchParameters.builder()
                 .created(created)
                 .type(type)
                 .source(source)

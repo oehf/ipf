@@ -13,6 +13,9 @@ import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +40,7 @@ public class Iti105ValidatorTest {
     @BeforeAll
     static void beforeAll() {
         var context = FhirContext.forR4();
+        MhdProfile.registerDefaultTypes(context);
         iti105Validator = new Iti105Validator(context);
     }
 
@@ -47,7 +51,7 @@ public class Iti105ValidatorTest {
 
     @Test
     void testInvalidConformance() throws Exception {
-        var documentReference = invalidDocumentreference();
+        var documentReference = invalidDocumentReference();
         UnprocessableEntityException exception = assertThrows(UnprocessableEntityException.class, () ->
             iti105Validator.validateRequest(documentReference, new HashMap<>())
         );
@@ -57,12 +61,12 @@ public class Iti105ValidatorTest {
     }
 
     private static DocumentReference validDocumentreference() throws NoSuchAlgorithmException {
-        var reference = invalidDocumentreference();
-        reference.getMeta().addProfile(Iti105Validator.ITI105_PROFILE);
+        var reference = invalidDocumentReference();
+        reference.getMeta().addProfile(MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE);
         return reference;
     }
 
-    private static DocumentReference invalidDocumentreference() throws NoSuchAlgorithmException {
+    private static DocumentReference invalidDocumentReference() throws NoSuchAlgorithmException {
         var documentContent = "Hello IHE World".getBytes();
         var practitioner = new Practitioner();
         var reference = new DocumentReference();
