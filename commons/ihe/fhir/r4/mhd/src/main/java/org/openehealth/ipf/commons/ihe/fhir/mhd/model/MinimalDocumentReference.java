@@ -18,18 +18,16 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.Enumerations;
-import org.hl7.fhir.r4.model.Identifier;
-import org.openehealth.ipf.commons.core.URN;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.Date;
 import java.util.UUID;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.MINIMAL_DOCUMENT_REFERENCE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.MINIMAL_DOCUMENT_REFERENCE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUMENT_REFERENCE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUMENT_REFERENCE_PROFILE;
 
 @ResourceDef(name = "DocumentReference", id = "mhdMinimalDocumentReference", profile = MINIMAL_DOCUMENT_REFERENCE_PROFILE)
-public class MinimalDocumentReference<T extends MinimalDocumentReference<T>> extends DocumentReference {
+public class MinimalDocumentReference extends AbstractDocumentReference<MinimalDocumentReference> {
 
     public MinimalDocumentReference() {
         super();
@@ -38,33 +36,10 @@ public class MinimalDocumentReference<T extends MinimalDocumentReference<T>> ext
         setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
     }
 
-    /**
-     * Sets the MasterIdentifier to be a Unique Id as required by the profile
-     *
-     * @param system system value
-     * @param value identifier value
-     * @return this object
-     */
-    @SuppressWarnings("unchecked")
-    public T setUniqueIdIdentifier(String system, String value) {
-        setMasterIdentifier(new Identifier()
-            .setUse(Identifier.IdentifierUse.USUAL)
-            .setSystem(system)
-            .setValue(value));
-        return (T)this;
-    }
-
-    /**
-     * Adds an identifier to be a EntryUuid as required by the profile
-     * @param uuid UUID
-     * @return this object
-     */
-    @SuppressWarnings("unchecked")
-    public T setEntryUuidIdentifier(UUID uuid) {
-        getIdentifier().add(new Identifier()
-            .setUse(Identifier.IdentifierUse.OFFICIAL)
-            .setSystem(Constants.URN_IETF_RFC_3986)
-            .setValue(new URN(uuid).toString()));
-        return (T)this;
+    @Override
+    public MinimalDocumentReference copy() {
+        var dst = new MinimalDocumentReference();
+        copyValues(dst);
+        return dst;
     }
 }

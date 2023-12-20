@@ -17,15 +17,22 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE;
 
 @ResourceDef(name = "DocumentReference", id = "mhdUncontainedComprehensiveDocumentReference", profile = UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE)
-public class UncontainedComprehensiveDocumentReference<T extends UncontainedComprehensiveDocumentReference<T>> extends MinimalDocumentReference<T> {
+public class UncontainedComprehensiveDocumentReference extends AbstractDocumentReference<UncontainedComprehensiveDocumentReference> {
 
     public UncontainedComprehensiveDocumentReference() {
         super();
         UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE.setProfile(this);
+    }
+
+    @Override
+    public UncontainedComprehensiveDocumentReference copy() {
+        var dst = new UncontainedComprehensiveDocumentReference();
+        copyValues(dst);
+        return dst;
     }
 
 }

@@ -1,0 +1,278 @@
+{
+  "resourceType": "Bundle",
+  "id": "ex-comprehensiveProvideDocumentBundleSimple",
+  "meta": {
+    "profile": [
+      "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.ProvideBundle"
+    ],
+    "security": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "code": "HTEST"
+      }
+    ]
+  },
+  "type": "transaction",
+  "timestamp": "2004-10-25T23:50:50-05:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300001",
+      "resource": {
+        "resourceType": "List",
+        "id": "aaaaaaaa-bbbb-cccc-dddd-e00333300001",
+        "meta": {
+          "profile": [
+            "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.SubmissionSet"
+          ],
+          "security": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST"
+            }
+          ]
+        },
+        "text": {
+          "status": "extensions",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">SubmissionSet with Patient</div>"
+        },
+        "contained" : [
+          {
+            "resourceType" : "Practitioner",
+            "id" : "in-practitionerRecipient",
+            "telecom" : [
+              {
+                "system" : "email",
+                "value" : "JohnMoehrke@gmail.com"
+              }
+            ]
+          },
+          {
+            "resourceType" : "Practitioner",
+            "id" : "in-practitionerAuthor",
+            "telecom" : [
+              {
+                "system" : "email",
+                "value" : "iti@ihe.net"
+              }
+            ]
+          },
+          {
+            "resourceType" : "Organization",
+            "id" : "in-organizationAuthor",
+            "name" : "my Hospital"
+          }
+        ],
+        "extension": [
+          {
+            "url": "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType",
+            "valueCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "225728007"
+                }
+              ]
+            }
+          },
+          {
+            "url": "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-sourceId",
+            "valueIdentifier": {
+              "value": "urn:oid:1.2.3.4"
+            }
+          },
+          {
+            "url" : "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-intendedRecipient",
+            "valueReference" : {
+              "reference" : "#in-practitionerRecipient"
+            }
+          }
+        ],
+        "identifier": [
+          {
+            "use": "usual",
+            "system": "urn:ietf:rfc:3986",
+            "value": "urn:oid:1.2.840.113556.1.8000.2554.58783.21864.3474.19410.44358.58254.41281.46346"
+          }
+        ],
+        "status": "current",
+        "mode": "working",
+        "code": {
+          "coding": [
+            {
+              "system": "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
+              "code": "submissionset"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/ex-patient"
+        },
+        "date": "2004-10-25T23:50:50-05:00",
+        "source" : {
+          "extension" : [
+            {
+              "url" : "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-authorOrg",
+              "valueReference" : {
+                "reference" : "#in-organizationAuthor"
+              }
+            }
+          ],
+          "reference" : "#in-practitionerAuthor"
+        },
+        "entry": [
+          {
+            "item": {
+              "reference": "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300002"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "List"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300002",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "aaaaaaaa-bbbb-cccc-dddd-e00333300002",
+        "meta": {
+          "profile": [
+            "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.DocumentReference"
+          ],
+          "security": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST"
+            }
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative: DocumentReference</b><a name=\"aaaaaaaa-bbbb-cccc-dddd-e00333300002\"> </a></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"><p style=\"margin-bottom: 0px\">Resource DocumentReference &quot;aaaaaaaa-bbbb-cccc-dddd-e00333300002&quot; </p><p style=\"margin-bottom: 0px\">Profile: <a href=\"StructureDefinition-IHE.MHD.Comprehensive.DocumentReference.html\">MHD DocumentReference Comprehensive</a></p><p style=\"margin-bottom: 0px\">Security Labels: <span title=\"{http://terminology.hl7.org/CodeSystem/v3-ActReason http://terminology.hl7.org/CodeSystem/v3-ActReason}\">http://terminology.hl7.org/CodeSystem/v3-ActReason</span></p></div><p><b>masterIdentifier</b>: id:\u00a0urn:oid:1.2.840.113556.1.8000.2554.53432.348.12973.17740.34205.4355.50220.62012</p><p><b>status</b>: current</p><p><b>type</b>: Patient summary Document <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://loinc.org/\">LOINC</a>#60591-5)</span></p><p><b>category</b>: History of Immunization Narrative <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://loinc.org/\">LOINC</a>#11369-6)</span></p><p><b>subject</b>: <a href=\"Patient-ex-patient.html\">Patient/ex-patient</a> &quot; SCHMIDT&quot;</p><p><b>date</b>: Feb 1, 2020, 10:50:50 PM</p><p><b>securityLabel</b>: restricted <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"http://terminology.hl7.org/5.0.0/CodeSystem-v3-Confidentiality.html\">Confidentiality</a>#R)</span></p><blockquote><p><b>content</b></p><h3>Attachments</h3><table class=\"grid\"><tr><td style=\"display: none\">-</td><td><b>ContentType</b></td><td><b>Language</b></td><td><b>Url</b></td><td><b>Size</b></td><td><b>Hash</b></td><td><b>Title</b></td><td><b>Creation</b></td></tr><tr><td style=\"display: none\">*</td><td>text/plain</td><td>en</td><td><code>urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300003</code></td><td>11</td><td>(base64 data - 40 bytes)</td><td>Hello World</td><td>2020-02-01 23:50:50-0500</td></tr></table><p><b>format</b>: ITI XDS-SD TEXT (Details: http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode code urn:ihe:iti:xds-sd:text:2008 = 'ITI XDS-SD TEXT', stated as 'null')</p></blockquote><h3>Contexts</h3><table class=\"grid\"><tr><td style=\"display: none\">-</td><td><b>FacilityType</b></td><td><b>PracticeSetting</b></td><td><b>SourcePatientInfo</b></td></tr><tr><td style=\"display: none\">*</td><td>Children's hospital <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://browser.ihtsdotools.org/\">SNOMED CT</a>#82242000)</span></td><td>Adult mental illness - specialty (qualifier value) <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://browser.ihtsdotools.org/\">SNOMED CT</a>#408467006)</span></td><td><a name=\"aaaaaaaa-bbbb-cccc-dddd-e00333300004\"> </a><blockquote><p/><p><a name=\"aaaaaaaa-bbbb-cccc-dddd-e00333300004\"> </a></p><p><b>identifier</b>: id:\u00a0mrn-1234</p><p><b>name</b>: Dee Schmidt </p></blockquote></td></tr></table><hr/><blockquote><p style=\"border: 1px #661aff solid; background-color: #e6e6ff; padding: 10px;\"><b>Dee Schmidt </b> (no stated gender), DoB Unknown ( id:\u00a0mrn-1234)</p><hr/></blockquote></div>"
+        },
+        "contained": [
+          {
+            "resourceType": "Patient",
+            "id": "aaaaaaaa-bbbb-cccc-dddd-e00333300004",
+            "identifier": [
+              {
+                "system": "http://example.org/patients",
+                "value": "mrn-1234"
+              }
+            ],
+            "name": [
+              {
+                "family": "Schmidt",
+                "given": [
+                  "Dee"
+                ]
+              }
+            ]
+          }
+        ],
+        "masterIdentifier": {
+          "system": "urn:ietf:rfc:3986",
+          "value": "urn:oid:1.2.840.113556.1.8000.2554.53432.348.12973.17740.34205.4355.50220.62012"
+        },
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "60591-5"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "11369-6"
+              }
+            ]
+          }
+        ],
+        "subject": {
+          "reference": "Patient/ex-patient"
+        },
+        "date": "2020-02-01T23:50:50-05:00",
+        "securityLabel": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
+                "code": "R"
+              }
+            ]
+          }
+        ],
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "language": "en",
+              "url": "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300003",
+              "size": 11,
+              "hash": "MGE0ZDU1YThkNzc4ZTUwMjJmYWI3MDE5NzdjNWQ4NDBiYmM0ODZkMA==",
+              "title": "Hello World",
+              "creation": "2020-02-01T23:50:50-05:00"
+            },
+            "format": {
+              "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+              "code": "urn:ihe:iti:xds-sd:text:2008"
+            }
+          }
+        ],
+        "context": {
+          "facilityType": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "82242000"
+              }
+            ]
+          },
+          "practiceSetting": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "408467006"
+              }
+            ]
+          },
+          "sourcePatientInfo": {
+            "reference": "#aaaaaaaa-bbbb-cccc-dddd-e00333300004"
+          }
+        }
+      },
+      "request": {
+        "method": "POST",
+        "url": "DocumentReference"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-e00333300003",
+      "resource": {
+        "resourceType": "Binary",
+        "id": "aaaaaaaa-bbbb-cccc-dddd-e00333300003",
+        "meta": {
+          "security": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+              "code": "HTEST"
+            }
+          ]
+        },
+        "contentType": "text/plain",
+        "data": "SGVsbG8gV29ybGQ="
+      },
+      "request": {
+        "method": "POST",
+        "url": "Binary"
+      }
+    }
+  ]
+}

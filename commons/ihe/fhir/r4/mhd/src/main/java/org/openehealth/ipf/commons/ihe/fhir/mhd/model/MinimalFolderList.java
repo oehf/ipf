@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.MINIMAL_FOLDER_TYPE_LIST;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.MINIMAL_FOLDER_TYPE_LIST_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_FOLDER_TYPE_LIST;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_FOLDER_TYPE_LIST_PROFILE;
 
 @ResourceDef(name = "List", id = "mhdMinimalFolder", profile = MINIMAL_FOLDER_TYPE_LIST_PROFILE)
 public class MinimalFolderList extends FolderList<MinimalFolderList> {
@@ -26,5 +26,12 @@ public class MinimalFolderList extends FolderList<MinimalFolderList> {
     public MinimalFolderList() {
         super();
         MINIMAL_FOLDER_TYPE_LIST.setProfile(this);
+    }
+
+    @Override
+    public MinimalFolderList copy() {
+        var dst = new MinimalFolderList();
+        copyValues(dst);
+        return dst;
     }
 }

@@ -17,15 +17,16 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils.getResources;
 
 @ResourceDef(name = "Bundle", id = "mhdMinimalDocumentReferenceResponseBundle", profile = ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE)
-public class FindMinimalDocumentReferencesResponseBundle extends Bundle {
+public class FindMinimalDocumentReferencesResponseBundle extends Bundle implements Mhd421 {
 
     public FindMinimalDocumentReferencesResponseBundle() {
         super();
@@ -35,6 +36,13 @@ public class FindMinimalDocumentReferencesResponseBundle extends Bundle {
 
     public List<MinimalDocumentReference> getMinimalDocumentReferences() {
         return getResources(this, MinimalDocumentReference.class);
+    }
+
+    @Override
+    public FindMinimalDocumentReferencesResponseBundle copy() {
+        var dst = new FindMinimalDocumentReferencesResponseBundle();
+        copyValues(dst);
+        return dst;
     }
 
 }

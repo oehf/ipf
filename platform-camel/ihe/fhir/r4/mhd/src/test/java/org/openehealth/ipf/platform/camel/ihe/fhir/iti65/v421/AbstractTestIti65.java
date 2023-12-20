@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveSubmissionSetList;
@@ -56,7 +56,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     public static void setup(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
-        MhdProfiles.registerDefaultTypes(serverFhirContext);
+        MhdProfile.registerDefaultTypes(serverFhirContext);
         servlet.setFhirContext(serverFhirContext);
 
         var loggingInterceptor = new LoggingInterceptor();

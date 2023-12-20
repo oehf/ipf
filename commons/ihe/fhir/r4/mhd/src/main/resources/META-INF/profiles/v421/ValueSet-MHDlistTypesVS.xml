@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ValueSet xmlns="http://hl7.org/fhir">
+  <id value="MHDlistTypesVS"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><ul><li>Include these codes as defined in <a href="CodeSystem-MHDlistTypes.html"><code>https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes</code></a><table class="none"><tr><td style="white-space:nowrap"><b>Code</b></td><td><b>Display</b></td></tr><tr><td><a href="CodeSystem-MHDlistTypes.html#MHDlistTypes-folder">folder</a></td><td>Folder as a FHIR List</td></tr><tr><td><a href="CodeSystem-MHDlistTypes.html#MHDlistTypes-submissionset">submissionset</a></td><td>SubmissionSet as a FHIR List</td></tr></table></li></ul></div>
+  </text>
+  <url value="https://profiles.ihe.net/ITI/MHD/ValueSet/MHDlistTypesVS"/>
+  <version value="4.2.1"/>
+  <name value="MHDlistTypesVS"/>
+  <title value="MHD List Types ValueSet"/>
+  <status value="active"/>
+  <experimental value="false"/>
+  <date value="2023-08-02T11:14:45-05:00"/>
+  <publisher value="IHE IT Infrastructure Technical Committee"/>
+  <contact>
+    <telecom>
+      <system value="url"/>
+      <value value="https://www.ihe.net/ihe_domains/it_infrastructure/"/>
+    </telecom>
+  </contact>
+  <contact>
+    <telecom>
+      <system value="email"/>
+      <value value="iti@ihe.net"/>
+    </telecom>
+  </contact>
+  <contact>
+    <name value="IHE IT Infrastructure Technical Committee"/>
+    <telecom>
+      <system value="email"/>
+      <value value="iti@ihe.net"/>
+    </telecom>
+  </contact>
+  <description value="ValueSet of the MHD List Types allowed"/>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <compose>
+    <include>
+      <system value="https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes"/>
+      <concept>
+        <code value="folder"/>
+      </concept>
+      <concept>
+        <code value="submissionset"/>
+      </concept>
+    </include>
+  </compose>
+</ValueSet>

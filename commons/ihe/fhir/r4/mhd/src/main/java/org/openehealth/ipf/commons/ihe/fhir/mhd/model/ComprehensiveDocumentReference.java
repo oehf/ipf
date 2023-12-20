@@ -18,12 +18,12 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.*;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.COMPREHENSIVE_DOCUMENT_REFERENCE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_DOCUMENT_REFERENCE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE;
 
 
 @ResourceDef(name = "DocumentReference", id = "mhdComprehensiveDocumentReference", profile = COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE)
-public class ComprehensiveDocumentReference extends UncontainedComprehensiveDocumentReference<ComprehensiveDocumentReference> {
+public class ComprehensiveDocumentReference extends AbstractDocumentReference<ComprehensiveDocumentReference> {
 
     public ComprehensiveDocumentReference() {
         super();
@@ -78,6 +78,13 @@ public class ComprehensiveDocumentReference extends UncontainedComprehensiveDocu
     public ComprehensiveDocumentReference setSourcePatientInfo(Patient patient) {
         getContext().setSourcePatientInfo(new Reference(patient));
         return this;
+    }
+
+    @Override
+    public ComprehensiveDocumentReference copy() {
+        var dst = new ComprehensiveDocumentReference();
+        copyValues(dst);
+        return dst;
     }
 
 }

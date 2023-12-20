@@ -22,11 +22,7 @@ import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.context.support.ValidationSupportContext;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.common.hapi.validation.support.CommonCodeSystemsTerminologyService;
-import org.hl7.fhir.common.hapi.validation.support.InMemoryTerminologyServerValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.PrePopulatedValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.SnapshotGeneratingValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
+import org.hl7.fhir.common.hapi.validation.support.*;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.Bundle;
@@ -41,6 +37,7 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StructureDefinition;
 import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.slf4j.Logger;
@@ -54,6 +51,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
 
 /**
  * Validator for ITI-65 transactions.
@@ -69,13 +69,14 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     private static final String IHE_PROFILE_PREFIX = "http://ihe.net/fhir/StructureDefinition/";
 
     private final FhirContext fhirContext;
-    private IValidationSupport validationSupport;
+    private IValidationSupport validationSupportv320;
 
     public Iti65Validator(FhirContext fhirContext) {
         this.fhirContext = fhirContext;
         LOG.info("Initializing Validator for ITI-65 bundles");
-        validationSupport = loadStructureDefinitions(new DefaultProfileValidationSupport(fhirContext), "Minimal");
-        validationSupport = loadStructureDefinitions(validationSupport, "Comprehensive");
+        validationSupportv320 = loadStructureDefinitionsv320(new DefaultProfileValidationSupport(fhirContext), "Minimal");
+        validationSupportv320 = loadStructureDefinitionsv320(validationSupportv320, "Comprehensive");
+        validationSupportv320 = new CachingValidationSupport(validationSupportv320);
         LOG.info("Initialized Validator for ITI-65 bundles");
     }
 
@@ -83,13 +84,16 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     public void validateRequest(Object payload, Map<String, Object> parameters) {
 
         var transactionBundle = (Bundle) payload;
-
-        validateBundleConsistency(transactionBundle);
+        if (transactionBundle instanceof Mhd421) {
+            validateBundleConsistency421(transactionBundle);
+        } else {
+            validateBundleConsistency320(transactionBundle);
+        }
 
         var validator = fhirContext.newValidator();
         validator.setValidateAgainstStandardSchema(false);
         validator.setValidateAgainstStandardSchematron(false);
-        var instanceValidator = new FhirInstanceValidator(validationSupport);
+        var instanceValidator = new FhirInstanceValidator(validationSupportv320);
         instanceValidator.setNoTerminologyChecks(false);
         instanceValidator.setErrorForUnknownProfiles(true);
         instanceValidator.setBestPracticeWarningLevel(BestPracticeWarningLevel.Hint);
@@ -101,7 +105,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         }
     }
 
-    public ValidationSupportChain loadStructureDefinitions(IValidationSupport baseValidationSupport, String kind) {
+    public ValidationSupportChain loadStructureDefinitionsv320(IValidationSupport baseValidationSupport, String kind) {
         var validationSupport = new PrePopulatedValidationSupport(fhirContext);
         var supportChain = new ValidationSupportChain(
                 validationSupport,
@@ -132,8 +136,9 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 var profileText = scanner.useDelimiter("\\A").next();
                 var parser = EncodingEnum.detectEncodingNoDefault(profileText).newParser(fhirContext);
                 var structureDefinition = parser.parseResource(StructureDefinition.class, profileText);
-                return Optional.of(structureDefinition.hasSnapshot() ? structureDefinition
-                        : (StructureDefinition) new SnapshotGeneratingValidationSupport(fhirContext).generateSnapshot(
+                return Optional.of(structureDefinition.hasSnapshot() ?
+                    structureDefinition :
+                    (StructureDefinition) new SnapshotGeneratingValidationSupport(fhirContext).generateSnapshot(
                                 new ValidationSupportContext(snaphotGenerationSupport), structureDefinition, url, url,
                                 name));
             }
@@ -147,7 +152,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
      *
      * @param bundle transaction bundle
      */
-    protected void validateBundleConsistency(Bundle bundle) {
+    protected void validateBundleConsistency320(Bundle bundle) {
 
         var entries = FhirUtils.getBundleEntries(bundle);
 
@@ -269,6 +274,144 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
 
     }
 
+    /**
+     * Verifies that bundle has expected content and consistent patient references
+     *
+     * @param bundle transaction bundle
+     */
+    protected void validateBundleConsistency421(Bundle bundle) {
+
+        var entries = FhirUtils.getBundleEntries(bundle);
+
+        // Verify that the bundle has all required resources
+        // This should be done by the StructureDefinition, but apparently HAPI has a problem with slices...
+        // TODO check
+
+        var submissionSets = entries.getOrDefault(ResourceType.List, Collections.emptyList()).stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .map(ListResource.class::cast)
+            .filter(this::isListSubmissionSet)
+            .collect(Collectors.toList());
+        if (submissionSets.size() != 1) {
+            throw FhirUtils.unprocessableEntity(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.INVALID,
+                null, null,
+                "Request bundle must have exactly one SubmissionSet list"
+            );
+        }
+        if (entries.getOrDefault(ResourceType.DocumentReference, Collections.emptyList()).isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.INVALID,
+                null, null,
+                "Request bundle must have at least one DocumentReference"
+            );
+        }
+
+
+        var patientReferences = new HashSet<String>();
+        var expectedBinaryFullUrls = new HashSet<String>();
+        var expectedReferenceFullUrls = new HashSet<String>();
+        entries.values().stream()
+            .flatMap(Collection::stream)
+            .map(Bundle.BundleEntryComponent::getResource)
+            .forEach(resource -> {
+                if (resource instanceof ListResource) {
+                    var listResource = (ListResource) resource;
+                    if (isListSubmissionSet(listResource)) {
+                        for (var entry : listResource.getEntry()) {
+                            try {
+                                expectedReferenceFullUrls.add(entry.getItem().getReference());
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                    patientReferences.add(getSubjectReference(resource, r -> listResource.getSubject()));
+                } else if (resource instanceof DocumentReference) {
+                    var dr = (DocumentReference) resource;
+                    for (var content : dr.getContent()) {
+                        var url = content.getAttachment().getUrl();
+                        if (!url.startsWith("http")) {
+                            expectedBinaryFullUrls.add(url);
+                        }
+                    }
+                    patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
+                } else if (!(resource instanceof Binary)) {
+                    throw FhirUtils.unprocessableEntity(
+                        OperationOutcome.IssueSeverity.ERROR,
+                        OperationOutcome.IssueType.INVALID,
+                        null, null,
+                        "Unexpected bundle component %s",
+                        resource.getClass().getSimpleName()
+                    );
+                }
+            });
+
+        if (patientReferences.size() != 1) {
+            throw FhirUtils.unprocessableEntity(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.INVALID,
+                ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(),
+                null,
+                "Inconsistent patient references %s",
+                patientReferences
+            );
+        }
+
+        entries.values().stream()
+            .flatMap(Collection::stream)
+            .forEach(entry -> {
+                if (ResourceType.DocumentReference == entry.getResource().getResourceType()) {
+                    if (!expectedReferenceFullUrls.remove(entry.getFullUrl())) {
+                        throw FhirUtils.unprocessableEntity(
+                            OperationOutcome.IssueSeverity.ERROR,
+                            OperationOutcome.IssueType.INVALID,
+                            null, null,
+                            "DocumentReference with URL %s is not referenced by any SubmissionSet list",
+                            entry.getFullUrl()
+                        );
+                    }
+                } else if (ResourceType.Binary == entry.getResource().getResourceType()) {
+                    if (!expectedBinaryFullUrls.remove(entry.getFullUrl())) {
+                        throw FhirUtils.unprocessableEntity(
+                            OperationOutcome.IssueSeverity.ERROR,
+                            OperationOutcome.IssueType.INVALID,
+                            null, null,
+                            "Binary with URL %s is not referenced by any DocumentReference",
+                            entry.getFullUrl()
+                        );
+                    }
+                }
+            });
+
+        if (!expectedBinaryFullUrls.isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.INVALID,
+                null, null,
+                "Binary with URLs %s referenced, but not present in this bundle",
+                expectedBinaryFullUrls
+            );
+        }
+
+        if (!expectedReferenceFullUrls.isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.INVALID,
+                null, null,
+                "DocumentReference with URLs %s referenced, but not present in this bundle",
+                expectedReferenceFullUrls
+            );
+        }
+
+    }
+
+    private boolean isListSubmissionSet(ListResource listResource) {
+        return COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST.hasProfile(listResource) ||
+            MINIMAL_SUBMISSIONSET_TYPE_LIST.hasProfile(listResource) ||
+            UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST.hasProfile(listResource);
+    }
 
     private String getSubjectReference(Resource resource, Function<Resource, Reference> f) {
         var reference = f.apply(resource);

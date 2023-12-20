@@ -26,8 +26,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE;
 
 @ResourceDef(name = "DocumentReference", id = "mhdSimplifiedPublishDocumentReference", profile = SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE)
 public class SimplifiedPublishDocumentReference extends DocumentReference {
@@ -67,5 +67,10 @@ public class SimplifiedPublishDocumentReference extends DocumentReference {
         }
     }
 
-
+    @Override
+    public SimplifiedPublishDocumentReference copy() {
+        var dst = new SimplifiedPublishDocumentReference();
+        copyValues(dst);
+        return dst;
+    }
 }

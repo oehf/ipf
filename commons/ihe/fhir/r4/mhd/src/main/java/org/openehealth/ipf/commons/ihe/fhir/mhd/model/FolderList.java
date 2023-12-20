@@ -17,15 +17,31 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.ListResource;
+import org.ietf.jgss.Oid;
 
-public class FolderList<T extends FolderList<T>> extends MhdList<T> {
+public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
 
     public FolderList() {
         super();
         setCode(new CodeableConcept().addCoding(FOLDER_LIST_CODING));
     }
 
-    private static final Coding FOLDER_LIST_CODING = new Coding(
+    /**
+     * Adds an identifier to be a EntryUuid as required by the profile
+     * @param system system
+     * @param value value
+     * @return this object
+     */
+    @SuppressWarnings("unchecked")
+    public T setUniqueIdIdentifier(String system, String value) {
+        getIdentifier().add(new UniqueIdIdentifier()
+            .setSystem(system)
+            .setValue(value));
+        return (T)this;
+    }
+
+    public static final Coding FOLDER_LIST_CODING = new Coding(
         "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
         "folder",
         "folder"

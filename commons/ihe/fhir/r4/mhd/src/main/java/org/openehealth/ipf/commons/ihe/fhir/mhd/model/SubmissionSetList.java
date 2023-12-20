@@ -19,15 +19,15 @@ import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.util.ElementUtil;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.*;
+import org.ietf.jgss.Oid;
+import org.openehealth.ipf.commons.core.URN;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T> {
+@SuppressWarnings("unchecked")
+public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T> {
 
     public SubmissionSetList() {
         super();
@@ -56,9 +56,23 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return sourceId;
     }
 
-    @SuppressWarnings("unchecked")
     public T setSourceId(Identifier sourceId) {
         this.sourceId = sourceId;
+        return (T)this;
+    }
+
+    public T setSourceId(Oid oid) {
+        this.sourceId = new Identifier().setValue(new URN(oid).toString());
+        return (T)this;
+    }
+
+    /**
+     * Adds an identifier to be a UniqueId as required by the profile
+     * @param oid oid
+     * @return this object
+     */
+    public T setSubmissionSetUniqueIdIdentifier(Oid oid) {
+        getIdentifier().add(new SubmissionSetUniqueIdIdentifier(oid));
         return (T)this;
     }
 
@@ -66,7 +80,7 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return this.sourceId != null && !this.sourceId.isEmpty();
     }
 
-    public List<Reference> getCitizenship() {
+    public List<Reference> getIntendedRecipient() {
         if (intendedRecipient == null) {
             intendedRecipient = new ArrayList<>();
         }
@@ -74,10 +88,9 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
     }
 
     public Reference getIntendedRecipientFirstRep() {
-        return this.getCitizenship().get(0);
+        return this.getIntendedRecipient().get(0);
     }
 
-    @SuppressWarnings("unchecked")
     public T setIntendedRecipient(List<Reference> intendedRecipient) {
         this.intendedRecipient = intendedRecipient;
         return (T)this;
@@ -91,7 +104,6 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return r;
     }
 
-    @SuppressWarnings("unchecked")
     public T addIntendedRecipient(Reference r) {
         if (r == null)
             return (T)this;
@@ -101,13 +113,6 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return (T)this;
     }
 
-    @SuppressWarnings("unchecked")
-    public T setSource(Source value) {
-        super.setSource(value);
-        return (T)this;
-    }
-
-    @SuppressWarnings("unchecked")
     public T linkDocumentReference(String fullUrl) {
         addEntry().setItem(new Reference(fullUrl));
         return (T)this;
@@ -122,7 +127,19 @@ public class SubmissionSetList<T extends SubmissionSetList<T>> extends MhdList<T
         return false;
     }
 
-    private static final Coding SUBMISSIONSET_LIST_CODING = new Coding(
+    @Override
+    public void copyValues(ListResource dst) {
+        super.copyValues(dst);
+        var submissionSetList = (SubmissionSetList<?>)dst;
+        submissionSetList.sourceId = sourceId == null ? null : sourceId.copy();
+        if (intendedRecipient != null) {
+            submissionSetList.intendedRecipient = new ArrayList<>();
+            for (Reference r : intendedRecipient)
+                ((SubmissionSetList<?>) dst).intendedRecipient.add(r.copy());
+        }
+    }
+
+    public static final Coding SUBMISSIONSET_LIST_CODING = new Coding(
         "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
         "submissionset",
         "submissionset"

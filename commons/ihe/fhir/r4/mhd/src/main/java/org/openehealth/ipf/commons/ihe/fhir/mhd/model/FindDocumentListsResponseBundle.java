@@ -17,15 +17,16 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils.getResources;
 
 @ResourceDef(name = "Bundle", id = "mhdSubmissionSetListResponseBundle", profile = ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE)
-public class FindDocumentListsResponseBundle extends Bundle {
+public class FindDocumentListsResponseBundle extends Bundle implements Mhd421 {
 
     public FindDocumentListsResponseBundle() {
         super();
@@ -39,6 +40,13 @@ public class FindDocumentListsResponseBundle extends Bundle {
 
     public List<FolderList> getFolders() {
         return getResources(this, FolderList.class);
+    }
+
+    @Override
+    public FindDocumentListsResponseBundle copy() {
+        var dst = new FindDocumentListsResponseBundle();
+        copyValues(dst);
+        return dst;
     }
 
 }

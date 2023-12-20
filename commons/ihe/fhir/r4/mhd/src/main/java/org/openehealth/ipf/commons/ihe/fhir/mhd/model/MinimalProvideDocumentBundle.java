@@ -17,19 +17,18 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_MINIMAL_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_MINIMAL_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_MINIMAL_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_MINIMAL_BUNDLE_PROFILE;
 
 
 @ResourceDef(name = "Bundle", id = "mhdMinimalBundle", profile = ITI65_MINIMAL_BUNDLE_PROFILE)
-public class MinimalProvideDocumentBundle extends Bundle {
-
+public class MinimalProvideDocumentBundle extends AbstractProvideDocumentBundle<MinimalProvideDocumentBundle> implements Mhd421 {
 
     public MinimalProvideDocumentBundle() {
         super();
@@ -37,8 +36,8 @@ public class MinimalProvideDocumentBundle extends Bundle {
         ITI65_MINIMAL_BUNDLE.setProfile(this);
     }
 
-    public SubmissionSetList getSubmissionSet() {
-        return FhirUtils.getResource(this, SubmissionSetList.class);
+    public MinimalSubmissionSetList getSubmissionSet() {
+        return FhirUtils.getResource(this, MinimalSubmissionSetList.class);
     }
 
     public List<? extends MinimalDocumentReference> getDocumentReferences() {
@@ -51,5 +50,12 @@ public class MinimalProvideDocumentBundle extends Bundle {
 
     public List<FolderList> getFolders() {
         return FhirUtils.getResources(this, FolderList.class);
+    }
+
+    @Override
+    public MinimalProvideDocumentBundle copy() {
+        var dst = new MinimalProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
     }
 }

@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.COMPREHENSIVE_FOLDER_TYPE_LIST;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_FOLDER_TYPE_LIST;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE;
 
 @ResourceDef(name = "List", id = "mhdComprehensiveFolder", profile = COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE)
 public class ComprehensiveFolderList extends FolderList<ComprehensiveFolderList> {
@@ -26,5 +26,12 @@ public class ComprehensiveFolderList extends FolderList<ComprehensiveFolderList>
     public ComprehensiveFolderList() {
         super();
         COMPREHENSIVE_FOLDER_TYPE_LIST.setProfile(this);
+    }
+
+    @Override
+    public ComprehensiveFolderList copy() {
+        var dst = new ComprehensiveFolderList();
+        copyValues(dst);
+        return dst;
     }
 }

@@ -25,7 +25,7 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.ListResource;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 /**
@@ -36,7 +36,7 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
-        MhdProfiles.registerDefaultTypes(serverFhirContext);
+        MhdProfile.registerDefaultTypes(serverFhirContext);
         servlet.setFhirContext(serverFhirContext);
 
         var loggingInterceptor = new LoggingInterceptor();

@@ -20,19 +20,26 @@ import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.util.ElementUtil;
 import lombok.Getter;
+import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Reference;
 
-@Getter
-@DatatypeDef(name = "Source", profileOf = Reference.class)
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.AUTHOR_ORG_PROFILE;
+
+/**
+ * Source data type extension. Unfortunately we cannot register this datatype with the FhirCOntext
+ * right now as parsing/rendering won't work anymore afterwards. It can be used, however, to
+ * assemble resources.
+ */
+@DatatypeDef(name = "Source", profileOf = Reference.class, isSpecialization = true)
 public class Source extends Reference {
 
     @Child(name = "authorOrg")
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-authorOrg", definedLocally = false)
+    @Extension(url = AUTHOR_ORG_PROFILE, definedLocally = false)
     private Reference authorOrg;
 
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(authorOrg, reference);
+        return super.isEmpty() && ElementUtil.isEmpty(authorOrg);
     }
 
     public Source setAuthorOrg(Reference authorOrg) {
@@ -40,14 +47,34 @@ public class Source extends Reference {
         return this;
     }
 
-    @Override
-    public Source setReference(String value) {
-        super.setReference(value);
-        return this;
-    }
-
     public boolean hasAuthorOrg() {
         return authorOrg != null && !authorOrg.isEmpty();
     }
 
+    public Reference getAuthorOrg() {
+        return authorOrg;
+    }
+
+    @Override
+    public Source copy() {
+        var dst = new Source();
+        copyValues(dst);
+        return dst;
+    }
+
+    @Override
+    public boolean equalsDeep(Base other_) {
+        if (!super.equalsDeep(other_))
+            return false;
+        if (!(other_ instanceof Source))
+            return false;
+        Source o = (Source) other_;
+        return compareDeep(authorOrg, o.authorOrg, true);
+    }
+
+    @Override
+    public void copyValues(Reference dst) {
+        super.copyValues(dst);
+        ((Source)dst).authorOrg = authorOrg == null ? null : authorOrg.copy();
+    }
 }

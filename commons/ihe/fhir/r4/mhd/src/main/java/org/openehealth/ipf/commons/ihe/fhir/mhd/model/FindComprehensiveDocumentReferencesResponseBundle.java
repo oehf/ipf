@@ -17,16 +17,16 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.CanonicalType;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils.getResources;
 
 @ResourceDef(name = "Bundle", id = "mhdComprehensiveDocumentReferenceResponseBundle", profile = ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE)
-public class FindComprehensiveDocumentReferencesResponseBundle extends Bundle {
+public class FindComprehensiveDocumentReferencesResponseBundle extends Bundle implements Mhd421 {
 
     public FindComprehensiveDocumentReferencesResponseBundle() {
         super();
@@ -36,6 +36,13 @@ public class FindComprehensiveDocumentReferencesResponseBundle extends Bundle {
 
     public List<ComprehensiveDocumentReference> getComprehensiveDocumentReferences() {
         return getResources(this, ComprehensiveDocumentReference.class);
+    }
+
+    @Override
+    public FindComprehensiveDocumentReferencesResponseBundle copy() {
+        var dst = new FindComprehensiveDocumentReferencesResponseBundle();
+        copyValues(dst);
+        return dst;
     }
 
 }

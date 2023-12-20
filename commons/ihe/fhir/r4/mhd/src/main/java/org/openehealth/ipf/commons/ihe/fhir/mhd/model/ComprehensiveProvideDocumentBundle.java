@@ -19,16 +19,16 @@ import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 
-import java.util.Collections;
 import java.util.List;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_COMPREHENSIVE_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_COMPREHENSIVE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_COMPREHENSIVE_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE;
 
 @ResourceDef(name = "Bundle", id = "mhdComprehensiveProvideDocumentBundle", profile = ITI65_COMPREHENSIVE_BUNDLE_PROFILE)
-public class ComprehensiveProvideDocumentBundle extends Bundle {
+public class ComprehensiveProvideDocumentBundle extends AbstractProvideDocumentBundle<ComprehensiveProvideDocumentBundle> implements Mhd421 {
 
     public ComprehensiveProvideDocumentBundle() {
         super();
@@ -47,14 +47,6 @@ public class ComprehensiveProvideDocumentBundle extends Bundle {
         return addEntry(fullUrl, documentReference);
     }
 
-    public ComprehensiveProvideDocumentBundle addFolder(String fullUrl, FolderList<?> folderList) {
-        return addEntry(fullUrl, folderList);
-    }
-
-    public ComprehensiveProvideDocumentBundle addBinary(String fullUrl, Binary binary) {
-        return addEntry(fullUrl, binary);
-    }
-
     public ComprehensiveSubmissionSetList getSubmissionSet() {
         return FhirUtils.getResource(this, ComprehensiveSubmissionSetList.class);
     }
@@ -71,14 +63,10 @@ public class ComprehensiveProvideDocumentBundle extends Bundle {
         return FhirUtils.getResources(this, FolderList.class);
     }
 
-    private ComprehensiveProvideDocumentBundle addEntry(String fullUrl, Resource resource) {
-        addEntry()
-            .setFullUrl(fullUrl)
-            .setRequest(
-                new Bundle.BundleEntryRequestComponent()
-                    .setMethod(Bundle.HTTPVerb.POST)
-                    .setUrl(resource.getResourceType().name()))
-            .setResource(resource);
-        return this;
+    @Override
+    public ComprehensiveProvideDocumentBundle copy() {
+        var dst = new ComprehensiveProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
     }
 }

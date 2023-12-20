@@ -17,17 +17,19 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE;
 
 @ResourceDef(name = "Bundle", id = "mhdUncontainedComprehensiveBundle", profile = ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE)
-public class UncontainedComprehensiveProvideDocumentBundle extends Bundle {
+public class UncontainedComprehensiveProvideDocumentBundle
+    extends AbstractProvideDocumentBundle<UncontainedComprehensiveProvideDocumentBundle>
+    implements Mhd421 {
 
     public UncontainedComprehensiveProvideDocumentBundle() {
         super();
@@ -49,6 +51,13 @@ public class UncontainedComprehensiveProvideDocumentBundle extends Bundle {
 
     public List<FolderList> getFolders() {
         return FhirUtils.getResources(this, FolderList.class);
+    }
+
+    @Override
+    public UncontainedComprehensiveProvideDocumentBundle copy() {
+        var dst = new UncontainedComprehensiveProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
     }
 
 }

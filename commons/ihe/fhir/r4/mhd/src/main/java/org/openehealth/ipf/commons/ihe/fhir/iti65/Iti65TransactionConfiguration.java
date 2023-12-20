@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.*;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles.*;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
 
 /**
  * Standard Configuration for Iti65Component.

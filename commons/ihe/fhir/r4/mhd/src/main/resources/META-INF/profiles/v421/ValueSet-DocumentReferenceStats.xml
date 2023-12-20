@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ValueSet xmlns="http://hl7.org/fhir">
+  <id value="DocumentReferenceStats"/>
+  <text>
+    <status value="extensions"/><div xmlns="http://www.w3.org/1999/xhtml"><ul><li>Include these codes as defined in <a href="http://hl7.org/fhir/R4/codesystem-document-reference-status.html"><code>http://hl7.org/fhir/document-reference-status</code></a><table class="none"><tr><td style="white-space:nowrap"><b>Code</b></td><td><b>Display</b></td><td><b>Definition</b></td></tr><tr><td><a href="http://hl7.org/fhir/R4/codesystem-document-reference-status.html#document-reference-status-current">current</a></td><td>Current</td><td>This is the current reference for this document.</td></tr><tr><td><a href="http://hl7.org/fhir/R4/codesystem-document-reference-status.html#document-reference-status-superseded">superseded</a></td><td>Superseded</td><td>This reference has been superseded by another reference.</td></tr></table></li></ul></div>
+  </text>
+  <url value="https://profiles.ihe.net/ITI/MHD/ValueSet/DocumentReferenceStats"/>
+  <version value="4.2.1"/>
+  <name value="DocumentReferenceStats"/>
+  <title value="MHD DocumentReference status codes"/>
+  <status value="active"/>
+  <experimental value="false"/>
+  <date value="2023-08-02T11:14:45-05:00"/>
+  <publisher value="IHE IT Infrastructure Technical Committee"/>
+  <contact>
+    <telecom>
+      <system value="url"/>
+      <value value="https://www.ihe.net/ihe_domains/it_infrastructure/"/>
+    </telecom>
+  </contact>
+  <contact>
+    <telecom>
+      <system value="email"/>
+      <value value="iti@ihe.net"/>
+    </telecom>
+  </contact>
+  <contact>
+    <name value="IHE IT Infrastructure Technical Committee"/>
+    <telecom>
+      <system value="email"/>
+      <value value="iti@ihe.net"/>
+    </telecom>
+  </contact>
+  <description value="ValueSet that does not include entered-in-error as that does not map"/>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <compose>
+    <include>
+      <system value="http://hl7.org/fhir/document-reference-status"/>
+      <concept>
+        <code value="current"/>
+      </concept>
+      <concept>
+        <code value="superseded"/>
+      </concept>
+    </include>
+  </compose>
+</ValueSet>
