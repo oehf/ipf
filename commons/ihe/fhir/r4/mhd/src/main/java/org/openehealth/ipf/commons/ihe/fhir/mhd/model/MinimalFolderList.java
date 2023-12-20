@@ -27,4 +27,11 @@ public class MinimalFolderList extends FolderList<MinimalFolderList> {
         super();
         MINIMAL_FOLDER_TYPE_LIST.setProfile(this);
     }
+
+    @Override
+    public MinimalFolderList copy() {
+        var dst = new MinimalFolderList();
+        copyValues(dst);
+        return dst;
+    }
 }

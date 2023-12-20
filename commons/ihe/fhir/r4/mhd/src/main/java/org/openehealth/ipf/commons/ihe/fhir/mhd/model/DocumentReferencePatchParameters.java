@@ -18,14 +18,21 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Parameters;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.DOCUMENT_REFERENCE_PATCH_PARAMETERS;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE;
 @ResourceDef(name = "Parameters", id = "mhdDocumentReferencePatchParameters", profile = DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE)
 public class DocumentReferencePatchParameters extends Parameters {
 
     public DocumentReferencePatchParameters() {
         super();
         DOCUMENT_REFERENCE_PATCH_PARAMETERS.setProfile(this);
+    }
+
+    @Override
+    public DocumentReferencePatchParameters copy() {
+        var dst = new DocumentReferencePatchParameters();
+        copyValues(dst);
+        return dst;
     }
 
 }

@@ -63,5 +63,10 @@ public class ComprehensiveProvideDocumentBundle extends AbstractProvideDocumentB
         return FhirUtils.getResources(this, FolderList.class);
     }
 
-
+    @Override
+    public ComprehensiveProvideDocumentBundle copy() {
+        var dst = new ComprehensiveProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
+    }
 }

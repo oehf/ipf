@@ -16,16 +16,22 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
-import lombok.Getter;
 import org.hl7.fhir.r4.model.Identifier;
 
 // https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.UniqueIdIdentifier
 
-@DatatypeDef(name = "UniqueIdIdentifier", profileOf = Identifier.class)
+@DatatypeDef(name = "UniqueIdIdentifier", profileOf = Identifier.class, isSpecialization = true)
 public class UniqueIdIdentifier extends Identifier {
 
     public UniqueIdIdentifier() {
         super();
         setUse(IdentifierUse.USUAL);
+    }
+
+    @Override
+    public UniqueIdIdentifier copy() {
+        var dst = new UniqueIdIdentifier();
+        copyValues(dst);
+        return dst;
     }
 }

@@ -67,5 +67,10 @@ public class SimplifiedPublishDocumentReference extends DocumentReference {
         }
     }
 
-
+    @Override
+    public SimplifiedPublishDocumentReference copy() {
+        var dst = new SimplifiedPublishDocumentReference();
+        copyValues(dst);
+        return dst;
+    }
 }

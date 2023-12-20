@@ -15,35 +15,39 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.ListResource;
-import org.ietf.jgss.Oid;
+import org.hl7.fhir.r4.model.DocumentReference;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
-public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
+import java.util.UUID;
 
-    public FolderList() {
-        super();
-        setCode(new CodeableConcept().addCoding(FOLDER_LIST_CODING));
-    }
+abstract class AbstractDocumentReference<T extends AbstractDocumentReference<T>>
+    extends DocumentReference
+    implements Mhd421 {
 
     /**
-     * Adds an identifier to be a EntryUuid as required by the profile
-     * @param system system
-     * @param value value
+     * Sets the MasterIdentifier to be a Unique Id as required by the profile
+     *
+     * @param system system value
+     * @param value identifier value
      * @return this object
      */
     @SuppressWarnings("unchecked")
     public T setUniqueIdIdentifier(String system, String value) {
-        getIdentifier().add(new UniqueIdIdentifier()
+        setMasterIdentifier(new UniqueIdIdentifier()
             .setSystem(system)
             .setValue(value));
         return (T)this;
     }
 
-    public static final Coding FOLDER_LIST_CODING = new Coding(
-        "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
-        "folder",
-        "folder"
-    );
+    /**
+     * Adds an identifier to be a EntryUuid as required by the profile
+     * @param uuid UUID
+     * @return this object
+     */
+    @SuppressWarnings("unchecked")
+    public T setEntryUuidIdentifier(UUID uuid) {
+        getIdentifier().add(new EntryUuidIdentifier(uuid));
+        return (T)this;
+    }
+
 }

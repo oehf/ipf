@@ -38,4 +38,11 @@ public class FindMinimalDocumentReferencesResponseBundle extends Bundle implemen
         return getResources(this, MinimalDocumentReference.class);
     }
 
+    @Override
+    public FindMinimalDocumentReferencesResponseBundle copy() {
+        var dst = new FindMinimalDocumentReferencesResponseBundle();
+        copyValues(dst);
+        return dst;
+    }
+
 }

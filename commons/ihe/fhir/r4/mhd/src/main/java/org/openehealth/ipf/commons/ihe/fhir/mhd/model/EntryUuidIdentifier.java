@@ -24,7 +24,7 @@ import java.util.UUID;
 
 // https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.EntryUUID.Identifier
 
-@DatatypeDef(name = "EntryUuidIdentifier", profileOf = Identifier.class)
+@DatatypeDef(name = "EntryUuidIdentifier", profileOf = Identifier.class, isSpecialization = true)
 public class EntryUuidIdentifier extends Identifier {
 
     public EntryUuidIdentifier() {
@@ -41,5 +41,12 @@ public class EntryUuidIdentifier extends Identifier {
     public EntryUuidIdentifier setValue(UUID uuid) {
         setValue(new URN(uuid).toString());
         return this;
+    }
+
+    @Override
+    public EntryUuidIdentifier copy() {
+        var dst = new EntryUuidIdentifier();
+        copyValues(dst);
+        return dst;
     }
 }

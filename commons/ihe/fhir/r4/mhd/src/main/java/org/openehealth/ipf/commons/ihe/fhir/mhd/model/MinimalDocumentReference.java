@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUME
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUMENT_REFERENCE_PROFILE;
 
 @ResourceDef(name = "DocumentReference", id = "mhdMinimalDocumentReference", profile = MINIMAL_DOCUMENT_REFERENCE_PROFILE)
-public class MinimalDocumentReference<T extends MinimalDocumentReference<T>> extends DocumentReference implements Mhd421 {
+public class MinimalDocumentReference extends AbstractDocumentReference<MinimalDocumentReference> {
 
     public MinimalDocumentReference() {
         super();
@@ -36,29 +36,10 @@ public class MinimalDocumentReference<T extends MinimalDocumentReference<T>> ext
         setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
     }
 
-    /**
-     * Sets the MasterIdentifier to be a Unique Id as required by the profile
-     *
-     * @param system system value
-     * @param value identifier value
-     * @return this object
-     */
-    @SuppressWarnings("unchecked")
-    public T setUniqueIdIdentifier(String system, String value) {
-        setMasterIdentifier(new UniqueIdIdentifier()
-            .setSystem(system)
-            .setValue(value));
-        return (T)this;
-    }
-
-    /**
-     * Adds an identifier to be a EntryUuid as required by the profile
-     * @param uuid UUID
-     * @return this object
-     */
-    @SuppressWarnings("unchecked")
-    public T setEntryUuidIdentifier(UUID uuid) {
-        getIdentifier().add(new EntryUuidIdentifier(uuid));
-        return (T)this;
+    @Override
+    public MinimalDocumentReference copy() {
+        var dst = new MinimalDocumentReference();
+        copyValues(dst);
+        return dst;
     }
 }

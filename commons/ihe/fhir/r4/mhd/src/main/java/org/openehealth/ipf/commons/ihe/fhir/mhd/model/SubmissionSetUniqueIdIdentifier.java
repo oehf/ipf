@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 // https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.SubmissionSetUniqueIdIdentifier
 
-@DatatypeDef(name = "SubmissionSetUniqueIdIdentifier", profileOf = Identifier.class)
+@DatatypeDef(name = "SubmissionSetUniqueIdIdentifier", profileOf = Identifier.class, isSpecialization = true)
 public class SubmissionSetUniqueIdIdentifier extends UniqueIdIdentifier {
 
     public SubmissionSetUniqueIdIdentifier() {
@@ -39,5 +39,12 @@ public class SubmissionSetUniqueIdIdentifier extends UniqueIdIdentifier {
     public SubmissionSetUniqueIdIdentifier setValue(Oid oid) {
         setValue(new URN(oid).toString());
         return this;
+    }
+
+    @Override
+    public SubmissionSetUniqueIdIdentifier copy() {
+        var dst = new SubmissionSetUniqueIdIdentifier();
+        copyValues(dst);
+        return dst;
     }
 }

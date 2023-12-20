@@ -27,4 +27,11 @@ public class ComprehensiveFolderList extends FolderList<ComprehensiveFolderList>
         super();
         COMPREHENSIVE_FOLDER_TYPE_LIST.setProfile(this);
     }
+
+    @Override
+    public ComprehensiveFolderList copy() {
+        var dst = new ComprehensiveFolderList();
+        copyValues(dst);
+        return dst;
+    }
 }

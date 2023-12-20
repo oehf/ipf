@@ -20,20 +20,18 @@ import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.util.ElementUtil;
+import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.ListResource;
-import org.ietf.jgss.Oid;
-import org.openehealth.ipf.commons.core.URN;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.Date;
 import java.util.UUID;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST_PROFILE;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST_PROFILE;
 
+@SuppressWarnings("unchecked")
 @ResourceDef(name = "List", id = "mhdList", profile = MHD_LIST_PROFILE)
 public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd421 {
 
@@ -84,10 +82,25 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
      * @param uuid uuid
      * @return this object
      */
-    @SuppressWarnings("unchecked")
     public T setEntryUuidIdentifier(UUID uuid) {
         getIdentifier().add(new EntryUuidIdentifier(uuid));
         return (T)this;
+    }
+
+    @Override
+    public void copyValues(ListResource dst) {
+        super.copyValues(dst);
+        ((MhdList<T>)dst).designationType = designationType == null ? null : designationType.copy();
+    }
+
+    @Override
+    public boolean equalsDeep(Base other_) {
+        if (!super.equalsDeep(other_))
+            return false;
+        if (!(other_ instanceof MhdList))
+            return false;
+        MhdList<T> o = (MhdList<T>) other_;
+        return compareDeep(designationType, o.designationType, true);
     }
 
 }

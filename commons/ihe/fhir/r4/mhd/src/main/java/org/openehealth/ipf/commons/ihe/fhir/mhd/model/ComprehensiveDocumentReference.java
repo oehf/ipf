@@ -23,7 +23,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_
 
 
 @ResourceDef(name = "DocumentReference", id = "mhdComprehensiveDocumentReference", profile = COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE)
-public class ComprehensiveDocumentReference extends UncontainedComprehensiveDocumentReference<ComprehensiveDocumentReference> {
+public class ComprehensiveDocumentReference extends AbstractDocumentReference<ComprehensiveDocumentReference> {
 
     public ComprehensiveDocumentReference() {
         super();
@@ -78,6 +78,13 @@ public class ComprehensiveDocumentReference extends UncontainedComprehensiveDocu
     public ComprehensiveDocumentReference setSourcePatientInfo(Patient patient) {
         getContext().setSourcePatientInfo(new Reference(patient));
         return this;
+    }
+
+    @Override
+    public ComprehensiveDocumentReference copy() {
+        var dst = new ComprehensiveDocumentReference();
+        copyValues(dst);
+        return dst;
     }
 
 }

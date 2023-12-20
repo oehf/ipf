@@ -29,4 +29,11 @@ public class GenerateMetadataInParameters extends Parameters {
         GENERATE_METADATA_PARAMETERS_IN.setProfile(this);
     }
 
+    @Override
+    public GenerateMetadataInParameters copy() {
+        var dst = new GenerateMetadataInParameters();
+        copyValues(dst);
+        return dst;
+    }
+
 }

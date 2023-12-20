@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveSubmissionSetList;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.model.Source;
 
 import java.security.MessageDigest;
 import java.util.Collections;
@@ -46,6 +47,7 @@ public class MhdValidatorTest {
     @Test
     public void testBundle() throws Exception {
         var context = FhirContext.forR4();
+        MhdProfile.registerDefaultTypes(context);
         var bundle = provideAndRegister();
         try {
             var iti65Validator = new MhdValidator(context);
@@ -78,7 +80,8 @@ public class MhdValidatorTest {
             ))
             .addIntendedRecipient(new Reference(practitioner))
             .setSubject(new Reference("Patient/a2"))
-            .setTitle("description");
+            .setTitle("description")
+            .setSource(new Source().setAuthorOrg(new Reference("Organization/4711")).setReference("Practitioner/1234"));
         submissionSetList.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         submissionSetList.getText().setDivAsString("<div>empty</div>");
 

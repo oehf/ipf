@@ -53,4 +53,11 @@ public class UncontainedComprehensiveProvideDocumentBundle
         return FhirUtils.getResources(this, FolderList.class);
     }
 
+    @Override
+    public UncontainedComprehensiveProvideDocumentBundle copy() {
+        var dst = new UncontainedComprehensiveProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
+    }
+
 }

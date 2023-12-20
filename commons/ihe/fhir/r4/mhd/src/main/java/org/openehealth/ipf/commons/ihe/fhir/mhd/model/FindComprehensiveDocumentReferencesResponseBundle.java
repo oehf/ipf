@@ -38,4 +38,11 @@ public class FindComprehensiveDocumentReferencesResponseBundle extends Bundle im
         return getResources(this, ComprehensiveDocumentReference.class);
     }
 
+    @Override
+    public FindComprehensiveDocumentReferencesResponseBundle copy() {
+        var dst = new FindComprehensiveDocumentReferencesResponseBundle();
+        copyValues(dst);
+        return dst;
+    }
+
 }

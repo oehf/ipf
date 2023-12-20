@@ -51,4 +51,11 @@ public class MinimalProvideDocumentBundle extends AbstractProvideDocumentBundle<
     public List<FolderList> getFolders() {
         return FhirUtils.getResources(this, FolderList.class);
     }
+
+    @Override
+    public MinimalProvideDocumentBundle copy() {
+        var dst = new MinimalProvideDocumentBundle();
+        copyValues(dst);
+        return dst;
+    }
 }

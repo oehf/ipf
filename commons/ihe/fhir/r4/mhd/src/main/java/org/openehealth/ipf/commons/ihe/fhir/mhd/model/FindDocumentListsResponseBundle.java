@@ -42,4 +42,11 @@ public class FindDocumentListsResponseBundle extends Bundle implements Mhd421 {
         return getResources(this, FolderList.class);
     }
 
+    @Override
+    public FindDocumentListsResponseBundle copy() {
+        var dst = new FindDocumentListsResponseBundle();
+        copyValues(dst);
+        return dst;
+    }
+
 }
