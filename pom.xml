@@ -27,7 +27,7 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.1.2</surefire-plugin-version>
+        <surefire-plugin-version>3.2.3</surefire-plugin-version>
         <jxr-plugin-version>3.3.0</jxr-plugin-version>
         <project-info-reports-plugin-version>3.4.1</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
@@ -38,30 +38,30 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.6.0</assembly-plugin-version>
-        <build-helper-version>3.4.0</build-helper-version>
-        <compiler-plugin-version>3.11.0</compiler-plugin-version>
-        <enforcer-plugin-version>3.4.0</enforcer-plugin-version>
-        <gmavenplus-plugin-version>2.1.0</gmavenplus-plugin-version>
+        <build-helper-version>3.5.0</build-helper-version>
+        <compiler-plugin-version>3.12.1</compiler-plugin-version>
+        <enforcer-plugin-version>3.4.1</enforcer-plugin-version>
+        <gmavenplus-plugin-version>3.0.2</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.3.0</jar-plugin-version>
-        <javadoc-plugin-version>3.5.0</javadoc-plugin-version>
+        <javadoc-plugin-version>3.6.3</javadoc-plugin-version>
         <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
-        <sources-plugin-version>3.2.1</sources-plugin-version>
+        <sources-plugin-version>3.3.0</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
         <easymock-version>5.2.0</easymock-version>
-        <guava-version>32.1.1-jre</guava-version>
+        <guava-version>33.0.0-jre</guava-version>
         <jaspic-api-version>1.1.1</jaspic-api-version>
         <lombok-version>1.18.30</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>9.0.83</tomcat-version>
-        <xbean-spring-version>4.23</xbean-spring-version>
+        <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
 
     <scm>
@@ -765,7 +765,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.20</version>
+                <version>${surefire-plugin-version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
