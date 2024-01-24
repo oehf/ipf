@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright 2024 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://camel.apache.org/schema/spring
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core.xsd">
+
+    <camel:camelContext id="camelContext">
+        <camel:jmxAgent id="agent" disabled="false"/>
+        <camel:routeBuilder ref="routeBuilder"/>
+    </camel:camelContext>
+
+    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forR4"/>
+
+    <ipf:globalContext id="globalContext"/>
+
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+        <property name="auditEnabled" value="true"/>
+        <property name="tlsParameters" ref="tlsParameters" />
+        <property name="auditMessageQueue" ref="auditMessageQueue"/>
+        <property name="auditRepositoryTransport" value="FHIR-REST-TLS"/>
+        <property name="serializationStrategy" ref="fhirXmlStrategy"/>
+        <property name="auditSourceId" value="IPF"/>
+        <property name="auditEnterpriseSiteId" value="IPF"/>
+        <property name="auditRepositoryPort" ref="auditRepositoryPort" />
+    </bean>
+
+    <bean id="tlsParameters" class="org.openehealth.ipf.commons.audit.CustomTlsParameters">
+        <property name="keyStoreFile" value="#{keystoreFile.absolutePath}" />
+        <property name="keyStorePassword" value="init" />
+        <property name="trustStoreFile" value="#{truststoreFile.absolutePath}" />
+        <property name="trustStorePassword" value="initinit" />
+    </bean>
+
+    <bean id="keystoreFile" class="java.io.File" >
+        <constructor-arg value="#{keystoreResource.URI}" />
+    </bean>
+
+    <bean id="truststoreFile" class="java.io.File" >
+        <constructor-arg value="#{truststoreResource.URI}" />
+    </bean>
+
+    <bean id="keystoreResource"
+          class="org.springframework.core.io.ClassPathResource">
+        <constructor-arg value="security/client.p12" />
+    </bean>
+
+    <bean id="truststoreResource"
+          class="org.springframework.core.io.ClassPathResource">
+        <constructor-arg value="security/ca.keystore" />
+    </bean>
+
+    <bean id="auditRepositoryPort"
+          class="org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository"
+          factory-method="getServerHttpsPort" />
+
+    <bean id="auditMessageQueue"
+          class="org.openehealth.ipf.commons.ihe.fhir.audit.queue.FhirDelegateMockedMessageQueue"/>
+
+    <bean id="fhirXmlStrategy"
+          class="org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpXmlSerializationStrategy">
+        <constructor-arg ref="fhirContext" />
+    </bean>
+
+</beans>

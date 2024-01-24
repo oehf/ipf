@@ -7,8 +7,8 @@ ipf:
     audit-enabled: false
     audit-repository-host: localhost
     audit-repository-port: 1342
+    audit-repository-context-path: fhir
     audit-repository-transport: TLS
     audit-enterprise-site-id: mysite
     audit-queue-class: org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue
     security-domain-name: mydomain
-

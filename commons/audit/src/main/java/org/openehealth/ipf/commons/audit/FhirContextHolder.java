@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,28 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
+package org.openehealth.ipf.commons.audit;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 
-/**
- * @author Christian Ohr
- * @since 4.1
- */
-public class FhirAuditXmlSerializationStrategy extends AbstractFhirAuditSerializationStrategy {
+public class FhirContextHolder {
 
-    public FhirAuditXmlSerializationStrategy() {
-        super();
+    private static final ThreadLocal<FhirContext> currentFhirContext = new ThreadLocal<>();
+
+    public static void setCurrentContext(FhirContext fhirContext) {
+        currentFhirContext.set(fhirContext);
     }
 
-    public FhirAuditXmlSerializationStrategy(FhirContext fhirContext) {
-        super(fhirContext);
+    public static FhirContext get() {
+        return currentFhirContext.get();
     }
 
-    @Override
-    protected IParser getParser(FhirContext fhirContext) {
-        return fhirContext.newXmlParser();
+    public static void remove() {
+        currentFhirContext.remove();
     }
 }
+

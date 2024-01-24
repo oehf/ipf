@@ -65,6 +65,12 @@ public class IpfAtnaConfigurationProperties {
     private int auditRepositoryPort = 514;
 
     /**
+     * Sets the context-path of the BALP audit record repository.
+     */
+    @Getter @Setter
+    private String auditRepositoryContextPath = "";
+
+    /**
      * Enterprise Site Id
      */
     @Getter @Setter

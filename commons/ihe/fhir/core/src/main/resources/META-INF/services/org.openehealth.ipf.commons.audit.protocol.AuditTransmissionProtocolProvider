@@ -1,0 +1,2 @@
+org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApacheSenderProvider
+org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordMethanolSenderProvider

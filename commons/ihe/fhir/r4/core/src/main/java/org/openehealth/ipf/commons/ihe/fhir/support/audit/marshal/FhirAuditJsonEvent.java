@@ -23,7 +23,7 @@ import ca.uhn.fhir.context.FhirContext;
  * @deprecated use FhirAuditJsonSerializationStrategy
  */
 @Deprecated
-public class FhirAuditJsonEvent extends FhirAuditJsonSerializationStrategy {
+public class FhirAuditJsonEvent extends BalpJsonSerializationStrategy {
 
     public FhirAuditJsonEvent() {
         super();

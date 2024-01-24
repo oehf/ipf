@@ -179,6 +179,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
                 '@PID.3.4.3': searchIdentifier.map({ it.oid ? 'ISO' : null }).orElse(null),
                 '@PID.5.1'  : firstOrNull(searchStringList(searchParameters.family, false)),
                 '@PID.5.2'  : firstOrNull(searchStringList(searchParameters.given, false)),
+                '@PID.6'    : searchString(searchParameters.mothersMaidenName, true),
                 '@PID.7'    : convertBirthDate(searchParameters.birthDate),
                 '@PID.8'    : genderString,
                 '@PID.11.1' : searchString(searchParameters.address, true),
@@ -200,7 +201,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String convertBirthDate(DateAndListParam birthDateParam) {
-        Date birthDate = firstOrNull(searchDateList(birthDateParam))
+        var birthDate = firstOrNull(searchDateList(birthDateParam))
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 
@@ -218,7 +219,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         param?.valuesAsQueryTokens?.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
-    protected List<String> searchDateList(DateAndListParam param) {
+    protected List<Date> searchDateList(DateAndListParam param) {
         param?.valuesAsQueryTokens?.collect { searchDate(it.valuesAsQueryTokens.find()) }
     }
 

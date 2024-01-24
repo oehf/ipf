@@ -18,7 +18,14 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
 public class Constants {
 
-    public static final String IHE_SYSTEM_NAME = "IHE Transactions";
+    public static final String IHE_SYSTEM_NAME = "urn:ihe:event-type-code";
     public static final String EHS_SYSTEM_NAME = "e-health-suisse";
+
+    public static final String DCM_SYSTEM_NAME = "http://dicom.nema.org/resources/ontology/DCM";
+    public static final String SECURITY_SOURCE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/security-source-type";
+    public static final String AUDIT_ENTITY_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/audit-entity-type";
+    public static final String OBJECT_ROLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/object-role";
+    public static final String AUDIT_LIFECYCLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle";
+
 
 }

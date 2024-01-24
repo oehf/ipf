@@ -61,6 +61,7 @@
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>9.0.83</tomcat-version>
+        <undertow-version>2.2.28.Final</undertow-version>
         <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
 
@@ -259,6 +260,12 @@
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.undertow</groupId>
+                <artifactId>undertow-servlet</artifactId>
+                <version>${undertow-version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

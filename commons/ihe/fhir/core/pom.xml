@@ -84,6 +84,11 @@
             <artifactId>hapi-fhir-structures-r4</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

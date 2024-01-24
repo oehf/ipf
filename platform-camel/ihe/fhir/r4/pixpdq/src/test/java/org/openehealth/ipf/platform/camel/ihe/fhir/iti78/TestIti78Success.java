@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 
 import java.nio.charset.StandardCharsets;
 
@@ -107,6 +108,9 @@ public class TestIti78Success extends AbstractTestIti78 {
 
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
 
+        var fhir = new BalpJsonSerializationStrategy(serverFhirContext).marshal(event, true);
+        System.out.println(fhir);
+
     }
 
     @Test
@@ -126,6 +130,9 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals(ParticipantObjectTypeCode.Person, patient.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Patient, patient.getParticipantObjectTypeCodeRole());
         assertEquals("Patient/4711", patient.getParticipantObjectID());
+
+        var fhir = new BalpJsonSerializationStrategy(serverFhirContext).marshal(event, true);
+        System.out.println(fhir);
     }
 
 

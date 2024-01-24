@@ -44,6 +44,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http</artifactId>
             <scope>test</scope>
@@ -116,6 +123,11 @@
         <dependency>
             <groupId>com.github.mizosoft.methanol</groupId>
             <artifactId>methanol</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-servlet</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

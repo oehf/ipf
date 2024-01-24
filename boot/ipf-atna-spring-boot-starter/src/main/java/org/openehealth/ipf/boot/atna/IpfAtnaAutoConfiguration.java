@@ -59,6 +59,7 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditSource(config.getAuditSourceType());
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
         auditContext.setAuditValueIfMissing(config.getAuditValueIfMissing());
+        auditContext.setAuditRepositoryContextPath(config.getAuditRepositoryContextPath());
 
         // Strategies and complex parameters; overrideable
         auditContext.setTlsParameters(tlsParameters);
@@ -95,10 +96,10 @@ public class IpfAtnaAutoConfiguration {
                                                                TlsParameters tlsParameters) throws Exception {
         if (config.getAuditSenderClass() != null) {
             return config.getAuditSenderClass().getConstructor(TlsParameters.class)
-                    .newInstance(tlsParameters);
+                .newInstance(tlsParameters);
         }
         return AuditTransmissionChannel.fromProtocolName(config.getAuditRepositoryTransport())
-                .makeInstance(tlsParameters);
+            .makeInstance(tlsParameters);
     }
 
     @Bean
@@ -107,8 +108,8 @@ public class IpfAtnaAutoConfiguration {
                                                        @Value("${spring.application.name}") String appName) {
         var auditMetadataProvider = new DefaultAuditMetadataProvider();
         auditMetadataProvider.setSendingApplication(config.getAuditSendingApplication() != null ?
-                config.getAuditSendingApplication() :
-                appName);
+            config.getAuditSendingApplication() :
+            appName);
         return auditMetadataProvider;
     }
 

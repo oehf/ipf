@@ -111,8 +111,8 @@ public interface AuditContext {
     default void audit(AuditMessage... messages) {
         if (isAuditEnabled() && messages != null) {
             getAuditMessageQueue().audit(this, Stream.of(messages)
-                    .map(getAuditMessagePostProcessor())
-                    .toArray(AuditMessage[]::new));
+                .map(getAuditMessagePostProcessor())
+                .toArray(AuditMessage[]::new));
         }
     }
 
@@ -164,6 +164,8 @@ public interface AuditContext {
      * @return true if participant object records shall be added, otherwise false
      */
     boolean isIncludeParticipantsFromResponse();
+
+    String getAuditRepositoryContextPath();
 
     static AuditContext noAudit() {
         return DefaultAuditContext.NO_AUDIT;

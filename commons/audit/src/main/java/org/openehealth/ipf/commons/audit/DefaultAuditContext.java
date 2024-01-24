@@ -101,6 +101,10 @@ public class DefaultAuditContext implements AuditContext {
     @Setter
     private String auditValueIfMissing = "UNKNOWN";
 
+    @Getter
+    @Setter
+    private String auditRepositoryContextPath = "";
+
     public String getAuditRepositoryTransport() {
         return auditTransmissionProtocol.getTransportName();
     }
@@ -111,7 +115,7 @@ public class DefaultAuditContext implements AuditContext {
 
     public void setAuditRepositoryTransport(String transport) {
         setAuditTransmissionProtocol(
-                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
+            AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
         );
     }
 

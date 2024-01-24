@@ -18,33 +18,43 @@ package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.protocol.providers.NettyTLSSyslogSenderProvider;
+import org.openehealth.ipf.commons.audit.protocol.providers.ReactorNettyTLSSyslogSenderProvider;
+import org.openehealth.ipf.commons.audit.protocol.providers.RecordingAuditMessageTransmissionProvider;
+import org.openehealth.ipf.commons.audit.protocol.providers.TLSSyslogSenderProvider;
+import org.openehealth.ipf.commons.audit.protocol.providers.UDPSyslogSenderProvider;
+import org.openehealth.ipf.commons.audit.protocol.providers.VertxTLSSyslogSenderProvider;
 
 import java.util.Arrays;
+import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 /**
- * Maps AuditTransmissionProtocol names to instances
+ * Maps AuditTransmissionProtocol names to service providers which should provide a concrete instance of an
+ * {@link AuditTransmissionProtocol} over a {@link ServiceLoader} mechanism.
  *
  * @author Christian Ohr
  */
 public enum AuditTransmissionChannel {
 
-    UDP("UDP", UDPSyslogSenderImpl.class),
-    NIO_UDP("NIO-UDP", UDPSyslogSenderImpl.class),
-    VERTX_UDP("VERTX-UDP", UDPSyslogSenderImpl.class),
-    TLS("TLS", TLSSyslogSenderImpl.class),
-    NIO_TLS("NIO-TLS", NettyTLSSyslogSenderImpl.class),
-    VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderImpl.class),
-    NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderImpl.class),
-    REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderImpl.class),
-    RECORDING("RECORDING", RecordingAuditMessageTransmission.class);
+    UDP("UDP", UDPSyslogSenderProvider.class.getName()),
+    NIO_UDP("NIO-UDP", UDPSyslogSenderProvider.class.getName()),
+    VERTX_UDP("VERTX-UDP", UDPSyslogSenderProvider.class.getName()),
+    TLS("TLS", TLSSyslogSenderProvider.class.getName()),
+    NIO_TLS("NIO-TLS", NettyTLSSyslogSenderProvider.class.getName()),
+    VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderProvider.class.getName()),
+    NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderProvider.class.getName()),
+    REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderProvider.class.getName()),
+    FHIR_REST_TLS("FHIR-REST-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApacheSenderProvider"),
+    FHIR_REST_METHANOL_TLS("FHIR-REST-METHANOL-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordMethanolSenderProvider"),
+    RECORDING("RECORDING", RecordingAuditMessageTransmissionProvider.class.getName());
 
     private final String protocolName;
-    private final Class<? extends AuditTransmissionProtocol> protocol;
+    private final String protocolClass;
 
-    AuditTransmissionChannel(String protocolName, Class<? extends AuditTransmissionProtocol> protocol) {
+    AuditTransmissionChannel(String protocolName, String protocolClass) {
         this.protocolName = protocolName;
-        this.protocol = protocol;
+        this.protocolClass = protocolClass;
     }
 
     public String getProtocolName() {
@@ -52,11 +62,13 @@ public enum AuditTransmissionChannel {
     }
 
     public AuditTransmissionProtocol makeInstance(TlsParameters tlsParameters) {
-        try {
-            return protocol.getConstructor(TlsParameters.class).newInstance(tlsParameters);
-        } catch (Exception e) {
-            throw new AuditException(e);
+        ServiceLoader<AuditTransmissionProtocolProvider> loader = ServiceLoader.load(AuditTransmissionProtocolProvider.class);
+        for (AuditTransmissionProtocolProvider provider : loader) {
+            if (protocolClass.equals(provider.getClass().getName())) {
+                return provider.createAuditTransmissionProtocol(tlsParameters);
+            }
         }
+        throw new AuditException("Could not instantiate AuditTransmissionProtocolProvider for name " + protocolName);
     }
 
     public static AuditTransmissionChannel fromProtocolName(String protocolName) {
@@ -66,9 +78,10 @@ public enum AuditTransmissionChannel {
             }
         }
         throw new IllegalArgumentException("Unknown audit protocol name: " + protocolName +
-                ". Choose one of: " +
-                Arrays.stream(AuditTransmissionChannel.values())
-                        .map(AuditTransmissionChannel::getProtocolName)
-                        .collect(Collectors.joining(",")));
+            ". Choose one of: " +
+            Arrays.stream(AuditTransmissionChannel.values())
+                .map(AuditTransmissionChannel::getProtocolName)
+                .collect(Collectors.joining(",")));
     }
+
 }
