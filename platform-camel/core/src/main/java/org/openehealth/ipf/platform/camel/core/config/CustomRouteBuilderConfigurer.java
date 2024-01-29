@@ -15,12 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.config;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
@@ -59,11 +61,16 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
         if (customRouteBuilder.getIntercepted() != null) {
             var intercepted = customRouteBuilder.getIntercepted();
             customRouteBuilder.setCamelContext(camelContext);
-            customRouteBuilder.setRouteCollection(intercepted.getRouteCollection());
+            customRouteBuilder.setTemplatedRouteCollection(intercepted.getTemplatedRouteCollection());
+            customRouteBuilder.setRouteTemplateCollection(intercepted.getRouteTemplateCollection());
             customRouteBuilder.setRestCollection(intercepted.getRestCollection());
-            customRouteBuilder.errorHandler(intercepted.getErrorHandlerFactory());
+            customRouteBuilder.setErrorHandlerFactory(intercepted.getErrorHandlerFactory());
 
-            // must invoke configure on the original builder so it adds its configuration to me
+            Field f1 = RouteBuilder.class.getDeclaredField("routeCollection");
+            f1.setAccessible(true);
+            f1.set(customRouteBuilder, intercepted.getRouteCollection());
+
+            // must invoke configure on the original builder, so it adds its configuration to me
             customRouteBuilder.configure();
 
         } else {

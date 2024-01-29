@@ -86,12 +86,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-schematron</artifactId>
+            <groupId>com.helger.schematron</groupId>
+            <artifactId>ph-schematron-xslt</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.helger</groupId>
+            <groupId>com.helger.commons</groupId>
             <artifactId>ph-commons</artifactId>
             <scope>test</scope>
         </dependency>

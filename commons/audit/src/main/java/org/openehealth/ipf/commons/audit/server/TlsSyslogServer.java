@@ -23,8 +23,8 @@ import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.DisposableChannel;
+import reactor.netty.internal.util.Metrics;
 import reactor.netty.tcp.TcpServer;
-import reactor.util.Metrics;
 
 import java.time.Duration;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
                 .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .wiretap(getClass().getName(), LogLevel.TRACE)
-                .metrics(Metrics.isInstrumentationAvailable())
+                .metrics(Metrics.isMicrometerAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
                 .doOnBind(serverBootstrap -> LOG.info("TLS Syslog Server is about to be started"))
                 .doOnBound(disposableServer -> LOG.info("TLS Syslog Server bound on {}", disposableServer.address()))
