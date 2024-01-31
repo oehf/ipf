@@ -35,7 +35,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <ipf:globalContext id="globalContext"/>
 
-    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultAuditContext">
+    <bean id="auditContext" class="org.openehealth.ipf.commons.audit.DefaultBalpAuditContext">
         <property name="auditEnabled" value="true"/>
         <property name="tlsParameters" ref="tlsParameters" />
         <property name="auditMessageQueue" ref="auditMessageQueue"/>
@@ -44,6 +44,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="auditSourceId" value="IPF"/>
         <property name="auditEnterpriseSiteId" value="IPF"/>
         <property name="auditRepositoryPort" ref="auditRepositoryPort" />
+        <property name="auditRepositoryContextPath" ref="auditRepositoryContextPath" />
     </bean>
 
     <bean id="tlsParameters" class="org.openehealth.ipf.commons.audit.CustomTlsParameters">
@@ -74,6 +75,10 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     <bean id="auditRepositoryPort"
           class="org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository"
           factory-method="getServerHttpsPort" />
+
+    <bean id="auditRepositoryContextPath"
+          class="org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository"
+          factory-method="getServerContextPath" />
 
     <bean id="auditMessageQueue"
           class="org.openehealth.ipf.commons.ihe.fhir.audit.queue.FhirDelegateMockedMessageQueue"/>

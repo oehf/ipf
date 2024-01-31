@@ -20,20 +20,34 @@ package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.hl7.fhir.exceptions.FHIRException;
-import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.AuditEvent;
+import org.hl7.fhir.r4.model.Base64BinaryType;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Reference;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.codes.*;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.NetworkAccessPointTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeCycle;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
+import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
 
@@ -104,7 +118,6 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             entity.setWhat(new Reference(poit.getParticipantObjectID()));
         }
         return entity;
-
     }
 
     protected AuditEvent.AuditEventSourceComponent auditSourceIdentificationToEventSource(AuditSourceIdentificationType asit) {
@@ -117,6 +130,40 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
     }
 
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
+        Optional<String> oUser = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_TYPE_SYSTEM_NAME);
+        if (oUser.isPresent()) {
+            AuditEvent.AuditEventAgentComponent agent = new AuditEvent.AuditEventAgentComponent()
+                .setType(systemAndCodeToCodeableConcept(OUSER_AGENT_TYPE_SYSTEM_NAME, OUSER_AGENT_TYPE_CODE, "information recipient"))
+                .addPolicy(oUser.get())
+                .setName(ap.getUserName())
+                .setWho(
+                    new Reference(ap.getUserID())
+                        .setIdentifier(new Identifier().setSystem(ap.getAlternativeUserID()).setValue(ap.getUserID()))
+                        .setDisplay(ap.getUserName()))
+                .setRequestor(ap.isUserIsRequestor());
+            getOAuthListAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME)
+                .forEach(purpose -> agent.getPurposeOfUse().add(
+                    systemAndCodeToCodeableConcept(OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME, purpose, "")));
+            getOAuthListAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_ROLE_SYSTEM_NAME)
+                .forEach(purpose -> agent.getRole().add(
+                    systemAndCodeToCodeableConcept(OUSER_AGENT_ROLE_SYSTEM_NAME, purpose, "")));
+            return agent;
+        }
+        Optional<String> oClient = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), DCM_SYSTEM_NAME);
+        if (oClient.isPresent()) {
+            return new AuditEvent.AuditEventAgentComponent()
+                .setType(systemAndCodeToCodeableConcept(DCM_SYSTEM_NAME, DCM_OCLIENT_CODE, "Application"))
+                .setRequestor(ap.isUserIsRequestor())
+                .setWho(new Reference().setIdentifier(new Identifier().setValue(oClient.get())));
+        }
+        Optional<String> opaqueToken = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(),
+            OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME);
+        if (opaqueToken.isPresent()) {
+            return new AuditEvent.AuditEventAgentComponent()
+                .setType(new CodeableConcept(
+                    new Coding(OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME, OUSER_AGENT_TYPE_OPAQUE_CODE, "")))
+                .setRequestor(true);
+        }
         return new AuditEvent.AuditEventAgentComponent()
             .setType(codedValueTypeToCodeableConcept(ap.getRoleIDCodes().get(0), DCM_SYSTEM_NAME))
             .setWho(new Reference().setDisplay(ap.getUserID()))
@@ -129,15 +176,28 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                 .setType(auditEventNetworkType(ap.getNetworkAccessPointTypeCode())));
     }
 
+    private Optional<String> getOAuthAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
+                                                             String knownCodeSystem) {
+        return roleCodes.stream().filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
+            .findFirst()
+            .map(CodedValueType::getCode);
+    }
+
+    private List<String> getOAuthListAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
+                                                             String knownCodeSystem) {
+        return roleCodes.stream().filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
+            .map(CodedValueType::getCode).collect(Collectors.toList());
+    }
+
     protected AuditEvent.AuditEventAgentNetworkType auditEventNetworkType(NetworkAccessPointTypeCode naptc) {
         try {
-            return AuditEvent.AuditEventAgentNetworkType.fromCode(String.valueOf(naptc.getValue()));
+            return naptc != null?
+                AuditEvent.AuditEventAgentNetworkType.fromCode(String.valueOf(naptc.getValue())) : null;
         } catch (FHIRException e) {
             // should never happen
             throw new AuditException(e);
         }
     }
-
 
     protected AuditEvent.AuditEventOutcome getAuditEventOutcome(EventOutcomeIndicator eventOutcomeIndicator) {
         try {
@@ -189,5 +249,9 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         return cvt != null ?
             new CodeableConcept().addCoding(codedValueTypeToCoding(cvt, codeSystem)) :
             null;
+    }
+
+    protected CodeableConcept systemAndCodeToCodeableConcept(String codeSystem, String code, String displayName) {
+        return new CodeableConcept().addCoding(new Coding(codeSystem, code, displayName));
     }
 }

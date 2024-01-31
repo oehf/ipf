@@ -1,11 +1,5 @@
 package org.openehealth.ipf.commons.ihe.fhir.extension;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
-import ca.uhn.fhir.rest.api.MethodOutcome;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.RestfulServer;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.UndertowOptions;
@@ -15,15 +9,14 @@ import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.InstanceFactory;
 import io.undertow.servlet.api.InstanceHandle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.hl7.fhir.r4.model.AuditEvent;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openehealth.ipf.commons.audit.CustomTlsParameters;
 import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.ihe.fhir.audit.server.FhirAuditServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -32,8 +25,6 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static io.undertow.servlet.Servlets.defaultContainer;
 import static io.undertow.servlet.Servlets.deployment;
@@ -45,7 +36,8 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
     private ExtensionContext extensionContext;
     private static FhirAuditServer fhirAuditServer;
     private static final String STORE_KEY = "undertow";
-    private static int httpsPort ;
+    private static int httpsPort;
+    private static String contextPath;
     static final String SERVER_KEY_STORE;
     static final String SERVER_KEY_STORE_PASS = "init";
     static final String TRUST_STORE;
@@ -80,6 +72,7 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
         if (hasStartedUndertow()) return;
 
         httpsPort = freePort();
+        contextPath = PrimitiveGenerators.letterStrings(10, 10).next();
         registerShutdownHook();
     }
 
@@ -95,12 +88,12 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
         if (server == null) {
             fhirAuditServer = new FhirAuditServer();
             DeploymentInfo servletBuilder = deployment()
-                    .setClassLoader(FhirAuditRepository.class.getClassLoader())
-                    .setContextPath("/")
-                    .setDeploymentName("FHIR-Deployment")
-                    .addServlets(
-                            servlet("FhirAuditServer", FhirAuditServer.class, new FhirServletInitiator(fhirAuditServer))
-                                    .addMapping("/*"));
+                .setClassLoader(FhirAuditRepository.class.getClassLoader())
+                .setContextPath("/" + contextPath)
+                .setDeploymentName("FHIR-Deployment")
+                .addServlets(
+                    servlet("FhirAuditServer", FhirAuditServer.class, new FhirServletInitiator(fhirAuditServer))
+                        .addMapping("/*"));
 
             DeploymentManager manager = defaultContainer().addDeployment(servletBuilder);
             manager.deploy();
@@ -110,11 +103,11 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
                 .path(Handlers.redirect("/"))
                 .addPrefixPath("/", servletHandler);
             server = Undertow.builder()
-                    .setServerOption(UndertowOptions.ENABLE_HTTP2, true)
-                    .addHttpsListener(
-                        httpsPort,"localhost", setupDefaultTlsParameter().getSSLContext(true))
-                    .setHandler(path)
-                    .build();
+                .setServerOption(UndertowOptions.ENABLE_HTTP2, true)
+                .addHttpsListener(
+                    httpsPort,"localhost", setupDefaultTlsParameter().getSSLContext(true))
+                .setHandler(path)
+                .build();
             server.start();
         }
     }
@@ -131,39 +124,20 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
     public static int getServerHttpsPort(){
         return httpsPort;
     }
+
+    public static String getServerContextPath(){
+        return contextPath;
+    }
     public static List<AuditEvent> getAuditEvents() {
         return fhirAuditServer.getAuditEvents();
     }
 
-    private boolean hasStartedUndertow(){
-        return extensionContext.getRoot().getStore(GLOBAL).get(STORE_KEY) != null;
+    public static void clearAuditEvents() {
+        fhirAuditServer.clearAuditEvents();
     }
 
-    static class FhirAuditServer extends RestfulServer implements IResourceProvider {
-
-        private final List<AuditEvent> auditEvents = new CopyOnWriteArrayList<>();
-
-        public FhirAuditServer() {
-            setFhirContext(FhirContext.forR4());
-            setResourceProviders(this);
-        }
-
-        public List<AuditEvent> getAuditEvents() {
-            return auditEvents;
-        }
-
-        @Create()
-        public MethodOutcome create(@ResourceParam AuditEvent auditEvent) {
-            auditEvents.add(auditEvent);
-            return new MethodOutcome(
-                new IdType(ResourceType.AuditEvent.name(),
-                UUID.randomUUID().toString()), true);
-        }
-
-        @Override
-        public Class<? extends IBaseResource> getResourceType() {
-            return AuditEvent.class;
-        }
+    private boolean hasStartedUndertow(){
+        return extensionContext.getRoot().getStore(GLOBAL).get(STORE_KEY) != null;
     }
 
     static class FhirServletInitiator implements InstanceFactory<FhirAuditServer> {

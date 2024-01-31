@@ -24,6 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.naming.ldap.LdapName;
 import javax.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Christian Ohr
@@ -50,5 +54,25 @@ public abstract class AuditInterceptorUtils {
                 LOG.info("Could not extract CN from client certificate", e);
             }
         }
+    }
+
+    public static Optional<String> extractAuthorizationHeader(Exchange exchange) {
+        if (exchange.getIn().getHeader(Constants.HTTP_INCOMING_HEADERS) != null) {
+            Map<String, List<String>> httpHeaders = exchange.getIn().getHeader(Constants.HTTP_INCOMING_HEADERS, Map.class);
+            if (!httpHeaders.isEmpty()
+                && httpHeaders.keySet().stream().anyMatch(Constants.HTTP_AUTHORIZATION::equalsIgnoreCase)) {
+
+                List<String> values = httpHeaders.entrySet().stream()
+                    .filter(entry -> Constants.HTTP_AUTHORIZATION.equalsIgnoreCase(entry.getKey()))
+                    .findFirst()
+                    .map(Map.Entry::getValue)
+                    .orElse(new ArrayList<>());
+
+                if (!values.isEmpty()) {
+                    return Optional.of(values.get(0));
+                }
+            }
+        }
+        return Optional.empty();
     }
 }

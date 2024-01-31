@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
 
 import java.util.Optional;
@@ -44,12 +45,12 @@ public class TestIti65WithBalpAudit extends AbstractTestIti65 {
 
     @BeforeEach
     public void beforeEach() {
-        FhirAuditRepository.getAuditEvents().clear();
+        FhirAuditRepository.clearAuditEvents();
     }
 
     @Test
     public void testSendManualMhd() throws Exception {
-        sendManually(provideAndRegister());
+        sendManuallyWithJwt(provideAndRegister());
 
         // Check ATNA Audit
         var auditEvents = FhirAuditRepository.getAuditEvents();
@@ -69,12 +70,16 @@ public class TestIti65WithBalpAudit extends AbstractTestIti65 {
         assertEquals(1, auditEvent.getEntity().stream()
             .filter(event -> event.getType().getCode().equals("2") && event.getRole().getCode().equals("20"))
             .count());
+        assertTrue(auditEvent.getAgent().stream()
+            .anyMatch(p -> p.getType().getCodingFirstRep().getCode().equals(Constants.OUSER_AGENT_TYPE_CODE)
+                && p.getType().getCodingFirstRep().getSystem().equals(Constants.OUSER_AGENT_TYPE_SYSTEM_NAME)
+                && p.hasPolicy()));
     }
 
     @Test
     public void testSendEndpointMhd() throws Exception {
         var bundle = provideAndRegister();
-        sendViaProducer(bundle);
+        sendViaProducerWithJwtAuthorization(bundle);
 
         // Check ATNA Audit
         var auditEvents = FhirAuditRepository.getAuditEvents();

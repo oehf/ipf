@@ -27,6 +27,7 @@
         <jakarta-jwsapi-version>2.1.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <methanol-version>1.7.0</methanol-version>
+        <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>5.6.5</ph-schematron-version>
         <ph-commons-version>9.5.5</ph-commons-version>
         <saxon-he-version>11.4</saxon-he-version>
@@ -100,7 +101,7 @@
                         <artifactId>jaxb2-basics-tools</artifactId>
                     </exclusion>
                     <exclusion>
-                        <!-- Hapi introduce beanutils to override a old version used in jaxb2-basics-tools, 
+                        <!-- Hapi introduce beanutils to override a old version used in jaxb2-basics-tools,
                              but since the tools are not needed, the fix also not -->
                         <groupId>commons-beanutils</groupId>
                         <artifactId>commons-beanutils</artifactId>
@@ -304,6 +305,11 @@
                 <groupId>com.github.mizosoft.methanol</groupId>
                 <artifactId>methanol</artifactId>
                 <version>${methanol-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>

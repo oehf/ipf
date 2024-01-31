@@ -27,6 +27,7 @@ import org.hl7.fhir.instance.model.api.IIdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpJwtUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.GenericFhirAuditMessageBuilder;
 
 import java.util.Map;
@@ -161,6 +162,7 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, GenericFhirAuditDataset auditDataset) {
         var builder = new GenericFhirAuditMessageBuilder(auditContext, auditDataset)
                 .addPatients(auditDataset);
+
         if (auditDataset.getQueryString() != null) {
             builder.addQueryParticipantObject(auditDataset);
         } else if (auditDataset.getResourceId() != null &&
@@ -168,6 +170,7 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
                 auditDataset.getResourceId().hasIdPart()) {
             builder.addResourceParticipantObject(auditDataset);
         }
+        builder.addJwtParticipants(auditDataset);
         return builder.getMessages();
     }
 

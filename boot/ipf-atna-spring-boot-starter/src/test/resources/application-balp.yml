@@ -1,0 +1,8 @@
+ipf:
+  atna:
+    audit-repository-transport: FHIR-REST-TLS
+    balp:
+      audit-repository-context-path: fhir
+      oauth:
+        clientIdPath: cid,client-id,my-client-id-path
+        idPath:

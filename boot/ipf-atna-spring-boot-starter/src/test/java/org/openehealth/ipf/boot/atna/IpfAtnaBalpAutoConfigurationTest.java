@@ -16,14 +16,18 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.BalpAuditContext;
 import org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,19 +37,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { TestApplication.class })
-public class IpfAtnaAutoConfigurationTest {
+@ActiveProfiles("balp")
+public class IpfAtnaBalpAutoConfigurationTest {
 
     @Autowired
     private AuditContext auditContext;
 
     @Test
-    public void testAtnaSettings() throws Exception {
+    public void testAtnaWithBalpSettings() throws Exception {
+        assertTrue(auditContext instanceof BalpAuditContext);
+
         assertEquals("atna-test", auditContext.getAuditSourceId());
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
         assertEquals(1342, auditContext.getAuditRepositoryPort());
-        assertEquals("TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
+        assertEquals("FHIR-REST-TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
         assertTrue(auditContext.getAuditMessageQueue() instanceof AsynchronousAuditMessageQueue);
+
+        assertEquals("fhir", ((BalpAuditContext)auditContext).getAuditRepositoryContextPath());
+        assertArrayEquals(new String[]{"cid","client-id","my-client-id-path"},
+            ((BalpAuditContext) auditContext).getBalpJwtExtractorProperties().getClientIdPath());
+        assertArrayEquals(new String[]{},
+            ((BalpAuditContext) auditContext).getBalpJwtExtractorProperties().getIdPath());
     }
 
 }

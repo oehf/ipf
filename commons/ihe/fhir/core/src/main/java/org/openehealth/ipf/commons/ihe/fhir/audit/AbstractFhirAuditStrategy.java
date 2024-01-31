@@ -25,7 +25,11 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_CONTEXT;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_AUTHORIZATION;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_CLIENT_IP_ADDRESS;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URI;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
 
 /**
  * Generic Audit Strategy for FHIR transactions
@@ -54,6 +58,9 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
         }
         if (parameters.get(FHIR_CONTEXT) != null) {
             auditDataset.setFhirContext((FhirContext) parameters.get(FHIR_CONTEXT));
+        }
+        if (parameters.get(HTTP_AUTHORIZATION) != null) {
+            auditDataset.setAuthorization((String) parameters.get(HTTP_AUTHORIZATION));
         }
         return auditDataset;
     }

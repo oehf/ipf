@@ -48,7 +48,7 @@ public class TestIti66WithBalpAudit extends AbstractTestIti66 {
 
     @BeforeEach
     public void beforeEach() {
-        FhirAuditRepository.getAuditEvents().clear();
+        FhirAuditRepository.clearAuditEvents();
     }
 
     @Test

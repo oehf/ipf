@@ -165,8 +165,6 @@ public interface AuditContext {
      */
     boolean isIncludeParticipantsFromResponse();
 
-    String getAuditRepositoryContextPath();
-
     static AuditContext noAudit() {
         return DefaultAuditContext.NO_AUDIT;
     }

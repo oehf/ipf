@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.CustomTlsParameters;
-import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -25,14 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(FhirAuditRepository.class)
 public abstract class AbstractFhirRestTLSSenderIntegrationTest {
 
-    protected DefaultAuditContext auditContext;
+    protected DefaultBalpAuditContext auditContext;
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFhirRestTLSSenderIntegrationTest.class);
 
     @BeforeEach
     public void setup() {
-        this.auditContext = new DefaultAuditContext();
+        this.auditContext = new DefaultBalpAuditContext();
         auditContext.setAuditRepositoryPort(FhirAuditRepository.getServerHttpsPort());
+        auditContext.setAuditRepositoryContextPath(FhirAuditRepository.getServerContextPath());
         auditContext.setAuditRepositoryHost("localhost");
         auditContext.setAuditEnabled(true);
         auditContext.setSerializationStrategy((auditMessage, writer, pretty) -> writer.write("<AuditEvent />"));
@@ -57,7 +58,7 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
     @AfterEach
     public void tearDown() {
         LOG.info("FhirAuditRepository size: " + FhirAuditRepository.getAuditEvents().size() + ". Cleanup....");
-        FhirAuditRepository.getAuditEvents().clear();
+        FhirAuditRepository.clearAuditEvents();
         LOG.info("FhirAuditRepository size: " + FhirAuditRepository.getAuditEvents().size());
     }
 

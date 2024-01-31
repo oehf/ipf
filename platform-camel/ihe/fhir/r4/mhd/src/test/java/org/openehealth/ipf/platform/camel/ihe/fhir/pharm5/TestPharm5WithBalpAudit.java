@@ -40,7 +40,7 @@ public class TestPharm5WithBalpAudit extends AbstractTestPharm5 {
 
     @BeforeEach
     public void beforeEach() {
-        FhirAuditRepository.getAuditEvents().clear();
+        FhirAuditRepository.clearAuditEvents();
     }
 
     @Test

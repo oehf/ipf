@@ -70,7 +70,7 @@ public class TestIti105WithBalpAudit extends FhirTestContainer {
 
     @BeforeEach
     public void beforeEach() {
-        FhirAuditRepository.getAuditEvents().clear();
+        FhirAuditRepository.clearAuditEvents();
     }
 
     @Test

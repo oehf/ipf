@@ -22,10 +22,15 @@ public class Constants {
     public static final String EHS_SYSTEM_NAME = "e-health-suisse";
 
     public static final String DCM_SYSTEM_NAME = "http://dicom.nema.org/resources/ontology/DCM";
+    public static final String DCM_OCLIENT_CODE = "110150";
     public static final String SECURITY_SOURCE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/security-source-type";
     public static final String AUDIT_ENTITY_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/audit-entity-type";
     public static final String OBJECT_ROLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/object-role";
     public static final String AUDIT_LIFECYCLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/dicom-audit-lifecycle";
-
-
+    public static final String OUSER_AGENT_TYPE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/v3-ParticipationType";
+    public static final String OUSER_AGENT_TYPE_CODE = "IRCP";
+    public static final String OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/v3-ActReason";
+    public static final String OUSER_AGENT_ROLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/v3-RoleClass";
+    public static final String OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME = "https://profiles.ihe.net/ITI/BALP/CodeSystem/UserAgentTypes";
+    public static final String OUSER_AGENT_TYPE_OPAQUE_CODE = "UserOauthAgent";
 }
