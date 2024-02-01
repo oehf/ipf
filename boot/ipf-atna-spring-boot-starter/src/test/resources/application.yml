@@ -11,4 +11,3 @@ ipf:
     audit-enterprise-site-id: mysite
     audit-queue-class: org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue
     security-domain-name: mydomain
-

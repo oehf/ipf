@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpQueryInformationBuilder;
 
 /**
  * @author Christian Ohr
@@ -35,7 +36,7 @@ public class Iti67AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobileDocumentReferenceQuery)
+        return new BalpQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobileDocumentReferenceQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters("MobileDocumentReferenceQuery",
                         FhirParticipantObjectIdTypeCode.MobileDocumentReferenceQuery,

@@ -100,4 +100,88 @@ public class IpfAtnaConfigurationProperties {
 
     @Getter @Setter
     private String auditValueIfMissing = "UNKNOWN";
+
+    @Getter @Setter
+    private Balp balp;
+
+    public static class Balp {
+
+        /**
+         * Sets the context-path of the BALP audit record repository.
+         */
+        @Getter
+        @Setter
+        private String auditRepositoryContextPath = "";
+
+        @Getter
+        @Setter
+        private String auditEventSerializationType = "json";
+
+        @Getter
+        @Setter
+        private OAuth oauth;
+
+        public static class OAuth {
+
+            @Getter
+            @Setter
+            private String[] idPath;
+
+            @Getter
+            @Setter
+            private String[] issuerPath;
+
+            @Getter
+            @Setter
+            private String[] clientIdPath;
+
+            @Getter
+            @Setter
+            private String[] subjectPath;
+
+            @Getter
+            @Setter
+            private String[] subjectNamePath;
+
+            @Getter
+            @Setter
+            private String[] subjectOrganizationPath;
+
+            @Getter
+            @Setter
+            private String[] subjectOrganizationIdPath;
+
+            @Getter
+            @Setter
+            private String[] subjectRolePath;
+
+            @Getter
+            @Setter
+            private String[] purposeOfUsePath;
+
+            @Getter
+            @Setter
+            private String[] homeCommunityIdPath;
+
+            @Getter
+            @Setter
+            private String[] nationalProviderIdPath;
+
+            @Getter
+            @Setter
+            private String[] personIdPath;
+
+            @Getter
+            @Setter
+            private String[] patientIdPath;
+
+            @Getter
+            @Setter
+            private String[] docIdPath;
+
+            @Getter
+            @Setter
+            private String[] acpPath;
+        }
+    }
 }

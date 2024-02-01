@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65.v421;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
+import org.apache.camel.Exchange;
+import org.apache.camel.component.http.HttpConstants;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.ietf.jgss.Oid;
@@ -25,6 +27,7 @@ import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtGenerator;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
@@ -34,6 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.http.HttpHeaders;
 import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -144,11 +148,25 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected Bundle sendManually(Bundle bundle) {
-        return client.transaction().withBundle(bundle).encodedXml().execute();
+        return client.transaction().withBundle(bundle)
+            .encodedXml().execute();
+    }
+
+    protected Bundle sendManuallyWithJwt(Bundle bundle) {
+        var headerValue = "Bearer " + new BalpJwtGenerator().next();
+        return client.transaction().withBundle(bundle)
+            .withAdditionalHeader("Authorization", headerValue)
+            .encodedXml().execute();
     }
 
     protected Bundle sendViaProducer(Bundle bundle) {
         return producerTemplate.requestBody("direct:input", bundle, Bundle.class);
+    }
+
+    protected Bundle sendViaProducerWithJwtAuthorization(Bundle bundle) {
+        var headerValue = "Bearer " + new BalpJwtGenerator().next();
+        return producerTemplate.requestBodyAndHeader("direct:input", bundle, "Authorization",
+            headerValue, Bundle.class);
     }
 
     protected void printAsXML(IBaseResource resource) {

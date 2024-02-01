@@ -18,11 +18,11 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 import org.hl7.fhir.r4.model.IdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpQueryInformationBuilder;
 
 import java.util.Map;
 
@@ -40,7 +40,7 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientDemographicsQuery)
+        return new BalpQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobilePatientDemographicsQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         "MobilePatientDemographicsQuery",

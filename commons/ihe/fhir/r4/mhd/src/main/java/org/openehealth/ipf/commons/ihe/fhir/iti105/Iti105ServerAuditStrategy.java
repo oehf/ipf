@@ -20,8 +20,8 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpPHIImportBuilder;
 
 import java.util.Collections;
 
@@ -37,7 +37,7 @@ public class Iti105ServerAuditStrategy extends Iti105AuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti105AuditDataset auditDataset) {
-        return new PHIImportBuilder<>(auditContext, auditDataset, FhirEventTypeCode.SimplifiedPublish)
+        return new BalpPHIImportBuilder(auditContext, auditDataset, FhirEventTypeCode.SimplifiedPublish)
                 .setPatient(auditDataset.getPatientId())
                 .addImportedEntity(
                         auditDataset.getDocumentReferenceId(),

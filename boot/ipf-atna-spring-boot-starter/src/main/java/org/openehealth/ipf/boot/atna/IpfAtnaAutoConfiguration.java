@@ -16,12 +16,20 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpXmlSerializationStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -30,6 +38,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  *
@@ -48,7 +58,27 @@ public class IpfAtnaAutoConfiguration {
                                      AuditExceptionHandler auditExceptionHandler,
                                      AuditMessagePostProcessor auditMessagePostProcessor,
                                      @Value("${spring.application.name}") String appName) {
-        var auditContext = new DefaultAuditContext();
+        if (config.getBalp() != null) {
+            return balpConfiguration(defaultContextConfiguration(new DefaultBalpAuditContext(), config,
+                auditTransmissionProtocol, auditMessageQueue, tlsParameters, auditMetadataProvider,
+                auditExceptionHandler, auditMessagePostProcessor, appName), config);
+        } else {
+            return defaultContextConfiguration(new DefaultAuditContext(), config, auditTransmissionProtocol,
+                auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
+                auditMessagePostProcessor, appName);
+        }
+    }
+
+    private <T extends DefaultAuditContext> T defaultContextConfiguration(T auditContext,
+                                             IpfAtnaConfigurationProperties config,
+                                             AuditTransmissionProtocol auditTransmissionProtocol,
+                                             AuditMessageQueue auditMessageQueue,
+                                             TlsParameters tlsParameters,
+                                             AuditMetadataProvider auditMetadataProvider,
+                                             AuditExceptionHandler auditExceptionHandler,
+                                             AuditMessagePostProcessor auditMessagePostProcessor,
+                                             @Value("${spring.application.name}") String appName) {
+
         auditContext.setAuditEnabled(config.isAuditEnabled());
 
         // Simple properties
@@ -67,7 +97,63 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditMessageQueue(auditMessageQueue);
         auditContext.setAuditExceptionHandler(auditExceptionHandler);
         auditContext.setAuditMessagePostProcessor(auditMessagePostProcessor);
+        return auditContext;
+    }
 
+    private DefaultBalpAuditContext balpConfiguration(DefaultBalpAuditContext auditContext, IpfAtnaConfigurationProperties config) {
+        if (config.getBalp() != null) {
+            auditContext.setAuditRepositoryContextPath(config.getBalp().getAuditRepositoryContextPath());
+
+            if (isNotBlank(config.getBalp().getAuditEventSerializationType())) {
+                auditContext.setSerializationStrategy(
+                    config.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
+                        new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
+            }
+            if (config.getBalp().getOauth() != null) {
+                if (config.getBalp().getOauth().getIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setIdPath(config.getBalp().getOauth().getIdPath());
+                }
+                if (config.getBalp().getOauth().getClientIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setClientIdPath(config.getBalp().getOauth().getClientIdPath());
+                }
+                if (config.getBalp().getOauth().getIssuerPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setIssuerPath(config.getBalp().getOauth().getIssuerPath());
+                }
+                if (config.getBalp().getOauth().getSubjectPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setSubjectPath(config.getBalp().getOauth().getSubjectPath());
+                }
+                if (config.getBalp().getOauth().getSubjectNamePath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setSubjectNamePath(config.getBalp().getOauth().getSubjectNamePath());
+                }
+                if (config.getBalp().getOauth().getSubjectRolePath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setSubjectRolePath(config.getBalp().getOauth().getSubjectRolePath());
+                }
+                if (config.getBalp().getOauth().getSubjectOrganizationIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setSubjectOrganizationIdPath(config.getBalp().getOauth().getSubjectOrganizationIdPath());
+                }
+                if (config.getBalp().getOauth().getPurposeOfUsePath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setPurposeOfUsePath(config.getBalp().getOauth().getPurposeOfUsePath());
+                }
+                if (config.getBalp().getOauth().getHomeCommunityIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setHomeCommunityIdPath(config.getBalp().getOauth().getHomeCommunityIdPath());
+                }
+                if (config.getBalp().getOauth().getNationalProviderIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setNationalProviderIdPath(config.getBalp().getOauth().getNationalProviderIdPath());
+                }
+                if (config.getBalp().getOauth().getDocIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setDocIdPath(config.getBalp().getOauth().getDocIdPath());
+                }
+                if (config.getBalp().getOauth().getPatientIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setPatientIdPath(config.getBalp().getOauth().getPatientIdPath());
+                }
+                if (config.getBalp().getOauth().getPersonIdPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setPersonIdPath(config.getBalp().getOauth().getPersonIdPath());
+                }
+                if (config.getBalp().getOauth().getAcpPath() != null) {
+                    auditContext.getBalpJwtExtractorProperties().setAcpPath(config.getBalp().getOauth().getAcpPath());
+                }
+            }
+        }
         return auditContext;
     }
 
@@ -95,10 +181,10 @@ public class IpfAtnaAutoConfiguration {
                                                                TlsParameters tlsParameters) throws Exception {
         if (config.getAuditSenderClass() != null) {
             return config.getAuditSenderClass().getConstructor(TlsParameters.class)
-                    .newInstance(tlsParameters);
+                .newInstance(tlsParameters);
         }
         return AuditTransmissionChannel.fromProtocolName(config.getAuditRepositoryTransport())
-                .makeInstance(tlsParameters);
+            .makeInstance(tlsParameters);
     }
 
     @Bean
@@ -107,8 +193,8 @@ public class IpfAtnaAutoConfiguration {
                                                        @Value("${spring.application.name}") String appName) {
         var auditMetadataProvider = new DefaultAuditMetadataProvider();
         auditMetadataProvider.setSendingApplication(config.getAuditSendingApplication() != null ?
-                config.getAuditSendingApplication() :
-                appName);
+            config.getAuditSendingApplication() :
+            appName);
         return auditMetadataProvider;
     }
 

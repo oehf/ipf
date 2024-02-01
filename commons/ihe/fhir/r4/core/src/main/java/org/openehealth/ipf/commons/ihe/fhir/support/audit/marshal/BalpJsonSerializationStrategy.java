@@ -23,13 +23,13 @@ import ca.uhn.fhir.parser.IParser;
  * @author Christian Ohr
  * @since 4.1
  */
-public class FhirAuditJsonSerializationStrategy extends AbstractFhirAuditSerializationStrategy {
+public class BalpJsonSerializationStrategy extends AbstractFhirAuditSerializationStrategy {
 
-    public FhirAuditJsonSerializationStrategy() {
+    public BalpJsonSerializationStrategy() {
         super();
     }
 
-    public FhirAuditJsonSerializationStrategy(FhirContext fhirContext) {
+    public BalpJsonSerializationStrategy(FhirContext fhirContext) {
         super(fhirContext);
     }
 

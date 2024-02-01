@@ -29,3 +29,4 @@ work
 /commons/ihe/xds/generated-stubs
 generated-stubs
 /commons/audit/.vertx
+/local_history.patch

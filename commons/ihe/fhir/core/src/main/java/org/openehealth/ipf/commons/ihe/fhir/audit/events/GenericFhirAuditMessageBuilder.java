@@ -132,6 +132,11 @@ public class GenericFhirAuditMessageBuilder extends
         return self();
     }
 
+    public GenericFhirAuditMessageBuilder addJwtParticipants(GenericFhirAuditDataset auditDataset) {
+        BalpJwtUtils.addJwtParticipant(delegate, auditDataset, getAuditContext());
+        return self();
+    }
+
 
     private static EventActionCode eventActionCode(RestOperationTypeEnum operation) {
         if (operation == null)

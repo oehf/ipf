@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpPHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 
 import java.util.Map;
@@ -45,7 +46,7 @@ public class Iti68BinaryServerAuditStrategy extends AuditStrategySupport<FhirAud
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirAuditDataset auditDataset) {
-        PHIExportBuilder builder = new PHIExportBuilder<>(auditContext, auditDataset,
+        BalpPHIExportBuilder builder = new BalpPHIExportBuilder(auditContext, auditDataset,
                 EventActionCode.Create,
                 FhirEventTypeCode.MobileDocumentRetrieval)
                 .setPatient(auditDataset.getPatientId());

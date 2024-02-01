@@ -111,7 +111,7 @@ public class DefaultAuditContext implements AuditContext {
 
     public void setAuditRepositoryTransport(String transport) {
         setAuditTransmissionProtocol(
-                AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
+            AuditTransmissionChannel.fromProtocolName(transport).makeInstance(tlsParameters)
         );
     }
 

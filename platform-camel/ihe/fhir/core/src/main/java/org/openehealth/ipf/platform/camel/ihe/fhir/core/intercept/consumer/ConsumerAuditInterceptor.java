@@ -28,6 +28,10 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static java.util.Objects.requireNonNull;
 
 
@@ -113,14 +117,12 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
             // TODO Also extract basic auth user?
             AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
-
+            AuditInterceptorUtils.extractAuthorizationHeader(exchange).ifPresent(auditDataset::setAuthorization);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }
-
-
 
 }
