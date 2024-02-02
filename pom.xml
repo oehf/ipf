@@ -60,7 +60,7 @@
         <lombok-version>1.18.30</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.85</tomcat-version>
+        <tomcat-version>9.0.83</tomcat-version>
         <undertow-version>2.2.28.Final</undertow-version>
         <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
