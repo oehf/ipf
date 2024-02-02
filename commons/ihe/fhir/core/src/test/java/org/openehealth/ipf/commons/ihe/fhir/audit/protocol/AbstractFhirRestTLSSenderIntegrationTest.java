@@ -46,7 +46,7 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
             var tlsParameters = new CustomTlsParameters();
             tlsParameters.setKeyStoreFile(Paths.get(AbstractFhirRestTLSSenderIntegrationTest.class.getResource("/security/client.p12").toURI()).toString());
             tlsParameters.setKeyStorePassword("init");
-            tlsParameters.setTrustStoreFile(Paths.get(AbstractFhirRestTLSSenderIntegrationTest.class.getResource("/security/ca.keystore").toURI()).toString());
+            tlsParameters.setTrustStoreFile(Paths.get(AbstractFhirRestTLSSenderIntegrationTest.class.getResource("/security/ca.truststore").toURI()).toString());
             tlsParameters.setTrustStorePassword("initinit");
             tlsParameters.setEnabledProtocols("TLSv1.2,TLSv1.3");
             return tlsParameters;

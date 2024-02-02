@@ -48,7 +48,7 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
     static {
         try {
             URI s = new ClassPathResource("/security/server.p12").getURI();
-            URI t = new ClassPathResource("/security/ca.keystore").getURI();
+            URI t = new ClassPathResource("/security/ca.truststore").getURI();
             SERVER_KEY_STORE = Paths.get(s).toAbsolutePath().toString();
             TRUST_STORE = Paths.get(t).toAbsolutePath().toString();
         } catch (Exception e) {

@@ -69,7 +69,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="truststoreResource"
           class="org.springframework.core.io.ClassPathResource">
-        <constructor-arg value="security/ca.keystore" />
+        <constructor-arg value="security/ca.truststore" />
     </bean>
 
     <bean id="auditRepositoryPort"
