@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>ipf-tutorials</artifactId>
-        <version>4.8-m6</version>
+        <version>4.8-SNAPSHOT</version>
     </parent>
 
     <dependencies>
