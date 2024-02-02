@@ -50,7 +50,7 @@
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
-        <sources-plugin-version>3.3.0</sources-plugin-version>
+        <sources-plugin-version>3.2.1</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
@@ -60,7 +60,7 @@
         <lombok-version>1.18.30</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.83</tomcat-version>
+        <tomcat-version>9.0.85</tomcat-version>
         <undertow-version>2.2.28.Final</undertow-version>
         <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
@@ -148,11 +148,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-core-legacy</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
