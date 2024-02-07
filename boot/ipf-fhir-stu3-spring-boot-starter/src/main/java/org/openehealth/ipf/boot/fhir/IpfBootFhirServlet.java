@@ -26,16 +26,17 @@ import org.springframework.beans.factory.ObjectProvider;
  */
 public class IpfBootFhirServlet extends IpfFhirServlet {
 
+    private final boolean caching;
     private final IPagingProvider pagingProvider;
 
-    public IpfBootFhirServlet(FhirContext fhirContext, ObjectProvider<IPagingProvider> pagingProvider) {
+    public IpfBootFhirServlet(FhirContext fhirContext, boolean caching, ObjectProvider<IPagingProvider> pagingProvider) {
         super(fhirContext);
+        this.caching = caching;
         this.pagingProvider = pagingProvider.getIfAvailable();
     }
 
     @Override
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        return pagingProvider != null ? pagingProvider : super.getDefaultPagingProvider(pagingProviderSize);
-
+        return caching ? (pagingProvider != null ? pagingProvider : super.getDefaultPagingProvider(pagingProviderSize)) : null;
     }
 }

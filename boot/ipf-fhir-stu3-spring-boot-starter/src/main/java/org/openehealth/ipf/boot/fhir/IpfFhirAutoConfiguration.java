@@ -137,7 +137,7 @@ public class IpfFhirAutoConfiguration {
             ObjectProvider<IPagingProvider> pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
-        var fhirServlet = new IpfBootFhirServlet(fhirContext, pagingProvider);
+        var fhirServlet = new IpfBootFhirServlet(fhirContext, config.isCaching(), pagingProvider);
         var servletProperties = config.getServlet();
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
