@@ -185,7 +185,7 @@ public class IpfFhirServlet extends RestfulServer {
     }
 
     /**
-     * Returns the instance of {@link IPagingProvider} to be used. This implemention returns {@link FifoMemoryPagingProvider},
+     * Returns the instance of {@link IPagingProvider} to be used. This implementation returns {@link FifoMemoryPagingProvider},
      * you may overwrite this e.g. to add a provider backed by a decent Cache implementation. In this case, not forget to set the
      * paging parameters accessible via {@link #getPagingProviderSize()}, {@link #getDefaultPageSize()} and {@link #getMaximumPageSize()}.
      * <p>
@@ -196,7 +196,7 @@ public class IpfFhirServlet extends RestfulServer {
      * </p>
      *
      * @param pagingProviderSize maximum number of parallel paged requests. Note that each request may have an
-     *                           aribitrary number of result resources though.
+     *                           arbitrary number of result resources though.
      * @return implementation of {@link IPagingProvider}
      * @see IPagingProvider
      * @see #getPagingProviderSize()
