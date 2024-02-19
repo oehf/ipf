@@ -78,7 +78,7 @@ public abstract class XdsHl7v2Renderer {
     static {
         addInclusion(CE.class,  null,                        1, 3);
         addInclusion(CX.class,  Identifiable.class,          1, 4);
-        addInclusion(CX.class,  ReferenceId.class,           1, 4, 5);
+        addInclusion(CX.class,  ReferenceId.class,           1, 4, 5, 6);
         addInclusion(HD.class,  AssigningAuthority.class,    2, 3);
         addInclusion(HD.class,  CXiAssigningAuthority.class, 1, 2, 3);
         addInclusion(HD.class,  Identifiable.class,          2, 3);
