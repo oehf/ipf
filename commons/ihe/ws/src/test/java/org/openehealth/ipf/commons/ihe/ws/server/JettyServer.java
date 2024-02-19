@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import jakarta.servlet.ServletContext;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.*;
@@ -30,6 +31,7 @@ import org.springframework.web.context.ContextLoaderListener;
  */
 public class JettyServer extends ServletServer {
     private Server server;
+    private ServletContext servletContext;
 
     @Override
     public void start() {
@@ -63,6 +65,13 @@ public class JettyServer extends ServletServer {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+
+        this.servletContext = context.getServletContext();
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
     private ServerConnector secureServerConnector(int port) {

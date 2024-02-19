@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws
 
+import jakarta.servlet.Servlet
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
@@ -30,8 +31,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
-
-import javax.servlet.Servlet
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -77,7 +76,7 @@ class StandardTestContainer {
 
         servletServer.start()
 
-        def servletContext = servlet.servletConfig.servletContext
+        def servletContext = servletServer.servletContext
         appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
         camelContext = appContext.getBean('camelContext', CamelContext.class)
@@ -94,7 +93,7 @@ class StandardTestContainer {
     }
 
     static int startServer(servlet, String appContextName, boolean secure, String servletName = null) {
-        int port = JettyServer.freePort
+        int port = ServletServer.freePort
         startServer(servlet, appContextName, secure, port, servletName)
         port
     }

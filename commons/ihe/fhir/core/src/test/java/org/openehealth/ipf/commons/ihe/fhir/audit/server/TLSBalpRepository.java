@@ -24,19 +24,16 @@ import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.InstanceFactory;
 import io.undertow.servlet.api.InstanceHandle;
+import jakarta.servlet.ServletException;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-
 import java.io.Closeable;
 import java.io.IOException;
 
-import static io.undertow.servlet.Servlets.defaultContainer;
-import static io.undertow.servlet.Servlets.deployment;
-import static io.undertow.servlet.Servlets.servlet;
+import static io.undertow.servlet.Servlets.*;
 
 public class TLSBalpRepository implements Closeable {
 
