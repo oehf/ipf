@@ -64,10 +64,10 @@ public class XdsHl7v2RenderingTest {
         var cx1 = "1^2^3^41&42&43&44&45&46^51&52^^^&&^^";
         var referenceId1 = Hl7v2Based.parse(cx1, ReferenceId.class);
         assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId1));
-        var cx2 = "1^2^3^41&42&43&44&45&46^51&52^6^2015^&&^^";
+        var cx2 = "1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015^&&^^";
         var referenceId2 = Hl7v2Based.parse(cx2, ReferenceId.class);
-        assertEquals("1^^^41&42&43^51^6", Hl7v2Based.render(referenceId2));
-        assertEquals("1^2^3^41&42&43&44&45&46^51&52^6^2015", Hl7v2Based.rawRender(referenceId2));
+        assertEquals("1^^^41&42&43^51^&1.2.40.0.34.3.1.2.99.1000001&ISO", Hl7v2Based.render(referenceId2));
+        assertEquals("1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015", Hl7v2Based.rawRender(referenceId2));
     }
 
     @Test
