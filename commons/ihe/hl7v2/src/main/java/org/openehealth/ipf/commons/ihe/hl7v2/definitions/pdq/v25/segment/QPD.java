@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 
 /**
@@ -47,18 +46,14 @@ public class QPD extends AbstractSegment {
     public QPD(Group parentGroup, ModelClassFactory modelFactory) {
         super(parentGroup, modelFactory);
         var msg = getMessage();
-        try {
-            add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
-            add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
-            add(QIP.class, true, 0, 256, new Object[]{msg}, "Demographics Fields");
-            add(NM.class, false, 1, 16, new Object[]{msg}, "Search Confidence Threshold");
-            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Name");
-            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Version");
-            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Description");
-            add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
-        } catch (HL7Exception e) {
-            throw new HL7v2Exception(e);
-        }
+        add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
+        add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
+        add(QIP.class, true, 0, 256, new Object[]{msg}, "Demographics Fields");
+        add(NM.class, false, 1, 16, new Object[]{msg}, "Search Confidence Threshold");
+        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Name");
+        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Version");
+        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Description");
+        add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
     }
 
     /**

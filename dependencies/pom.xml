@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.76</bouncycastle-version>
         <brave-version>5.16.0</brave-version>
-        <camel-version>4.3.0</camel-version>
+        <camel-version>4.4.0</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
         <cxf-version>4.0.3</cxf-version>
@@ -21,7 +21,7 @@
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <groovy-version>4.0.18</groovy-version>
         <hapi-version>2.5.1</hapi-version>
-        <hapi-fhir-version>7.0.0-SNAPSHOT</hapi-fhir-version>
+        <hapi-fhir-version>7.0.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
