@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.parser.DefaultEscaping;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.Escaping;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
@@ -34,6 +35,8 @@ import java.util.*;
  * @author Dmytro Rud
  */
 public abstract class XdsHl7v2Renderer {
+
+    static final String XDS_VALIDATION_CP_1292_PROPERTY = "XDS_VALIDATION_CP_1292";
 
     /**
      * Encoding characters for HL7 v2 messages.
@@ -78,7 +81,11 @@ public abstract class XdsHl7v2Renderer {
     static {
         addInclusion(CE.class,  null,                        1, 3);
         addInclusion(CX.class,  Identifiable.class,          1, 4);
-        addInclusion(CX.class,  ReferenceId.class,           1, 4, 5, 6);
+        if (isCP1292ValidationEnabled()) {
+            addInclusion(CX.class, ReferenceId.class, 1, 4, 5, 6);
+        } else {
+            addInclusion(CX.class, ReferenceId.class, 1, 4, 5);
+        }
         addInclusion(HD.class,  AssigningAuthority.class,    2, 3);
         addInclusion(HD.class,  CXiAssigningAuthority.class, 1, 2, 3);
         addInclusion(HD.class,  Identifiable.class,          2, 3);
@@ -87,6 +94,10 @@ public abstract class XdsHl7v2Renderer {
         addInclusion(XTN.class, null,                        2, 3, 4, 5, 6, 7, 8, 12);
     }
 
+    private static boolean isCP1292ValidationEnabled() {
+        String cp1292Value = System.getProperty(XDS_VALIDATION_CP_1292_PROPERTY, "false");
+        return BooleanUtils.toBoolean(cp1292Value);
+    }
 
     private XdsHl7v2Renderer() {
         throw new IllegalStateException("cannot instantiate helper class");
