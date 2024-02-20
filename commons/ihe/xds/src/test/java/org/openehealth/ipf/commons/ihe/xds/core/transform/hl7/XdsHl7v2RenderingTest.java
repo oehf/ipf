@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
+import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
@@ -61,25 +62,19 @@ public class XdsHl7v2RenderingTest {
 
     @Test
     public void testReferenceIdRendering() {
-        var cx1 = "1^2^3^41&42&43&44&45&46^51&52^^^&&^^";
-        var referenceId1 = Hl7v2Based.parse(cx1, ReferenceId.class);
-        assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId1));
-        var cx2 = "1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015^&&^^";
-        var referenceId2 = Hl7v2Based.parse(cx2, ReferenceId.class);
-        assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId2));
-        assertEquals("1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015", Hl7v2Based.rawRender(referenceId2));
-    }
-
-    @Test
-    public void testReferenceIdRenderingCp1292() {
-        System.setProperty("XDS_VALIDATION_CP_1292", "true");
+        Boolean cp1292Enabled =  PrimitiveGenerators.booleans().next();
+        System.setProperty("XDS_VALIDATION_CP_1292", cp1292Enabled.toString());
         try {
             var cx1 = "1^2^3^41&42&43&44&45&46^51&52^^^&&^^";
             var referenceId1 = Hl7v2Based.parse(cx1, ReferenceId.class);
             assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId1));
             var cx2 = "1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015^&&^^";
             var referenceId2 = Hl7v2Based.parse(cx2, ReferenceId.class);
-            assertEquals("1^^^41&42&43^51^&1.2.40.0.34.3.1.2.99.1000001&ISO", Hl7v2Based.render(referenceId2));
+            if (cp1292Enabled) {
+                assertEquals("1^^^41&42&43^51^&1.2.40.0.34.3.1.2.99.1000001&ISO", Hl7v2Based.render(referenceId2));
+            } else {
+                assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId2));
+            }
             assertEquals("1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015", Hl7v2Based.rawRender(referenceId2));
         } finally {
             System.clearProperty("XDS_VALIDATION_CP_1292");

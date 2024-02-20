@@ -49,6 +49,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
 
 /**
@@ -114,8 +115,15 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             entity.addDetail(new AuditEvent.AuditEventEntityDetailComponent()
                 .setType(tvp.getType())
                 .setValue(new Base64BinaryType(tvp.getValue()))));
-        if (poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Patient) {
-            entity.setWhat(new Reference(poit.getParticipantObjectID()));
+        if (poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Patient &&
+            isNotBlank(poit.getParticipantObjectID())) {
+            Reference patReference = new Reference(poit.getParticipantObjectID());
+            if (patReference.getReferenceElement().hasResourceType()) {
+                entity.setWhat(new Reference(poit.getParticipantObjectID()));
+            } else {
+                entity.setWhat(new Reference().setIdentifier(
+                    new Identifier().setValue(poit.getParticipantObjectID())));
+            }
         }
         return entity;
     }
@@ -130,6 +138,20 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
     }
 
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
+        Optional<AuditEvent.AuditEventAgentComponent> oAuthEventAgent = oAuthActiveParticipantToAgent(ap);
+        return oAuthEventAgent.orElseGet(() -> new AuditEvent.AuditEventAgentComponent()
+            .setType(ap.getRoleIDCodes().isEmpty() ? null : codedValueTypeToCodeableConcept(ap.getRoleIDCodes().get(0), DCM_SYSTEM_NAME))
+            .setWho(new Reference().setDisplay(ap.getUserID()))
+            .setAltId(ap.getAlternativeUserID())
+            .setName(ap.getUserName())
+            .setRequestor(ap.isUserIsRequestor())
+            .setMedia(codedValueTypeToCoding(ap.getMediaType()))
+            .setNetwork(new AuditEvent.AuditEventAgentNetworkComponent()
+                .setAddress(ap.getNetworkAccessPointID())
+                .setType(auditEventNetworkType(ap.getNetworkAccessPointTypeCode()))));
+    }
+
+    private Optional<AuditEvent.AuditEventAgentComponent> oAuthActiveParticipantToAgent(ActiveParticipantType ap) {
         Optional<String> oUser = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_TYPE_SYSTEM_NAME);
         if (oUser.isPresent()) {
             AuditEvent.AuditEventAgentComponent agent = new AuditEvent.AuditEventAgentComponent()
@@ -147,33 +169,25 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             getOAuthListAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_ROLE_SYSTEM_NAME)
                 .forEach(purpose -> agent.getRole().add(
                     systemAndCodeToCodeableConcept(OUSER_AGENT_ROLE_SYSTEM_NAME, purpose, "")));
-            return agent;
+            return Optional.of(agent);
         }
         Optional<String> oClient = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), DCM_SYSTEM_NAME);
         if (oClient.isPresent()) {
-            return new AuditEvent.AuditEventAgentComponent()
+            return Optional.of(new AuditEvent.AuditEventAgentComponent()
                 .setType(systemAndCodeToCodeableConcept(DCM_SYSTEM_NAME, DCM_OCLIENT_CODE, "Application"))
                 .setRequestor(ap.isUserIsRequestor())
-                .setWho(new Reference().setIdentifier(new Identifier().setValue(oClient.get())));
+                .setWho(new Reference().setIdentifier(
+                    new Identifier().setValue(oClient.get())).setDisplay(ap.getUserName())));
         }
         Optional<String> opaqueToken = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(),
             OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME);
         if (opaqueToken.isPresent()) {
-            return new AuditEvent.AuditEventAgentComponent()
+            return Optional.of(new AuditEvent.AuditEventAgentComponent()
                 .setType(new CodeableConcept(
                     new Coding(OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME, OUSER_AGENT_TYPE_OPAQUE_CODE, "")))
-                .setRequestor(true);
+                .setRequestor(true));
         }
-        return new AuditEvent.AuditEventAgentComponent()
-            .setType(codedValueTypeToCodeableConcept(ap.getRoleIDCodes().get(0), DCM_SYSTEM_NAME))
-            .setWho(new Reference().setDisplay(ap.getUserID()))
-            .setAltId(ap.getAlternativeUserID())
-            .setName(ap.getUserName())
-            .setRequestor(ap.isUserIsRequestor())
-            .setMedia(codedValueTypeToCoding(ap.getMediaType()))
-            .setNetwork(new AuditEvent.AuditEventAgentNetworkComponent()
-                .setAddress(ap.getNetworkAccessPointID())
-                .setType(auditEventNetworkType(ap.getNetworkAccessPointTypeCode())));
+        return Optional.empty();
     }
 
     private Optional<String> getOAuthAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,

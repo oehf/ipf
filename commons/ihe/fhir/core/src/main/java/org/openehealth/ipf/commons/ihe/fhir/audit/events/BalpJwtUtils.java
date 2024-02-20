@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtDataSet;
 import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtParser;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -48,6 +49,21 @@ public class BalpJwtUtils {
         Optional<BalpJwtDataSet> balpDataSet = BalpJwtParser.parseAuthorizationToBalpDataSet(
             auditDataset.getAuthorization(), balpJwtExtractorProperties);
         balpDataSet.ifPresent(dataSet -> {
+            if (isNotBlank(dataSet.getIheBppcPatientId())) {
+                delegate.addPatientParticipantObject(
+                    dataSet.getIheBppcPatientId(),
+                    "oAuth Token Patient ID",
+                    Collections.emptyList(),
+                    null);
+            }
+            if (isNotBlank(dataSet.getIheIuaSubjectOrganizationId())) {
+                ActiveParticipantType ap = new ActiveParticipantType(dataSet.getIheIuaSubjectOrganizationId(), true);
+                ap.setUserName(dataSet.getIheIuaSubjectOrganization());
+                ap.getRoleIDCodes().add(
+                    ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getIheIuaSubjectOrganizationId(),
+                        DCM_SYSTEM_NAME, "oAuth Token Subject Organization ID")));
+                delegate.addActiveParticipant(ap);
+            }
             if (isNotBlank(dataSet.getJwtId())) {
                 ActiveParticipantType ap = new ActiveParticipantType(dataSet.getSubject(), true);
                 ap.getRoleIDCodes().add(
