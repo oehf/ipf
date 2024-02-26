@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
+    <rim:RegistryObjectList xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0"
+                            xmlns="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
+        <RegistryPackage id="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                         lid="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                         objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:RegistryPackage"
+                         status="urn:oasis:names:tc:ebxml-regrep:StatusType:Approved">
+            <Slot name="submissionTime">
+                <ValueList>
+                    <Value>20170529003006</Value>
+                </ValueList>
+            </Slot>
+            <Name>
+                <LocalizedString value="CDD: document deleted: elgaFlag = FALSE"/>
+            </Name>
+            <Description>
+                <LocalizedString value="CDD: document deleted: elgaFlag = FALSE"/>
+            </Description>
+            <VersionInfo versionName="1"/>
+            <Classification classificationNode="urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd"
+                            classifiedObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                            id="urn:uuid:707c37b3-f562-4c04-a5ad-a2124e233ff7"
+                            lid="urn:uuid:707c37b3-f562-4c04-a5ad-a2124e233ff7"
+                            objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification">
+                <VersionInfo versionName="1"/>
+            </Classification>
+            <Classification classificationScheme="urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d"
+                            classifiedObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                            id="urn:uuid:4838e227-52b9-424d-b4fd-e6d6d82eff9c"
+                            lid="urn:uuid:4838e227-52b9-424d-b4fd-e6d6d82eff9c"
+                            nodeRepresentation=""
+                            objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification">
+                <Slot name="authorInstitution">
+                    <ValueList>
+                        <Value>KASanktMargarethenimBurgenland_Arzt^^^^^^^^^1.2.40.0.34.99.10.2.1.1.11504</Value>
+                    </ValueList>
+                </Slot>
+                <Slot name="authorPerson">
+                    <ValueList>
+                        <Value>1234^Mustermann^Max^^^PharmDr.^^^&amp;1.2.40.0.34.99.10.2.1.1.11504&amp;ISO</Value>
+                    </ValueList>
+                </Slot>
+                <Slot name="authorRole">
+                    <ValueList>
+                        <Value>Ärztliche/r Leiter/in</Value>
+                    </ValueList>
+                </Slot>
+                <Slot name="authorSpecialty">
+                    <ValueList>
+                        <Value>300</Value>
+                    </ValueList>
+                </Slot>
+                <VersionInfo versionName="1"/>
+            </Classification>
+            <Classification classificationScheme="urn:uuid:aa543740-bdda-424e-8c96-df4873be8500"
+                            classifiedObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                            id="urn:uuid:a191f6fb-dc39-403a-b000-960ed089f96f"
+                            lid="urn:uuid:a191f6fb-dc39-403a-b000-960ed089f96f"
+                            nodeRepresentation="18842-5"
+                            objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification">
+                <Slot name="codingScheme">
+                    <ValueList>
+                        <Value>2.16.840.1.113883.6.1</Value>
+                    </ValueList>
+                </Slot>
+                <Name>
+                    <LocalizedString value="Discharge summary"/>
+                </Name>
+                <VersionInfo versionName="1"/>
+            </Classification>
+            <ExternalIdentifier id="urn:uuid:c00812c4-dae4-4852-942d-c05586304bbe"
+                                identificationScheme="urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8"
+                                lid="urn:uuid:c00812c4-dae4-4852-942d-c05586304bbe"
+                                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier"
+                                registryObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                                value="1.2.40.0.13.1.1.10.255.255.42.20170526023004174.44904">
+                <Name>
+                    <LocalizedString value="XDSSubmissionSet.uniqueId"/>
+                </Name>
+                <VersionInfo versionName="1"/>
+            </ExternalIdentifier>
+            <ExternalIdentifier id="urn:uuid:4ad3500d-e55a-4cbe-b71b-ac2ee9583703"
+                                identificationScheme="urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446"
+                                lid="urn:uuid:4ad3500d-e55a-4cbe-b71b-ac2ee9583703"
+                                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier"
+                                registryObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                                value="REG.1FXENHOW5A^^^&amp;1.2.40.0.34.3.9.106.2.1.12&amp;ISO">
+                <Name>
+                    <LocalizedString value="XDSSubmissionSet.patientId"/>
+                </Name>
+                <VersionInfo versionName="1"/>
+            </ExternalIdentifier>
+            <ExternalIdentifier id="urn:uuid:25070d83-c2cd-4da1-a1f0-ef1e2a99cdca"
+                                identificationScheme="urn:uuid:554ac39e-e3fe-47fe-b233-965d2a147832"
+                                lid="urn:uuid:25070d83-c2cd-4da1-a1f0-ef1e2a99cdca"
+                                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier"
+                                registryObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                                value="1.2.40.0.34.99.10.2.1.1.11504">
+                <Name>
+                    <LocalizedString value="XDSSubmissionSet.sourceId"/>
+                </Name>
+                <VersionInfo versionName="1"/>
+            </ExternalIdentifier>
+        </RegistryPackage>
+        <Association associationType="urn:elga-bes:AssociationType:NonVersioningUpdate"
+                     id="urn:uuid:8a41c23b-221b-485f-b129-cd3dff8bb7a7"
+                     lid="urn:uuid:8a41c23b-221b-485f-b129-cd3dff8bb7a7"
+                     objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association"
+                     sourceObject="urn:uuid:e2ad0bfe-4e04-41ae-99ab-f0e6ce6f7fcc"
+                     status="urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"
+                     targetObject="urn:uuid:7d51bd20-1ddd-4e07-a437-66324f2cd5aa">
+            <Slot name="urn:elga-bes:elgaFlag">
+                <ValueList>
+                    <Value>false</Value>
+                </ValueList>
+            </Slot>
+            <Slot name="urn:elga-bes:elgaHash">
+                <ValueList>
+                    <Value>CDD: document deleted: elgaFlag = FALSE</Value>
+                </ValueList>
+            </Slot>
+            <VersionInfo versionName="1"/>
+        </Association>
+    </rim:RegistryObjectList>
+</lcm:SubmitObjectsRequest>

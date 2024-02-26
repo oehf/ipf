@@ -46,7 +46,9 @@ public enum AssociationType {
     /** An entry that represents an association for update availability status trigger. */
     @XmlEnumValue("UpdateAvailabilityStatus") UPDATE_AVAILABILITY_STATUS("UpdateAvailabilityStatus", "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus"),
     /** An entry that represents an association for submit association trigger. */
-    @XmlEnumValue("SubmitAssociation") SUBMIT_ASSOCIATION("SubmitAssociation", "urn:ihe:iti:2010:AssociationType:SubmitAssociation");
+    @XmlEnumValue("SubmitAssociation") SUBMIT_ASSOCIATION("SubmitAssociation", "urn:ihe:iti:2010:AssociationType:SubmitAssociation"),
+    /** An entry that represents an association which is used as a flag to avoid the versioning of an updated document. */
+    @XmlEnumValue("NonVersioningUpdate") NON_VERSIONING_UPDATE("NonVersioningUpdate", "urn:elga-bes:AssociationType:NonVersioningUpdate");
 
     private final String opcode21;
     private final String opcode30;
