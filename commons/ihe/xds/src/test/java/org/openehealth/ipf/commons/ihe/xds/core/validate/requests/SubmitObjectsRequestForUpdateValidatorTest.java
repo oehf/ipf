@@ -59,6 +59,13 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
         expectXdsRuntimeException(ErrorCode.INVALID_REQUEST_EXCEPTION, request, ITI_57);
     }
 
+    @Test
+    public void testNonStandardAssociationType() throws Exception {
+        var request = getRequest("SubmitObjectsRequest_ebrs30_update_nonstandard_association.xml");
+
+        validator.validate(request, ITI_57);
+    }
+
     private void expectXdsMetadataException(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);

@@ -410,6 +410,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     }
                     break;
 
+                case NON_VERSIONING_UPDATE:
+                    metaDataAssert(profile.getInteractionId().equals(XDS.Interactions.ITI_18) ||
+                                    profile.getInteractionId().equals(XDS.Interactions.ITI_57),
+                                    INVALID_ASSOCIATION_TYPE, association.getSource());
+                    break;
+
                 default:
                     metaDataAssert(profile.isQuery() || hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
             }

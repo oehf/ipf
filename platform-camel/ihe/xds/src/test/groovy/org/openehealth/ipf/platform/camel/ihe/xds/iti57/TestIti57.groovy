@@ -25,6 +25,9 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
@@ -78,6 +81,21 @@ class TestIti57 extends XdsStandardTestContainer {
     
     @Test
     void testIti57() {
+        assert SUCCESS == sendIt(SERVICE1, 'service 1').status
+        assert SUCCESS == sendIt(SERVICE2, 'service 2').status
+        assert auditSender.messages.size() == 4
+
+        checkAudit(EventOutcomeIndicator.Success)
+    }
+
+    @Test
+    void testIti57WithNonStandardElgaAssociation() {
+        Association association = new Association(AssociationType.NON_VERSIONING_UPDATE,
+            "urn:uuid:" + UUID.randomUUID().toString(),
+            "urn:uuid:" + UUID.randomUUID().toString(),
+            "urn:uuid:" + UUID.randomUUID().toString())
+        association.setAvailabilityStatus(AvailabilityStatus.APPROVED)
+        request.associations.add(association)
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
