@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules-cda</artifactId>
-        <version>4.8-m8</version>
+        <version>4.8-SNAPSHOT</version>
     </parent>
     
     <properties>
