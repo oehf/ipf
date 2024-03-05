@@ -329,7 +329,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             grp.PID[30].value = 'Y'
             grp.PID[29][1].value = person.deceasedTime?.@value?.text() ?: ''
         } else if (person.deceasedInd?.@value == 'false') {
-            grp.PID[24].value = 'N'
+            grp.PID[30].value = 'N'
         }
 
         // Segment PV1
