@@ -46,14 +46,18 @@ public class QPD extends AbstractSegment {
     public QPD(Group parentGroup, ModelClassFactory modelFactory) {
         super(parentGroup, modelFactory);
         var msg = getMessage();
-        add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
-        add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
-        add(QIP.class, true, 0, 256, new Object[]{msg}, "Demographics Fields");
-        add(NM.class, false, 1, 16, new Object[]{msg}, "Search Confidence Threshold");
-        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Name");
-        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Version");
-        add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Description");
-        add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
+        try {
+            add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
+            add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
+            add(QIP.class, true, 0, 256, new Object[]{msg}, "Demographics Fields");
+            add(NM.class, false, 1, 16, new Object[]{msg}, "Search Confidence Threshold");
+            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Name");
+            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Version");
+            add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Description");
+            add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

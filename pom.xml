@@ -110,6 +110,7 @@
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
+                        <version>${lombok-plugin-version}</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>

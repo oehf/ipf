@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.segment
 
+import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.AbstractSegment
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
@@ -51,10 +52,14 @@ class ZBE extends AbstractSegment {
     ZBE(Group parent, ModelClassFactory factory) {
         super(parent, factory)
         Message message = getMessage()
-        add(EI, true, 0, 999, [message] as Object[], null)
-        add(TS, true, 1, 26, [message] as Object[], null)
-        add(TS, false, 1, 26, [message] as Object[], null)
-        add(ST, true, 1, 10, [message] as Object[], null)
+        try {
+            add(EI, true, 0, 999, [message] as Object[], null)
+            add(TS, true, 1, 26, [message] as Object[], null)
+            add(TS, false, 1, 26, [message] as Object[], null)
+            add(ST, true, 1, 10, [message] as Object[], null)
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
