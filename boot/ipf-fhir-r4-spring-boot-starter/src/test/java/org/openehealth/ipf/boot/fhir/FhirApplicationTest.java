@@ -2,6 +2,7 @@ package org.openehealth.ipf.boot.fhir;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openehealth.ipf.boot.IpfAutoConfiguration;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.map.MappingService;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappings;

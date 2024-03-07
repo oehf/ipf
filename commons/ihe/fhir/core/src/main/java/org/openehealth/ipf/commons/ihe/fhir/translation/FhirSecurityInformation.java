@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.core.SecurityInformation;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import java.security.NoSuchAlgorithmException;
 
 /**
  *

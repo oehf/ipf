@@ -1,0 +1,2 @@
+org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration
+org.openehealth.ipf.boot.atna.IpfAtnaSpringSecurityAutoConfiguration

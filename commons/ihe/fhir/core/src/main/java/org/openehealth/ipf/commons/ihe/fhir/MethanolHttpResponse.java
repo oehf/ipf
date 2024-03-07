@@ -108,7 +108,7 @@ public class MethanolHttpResponse extends BaseHttpResponse {
     }
 
     @Override
-    public InputStream readEntity() throws IOException {
+    public InputStream readEntity() {
         return responseBuffered ? new ByteArrayInputStream(responseBuffer) : response.body();
     }
 

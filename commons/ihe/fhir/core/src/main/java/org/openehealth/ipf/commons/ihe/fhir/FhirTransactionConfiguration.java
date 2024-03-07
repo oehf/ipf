@@ -146,7 +146,13 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
     private FhirContextProvider fhirContextProvider() {
         return (fhirVersion) -> {
             var fhirContext = new FhirContext(fhirVersion);
-            fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
+            try {
+                Class.forName("org.apache.hc.client5.http.classic.HttpClient");
+                fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClient5Factory(fhirContext));
+            } catch (ClassNotFoundException e) {
+                fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
+            }
+
             return fhirContext;
         };
     }

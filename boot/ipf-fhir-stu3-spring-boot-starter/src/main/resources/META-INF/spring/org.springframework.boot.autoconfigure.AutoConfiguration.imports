@@ -1,0 +1,2 @@
+org.openehealth.ipf.boot.fhir.IpfFhirAutoConfiguration
+org.openehealth.ipf.boot.fhir.IpfFhirPixpdqAutoConfiguration

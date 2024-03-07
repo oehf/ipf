@@ -48,15 +48,15 @@ import java.util.Objects;
  * @since 3.5
  */
 public class GenericFhirAuditMessageBuilder extends
-        IHEAuditMessageBuilder<GenericFhirAuditMessageBuilder, CustomAuditMessageBuilder> {
+    IHEAuditMessageBuilder<GenericFhirAuditMessageBuilder, CustomAuditMessageBuilder> {
 
     public GenericFhirAuditMessageBuilder(AuditContext auditContext, GenericFhirAuditDataset auditDataset) {
         super(auditContext, new CustomAuditMessageBuilder(
-                auditDataset.getEventOutcomeIndicator(),
-                auditDataset.getEventOutcomeDescription(),
-                eventActionCode(auditDataset.getOperation()),
-                FhirEventIdCode.RestfulOperation,
-                FhirEventTypeCode.fromRestOperationType(auditDataset.getOperation())
+            auditDataset.getEventOutcomeIndicator(),
+            auditDataset.getEventOutcomeDescription(),
+            eventActionCode(auditDataset.getOperation()),
+            FhirEventIdCode.RestfulOperation,
+            FhirEventTypeCode.fromRestOperationType(auditDataset.getOperation())
         ));
 
         // First the source, then the destination
@@ -73,10 +73,10 @@ public class GenericFhirAuditMessageBuilder extends
 
     public GenericFhirAuditMessageBuilder addPatients(GenericFhirAuditDataset auditDataset) {
         if (auditDataset.getPatientIds() != null)
-        auditDataset.getPatientIds().stream()
-            .filter(Objects::nonNull)
-            .forEach(patientId ->
-                delegate.addParticipantObjectIdentification(
+            auditDataset.getPatientIds().stream()
+                .filter(Objects::nonNull)
+                .forEach(patientId ->
+                    delegate.addParticipantObjectIdentification(
                         ParticipantObjectIdTypeCode.PatientNumber,
                         null,
                         null,
@@ -95,18 +95,18 @@ public class GenericFhirAuditMessageBuilder extends
      */
     public GenericFhirAuditMessageBuilder addQueryParticipantObject(GenericFhirAuditDataset auditDataset) {
         delegate.addParticipantObjectIdentification(
-                FhirParticipantObjectIdTypeCode.fromResourceType(
-                        auditDataset.getAffectedResourceType() != null ?
-                                auditDataset.getAffectedResourceType() :
-                                getAuditContext().getAuditValueIfMissing()),
-                null,
-                auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8),
-                null,
-                "FHIR Restful Query",
-                ParticipantObjectTypeCode.System,
-                ParticipantObjectTypeCodeRole.Query,
-                null,
-                null);
+            FhirParticipantObjectIdTypeCode.fromResourceType(
+                auditDataset.getAffectedResourceType() != null ?
+                    auditDataset.getAffectedResourceType() :
+                    getAuditContext().getAuditValueIfMissing()),
+            null,
+            auditDataset.getQueryString().getBytes(StandardCharsets.UTF_8),
+            null,
+            "FHIR Restful Query",
+            ParticipantObjectTypeCode.System,
+            ParticipantObjectTypeCodeRole.Query,
+            null,
+            null);
 
         return self();
     }
@@ -117,18 +117,18 @@ public class GenericFhirAuditMessageBuilder extends
      */
     public GenericFhirAuditMessageBuilder addResourceParticipantObject(GenericFhirAuditDataset auditDataset) {
         delegate.addParticipantObjectIdentification(
-                FhirParticipantObjectIdTypeCode.fromResourceType(
-                        auditDataset.getAffectedResourceType() != null ?
-                                auditDataset.getAffectedResourceType() :
-                                getAuditContext().getAuditValueIfMissing()),
-                null,
-                null,
-                null,
-                auditDataset.getResourceId().getIdPart(),
-                ParticipantObjectTypeCode.System,
-                ParticipantObjectTypeCodeRole.Job,
-                null,
-                auditDataset.getSecurityLabel());
+            FhirParticipantObjectIdTypeCode.fromResourceType(
+                auditDataset.getAffectedResourceType() != null ?
+                    auditDataset.getAffectedResourceType() :
+                    getAuditContext().getAuditValueIfMissing()),
+            null,
+            null,
+            null,
+            auditDataset.getResourceId().getIdPart(),
+            ParticipantObjectTypeCode.System,
+            ParticipantObjectTypeCodeRole.Job,
+            null,
+            auditDataset.getSecurityLabel());
         return self();
     }
 
@@ -141,19 +141,12 @@ public class GenericFhirAuditMessageBuilder extends
     private static EventActionCode eventActionCode(RestOperationTypeEnum operation) {
         if (operation == null)
             return EventActionCode.Execute;
-        switch (operation) {
-            case CREATE:
-                return EventActionCode.Create;
-            case READ:
-            case VREAD:
-                return EventActionCode.Read;
-            case UPDATE:
-            case PATCH:
-                return EventActionCode.Update;
-            case DELETE:
-                return EventActionCode.Delete;
-            default:
-                return EventActionCode.Execute;
-        }
+        return switch (operation) {
+            case CREATE -> EventActionCode.Create;
+            case READ, VREAD -> EventActionCode.Read;
+            case UPDATE, PATCH -> EventActionCode.Update;
+            case DELETE -> EventActionCode.Delete;
+            default -> EventActionCode.Execute;
+        };
     }
 }

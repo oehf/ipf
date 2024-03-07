@@ -84,8 +84,8 @@ public class BalpJwtClaimsExtractor {
     private String extractStringClaimFromJWT(JWT jwt, String[] expressions){
         Optional<ClaimSetPair> finalClaimForExpression = getFinalClaimSet(jwt, expressions);
         if (finalClaimForExpression.isPresent()) {
-            JWTClaimsSet claimsSet = finalClaimForExpression.get().getJwtClaimsSet();
-            String expression = finalClaimForExpression.get().getExpression();
+            JWTClaimsSet claimsSet = finalClaimForExpression.get().jwtClaimsSet();
+            String expression = finalClaimForExpression.get().expression();
             try {
                 return claimsSet.getStringClaim(expression);
             } catch (ParseException pe) {
@@ -98,8 +98,8 @@ public class BalpJwtClaimsExtractor {
     private Set<String> extractListClaimFromJWT(JWT jwt, String[] expressions){
         Optional<ClaimSetPair> finalClaimForExpression = getFinalClaimSet(jwt, expressions);
         if (finalClaimForExpression.isPresent()) {
-            JWTClaimsSet claimsSet = finalClaimForExpression.get().getJwtClaimsSet();
-            String expression = finalClaimForExpression.get().getExpression();
+            JWTClaimsSet claimsSet = finalClaimForExpression.get().jwtClaimsSet();
+            String expression = finalClaimForExpression.get().expression();
             try {
                 List<Object> values = claimsSet.getListClaim(expression);
                 if (values != null && !values.isEmpty()) {
@@ -152,16 +152,7 @@ public class BalpJwtClaimsExtractor {
         return claimsSet.getClaim(name) != null;
     }
 
-    private static final class ClaimSetPair {
-        @Getter
-        private final String expression;
-        @Getter
-        private final JWTClaimsSet jwtClaimsSet;
-
-        public ClaimSetPair(String expression, JWTClaimsSet jwtClaimsSet) {
-            this.expression = expression;
-            this.jwtClaimsSet = jwtClaimsSet;
-        }
+    private record ClaimSetPair(@Getter String expression, @Getter JWTClaimsSet jwtClaimsSet) {
     }
 
 }

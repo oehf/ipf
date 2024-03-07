@@ -26,13 +26,7 @@ import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.support.EndpointHelper;
 import org.apache.camel.support.jsse.SSLContextParameters;
-import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.FhirContextProvider;
-import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
-import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.*;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
@@ -144,7 +138,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, CONSUMER_SELECTOR, Predicate.class);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
 
-
         FhirContext fhirContext = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
 
@@ -156,8 +149,15 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                         "] is not compatible with component of class [" + component.getClass() + "]");
             }
             this.context = fhirContext;
-            this.securityInformation = new SslAwareApacheRestfulClientFactory(fhirContext)
-                    .initializeSecurityInformation(secure, null, null, null, null);
+            SslAwareAbstractRestfulClientFactory<?> restfulClientFactory;
+            try {
+                Class.forName("org.apache.hc.client5.http.classic.HttpClient");
+                restfulClientFactory = new SslAwareApacheRestfulClient5Factory(fhirContext);
+            } catch (ClassNotFoundException e) {
+                restfulClientFactory = new SslAwareApacheRestfulClientFactory(fhirContext);
+            }
+            this.securityInformation = restfulClientFactory
+                .initializeSecurityInformation(secure, null, null, null, null);
             return;
         }
 
@@ -184,6 +184,9 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             this.context.setRestfulClientFactory(restfulClientFactory);
         } else if ("apache".equalsIgnoreCase(httpClientType)) {
             restfulClientFactory = new SslAwareApacheRestfulClientFactory(this.context);
+            this.context.setRestfulClientFactory(restfulClientFactory);
+        } else if ("apache5".equalsIgnoreCase(httpClientType)) {
+            restfulClientFactory = new SslAwareApacheRestfulClient5Factory(this.context);
             this.context.setRestfulClientFactory(restfulClientFactory);
         } else {
             restfulClientFactory = getRestfulClientFactory();

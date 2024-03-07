@@ -9,7 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <bouncycastle-version>1.76</bouncycastle-version>
+        <bouncycastle-version>1.77</bouncycastle-version>
         <brave-version>5.16.0</brave-version>
         <camel-version>4.4.0</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
@@ -23,6 +23,7 @@
         <hapi-version>2.5.1</hapi-version>
         <hapi-fhir-version>7.0.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
+        <httpclient5-version>5.3.1</httpclient5-version>
         <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
@@ -31,19 +32,19 @@
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <kotlin.dokka.version>1.8.10</kotlin.dokka.version>
-        <kotlin.version>1.9.10</kotlin.version>
+        <kotlin.version>1.9.22</kotlin.version>
         <kotlin.logging.version>3.0.5</kotlin.logging.version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>
         <ph-commons-version>11.1.0</ph-commons-version>
-        <saxon-he-version>12.3</saxon-he-version>
+        <saxon-he-version>12.4</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>3.2.2</spring-boot-version>
+        <spring-boot-version>3.2.3</spring-boot-version>
         <velocity-version>2.3</velocity-version>
         <vibur-version>25.0</vibur-version>
-        <woodstox-version>6.5.1</woodstox-version>
-        <xmlsec-version>4.0.1</xmlsec-version>
+        <woodstox-version>6.6.1</woodstox-version>
+        <xmlsec-version>4.0.2</xmlsec-version>
 
 
     </properties>
@@ -360,6 +361,11 @@
                 <artifactId>Saxon-HE</artifactId>
                 <classifier>xqj</classifier>
                 <version>${saxon-he-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.velocity</groupId>

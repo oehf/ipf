@@ -44,6 +44,7 @@ public enum AuditTransmissionChannel {
     NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderProvider.class.getName()),
     REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderProvider.class.getName()),
     FHIR_REST_TLS("FHIR-REST-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApacheSenderProvider"),
+    FHIR_REST_APACHE5_TLS("FHIR-REST-APACHE5-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApache5SenderProvider"),
     FHIR_REST_METHANOL_TLS("FHIR-REST-METHANOL-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordMethanolSenderProvider"),
     RECORDING("RECORDING", RecordingAuditMessageTransmissionProvider.class.getName());
 

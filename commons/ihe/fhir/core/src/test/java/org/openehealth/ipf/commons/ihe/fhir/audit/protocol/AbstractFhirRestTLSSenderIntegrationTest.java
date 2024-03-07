@@ -1,5 +1,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
-import java.util.concurrent.CountDownLatch;
+import java.time.Duration;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(FhirAuditRepository.class)
 public abstract class AbstractFhirRestTLSSenderIntegrationTest {
@@ -63,15 +61,16 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
     }
 
     @Test
-    public void testTwoWayTLSFlooding() throws Exception {
+    public void testTwoWayTLSFlooding() {
         var count = 500;
         var threads = 2;
         var executor = Executors.newFixedThreadPool(threads);
-
         IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
-        CountDownLatch latch = new CountDownLatch(1);
-        Executors.newSingleThreadExecutor().execute(new ExpectationRunnable(latch, count));
-        assertTrue(latch.await(10, TimeUnit.SECONDS));
+        Awaitility.await()
+            .atMost(Duration.ofSeconds(10L))
+            .pollInterval(Duration.ofSeconds(1L))
+            .until(() ->
+                FhirAuditRepository.getAuditEvents().size() == count);
     }
 
     void sendAudit(String userName) {
@@ -88,27 +87,4 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
                 .getMessages());
     }
 
-    static class ExpectationRunnable implements Runnable {
-
-        private final CountDownLatch latch;
-
-        private final int expectedMessagesCount;
-
-        public ExpectationRunnable(CountDownLatch latch, int expectedMessagesCount) {
-            this.latch = latch;
-            this.expectedMessagesCount = expectedMessagesCount;
-        }
-
-        @Override
-        public void run() {
-            while (FhirAuditRepository.getAuditEvents().size() < expectedMessagesCount) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                }
-            }
-            latch.countDown();
-        }
-    }
 }

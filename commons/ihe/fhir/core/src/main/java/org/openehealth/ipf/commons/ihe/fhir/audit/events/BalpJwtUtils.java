@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.events;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.BalpAuditContext;
 import org.openehealth.ipf.commons.audit.BalpJwtExtractorProperties;
-import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
