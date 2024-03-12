@@ -66,7 +66,7 @@
             <action issue="391" dev="unixoid" type="add">
                 Support for the Swiss EPR integration profile CH:PPQm
             </action>
-            <action issue="369" dev="unixoid" type="add">
+            <action issue="369" dev="ohr" type="add">
                 Support for IHE MHD 4.2.1
             </action>
         </release>
