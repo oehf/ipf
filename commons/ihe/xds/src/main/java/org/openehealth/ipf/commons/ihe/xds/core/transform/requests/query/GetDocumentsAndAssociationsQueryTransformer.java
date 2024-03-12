@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsAndAssociationsQuery;
 
@@ -25,48 +26,30 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Jens Riemschneider
  */
 public class GetDocumentsAndAssociationsQueryTransformer extends GetByIDQueryTransformer<GetDocumentsAndAssociationsQuery> {
+
+    @Getter
+    private static final GetDocumentsAndAssociationsQueryTransformer instance = new GetDocumentsAndAssociationsQueryTransformer();
+
     /**
      * Constructs the transformer.
      */
-    public GetDocumentsAndAssociationsQueryTransformer() {
+    private GetDocumentsAndAssociationsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
     }
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
+
     @Override
-    public void toEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetDocumentsAndAssociationsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
     @Override
-    public void fromEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetDocumentsAndAssociationsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
+
 }

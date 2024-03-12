@@ -175,7 +175,7 @@ public class AdhocQueryRequest
      *     
      */
     public BigInteger getStartIndex() {
-        return Objects.requireNonNullElseGet(startIndex, () -> BigInteger.ZERO);
+        return Objects.requireNonNullElse(startIndex, BigInteger.ZERO);
     }
 
     /**

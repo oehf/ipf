@@ -40,7 +40,7 @@ public class RemoveMetadataTransformerTest {
 
     
     @BeforeEach
-    public void setUp() throws Exception {        
+    public void setUp() {
         transformer = new RemoveMetadataRequestTransformer();
         request = SampleData.createRemoveMetadata();
     }
@@ -96,7 +96,7 @@ public class RemoveMetadataTransformerTest {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         var writer = new StringWriter();
         marshaller.marshal(ebXML.getInternal(), writer);
-        new RemoveMetadataRequestValidator().validate(ebXML, ITI_62);
+        RemoveMetadataRequestValidator.getInstance().validate(ebXML, ITI_62);
         assertFalse(writer.toString().contains("AdhocQuery"), "AdhocQuery is not expected in ITI-62 request");
     }
 }

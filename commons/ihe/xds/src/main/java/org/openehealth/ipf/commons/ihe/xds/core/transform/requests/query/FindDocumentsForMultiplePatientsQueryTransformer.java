@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
 
@@ -26,30 +27,24 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  */
 public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQueryTransformer<FindDocumentsForMultiplePatientsQuery> {
 
+
+    @Getter
+    private static final FindDocumentsForMultiplePatientsQueryTransformer instance = new FindDocumentsForMultiplePatientsQueryTransformer();
+
+    private FindDocumentsForMultiplePatientsQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(FindDocumentsForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(FindDocumentsForMultiplePatientsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromPatientIdList(DOC_ENTRY_PATIENT_ID, query.getPatientIds());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
     }
 
-
     @Override
-    public void fromEbXML(FindDocumentsForMultiplePatientsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void fromEbXML(FindDocumentsForMultiplePatientsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setPatientIds(slots.toPatientIdList(DOC_ENTRY_PATIENT_ID));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));

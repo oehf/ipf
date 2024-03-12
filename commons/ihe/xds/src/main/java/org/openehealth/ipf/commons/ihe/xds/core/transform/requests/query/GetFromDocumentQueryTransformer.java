@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFromDocumentQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
@@ -28,49 +27,18 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Jens Riemschneider
  */
 public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQuery> extends AbstractStoredQueryTransformer<T> {
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+
     @Override
-    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(T query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromString(DOC_ENTRY_UUID, query.getUuid());
         slots.fromString(DOC_ENTRY_UNIQUE_ID, query.getUniqueId());
     }
 
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-        
+    protected void fromEbXML(T query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setUniqueId(slots.toString(DOC_ENTRY_UNIQUE_ID));
         query.setUuid(slots.toString(DOC_ENTRY_UUID));
     }
-
 }

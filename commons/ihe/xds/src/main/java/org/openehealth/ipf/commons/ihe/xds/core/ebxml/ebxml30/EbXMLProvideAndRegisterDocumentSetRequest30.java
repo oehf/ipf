@@ -36,7 +36,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
  * @author Jens Riemschneider
  */
-public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectContainer30 implements EbXMLProvideAndRegisterDocumentSetRequest {
+public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectContainer30
+        implements EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> {
     private final ProvideAndRegisterDocumentSetRequestType request;
 
     /**
@@ -48,7 +49,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
      */
     public EbXMLProvideAndRegisterDocumentSetRequest30(ProvideAndRegisterDocumentSetRequestType request, EbXMLObjectLibrary objectLibrary) {
         super(objectLibrary);
-        this.request = requireNonNull(request, "request cannot be null");;
+        this.request = requireNonNull(request, "request cannot be null");
     }
 
     /**

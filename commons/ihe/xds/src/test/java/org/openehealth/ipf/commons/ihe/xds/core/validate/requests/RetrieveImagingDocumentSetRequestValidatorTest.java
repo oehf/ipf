@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -48,7 +49,7 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
 
     @BeforeEach
     public void setUp() {
-        validator = new RetrieveImagingDocumentSetRequestValidator();
+        validator = RetrieveImagingDocumentSetRequestValidator.getInstance();
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveImagingDocumentSet();
@@ -103,7 +104,7 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
         
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveImagingDocumentSetRequest ebXML) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveImagingDocumentSetRequest<RetrieveImagingDocumentSetRequestType> ebXML) {
         try {
             validator.validate(ebXML, RAD_69);
             fail("Expected exception: " + XDSMetaDataException.class);

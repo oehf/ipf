@@ -137,10 +137,10 @@ public class CxfEndpointTest {
             new ResponseTransformer(factory);
 
         private final SubmitObjectsRequestValidator reqValidator =
-            new SubmitObjectsRequestValidator();
+            SubmitObjectsRequestValidator.getInstance();
 
         private final RegistryResponseValidator respValidator =
-            new RegistryResponseValidator();
+            RegistryResponseValidator.getInstance();
 
         @Override
         public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest rawReq) {

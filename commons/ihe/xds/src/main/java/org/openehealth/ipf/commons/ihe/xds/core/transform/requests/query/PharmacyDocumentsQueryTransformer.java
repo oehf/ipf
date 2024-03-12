@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.PharmacyDocumentsQuery;
@@ -29,47 +28,17 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  */
 abstract class PharmacyDocumentsQueryTransformer<T extends PharmacyDocumentsQuery> extends AbstractStoredQueryTransformer<T> {
 
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(T query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
     }
 
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void fromEbXML(T query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
         query.setPatientId(Hl7v2Based.parse(slots.toString(DOC_ENTRY_PATIENT_ID), Identifiable.class));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));

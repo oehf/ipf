@@ -40,7 +40,7 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
         super(serverSide);
     }
 
-    protected static void enrichDatasetFromSubmitObjectsRequest(XdsSubmitAuditDataset auditDataset, EbXMLSubmitObjectsRequest ebXML) {
+    protected static void enrichDatasetFromSubmitObjectsRequest(XdsSubmitAuditDataset auditDataset, EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML) {
         var submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         auditDataset.setHomeCommunityId(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
 
@@ -59,7 +59,7 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         if (pojo instanceof SubmitObjectsRequest) {
             var submitObjectsRequest = (SubmitObjectsRequest) pojo;
-            EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
+            EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
         }
         return auditDataset;

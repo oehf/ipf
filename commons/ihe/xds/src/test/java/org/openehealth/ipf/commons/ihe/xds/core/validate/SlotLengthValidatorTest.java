@@ -35,14 +35,14 @@ public class SlotLengthValidatorTest {
 
     @Test
     public void testValidateGoodCase30() throws XDSMetaDataException {
-        new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory30, SLOT_VALUE_30, -1));
+        SlotLengthAndNameUniquenessValidator.validateContainer(createContainer(factory30, SLOT_VALUE_30, -1));
     }
 
     @Test
     public void testValidateTooLong30() throws XDSMetaDataException {
         for (var idx = 0; idx < 7; ++idx) {
             try {
-                new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory30, SLOT_VALUE_30, idx));
+                SlotLengthAndNameUniquenessValidator.validateContainer(createContainer(factory30, SLOT_VALUE_30, idx));
                 fail("Expected exception: " + XDSMetaDataException.class + ", index=" + idx);
             } catch (XDSMetaDataException e) {
                 // expected

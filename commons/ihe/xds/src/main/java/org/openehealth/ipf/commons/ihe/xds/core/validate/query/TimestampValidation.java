@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.TimeValidator;
@@ -43,7 +44,7 @@ public class TimestampValidation implements QueryParameterValidation {
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var slots = new QuerySlotHelper(request);
         var value = slots.toTimestamp(param);
         if (value != null) {

@@ -26,7 +26,7 @@ import javax.activation.DataHandler;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLProvideAndRegisterDocumentSetRequest extends EbXMLSubmitObjectsRequest {
+public interface EbXMLProvideAndRegisterDocumentSetRequest<E> extends EbXMLSubmitObjectsRequest<E> {
     /**
      * @return the documents contained in the request. This map is read-only.
      */

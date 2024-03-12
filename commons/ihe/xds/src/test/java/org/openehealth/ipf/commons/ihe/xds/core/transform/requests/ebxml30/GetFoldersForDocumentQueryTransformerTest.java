@@ -21,7 +21,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFoldersForDocumentQueryTransformer;
 
 import java.util.Collections;
@@ -32,15 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link GetFoldersForDocumentQueryTransformer}.
  * @author Jens Riemschneider
  */
-public class GetFoldersForDocumentQueryTransformerTest {
-    private GetFoldersForDocumentQueryTransformer transformer;
-    private GetFoldersForDocumentQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class GetFoldersForDocumentQueryTransformerTest extends AbstractQueryTransformerTest<GetFoldersForDocumentQuery, GetFoldersForDocumentQueryTransformer> {
     
     @BeforeEach
     public void setUp() {
-        transformer = new GetFoldersForDocumentQueryTransformer();
-        query = new GetFoldersForDocumentQuery();
+        transformer = GetFoldersForDocumentQueryTransformer.getInstance();
+        query = emptyQuery();
 
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
@@ -63,41 +62,9 @@ public class GetFoldersForDocumentQueryTransformerTest {
         assertEquals("home", ebXML.getHome());
         assertEquals(2, ebXML.getSlots().size());
     }
-    
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-    
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new GetFoldersForDocumentQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
 
-    
-    
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new GetFoldersForDocumentQuery();
-        transformer.fromEbXML(result, ebXML);
-        
-        assertEquals(query, result);
-    }
-    
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new GetFoldersForDocumentQuery();
-        transformer.fromEbXML(result, null);        
-        assertEquals(new GetFoldersForDocumentQuery(), result);
-    }
-        
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new GetFoldersForDocumentQuery();
-        transformer.fromEbXML(result, ebXML);        
-        assertEquals(new GetFoldersForDocumentQuery(), result);
+    @Override
+    protected GetFoldersForDocumentQuery emptyQuery() {
+        return new GetFoldersForDocumentQuery();
     }
 }

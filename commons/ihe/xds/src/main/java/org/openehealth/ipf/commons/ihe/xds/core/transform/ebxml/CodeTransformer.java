@@ -80,7 +80,7 @@ public class CodeTransformer {
         code.setDisplayName(classification.getName());
 
         var slotValues = classification.getSlotValues(SLOT_NAME_CODING_SCHEME);
-        if (slotValues.size() > 0) {
+        if (!slotValues.isEmpty()) {
             code.setSchemeName(slotValues.get(0));
         }
 

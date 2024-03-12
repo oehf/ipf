@@ -147,7 +147,7 @@ public abstract class XdsRenderingUtils {
      *      XML representation of the XDS object contained in the given Camel exchange.
      */
     public static String render(Exchange exchange, @ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Exchange"})
-            Closure closure) {
+            Closure<?> closure) {
         return doRender(exchange, closure.call(exchange));
     }
 

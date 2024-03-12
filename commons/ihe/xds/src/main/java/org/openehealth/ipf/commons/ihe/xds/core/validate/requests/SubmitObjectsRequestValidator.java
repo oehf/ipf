@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.XCDR;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
@@ -27,9 +28,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  * Validates a {@link EbXMLSubmitObjectsRequest} request.
  * @author Jens Riemschneider
  */
-public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjectsRequest, ValidationProfile> {
-    private static final ObjectContainerValidator OBJECT_CONTAINER_VALIDATOR = new ObjectContainerValidator();
+public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjectsRequest<?>, ValidationProfile> {
+    private static final ObjectContainerValidator OBJECT_CONTAINER_VALIDATOR = ObjectContainerValidator.getInstance();
     private static final HomeCommunityIdValidator HOME_COMMUNITY_ID_VALIDATOR = new HomeCommunityIdValidator(false);
+
+    @Getter
+    private static final SubmitObjectsRequestValidator instance = new SubmitObjectsRequestValidator();
+
+    private SubmitObjectsRequestValidator() {
+    }
 
     /**
      * Validates the request.
@@ -39,7 +46,7 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
      *          if the validation failed.
      */
     @Override
-    public void validate(EbXMLSubmitObjectsRequest request, ValidationProfile profile)  {
+    public void validate(EbXMLSubmitObjectsRequest<?> request, ValidationProfile profile)  {
         OBJECT_CONTAINER_VALIDATOR.validate(request, profile);
         HOME_COMMUNITY_ID_VALIDATOR.validate(request.getRegistryPackages().get(0).getHome());
         new HomeCommunityIdValidator(profile.getInteractionId() == XCDR.Interactions.ITI_80).validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));

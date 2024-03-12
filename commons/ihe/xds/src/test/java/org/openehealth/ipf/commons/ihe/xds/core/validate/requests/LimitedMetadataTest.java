@@ -96,7 +96,7 @@ public class LimitedMetadataTest {
         System.out.println(writer.toString());
         */
 
-        var validator = new SubmitObjectsRequestValidator();
+        var validator = SubmitObjectsRequestValidator.getInstance();
         validator.validate(ebXmlRequest, XDM.Interactions.ITI_41);
     }
 

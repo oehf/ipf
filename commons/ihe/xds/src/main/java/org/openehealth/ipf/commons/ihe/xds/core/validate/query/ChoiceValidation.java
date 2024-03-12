@@ -19,6 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
@@ -53,7 +54,7 @@ public class ChoiceValidation implements QueryParameterValidation {
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var paramSlotNames = Arrays.stream(params)
                 .map(QueryParameter::getSlotName)
                 .collect(Collectors.toList());

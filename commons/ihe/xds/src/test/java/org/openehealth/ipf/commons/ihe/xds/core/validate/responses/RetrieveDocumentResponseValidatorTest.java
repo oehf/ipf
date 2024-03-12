@@ -46,7 +46,7 @@ public class RetrieveDocumentResponseValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new RetrieveDocumentSetResponseValidator();
+        validator = RetrieveDocumentSetResponseValidator.getInstance();
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
@@ -124,7 +124,7 @@ public class RetrieveDocumentResponseValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(response));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveDocumentSetResponse ebXMLRegistryResponse) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveDocumentSetResponse<RetrieveDocumentSetResponseType> ebXMLRegistryResponse) {
         try {
             validator.validate(ebXMLRegistryResponse, ITI_43);
             fail("Expected exception: " + XDSMetaDataException.class);

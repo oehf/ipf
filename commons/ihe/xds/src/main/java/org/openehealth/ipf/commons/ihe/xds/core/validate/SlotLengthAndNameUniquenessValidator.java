@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public class SlotLengthAndNameUniquenessValidator {
+public abstract class SlotLengthAndNameUniquenessValidator {
 
     /**
      * Validates slot lengths and name uniqueness
@@ -49,27 +49,27 @@ public class SlotLengthAndNameUniquenessValidator {
      * @param container the container of ebXML objects.
      * @throws XDSMetaDataException if a slot length validation failed.
      */
-    public void validateContainer(EbXMLObjectContainer container) throws XDSMetaDataException {
+    public static void validateContainer(EbXMLObjectContainer container) throws XDSMetaDataException {
         validateRegistryObjects(container.getAssociations());
         validateRegistryObjects(container.getExtrinsicObjects());
         validateRegistryObjects(container.getRegistryPackages());
         validateSlotLists(container.getClassifications());
     }
 
-    private void validateRegistryObjects(List<? extends EbXMLRegistryObject> regObjects) throws XDSMetaDataException {
+    private static void validateRegistryObjects(List<? extends EbXMLRegistryObject> regObjects) throws XDSMetaDataException {
         validateSlotLists(regObjects);
         for (EbXMLRegistryObject regObj : regObjects) {
             validateSlotLists(regObj.getClassifications());
         }
     }
 
-    private void validateSlotLists(List<? extends EbXMLSlotList> slotListContainers) throws XDSMetaDataException {
+    private static void validateSlotLists(List<? extends EbXMLSlotList> slotListContainers) throws XDSMetaDataException {
         for (EbXMLSlotList slotList : slotListContainers) {
             doValidateSlots(slotList.getSlots(), false, emptySet());
         }
     }
 
-    public void validateQuerySlots(
+    public static void validateQuerySlots(
             List<? extends EbXMLSlot> slots,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {
         doValidateSlots(slots, true, allowedSlotNamesMultiple);
@@ -83,7 +83,7 @@ public class SlotLengthAndNameUniquenessValidator {
      * @param allowedSlotNamesMultiple names of slots which are allowed to be present more than once (only for queries).
      * @throws XDSMetaDataException when the validation fails.
      */
-    private void doValidateSlots(
+    private static void doValidateSlots(
             List<? extends EbXMLSlot> slots,
             boolean queryMode,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {

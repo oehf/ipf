@@ -99,10 +99,9 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     @Override
     protected void addClassifications(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(folder, regPackage, objectLibrary);
-        
-        for (var codeListElem : folder.getCodeList()) {
-            var code = codeTransformer.toEbXML(codeListElem, objectLibrary);
-            regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
-        }
+
+        folder.getCodeList().stream()
+                .map(codeListElem -> codeTransformer.toEbXML(codeListElem, objectLibrary))
+                .forEach(code -> regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME));
     }
 }

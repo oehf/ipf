@@ -26,7 +26,7 @@ import java.util.List;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLNonconstructiveDocumentSetRequest {
+public interface EbXMLNonconstructiveDocumentSetRequest<E> {
     /**
      * Sets the documents of the request.
      * @param documents
@@ -42,5 +42,5 @@ public interface EbXMLNonconstructiveDocumentSetRequest {
     /**
      * @return the ebXML object being wrapped by this class. 
      */
-    Object getInternal();
+    E getInternal();
 }

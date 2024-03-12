@@ -111,10 +111,9 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     @Override
     protected void addClassificationsFromEbXML(SubmissionSet set, EbXMLRegistryPackage regPackage) {
         super.addClassificationsFromEbXML(set, regPackage);
-        
-        for (var author : regPackage.getClassifications(SUBMISSION_SET_AUTHOR_CLASS_SCHEME)) {
-            set.getAuthors().add(authorTransformer.fromEbXML(author));
-        }
+
+        regPackage.getClassifications(SUBMISSION_SET_AUTHOR_CLASS_SCHEME).forEach(author ->
+                set.getAuthors().add(authorTransformer.fromEbXML(author)));
 
         var contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
         set.setContentTypeCode(codeTransformer.fromEbXML(contentType));
@@ -123,11 +122,10 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     @Override
     protected void addClassifications(SubmissionSet set, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(set, regPackage, objectLibrary);
-        
-        for (var author : set.getAuthors()) {
-            var authorClasification = authorTransformer.toEbXML(author, objectLibrary);
-            regPackage.addClassification(authorClasification, SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
-        }
+
+        set.getAuthors().stream()
+                .map(author -> authorTransformer.toEbXML(author, objectLibrary))
+                .forEach(authorClassification -> regPackage.addClassification(authorClassification, SUBMISSION_SET_AUTHOR_CLASS_SCHEME));
 
         var contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);

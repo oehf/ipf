@@ -128,6 +128,8 @@ public enum QueryParameter {
     SUBMISSION_SET_SUBMISSION_TIME_TO("$XDSSubmissionSetSubmissionTimeTo"),
     /** Used to filter {@link SubmissionSet#getAuthors()}. */
     SUBMISSION_SET_AUTHOR_PERSON("$XDSSubmissionSetAuthorPerson"),
+    /** Used to filter {@link SubmissionSet#getIntendedRecipients()} ()}. */
+    SUBMISSION_SET_INTENDED_RECIPIENT("$XDSSubmissionSetIntendedRecipient "),
     /** Used to filter {@link SubmissionSet#getContentTypeCode()}. */
     SUBMISSION_SET_CONTENT_TYPE_CODE("$XDSSubmissionSetContentType"),
     /** Used to filter {@link SubmissionSet#getContentTypeCode()}. */

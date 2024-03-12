@@ -15,35 +15,33 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsByTitleQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_AUTHOR_INSTITUTION;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TITLE;
 
-public class FindDocumentsByTitleQueryTransformer extends FindDocumentsQueryTransformer<FindDocumentsByTitleQuery> {
+public class FindDocumentsByTitleQueryTransformer extends AbstractFindDocumentsQueryTransformer<FindDocumentsByTitleQuery> {
+
+    @Getter
+    private static final FindDocumentsByTitleQueryTransformer instance = new FindDocumentsByTitleQueryTransformer();
+
+    private FindDocumentsByTitleQueryTransformer() {
+    }
 
     @Override
-    public void toEbXML(FindDocumentsByTitleQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(FindDocumentsByTitleQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStringList(DOC_ENTRY_TITLE, query.getTitle());
         slots.fromStringList(DOC_ENTRY_AUTHOR_INSTITUTION, query.getAuthorInstitution());
     }
 
     @Override
-    public void fromEbXML(FindDocumentsByTitleQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(FindDocumentsByTitleQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setTitle(slots.toStringList(DOC_ENTRY_TITLE));
         query.setAuthorInstitution(slots.toStringList(DOC_ENTRY_AUTHOR_INSTITUTION));
     }
+
+
 }

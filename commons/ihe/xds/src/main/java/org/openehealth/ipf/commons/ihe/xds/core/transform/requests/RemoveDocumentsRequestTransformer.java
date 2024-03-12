@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments;
 
 import static java.util.Objects.requireNonNull;
@@ -43,7 +44,7 @@ public class RemoveDocumentsRequestTransformer {
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLNonconstructiveDocumentSetRequest toEbXML(RemoveDocuments request) {
+    public EbXMLNonconstructiveDocumentSetRequest<RemoveDocumentsRequestType> toEbXML(RemoveDocuments request) {
         if (request == null) {
             return null;
         }
@@ -59,7 +60,7 @@ public class RemoveDocumentsRequestTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public RemoveDocuments fromEbXML(EbXMLNonconstructiveDocumentSetRequest ebXML) {
+    public RemoveDocuments fromEbXML(EbXMLNonconstructiveDocumentSetRequest<RemoveDocumentsRequestType> ebXML) {
         if (ebXML == null) {
             return null;
         }

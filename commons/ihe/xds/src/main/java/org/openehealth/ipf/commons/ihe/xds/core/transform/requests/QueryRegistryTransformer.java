@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -30,15 +31,23 @@ import java.lang.reflect.InvocationTargetException;
  * @author Jens Riemschneider
  */
 public class QueryRegistryTransformer {
-    private final EbXMLFactory factory30 = new EbXMLFactory30();
-    
+    private final EbXMLFactory factory30;
+
+    public QueryRegistryTransformer() {
+        this(new EbXMLFactory30());
+    }
+
+    public QueryRegistryTransformer(EbXMLFactory factory30) {
+        this.factory30 = factory30;
+    }
+
     /**
      * Transforms the request into its ebXML representation.
      * @param request
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLAdhocQueryRequest toEbXML(QueryRegistry request) {
+    public EbXMLAdhocQueryRequest<AdhocQueryRequest> toEbXML(QueryRegistry request) {
         if (request == null) {
             return null;
         }
@@ -58,7 +67,7 @@ public class QueryRegistryTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public QueryRegistry fromEbXML(EbXMLAdhocQueryRequest ebXML) {
+    public QueryRegistry fromEbXML(EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML) {
         if (ebXML == null) {
             return null;
         }
@@ -86,7 +95,7 @@ public class QueryRegistryTransformer {
         }
     }
 
-    private EbXMLAdhocQueryRequest createAdhocQueryRequest() {
+    private EbXMLAdhocQueryRequest<AdhocQueryRequest> createAdhocQueryRequest() {
         return factory30.createAdhocQueryRequest();
     }
 }

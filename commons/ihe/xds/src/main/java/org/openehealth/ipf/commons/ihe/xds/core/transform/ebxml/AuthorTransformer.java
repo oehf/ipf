@@ -27,6 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Transforms between an {@link Author} instance and its representation in ebXML.
@@ -89,7 +90,7 @@ public class AuthorTransformer {
         var author = new Author();
 
         var persons = classification.getSlotValues(SLOT_NAME_AUTHOR_PERSON);
-        if (persons.size() > 0) {
+        if (!persons.isEmpty()) {
             var person = Hl7v2Based.parse(persons.get(0), Person.class);
             author.setAuthorPerson(person);
         }
@@ -127,12 +128,10 @@ public class AuthorTransformer {
             List<T> targetCollection,
             Class<T> targetClass)
     {
-        for (var source : sourceClassification.getSlotValues(sourceSlotName)) {
-            var target = Hl7v2Based.parse(source, targetClass);
-            if (target != null) {
-                targetCollection.add(target);
-            }
-        }
+        sourceClassification.getSlotValues(sourceSlotName).stream()
+                .map(source -> Hl7v2Based.parse(source, targetClass))
+                .filter(Objects::nonNull)
+                .forEach(targetCollection::add);
     }
 
 
@@ -156,12 +155,12 @@ public class AuthorTransformer {
             String targetSlotName)
     {
         var targetCollection = new ArrayList<String>();
-        for (var source : sourceCollection) {
+        sourceCollection.forEach(source -> {
             var target = Hl7v2Based.render(source);
             if (source != null) {
                 targetCollection.add(target);
             }
-        }
+        });
 
         var array = new String[targetCollection.size()];
         targetClassification.addSlot(targetSlotName, targetCollection.toArray(array));

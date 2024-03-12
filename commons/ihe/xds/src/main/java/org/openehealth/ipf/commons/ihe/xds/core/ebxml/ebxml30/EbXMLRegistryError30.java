@@ -28,7 +28,7 @@ public class EbXMLRegistryError30 implements EbXMLRegistryError {
     private final RegistryError error;
 
     public EbXMLRegistryError30(RegistryError error) {
-        this.error = requireNonNull(error, "registry error object cannot be null");;
+        this.error = requireNonNull(error, "registry error object cannot be null");
     }
 
     @Override

@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -26,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDispensesQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDispensesQueryTransformer;
 
 import java.util.Arrays;
@@ -38,16 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Quentin Ligier
  * @since 3.7
  */
-public class FindDispensesQueryTransformerTest {
-    private FindDispensesQueryTransformer transformer;
-    private FindDispensesQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class FindDispensesQueryTransformerTest extends AbstractQueryTransformerTest<FindDispensesQuery, FindDispensesQueryTransformer> {
 
     @BeforeEach
     public void setUp() {
-        transformer = new FindDispensesQueryTransformer();
+        transformer = FindDispensesQueryTransformer.getInstance();
 
-        query = new FindDispensesQuery();
+        query = emptyQuery();
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("uni3", "uniType3")));
         query.setHomeCommunityId("12.21.41");
         query.setConfidentialityCodes(Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
@@ -98,37 +95,8 @@ public class FindDispensesQueryTransformerTest {
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_AUTHOR_PERSON.getSlotName()));
     }
 
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new FindDispensesQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new FindDispensesQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(query, result);
-    }
-
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new FindDispensesQuery();
-        transformer.fromEbXML(result, null);
-        assertEquals(new FindDispensesQuery(), result);
-    }
-
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new FindDispensesQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(new FindDispensesQuery(), result);
+    @Override
+    protected FindDispensesQuery emptyQuery() {
+        return new FindDispensesQuery();
     }
 }

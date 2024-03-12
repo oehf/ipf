@@ -54,7 +54,7 @@ public abstract class XdsCamelValidators {
         }
         var message =
             new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-        new AdhocQueryRequestValidator().validate(message, ITI_18);
+        AdhocQueryRequestValidator.getInstance().validate(message, ITI_18);
     };
    
     private static final Processor ITI_18_RESPONSE_VALIDATOR = exchange -> {
@@ -62,7 +62,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-        new QueryResponseValidator().validate(message, ITI_18);
+        QueryResponseValidator.getInstance().validate(message, ITI_18);
     };
     
     private static final Processor ITI_38_REQUEST_VALIDATOR = exchange -> {
@@ -70,7 +70,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-        new AdhocQueryRequestValidator().validate(message, ITI_38);
+        AdhocQueryRequestValidator.getInstance().validate(message, ITI_38);
     };
 
     private static final Processor ITI_38_RESPONSE_VALIDATOR = exchange -> {
@@ -78,7 +78,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-        new QueryResponseValidator().validate(message, ITI_38);
+        QueryResponseValidator.getInstance().validate(message, ITI_38);
     };
 
     private static final Processor ITI_39_REQUEST_VALIDATOR = exchange -> {
@@ -86,7 +86,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
-        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_39);
+        NonconstructiveDocumentSetRequestValidator.getInstance().validate(message, ITI_39);
     };
 
     private static final Processor ITI_39_RESPONSE_VALIDATOR = exchange -> {
@@ -94,7 +94,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
-        new RetrieveDocumentSetResponseValidator().validate(message, ITI_39);
+        RetrieveDocumentSetResponseValidator.getInstance().validate(message, ITI_39);
     };
 
     private static final Processor ITI_41_REQUEST_VALIDATOR = exchange -> {
@@ -102,7 +102,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, ITI_41);
+        ProvideAndRegisterDocumentSetRequestValidator.getInstance().validate(message, ITI_41);
     };
 
     private static final Processor ITI_41_XDM_REQUEST_VALIDATOR = exchange -> {
@@ -110,7 +110,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, XDM.Interactions.ITI_41);
+        ProvideAndRegisterDocumentSetRequestValidator.getInstance().validate(message, XDM.Interactions.ITI_41);
     };
 
     private static final Processor ITI_41_XDR_REQUEST_VALIDATOR = exchange -> {
@@ -118,7 +118,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, XDR.Interactions.ITI_41);
+        ProvideAndRegisterDocumentSetRequestValidator.getInstance().validate(message, XDR.Interactions.ITI_41);
     };
 
     private static final Processor ITI_41_RESPONSE_VALIDATOR = exchange -> {
@@ -126,7 +126,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_41);
+        RegistryResponseValidator.getInstance().validate(message, ITI_41);
     };
 
     private static final Processor ITI_42_REQUEST_VALIDATOR = exchange -> {
@@ -134,7 +134,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        new SubmitObjectsRequestValidator().validate(message, ITI_42);
+        SubmitObjectsRequestValidator.getInstance().validate(message, ITI_42);
     };
    
     private static final Processor ITI_42_RESPONSE_VALIDATOR = exchange -> {
@@ -142,7 +142,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_42);
+        RegistryResponseValidator.getInstance().validate(message, ITI_42);
     };
     
     private static final Processor ITI_43_REQUEST_VALIDATOR = exchange -> {
@@ -150,7 +150,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
-        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_43);
+        NonconstructiveDocumentSetRequestValidator.getInstance().validate(message, ITI_43);
     };
    
     private static final Processor ITI_43_RESPONSE_VALIDATOR = exchange -> {
@@ -158,7 +158,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
-        new RetrieveDocumentSetResponseValidator().validate(message, ITI_43);
+        RetrieveDocumentSetResponseValidator.getInstance().validate(message, ITI_43);
     };
 
     private static final Processor ITI_51_REQUEST_VALIDATOR = exchange -> {
@@ -166,7 +166,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-        new AdhocQueryRequestValidator().validate(message, ITI_51);
+        AdhocQueryRequestValidator.getInstance().validate(message, ITI_51);
     };
 
     private static final Processor ITI_51_RESPONSE_VALIDATOR = exchange -> {
@@ -174,7 +174,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-        new QueryResponseValidator().validate(message, ITI_51);
+        QueryResponseValidator.getInstance().validate(message, ITI_51);
     };
 
     private static final Processor ITI_57_REQUEST_VALIDATOR = exchange -> {
@@ -182,7 +182,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        new SubmitObjectsRequestValidator().validate(message, ITI_57);
+        SubmitObjectsRequestValidator.getInstance().validate(message, ITI_57);
     };
 
     private static final Processor ITI_57_RESPONSE_VALIDATOR = exchange -> {
@@ -190,7 +190,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_57);
+        RegistryResponseValidator.getInstance().validate(message, ITI_57);
     };
 
     private static final Processor ITI_61_REQUEST_VALIDATOR = exchange -> {
@@ -198,7 +198,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        new SubmitObjectsRequestValidator().validate(message, ITI_61);
+        SubmitObjectsRequestValidator.getInstance().validate(message, ITI_61);
     };
 
     private static final Processor ITI_61_RESPONSE_VALIDATOR = exchange -> {
@@ -206,7 +206,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_61);
+        RegistryResponseValidator.getInstance().validate(message, ITI_61);
     };
 
     private static final Processor ITI_62_REQUEST_VALIDATOR = exchange -> {
@@ -214,7 +214,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRemoveMetadataRequest30(exchange.getIn().getBody(RemoveObjectsRequest.class));
-        new RemoveMetadataRequestValidator().validate(message, ITI_62);
+        RemoveMetadataRequestValidator.getInstance().validate(message, ITI_62);
     };
 
     private static final Processor ITI_62_RESPONSE_VALIDATOR = exchange -> {
@@ -222,7 +222,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_62);
+        RegistryResponseValidator.getInstance().validate(message, ITI_62);
     };
 
     private static final Processor ITI_63_REQUEST_VALIDATOR = exchange -> {
@@ -230,7 +230,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-        new AdhocQueryRequestValidator().validate(message, ITI_63);
+        AdhocQueryRequestValidator.getInstance().validate(message, ITI_63);
     };
 
     private static final Processor ITI_63_RESPONSE_VALIDATOR = exchange -> {
@@ -238,7 +238,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-        new QueryResponseValidator().validate(message, ITI_63);
+        QueryResponseValidator.getInstance().validate(message, ITI_63);
     };
 
     private static final Processor ITI_80_REQUEST_VALIDATOR = exchange -> {
@@ -246,7 +246,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, ITI_80);
+        ProvideAndRegisterDocumentSetRequestValidator.getInstance().validate(message, ITI_80);
     };
 
     private static final Processor ITI_80_RESPONSE_VALIDATOR = exchange -> {
@@ -254,7 +254,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_80);
+        RegistryResponseValidator.getInstance().validate(message, ITI_80);
     };
 
     private static final Processor ITI_86_REQUEST_VALIDATOR = exchange -> {
@@ -262,7 +262,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
-        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_86);
+        NonconstructiveDocumentSetRequestValidator.getInstance().validate(message, ITI_86);
     };
 
     private static final Processor ITI_86_RESPONSE_VALIDATOR = exchange -> {
@@ -270,7 +270,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_86);
+        RegistryResponseValidator.getInstance().validate(message, ITI_86);
     };
 
     private static final Processor ITI_92_REQUEST_VALIDATOR = exchange -> {
@@ -278,7 +278,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        new SubmitObjectsRequestValidator().validate(message, RMU.Interactions.ITI_92);
+        SubmitObjectsRequestValidator.getInstance().validate(message, RMU.Interactions.ITI_92);
     };
 
     private static final Processor ITI_92_RESPONSE_VALIDATOR = exchange -> {
@@ -286,7 +286,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, RMU.Interactions.ITI_92);
+        RegistryResponseValidator.getInstance().validate(message, RMU.Interactions.ITI_92);
     };
 
     /**
@@ -504,7 +504,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
-        new RetrieveImagingDocumentSetRequestValidator().validate(message, RAD_69);
+        RetrieveImagingDocumentSetRequestValidator.getInstance().validate(message, RAD_69);
     };
 
     private static final Processor RAD_69_RESPONSE_VALIDATOR = exchange -> {
@@ -512,7 +512,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
-        new RetrieveDocumentSetResponseValidator().validate(message, RAD_69);
+        RetrieveDocumentSetResponseValidator.getInstance().validate(message, RAD_69);
     };
 
     private static final Processor RAD_75_REQUEST_VALIDATOR = exchange -> {
@@ -520,7 +520,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
-        new RetrieveImagingDocumentSetRequestValidator().validate(message, RAD_75);
+        RetrieveImagingDocumentSetRequestValidator.getInstance().validate(message, RAD_75);
     };
 
     private static final Processor RAD_75_RESPONSE_VALIDATOR = exchange -> {
@@ -528,7 +528,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
-        new RetrieveDocumentSetResponseValidator().validate(message, RAD_75);
+        RetrieveDocumentSetResponseValidator.getInstance().validate(message, RAD_75);
     };
 
     /**
@@ -564,7 +564,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-        new AdhocQueryRequestValidator().validate(message, PHARM_1);
+        AdhocQueryRequestValidator.getInstance().validate(message, PHARM_1);
     };
 
     private static final Processor PHARM_1_RESPONSE_VALIDATOR = exchange -> {
@@ -572,7 +572,7 @@ public abstract class XdsCamelValidators {
             return;
         }
         var message = new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-        new QueryResponseValidator().validate(message, PHARM_1);
+        QueryResponseValidator.getInstance().validate(message, PHARM_1);
     };
 
     /**

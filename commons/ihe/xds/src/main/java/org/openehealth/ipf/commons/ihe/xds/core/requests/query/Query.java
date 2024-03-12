@@ -85,6 +85,11 @@ public abstract class Query implements Serializable {
         void visit(FindMedicationListQuery query);
         // extension DE:GEMATIK
         void visit(FindDocumentsByTitleQuery query);
+        void visit(SubscriptionForDocumentEntryQuery query);
+        void visit(SubscriptionForFolderQuery query);
+        void visit(SubscriptionForPatientIndependentDocumentEntryQuery query);
+        void visit(SubscriptionForSubmissionSetQuery query);
+        void visit(SubscriptionForPatientIndependentSubmissionSetQuery query);
     }
 
     /**

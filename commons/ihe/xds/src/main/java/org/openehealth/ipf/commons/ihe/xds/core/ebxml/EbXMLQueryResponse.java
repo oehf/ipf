@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLQueryResponse extends EbXMLObjectContainer, EbXMLRegistryResponse {
+public interface EbXMLQueryResponse<E> extends EbXMLObjectContainer, EbXMLRegistryResponse<E> {
     /**
      * Adds an object reference to the response.
      * @param ref

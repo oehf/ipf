@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
 import static java.util.Objects.requireNonNull;
@@ -45,7 +46,7 @@ public class RegisterDocumentSetTransformer extends LeafClassTransformer {
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLSubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
+    public EbXMLSubmitObjectsRequest<SubmitObjectsRequest> toEbXML(RegisterDocumentSet request) {
         requireNonNull(request, "request cannot be null");
 
         var ebXML = factory.createSubmitObjectsRequest();
@@ -74,7 +75,7 @@ public class RegisterDocumentSetTransformer extends LeafClassTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest ebXML) {
+    public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML) {
         requireNonNull(ebXML, "ebXML cannot be null");
 
         var request = new RegisterDocumentSet();
@@ -88,7 +89,7 @@ public class RegisterDocumentSetTransformer extends LeafClassTransformer {
         }
 
         var regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
-        if (regPackages.size() > 0) {
+        if (!regPackages.isEmpty()) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
         

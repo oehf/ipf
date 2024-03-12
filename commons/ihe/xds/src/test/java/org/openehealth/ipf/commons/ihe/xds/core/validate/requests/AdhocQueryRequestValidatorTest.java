@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -52,7 +53,7 @@ public class AdhocQueryRequestValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new AdhocQueryRequestValidator();
+        validator = AdhocQueryRequestValidator.getInstance();
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
         requestMpq = SampleData.createFindDocumentsForMultiplePatientsQuery();
@@ -330,7 +331,7 @@ public class AdhocQueryRequestValidatorTest {
         expectFailure(DUPLICATE_SLOT_NAME, ebXML, ITI_18);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLAdhocQueryRequest request, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLAdhocQueryRequest<AdhocQueryRequest> request, ValidationProfile profile) {
         try {
             validator.validate(request, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

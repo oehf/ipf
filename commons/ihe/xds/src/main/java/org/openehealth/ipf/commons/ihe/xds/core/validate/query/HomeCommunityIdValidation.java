@@ -17,9 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.Arrays;
 
 /**
  * Validator for home community ID attribute in stored queries.
@@ -42,7 +45,7 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         final boolean homeCommunityRequired;
         switch (optionality) {
             case NEVER:
@@ -62,13 +65,9 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
         validator.validate(request.getHome());
     }
 
-    private static boolean patientIdMissing(EbXMLAdhocQueryRequest request) {
-        for (var parameter : PATIENT_ID_PARAMETERS) {
-            if (!request.getSlotValues(parameter.getSlotName()).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
+    private static boolean patientIdMissing(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) {
+        return Arrays.stream(PATIENT_ID_PARAMETERS).allMatch(parameter ->
+                request.getSlotValues(parameter.getSlotName()).isEmpty());
     }
 
 }

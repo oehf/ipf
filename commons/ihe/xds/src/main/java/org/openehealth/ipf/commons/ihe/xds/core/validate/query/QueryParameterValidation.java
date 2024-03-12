@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
@@ -30,5 +31,5 @@ public interface QueryParameterValidation {
      * @throws XDSMetaDataException 
      *          if the validation failed.
      */
-    void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException;
+    void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException;
 }

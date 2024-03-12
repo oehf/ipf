@@ -60,6 +60,9 @@
             <action issue="422" dev="unixoid" type="add">
                 Support JSON representation of the HPD DSMLv2 data model
             </action>
+            <action issue="421" dev="ohr" type="add">
+                Added a couple of XDS query models for Subscriptions. Internally, made all ebxml transformer classes static
+            </action>
             <action issue="402" dev="unixoid" type="add">
                 Possibility to add HTTP headers in FHIR requests
             </action>

@@ -50,7 +50,7 @@ abstract public class ContinuaHrnCamelProcessors {
         if (validationEnabled) {
             var message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, CONTINUA_HRN.Interactions.ITI_41);
+            ProvideAndRegisterDocumentSetRequestValidator.getInstance().validate(message, CONTINUA_HRN.Interactions.ITI_41);
         }
 
         // transform ebXML into simplified model, extract embedded documents, check document count

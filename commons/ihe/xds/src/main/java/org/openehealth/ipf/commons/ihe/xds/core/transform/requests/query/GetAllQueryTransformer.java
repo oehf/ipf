@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetAllQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -28,67 +29,36 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
  */
 public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAllQuery> {
 
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+    @Getter
+    private static final GetAllQueryTransformer instance = new GetAllQueryTransformer();
+
+    private GetAllQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(GetAllQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromString(PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
-        
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatusDocuments());
         slots.fromStatus(SUBMISSION_SET_STATUS, query.getStatusSubmissionSets());
         slots.fromStatus(FOLDER_STATUS, query.getStatusFolders());
-        
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
-
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
-    
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>. 
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+
     @Override
-    public void fromEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetAllQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         var patientId = slots.toString(PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
-
         query.setStatusDocuments(slots.toStatus(DOC_ENTRY_STATUS));
         query.setStatusFolders(slots.toStatus(FOLDER_STATUS));
         query.setStatusSubmissionSets(slots.toStatus(SUBMISSION_SET_STATUS));
-        
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
-
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));

@@ -23,9 +23,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLSubmitObjectsRequest extends EbXMLObjectContainer, EbXMLSlotList {
+public interface EbXMLSubmitObjectsRequest<E> extends EbXMLObjectContainer, EbXMLSlotList {
     /**
      * @return the wrapped ebXML representation of this request.
      */
-    Object getInternal();
+    E getInternal();
 }

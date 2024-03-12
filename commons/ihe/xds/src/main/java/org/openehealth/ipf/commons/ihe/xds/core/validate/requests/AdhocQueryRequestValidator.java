@@ -15,17 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -44,8 +48,13 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  *
  * @author Jens Riemschneider
  */
-public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequest, ValidationProfile> {
+public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequest<AdhocQueryRequest>, ValidationProfile> {
+
+    @Getter
+    private static final AdhocQueryRequestValidator instance = new AdhocQueryRequestValidator();
+
     private static final CXValidator cxValidator = new CXValidator(true);
+    private static final OIDValidator oidValidator = new OIDValidator();
     private static final NopValidator nopValidator = new NopValidator();
 
 
@@ -156,10 +165,18 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         ALLOWED_QUERY_TYPES.put(PHARM_1, pharmStoredQueryTypes);
     }
 
+    private final Map<String, QueryParameterValidation[]> validations = new ConcurrentHashMap<>();
+
+    private AdhocQueryRequestValidator() {
+    }
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
         var homeCommunityIdOptionality = profile.getInteractionProfile().getHomeCommunityIdOptionality();
+        return validations.computeIfAbsent(queryType.name() + homeCommunityIdOptionality.name(),
+            s -> instantiateValidators(queryType, homeCommunityIdOptionality));
+    }
 
+    private QueryParameterValidation[] instantiateValidators(QueryType queryType, XdsIntegrationProfile.HomeCommunityIdOptionality homeCommunityIdOptionality) {
         switch (queryType) {
             case FETCH:
                 return new QueryParameterValidation[]{
@@ -394,13 +411,60 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         new StatusValidation(DOC_ENTRY_STATUS),
                         new DocumentEntryTypeValidation(),
                 };
+
+            case SUBSCRIPTION_FOR_DOCUMENT_ENTRY:
+                return new QueryParameterValidation[]{
+                    new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                    new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                    new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
+                    new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                    new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                    new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                    new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                    new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
+                };
+
+            case SUBSCRIPTION_FOR_FOLDER:
+                return new QueryParameterValidation[]{
+                    new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
+                    new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+                    new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME)
+                };
+
+            case SUBSCRIPTION_FOR_SUBMISSION_SET:
+                return new QueryParameterValidation[]{
+                    new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
+                    new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                    new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                    new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
+                };
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY:
+                return new QueryParameterValidation[]{
+                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                    new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                    new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                    new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                    new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                    new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                    new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
+                };
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET:
+                return new QueryParameterValidation[]{
+                    new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                    new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                    new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
+                };
         }
 
         return null;    // should not occur
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request, ValidationProfile profile) {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request, ValidationProfile profile) {
         requireNonNull(request, "request cannot be null");
 
         if (profile == ITI_63) {
@@ -418,14 +482,12 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         var allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
         metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
-        new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
+        SlotLengthAndNameUniquenessValidator.validateQuerySlots(
                 request.getSlots(),
                 ALLOWED_MULTIPLE_SLOTS.getOrDefault(queryType, Collections.emptySet()));
         var validations = getValidators(queryType, profile);
         if (validations != null) {
-            for (var validation : validations) {
-                validation.validate(request);
-            }
+            Arrays.stream(validations).forEach(validation -> validation.validate(request));
         }
 
         switch (queryType) {
@@ -435,13 +497,19 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case FIND_FOLDERS_MPQ:
                 checkAtLeastOnePresent(request, FOLDER_PATIENT_ID, FOLDER_CODES);
                 break;
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY:
+                checkAtLeastOnePresent(request, DOC_ENTRY_CLASS_CODE, DOC_ENTRY_TYPE_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
+                break;
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET:
+                checkAtLeastOnePresent(request, SUBMISSION_SET_SOURCE_ID, SUBMISSION_SET_AUTHOR_PERSON, SUBMISSION_SET_INTENDED_RECIPIENT);
+                break;
         }
     }
 
     /**
      * Checks that at least one of the given query parameters is provided in the message.
      */
-    private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest request, QueryParameter... params) {
+    private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest<AdhocQueryRequest> request, QueryParameter... params) {
         var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
         slotNames.stream()
                 .map(request::getSlotValues)

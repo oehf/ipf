@@ -55,7 +55,6 @@ public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
     /**
      * Define the ErrorCode used to indicate a error in the metadata (typically a client fault).
      * IHE profiles do not have one common error code to indicate the error.
-     *
      * If the default {@link ErrorCode} can not be used, override this method to use a different code.
      *
      * @return {@link ErrorCode#REGISTRY_METADATA_ERROR}.

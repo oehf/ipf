@@ -27,7 +27,7 @@ import java.util.List;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLRemoveMetadataRequest extends EbXMLAdhocQueryRequest {
+public interface EbXMLRemoveMetadataRequest<E> extends EbXMLAdhocQueryRequest<E> {
 
     /**
      * Sets the object references of the remove request.
@@ -52,9 +52,4 @@ public interface EbXMLRemoveMetadataRequest extends EbXMLAdhocQueryRequest {
      */
     void setDeletionScope(String deletionScope);
 
-    /**
-     * @return the wrapped ebXML representation of this request.
-     */
-    @Override
-    Object getInternal();
 }

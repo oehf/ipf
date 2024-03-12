@@ -40,7 +40,7 @@ public interface ValidationProfile {
     /**
      * @return ID of the eHealth transaction.
      */
-    XdsInteractionId getInteractionId();
+    XdsInteractionId<?> getInteractionId();
 
 
     /**

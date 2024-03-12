@@ -18,14 +18,18 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import ca.uhn.hl7v2.model.Composite;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -40,26 +44,31 @@ import static java.util.Objects.requireNonNull;
  * values are met.
  * <p>
  * Note that this class is only used for ebXML 3.0!
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
 public class QuerySlotHelper {
 
-    private final EbXMLAdhocQueryRequest ebXML;
+    private final EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML;
 
     /**
      * Constructs the wrapper.
-     * @param ebXML
-     *          the wrapped object.
+     *
+     * @param ebXML the wrapped object.
      */
-    public QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
+    public QuerySlotHelper(EbXMLAdhocQueryRequest<AdhocQueryRequest> ebXML) {
         this.ebXML = requireNonNull(ebXML, "ebXML cannot be null");
+    }
+
+    public List<EbXMLSlot> getSlots() {
+        return ebXML.getSlots();
     }
 
     /**
      * Retrieves a string-valued parameter from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the string value.
      */
     public String toString(QueryParameter param) {
@@ -69,10 +78,9 @@ public class QuerySlotHelper {
 
     /**
      * Stores a string-valued parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param value
-     *          the string value.
+     *
+     * @param param the parameter.
+     * @param value the string value.
      */
     public void fromString(QueryParameter param, String value) {
         if (value != null) {
@@ -82,36 +90,31 @@ public class QuerySlotHelper {
 
     /**
      * Stores a list of codes into a slot.
-     * @param param
-     *          the parameter.
-     * @param codes
-     *          the list of codes.
+     *
+     * @param param the parameter.
+     * @param codes the list of codes.
      */
     public void fromCode(QueryParameter param, List<Code> codes) {
         if (codes == null) {
             return;
         }
 
-        var slotValues = new ArrayList<String>();
-        for (var code : codes) {
-            var hl7CE = Hl7v2Based.render(code);
-            slotValues.add(encodeAsStringList(hl7CE));
-        }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
+        ebXML.addSlot(param.getSlotName(), codes.stream()
+                .map(Hl7v2Based::render)
+                .map(QuerySlotHelper::encodeAsStringList)
+                .toArray(String[]::new));
     }
 
     /**
      * Stores a code list with AND/OR semantics into a set of slots with the same name.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
-     * @param queryList
-     *          the list of codes.
+     *
+     * @param param     standard query parameter (implies the name of the slots).
+     * @param queryList the list of codes.
      */
     public void fromCode(QueryParameter param, QueryList<Code> queryList) {
         if (queryList == null) {
             return;
         }
-
         for (var codes : queryList.getOuterList()) {
             fromCode(param, codes);
         }
@@ -122,19 +125,17 @@ public class QuerySlotHelper {
         if (slots.isEmpty()) {
             return null;
         }
-
         var queryList = new QueryList<Code>();
-        for (var slot : slots) {
-            var innerList = toCode(slot.getValueList());
-            queryList.getOuterList().add(innerList);
-        }
+        slots.stream()
+                .map(slot -> toCode(slot.getValueList()))
+                .forEach(innerList -> queryList.getOuterList().add(innerList));
         return queryList;
     }
 
     /**
      * Retrieves a string list with AND/OR semantics from a set of slots with the same name.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
+     *
+     * @param param standard query parameter (implies the name of the slots).
      * @return the string list.
      */
     public QueryList<String> toStringQueryList(QueryParameter param) {
@@ -143,38 +144,35 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a string list with AND/OR semantics from a set of slots with the same name.
-     * @param slotName
-     *          name of the source slots, may correspond to either
-     *          a standard query parameter or an extra parameter.
+     *
+     * @param slotName name of the source slots, may correspond to either
+     *                 a standard query parameter or an extra parameter.
      * @return the string list.
      */
     public QueryList<String> toStringQueryList(String slotName) {
         if (isEmpty(slotName)) {
             return null;
         }
-
         var slots = ebXML.getSlots(slotName);
         if (slots.isEmpty()) {
             return null;
         }
-
         var queryList = new QueryList<String>();
-        for (var slot : slots) {
+        slots.forEach(slot -> {
             var innerList = new ArrayList<String>();
             for (var slotValue : slot.getValueList()) {
                 innerList.addAll(decodeStringList(slotValue));
             }
             queryList.getOuterList().add(innerList);
-        }
+        });
         return queryList;
     }
 
     /**
      * Stores a list of strings into a slot.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
-     * @param values
-     *          the string list.
+     *
+     * @param param  standard query parameter (implies the name of the slots).
+     * @param values the string list.
      */
     public void fromStringList(QueryParameter param, List<String> values) {
         fromStringList(param.getSlotName(), values);
@@ -182,17 +180,15 @@ public class QuerySlotHelper {
 
     /**
      * Stores a list of strings into a slot.
-     * @param slotName
-     *          name of the target slot, may correspond to either
-     *          a standard query parameter or an extra parameter.
-     * @param values
-     *          the string list.
+     *
+     * @param slotName name of the target slot, may correspond to either
+     *                 a standard query parameter or an extra parameter.
+     * @param values   the string list.
      */
     public void fromStringList(String slotName, List<String> values) {
         if (isEmpty(slotName) || (values == null)) {
             return;
         }
-
         var slotValues = values.stream()
                 .map(QuerySlotHelper::encodeAsStringList)
                 .toArray(String[]::new);
@@ -201,10 +197,9 @@ public class QuerySlotHelper {
 
     /**
      * Stores a string list with AND/OR semantics into a set of slots with the same name.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
-     * @param queryList
-     *          the list of strings.
+     *
+     * @param param     standard query parameter (implies the name of the slots).
+     * @param queryList the list of strings.
      */
     public void fromStringList(QueryParameter param, QueryList<String> queryList) {
         fromStringList(param.getSlotName(), queryList);
@@ -212,26 +207,22 @@ public class QuerySlotHelper {
 
     /**
      * Stores a string list with AND/OR semantics into a set of slots with the same name.
-     * @param slotName
-     *          name of the target slots, may correspond to either
-     *          a standard query parameter or an extra parameter.
-     * @param queryList
-     *          the list of strings.
+     *
+     * @param slotName  name of the target slots, may correspond to either
+     *                  a standard query parameter or an extra parameter.
+     * @param queryList the list of strings.
      */
     public void fromStringList(String slotName, QueryList<String> queryList) {
         if (isEmpty(slotName) || (queryList == null)) {
             return;
         }
-
-        for (var list : queryList.getOuterList()) {
-            fromStringList(slotName, list);
-        }
+        queryList.getOuterList().forEach(list -> fromStringList(slotName, list));
     }
 
     /**
      * Retrieves a list of strings from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the string list.
      */
     public List<String> toStringList(QueryParameter param) {
@@ -239,27 +230,22 @@ public class QuerySlotHelper {
         if (slotValues.isEmpty()) {
             return null;
         }
-
-        var values = new ArrayList<String>();
-        for (var slotValue : slotValues) {
-            values.addAll(decodeStringList(slotValue));
-        }
-        return values;
+        return slotValues.stream()
+                .flatMap(slotValue -> decodeStringList(slotValue).stream())
+                .collect(Collectors.toList());
     }
 
 
     /**
      * Stores a list of patient IDs into a slot.
-     * @param param
-     *          the parameter.
-     * @param values
-     *          the patient ID list.
+     *
+     * @param param  the parameter.
+     * @param values the patient ID list.
      */
     public void fromPatientIdList(QueryParameter param, List<Identifiable> values) {
         if (values == null) {
             return;
         }
-
         var slotValues = values.stream()
                 .map(value -> encodeAsStringList(Hl7v2Based.render(value)))
                 .toArray(String[]::new);
@@ -268,8 +254,8 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a list of patient IDs from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the patient ID list.
      */
     public List<Identifiable> toPatientIdList(QueryParameter param) {
@@ -277,18 +263,15 @@ public class QuerySlotHelper {
         if (values == null) {
             return null;
         }
-
-        var patientIds = new ArrayList<Identifiable>();
-        for (var value : values) {
-            patientIds.add(Hl7v2Based.parse(value, Identifiable.class));
-        }
-        return patientIds;
+        return values.stream()
+                .map(value -> Hl7v2Based.parse(value, Identifiable.class))
+                .collect(Collectors.toList());
     }
 
     /**
      * Retrieves a list of codes from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the codes.
      */
     public List<Code> toCodeList(QueryParameter param) {
@@ -297,10 +280,9 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a code list with AND/OR semantics from a set of slots with the same name.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
-     * @param schemeParam
-     *          the code scheme parameter.
+     *
+     * @param param       standard query parameter (implies the name of the slots).
+     * @param schemeParam the code scheme parameter.
      * @return the codes.
      */
     public QueryList<Code> toCodeQueryList(QueryParameter param, QueryParameter schemeParam) {
@@ -308,7 +290,6 @@ public class QuerySlotHelper {
         if (codes == null) {
             return null;
         }
-
         var schemes = toStringQueryList(schemeParam);
         if (schemes != null) {
             var schemesOuter = schemes.getOuterList();
@@ -324,37 +305,12 @@ public class QuerySlotHelper {
         return codes;
     }
 
-    /**
-     * Stores a numbered parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param value
-     *          the value.
-     * @deprecated not used
-     */
-    @Deprecated
-    public void fromNumber(QueryParameter param, String value) {
-        ebXML.addSlot(param.getSlotName(), value);
-    }
-
-    /**
-     * Retrieves a numbered parameter from a slot.
-     * @param param
-     *          the parameter.
-     * @return the value.
-     * @deprecated used only in the deprecated class {@link org.openehealth.ipf.commons.ihe.xds.core.validate.query.NumberValidation}
-     */
-    @Deprecated
-    public String toNumber(QueryParameter param) {
-        return ebXML.getSingleSlotValue(param.getSlotName());
-    }
 
     /**
      * Stores a timestamp parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param value
-     *          the value.
+     *
+     * @param param the parameter.
+     * @param value the value.
      */
     public void fromTimestamp(QueryParameter param, Timestamp value) {
         ebXML.addSlot(param.getSlotName(), Timestamp.toHL7(value));
@@ -363,8 +319,8 @@ public class QuerySlotHelper {
     /**
      * Retrieves a timestamp parameter from a slot.
      * According to CP-ITI-1260, a timestamp parameter may be enclosed in single quotes.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the value.
      */
     public String toTimestamp(QueryParameter param) {
@@ -374,10 +330,9 @@ public class QuerySlotHelper {
 
     /**
      * Stores a status parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param status
-     *          the list of status values.
+     *
+     * @param param  the parameter.
+     * @param status the list of status values.
      */
     public void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
         if (status == null) {
@@ -391,8 +346,8 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a status parameter from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the list of status values.
      */
     public List<AvailabilityStatus> toStatus(QueryParameter param) {
@@ -400,29 +355,22 @@ public class QuerySlotHelper {
         if (opcodes == null) {
             return null;
         }
-
-       var list = new ArrayList<AvailabilityStatus>();
-        for (var opcode : opcodes) {
-            var status = AvailabilityStatus.valueOfOpcode(opcode);
-            if (status != null) {
-                list.add(status);
-            }
-        }
-        return list;
+        return opcodes.stream()
+                .map(AvailabilityStatus::valueOfOpcode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     /**
      * Stores an association parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param associationTypes
-     *          the list of association types.
+     *
+     * @param param            the parameter.
+     * @param associationTypes the list of association types.
      */
     public void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
         if (associationTypes == null) {
             return;
         }
-
         var opcodes = associationTypes.stream()
                 .map(type -> AssociationType.getOpcode30(type))
                 .collect(Collectors.toList());
@@ -431,8 +379,8 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves an association parameter from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the list of association types.
      */
     public List<AssociationType> toAssociationType(QueryParameter param) {
@@ -440,7 +388,6 @@ public class QuerySlotHelper {
         if (opcodes == null) {
             return null;
         }
-
         return opcodes.stream()
                 .map(AssociationType::valueOfOpcode30)
                 .collect(Collectors.toList());
@@ -450,7 +397,6 @@ public class QuerySlotHelper {
         if (documentEntryTypes == null) {
             return;
         }
-
         var uuids = documentEntryTypes.stream()
                 .map(DocumentEntryType::toUuid)
                 .collect(Collectors.toList());
@@ -462,42 +408,37 @@ public class QuerySlotHelper {
         if (uuids == null) {
             return null;
         }
-
-       return uuids.stream()
-               .map(DocumentEntryType::valueOfUuid)
-               .collect(Collectors.toList());
+        return uuids.stream()
+                .map(DocumentEntryType::valueOfUuid)
+                .collect(Collectors.toList());
     }
 
     public static List<Code> toCode(List<String> slotValues) {
         if (slotValues.isEmpty()) {
             return null;
         }
-
         var codes = new ArrayList<Code>();
-        for (var slotValue : slotValues) {
-            for (var hl7CE : decodeStringList(slotValue)) {
-                var code = Hl7v2Based.parse(hl7CE, Code.class);
-                if (code == null || StringUtils.isEmpty(code.getCode()) || StringUtils.isEmpty(code.getSchemeName())) {
-                    throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CE);
-                }
-                codes.add(code);
-            }
-        }
+        slotValues.forEach(slotValue ->
+                decodeStringList(slotValue).forEach(hl7CE -> {
+                    var code = Hl7v2Based.parse(hl7CE, Code.class);
+                    if (code == null || isEmpty(code.getCode()) || isEmpty(code.getSchemeName())) {
+                        throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CE);
+                    }
+                    codes.add(code);
+                }));
         return codes;
     }
 
     /**
      * Stores a status parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param status
-     *          the list of documentAvailability values.
+     *
+     * @param param  the parameter.
+     * @param status the list of documentAvailability values.
      */
     public void fromDocumentAvailability(QueryParameter param, List<DocumentAvailability> status) {
         if (status == null) {
             return;
         }
-
         var opcodes = status.stream()
                 .map(DocumentAvailability::toFullQualifiedOpcode)
                 .collect(Collectors.toList());
@@ -506,8 +447,8 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a status parameter from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the list of documentAvailability values.
      */
     public List<DocumentAvailability> toDocumentAvailability(QueryParameter param) {
@@ -515,26 +456,20 @@ public class QuerySlotHelper {
         if (opcodes == null) {
             return null;
         }
-
-        var list = new ArrayList<DocumentAvailability>();
-        for (var opcode : opcodes) {
-            var availability = DocumentAvailability.valueOfOpcode(opcode);
-            if (availability != null) {
-                list.add(availability);
-            }
-        }
-        return list;
+        return opcodes.stream()
+                .map(DocumentAvailability::valueOfOpcode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     /**
      * Stores a numbered parameter into a slot.
-     * @param param
-     *          the parameter.
-     * @param value
-     *          the value.
+     *
+     * @param param the parameter.
+     * @param value the value.
      */
     public void fromInteger(QueryParameter param, Integer value) {
-        if (value == null){
+        if (value == null) {
             return;
         }
         ebXML.addSlot(param.getSlotName(), String.valueOf(value));
@@ -542,21 +477,20 @@ public class QuerySlotHelper {
 
     /**
      * Retrieves a numbered parameter from a slot.
-     * @param param
-     *          the parameter.
+     *
+     * @param param the parameter.
      * @return the value.
      */
     public Integer toInteger(QueryParameter param) {
-        Integer result = null;
         try {
             var slotValue = ebXML.getSingleSlotValue(param.getSlotName());
             if (StringUtils.isNotBlank(slotValue)) {
-                result = Integer.valueOf(slotValue);
+                return Integer.valueOf(slotValue);
             }
-        } catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             // ok, return null
         }
-        return result;
+        return null;
     }
 
     public static String encodeAsString(String value) {
@@ -588,24 +522,19 @@ public class QuerySlotHelper {
         if (list == null) {
             return null;
         }
-
-        list = list.trim();
-        if (list.startsWith("(")) {
-            list = list.substring(1);
+        String trimmed = list.trim();
+        if (trimmed.startsWith("(")) {
+            trimmed = trimmed.substring(1);
         }
-        if (list.endsWith(")")) {
-            list = list.substring(0, list.length() - 1);
+        if (trimmed.endsWith(")")) {
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
         }
-
-        var values = new ArrayList<String>();
-        for (var value: list.split(",")){
-            var decodedValue = isNotBlank(value)? decodeString(value.trim()): "";
-            values.add(decodedValue);
-        }
-        return values;
+        return Arrays.stream(trimmed.split(","))
+                .map(value -> isNotBlank(value) ? decodeString(value.trim()) : "")
+                .collect(Collectors.toList());
     }
 
-    public static <T extends Hl7v2Based> QueryList<String> render(QueryList<T> source) {
+    public static <T extends Hl7v2Based<?>> QueryList<String> render(QueryList<T> source) {
         if (source == null) {
             return null;
         }
@@ -615,7 +544,7 @@ public class QuerySlotHelper {
         return target;
     }
 
-    public static <T extends Hl7v2Based> List<String> render(List<T> source) {
+    public static <T extends Hl7v2Based<?>> List<String> render(List<T> source) {
         if (source == null) {
             return null;
         }
@@ -627,8 +556,7 @@ public class QuerySlotHelper {
 
     public static <C extends Composite, T extends Hl7v2Based<C>> QueryList<T> parse(
             QueryList<String> source,
-            Class<T> targetClass)
-    {
+            Class<T> targetClass) {
         if (source == null) {
             return null;
         }
@@ -640,8 +568,7 @@ public class QuerySlotHelper {
 
     public static <C extends Composite, T extends Hl7v2Based<C>> List<T> parse(
             List<String> source,
-            Class<T> targetClass)
-    {
+            Class<T> targetClass) {
         if (source == null) {
             return null;
         }

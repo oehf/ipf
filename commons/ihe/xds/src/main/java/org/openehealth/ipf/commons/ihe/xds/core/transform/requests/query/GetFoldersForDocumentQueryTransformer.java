@@ -16,10 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.ASSOCIATION_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.METADATA_LEVEL;
 
 /**
  * Transforms between a {@link GetFoldersForDocumentQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -27,40 +29,22 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  */
 public class GetFoldersForDocumentQueryTransformer extends GetFromDocumentQueryTransformer<GetFoldersForDocumentQuery> {
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
+    @Getter
+    private static final GetFoldersForDocumentQueryTransformer instance = new GetFoldersForDocumentQueryTransformer();
+
+    private GetFoldersForDocumentQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetFoldersForDocumentQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
-    /**
-     *
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML ebXML object
-     */
     @Override
-    public void fromEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetFoldersForDocumentQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -53,7 +54,7 @@ public class StatusValidationTest {
         expectValidationError(MISSING_REQUIRED_QUERY_PARAMETER, invalidQueryRequestWithStatus(null));
     }
 
-    private void expectValidationError(ValidationMessage expectedError, EbXMLAdhocQueryRequest request) {
+    private void expectValidationError(ValidationMessage expectedError, EbXMLAdhocQueryRequest<AdhocQueryRequest> request) {
         try {
             validator.validate(request);
             fail("XDSMetaDataException expected");
@@ -62,7 +63,7 @@ public class StatusValidationTest {
         }
     }
 
-    private EbXMLAdhocQueryRequest invalidQueryRequestWithStatus(String statusQuery) {
+    private EbXMLAdhocQueryRequest<AdhocQueryRequest> invalidQueryRequestWithStatus(String statusQuery) {
         var createFindDocumentsQuery = SampleData.createFindDocumentsQuery();
         var ebXML = new QueryRegistryTransformer().toEbXML(createFindDocumentsQuery);
         var slotValues = ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName());
@@ -71,7 +72,7 @@ public class StatusValidationTest {
             slotValues.add(statusQuery);
         return ebXML;
     }
-    private EbXMLAdhocQueryRequest validQueryRequestWithStatus() {
+    private EbXMLAdhocQueryRequest<AdhocQueryRequest> validQueryRequestWithStatus() {
         var createFindDocumentsQuery = SampleData.createFindDocumentsQuery();
         return new QueryRegistryTransformer().toEbXML(createFindDocumentsQuery);
     }

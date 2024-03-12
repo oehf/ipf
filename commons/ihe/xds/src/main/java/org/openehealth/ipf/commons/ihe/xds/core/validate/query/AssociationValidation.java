@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -46,22 +47,21 @@ public class AssociationValidation implements QueryParameterValidation {
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var slotValues = request.getSlotValues(param.getSlotName());
         metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
-        for (var slotValue : slotValues) {
+        slotValues.forEach(slotValue -> {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
-        }
+        });
 
         var slots = new QuerySlotHelper(request);
         var associationTypes = slots.toAssociationType(param);
 
         if (associationTypes != null) {
-            for (var type : associationTypes) {
-                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
-            }
+            associationTypes.forEach(type ->
+                    metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param));
         } else {
             throw new XDSMetaDataException(INVALID_ASSOCIATION_TYPE);
         }

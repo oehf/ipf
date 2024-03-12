@@ -17,11 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetSubmissionSetsQueryTransformer;
 
 import java.util.Arrays;
@@ -32,15 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link GetSubmissionSetsQueryTransformer}.
  * @author Jens Riemschneider
  */
-public class GetSubmissionSetsQueryTransformerTest {
-    private GetSubmissionSetsQueryTransformer transformer;
-    private GetSubmissionSetsQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class GetSubmissionSetsQueryTransformerTest extends AbstractQueryTransformerTest<GetSubmissionSetsQuery, GetSubmissionSetsQueryTransformer> {
     
     @BeforeEach
     public void setUp() {
-        transformer = new GetSubmissionSetsQueryTransformer();
-        query = new GetSubmissionSetsQuery();
+        transformer = GetSubmissionSetsQueryTransformer.getInstance();
+        query = emptyQuery();
 
         query.setUuids(Arrays.asList("uuid1", "uuid2"));
         query.setHomeCommunityId("home");
@@ -59,41 +56,9 @@ public class GetSubmissionSetsQueryTransformerTest {
         assertEquals("home", ebXML.getHome());
         assertEquals(1, ebXML.getSlots().size());
     }
-    
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-    
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new GetSubmissionSetsQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
 
-    
-    
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new GetSubmissionSetsQuery();
-        transformer.fromEbXML(result, ebXML);
-        
-        assertEquals(query, result);
-    }
-    
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new GetSubmissionSetsQuery();
-        transformer.fromEbXML(result, null);        
-        assertEquals(new GetSubmissionSetsQuery(), result);
-    }
-        
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new GetSubmissionSetsQuery();
-        transformer.fromEbXML(result, ebXML);        
-        assertEquals(new GetSubmissionSetsQuery(), result);
+    @Override
+    protected GetSubmissionSetsQuery emptyQuery() {
+        return new GetSubmissionSetsQuery();
     }
 }

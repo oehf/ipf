@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
@@ -47,7 +48,7 @@ public class ProvideAndRegisterDocumentSetTransformer extends LeafClassTransform
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLProvideAndRegisterDocumentSetRequest toEbXML(ProvideAndRegisterDocumentSet request) {
+    public EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> toEbXML(ProvideAndRegisterDocumentSet request) {
         if (request == null) {
             return null;
         }
@@ -86,7 +87,7 @@ public class ProvideAndRegisterDocumentSetTransformer extends LeafClassTransform
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public ProvideAndRegisterDocumentSet fromEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
+    public ProvideAndRegisterDocumentSet fromEbXML(EbXMLProvideAndRegisterDocumentSetRequest<ProvideAndRegisterDocumentSetRequestType> ebXML) {
         if (ebXML == null) {
             return null;
         }
@@ -113,7 +114,7 @@ public class ProvideAndRegisterDocumentSetTransformer extends LeafClassTransform
         }
 
         var regPackages = ebXML.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
-        if (regPackages.size() > 0) {
+        if (!regPackages.isEmpty()) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
 

@@ -29,14 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SubmissionSetTest {
     private Author author1;
     private Author author2;
-    private Author author3;
     private SubmissionSet submissionSet;
 
     @BeforeEach
     public void setUp() {
         author1 = new Author();
         author2 = new Author();
-        author3 = new Author();
         submissionSet = new SubmissionSet();
     }
 

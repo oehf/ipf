@@ -22,7 +22,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLAdhocQueryRequest extends EbXMLSlotList {
+public interface EbXMLAdhocQueryRequest<E> extends EbXMLSlotList {
     
     /**
      * @param returnType
@@ -60,5 +60,5 @@ public interface EbXMLAdhocQueryRequest extends EbXMLSlotList {
     /**
      * @return the ebXML object wrapped by this object.
      */
-    Object getInternal();
+    E getInternal();
 }

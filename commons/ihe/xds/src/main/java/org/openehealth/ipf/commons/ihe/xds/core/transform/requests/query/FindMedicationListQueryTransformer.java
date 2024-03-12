@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationListQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between {@link FindMedicationListQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -27,58 +28,30 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationLis
  */
 public class FindMedicationListQueryTransformer extends PharmacyDocumentsQueryTransformer<FindMedicationListQuery> {
 
-    /**
-     * Transforms the query into its EbXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query to transform.
-     * @param ebXML
-     *          the EbXML representation.
-     */
+    @Getter
+    private static final FindMedicationListQueryTransformer instance = new FindMedicationListQueryTransformer();
+
+    private FindMedicationListQueryTransformer() {
+    }
+
     @Override
-    public void toEbXML(FindMedicationListQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(FindMedicationListQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
-
         slots.fromTimestamp(DOC_ENTRY_SERVICE_START_FROM, query.getServiceStart().getFrom());
         slots.fromTimestamp(DOC_ENTRY_SERVICE_START_TO, query.getServiceStart().getTo());
-
         slots.fromTimestamp(DOC_ENTRY_SERVICE_END_FROM, query.getServiceEnd().getFrom());
         slots.fromTimestamp(DOC_ENTRY_SERVICE_END_TO, query.getServiceEnd().getTo());
     }
 
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void fromEbXML(FindMedicationListQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void fromEbXML(FindMedicationListQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
-
         query.getServiceStart().setFrom(slots.toTimestamp(DOC_ENTRY_SERVICE_START_FROM));
         query.getServiceStart().setTo(slots.toTimestamp(DOC_ENTRY_SERVICE_START_TO));
-
         query.getServiceEnd().setFrom(slots.toTimestamp(DOC_ENTRY_SERVICE_END_FROM));
         query.getServiceEnd().setTo(slots.toTimestamp(DOC_ENTRY_SERVICE_END_TO));
     }

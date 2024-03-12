@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
  * Encapsulation of {@link AdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
+public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest<AdhocQueryRequest> {
     private final AdhocQueryRequest request;
 
     /**
@@ -34,7 +34,7 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
      *          the ebXML 3.0 object.
      */
     public EbXMLAdhocQueryRequest30(AdhocQueryRequest request) {
-        this.request = requireNonNull(request, "request cannot be null");;
+        this.request = requireNonNull(request, "request cannot be null");
     }
 
     @Override

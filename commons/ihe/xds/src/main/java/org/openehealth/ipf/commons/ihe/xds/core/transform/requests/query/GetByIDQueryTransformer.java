@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
  *          the actual query type that is transformed by an extending subclass.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDQueryTransformer<T extends GetByIdQuery> extends GetByUUIDQueryTransformer<T> {
+abstract class GetByIDQueryTransformer<T extends GetByIdQuery> extends GetByUUIDQueryTransformer<T> {
     private final QueryParameter uniqueIdParam;
 
     /**

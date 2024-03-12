@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.PharmacyStableDocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
@@ -27,24 +26,10 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  */
 abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableDocumentsQuery> extends PharmacyDocumentsQueryTransformer<T> {
 
-    /**
-     * Transforms the query into its ebXML representation.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
+
     @Override
-    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void toEbXML(T query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
         slots.fromStringList(DOC_ENTRY_UUID, query.getUuids());
         slots.fromStringList(DOC_ENTRY_UNIQUE_ID, query.getUniqueIds());
@@ -54,32 +39,15 @@ abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableD
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
-
         slots.fromTimestamp(DOC_ENTRY_SERVICE_START_TIME_FROM, query.getServiceStartTime().getFrom());
         slots.fromTimestamp(DOC_ENTRY_SERVICE_START_TIME_TO, query.getServiceStartTime().getTo());
-
         slots.fromTimestamp(DOC_ENTRY_SERVICE_STOP_TIME_FROM, query.getServiceStopTime().getFrom());
         slots.fromTimestamp(DOC_ENTRY_SERVICE_STOP_TIME_TO, query.getServiceStopTime().getTo());
     }
 
-    /**
-     * Transforms the ebXML representation of a query into a query object.
-     * <p>
-     * Does not perform any transformation if one of the parameters is <code>null</code>.
-     * @param query
-     *          the query. Can be <code>null</code>.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     */
     @Override
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-        var slots = new QuerySlotHelper(ebXML);
-
+    protected void fromEbXML(T query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
         query.setConfidentialityCodes(slots.toCodeList(DOC_ENTRY_CONFIDENTIALITY_CODE));
         query.getCreationTime().setFrom(slots.toTimestamp(DOC_ENTRY_CREATION_TIME_FROM));
@@ -89,10 +57,8 @@ abstract class PharmacyStableDocumentsQueryTransformer<T extends PharmacyStableD
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
         query.setUniqueIds(slots.toStringList(DOC_ENTRY_UNIQUE_ID));
         query.setUuids(slots.toStringList(DOC_ENTRY_UUID));
-
         query.getServiceStartTime().setFrom(slots.toTimestamp(DOC_ENTRY_SERVICE_START_TIME_FROM));
         query.getServiceStartTime().setTo(slots.toTimestamp(DOC_ENTRY_SERVICE_START_TIME_TO));
-
         query.getServiceStopTime().setFrom(slots.toTimestamp(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
         query.getServiceStopTime().setTo(slots.toTimestamp(DOC_ENTRY_SERVICE_STOP_TIME_TO));
     }

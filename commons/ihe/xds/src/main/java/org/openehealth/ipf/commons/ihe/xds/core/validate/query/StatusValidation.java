@@ -25,12 +25,14 @@ import java.util.regex.Pattern;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Query parameter validation for parameters that are AvailabilityStatus-based.
+ *
  * @author Jens Riemschneider
  */
 public class StatusValidation implements QueryParameterValidation {
@@ -41,31 +43,31 @@ public class StatusValidation implements QueryParameterValidation {
 
     /**
      * Constructs a validation object.
-     * @param param
-     *          parameter to validate.
+     *
+     * @param param parameter to validate.
      */
     public StatusValidation(QueryParameter param) {
         this.param = requireNonNull(param, "param cannot be null");
     }
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var slotValues = request.getSlotValues(param.getSlotName());
         metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
-        for (var slotValue : slotValues) {
+        slotValues.forEach(slotValue -> {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
-        }
+        });
 
         var slots = new QuerySlotHelper(request);
 
         var list = slots.toStatus(param);
 
         if (list.isEmpty()) {
-            for (var value : slots.toStringList(param)) {
-                metaDataAssert(AvailabilityStatus.valueOfOpcode(value) != null, INVALID_QUERY_PARAMETER_VALUE, value);
-            }
+            slots.toStringList(param)
+                    .forEach(value ->
+                            metaDataAssert(AvailabilityStatus.valueOfOpcode(value) != null, INVALID_QUERY_PARAMETER_VALUE, value));
         }
         metaDataAssert(!list.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, slotValues);
 

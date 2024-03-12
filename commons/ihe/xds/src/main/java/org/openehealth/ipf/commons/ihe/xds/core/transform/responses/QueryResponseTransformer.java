@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
 import javax.activation.DataHandler;
@@ -49,7 +50,7 @@ public class QueryResponseTransformer extends LeafClassTransformer {
      * @param response the response. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLQueryResponse toEbXML(QueryResponse response) {
+    public EbXMLQueryResponse<AdhocQueryResponse> toEbXML(QueryResponse response) {
         if (response == null) {
             return null;
         }
@@ -96,7 +97,7 @@ public class QueryResponseTransformer extends LeafClassTransformer {
      * @param ebXML the ebXML representation. Can be <code>null</code>.
      * @return the response. <code>null</code> if the input was <code>null</code>.
      */
-    public QueryResponse fromEbXML(EbXMLQueryResponse ebXML) {
+    public QueryResponse fromEbXML(EbXMLQueryResponse<AdhocQueryResponse> ebXML) {
         if (ebXML == null) {
             return null;
         }

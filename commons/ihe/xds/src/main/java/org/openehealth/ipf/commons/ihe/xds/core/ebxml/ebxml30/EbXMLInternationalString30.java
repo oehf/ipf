@@ -98,11 +98,8 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         }
 
         var locals = international.getLocalizedString();
-        if (locals == null || locals.isEmpty()) {
-            return null;
-        }
+        return locals == null || locals.isEmpty() ? null : createLocalizedString(locals.get(0));
 
-        return createLocalizedString(locals.get(0));
     }
 
     private LocalizedString createLocalizedString(LocalizedStringType localizedEbRS30) {

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.*;
@@ -41,8 +42,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  */
 public class ObjectContainerValidator implements Validator<EbXMLObjectContainer, ValidationProfile> {
 
-    private final SlotLengthAndNameUniquenessValidator slotLengthAndNameUniquenessValidator =
-            new SlotLengthAndNameUniquenessValidator();
     private final OIDValidator oidValidator = new OIDValidator();
     private final TimeValidator timeValidator = new TimeValidator();
     private final TimeValidator timeValidatorSec = new TimeValidator(14);
@@ -73,6 +72,11 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final SlotValueValidation[] codingSchemeValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
 
+    @Getter
+    private static final ObjectContainerValidator instance = new ObjectContainerValidator();
+
+    private ObjectContainerValidator() {
+    }
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided, boolean limitedMetadata) {
         var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
@@ -177,7 +181,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         requireNonNull(container, "container cannot be null");
         requireNonNull(profile, "profile must be set");
 
-        slotLengthAndNameUniquenessValidator.validateContainer(container);
+        SlotLengthAndNameUniquenessValidator.validateContainer(container);
 
         // Note: The order of these checks is important!
         validateSubmissionSet(container, profile);
@@ -356,8 +360,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         var logicalIds = new HashSet<String>();
         var docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
-                .filter(docEntry -> docEntry.getId() != null)
                 .map(EbXMLRegistryObject::getId)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         var submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
                 .map(EbXMLRegistryObject::getId)

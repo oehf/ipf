@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -32,7 +33,7 @@ public class DocumentEntryTypeValidation implements QueryParameterValidation {
     private final QueryParameter param = QueryParameter.DOC_ENTRY_TYPE;
 
     @Override
-    public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
+    public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var slotValues = request.getSlotValues(param.getSlotName());
         for (var slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
@@ -42,9 +43,7 @@ public class DocumentEntryTypeValidation implements QueryParameterValidation {
         var list = slots.toDocumentEntryType(param);
 
         if (list != null) {
-            for (var type : list) {
-                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
-            }
+            list.forEach(type -> metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param));
         }
     }
 }

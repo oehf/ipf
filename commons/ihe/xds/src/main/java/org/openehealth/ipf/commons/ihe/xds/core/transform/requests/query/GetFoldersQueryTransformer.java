@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetFoldersQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -26,44 +27,29 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
  * @author Jens Riemschneider
  */
 public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFoldersQuery> {
+
+    @Getter
+    private static final GetFoldersQueryTransformer instance = new GetFoldersQueryTransformer();
+
     /**
      * Constructs the transformer.
      */
-    public GetFoldersQueryTransformer() {
+    private GetFoldersQueryTransformer() {
         super(FOLDER_UUID, FOLDER_UNIQUE_ID);
     }
 
-    /**
-     * @param query the query. Can be <code>null</code>.
-     * @param ebXML ebXML request
-     */
     @Override
-    public void toEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.toEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void toEbXML(GetFoldersQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromStringList(FOLDER_LOGICAL_ID, query.getLogicalUuid());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
-    /**
-     * @param query the query. Can be <code>null</code>.
-     * @param ebXML ebXML request
-     */
     @Override
-    public void fromEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-
-        super.fromEbXML(query, ebXML);
-
-        var slots = new QuerySlotHelper(ebXML);
+    protected void fromEbXML(GetFoldersQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setLogicalUuid(slots.toStringList(FOLDER_LOGICAL_ID));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
+
 }

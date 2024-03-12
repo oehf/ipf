@@ -19,6 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 
 /**
  * Transforms between a {@link RemoveMetadata} and its ebXML representation.
@@ -39,7 +40,7 @@ public class RemoveMetadataRequestTransformer {
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLRemoveMetadataRequest toEbXML(RemoveMetadata request) {
+    public EbXMLRemoveMetadataRequest<RemoveObjectsRequest> toEbXML(RemoveMetadata request) {
         if (request == null) {
             return null;
         }
@@ -56,7 +57,7 @@ public class RemoveMetadataRequestTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public RemoveMetadata fromEbXML(EbXMLRemoveMetadataRequest ebXML) {
+    public RemoveMetadata fromEbXML(EbXMLRemoveMetadataRequest<RemoveObjectsRequest> ebXML) {
         if (ebXML == null) {
             return null;
         }

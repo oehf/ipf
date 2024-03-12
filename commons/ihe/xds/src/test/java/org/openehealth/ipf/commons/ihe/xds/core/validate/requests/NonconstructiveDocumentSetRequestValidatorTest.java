@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
@@ -44,7 +45,7 @@ public class NonconstructiveDocumentSetRequestValidatorTest {
 
     @BeforeEach
     public void setUp() {
-        validator = new NonconstructiveDocumentSetRequestValidator();
+        validator = NonconstructiveDocumentSetRequestValidator.getInstance();
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveDocumentSet();
@@ -69,7 +70,7 @@ public class NonconstructiveDocumentSetRequestValidatorTest {
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
         
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLNonconstructiveDocumentSetRequest ebXML) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLNonconstructiveDocumentSetRequest<RetrieveDocumentSetRequestType> ebXML) {
         try {
             validator.validate(ebXML, ITI_43);
             fail("Expected exception: " + XDSMetaDataException.class);

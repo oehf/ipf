@@ -15,41 +15,37 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumentsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTransformer<GetRelatedDocumentsQuery> {
-    @Override
-    public void toEbXML(GetRelatedDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-        
-        super.toEbXML(query, ebXML);
 
-        var slots = new QuerySlotHelper(ebXML);
+    @Getter
+    private static final GetRelatedDocumentsQueryTransformer instance = new GetRelatedDocumentsQueryTransformer();
+
+    private GetRelatedDocumentsQueryTransformer() {
+    }
+
+    @Override
+    protected void toEbXML(GetRelatedDocumentsQuery query, QuerySlotHelper slots) {
+        super.toEbXML(query, slots);
         slots.fromAssociationType(ASSOCIATION_TYPE, query.getAssociationTypes());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
-    
-    @Override
-    public void fromEbXML(GetRelatedDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
-        if (query == null || ebXML == null) {
-            return;
-        }
-        
-        super.fromEbXML(query, ebXML);
 
-        var slots = new QuerySlotHelper(ebXML);
+    @Override
+    protected void fromEbXML(GetRelatedDocumentsQuery query, QuerySlotHelper slots) {
+        super.fromEbXML(query, slots);
         query.setAssociationTypes(slots.toAssociationType(ASSOCIATION_TYPE));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));

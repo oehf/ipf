@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -26,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindMedicationTreatmentPlansQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindMedicationTreatmentPlansQueryTransformer;
 
 import java.util.Arrays;
@@ -38,16 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Quentin Ligier
  * @since 3.7
  */
-public class FindMedicationTreatmentPlansQueryTransformerTest {
-    private FindMedicationTreatmentPlansQueryTransformer transformer;
-    private FindMedicationTreatmentPlansQuery query;
-    private EbXMLAdhocQueryRequest ebXML;
+public class FindMedicationTreatmentPlansQueryTransformerTest extends AbstractQueryTransformerTest<FindMedicationTreatmentPlansQuery, FindMedicationTreatmentPlansQueryTransformer> {
+
 
     @BeforeEach
     public void setUp() {
-        transformer = new FindMedicationTreatmentPlansQueryTransformer();
+        transformer = FindMedicationTreatmentPlansQueryTransformer.getInstance();
 
-        query = new FindMedicationTreatmentPlansQuery();
+        query = emptyQuery();
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
         query.setHomeCommunityId("12.21.41");
         query.setConfidentialityCodes(Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
@@ -98,37 +96,8 @@ public class FindMedicationTreatmentPlansQueryTransformerTest {
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_AUTHOR_PERSON.getSlotName()));
     }
 
-    @Test
-    public void testToEbXMLNull() {
-        transformer.toEbXML(null, ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-    @Test
-    public void testToEbXMLEmpty() {
-        transformer.toEbXML(new FindMedicationTreatmentPlansQuery(), ebXML);
-        assertEquals(0, ebXML.getSlots().size());
-    }
-
-    @Test
-    public void testFromEbXML() {
-        transformer.toEbXML(query, ebXML);
-        var result = new FindMedicationTreatmentPlansQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(query, result);
-    }
-
-    @Test
-    public void testFromEbXMLNull() {
-        var result = new FindMedicationTreatmentPlansQuery();
-        transformer.fromEbXML(result, null);
-        assertEquals(new FindMedicationTreatmentPlansQuery(), result);
-    }
-
-    @Test
-    public void testFromEbXMLEmpty() {
-        var result = new FindMedicationTreatmentPlansQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(new FindMedicationTreatmentPlansQuery(), result);
+    @Override
+    protected FindMedicationTreatmentPlansQuery emptyQuery() {
+        return new FindMedicationTreatmentPlansQuery();
     }
 }
