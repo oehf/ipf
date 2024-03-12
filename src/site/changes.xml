@@ -23,7 +23,19 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="4.8.0" description="IPF 4.8.0" date="tbd">
+        <release version="4.8.0" description="IPF 4.8.0" date="14 Mar 2024">
+            <action issue="444" dev="ohr" type="fix">
+                Fix type in translation from HL7v3 to HL7v2 of deceasedIndicator
+            </action>
+            <action issue="442" dev="stanojevic-boris" type="add">
+                Add support for a non-standard urn:elga-bes:AssociationType:NonVersioningUpdate AssociationType
+            </action>
+            <action issue="441" dev="ohr" type="update">
+                Add support for rendering CXi in XDS according to CP-ITI-1292
+            </action>
+            <action issue="441" dev="qligier" type="fix">
+                Fix incorrect validation of XDS RegistryError.location
+            </action>
             <action issue="437" dev="stanojevic-boris" type="add">
                 Implement the new SimplifiedPublish ITI-105 Component
             </action>
@@ -32,6 +44,9 @@
             </action>
             <action issue="434" dev="thopap" type="fix">
                 Fix missing objectType attribute for XML element classification (for SubmissionSet and Folder)
+            </action>
+            <action issue="433" dev="stanojevic-boris" type="add">
+                Add support for IHE BALP
             </action>
             <action issue="431" dev="unixoid" type="fix">
                 Fix error handling in CH:PPQ-2
@@ -74,14 +89,8 @@
             </action>
         </release>
         <release version="4.7.0" description="IPF 4.7.0" date="10 Jul 2023">
-            <action issue="413" dev="zortx233" type="fix">
-                Properly populate PurposeOfUse attribute in audit records of some HL7v3-based transactions
-            </action>
-            <action issue="415" dev="unixoid" type="fix">
-                Avoid NPE when transforming XDS classifications without schemas
-            </action>
-            <action issue="417" dev="unixoid" type="fix">
-                Better validation for unique IDs of XDS Document Entries, Submission Sets, and Folders
+            <action issue="420" dev="ohr" type="fix">
+                PDQm/PIXm translation improvements
             </action>
             <action issue="419" dev="unixoid" type="fix">
                 Fixed the 'user is requestor' flag in ATNA records
@@ -89,8 +98,11 @@
             <action issue="418" dev="thopap" type="update">
                 Dependency Updates (Important: Camel 3.20->3.21, CXF 3.5->3.6, Hapi 6.4->6.6)
             </action>
-            <action issue="420" dev="ohr" type="fix">
-                PDQm/PIXm translation improvements
+            <action issue="417" dev="unixoid" type="fix">
+                Better validation for unique IDs of XDS Document Entries, Submission Sets, and Folders
+            </action>
+            <action issue="415" dev="unixoid" type="fix">
+                Avoid NPE when transforming XDS classifications without schemas
             </action>
         </release>
         <release version="4.6.0" description="IPF 4.6.0" date="21 Apr 2023">
