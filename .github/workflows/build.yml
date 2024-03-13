@@ -1,4 +1,4 @@
-name: Build IPF with Maven with Java 17
+name: Build IPF with Java 17
 
 on: [push, pull_request, workflow_dispatch]
 
