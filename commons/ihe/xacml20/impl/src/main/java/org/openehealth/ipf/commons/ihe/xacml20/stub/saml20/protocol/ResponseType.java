@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.EncryptedElementType;

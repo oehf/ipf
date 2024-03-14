@@ -20,7 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 
 import javax.security.cert.X509Certificate;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.*;
 
@@ -104,7 +104,7 @@ public abstract class FhirProvider implements Serializable {
 
         var cipherSuite = (String) httpServletRequest.getAttribute("javax.servlet.request.cipher_suite");
         if (cipherSuite != null) {
-            enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute(X509Certificate.class.getName()));
+            enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute("javax.security.cert.X509Certificate"));
         }
 
         if (parameters != null) {

@@ -23,28 +23,19 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- ========== Configuration of Caches and Storages ========== -->
     
-    <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
-    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
-            <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
-        <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
-    </bean>
-    
     <bean id="interactiveContinuationStorage"
-          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage">
-        <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
-                <constructor-arg value="interactiveContinuationCache" />
-            </bean>
-        </constructor-arg>
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage">
+        <constructor-arg ref="cacheManager"/>
     </bean>
 
     <bean id="unsolicitedFragmentationStorage"
-          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheUnsolicitedFragmentationStorage">
-        <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
-                <constructor-arg value="unsolicitedFragmentationCache" />
-            </bean>
-        </constructor-arg>
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage">
+        <constructor-arg ref="cacheManager"/>
+    </bean>
+
+    <bean id="cacheManager"
+          class="org.springframework.cache.caffeine.CaffeineCacheManager">
+        <property name="cacheSpecification" value="maximumSize=1000"/>
     </bean>
 
 </beans>

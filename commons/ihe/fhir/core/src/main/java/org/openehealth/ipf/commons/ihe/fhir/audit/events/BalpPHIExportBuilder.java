@@ -1,7 +1,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit.events;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.BalpAuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.EventType;

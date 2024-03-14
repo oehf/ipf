@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import jakarta.security.auth.message.config.AuthConfigFactory;
+import jakarta.servlet.ServletContext;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl;
 import org.apache.catalina.startup.Tomcat;
@@ -23,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
 
-import javax.security.auth.message.config.AuthConfigFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -38,6 +39,7 @@ public class TomcatServer extends ServletServer {
     private static final AtomicInteger SERVLET_COUNTER = new AtomicInteger(0);
     private Tomcat embedded;
     private Wrapper wrapper;
+    private ServletContext servletContext;
 
     @Override
     public void start() {
@@ -47,6 +49,7 @@ public class TomcatServer extends ServletServer {
         var context = embedded.addContext(getContextPath(), "/");
         context.addParameter("contextConfigLocation", getContextResource());
         context.addApplicationListener(ContextLoaderListener.class.getName());
+        context.addServletContainerInitializer((c, ctx) -> servletContext = ctx, null);
 
         embedded.getHost().setAppBase("");
 
@@ -98,6 +101,11 @@ public class TomcatServer extends ServletServer {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
     @Override

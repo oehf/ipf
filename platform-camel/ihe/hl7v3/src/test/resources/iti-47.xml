@@ -37,15 +37,9 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <constructor-arg value="d" />
     </bean>
 
-    <import resource="ehcache-spring.xml"/>
-
     <bean id="hl7v2ContinuationStorage"
-          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage">
-        <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
-                <constructor-arg value="hl7v2ContinuationCache" />
-            </bean>
-        </constructor-arg>
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage">
+        <constructor-arg ref="cacheManager"/>
     </bean>
 
     <bean id="faultMessageOutInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.FaultMessageOutInterceptor">

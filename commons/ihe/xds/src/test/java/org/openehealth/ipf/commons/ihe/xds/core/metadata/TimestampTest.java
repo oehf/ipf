@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
 import org.openehealth.ipf.commons.xml.XmlUtils;
 
-import javax.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 

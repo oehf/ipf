@@ -25,11 +25,11 @@ import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import javax.xml.transform.stream.StreamSource;
 
 import static org.apache.camel.builder.Builder.bodyAs;

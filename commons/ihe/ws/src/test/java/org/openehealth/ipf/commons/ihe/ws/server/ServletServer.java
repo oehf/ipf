@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import jakarta.servlet.ServletContext;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -97,6 +98,8 @@ public abstract class ServletServer {
     public String getContextPath() {
         return contextPath;
     }
+
+    public abstract ServletContext getServletContext();
 
     /**
      * @param port

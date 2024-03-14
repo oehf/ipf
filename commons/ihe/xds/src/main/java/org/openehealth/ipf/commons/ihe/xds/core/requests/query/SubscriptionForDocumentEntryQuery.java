@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 /**
  * Represents a stored query for SubscriptionFilterQuery used for ITI-52 filters

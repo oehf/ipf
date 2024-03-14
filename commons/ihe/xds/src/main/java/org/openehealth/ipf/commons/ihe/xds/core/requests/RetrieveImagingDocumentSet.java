@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -50,7 +50,7 @@ public class IpfAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SpringConfigurationPostProcessor.class)
-    public SpringConfigurationPostProcessor postProcessor(CustomMappingsConfigurer customMappingsConfigurer) {
+    public SpringConfigurationPostProcessor postProcessor(CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer) {
         var processor = new SpringConfigurationPostProcessor();
         var list = new ArrayList<OrderedConfigurer>();
         if (customMappingsConfigurer != null) list.add(customMappingsConfigurer);
@@ -60,8 +60,8 @@ public class IpfAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(CustomMappingsConfigurer.class)
-    protected CustomMappingsConfigurer customMappingsConfigurer(SpringBidiMappingService mappingService) {
-        var configurer = new CustomMappingsConfigurer();
+    protected CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer(SpringBidiMappingService mappingService) {
+        var configurer = new CustomMappingsConfigurer<SpringRegistry>();
         configurer.setMappingService(mappingService);
         return configurer;
     }

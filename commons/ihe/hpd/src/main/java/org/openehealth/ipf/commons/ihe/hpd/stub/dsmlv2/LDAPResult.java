@@ -16,12 +16,12 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
 
 
 /**

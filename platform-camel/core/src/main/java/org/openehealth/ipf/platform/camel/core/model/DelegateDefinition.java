@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.RouteDefinition;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)

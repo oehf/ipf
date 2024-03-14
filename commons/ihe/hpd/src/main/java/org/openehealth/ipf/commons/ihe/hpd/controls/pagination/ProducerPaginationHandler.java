@@ -25,7 +25,7 @@ import org.springframework.beans.BeanUtils;
 
 import javax.naming.ldap.PagedResultsControl;
 import javax.naming.ldap.PagedResultsResponseControl;
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

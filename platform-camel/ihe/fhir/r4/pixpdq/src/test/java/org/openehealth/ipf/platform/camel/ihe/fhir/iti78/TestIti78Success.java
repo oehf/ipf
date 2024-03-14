@@ -109,7 +109,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals(FhirParticipantObjectIdTypeCode.MobilePatientDemographicsQuery, patient.getParticipantObjectIDTypeCode());
 
         var fhir = new BalpJsonSerializationStrategy(serverFhirContext).marshal(event, true);
-        System.out.println(fhir);
+        // System.out.println(fhir);
 
     }
 
@@ -132,7 +132,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals("Patient/4711", patient.getParticipantObjectID());
 
         var fhir = new BalpJsonSerializationStrategy(serverFhirContext).marshal(event, true);
-        System.out.println(fhir);
+        // System.out.println(fhir);
     }
 
 

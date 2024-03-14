@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
 import org.slf4j.Logger
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 
 import java.time.ZonedDateTime
 

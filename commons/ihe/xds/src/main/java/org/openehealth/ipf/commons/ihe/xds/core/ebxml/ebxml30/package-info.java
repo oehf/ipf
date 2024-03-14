@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 @XmlSchema(namespace = "urn:ihe:iti:xds-b:2007", 
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
         @XmlNs(prefix = "xds", namespaceURI = "urn:ihe:iti:xds-b:2007"),
         @XmlNs(prefix = "rmd", namespaceURI = "urn:ihe:iti:rmd:2017")})
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlSchema;
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlSchema;

@@ -31,8 +31,8 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**

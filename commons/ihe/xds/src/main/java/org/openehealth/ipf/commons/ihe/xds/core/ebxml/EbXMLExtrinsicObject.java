@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 /**
  * Encapsulation of the ebXML classes for {@code ExtrinsicObjectType}.

@@ -19,7 +19,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.*;
 

@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import org.apache.camel.model.DataFormatDefinition;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 /**
  * @author Martin Krasser

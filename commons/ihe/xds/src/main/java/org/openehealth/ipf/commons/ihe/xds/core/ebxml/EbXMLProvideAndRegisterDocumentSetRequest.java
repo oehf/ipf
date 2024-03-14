@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 import java.util.Map;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 /**
  * Encapsulation of the ebXML classes for {@code ProvideAndRegisterDocumentSetRequestType}. 

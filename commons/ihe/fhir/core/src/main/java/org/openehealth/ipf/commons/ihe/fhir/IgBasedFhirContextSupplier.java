@@ -37,14 +37,19 @@ import java.io.IOException;
 public class IgBasedFhirContextSupplier {
 
     public static FhirContext getContext(FhirContext fhirContext, String... igResources) throws IOException {
-        fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
+        try {
+            Class.forName("org.apache.hc.client5.http.classic.HttpClient");
+            fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClient5Factory(fhirContext));
+        } catch (ClassNotFoundException e) {
+            fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
+        }
 
-        NpmPackageValidationSupport npmValidationSupport = new NpmPackageValidationSupport(fhirContext);
+        var npmValidationSupport = new NpmPackageValidationSupport(fhirContext);
         for (String igResource : igResources) {
             npmValidationSupport.loadPackageFromClasspath(igResource);
         }
 
-        CachingValidationSupport validationSupport = new CachingValidationSupport(new ValidationSupportChain(
+        var validationSupport = new CachingValidationSupport(new ValidationSupportChain(
                 npmValidationSupport,
                 new DefaultProfileValidationSupport(fhirContext),
                 new InMemoryTerminologyServerValidationSupport(fhirContext)));

@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedR
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
 
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq1RequestValidator;

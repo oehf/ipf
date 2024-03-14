@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataHandler;
-import javax.xml.bind.JAXBElement;
+import jakarta.activation.DataHandler;
+import jakarta.xml.bind.JAXBElement;
 
 import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;

@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 
 import java.util.Objects;
 
-import javax.activation.DataHandler;
-import javax.xml.bind.attachment.AttachmentMarshaller;
+import jakarta.activation.DataHandler;
+import jakarta.xml.bind.attachment.AttachmentMarshaller;
 
 /**
  * An attachment marshaller implementation which does not read any data

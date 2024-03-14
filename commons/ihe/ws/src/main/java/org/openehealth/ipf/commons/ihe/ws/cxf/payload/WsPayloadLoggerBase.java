@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 

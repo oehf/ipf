@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 
-import javax.activation.DataHandler;
-import javax.xml.bind.annotation.*;
+import jakarta.activation.DataHandler;
+import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 

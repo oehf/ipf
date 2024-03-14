@@ -3,5 +3,3 @@ org.openehealth.ipf.commons.audit.protocol.providers.UDPSyslogSenderProvider
 org.openehealth.ipf.commons.audit.protocol.providers.NettyTLSSyslogSenderProvider
 org.openehealth.ipf.commons.audit.protocol.providers.ReactorNettyTLSSyslogSenderProvider
 org.openehealth.ipf.commons.audit.protocol.providers.RecordingAuditMessageTransmissionProvider
-org.openehealth.ipf.commons.audit.protocol.providers.VertxTLSSyslogSenderProvider
-org.openehealth.ipf.commons.audit.protocol.providers.VertxUDPSyslogSenderProvider

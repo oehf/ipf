@@ -29,21 +29,15 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
     </bean>
 
     <bean id="hl7v3ContinuationStorage"
-          class="org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage">
-        <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
-                <constructor-arg value="hl7v3ContinuationCache" />
-            </bean>
-        </constructor-arg>
+          class="org.openehealth.ipf.commons.ihe.hl7v3.storage.SpringCacheHl7v3ContinuationStorage">
+        <constructor-arg ref="cacheManager"/>
     </bean>
 
     <bean id="correlator"
-          class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">
-        <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
-                <constructor-arg value="wsCorrelationCache" />
-            </bean>
-        </constructor-arg>
+          class="org.openehealth.ipf.commons.ihe.ws.correlation.SpringCacheAsynchronyCorrelator">
+        <constructor-arg ref="cacheManager"/>
     </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.caffeine.CaffeineCacheManager"/>
 
 </beans>

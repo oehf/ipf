@@ -3,6 +3,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 
@@ -23,5 +24,10 @@ public class ApacheFhirRestTLSAuditRecordSender extends AbstractFhirRestTLSAudit
     @Override
     protected SslAwareAbstractRestfulClientFactory<?> createSslAwareClientFactory(FhirContext fhirContext) {
         return new SslAwareApacheRestfulClientFactory(fhirContext);
+    }
+
+    @Override
+    public String getTransportName() {
+        return AuditTransmissionChannel.FHIR_REST_TLS.getProtocolName();
     }
 }

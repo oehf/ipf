@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessa
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

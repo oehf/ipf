@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 
 /**
@@ -38,7 +37,6 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
  * <li>QPD-8: What Domains Returned (CX)</li>
  * </ul>
  */
-@SuppressWarnings("serial")
 public class QPD extends AbstractSegment {
 
     /**
@@ -58,7 +56,7 @@ public class QPD extends AbstractSegment {
             add(ST.class, false, 1, 199, new Object[]{msg}, "Algorithm Description");
             add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
         } catch (HL7Exception e) {
-            throw new HL7v2Exception(e);
+            throw new RuntimeException(e);
         }
     }
 

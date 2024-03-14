@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElementRef;
 
 import static org.apache.camel.builder.ExpressionBuilder.headerExpression;
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.builderExpression;

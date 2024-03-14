@@ -20,7 +20,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;

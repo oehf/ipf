@@ -17,11 +17,6 @@
             <artifactId>jdom2</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
             <optional>true</optional>
@@ -56,23 +51,26 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
+            <version>${activemq-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-client</artifactId>
+            <version>${activemq-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
+            <groupId>org.messaginghub</groupId>
+            <artifactId>pooled-jms</artifactId>
+            <version>${pooled-jms-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

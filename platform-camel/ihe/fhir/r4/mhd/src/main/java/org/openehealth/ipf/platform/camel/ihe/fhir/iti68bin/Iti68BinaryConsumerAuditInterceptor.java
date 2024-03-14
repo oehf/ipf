@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer.Audit
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Audit Interceptor for ITI-68-BIN. Note that the ParticipantObjectIdentificationType for the document

@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@javax.xml.bind.annotation.XmlSchema(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:protocol", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol;

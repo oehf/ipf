@@ -18,9 +18,8 @@ package org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
-
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.*;
 import org.herasaf.xacml.core.context.impl.RequestType;
 import org.herasaf.xacml.core.policy.impl.PolicySetType;
 import org.herasaf.xacml.core.policy.impl.PolicyType;

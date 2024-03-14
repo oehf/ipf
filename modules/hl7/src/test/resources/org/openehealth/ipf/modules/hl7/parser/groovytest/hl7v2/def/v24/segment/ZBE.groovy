@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.segment
 
-import org.openehealth.ipf.modules.hl7.HL7v2Exception
-
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.AbstractSegment
 import ca.uhn.hl7v2.model.Group
@@ -36,7 +34,7 @@ import ca.uhn.hl7v2.parser.ModelClassFactory
  * The segment is defined by the German Patient Management Profile and extended
  * by the "Historic Movement" option of the IHE ITI Supplement Patient
  * Administration Framework (PAM) Integration Profile.
- * 
+ *
  * This custom segment is compiled and loaded at runtime (unlike Java custom
  * segments, which are already available as .class file. Take care to load required
  * custom types in the same way. For this purpose the HapiModelExtension provides
@@ -45,69 +43,69 @@ import ca.uhn.hl7v2.parser.ModelClassFactory
  *
  * @author Christian Ohr
  */
-public class ZBE extends AbstractSegment {
+class ZBE extends AbstractSegment {
 
-	/**
-	 * @param parent
-	 * @param factory
-	 */
-	public ZBE(Group parent, ModelClassFactory factory) {
-		super(parent, factory)
-		Message message = getMessage()
-		try {
-			add(EI, true, 0, 999, [ message ] as Object[], null)
-			add(TS, true, 1, 26, [ message ] as Object[], null)
-			add(TS, false, 1, 26, [ message ] as Object[], null)
-			add(ST, true, 1, 10, [ message ] as Object[], null)
-		} catch (HL7Exception he) {
-			throw new HL7v2Exception(he)
-		}
-	}
+    /**
+     * @param parent
+     * @param factory
+     */
+    ZBE(Group parent, ModelClassFactory factory) {
+        super(parent, factory)
+        Message message = getMessage()
+        try {
+            add(EI, true, 0, 999, [message] as Object[], null)
+            add(TS, true, 1, 26, [message] as Object[], null)
+            add(TS, false, 1, 26, [message] as Object[], null)
+            add(ST, true, 1, 10, [message] as Object[], null)
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	/**
-	 * Returns movement ID (ZBE-1).
-	 *
-	 * @param rep index of repeating field
-	 * @return movement ID
-	 */
-	public EI getMovementID(int rep) {
-		return getTypedField(1, rep)
-	}
+    /**
+     * Returns movement ID (ZBE-1).
+     *
+     * @param rep index of repeating field
+     * @return movement ID
+     */
+    EI getMovementID(int rep) {
+        return getTypedField(1, rep)
+    }
 
-	/**
-	 * Returns movement IDs (ZBE-1).
-	 *
-	 * @return movement IDs
-	 */
-	public EI[] getMovementID() {
+    /**
+     * Returns movement IDs (ZBE-1).
+     *
+     * @return movement IDs
+     */
+    EI[] getMovementID() {
         return getTypedField(1, new EI[0])
-	}
+    }
 
-	/**
-	 * Returns movement start date (ZBE-2).
-	 *
-	 * @return movement start date (required)
-	 */
-	public TS getStartMovementDateTime() {
-		return getTypedField(2, 0)
-	}
+    /**
+     * Returns movement start date (ZBE-2).
+     *
+     * @return movement start date (required)
+     */
+    TS getStartMovementDateTime() {
+        return getTypedField(2, 0)
+    }
 
-	/**
-	 * Returns movement end date (ZBE-3).
-	 *
-	 * @return movement end date (optional)
-	 */
-	public TS getStartMovementEndTime() {
-		return getTypedField(3, 0)
-	}
+    /**
+     * Returns movement end date (ZBE-3).
+     *
+     * @return movement end date (optional)
+     */
+    TS getStartMovementEndTime() {
+        return getTypedField(3, 0)
+    }
 
-	/**
-	 * Returns movement action (ZBE-4).
-	 *
-	 * @return movement action (required, one of INSERT, DELETE, UPDATE, REFERENCE)
-	 */
-	public ST getAction() {
-		return getTypedField(4, 0)
-	}
+    /**
+     * Returns movement action (ZBE-4).
+     *
+     * @return movement action (required, one of INSERT, DELETE, UPDATE, REFERENCE)
+     */
+    ST getAction() {
+        return getTypedField(4, 0)
+    }
 
 }

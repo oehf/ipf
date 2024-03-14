@@ -25,8 +25,8 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.util.JAXBSource;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
 import java.util.Map;
 

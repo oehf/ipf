@@ -15,85 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.storage;
 
-import ca.uhn.hl7v2.model.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.cache.Cache;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
-
 /**
- * An Ehcache-based implementation of {@link InteractiveContinuationStorage}.
+ * An JCache-based implementation of {@link InteractiveContinuationStorage}.
  *
  * @author Dmytro Rud
+ * @deprecated
  */
-public class EhcacheInteractiveContinuationStorage implements InteractiveContinuationStorage {
+@Deprecated(forRemoval = true)
+public class EhcacheInteractiveContinuationStorage extends JCacheInteractiveContinuationStorage {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(EhcacheInteractiveContinuationStorage.class);
-    private final Cache<String, InteractiveContinuationChain> ehcache;
-
-
-    public EhcacheInteractiveContinuationStorage(Cache<String, InteractiveContinuationChain> ehcache) {
-        requireNonNull(ehcache);
-        this.ehcache = ehcache;
+    public EhcacheInteractiveContinuationStorage(Cache<String, InteractiveContinuationChain> cache) {
+        super(cache);
     }
-
-
-    @Override
-    public void put(String continuationPointer, String chainId, Message fragment) {
-        var chain = ehcache.get(chainId);
-        if (chain == null) {
-            LOG.debug("Create chain for storage key {}", chainId);
-            chain = new InteractiveContinuationChain();
-            ehcache.put(chainId, chain);
-        }
-        chain.put(continuationPointer, fragment);
-    }
-
-
-    @Override
-    public Message get(
-            String continuationPointer,
-            String chainId)
-    {
-        var chain = ehcache.get(chainId);
-        if (chain != null) {
-            return chain.get(continuationPointer);
-        }
-        return null;
-    }
-
-
-    @Override
-    public boolean delete(String chainId) {
-        return ehcache.remove(chainId);
-    }
-
-
-    
-    /**
-     * Chain of interactive continuation fragments of a query's response.
-     * <p>
-     * Keys correspond to continuation pointers of the fragments;
-     * the key of the first fragment is <code>null</code>.
-     */
-    private static class InteractiveContinuationChain implements Serializable {
-        private final Map<String, Message> responseMessages =
-            Collections.synchronizedMap(new HashMap<>());
-
-        public void put(String continuationPointer, Message message) {
-            responseMessages.put(continuationPointer, message);
-        }
-
-        public Message get(String continuationPointer) {
-            return responseMessages.get(continuationPointer);
-        }
-    }
-
 }

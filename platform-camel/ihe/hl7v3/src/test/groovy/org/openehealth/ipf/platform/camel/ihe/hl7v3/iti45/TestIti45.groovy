@@ -97,7 +97,7 @@ class TestIti45 extends HL7v3StandardTestContainer {
         // Unsupported type
         boolean caught = false
         try {
-            send(SERVICE2, new Integer(666), String.class)
+            send(SERVICE2, 666, String.class)
         } catch (Exception e) {
             caught = true
         }

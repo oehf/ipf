@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.LDAPResult;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResponse;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 /**
  * @author Dmytro Rud

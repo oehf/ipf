@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 
 /**
  * HAPI FHIR {@link RestfulServer} implementation, adding a few configuration bits using servlet

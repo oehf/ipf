@@ -1,4 +1,4 @@
-name: Build IPF with Maven with Java 17
+name: Build IPF with Java 17
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
       - name: Build with Maven

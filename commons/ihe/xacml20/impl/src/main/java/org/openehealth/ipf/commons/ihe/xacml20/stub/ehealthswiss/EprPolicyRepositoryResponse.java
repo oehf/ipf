@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 
 /**

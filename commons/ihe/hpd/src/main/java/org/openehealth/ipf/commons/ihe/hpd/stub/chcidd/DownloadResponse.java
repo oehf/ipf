@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.chcidd;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 

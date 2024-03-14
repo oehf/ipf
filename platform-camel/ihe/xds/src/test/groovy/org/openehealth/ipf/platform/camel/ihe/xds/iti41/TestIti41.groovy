@@ -36,9 +36,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
-import javax.xml.ws.soap.SOAPFaultException
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.Unmarshaller
+import jakarta.xml.ws.soap.SOAPFaultException
 import java.util.concurrent.TimeUnit
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE

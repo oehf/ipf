@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 

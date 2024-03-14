@@ -33,8 +33,8 @@
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.6.0</assembly-plugin-version>
@@ -45,23 +45,24 @@
 
         <jar-plugin-version>3.3.0</jar-plugin-version>
         <javadoc-plugin-version>3.6.3</javadoc-plugin-version>
-        <jaxb-plugin-version>2.5.0</jaxb-plugin-version>
+        <jaxb-plugin-version>3.1.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
-        <release-plugin-version>2.5.3</release-plugin-version>
+        <release-plugin-version>3.0.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
         <sources-plugin-version>3.2.1</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
+        <activemq-version>6.0.1</activemq-version>
         <easymock-version>5.2.0</easymock-version>
         <guava-version>33.0.0-jre</guava-version>
-        <jaspic-api-version>1.1.1</jaspic-api-version>
         <lombok-version>1.18.30</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
+        <pooled-jms-version>3.1.5</pooled-jms-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>9.0.83</tomcat-version>
-        <undertow-version>2.2.28.Final</undertow-version>
+        <tomcat-version>10.1.19</tomcat-version>
+        <undertow-version>2.3.11.Final</undertow-version>
         <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
 
@@ -109,6 +110,7 @@
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
+                        <version>${lombok-plugin-version}</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>
@@ -123,13 +125,20 @@
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok-version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
             <dependencies>
                 <!-- for generating stubs only -->
                 <dependency>
-                    <groupId>org.codehaus.groovy</groupId>
+                    <groupId>org.apache.groovy</groupId>
                     <artifactId>groovy</artifactId>
                     <version>${groovy-version}</version>
                     <scope>provided</scope>
@@ -155,7 +164,7 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-test</artifactId>
                 <version>${groovy-version}</version>
                 <scope>test</scope>
@@ -204,12 +213,6 @@
                         <artifactId>ecj</artifactId>
                     </exclusion>
                 </exclusions>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.security.auth.message</groupId>
-                <artifactId>javax.security.auth.message-api</artifactId>
-                <version>${jaspic-api-version}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -485,8 +488,8 @@
                                         </excludes>
                                     </bannedDependencies>
                                     <requireJavaVersion>
-                                        <message>Requires at least Java 11</message>
-                                        <version>[11,)</version>
+                                        <message>Requires at least Java 17</message>
+                                        <version>[17,)</version>
                                     </requireJavaVersion>
                                 </rules>
                             </configuration>
@@ -583,7 +586,7 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
+                        <groupId>org.apache.groovy</groupId>
                         <artifactId>groovy-all</artifactId>
                         <version>${groovy-version}</version>
                         <type>pom</type>
@@ -595,7 +598,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-                    <release>11</release>
+                    <release>17</release>
                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
             </plugin>
@@ -651,7 +654,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
-                <version>1.1</version>
+                <version>3.2.1</version>
                 <inherited>false</inherited>
                 <configuration>
                     <checkoutDirectory>${site.scm.directory}</checkoutDirectory>

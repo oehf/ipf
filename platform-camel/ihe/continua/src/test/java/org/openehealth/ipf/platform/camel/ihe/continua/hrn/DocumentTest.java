@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayT
 import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandlerToByteArrayConverter;
 import org.springframework.core.convert.support.GenericConversionService;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED

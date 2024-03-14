@@ -16,6 +16,17 @@
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.bbottema</groupId>
+                    <artifactId>emailaddress-rfc2822</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.bbottema</groupId>
+            <artifactId>emailaddress-rfc2822</artifactId>
+            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
@@ -24,6 +35,10 @@
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-caching-caffeine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -50,6 +65,11 @@
             <artifactId>nimbus-jose-jwt</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.github.mizosoft.methanol</groupId>
             <artifactId>methanol</artifactId>
             <optional>true</optional>
@@ -71,8 +91,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
@@ -95,6 +115,11 @@
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

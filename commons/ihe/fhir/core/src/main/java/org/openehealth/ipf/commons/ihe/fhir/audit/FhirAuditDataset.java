@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtDataSet;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

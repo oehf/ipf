@@ -25,8 +25,8 @@ import org.hl7.fhir.r4.model.IdType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class ChPpq3ResourceProvider extends AbstractResourceProvider {
 

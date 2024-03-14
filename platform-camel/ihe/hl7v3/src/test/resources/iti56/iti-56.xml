@@ -27,8 +27,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56.Iti56TestRouteBuilder">
     </bean>
-    
-    <import resource="../ehcache-spring.xml" />
 
     <bean id="inLogInterceptor" class="org.apache.cxf.ext.logging.LoggingInInterceptor" />
     <bean id="outLogInterceptor" class="org.apache.cxf.ext.logging.LoggingOutInterceptor" />

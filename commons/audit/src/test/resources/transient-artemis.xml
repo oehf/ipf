@@ -1,0 +1,21 @@
+<configuration xmlns="urn:activemq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="
+               urn:activemq /schema/artemis-server.xsd
+               urn:activemq:core /schema/artemis-configuration.xsd
+               urn:activemq:jms /schema/artemis-jms.xsd">
+
+    <core xmlns="urn:activemq:core">
+        <persistence-enabled>false</persistence-enabled>
+        <jmx-management-enabled>false</jmx-management-enabled>
+        <journal-pool-files>1</journal-pool-files>
+        <!-- Acceptors -->
+        <acceptors>
+            <acceptor name="in-vm">vm://0</acceptor>
+            <acceptor name="tcp">tcp://localhost:61616</acceptor>
+        </acceptors>
+        <security-enabled>false</security-enabled>
+    </core>
+
+
+</configuration>

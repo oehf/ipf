@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.custom;
 
+import org.apache.camel.Category;
 import org.apache.camel.spi.UriEndpoint;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirConsumer;
@@ -26,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @author Christian Ohr
  * @since 3.1
  */
-@UriEndpoint(scheme = "fhir", title = "Generic FHIR", syntax = "fhir:host:port", consumerClass = FhirConsumer.class, label = "http")
+@UriEndpoint(scheme = "fhir", title = "Generic FHIR", syntax = "fhir:host:port", category = Category.HTTP)
 public class CustomFhirEndpoint<AuditDatasetType extends FhirAuditDataset>
         extends FhirEndpoint<AuditDatasetType, CustomFhirComponent<AuditDatasetType>> {
 

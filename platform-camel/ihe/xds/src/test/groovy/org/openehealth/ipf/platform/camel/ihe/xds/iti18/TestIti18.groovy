@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 import org.apache.camel.RuntimeCamelException
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClients
+import org.apache.hc.client5.http.classic.methods.HttpGet
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
+import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -110,7 +109,7 @@ class TestIti18 extends XdsStandardTestContainer {
 
     @Test
     void testCustomizedSoapFault() {
-        HttpClients.createDefault().withCloseable { client -> 
+        HttpClients.createDefault().withCloseable { client ->
             // Provoking an error by sending a GET
             HttpGet httpPost = new HttpGet("http://localhost:${port}/xds-iti18-service1");
             CloseableHttpResponse response = client.execute(httpPost);

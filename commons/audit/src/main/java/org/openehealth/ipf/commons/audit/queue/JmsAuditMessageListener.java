@@ -16,15 +16,14 @@
 
 package org.openehealth.ipf.commons.audit.queue;
 
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
+import jakarta.jms.TextMessage;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.*;

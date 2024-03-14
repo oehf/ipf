@@ -22,13 +22,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.ws.Action;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebResult;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.ws.Action;
 
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType", portName = "DocumentRegistry_Port_Soap12")
 @XmlSeeAlso({

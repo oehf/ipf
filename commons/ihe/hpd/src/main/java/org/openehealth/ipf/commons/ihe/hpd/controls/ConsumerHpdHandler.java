@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.ihe.hpd.controls.handlers.ConsumerHandlerBase
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 /**
  * @author Dmytro Rud

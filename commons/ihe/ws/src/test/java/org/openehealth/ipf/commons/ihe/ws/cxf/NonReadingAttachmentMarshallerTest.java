@@ -2,7 +2,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 
 import org.junit.jupiter.api.Test;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

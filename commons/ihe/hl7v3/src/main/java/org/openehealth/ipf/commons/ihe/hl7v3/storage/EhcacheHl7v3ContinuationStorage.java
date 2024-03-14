@@ -26,60 +26,13 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author Dmytro Rud
  * @author Christian Ohr
+ * @deprecated
  */
-public class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
+@Deprecated(forRemoval = true)
+public class EhcacheHl7v3ContinuationStorage extends JCacheHl7v3ContinuationStorage {
 
-    private final Cache<String, Serializable> ehcache;
-
-    private static final String MESSAGE_SUFFIX = ".message";
-    private static final String LAST_RESULT_NUMBER_SUFFIX = ".lastIndex";
-    private static final String CONTINUATION_QUANTITY_SUFFIX = ".quantity";
-
-    EhcacheHl7v3ContinuationStorage(Cache<String, Serializable> ehcache) {
-        requireNonNull(ehcache);
-        this.ehcache = ehcache;
+    public EhcacheHl7v3ContinuationStorage(Cache<String, Serializable> cache) {
+        super(cache);
     }
-
-    @Override
-    public void storeMessage(String key, String message) {
-        ehcache.put(key + MESSAGE_SUFFIX, message);
-    }
-
-    @Override
-    public String getMessage(String key) {
-        return (String) ehcache.get(key + MESSAGE_SUFFIX);
-    }
-
-    @Override
-    public void storeLastResultNumber(String key, int lastResultNumber) {
-        ehcache.put(key + LAST_RESULT_NUMBER_SUFFIX, lastResultNumber);
-    }
-
-    @Override
-    public int getLastResultNumber(String key) {
-        var value = ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX);
-        return (value != null) ? (int) value : -1;
-    }
-
-    @Override
-    public void storeContinuationQuantity(String key, int continuationQuantity) {
-        ehcache.put(key + CONTINUATION_QUANTITY_SUFFIX, continuationQuantity);
-    }
-
-    @Override
-    public int getContinuationQuantity(String key) {
-        var value = ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX);
-        return (value != null) ? (int) value : -1;
-    }
-
-    @Override
-    public boolean remove(String key) {
-        var exists = ehcache.get(key + MESSAGE_SUFFIX) != null;
-        ehcache.remove(key + LAST_RESULT_NUMBER_SUFFIX);
-        ehcache.remove(key + CONTINUATION_QUANTITY_SUFFIX);
-        ehcache.remove(key + MESSAGE_SUFFIX);
-        return exists;
-    }
-
 }
 

@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.utils;
 
 import org.junit.jupiter.api.Assertions;
 
-import javax.activation.DataSource;
+import jakarta.activation.DataSource;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;

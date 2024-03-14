@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.audit.protocol.providers.ReactorNettyTLSSyslo
 import org.openehealth.ipf.commons.audit.protocol.providers.RecordingAuditMessageTransmissionProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.TLSSyslogSenderProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.UDPSyslogSenderProvider;
-import org.openehealth.ipf.commons.audit.protocol.providers.VertxTLSSyslogSenderProvider;
 
 import java.util.Arrays;
 import java.util.ServiceLoader;
@@ -42,10 +41,10 @@ public enum AuditTransmissionChannel {
     VERTX_UDP("VERTX-UDP", UDPSyslogSenderProvider.class.getName()),
     TLS("TLS", TLSSyslogSenderProvider.class.getName()),
     NIO_TLS("NIO-TLS", NettyTLSSyslogSenderProvider.class.getName()),
-    VERTX_TLS("VERTX-TLS", VertxTLSSyslogSenderProvider.class.getName()),
     NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderProvider.class.getName()),
     REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderProvider.class.getName()),
     FHIR_REST_TLS("FHIR-REST-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApacheSenderProvider"),
+    FHIR_REST_APACHE5_TLS("FHIR-REST-APACHE5-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApache5SenderProvider"),
     FHIR_REST_METHANOL_TLS("FHIR-REST-METHANOL-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordMethanolSenderProvider"),
     RECORDING("RECORDING", RecordingAuditMessageTransmissionProvider.class.getName());
 

@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XcnName;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * A JAXB {@link XmlAdapter} that allows the Name class to be serialized.

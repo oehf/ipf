@@ -10,7 +10,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 /**
  * <p>Java class for RetrieveImagingDocumentSetRequestType complex type.

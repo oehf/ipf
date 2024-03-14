@@ -19,8 +19,8 @@ import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import java.util.*;
 
 /**

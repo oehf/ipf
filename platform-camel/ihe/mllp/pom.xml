@@ -45,15 +45,16 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hl7</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ca.uhn.hapi</groupId>
+                    <artifactId>hapi-base</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- dependencies for test -->
@@ -91,6 +92,16 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

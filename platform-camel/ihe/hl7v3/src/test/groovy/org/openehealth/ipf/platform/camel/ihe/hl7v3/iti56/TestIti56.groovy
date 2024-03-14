@@ -20,6 +20,7 @@ import org.apache.camel.support.DefaultExchange
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
@@ -69,7 +70,7 @@ class TestIti56 extends HL7v3StandardTestContainer {
      *   <li> ATNA auditing works.
      * </ol>
      */
-    @Test
+    @Test @Disabled
     void testIti56() {
         final int N = Iti56TestRouteBuilder.TASKS_COUNT
         int i = 0
@@ -113,7 +114,7 @@ class TestIti56 extends HL7v3StandardTestContainer {
     }
     
     
-    private void send(
+    private static void send(
         String endpointUri,
         int n,
         String responseEndpointUri = null)

@@ -21,8 +21,8 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import org.hl7.fhir.r4.model.IdType;

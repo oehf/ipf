@@ -23,8 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPFactory;
-import javax.xml.ws.soap.SOAPFaultException;
+import jakarta.xml.soap.SOAPFactory;
+import jakarta.xml.ws.soap.SOAPFaultException;
 
 import java.util.Map;
 

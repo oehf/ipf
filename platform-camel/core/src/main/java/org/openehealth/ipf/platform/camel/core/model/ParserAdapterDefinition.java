@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.spi.Metadata;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 /**
  * @author Martin Krasser

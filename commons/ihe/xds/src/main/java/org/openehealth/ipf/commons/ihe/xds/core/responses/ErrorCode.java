@@ -17,9 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Error codes specified by the XDS specification.

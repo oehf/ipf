@@ -17,12 +17,12 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti47;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.xml.ws.Action;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebResult;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
+import jakarta.xml.ws.Action;
 
 @WebService(targetNamespace = "urn:ihe:iti:pdqv3:2007", name = "PDSupplier_PortType", portName = "PDSupplier_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)

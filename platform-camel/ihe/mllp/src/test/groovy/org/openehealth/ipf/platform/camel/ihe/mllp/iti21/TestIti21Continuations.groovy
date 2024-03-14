@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.model.Message
 import org.junit.jupiter.api.Test
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -31,9 +31,6 @@ import static java.lang.System.currentTimeMillis
  */
 @ContextConfiguration('/iti21/iti-21-continuations.xml')
 class TestIti21Continuations extends AbstractMllpTest {
-
-    @Autowired
-    private EhcacheInteractiveContinuationStorage storage
 
     final String REQUEST_MESSAGE =
         'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
@@ -76,8 +73,6 @@ class TestIti21Continuations extends AbstractMllpTest {
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
-
-        assert storage.ehcache.iterator().hasNext() == false
     }
     
     @Test

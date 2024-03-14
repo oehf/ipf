@@ -20,7 +20,6 @@ import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 /**
  * The ZBE segment is intended to be used for information that details ADT
@@ -35,7 +34,6 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
  * 
  * @author Christian Ohr
  */
-@SuppressWarnings("serial")
 public class ZBE extends AbstractSegment {
 
     /**
@@ -46,17 +44,17 @@ public class ZBE extends AbstractSegment {
         super(parent, factory);
         var message = getMessage();
         try {
-            add(EI.class, true, 0, 427, new Object[] { message }, "Movement ID");
-            add(TS.class, true, 1, 26, new Object[] { message }, "Start Movement Date/Time");
-            add(TS.class, false, 1, 26, new Object[] { message }, "End Movement Date/Time");
-            add(ST.class, true, 1, 6, new Object[] { message }, "Movement Action");
-            add(ID.class, true, 1, 1, new Object[] { message }, "Historical Movement Indicator");
-            add(ID.class, false, 1, 3, new Object[] { message }, "Original trigger event code");
-            add(XON.class, false, 1, 567, new Object[] { message }, "Responsible Ward");
-            add(XON.class, false, 1, 567, new Object[] { message }, "Responsible Nursing Ward");
-            add(CWE.class, false, 1, 3, new Object[] { message }, "Movement Scope");
-        } catch (HL7Exception he) {
-            throw new HL7v2Exception(he);
+            add(EI.class, true, 0, 427, new Object[]{message}, "Movement ID");
+            add(TS.class, true, 1, 26, new Object[]{message}, "Start Movement Date/Time");
+            add(TS.class, false, 1, 26, new Object[]{message}, "End Movement Date/Time");
+            add(ST.class, true, 1, 6, new Object[]{message}, "Movement Action");
+            add(ID.class, true, 1, 1, new Object[]{message}, "Historical Movement Indicator");
+            add(ID.class, false, 1, 3, new Object[]{message}, "Original trigger event code");
+            add(XON.class, false, 1, 567, new Object[]{message}, "Responsible Ward");
+            add(XON.class, false, 1, 567, new Object[]{message}, "Responsible Nursing Ward");
+            add(CWE.class, false, 1, 3, new Object[]{message}, "Movement Scope");
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

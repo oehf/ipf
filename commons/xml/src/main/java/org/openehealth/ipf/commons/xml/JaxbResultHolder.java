@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.util.JAXBResult;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.util.JAXBResult;
 import javax.xml.transform.Result;
 
 /**

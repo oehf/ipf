@@ -63,7 +63,7 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
                 dataset.getPatientIds().addAll(
                         tokenParams.stream()
                                 .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
-                                .collect(Collectors.toList()));
+                                .toList());
             }
         }
 

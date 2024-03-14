@@ -22,9 +22,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.*;

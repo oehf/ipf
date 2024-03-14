@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.ws.BindingProvider;
+import jakarta.xml.ws.BindingProvider;
 import java.util.ArrayList;
 import java.util.List;
 

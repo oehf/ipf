@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
 
 import javax.xml.namespace.QName
-import javax.activation.DataHandler
+import jakarta.activation.DataHandler
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding

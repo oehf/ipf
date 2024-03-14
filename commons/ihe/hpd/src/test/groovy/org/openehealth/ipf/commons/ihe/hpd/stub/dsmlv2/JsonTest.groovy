@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
 import org.openehealth.ipf.commons.xml.XmlUtils
 
-import javax.xml.bind.JAXBElement
+import jakarta.xml.bind.JAXBElement
 
 @Slf4j
 class JsonTest {

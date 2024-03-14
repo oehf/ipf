@@ -31,8 +31,6 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.Iti55TestRouteBuilder">
     </bean>
 
-    <import resource="../ehcache-spring.xml" />
-
     <bean id="rejectionHandlingStrategy"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy" />
 

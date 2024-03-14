@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static java.util.Objects.requireNonNull;
 

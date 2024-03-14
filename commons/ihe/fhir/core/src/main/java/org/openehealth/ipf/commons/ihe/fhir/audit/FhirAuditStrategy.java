@@ -39,15 +39,11 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Abst
             return EventOutcomeIndicator.Success;
         }
         var severity = getWorstIssueSeverity(fhirContext, response);
-        switch (severity) {
-            case "fatal":
-            case "error":
-                return EventOutcomeIndicator.MajorFailure;
-            case "warning":
-                return EventOutcomeIndicator.MinorFailure;
-            default:
-                return EventOutcomeIndicator.Success;
-        }
+        return switch (severity) {
+            case "fatal", "error" -> EventOutcomeIndicator.MajorFailure;
+            case "warning" -> EventOutcomeIndicator.MinorFailure;
+            default -> EventOutcomeIndicator.Success;
+        };
     }
 
     @Override

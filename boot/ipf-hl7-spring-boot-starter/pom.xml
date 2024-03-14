@@ -33,6 +33,10 @@
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-hl7-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
+        </dependency>
 
         <!-- IPF Support -->
         <dependency>

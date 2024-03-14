@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import jakarta.servlet.ServletContext;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
@@ -31,18 +31,19 @@ import org.springframework.web.context.ContextLoaderListener;
  */
 public class JettyServer extends ServletServer {
     private Server server;
+    private ServletContext servletContext;
 
     @Override
     public void start() {
         server = new Server();
         var connector = isSecure()
-                ? new ServerConnector(server, createSecureContextFactory())
+                ? secureServerConnector(getPort())
                 : new ServerConnector(server);
 
         server.addConnector(connector);
         connector.setPort(getPort());
         var context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        context.setResourceBase("/");
+        context.setContextPath("/");
         var listener = new ContextLoaderListener();
 
         context.getInitParams().put("contextConfigLocation", getContextResource());
@@ -64,9 +65,30 @@ public class JettyServer extends ServletServer {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+
+        this.servletContext = context.getServletContext();
     }
 
-    private SslContextFactory createSecureContextFactory() {
+    @Override
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
+
+    private ServerConnector secureServerConnector(int port) {
+        return new ServerConnector(server,
+                createSecureConnectionFactory(),
+                createHttpsConnectionFactory(port));
+    }
+
+    private HttpConnectionFactory createHttpsConnectionFactory(int port) {
+        var httpsConfig = new HttpConfiguration();
+        httpsConfig.setSecureScheme("https");
+        httpsConfig.setSecurePort(port);
+        httpsConfig.addCustomizer(new SecureRequestCustomizer());
+        return new HttpConnectionFactory(httpsConfig);
+    }
+
+    private SslConnectionFactory createSecureConnectionFactory() {
         var sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
@@ -74,7 +96,8 @@ public class JettyServer extends ServletServer {
         sslContextFactory.setTrustStorePassword(getTruststorePass());
         sslContextFactory.setNeedClientAuth(getClientAuthType() == ClientAuthType.MUST);
         sslContextFactory.setWantClientAuth(getClientAuthType() == ClientAuthType.WANT);
-        return sslContextFactory;
+        var http11 = new HttpConnectionFactory();
+        return new SslConnectionFactory(sslContextFactory, http11.getProtocol());
     }
 
     @Override

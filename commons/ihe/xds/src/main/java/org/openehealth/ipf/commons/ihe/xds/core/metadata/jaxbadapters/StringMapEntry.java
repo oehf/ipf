@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 
 /**

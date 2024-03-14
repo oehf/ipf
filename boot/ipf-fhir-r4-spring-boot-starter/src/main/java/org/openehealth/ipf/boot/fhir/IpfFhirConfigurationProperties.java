@@ -17,16 +17,15 @@
 package org.openehealth.ipf.boot.fhir;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.cors.CorsConfiguration;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.*;
 
 /**
@@ -153,6 +152,9 @@ public class IpfFhirConfigurationProperties {
          */
         @Getter @Setter
         private boolean strict = false;
+    }
+
+    public static class CorsConfiguration extends org.springframework.web.cors.CorsConfiguration {
     }
 
     private static CorsConfiguration defaultCorsConfiguration() {

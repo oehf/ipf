@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.convert.converter.Converter;
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 /**
  * @author Stefan Ivanov

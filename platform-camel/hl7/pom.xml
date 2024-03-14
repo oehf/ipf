@@ -36,6 +36,12 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hl7</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ca.uhn.hapi</groupId>
+                    <artifactId>hapi-base</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.jms</groupId>

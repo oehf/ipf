@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import lombok.extern.slf4j.Slf4j;
 import org.herasaf.xacml.core.policy.Evaluatable;
 import org.openehealth.ipf.commons.audit.AuditContext;

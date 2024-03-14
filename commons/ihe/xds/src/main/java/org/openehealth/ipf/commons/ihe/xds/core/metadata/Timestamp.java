@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateTimeAd
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

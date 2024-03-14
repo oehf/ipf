@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * A JAXB {@link XmlAdapter} that creates a simplified representation of an

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.model;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * This class is used only to create the XML Schema.

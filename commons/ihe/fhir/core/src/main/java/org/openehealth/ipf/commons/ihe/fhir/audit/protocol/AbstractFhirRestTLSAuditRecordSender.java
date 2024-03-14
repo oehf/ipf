@@ -18,13 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.BalpAuditContext;
-import org.openehealth.ipf.commons.audit.FhirContextHolder;
-import org.openehealth.ipf.commons.audit.TlsParameters;
-import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
+import org.openehealth.ipf.commons.audit.*;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
 import org.slf4j.Logger;
@@ -67,7 +63,7 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
     @Override
     public void send(AuditContext auditContext,
                      AuditMetadataProvider auditMetadataProvider,
-                     String auditEvent) throws Exception {
+                     String auditEvent) {
         if (client == null) {
             context = FhirContextHolder.get();
             if (context == null) {
@@ -99,12 +95,6 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
 
     @Override
     public void shutdown() {
-
-    }
-
-    @Override
-    public String getTransportName() {
-        return AuditTransmissionChannel.FHIR_REST_TLS.getProtocolName();
     }
 
     private final class TlsParametersAwareRestfulClientFactory {
@@ -119,7 +109,7 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
 
         private RestfulClientFactory createRestfulFactory(TlsParameters tlsParameters) {
             SslAwareAbstractRestfulClientFactory<?> factory = createSslAwareClientFactory(fhirContext);
-
+            factory.setServerValidationMode(ServerValidationModeEnum.NEVER);
             factory.initializeSecurityInformation(true,
                 tlsParameters.getSSLContext(false), null, "", "");
             fhirContext.setRestfulClientFactory(factory);

@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 import static org.junit.jupiter.api.Assertions.*;
  

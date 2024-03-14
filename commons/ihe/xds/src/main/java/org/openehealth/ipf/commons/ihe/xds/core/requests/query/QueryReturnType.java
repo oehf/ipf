@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Return types for XDS queries (ITI-18, ITI-38, ITI-51, ITI-63, PHARM-1).
