@@ -39,6 +39,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.6.0</assembly-plugin-version>
         <build-helper-version>3.5.0</build-helper-version>
+        <clean-plugin-version>3.3.2</clean-plugin-version>
         <compiler-plugin-version>3.12.1</compiler-plugin-version>
         <enforcer-plugin-version>3.4.1</enforcer-plugin-version>
         <gmavenplus-plugin-version>3.0.2</gmavenplus-plugin-version>
@@ -343,7 +344,6 @@
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:
-                            boot/ipf-fhir-stu3-spring-boot-starter/generated-stubs:
                             boot/ipf-fhir-r4-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
@@ -354,11 +354,6 @@
                             commons/core/generated-stubs:
                             commons/ihe/core/generated-stubs:
                             commons/ihe/fhir/core/generated-stubs:
-                            commons/ihe/fhir/stu3/core/generated-stubs:
-                            commons/ihe/fhir/stu3/audit/generated-stubs:
-                            commons/ihe/fhir/stu3/mhd/generated-stubs:
-                            commons/ihe/fhir/stu3/pixpdq/generated-stubs:
-                            commons/ihe/fhir/stu3/qedm/generated-stubs:
                             commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/audit/generated-stubs:
                             commons/ihe/fhir/r4/mhd/generated-stubs:
@@ -386,10 +381,6 @@
                             platform-camel/ihe/continua/generated-stubs:
                             platform-camel/ihe/core/generated-stubs:
                             platform-camel/ihe/fhir/core/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/audit/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/mhd/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/qedm/generated-stubs:
                             platform-camel/ihe/fhir/r4/audit/generated-stubs:
                             platform-camel/ihe/fhir/r4/mhd/generated-stubs:
                             platform-camel/ihe/fhir/r4/pixpdq/generated-stubs:
@@ -597,6 +588,18 @@
                 <configuration>
                     <release>11</release>
                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${clean-plugin-version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>generated-stubs</directory>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
             <plugin>
