@@ -20,10 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
 import ca.uhn.fhir.validation.FhirValidator;
 import lombok.experimental.UtilityClass;
-import org.hl7.fhir.common.hapi.validation.support.CachingValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.InMemoryTerminologyServerValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.NpmPackageValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
+import org.hl7.fhir.common.hapi.validation.support.*;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
 
 import java.io.IOException;
@@ -46,6 +43,7 @@ public class IgBasedFhirContextSupplier {
 
         CachingValidationSupport validationSupport = new CachingValidationSupport(new ValidationSupportChain(
                 npmValidationSupport,
+                new CommonCodeSystemsTerminologyService(fhirContext),
                 new DefaultProfileValidationSupport(fhirContext),
                 new InMemoryTerminologyServerValidationSupport(fhirContext)));
 
