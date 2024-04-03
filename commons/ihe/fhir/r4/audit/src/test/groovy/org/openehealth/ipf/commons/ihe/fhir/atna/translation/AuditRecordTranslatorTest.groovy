@@ -63,6 +63,7 @@ class AuditRecordTranslatorTest {
         auditEvent.entity.each { entity ->
             assert entity.what.identifier.type != null
         }
+        assert auditEvent.entity[2].query.length == 47
     }
 
     static AuditMessage createAuditMessage1() {
@@ -119,7 +120,12 @@ class AuditRecordTranslatorTest {
                             participantObjectTypeCode = ParticipantObjectTypeCode.Person
                             participantObjectTypeCodeRole = ParticipantObjectTypeCodeRole.Patient
                             participantObjectName = 'John Doe'
-                        }
+                        },
+                        new ParticipantObjectIdentificationType('queryId', ParticipantObjectIdTypeCode.SearchCriteria).with(true) {
+                            participantObjectTypeCode = ParticipantObjectTypeCode.Other
+                            participantObjectTypeCodeRole = ParticipantObjectTypeCodeRole.Query
+                            participantObjectQuery = 'SELECT * FROM documents WHERE type="TOP SECRET"'.bytes
+                        },
                 ]
         )
     }
