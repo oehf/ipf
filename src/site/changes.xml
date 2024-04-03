@@ -23,6 +23,11 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="" description="" date="">
+            <action issue="446" dev="Ivan1pl" type="fix">
+                Properly handle query payload when translating ATNA audit records to FHIR
+            </action>
+        </release>
         <release version="4.8.0" description="IPF 4.8.0" date="14 Mar 2024">
             <action issue="444" dev="ohr" type="fix">
                 Fix type in translation from HL7v3 to HL7v2 of deceasedIndicator

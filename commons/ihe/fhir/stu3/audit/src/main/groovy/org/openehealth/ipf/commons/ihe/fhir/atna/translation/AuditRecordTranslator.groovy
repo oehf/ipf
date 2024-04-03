@@ -91,7 +91,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
                     .setAddress(atna.networkAccessPointID)
                     .setType(new AuditEvent.AuditEventAgentNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode.value)))
         }
-        fhir
+        return fhir
     }
 
     static AuditEvent.AuditEventEntityComponent participantObject(ParticipantObjectIdentificationType atna) {
@@ -101,14 +101,15 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
                 /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)
         fhir.type = codingEnum(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode.value)))
         fhir.role = codingEnum(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole.value)))
+        fhir.query = atna.participantObjectQuery
         atna.participantObjectDetails.each {
             fhir.addDetail(new AuditEvent.AuditEventEntityDetailComponent(type: it.type, value: it.value))
         }
-        fhir
+        return fhir
     }
 
     AuditEvent translate(AuditMessage atna) {
-        translateToFhir(atna, null)
+        return translateToFhir(atna, null)
     }
 
     @Override
@@ -118,6 +119,6 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
                 auditMessage.auditSourceIdentification)
         auditMessage.activeParticipants.each { fhir.addAgent(participant(it)) }
         auditMessage.participantObjectIdentifications.each { fhir.addEntity(participantObject(it)) }
-        fhir
+        return fhir
     }
 }
