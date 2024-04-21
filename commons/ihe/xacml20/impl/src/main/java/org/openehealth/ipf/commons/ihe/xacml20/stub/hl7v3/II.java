@@ -20,6 +20,9 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 
 /**
  * <p>Java class for II complex type.
@@ -41,7 +44,9 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "II")
-public class II {
+public class II implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -976919222195628069L;
 
     @XmlAttribute(name = "root", required = true)
     protected String root;

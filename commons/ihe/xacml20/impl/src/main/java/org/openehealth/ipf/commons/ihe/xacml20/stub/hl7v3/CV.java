@@ -20,6 +20,9 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 
 /**
  * <p>Java class for CV complex type.
@@ -49,7 +52,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "CV", propOrder = {
     "originalText"
 })
-public class CV {
+public class CV implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 4293231794649378796L;
 
     protected String originalText;
     @XmlAttribute(name = "code", required = true)
