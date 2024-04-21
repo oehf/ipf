@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 
 /**
@@ -49,7 +50,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CV", propOrder = {
     "originalText"
 })
-public class CV {
+public class CV implements Serializable {
+    private static final long serialVersionUID = 4293231794649378796L;
 
     protected String originalText;
     @XmlAttribute(name = "code", required = true)

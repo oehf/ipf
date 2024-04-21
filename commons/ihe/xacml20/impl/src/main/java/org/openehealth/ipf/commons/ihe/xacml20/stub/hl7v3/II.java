@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 
 /**
@@ -41,7 +42,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "II")
-public class II {
+public class II implements Serializable {
+    private static final long serialVersionUID = -976919222195628069L;
 
     @XmlAttribute(name = "root", required = true)
     protected String root;
