@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.CustomTlsParameters;
 import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
-import org.openehealth.ipf.commons.audit.FhirContextHolder;
 import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -30,7 +29,6 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        FhirContextHolder.remove();
         this.auditContext = new DefaultBalpAuditContext();
         auditContext.setAuditRepositoryPort(FhirAuditRepository.getServerHttpsPort());
         auditContext.setAuditRepositoryContextPath(FhirAuditRepository.getServerContextPath());
