@@ -24,6 +24,7 @@
         <hapi-fhir-version>7.2.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0.0</ipf-gazelle-version>
+        <httpclient5-version>5.3.1</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
         <jackson-version>2.16.2</jackson-version>
@@ -378,6 +379,11 @@
                 <artifactId>Saxon-HE</artifactId>
                 <classifier>xqj</classifier>
                 <version>${saxon-he-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.velocity</groupId>

@@ -87,25 +87,25 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         if (server == null) {
             fhirAuditServer = new FhirAuditServer();
-            DeploymentInfo servletBuilder = deployment()
+            var servletBuilder = deployment()
                 .setClassLoader(FhirAuditRepository.class.getClassLoader())
                 .setContextPath("/" + contextPath)
                 .setDeploymentName("FHIR-Deployment")
                 .addServlets(
                     servlet("FhirAuditServer", FhirAuditServer.class, new FhirServletInitiator(fhirAuditServer))
-                        .addMapping("/*"));
+                .addMapping("/*"));
 
-            DeploymentManager manager = defaultContainer().addDeployment(servletBuilder);
+            var manager = defaultContainer().addDeployment(servletBuilder);
             manager.deploy();
 
-            HttpHandler servletHandler = manager.start();
-            PathHandler path = Handlers
+            var servletHandler = manager.start();
+            var path = Handlers
                 .path(Handlers.redirect("/"))
                 .addPrefixPath("/", servletHandler);
             server = Undertow.builder()
                 .setServerOption(UndertowOptions.ENABLE_HTTP2, true)
                 .addHttpsListener(
-                    httpsPort,"localhost", setupDefaultTlsParameter().getSSLContext(true))
+                    httpsPort, "localhost", setupDefaultTlsParameter().getSSLContext(true))
                 .setHandler(path)
                 .build();
             server.start();
@@ -121,13 +121,14 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
         extensionContext.getRoot().getStore(GLOBAL).put(STORE_KEY, closeableResource);
     }
 
-    public static int getServerHttpsPort(){
+    public static int getServerHttpsPort() {
         return httpsPort;
     }
 
-    public static String getServerContextPath(){
+    public static String getServerContextPath() {
         return contextPath;
     }
+
     public static List<AuditEvent> getAuditEvents() {
         return fhirAuditServer.getAuditEvents();
     }
@@ -136,7 +137,7 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
         fhirAuditServer.clearAuditEvents();
     }
 
-    private boolean hasStartedUndertow(){
+    private boolean hasStartedUndertow() {
         return extensionContext.getRoot().getStore(GLOBAL).get(STORE_KEY) != null;
     }
 
@@ -149,7 +150,7 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
         }
 
         @Override
-        public InstanceHandle<FhirAuditServer> createInstance() throws InstantiationException {
+        public InstanceHandle<FhirAuditServer> createInstance() {
             return new InstanceHandle<>() {
                 @Override
                 public FhirAuditServer getInstance() {
