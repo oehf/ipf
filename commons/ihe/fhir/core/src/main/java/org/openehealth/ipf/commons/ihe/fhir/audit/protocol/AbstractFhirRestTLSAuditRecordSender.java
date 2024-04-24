@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import org.openehealth.ipf.commons.audit.*;
@@ -46,14 +47,14 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
 
     public AbstractFhirRestTLSAuditRecordSender(final FhirContext context, String baseUrl) {
         this.context = Objects.requireNonNull(context, "FhirContext must not be null");
-        createClient(baseUrl);
+        createClient(context.getRestfulClientFactory(), baseUrl);
     }
 
     public AbstractFhirRestTLSAuditRecordSender(RestfulClientFactory restfulClientFactory, String baseUrl) {
         this.context = Objects
             .requireNonNull(restfulClientFactory, "RestfulClientFactory must not be null")
             .getFhirContext();
-        createClient(baseUrl);
+        createClient(restfulClientFactory,baseUrl);
     }
 
     public AbstractFhirRestTLSAuditRecordSender(TlsParameters tlsParameters) {
@@ -69,27 +70,27 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
             if (context == null) {
                 context = forR4();
             }
-            new TlsParametersAwareRestfulClientFactory(
+            var clientFactory = new TlsParametersAwareRestfulClientFactory(
                 this.context,
                 this.tlsParameters);
             String baseUrl = String.format(BASE_URL_FORMAT,
                 auditContext.getAuditRepositoryHostName(),
                 auditContext.getAuditRepositoryPort(),
-                (auditContext instanceof BalpAuditContext)?
-                    ((BalpAuditContext)auditContext).getAuditRepositoryContextPath() : "");
-            createClient(baseUrl);
+                (auditContext instanceof BalpAuditContext balpAuditContext)?
+                        balpAuditContext.getAuditRepositoryContextPath() : "");
+            createClient(clientFactory.getRestfulClientFactory(), baseUrl);
         }
         MethodOutcome outcome = client
             .create()
             .resource(auditEvent)
             .execute();
 
-        LOG.debug("Audit Repository Response: " + outcome.getResponseStatusCode());
+        LOG.debug("Audit Repository Response: {}", outcome.getResponseStatusCode());
     }
 
-    private synchronized void createClient(String baseUrl) {
+    private synchronized void createClient(IRestfulClientFactory restfulClientFactory, String baseUrl) {
         if (client == null) {
-            client = context.getRestfulClientFactory().newGenericClient(baseUrl);
+            client = restfulClientFactory.newGenericClient(baseUrl);
         }
     }
 
