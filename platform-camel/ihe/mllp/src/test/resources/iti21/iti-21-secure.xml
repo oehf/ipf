@@ -121,7 +121,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
             <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
         </camel:secureSocketProtocols>
         <camel:cipherSuites>
-            <camel:cipherSuite>TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256</camel:cipherSuite>
+            <camel:cipherSuite>TLS_RSA_WITH_AES_128_GCM_SHA256</camel:cipherSuite>
         </camel:cipherSuites>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
