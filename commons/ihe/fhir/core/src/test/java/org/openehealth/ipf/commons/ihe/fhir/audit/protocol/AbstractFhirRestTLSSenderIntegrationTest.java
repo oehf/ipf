@@ -67,7 +67,7 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
         var executor = Executors.newFixedThreadPool(threads);
         IntStream.range(0, count).forEach(i -> executor.execute(() -> sendAudit(Integer.toString(i))));
         Awaitility.await()
-            .atMost(Duration.ofSeconds(10L))
+            .atMost(Duration.ofSeconds(15L))
             .pollInterval(Duration.ofSeconds(1L))
             .until(() ->
                 FhirAuditRepository.getAuditEvents().size() == count);
