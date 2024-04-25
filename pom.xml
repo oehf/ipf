@@ -61,7 +61,7 @@
         <mockserver-version>5.15.0</mockserver-version>
         <pooled-jms-version>3.1.5</pooled-jms-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.19</tomcat-version>
+        <tomcat-version>10.1.20</tomcat-version>
         <undertow-version>2.3.11.Final</undertow-version>
         <xbean-spring-version>4.24</xbean-spring-version>
     </properties>
