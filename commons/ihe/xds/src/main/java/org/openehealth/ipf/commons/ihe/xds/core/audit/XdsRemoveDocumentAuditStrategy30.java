@@ -42,8 +42,7 @@ public abstract class XdsRemoveDocumentAuditStrategy30 extends XdsNonconstructiv
 
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
-        if (pojo instanceof RegistryResponseType) {
-            var response = (RegistryResponseType) pojo;
+        if (pojo instanceof RegistryResponseType response) {
             if (Status.FAILURE.getOpcode30().equals(response.getStatus())) {
                 auditDataset.getDocuments().forEach(x -> x.setStatus(NOT_SUCCESSFUL));
             } else if (Status.PARTIAL_SUCCESS.getOpcode30().equals(response.getStatus()) &&

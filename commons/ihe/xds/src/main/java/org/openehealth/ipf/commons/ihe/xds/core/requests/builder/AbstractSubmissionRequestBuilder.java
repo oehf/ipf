@@ -32,7 +32,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Abstract builder to support build for certain types of
@@ -99,12 +98,12 @@ abstract class AbstractSubmissionRequestBuilder<T extends AbstractSubmissionRequ
 
     /**
      * Supportive operation for constructing a submission request (ITI-41 + ITI-42).
-     * The following information will be set if not defined: 
+     * The following information will be set if not defined:
      * SubmissionSet.submissionTime, UniqueId's, EntryUuid's and HasMember
      * associations
      */
     private void supportivePostProcess() {
-        var docEntries = documents.stream().map(documentMapper).collect(Collectors.toList());
+        var docEntries = documents.stream().map(documentMapper).toList();
         assignDefault(folders, XDSMetaClass::getUniqueId, XDSMetaClass::assignUniqueId);
         assignDefault(folders, XDSMetaClass::getEntryUuid, XDSMetaClass::assignEntryUuid);
         assignDefault(docEntries, XDSMetaClass::getUniqueId, XDSMetaClass::assignUniqueId);
@@ -116,17 +115,17 @@ abstract class AbstractSubmissionRequestBuilder<T extends AbstractSubmissionRequ
 
         associations.addAll(docEntries.stream()
                 .filter(metadata -> !hasAssociationFromSubmissionSetWithHasMemberTo(metadata.getEntryUuid()))
-                .map(metadata -> createHasMemberAssocationWithOriginalLabel(metadata.getEntryUuid())).collect(Collectors.toList()));
+                .map(metadata -> createHasMemberAssocationWithOriginalLabel(metadata.getEntryUuid())).toList());
         associations.addAll(folders.stream()
                 .filter(metadata -> !hasAssociationFromSubmissionSetWithHasMemberTo(metadata.getEntryUuid()))
-                .map(metadata -> createHasMemberAssocation(metadata.getEntryUuid())).collect(Collectors.toList()));
+                .map(metadata -> createHasMemberAssocation(metadata.getEntryUuid())).toList());
         associations.addAll(associations.stream()
                 .filter(assoc -> AssociationType.HAS_MEMBER.equals(assoc.getAssociationType()))
                 .filter(assoc -> !Objects.equals(assoc.getSourceUuid(), submissionSet.getEntryUuid()))
                 .filter(assoc -> !hasAssociationFromSubmissionSetWithHasMemberTo(assoc.getEntryUuid()))
-                .map(assoc -> createHasMemberAssocation(assoc.getEntryUuid())).collect(Collectors.toList()));
+                .map(assoc -> createHasMemberAssocation(assoc.getEntryUuid())).toList());
     }
-    
+
     private Association createHasMemberAssocationWithOriginalLabel(String entryUuid) {
         var assoc = createHasMemberAssocation(entryUuid);
         assoc.setLabel(AssociationLabel.ORIGINAL);

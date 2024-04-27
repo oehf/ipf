@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -232,7 +231,7 @@ public class QuerySlotHelper {
         }
         return slotValues.stream()
                 .flatMap(slotValue -> decodeStringList(slotValue).stream())
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -265,7 +264,7 @@ public class QuerySlotHelper {
         }
         return values.stream()
                 .map(value -> Hl7v2Based.parse(value, Identifiable.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -340,7 +339,7 @@ public class QuerySlotHelper {
         }
         var opcodes = status.stream()
                 .map(AvailabilityStatus::toQueryOpcode)
-                .collect(Collectors.toList());
+                .toList();
         fromStringList(param, opcodes);
     }
 
@@ -358,7 +357,7 @@ public class QuerySlotHelper {
         return opcodes.stream()
                 .map(AvailabilityStatus::valueOfOpcode)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -373,7 +372,7 @@ public class QuerySlotHelper {
         }
         var opcodes = associationTypes.stream()
                 .map(type -> AssociationType.getOpcode30(type))
-                .collect(Collectors.toList());
+                .toList();
         fromStringList(param, opcodes);
     }
 
@@ -390,7 +389,7 @@ public class QuerySlotHelper {
         }
         return opcodes.stream()
                 .map(AssociationType::valueOfOpcode30)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void fromDocumentEntryType(QueryParameter param, List<DocumentEntryType> documentEntryTypes) {
@@ -399,7 +398,7 @@ public class QuerySlotHelper {
         }
         var uuids = documentEntryTypes.stream()
                 .map(DocumentEntryType::toUuid)
-                .collect(Collectors.toList());
+                .toList();
         fromStringList(param, uuids);
     }
 
@@ -410,7 +409,7 @@ public class QuerySlotHelper {
         }
         return uuids.stream()
                 .map(DocumentEntryType::valueOfUuid)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static List<Code> toCode(List<String> slotValues) {
@@ -441,7 +440,7 @@ public class QuerySlotHelper {
         }
         var opcodes = status.stream()
                 .map(DocumentAvailability::toFullQualifiedOpcode)
-                .collect(Collectors.toList());
+                .toList();
         fromStringList(param, opcodes);
     }
 
@@ -459,7 +458,7 @@ public class QuerySlotHelper {
         return opcodes.stream()
                 .map(DocumentAvailability::valueOfOpcode)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -531,7 +530,7 @@ public class QuerySlotHelper {
         }
         return Arrays.stream(trimmed.split(","))
                 .map(value -> isNotBlank(value) ? decodeString(value.trim()) : "")
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static <T extends Hl7v2Based<?>> QueryList<String> render(QueryList<T> source) {
@@ -551,7 +550,7 @@ public class QuerySlotHelper {
         noNullElements(source, "list cannot contain NULL elements");
         return source.stream()
                 .map(Hl7v2Based::render)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static <C extends Composite, T extends Hl7v2Based<C>> QueryList<T> parse(
@@ -575,7 +574,7 @@ public class QuerySlotHelper {
         noNullElements(source, "list cannot contain NULL elements");
         return source.stream()
                 .map(value -> Hl7v2Based.parse(value, targetClass))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

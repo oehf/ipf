@@ -71,14 +71,11 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         @Override
         public void afterUnmarshal(Object target, Object parent) {
-            if (target instanceof ExtrinsicObjectType) {
-                var ebXml = (ExtrinsicObjectType) target;
+            if (target instanceof ExtrinsicObjectType ebXml) {
                 findExtraMetadata(ebXml.getSlot(), ebXml);
-            } else if (target instanceof RegistryPackageType) {
-                var ebXml = (RegistryPackageType) target;
+            } else if (target instanceof RegistryPackageType ebXml) {
                 findExtraMetadata(ebXml.getSlot(), ebXml);
-            } else if (target instanceof AssociationType1) {
-                var ebXml = (AssociationType1) target;
+            } else if (target instanceof AssociationType1 ebXml) {
                 findExtraMetadata(ebXml.getSlot(), ebXml);
             } else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
                 getCamelHeaders(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
@@ -108,14 +105,11 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     public static class MarshallerListener extends Marshaller.Listener {
         @Override
         public void beforeMarshal(Object source) {
-            if (source instanceof ExtrinsicObjectType) {
-                var ebXml = (ExtrinsicObjectType) source;
+            if (source instanceof ExtrinsicObjectType ebXml) {
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
-            } else if (source instanceof RegistryPackageType) {
-                var ebXml = (RegistryPackageType) source;
+            } else if (source instanceof RegistryPackageType ebXml) {
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
-            } else if (source instanceof AssociationType1) {
-                var ebXml = (AssociationType1) source;
+            } else if (source instanceof AssociationType1 ebXml) {
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
             }
         }

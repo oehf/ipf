@@ -47,8 +47,7 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
 
     @Override
     public XdsQueryAuditDataset enrichAuditDatasetFromRequest(XdsQueryAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        if (pojo instanceof AdhocQueryRequest) {
-            var request = (AdhocQueryRequest) pojo;
+        if (pojo instanceof AdhocQueryRequest request) {
             var adHocQuery = request.getAdhocQuery();
             if (adHocQuery != null) {
                 auditDataset.setQueryUuid(adHocQuery.getId());
@@ -56,7 +55,7 @@ public abstract class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
             }
 
             var slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
-            
+
             PATIENT_QUERY_PARAMS.stream().map(slotHelper::toStringList).filter(Objects::nonNull).forEach(p -> auditDataset.getPatientIds().addAll(p));
         }
         return auditDataset;

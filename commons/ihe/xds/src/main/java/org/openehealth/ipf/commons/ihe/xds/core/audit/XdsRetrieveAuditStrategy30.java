@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocumentSetRequestAuditStrategy30 {
 
     public XdsRetrieveAuditStrategy30(boolean serverSide) {
-        // These transactions define source and destination in reverse direction, so we need to 
+        // These transactions define source and destination in reverse direction, so we need to
         // toggle server side indicator
         super(!serverSide);
     }
@@ -49,8 +49,7 @@ public abstract class XdsRetrieveAuditStrategy30 extends XdsNonconstructiveDocum
 
     @Override
     public boolean enrichAuditDatasetFromResponse(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, AuditContext auditContext) {
-        if (pojo instanceof RetrieveDocumentSetResponseType) {
-            var response = (RetrieveDocumentSetResponseType) pojo;
+        if (pojo instanceof RetrieveDocumentSetResponseType response) {
             if (response.getDocumentResponse() != null) {
                 for (var documentResponse : response.getDocumentResponse()) {
                     auditDataset.registerProcessedDocument(

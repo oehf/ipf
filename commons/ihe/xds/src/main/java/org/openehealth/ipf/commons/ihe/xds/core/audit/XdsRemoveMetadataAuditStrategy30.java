@@ -34,8 +34,7 @@ public abstract class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<
 
     @Override
     public XdsRemoveMetadataAuditDataset enrichAuditDatasetFromRequest(XdsRemoveMetadataAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        if (pojo instanceof RemoveObjectsRequest) {
-            var request = (RemoveObjectsRequest) pojo;
+        if (pojo instanceof RemoveObjectsRequest request) {
 
             var references = request.getObjectRefList().getObjectRef();
             if (references != null) {

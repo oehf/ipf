@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
-
-import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
@@ -35,11 +33,11 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     /**
      * Constructs the transformer
      * @param factory
-     *          factory for version independent ebXML objects. 
+     *          factory for version independent ebXML objects.
      */
     public FolderTransformer(EbXMLFactory factory) {
-        super(FOLDER_PATIENT_ID_EXTERNAL_ID, 
-                FOLDER_LOCALIZED_STRING_PATIENT_ID, 
+        super(FOLDER_PATIENT_ID_EXTERNAL_ID,
+                FOLDER_LOCALIZED_STRING_PATIENT_ID,
                 FOLDER_UNIQUE_ID_EXTERNAL_ID,
                 FOLDER_LOCALIZED_STRING_UNIQUE_ID,
                 FOLDER_LIMITED_METADATA_CLASS_NODE,
@@ -47,42 +45,42 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
 
         codeTransformer = new CodeTransformer(factory);
     }
-    
+
     @Override
     protected EbXMLRegistryPackage createEbXMLInstance(String id, EbXMLObjectLibrary objectLibrary) {
         return factory.createRegistryPackage(id, objectLibrary);
     }
-    
+
     @Override
     protected Folder createMetaClassInstance() {
         return new Folder();
     }
-    
+
     @Override
     protected void addAttributes(Folder metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addAttributes(metaData, ebXML, objectLibrary);
-        ebXML.setStatus(metaData.getAvailabilityStatus());                
+        ebXML.setStatus(metaData.getAvailabilityStatus());
         ebXML.setHome(metaData.getHomeCommunityId());
     }
-    
+
     @Override
     protected void addAttributesFromEbXML(Folder metaData, EbXMLRegistryPackage ebXML) {
         super.addAttributesFromEbXML(metaData, ebXML);
-        metaData.setAvailabilityStatus(ebXML.getStatus());        
+        metaData.setAvailabilityStatus(ebXML.getStatus());
         metaData.setHomeCommunityId(ebXML.getHome());
     }
 
     @Override
     protected void addSlotsFromEbXML(Folder folder, EbXMLRegistryPackage regPackage) {
-        super.addSlotsFromEbXML(folder, regPackage);        
-        
+        super.addSlotsFromEbXML(folder, regPackage);
+
         folder.setLastUpdateTime(regPackage.getSingleSlotValue(SLOT_NAME_LAST_UPDATE_TIME));
     }
 
     @Override
     protected void addSlots(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(folder, regPackage, objectLibrary);
-        
+
         regPackage.addSlot(SLOT_NAME_LAST_UPDATE_TIME, toHL7(folder.getLastUpdateTime()));
     }
 
@@ -93,7 +91,7 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         var codes = folder.getCodeList();
         codes.addAll(regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @Override

@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
  */
 public class XDSMetaDataException extends ValidationException {
     private static final long serialVersionUID = -394009702858390335L;
-    
+
     private final ValidationMessage validationMessage;
 
     /**
@@ -59,12 +59,10 @@ public class XDSMetaDataException extends ValidationException {
      */
     private static Object[] unwrapQueryParameterNames(Object[] array) {
         for (var i = 0; i < array.length; ++i) {
-            if (array[i] instanceof QueryParameter) {
-                var param = (QueryParameter) array[i];
+            if (array[i] instanceof QueryParameter param) {
                 array[i] = param.getSlotName();
             }
-            else if (array[i] instanceof QueryParameter[]) {
-                var params = (QueryParameter[]) array[i];
+            else if (array[i] instanceof QueryParameter[] params) {
                 if (params.length > 0) {
                     var sb = new StringBuilder();
                     for (var param : params) {

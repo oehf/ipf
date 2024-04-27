@@ -57,8 +57,7 @@ public abstract class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
 
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        if (pojo instanceof SubmitObjectsRequest) {
-            var submitObjectsRequest = (SubmitObjectsRequest) pojo;
+        if (pojo instanceof SubmitObjectsRequest submitObjectsRequest) {
             EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
         }

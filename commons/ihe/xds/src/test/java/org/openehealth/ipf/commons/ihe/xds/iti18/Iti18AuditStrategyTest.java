@@ -43,9 +43,8 @@ public class Iti18AuditStrategyTest extends XdsAuditorTestBase {
     }
 
     private void testRequest(boolean serverSide, StoredQuery query) {
-        if (query instanceof PatientIdBasedStoredQuery) {
-            ((PatientIdBasedStoredQuery) query)
-                    .setPatientId(Hl7v2Based.parse(AuditorTestBase.PATIENT_IDS[0], Identifiable.class));
+        if (query instanceof PatientIdBasedStoredQuery patientQuery) {
+            patientQuery.setPatientId(Hl7v2Based.parse(AuditorTestBase.PATIENT_IDS[0], Identifiable.class));
         }
         var strategy = new Iti18AuditStrategy(serverSide);
         var auditDataset = getXdsAuditDataset(strategy);

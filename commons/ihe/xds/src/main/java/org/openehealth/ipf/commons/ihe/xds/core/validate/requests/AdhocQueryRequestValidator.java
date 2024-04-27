@@ -510,7 +510,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
      * Checks that at least one of the given query parameters is provided in the message.
      */
     private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest<AdhocQueryRequest> request, QueryParameter... params) {
-        var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).collect(Collectors.toList());
+        var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).toList();
         slotNames.stream()
                 .map(request::getSlotValues)
                 .filter(slotList -> !slotList.isEmpty())

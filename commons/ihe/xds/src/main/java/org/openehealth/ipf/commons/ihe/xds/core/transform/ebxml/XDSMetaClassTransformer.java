@@ -1,12 +1,12 @@
 /*
  * Copyright 2009-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Base class for transformers of {@link XDSMetaClass} and ebXML representations.
@@ -45,7 +44,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     private final String uniqueIdExternalId;
     private final String uniqueIdLocalizedString;
     private final String limitedMetadataAttributeName;
-    
+
 
     /**
      * Constructs the transformer using various constants from {@link Vocabulary}.
@@ -62,14 +61,14 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      */
     protected XDSMetaClassTransformer(
             String patientIdExternalId,
-            String patientIdLocalizedString, 
+            String patientIdLocalizedString,
             String uniqueIdExternalId,
             String uniqueIdLocalizedString,
             String limitedMetadataAttributeName,
             EbXMLFactory factory) {
-        
+
         this.factory = requireNonNull(factory, "factory cannot be null");
-        
+
         this.patientIdExternalId = patientIdExternalId;
         this.patientIdLocalizedString = patientIdLocalizedString;
         this.uniqueIdExternalId = uniqueIdExternalId;
@@ -87,22 +86,22 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      */
     public E toEbXML(C metaData, EbXMLObjectLibrary objectLibrary) {
         requireNonNull(objectLibrary, "objectLibrary cannot be null");
-        
+
         if (metaData == null) {
             return null;
         }
 
         var ebXML = createEbXMLInstance(metaData.getEntryUuid(), objectLibrary);
-        
-        addAttributes(metaData, ebXML, objectLibrary);        
+
+        addAttributes(metaData, ebXML, objectLibrary);
         addClassifications(metaData, ebXML, objectLibrary);
         addSlots(metaData, ebXML, objectLibrary);
         addExternalIdentifiers(metaData, ebXML, objectLibrary);
 
-        if (ebXML instanceof ExtraMetadataHolder) {
-            ((ExtraMetadataHolder) ebXML).setExtraMetadata(metaData.getExtraMetadata());
+        if (ebXML instanceof ExtraMetadataHolder ebXmlHolder) {
+            ebXmlHolder.setExtraMetadata(metaData.getExtraMetadata());
         }
-        
+
         if (metaData.isLimitedMetadata()) {
             var classification = factory.createClassification(objectLibrary);
             classification.setClassificationNode(limitedMetadataAttributeName);
@@ -124,34 +123,34 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         }
 
         var metaData = createMetaClassInstance();
-        
-        addAttributesFromEbXML(metaData, ebXML);        
+
+        addAttributesFromEbXML(metaData, ebXML);
         addClassificationsFromEbXML(metaData, ebXML);
         addSlotsFromEbXML(metaData, ebXML);
         addExternalIdentifiersFromEbXML(metaData, ebXML);
 
-        if (ebXML instanceof ExtraMetadataHolder) {
-            metaData.setExtraMetadata(((ExtraMetadataHolder) ebXML).getExtraMetadata());
+        if (ebXML instanceof ExtraMetadataHolder ebXmlHolder) {
+            metaData.setExtraMetadata(ebXmlHolder.getExtraMetadata());
         }
-        
+
         metaData.setLimitedMetadata(ebXML.getClassifications().stream()
                 .anyMatch(classification -> limitedMetadataAttributeName.equals(classification.getClassificationNode())));
 
         return metaData;
     }
-    
+
     /**
      * Called by the base class to create a new instance of the ebXML type.
      * @param id
      *          the id of the object to create.
      * @param objectLibrary
-     *          the object library. 
+     *          the object library.
      * @return a new instance of the ebXML type.
      */
     protected abstract E createEbXMLInstance(String id, EbXMLObjectLibrary objectLibrary);
 
     /**
-     * Called by the base class to create a new instance of the {@link XDSMetaClass}. 
+     * Called by the base class to create a new instance of the {@link XDSMetaClass}.
      * @return a new instance of the meta data type.
      */
     protected abstract C createMetaClassInstance();
@@ -159,10 +158,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add attributes to the ebXML instance.
      * @param metaData
-     *          the meta data instance containing the attributes. 
+     *          the meta data instance containing the attributes.
      * @param ebXML
      *          the ebXML instance receiving the attributes.
-     * @param objectLibrary 
+     * @param objectLibrary
      *          the object library.
      */
     protected void addAttributes(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
@@ -190,10 +189,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add slots to the ebXML instance.
      * @param metaData
-     *          the meta data instance containing the slots. 
+     *          the meta data instance containing the slots.
      * @param ebXML
      *          the ebXML instance receiving the slots.
-     * @param objectLibrary 
+     * @param objectLibrary
      *          the object library.
      */
     protected void addSlots(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {}
@@ -201,7 +200,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add slots to the meta data.
      * @param metaData
-     *          the meta data instance receiving the slots. 
+     *          the meta data instance receiving the slots.
      * @param ebXML
      *          the ebXML instance containing the slots.
      */
@@ -210,10 +209,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add classifications to the ebXML instance.
      * @param metaData
-     *          the meta data instance containing the classifications. 
+     *          the meta data instance containing the classifications.
      * @param ebXML
      *          the ebXML instance receiving the classifications.
-     * @param objectLibrary 
+     * @param objectLibrary
      *          the object library.
      */
     protected void addClassifications(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
@@ -227,7 +226,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add classifications to the meta data.
      * @param metaData
-     *          the meta data instance receiving the classifications. 
+     *          the meta data instance receiving the classifications.
      * @param ebXML
      *          the ebXML instance containing the classifications.
      */
@@ -235,7 +234,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         List<EbXMLClassification> extraClassifications = ebXML.getClassifications().stream()
                 .filter(c -> Vocabulary.isNonStandardUuid(c.getClassificationScheme()))
                 .filter(c -> !(Vocabulary.SUBMISSION_SET_CLASS_NODE.equals(c.getClassificationNode()) || Vocabulary.FOLDER_CLASS_NODE.equals(c.getClassificationNode())))
-                .collect(Collectors.toList());
+                .toList();
         if (!extraClassifications.isEmpty()) {
             metaData.setExtraClassifications(extraClassifications);
         }
@@ -244,22 +243,22 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     /**
      * Called by the base class to add external identifiers to the ebXML instance.
      * @param metaData
-     *          the meta data instance containing the external identifiers. 
+     *          the meta data instance containing the external identifiers.
      * @param ebXML
      *          the ebXML instance receiving the external identifiers.
-     * @param objectLibrary 
+     * @param objectLibrary
      *          the object library.
      */
     protected void addExternalIdentifiers(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
         var patientID = Hl7v2Based.render(metaData.getPatientId());
-        ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);        
+        ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);
         ebXML.addExternalIdentifier(metaData.getUniqueId(), uniqueIdExternalId, uniqueIdLocalizedString);
     }
 
     /**
      * Called by the base class to add external identifiers to the meta data.
      * @param metaData
-     *          the meta data instance receiving the external identifiers. 
+     *          the meta data instance receiving the external identifiers.
      * @param ebXML
      *          the ebXML instance containing the external identifiers.
      */

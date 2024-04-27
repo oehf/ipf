@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsR
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +56,7 @@ public class PatientInfoTest {
     private static List<String> getRenderedStrings(List<String> strings, String fieldName, int expectedCount) {
         var result = strings.stream()
                 .filter(s -> s.startsWith(fieldName + '|'))
-                .collect(Collectors.toList());
+                .toList();
         assertEquals(expectedCount, result.size(), "Expected " + expectedCount + " lines for " + fieldName);
         return result;
     }

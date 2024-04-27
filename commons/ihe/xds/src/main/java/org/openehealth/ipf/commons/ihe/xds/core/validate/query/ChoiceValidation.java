@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
@@ -57,7 +56,7 @@ public class ChoiceValidation implements QueryParameterValidation {
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
         var paramSlotNames = Arrays.stream(params)
                 .map(QueryParameter::getSlotName)
-                .collect(Collectors.toList());
+                .toList();
 
         var count = paramSlotNames.stream()
                 .map(request::getSingleSlotValue)

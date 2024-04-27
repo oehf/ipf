@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
@@ -95,8 +93,7 @@ public class ErrorInfo implements Serializable {
         this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation, null);
         var t = throwable;
         while (t != null) {
-            if (t instanceof XDSMetaDataException) {
-                var metaDataException = (XDSMetaDataException) t;
+            if (t instanceof XDSMetaDataException metaDataException) {
                 this.errorCode = metaDataException.getValidationMessage().getErrorCode();
                 if (this.errorCode == null) {
                     this.errorCode = defaultMetaDataError;
@@ -104,8 +101,7 @@ public class ErrorInfo implements Serializable {
                 this.codeContext = metaDataException.getMessage();
                 return;
             }
-            if (t instanceof XdsRuntimeException) {
-                var exception = (XdsRuntimeException) t;
+            if (t instanceof XdsRuntimeException exception) {
                 this.errorCode = exception.getErrorCode();
                 this.codeContext = exception.getCodeContext();
                 this.severity = exception.getSeverity();

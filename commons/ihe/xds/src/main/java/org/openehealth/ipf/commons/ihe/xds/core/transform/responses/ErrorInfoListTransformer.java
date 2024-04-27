@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
@@ -46,7 +45,7 @@ public class ErrorInfoListTransformer {
         requireNonNull(errorInfoList, "error info list cannot be null");
         return errorInfoList.stream()
                 .map(this::toEbXML)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -55,7 +54,7 @@ public class ErrorInfoListTransformer {
 
         return registryErrorList.stream()
                 .map(this::fromEbXML)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 

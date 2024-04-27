@@ -21,7 +21,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A JAXB {@link XmlAdapter} that helps serialize generic lists of lists. This sort of thing is used by the
@@ -36,14 +35,14 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
     public List<List<T>> unmarshal(ListOfListWrapper<T> v) {
         return v.getInnerList().stream()
                 .map(ListWrapper::getValue)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public ListOfListWrapper<T> marshal(List<List<T>> v) {
         var outerList = v.stream()
                 .map(ListWrapper::new)
-                .collect(Collectors.toList());
+                .toList();
         return new ListOfListWrapper<>(outerList);
     }
 

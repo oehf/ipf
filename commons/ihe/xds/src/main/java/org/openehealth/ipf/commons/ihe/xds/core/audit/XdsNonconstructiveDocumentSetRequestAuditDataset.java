@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+
 
 /**
  * Audit dataset specific for non-constructive operations (Read+Delete as opposed to Create+Update in CRUD)
@@ -49,9 +50,9 @@ public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDa
         @Getter @Setter private Status status;
 
         public boolean matches(String documentUniqueId, String repositoryUniqueId, String homeCommunityId) {
-            return StringUtils.equals(this.documentUniqueId, documentUniqueId)
-                    && StringUtils.equals(this.repositoryUniqueId, repositoryUniqueId)
-                    && StringUtils.equals(this.homeCommunityId, homeCommunityId);
+            return Objects.equals(this.documentUniqueId, documentUniqueId)
+                    && Objects.equals(this.repositoryUniqueId, repositoryUniqueId)
+                    && Objects.equals(this.homeCommunityId, homeCommunityId);
         }
     }
 

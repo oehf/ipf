@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,8 +25,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 
-import java.util.stream.Collectors;
-
 /**
  * Transforms between a {@link DocumentEntry} and its ebXML representation.
  * @author Jens Riemschneider
@@ -34,31 +32,31 @@ import java.util.stream.Collectors;
 public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtrinsicObject, DocumentEntry> {
     private final AuthorTransformer authorTransformer;
     private final CodeTransformer codeTransformer;
-    
+
     private final PatientInfoTransformer patientInfoTransformer = new PatientInfoTransformer();
 
     /**
      * Constructs the transformer
      * @param factory
-     *          factory for version independent ebXML objects. 
+     *          factory for version independent ebXML objects.
      */
     public DocumentEntryTransformer(EbXMLFactory factory) {
-        super(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, 
-                DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID, 
+        super(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
+                DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID,
                 DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID,
                 DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID,
                 DOC_ENTRY_LIMITED_METADATA_CLASS_NODE,
                 factory);
-        
+
         authorTransformer = new AuthorTransformer(factory);
         codeTransformer = new CodeTransformer(factory);
     }
-    
+
     @Override
     protected EbXMLExtrinsicObject createEbXMLInstance(String id, EbXMLObjectLibrary objectLibrary) {
         return factory.createExtrinsic(id, objectLibrary);
     }
-    
+
     @Override
     protected DocumentEntry createMetaClassInstance() {
         return new DocumentEntry();
@@ -67,7 +65,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     @Override
     protected void addAttributesFromEbXML(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic) {
         super.addAttributesFromEbXML(docEntry, extrinsic);
-        docEntry.setAvailabilityStatus(extrinsic.getStatus());        
+        docEntry.setAvailabilityStatus(extrinsic.getStatus());
         docEntry.setMimeType(extrinsic.getMimeType());
         docEntry.setType(DocumentEntryType.valueOfUuid(extrinsic.getObjectType()));
         docEntry.setHomeCommunityId(extrinsic.getHome());
@@ -76,7 +74,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     @Override
     protected void addAttributes(DocumentEntry metaData, EbXMLExtrinsicObject ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addAttributes(metaData, ebXML, objectLibrary);
-        ebXML.setStatus(metaData.getAvailabilityStatus());                
+        ebXML.setStatus(metaData.getAvailabilityStatus());
         ebXML.setMimeType(metaData.getMimeType());
         ebXML.setObjectType(DocumentEntryType.toUuid(metaData.getType()));
         ebXML.setHome(metaData.getHomeCommunityId());
@@ -85,7 +83,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     @Override
     protected void addSlotsFromEbXML(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic) {
         super.addSlotsFromEbXML(docEntry, extrinsic);
-        
+
         docEntry.setCreationTime(extrinsic.getSingleSlotValue(SLOT_NAME_CREATION_TIME));
         docEntry.setHash(extrinsic.getSingleSlotValue(SLOT_NAME_HASH));
         docEntry.setLanguageCode(extrinsic.getSingleSlotValue(SLOT_NAME_LANGUAGE_CODE));
@@ -112,11 +110,11 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
             docEntry.getReferenceIdList().add(Hl7v2Based.parse(referenceIdValue, ReferenceId.class));
         }
     }
-    
+
     @Override
     protected void addSlots(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(docEntry, extrinsic, objectLibrary);
-        
+
         extrinsic.addSlot(SLOT_NAME_CREATION_TIME, toHL7(docEntry.getCreationTime()));
         extrinsic.addSlot(SLOT_NAME_HASH, docEntry.getHash());
         extrinsic.addSlot(SLOT_NAME_LANGUAGE_CODE, docEntry.getLanguageCode());
@@ -172,12 +170,12 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         var confidentialityCodes = docEntry.getConfidentialityCodes();
         confidentialityCodes.addAll(extrinsic.getClassifications(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
-                .collect(Collectors.toList()));
+                .toList());
 
         var eventCodeList = docEntry.getEventCodeList();
         eventCodeList.addAll(extrinsic.getClassifications(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME).stream()
                 .map(codeTransformer::fromEbXML)
-                .collect(Collectors.toList()));
+                .toList());
 
     }
 

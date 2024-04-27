@@ -34,8 +34,7 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
 
     @Override
     public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
-        if (pojo instanceof RetrieveImagingDocumentSetRequestType) {
-            var request = (RetrieveImagingDocumentSetRequestType) pojo;
+        if (pojo instanceof RetrieveImagingDocumentSetRequestType request) {
             var requestedStudies = request.getStudyRequest();
             if (requestedStudies != null) {
                 for (var studyRequest : requestedStudies) {
