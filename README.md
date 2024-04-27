@@ -10,7 +10,7 @@ comprehensive support for message processing and connecting information systems 
 It is available under the Apache License version 2.0.
 
 IPF focuses on a domain-specific language (DSL) to implement Enterprise Integration Patterns (EIPs) in integration solutions.
-IPF is based on the Java and Groovy programming languages for application development and for designing project-specific DSLs.
+IPF is based on the Java and [Groovy](https://groovy-lang.org/) programming languages for application development and for designing project-specific DSLs.
 
 IPF provides highl-level building blocks for implementing IHE profiles such as [XDS](https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html), [PIX](https://profiles.ihe.net/ITI/TF/Volume1/ch-5.html), [PDQ](https://profiles.ihe.net/ITI/TF/Volume1/ch-8.html) or [XCPD](https://profiles.ihe.net/ITI/TF/Volume1/ch-27.html).
 Other supported standards are HL7v2 and HL7v3 (CDA and CCD) for which IPF provides domain-specific languages (DSLs) for
@@ -18,7 +18,7 @@ creation, parsing, rendering, navigation and modification.
 
 ## Documentation
 
-The IPF documentation is available via [Github Pages](http://oehf.github.io/ipf-docs). This is a revamp of the existing
+The IPF documentation is available via [Github Pages](https://oehf.github.io/ipf-docs). This is a revamp of the existing
 documentation that is still [available here](http://oehf.github.io/ipf), with some content yet to be written.
 
 There's also a somewhat outdated [Introductory article](https://dzone.com/articles/introduction-open-ehealth).
