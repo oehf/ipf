@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests;
 
 import net.ihe.gazelle.hl7v3.datatypes.*;
 import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02Type;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("disabled due to javax dependency in gazelle lib")
 public class PixV3QueryRequestTransformerTest {
 
     @Test
