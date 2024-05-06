@@ -28,24 +28,6 @@
         <version>5.0-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <kotlin.dokka.version>1.9.10</kotlin.dokka.version>
-        <kotlin.version>1.9.22</kotlin.version>
-        <kotlin.logging.version>3.0.5</kotlin.logging.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-bom</artifactId>
-                <version>${kotlin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

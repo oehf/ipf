@@ -37,33 +37,33 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- Plugin version properties -->
-        <assembly-plugin-version>3.6.0</assembly-plugin-version>
+        <assembly-plugin-version>3.7.1</assembly-plugin-version>
         <build-helper-version>3.5.0</build-helper-version>
-        <compiler-plugin-version>3.12.1</compiler-plugin-version>
+        <compiler-plugin-version>3.13.0</compiler-plugin-version>
         <enforcer-plugin-version>3.4.1</enforcer-plugin-version>
         <gmavenplus-plugin-version>3.0.2</gmavenplus-plugin-version>
 
-        <jar-plugin-version>3.3.0</jar-plugin-version>
+        <jar-plugin-version>3.4.1</jar-plugin-version>
         <javadoc-plugin-version>3.6.3</javadoc-plugin-version>
-        <jaxb-plugin-version>3.1.0</jaxb-plugin-version>
+        <jaxb-plugin-version>3.2.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
         <release-plugin-version>3.0.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
-        <sources-plugin-version>3.2.1</sources-plugin-version>
+        <sources-plugin-version>3.3.1</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>6.0.1</activemq-version>
+        <activemq-version>6.1.2</activemq-version>
         <easymock-version>5.2.0</easymock-version>
         <guava-version>33.0.0-jre</guava-version>
-        <lombok-version>1.18.30</lombok-version>
+        <lombok-version>1.18.32</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <pooled-jms-version>3.1.5</pooled-jms-version>
         <quickcheck-version>0.6</quickcheck-version>
         <tomcat-version>10.1.20</tomcat-version>
-        <undertow-version>2.3.11.Final</undertow-version>
-        <xbean-spring-version>4.24</xbean-spring-version>
+        <undertow-version>2.3.13.Final</undertow-version>
+        <xbean-spring-version>4.25</xbean-spring-version>
     </properties>
 
     <scm>
@@ -599,7 +599,7 @@
                 <version>${compiler-plugin-version}</version>
                 <configuration>
                     <release>17</release>
-                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <forceLegacyJavacApi>true</forceLegacyJavacApi>
                 </configuration>
             </plugin>
             <plugin>
