@@ -23,7 +23,7 @@
         <hapi-version>2.5.1</hapi-version>
         <hapi-fhir-version>7.0.2</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
-        <ipf-gazelle-version>3.0-SNAPSHOT</ipf-gazelle-version>
+        <ipf-gazelle-version>3.0.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
         <jackson-version>2.16.2</jackson-version>
