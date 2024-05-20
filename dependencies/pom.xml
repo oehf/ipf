@@ -21,7 +21,7 @@
         <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
         <groovy-version>4.0.21</groovy-version>
         <hapi-version>2.5.1</hapi-version>
-        <hapi-fhir-version>7.0.2</hapi-fhir-version>
+        <hapi-fhir-version>7.2.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0.0</ipf-gazelle-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -31,7 +31,7 @@
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <kotlin.dokka.version>1.9.20</kotlin.dokka.version>
-        <kotlin.version>1.9.23</kotlin.version>
+        <kotlin.version>1.9.24</kotlin.version>
         <kotlin.logging.version>3.0.5</kotlin.logging.version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
@@ -108,6 +108,24 @@
                              but since the tools are not needed, the fix also not -->
                         <groupId>commons-beanutils</groupId>
                         <artifactId>commons-beanutils</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- Plantuml not needed for our purpose  -->
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml-mit</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-r5</artifactId>
+                <version>${hapi-fhir-version}</version>
+                <scope>runtime</scope>
+                <exclusions>
+                    <exclusion>
+                        <!-- Plantuml not needed for our purpose  -->
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml-mit</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

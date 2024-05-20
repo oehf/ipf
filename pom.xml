@@ -485,6 +485,7 @@
                                         <excludes>
                                             <exclude>commons-logging:commons-logging</exclude>
                                             <exclude>log4j:log4j</exclude>
+                                            <exclude>net.sourceforge.plantuml:plantuml-mit</exclude>
                                         </excludes>
                                     </bannedDependencies>
                                     <requireJavaVersion>
