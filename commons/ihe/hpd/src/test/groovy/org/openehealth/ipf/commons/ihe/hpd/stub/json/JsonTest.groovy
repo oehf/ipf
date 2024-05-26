@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2
+package org.openehealth.ipf.commons.ihe.hpd.stub.json
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -22,8 +22,7 @@ import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
-import org.openehealth.ipf.commons.ihe.hpd.stub.json.BatchResponseIntermediary
-import org.openehealth.ipf.commons.ihe.hpd.stub.json.SearchBatchRequestIntermediary
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.commons.xml.XmlUtils
 
 import jakarta.xml.bind.JAXBElement
