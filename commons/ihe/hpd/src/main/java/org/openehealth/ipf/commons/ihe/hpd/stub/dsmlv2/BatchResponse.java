@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.openehealth.ipf.commons.ihe.hpd.stub.json.JaxbElementListSerializer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="" description="" date="">
+            <action issue="451" dev="unixoid" type="fix">
+                Improved translation between DSMLv2 and JSON
+            </action>
             <action issue="446" dev="Ivan1pl" type="fix">
                 Properly handle query payload when translating ATNA audit records to FHIR
             </action>
