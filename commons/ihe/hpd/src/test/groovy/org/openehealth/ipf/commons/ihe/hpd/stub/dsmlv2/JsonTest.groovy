@@ -22,12 +22,16 @@ import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
+import org.openehealth.ipf.commons.ihe.hpd.stub.json.BatchResponseIntermediary
+import org.openehealth.ipf.commons.ihe.hpd.stub.json.SearchBatchRequestIntermediary
 import org.openehealth.ipf.commons.xml.XmlUtils
 
 import jakarta.xml.bind.JAXBElement
 
 @Slf4j
 class JsonTest {
+
+    static final ObjectFactory OBJECT_FACTORY = new ObjectFactory()
 
     static ObjectMapper mapper
 
@@ -43,25 +47,25 @@ class JsonTest {
     @Test
     void testBatchRequest() {
         def batchRequest1 = new BatchRequest(
-                requestID: '123',
-                batchRequests: [
-                        new SearchRequest(
-                                requestID: '124',
-                                dn: 'ou=HPDElectronicService',
-                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
-                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
-                                filter: new Filter(
-                                        equalityMatch: new AttributeValueAssertion(name: 'hcIdentifier', value: '1234567')
-                                ),
-                                attributes: new AttributeDescriptions(
-                                        attribute: [
-                                                new AttributeDescription(name: 'hpdServiceAddress'),
-                                                new AttributeDescription(name: 'boundInstitution'),
-                                        ],
-                                ),
-                        ),
+            requestID: '123',
+            batchRequests: [
+                new SearchRequest(
+                    requestID: '124',
+                    dn: 'ou=HPDElectronicService',
+                    scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                    derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                    filter: new Filter(
+                        equalityMatch: new AttributeValueAssertion(name: 'hcIdentifier', value: '1234567')
+                    ),
+                    attributes: new AttributeDescriptions(
+                        attribute: [
+                            new AttributeDescription(name: 'hpdServiceAddress'),
+                            new AttributeDescription(name: 'boundInstitution'),
+                        ],
+                    ),
+                ),
 
-                ],
+            ],
         )
 
         def json1 = mapper.writeValueAsString(batchRequest1)
@@ -143,6 +147,74 @@ class JsonTest {
         log.debug('JSON 2:\n{}', json2)
 
         assert json1 == json2
+    }
+
+    @Test
+    void testSearchBatchRequest() {
+        def batchRequest1 = new BatchRequest(
+            requestID: '123',
+            processing: BatchRequest.RequestProcessingType.SEQUENTIAL,
+            responseOrder: BatchRequest.RequestResponseOrder.SEQUENTIAL,
+            onError: BatchRequest.RequestErrorHandlingType.EXIT,
+            batchRequests: [
+                new SearchRequest(
+                    requestID: '124',
+                    dn: 'ou=HCProfessional,foo=bar',
+                    scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                    derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                    sizeLimit: 100L,
+                    timeLimit: 200L,
+                    typesOnly: false,
+                    filter: new Filter(
+                        and: new FilterSet(
+                            filterGroup: [
+                                OBJECT_FACTORY.createFilterSetOr(new FilterSet(
+                                    filterGroup: [
+                                        OBJECT_FACTORY.createFilterSetSubstrings(new SubstringFilter(name: 'hcIdentifier', initial: 'RefData:', any: ['123', '456'], _final: ':ACTIVE')),
+                                        OBJECT_FACTORY.createFilterSetEqualityMatch(new AttributeValueAssertion(name: 'sn', value: 'Schmidt')),
+                                        OBJECT_FACTORY.createFilterSetGreaterOrEqual(new AttributeValueAssertion(name: 'creationTimestamp', value: '20240525101112')),
+                                        OBJECT_FACTORY.createFilterSetLessOrEqual(new AttributeValueAssertion(name: 'creationTimestamp', value: '20240525101112')),
+                                    ],
+                                )),
+                                OBJECT_FACTORY.createFilterSetNot(new Filter(
+                                    or: new FilterSet(
+                                        filterGroup: [
+                                            OBJECT_FACTORY.createFilterSetPresent(new AttributeDescription(name: 'hcProfession')),
+                                            OBJECT_FACTORY.createFilterSetApproxMatch(new AttributeValueAssertion(name: 'telephoneNumber', value: '+4176...')),
+                                            OBJECT_FACTORY.createFilterSetExtensibleMatch(new MatchingRuleAssertion(name: 'cn', value: 'Mouse, Mickey, comm1:123', dnAttributes: Boolean.TRUE, matchingRule: 'rule123')),
+                                        ],
+                                    ),
+                                )),
+                            ]),
+                    ),
+                    attributes: new AttributeDescriptions(
+                        attribute: [
+                            new AttributeDescription(name: 'hpdServiceAddress'),
+                            new AttributeDescription(name: 'boundInstitution'),
+                        ],
+                    ),
+                ),
+            ],
+        )
+        def xml1 = XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchRequest1, false)
+        log.debug('XML 1:\n{}', xml1)
+
+        def batchRequestIntermediary1 = SearchBatchRequestIntermediary.fromBatchRequest(batchRequest1)
+        def json1 = mapper.writeValueAsString(batchRequestIntermediary1)
+        log.debug('JSON 1:\n{}', json1)
+
+        def batchRequestIntermediary2 = mapper.readValue(json1, SearchBatchRequestIntermediary.class)
+        def batchRequest2 = batchRequestIntermediary2.toBatchRequest()
+        def xml2 = XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchRequest2, false)
+        log.debug('XML 2:\n{}', xml2)
+
+        assert xml1 == xml2
+
+        def batchRequestIntermediary3 = SearchBatchRequestIntermediary.fromBatchRequest(batchRequest2)
+        def json3 = mapper.writeValueAsString(batchRequestIntermediary3)
+        log.debug('JSON 3:\n{}', json3)
+
+        assert json1 == json3
     }
 
 }
