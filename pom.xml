@@ -27,9 +27,9 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.2.3</surefire-plugin-version>
-        <jxr-plugin-version>3.3.0</jxr-plugin-version>
-        <project-info-reports-plugin-version>3.4.1</project-info-reports-plugin-version>
+        <surefire-plugin-version>3.2.5</surefire-plugin-version>
+        <jxr-plugin-version>3.3.2</jxr-plugin-version>
+        <project-info-reports-plugin-version>3.5.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
@@ -38,7 +38,7 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.7.1</assembly-plugin-version>
-        <build-helper-version>3.5.0</build-helper-version>
+        <build-helper-version>3.6.0</build-helper-version>
         <compiler-plugin-version>3.13.0</compiler-plugin-version>
         <enforcer-plugin-version>3.4.1</enforcer-plugin-version>
         <gmavenplus-plugin-version>3.0.2</gmavenplus-plugin-version>
@@ -54,15 +54,12 @@
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>6.1.2</activemq-version>
         <easymock-version>5.2.0</easymock-version>
         <guava-version>33.0.0-jre</guava-version>
         <lombok-version>1.18.32</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
-        <pooled-jms-version>3.1.5</pooled-jms-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.20</tomcat-version>
-        <undertow-version>2.3.13.Final</undertow-version>
+        <tomcat-version>10.1.24</tomcat-version>
         <xbean-spring-version>4.25</xbean-spring-version>
     </properties>
 
@@ -258,12 +255,6 @@
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-servlet</artifactId>
-                <version>${undertow-version}</version>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
