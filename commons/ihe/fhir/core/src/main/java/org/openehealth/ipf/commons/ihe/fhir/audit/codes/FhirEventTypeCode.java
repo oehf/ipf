@@ -37,6 +37,7 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     RetrieveATNAAuditEvent("ITI-81", IHE_SYSTEM_NAME, "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", IHE_SYSTEM_NAME, "Mobile Patient Identifier Cross-reference Query"),
     SimplifiedPublish("ITI-105", IHE_SYSTEM_NAME, "Simplified Publish"),
+    PatientDemographicsMatch("ITI-119", IHE_SYSTEM_NAME, "Patient Demographics Match"),
     MobileQueryExistingData("PCC-44", IHE_SYSTEM_NAME, "Mobile Query Existing Data"),
     QueryPharmacyDocumentsOverMhd("PHARM-5", IHE_SYSTEM_NAME, "Query Pharmacy Documents over MHD"),
     MobilePrivacyPolicyFeed("PPQ-3", EHS_SYSTEM_NAME, "Mobile Privacy Policy Feed"),
