@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.support.EndpointHelper;
@@ -51,6 +52,7 @@ import java.util.stream.Stream;
  * @author Christian Ohr
  * @since 3.1
  */
+@Slf4j
 @UriParams
 public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends AuditableEndpointConfiguration {
 
@@ -158,6 +160,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             this.context = fhirContext;
             this.securityInformation = new SslAwareApacheRestfulClientFactory(fhirContext)
                     .initializeSecurityInformation(secure, null, null, null, null);
+            if (!parameters.isEmpty()) {
+                log.info("Disregarding URI parameters {} for endpoint {}, because static fhirContext is provided.", parameters, path);
+                parameters.clear();
+            }
             return;
         }
 
