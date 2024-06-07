@@ -21,7 +21,6 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.r4.model.*;
 import org.ietf.jgss.Oid;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveSubmissionSetList;
@@ -30,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.fhir.mhd.model.Source;
 import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.URN_IETF_RFC_3986;
@@ -70,6 +68,10 @@ public class MhdValidatorTest {
         sourcePatient.getText().setDivAsString("<div>empty</div>");
 
         var submissionSetList = new ComprehensiveSubmissionSetList();
+        var source = new Source();
+        source
+            .setAuthorOrg(new Reference(new Organization()))
+            .setResource(new Practitioner());
         submissionSetList
             .linkDocumentReference(REFERENCE_FULL_URL)
             .setSubmissionSetUniqueIdIdentifier(new Oid("1.2.58.92.23"))
@@ -81,7 +83,7 @@ public class MhdValidatorTest {
             .addIntendedRecipient(new Reference(practitioner))
             .setSubject(new Reference("Patient/a2"))
             .setTitle("description")
-            .setSource(new Source().setAuthorOrg(new Reference("Organization/4711")).setReference("Practitioner/1234"));
+            .setSource(source);
         submissionSetList.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
         submissionSetList.getText().setDivAsString("<div>empty</div>");
 
@@ -106,6 +108,7 @@ public class MhdValidatorTest {
                 .setSourcePatientInfo(new Reference(sourcePatient))
             )
             .setDescription("Physical")
+            .setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
             .setSubject(new Reference("Patient/a2"));
         documentReference.getType().addCoding()
             .setSystem("http://ihe.net/connectathon/classCodes")
