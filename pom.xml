@@ -59,7 +59,7 @@
         <lombok-version>1.18.32</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.24</tomcat-version>
+        <tomcat-version>10.1.25</tomcat-version>
         <xbean-spring-version>4.25</xbean-spring-version>
     </properties>
 
@@ -327,7 +327,7 @@
                             <link>https://cxf.apache.org/javadoc/latest/</link>
                             <link>https://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                             <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
-                            <link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
+                            <link>https://docs.spring.io/spring-framework/docs/6.1.x/javadoc-api/</link>
                         </links>
                         <source>11</source>
                         <linksource>false</linksource>
