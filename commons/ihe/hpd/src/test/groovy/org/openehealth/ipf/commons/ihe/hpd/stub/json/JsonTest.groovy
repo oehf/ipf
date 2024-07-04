@@ -22,9 +22,14 @@ import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hpd.HpdValidator
+import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2
+import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.commons.xml.XmlUtils
 
+import javax.naming.ldap.PagedResultsControl
+import javax.naming.ldap.SortKey
 import javax.xml.bind.JAXBElement
 
 @Slf4j
@@ -53,6 +58,14 @@ class JsonTest {
                     dn: 'ou=HPDElectronicService',
                     scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
                     derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
+                    control: [
+                        ControlUtils.toDsmlv2(new SortControl2(true, [
+                            new SortKey('attr1', true, 'alg1'),
+                            new SortKey('attr2', false, 'alg2'),
+                        ] as SortKey[])),
+                        ControlUtils.toDsmlv2(new SortResponseControl2(42, 'attr3', true)),
+                        ControlUtils.toDsmlv2(new PagedResultsControl(100, 'cookie'.bytes, false)),
+                    ],
                     filter: new Filter(
                         equalityMatch: new AttributeValueAssertion(name: 'hcIdentifier', value: '1234567')
                     ),

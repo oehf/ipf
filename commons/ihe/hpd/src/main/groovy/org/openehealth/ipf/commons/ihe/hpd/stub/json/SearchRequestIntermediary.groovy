@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.json
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import groovy.transform.CompileStatic
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 
@@ -25,6 +27,8 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 class SearchRequestIntermediary {
 
     String requestId
+    @JsonSerialize(using = ControlListSerializer.class)
+    @JsonDeserialize(using = ControlListDeserializer.class)
     List<Control> controls
     FilterIntermediary filter
     List<String> attributes

@@ -31,7 +31,7 @@ class FilterIntermediaryUtils {
     static final List<String> FILTER_TYPES = ['and', 'or', 'not', 'equalityMatch', 'substring', 'greaterOrEqual', 'lessOrEqual', 'present', 'approxMatch', 'extensibleMatch']
 
     static FilterIntermediary fromDsml(String filterType, Object dsml) {
-        return Class.forName("${FilterIntermediaryUtils.packageName + '.' + filterType.capitalize()}").declaredMethods.find { it.name == 'fromDsml' }.invoke(null, dsml) as FilterIntermediary
+        return Class.forName(FilterIntermediaryUtils.packageName + '.' + filterType.capitalize()).declaredMethods.find { it.name == 'fromDsml' }.invoke(null, dsml) as FilterIntermediary
     }
 
     static FilterIntermediary fromFilter(Filter f) {
