@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.json
 
+import jakarta.xml.bind.JAXBElement
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Filter
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.FilterSet
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory
-
-import javax.xml.bind.JAXBElement
 
 /**
  * @author Dmytro Rud
@@ -31,7 +30,7 @@ class FilterIntermediaryUtils {
     static final List<String> FILTER_TYPES = ['and', 'or', 'not', 'equalityMatch', 'substring', 'greaterOrEqual', 'lessOrEqual', 'present', 'approxMatch', 'extensibleMatch']
 
     static FilterIntermediary fromDsml(String filterType, Object dsml) {
-        return Class.forName("${FilterIntermediaryUtils.packageName + '.' + filterType.capitalize()}").declaredMethods.find { it.name == 'fromDsml' }.invoke(null, dsml) as FilterIntermediary
+        return Class.forName(FilterIntermediaryUtils.packageName + '.' + filterType.capitalize()).declaredMethods.find { it.name == 'fromDsml' }.invoke(null, dsml) as FilterIntermediary
     }
 
     static FilterIntermediary fromFilter(Filter f) {

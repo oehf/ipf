@@ -16,6 +16,10 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.openehealth.ipf.commons.ihe.hpd.stub.json.ControlListDeserializer;
+import org.openehealth.ipf.commons.ihe.hpd.stub.json.ControlListSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +71,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class DsmlMessage {
 
+    @JsonSerialize(using = ControlListSerializer.class)
+    @JsonDeserialize(using = ControlListDeserializer.class)
     protected List<Control> control;
     @XmlAttribute(name = "requestID")
     protected String requestID;
