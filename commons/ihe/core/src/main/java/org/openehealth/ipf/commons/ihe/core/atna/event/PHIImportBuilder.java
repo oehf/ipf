@@ -64,7 +64,7 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
                             EventActionCode eventActionCode,
                             EventType eventType,
                             PurposeOfUse... purposesOfUse) {
-        super(auditContext, new DataImportBuilder(
+        super(auditContext, auditDataset, new DataImportBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,

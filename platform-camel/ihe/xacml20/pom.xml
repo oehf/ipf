@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-xua</artifactId>
+            <artifactId>ipf-commons-ihe-swissepr</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

@@ -28,7 +28,7 @@
         <module>hl7v3</module>
         <module>hl7v3model</module>
         <module>fhir</module>
-        <module>xua</module>
+        <module>swissepr</module>
         <module>hpd</module>
         <module>xacml20</module>
     </modules>

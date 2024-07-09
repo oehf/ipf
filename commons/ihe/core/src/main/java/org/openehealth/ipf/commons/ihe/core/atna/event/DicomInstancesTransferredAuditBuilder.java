@@ -53,7 +53,7 @@ public class DicomInstancesTransferredAuditBuilder<T extends DicomInstancesTrans
             final EventActionCode eventActionCode,
             final EventType eventType,
             final PurposeOfUse... purposesOfUse) {
-        super(auditContext, new DicomInstancesTransferredBuilder(
+        super(auditContext, auditDataset, new DicomInstancesTransferredBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,

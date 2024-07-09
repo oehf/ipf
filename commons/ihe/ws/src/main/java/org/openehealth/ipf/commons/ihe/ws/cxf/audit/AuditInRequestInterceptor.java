@@ -53,7 +53,7 @@ public class AuditInRequestInterceptor<T extends WsAuditDataset> extends Abstrac
 
         var auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
-        enrichAuditDatasetFromXuaToken(message, Header.Direction.DIRECTION_IN, auditDataset);
+        enrichAuditDataset(message, Header.Direction.DIRECTION_IN, auditDataset);
         // TODO Also extract basic auth user?
         extractClientCertificateCommonName(message, auditDataset);
         

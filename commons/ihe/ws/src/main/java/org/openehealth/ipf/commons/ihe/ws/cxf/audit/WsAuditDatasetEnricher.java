@@ -21,23 +21,22 @@ import org.apache.cxf.headers.Header;
 /**
  * @author Dmytro Rud
  */
-public interface XuaProcessor {
+public interface WsAuditDatasetEnricher {
 
     /**
-     * Enriches the given audit dataset with elements from the XUA token (SAML2 assertion)
-     * contained in the given CXF message.
+     * Enriches the given audit dataset with elements from the given CXF message.
      *
      * @param message
      *      source CXF message.
      * @param headerDirection
-     *      direction of the header containing the SAML2 assertion.
+     *      direction of SOAP headers.
      * @param auditDataset
      *      target ATNA audit dataset.
      */
-    void enrichAuditDatasetFromXuaToken(
+    void enrichAuditDataset(
             SoapMessage message,
             Header.Direction headerDirection,
             WsAuditDataset auditDataset);
 
-    XuaProcessor NOOP = (message, headerDirection, auditDataset) -> {};
+    WsAuditDatasetEnricher NOOP = (message, headerDirection, auditDataset) -> {};
 }

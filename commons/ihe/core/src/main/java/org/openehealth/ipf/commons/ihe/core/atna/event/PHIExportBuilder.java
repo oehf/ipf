@@ -64,7 +64,7 @@ public class PHIExportBuilder<T extends PHIExportBuilder<T>> extends IHEAuditMes
                             EventActionCode eventActionCode,
                             EventType eventType,
                             PurposeOfUse... purposesOfUse) {
-        super(auditContext, new DataExportBuilder(
+        super(auditContext, auditDataset, new DataExportBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,

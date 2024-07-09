@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="" description="" date="">
+            <action issue="449" dev="unixoid" type="add">
+                Add W3C Trace Context ID to Audit Trail records in the Swiss EPR context
+            </action>
             <action issue="446" dev="Ivan1pl" type="fix">
                 Properly handle query payload when translating ATNA audit records to FHIR
             </action>

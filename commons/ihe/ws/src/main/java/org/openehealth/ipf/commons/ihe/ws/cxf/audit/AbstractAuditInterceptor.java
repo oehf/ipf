@@ -56,11 +56,11 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
 
     /**
-     * Processor for extracting SAML tokens when XUA is used
+     * Additional (e.g. specific to a regulatory domain) enricher of audit datasets.
      */
     @Getter
     @Setter
-    private static XuaProcessor xuaProcessor = Lookup.lookup(XuaProcessor.class).orElse(XuaProcessor.NOOP);
+    private static WsAuditDatasetEnricher wsAuditDatasetEnricher = Lookup.lookup(WsAuditDatasetEnricher.class).orElse(WsAuditDatasetEnricher.NOOP);
 
     /**
      * Audit strategy associated with this interceptor.
@@ -164,18 +164,17 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
 
 
     /**
-     * Enriches the given audit dataset with elements from the XUA token (SAML2 assertion)
-     * contained in the given CXF message.
+     * Enriches the given audit dataset with elements from the given CXF message.
      *
      * @param message         source CXF message.
-     * @param headerDirection direction of the header containing the SAML2 assertion.
+     * @param headerDirection direction of SOAP headers.
      * @param auditDataset    target ATNA audit dataset.
      */
-    protected static void enrichAuditDatasetFromXuaToken(
+    protected static void enrichAuditDataset(
             SoapMessage message,
             Header.Direction headerDirection,
             WsAuditDataset auditDataset) {
-        xuaProcessor.enrichAuditDatasetFromXuaToken(message, headerDirection, auditDataset);
+        wsAuditDatasetEnricher.enrichAuditDataset(message, headerDirection, auditDataset);
     }
 
 

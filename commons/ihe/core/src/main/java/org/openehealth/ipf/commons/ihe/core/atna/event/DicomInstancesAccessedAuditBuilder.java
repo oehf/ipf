@@ -53,7 +53,7 @@ public class DicomInstancesAccessedAuditBuilder<T extends DicomInstancesAccessed
             final EventActionCode eventActionCode,
             final EventType eventType,
             final PurposeOfUse... purposesOfUse) {
-        super(auditContext, new DicomInstancesAccessedBuilder(
+        super(auditContext, auditDataset, new DicomInstancesAccessedBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 eventActionCode,

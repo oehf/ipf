@@ -51,7 +51,7 @@ public class GenericFhirAuditMessageBuilder extends
     IHEAuditMessageBuilder<GenericFhirAuditMessageBuilder, CustomAuditMessageBuilder> {
 
     public GenericFhirAuditMessageBuilder(AuditContext auditContext, GenericFhirAuditDataset auditDataset) {
-        super(auditContext, new CustomAuditMessageBuilder(
+        super(auditContext, auditDataset, new CustomAuditMessageBuilder(
             auditDataset.getEventOutcomeIndicator(),
             auditDataset.getEventOutcomeDescription(),
             eventActionCode(auditDataset.getOperation()),

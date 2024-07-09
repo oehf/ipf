@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xua
+package org.openehealth.ipf.commons.ihe.swissepr
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
@@ -21,13 +21,14 @@ import org.apache.cxf.binding.soap.Soap11
 import org.apache.cxf.binding.soap.Soap12
 import org.apache.cxf.binding.soap.SoapMessage
 import org.apache.cxf.headers.Header
+import org.apache.cxf.message.Message
 import org.apache.cxf.staxutils.StaxUtils
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.XuaProcessor
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDatasetEnricher
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -38,7 +39,7 @@ import javax.xml.namespace.QName
 /**
  * @author Dmytro Rud
  */
-class BasicXuaProcessor implements XuaProcessor {
+class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
 
     /**
      * If a SAML assertion is stored under this key in the Web Service context,
@@ -62,7 +63,12 @@ class BasicXuaProcessor implements XuaProcessor {
 
 
     @Override
-    void enrichAuditDatasetFromXuaToken(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+    void enrichAuditDataset(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+        extractXuaTokenElements(message, headerDirection, auditDataset)
+        extractW3cTraceContextId(message, auditDataset)
+    }
+
+    private static void extractXuaTokenElements(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         Element assertion = null
 
         // check whether someone has already parsed the SAML2 assertion
@@ -96,7 +102,6 @@ class BasicXuaProcessor implements XuaProcessor {
         def additionalEpdUser = createAdditionalEpdUser(gpath, iheUser, purposesOfUse)
         auditDataset.humanUsers.addAll([iheUser, mainEpdUser, additionalEpdUser].findAll { !it.isEmpty() })
     }
-
 
     private static Element extractAssertionFromCxfMessage(SoapMessage message, Header.Direction headerDirection) {
         Header header = message.getHeader(new QName(WSSE_NS, 'Security'))
@@ -169,4 +174,17 @@ class BasicXuaProcessor implements XuaProcessor {
         }
         return user
     }
+
+    private static void extractW3cTraceContextId(SoapMessage message, WsAuditDataset auditDataset) {
+        def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
+        if (httpHeaders != null) {
+            for (String headerName : httpHeaders.keySet()) {
+                if (headerName.toLowerCase(Locale.ROOT) == 'traceparent') {
+                    auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
+                    break
+                }
+            }
+        }
+    }
+
 }

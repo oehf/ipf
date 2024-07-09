@@ -83,7 +83,15 @@ public abstract class AuditDataset implements Serializable {
      */
     @Getter
     @Setter
-    String sourceUserName;
+    private String sourceUserName;
+
+    /**
+     * Contents of the HTTP header "traceparent:" as defined in the
+     * <a href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a> specification.
+     */
+    @Getter
+    @Setter
+    private String w3cTraceContextId;
 
     /**
      * @param serverSide   specifies whether this audit dataset will be used on the
