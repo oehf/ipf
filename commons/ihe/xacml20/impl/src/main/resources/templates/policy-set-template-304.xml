@@ -1,4 +1,4 @@
-<!-- Template 301 -->
+<!-- Template 304 -->
 <PolicySet
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:hl7="urn:hl7-org:v3"
@@ -6,7 +6,8 @@
 	PolicySetId="${id}"
 	PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:deny-overrides"> 
 	<Description>
-		Patient specific PolicySet for User Assignment 301 - allowing a user (health professional) to access the patient's EPD according to the scope of the referenced access level (PolicySetIdReference below)
+		Patient specific PolicySet for User Assignment 304 - allowing a user (health professional) to access the patient's EPD according to the scope of the referenced access level (PolicySetIdReference below)
+        with the possibility of delegation
 	</Description>
 	<Target>
 		<Subjects>
@@ -43,9 +44,24 @@
 						DataType="urn:hl7-org:v3#II"
 					AttributeId="urn:e-health-suisse:2015:epr-spid"/>
 				</ResourceMatch>
-			</Resource>
+                #if ($startDate)
+                <ResourceMatch
+                    MatchId="urn:oasis:names:tc:xacml:1.0:function:date-less-than-or-equal">
+                    <AttributeValue	DataType="http://www.w3.org/2001/XMLSchema#date">${startDate}</AttributeValue>
+                    <ResourceAttributeDesignator
+                        AttributeId="urn:e-health-suisse:2023:policy-attributes:start-date"
+                        DataType="http://www.w3.org/2001/XMLSchema#date"/>
+                </ResourceMatch>
+                #end
+                <ResourceMatch
+                    MatchId="urn:oasis:names:tc:xacml:1.0:function:date-greater-than-or-equal">
+                    <AttributeValue	DataType="http://www.w3.org/2001/XMLSchema#date">${endDate}</AttributeValue>
+                    <ResourceAttributeDesignator
+                        AttributeId="urn:e-health-suisse:2023:policy-attributes:end-date"
+                        DataType="http://www.w3.org/2001/XMLSchema#date"/>
+                </ResourceMatch>
+            </Resource>
 		</Resources>
-		#if ($startDate || $endDate)
 		<Environments>
 			<Environment>
 				#if ($startDate)
@@ -57,7 +73,6 @@
 							DataType="http://www.w3.org/2001/XMLSchema#date"/>
 				</EnvironmentMatch>
 				#end
-				#if ($endDate)
 				<EnvironmentMatch
 						MatchId="urn:oasis:names:tc:xacml:1.0:function:date-greater-than-or-equal">
 					<AttributeValue	DataType="http://www.w3.org/2001/XMLSchema#date">${endDate}</AttributeValue>
@@ -65,10 +80,8 @@
 							AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-date"
 							DataType="http://www.w3.org/2001/XMLSchema#date"/>
 				</EnvironmentMatch>
-				#end
 			</Environment>
 		</Environments>
-		#end
 	</Target>
 	<PolicySetIdReference>
 		${policyIdReference}

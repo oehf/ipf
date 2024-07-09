@@ -96,7 +96,9 @@ class XacmlToFhirTranslator {
         }
 
         String gln = extractAttributeValue(subjectMatches, 'urn:oasis:names:tc:xacml:1.0:subject:subject-id')
-        return create301Consent(id, eprSpid, gln, policyIdReference, startDate, endDate)
+        return policyIdReference.contains('delegation')
+            ? create304Consent(id, eprSpid, gln, policyIdReference, startDate, endDate)
+            : create301Consent(id, eprSpid, gln, policyIdReference, startDate, endDate)
     }
 
     private static Date parseDate(GPathResult xacml, String matchId) {

@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ValidationResult;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.OperationOutcome;
@@ -27,6 +28,7 @@ import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 
 import java.util.Comparator;
+import java.util.Set;
 
 /**
  * Validator which uses Implementation Guides to validate FHIR resources.
@@ -46,8 +48,8 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
      * @param resource FHIR resource to validate.
      * @return {@link OperationOutcome} containing or not containing validation errors (never <code>null</code>).
      */
-    protected OperationOutcome validateProfileConformance(Resource resource, String profileUri) {
-
+    protected OperationOutcome validateProfileConformance(Resource resource, Set<String> allowedProfileUris) {
+        String profileUri = allowedProfileUris.iterator().next();
         if (profileUri.startsWith(STANDARD_PREFIX)) {
             String expectedResourceType = profileUri.substring(STANDARD_PREFIX.length());
             if (resource.fhirType().equals(expectedResourceType)) {
@@ -61,7 +63,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
             }
         } else {
             for (CanonicalType profile : resource.getMeta().getProfile()) {
-                if (profile.equals(profileUri)) {
+                if (allowedProfileUris.contains(profile.asStringValue())) {
                     return doValidate(resource);
                 }
             }
@@ -71,7 +73,11 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
                 .addIssue(new OperationOutcome.OperationOutcomeIssueComponent()
                         .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                         .setCode(OperationOutcome.IssueType.REQUIRED)
-                        .setDiagnostics("Resource shall declare profile " + profileUri));
+                        .setDiagnostics("Resource shall declare one of the profiles: " + StringUtils.join(allowedProfileUris, ", ")));
+    }
+
+    protected OperationOutcome validateProfileConformance(Resource resource, String allowedProfileUri) {
+        return validateProfileConformance(resource, Set.of(allowedProfileUri));
     }
 
     private OperationOutcome doValidate(Resource resource) {
