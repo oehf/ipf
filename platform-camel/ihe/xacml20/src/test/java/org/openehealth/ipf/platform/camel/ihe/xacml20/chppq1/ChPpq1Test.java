@@ -29,10 +29,13 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import javax.xml.bind.JAXBElement;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -92,16 +95,16 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
+        var traceParentId = UUID.randomUUID().toString();
         var response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request-ppq.xml"),
-            EprPolicyRepositoryResponse.class);
+            EprPolicyRepositoryResponse.class,
+            Map.of(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.of("TraceParent", traceParentId)));
         assertEquals(statusCode, response.getStatus());
 
-        List messages = getAuditSender().getMessages();
+        List<AuditMessage> messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (var object : messages) {
-            var message = (AuditMessage) object;
-
+        for (var message : messages) {
             var event = message.getEventIdentification();
             assertEquals(EventActionCode.Create, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
@@ -117,14 +120,19 @@ public class ChPpq1Test extends StandardTestContainer {
             assertEquals(1, message.getActiveParticipants().get(1).getRoleIDCodes().size());
             checkCodeValueType(message.getActiveParticipants().get(1).getRoleIDCodes().get(0), new String[]{"110152", "DCM", "Destination Role ID"});
 
-            assertEquals(2, message.getParticipantObjectIdentifications().size());
+            assertEquals(3, message.getParticipantObjectIdentifications().size());
 
             var participant = message.getParticipantObjectIdentifications().get(0);
+            assertEquals(ParticipantObjectTypeCode.Other, participant.getParticipantObjectTypeCode());
+            assertEquals(ParticipantObjectTypeCodeRole.ProcessingElement, participant.getParticipantObjectTypeCodeRole());
+            assertEquals(traceParentId, participant.getParticipantObjectID());
+
+            participant = message.getParticipantObjectIdentifications().get(1);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.SecurityResource, participant.getParticipantObjectTypeCodeRole());
             assertEquals("urn:uuid:58bbfa76-4d65-4fa1-b0af-c862b52a20d4", participant.getParticipantObjectID());
 
-            participant = message.getParticipantObjectIdentifications().get(1);
+            participant = message.getParticipantObjectIdentifications().get(2);
             assertEquals(ParticipantObjectTypeCode.Person, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.Patient, participant.getParticipantObjectTypeCodeRole());
             assertEquals("761337611194602836^^^&2.16.756.5.30.1.127.3.10.3&ISO", participant.getParticipantObjectID());

@@ -30,7 +30,7 @@ public class IHEAuditLogUsedBuilder extends
         IHEAuditMessageBuilder<IHEAuditLogUsedBuilder, AuditLogUsedBuilder> {
 
     public IHEAuditLogUsedBuilder(AuditContext auditContext, FhirAuditEventQueryAuditDataset auditDataset) {
-        super(auditContext, new AuditLogUsedBuilder(
+        super(auditContext, auditDataset, new AuditLogUsedBuilder(
                 auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription()
         ));

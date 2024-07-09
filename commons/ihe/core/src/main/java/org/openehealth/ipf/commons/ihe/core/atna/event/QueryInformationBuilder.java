@@ -45,7 +45,7 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
                                    AuditDataset auditDataset,
                                    EventType eventType,
                                    PurposeOfUse... purposesOfUse) {
-        super(auditContext, new QueryBuilder(
+        super(auditContext, auditDataset, new QueryBuilder(
                 auditDataset.getEventOutcomeIndicator(),
                 auditDataset.getEventOutcomeDescription(),
                 eventType,

@@ -59,7 +59,7 @@ public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> e
                                      EventActionCode action,
                                      EventType eventType,
                                      PurposeOfUse... purposesOfUse) {
-        super(auditContext, new PatientRecordBuilder(
+        super(auditContext, auditDataset, new PatientRecordBuilder(
                 eventOutcomeIndicator,
                 eventOutcomeDescription,
                 action,

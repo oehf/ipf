@@ -54,10 +54,13 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
 
     private final AuditContext auditContext;
 
-    public IHEAuditMessageBuilder(AuditContext auditContext, D delegate) {
+    public IHEAuditMessageBuilder(AuditContext auditContext, AuditDataset auditDataset, D delegate) {
         super(delegate);
         this.auditContext = requireNonNull(auditContext, "auditContext must be not null");
         delegate.setAuditSource(auditContext);
+        if (auditDataset.getW3cTraceContextId() != null) {
+            addSwissW3CTraceContextIdParticipantObject(auditDataset.getW3cTraceContextId());
+        }
     }
 
     public AuditContext getAuditContext() {
@@ -211,6 +214,23 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
                     .filter(Objects::nonNull)
                     .forEach(sri -> addSecurityResourceParticipantObject(participantObjectIdType, sri));
         }
+        return self();
+    }
+
+    /**
+     * Adds a Participant Object representing a W3C Trace Context ID (specific for the Swiss EPR).
+     */
+    public T addSwissW3CTraceContextIdParticipantObject(String traceContextId) {
+        delegate.addParticipantObjectIdentification(
+            ParticipantObjectIdType.of("traceparent", "e-health-suisse", "traceparent"),
+            null,
+            null,
+            null,
+            requireNonNull(traceContextId, "trace context ID must not be null"),
+            ParticipantObjectTypeCode.Other,
+            ParticipantObjectTypeCodeRole.ProcessingElement,
+            null,
+            null);
         return self();
     }
 

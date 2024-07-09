@@ -27,6 +27,9 @@
             <action issue="451" dev="unixoid" type="fix">
                 Improved translation between DSMLv2 and JSON
             </action>
+            <action issue="449" dev="unixoid" type="add">
+                Add W3C Trace Context ID to Audit Trail records in the Swiss EPR context
+            </action>
             <action issue="446" dev="Ivan1pl" type="fix">
                 Properly handle query payload when translating ATNA audit records to FHIR
             </action>

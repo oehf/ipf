@@ -44,7 +44,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
     private static final String URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE = "urn:ihe:iti:xpid:2017:patientIdentifierType";
 
     IHEPatientRecordChangeLinkBuilder(AuditContext auditContext, AuditDataset auditDataset) {
-        super(auditContext, new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
+        super(auditContext, auditDataset, new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {

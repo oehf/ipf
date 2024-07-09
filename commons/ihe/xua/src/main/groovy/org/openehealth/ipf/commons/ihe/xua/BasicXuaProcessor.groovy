@@ -21,6 +21,7 @@ import org.apache.cxf.binding.soap.Soap11
 import org.apache.cxf.binding.soap.Soap12
 import org.apache.cxf.binding.soap.SoapMessage
 import org.apache.cxf.headers.Header
+import org.apache.cxf.message.Message
 import org.apache.cxf.staxutils.StaxUtils
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse
@@ -63,6 +64,11 @@ class BasicXuaProcessor implements XuaProcessor {
 
     @Override
     void enrichAuditDatasetFromXuaToken(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+        extractXuaTokenElements(message, headerDirection, auditDataset)
+        extractW3cTraceContextId(message, auditDataset)
+    }
+
+    private static void extractXuaTokenElements(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         Element assertion = null
 
         // check whether someone has already parsed the SAML2 assertion
@@ -96,7 +102,6 @@ class BasicXuaProcessor implements XuaProcessor {
         def additionalEpdUser = createAdditionalEpdUser(gpath, iheUser, purposesOfUse)
         auditDataset.humanUsers.addAll([iheUser, mainEpdUser, additionalEpdUser].findAll { !it.isEmpty() })
     }
-
 
     private static Element extractAssertionFromCxfMessage(SoapMessage message, Header.Direction headerDirection) {
         Header header = message.getHeader(new QName(WSSE_NS, 'Security'))
@@ -169,4 +174,17 @@ class BasicXuaProcessor implements XuaProcessor {
         }
         return user
     }
+
+    private static void extractW3cTraceContextId(SoapMessage message, WsAuditDataset auditDataset) {
+        def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
+        if (httpHeaders != null) {
+            for (String headerName : httpHeaders.keySet()) {
+                if (headerName.toLowerCase(Locale.ROOT) == 'traceparent') {
+                    auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
+                    break
+                }
+            }
+        }
+    }
+
 }
