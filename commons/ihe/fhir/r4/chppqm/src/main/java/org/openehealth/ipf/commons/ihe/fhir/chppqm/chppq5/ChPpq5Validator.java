@@ -55,7 +55,7 @@ public class ChPpq5Validator extends IgBasedInstanceValidator {
 
     @Override
     public void validateResponse(Object payload, Map<String, Object> parameters) {
-        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.CONSENT));
+        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.TEMPLATE_PROFILE_URIS));
     }
 
 }

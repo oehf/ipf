@@ -44,8 +44,9 @@ public class ChPpqmUtils {
         try {
             FHIR_CONTEXT = IgBasedFhirContextSupplier.getContext(
                     FhirContext.forR4(),
-                    "classpath:/igs/ch-ppqm-2.0.0.tgz",
-                    "classpath:/igs/ch-epr-term-2.0.9.tgz");
+                    "classpath:/igs/ch-epr-fhir-4.0.1-ballot.tgz",
+                    "classpath:/igs/ch-epr-term-2.0.9.tgz",
+                    "classpath:/igs/ch-core-4.0.1.tgz");
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }
@@ -55,14 +56,25 @@ public class ChPpqmUtils {
         return FHIR_CONTEXT;
     }
 
+    public static final Set<String> TEMPLATE_IDS = Set.of("201", "202", "203", "301", "302", "303", "304");
+
+    public static String getTemplateProfileUri(String templateId) {
+        return Profiles.BASE_URL + "/PpqmConsentTemplate" + templateId;
+    }
+
+    public static final Set<String> TEMPLATE_PROFILE_URIS = TEMPLATE_IDS.stream()
+        .map(ChPpqmUtils::getTemplateProfileUri)
+        .collect(Collectors.toSet());
+
     public static class Profiles {
-        public static final String CONSENT = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmConsent";
-        public static final String FEED_REQUEST_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmFeedRequestBundle";
-        public static final String RETRIEVE_RESPONSE_BUNDLE = "http://fhir.ch/ig/ch-epr-ppqm/StructureDefinition/PpqmRetrieveResponseBundle";
+        public static final String BASE_URL = "http://fhir.ch/ig/ch-epr-fhir/StructureDefinition";
+        public static final String FEED_REQUEST_BUNDLE      = BASE_URL + "/PpqmFeedRequestBundle";
+        public static final String RETRIEVE_RESPONSE_BUNDLE = BASE_URL + "/PpqmRetrieveResponseBundle";
     }
 
     public static class CodingSystems {
-        public static String CONSENT_IDENTIFIER_TYPE = "http://fhir.ch/ig/ch-epr-ppqm/CodeSystem/PpqmConsentIdentifierType";
+        public static String CONSENT_IDENTIFIER_TYPE = "http://fhir.ch/ig/ch-epr-fhir/CodeSystem/PpqmConsentIdentifierType";
+        public static String GLN = "urn:oid:2.51.1.3";
     }
 
     public static class ConsentIdTypes {

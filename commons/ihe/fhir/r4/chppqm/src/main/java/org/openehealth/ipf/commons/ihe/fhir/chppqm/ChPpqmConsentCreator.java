@@ -82,7 +82,7 @@ public class ChPpqmConsentCreator {
                                 .collect(Collectors.toList())));
 
         consent.setId(consentId);
-        consent.getMeta().addProfile(ChPpqmUtils.Profiles.CONSENT);
+        consent.getMeta().addProfile(ChPpqmUtils.getTemplateProfileUri(templateId));
         return consent;
     }
 
@@ -110,7 +110,8 @@ public class ChPpqmConsentCreator {
     private static Consent.provisionActorComponent createInstanceActor(
             SubjectRole role,
             String idQualifier,
-            String id)
+            String id,
+            String idSystem)
     {
         return createActor(role)
                 .setReference(new Reference()
@@ -118,6 +119,7 @@ public class ChPpqmConsentCreator {
                                 .setType(new CodeableConcept(new Coding()
                                         .setSystem(Constants.URN_IETF_RFC_3986)
                                         .setCode(idQualifier)))
+                                .setSystem(idSystem)
                                 .setValue(id)));
     }
 
@@ -137,7 +139,7 @@ public class ChPpqmConsentCreator {
                 "201",
                 eprSpid,
                 "urn:e-health-suisse:2015:policies:access-level:full",
-                createInstanceActor(SubjectRole.PATIENT, "urn:e-health-suisse:2015:epr-spid", eprSpid),
+                createInstanceActor(SubjectRole.PATIENT, "urn:e-health-suisse:2015:epr-spid", eprSpid, "urn:oid:" + PpqConstants.CodingSystemIds.SWISS_PATIENT_ID),
                 null,
                 null,
                 Collections.emptyList());
@@ -169,7 +171,7 @@ public class ChPpqmConsentCreator {
                 List.of(PurposeOfUse.NORMAL, PurposeOfUse.AUTO, PurposeOfUse.DICOM_AUTO));
     }
 
-    // template 301 -- read access for a particular HCP
+    // template 301 -- read access for a particular HCP without the possibility to delegate
     public static Consent create301Consent(
             String id,
             String eprSpid,
@@ -178,16 +180,12 @@ public class ChPpqmConsentCreator {
             Date startDate,
             Date endDate)
     {
-        if (policyIdReference.contains("delegation") && (endDate == null)) {
-            // TODO: In Swiss EPR spec revision 2024, delegation will be moved to template 304.
-            throw new IllegalArgumentException("In delegation policies, the end date shall be provided");
-        }
         return createConsent(
                 id,
                 "301",
                 eprSpid,
                 policyIdReference,
-                createInstanceActor(SubjectRole.PROFESSIONAL, "urn:gs1:gln", gln),
+                createInstanceActor(SubjectRole.PROFESSIONAL, "urn:gs1:gln", gln, ChPpqmUtils.CodingSystems.GLN),
                 startDate,
                 endDate,
                 List.of(PurposeOfUse.NORMAL));
@@ -210,7 +208,7 @@ public class ChPpqmConsentCreator {
                 "302",
                 eprSpid,
                 policyIdReference,
-                createInstanceActor(SubjectRole.PROFESSIONAL, "urn:oasis:names:tc:xspa:1.0:subject:organization-id", groupOid),
+                createInstanceActor(SubjectRole.PROFESSIONAL, "urn:oasis:names:tc:xspa:1.0:subject:organization-id", groupOid, null),
                 startDate,
                 endDate,
                 List.of(PurposeOfUse.NORMAL));
@@ -229,10 +227,33 @@ public class ChPpqmConsentCreator {
                 "303",
                 eprSpid,
                 "urn:e-health-suisse:2015:policies:access-level:full",
-                createInstanceActor(SubjectRole.REPRESENTATIVE, "urn:e-health-suisse:representative-id", representativeId),
+                createInstanceActor(SubjectRole.REPRESENTATIVE, "urn:e-health-suisse:representative-id", representativeId, null),
                 startDate,
                 endDate,
                 Collections.emptyList());
+    }
+
+    // template 304 -- read access for a particular HCP, with the possibility to delegate
+    public static Consent create304Consent(
+        String id,
+        String eprSpid,
+        String gln,
+        String policyIdReference,
+        Date startDate,
+        Date endDate)
+    {
+        if (policyIdReference.contains("delegation") && (endDate == null)) {
+            throw new IllegalArgumentException("In delegation policies, the end date shall be provided");
+        }
+        return createConsent(
+            id,
+            "304",
+            eprSpid,
+            policyIdReference,
+            createInstanceActor(SubjectRole.PROFESSIONAL, "urn:gs1:gln", gln, ChPpqmUtils.CodingSystems.GLN),
+            startDate,
+            endDate,
+            List.of(PurposeOfUse.NORMAL));
     }
 
 }

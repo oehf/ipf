@@ -66,6 +66,7 @@ class FhirToXacmlTranslator {
         def templateId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.TEMPLATE_ID)
         switch (templateId) {
             case '301':
+            case '304':
                 substitutions.put('gln', consent.provision.actor[0].reference.identifier.value)
                 break
             case '302':

@@ -42,7 +42,7 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
         switch (method) {
             case "POST":
             case "PUT":
-                return validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.CONSENT);
+                return validateProfileConformance((Resource) payload, ChPpqmUtils.TEMPLATE_PROFILE_URIS);
 
             case "DELETE":
                 String resourceId = (String) payload;

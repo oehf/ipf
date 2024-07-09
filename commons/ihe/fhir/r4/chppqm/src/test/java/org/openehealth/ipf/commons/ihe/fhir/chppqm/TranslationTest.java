@@ -127,7 +127,7 @@ public class TranslationTest {
     @Test
     public void testConsent301Creation1() throws Exception {
         Consent consent = create301Consent(createUuid(), "123456789012345678", "3210987654321",
-                "urn:e-health-suisse:2015:policies:access-level:delegation-and-normal", null, new Date());
+                "urn:e-health-suisse:2015:policies:access-level:normal", null, new Date());
         doTest("301", consent, "POST", null);
     }
 
@@ -142,6 +142,13 @@ public class TranslationTest {
     public void testConsent303Creation1() throws Exception {
         Consent consent = create303Consent(createUuid(), "123456789012345678", "rep123", null, null);
         doTest("303", consent, "POST", null);
+    }
+
+    @Test
+    public void testConsent304Creation1() throws Exception {
+        Consent consent = create304Consent(createUuid(), "123456789012345678", "3210987654321",
+            "urn:e-health-suisse:2015:policies:access-level:delegation-and-normal", null, new Date());
+        doTest("304", consent, "POST", null);
     }
 
     @Test
