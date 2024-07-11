@@ -445,6 +445,30 @@ public abstract class SampleData {
         return new QueryRegistry(query);
     }
 
+    public static QueryRegistry createFindDocumentsByReferenceIdForMultiplePatientsQuery() {
+        var query = new FindDocumentsByReferenceIdForMultiplePatientsQuery();
+        populateDocumentsQuery(query);
+        query.setPatientIds(Arrays.asList(
+            new Identifiable("id3", new AssigningAuthority("1.3")),
+            new Identifiable("id4", new AssigningAuthority("1.4"))));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
+
+        var referenceIds = new QueryList<ReferenceId>();
+        referenceIds.getOuterList().add(Arrays.asList(
+            new ReferenceId("ref-id-11", new CXiAssigningAuthority("", "1.1.1.1", "ISO"),
+                ReferenceId.ID_TYPE_CODE_UNIQUE_ID),
+            new ReferenceId("ref-id-12", null, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID),
+            new ReferenceId("ref-id-13", null, ReferenceId.ID_TYPE_CODE_REFERRAL)));
+        referenceIds.getOuterList().add(Arrays.asList(
+            new ReferenceId("ref-id-21", new CXiAssigningAuthority("", "1.1.1.2", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION),
+            new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER)));
+        query.setTypedReferenceIds(referenceIds);
+
+        return new QueryRegistry(query);
+    }
+
     public static QueryRegistry createFindDocumentsByTitleQuery() {
         var query = new FindDocumentsByTitleQuery();
         populateDocumentsQuery(query);

@@ -84,6 +84,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_EVENT_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE);
 
+        addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ,
+                DOC_ENTRY_REFERENCE_IDS,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
         addAllowedMultipleSlots(FIND_FOLDERS,
                 FOLDER_CODES);
 
@@ -160,7 +165,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
         ALLOWED_QUERY_TYPES.put(ITI_18, itiStoredQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_38, itiStoredQueryTypes);
-        ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));
+        ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ, FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ));
         ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
         ALLOWED_QUERY_TYPES.put(PHARM_1, pharmStoredQueryTypes);
     }
@@ -248,8 +253,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 };
 
             case FIND_DOCUMENTS_BY_REFERENCE_ID:
+            case FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ:
                 return new QueryParameterValidation[]{
-                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        queryType.equals(FIND_DOCUMENTS_BY_REFERENCE_ID)
+                                ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
+                                : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
                         new CodeValidation(DOC_ENTRY_CLASS_CODE),
                         new CodeValidation(DOC_ENTRY_TYPE_CODE),
                         new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),

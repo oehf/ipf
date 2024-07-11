@@ -126,6 +126,11 @@ final class FromEbXMLVisitor implements Visitor {
     }
 
     @Override
+    public void visit(FindDocumentsByReferenceIdForMultiplePatientsQuery query) {
+        FindDocumentsByReferenceIdForMultiplePatientsQueryTransformer.getInstance().fromEbXML(query, ebXML);
+    }
+
+    @Override
     public void visit(FindMedicationTreatmentPlansQuery query) {
         FindMedicationTreatmentPlansQueryTransformer.getInstance().fromEbXML(query, ebXML);
     }

@@ -41,6 +41,8 @@ public enum QueryType {
     @XmlEnumValue("FindFolders") FIND_FOLDERS("urn:uuid:958f3006-baad-4929-a4de-ff1114824431", FindFoldersQuery.class),
     /** Searches for documents by reference IDs */
     @XmlEnumValue("FindDocumentsByReferenceId") FIND_DOCUMENTS_BY_REFERENCE_ID("urn:uuid:12941a89-e02e-4be5-967c-ce4bfc8fe492", FindDocumentsByReferenceIdQuery.class),
+    /** Searches for documents by reference IDs (Multi Patient Variety). */
+    @XmlEnumValue("FindDocumentsByReferenceIdForMultiplePatients") FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ("urn:uuid:1191642d-86c4-42d8-b784-f95445f9f0d5", FindDocumentsByReferenceIdForMultiplePatientsQuery.class),
     /** Searches for folders (Multi Patient Variety). */
     @XmlEnumValue("FindFoldersForMultiplePatients") FIND_FOLDERS_MPQ("urn:uuid:50d3f5ac-39a2-11de-a1ca-b366239e58df", FindFoldersForMultiplePatientsQuery.class),
     /** Returns everything. */

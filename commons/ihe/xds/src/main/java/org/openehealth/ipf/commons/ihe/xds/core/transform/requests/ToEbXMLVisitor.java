@@ -125,6 +125,11 @@ final class ToEbXMLVisitor implements Visitor {
     }
 
     @Override
+    public void visit(FindDocumentsByReferenceIdForMultiplePatientsQuery query) {
+        FindDocumentsByReferenceIdForMultiplePatientsQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
+
+    @Override
     public void visit(FindMedicationTreatmentPlansQuery query) {
         FindMedicationTreatmentPlansQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
