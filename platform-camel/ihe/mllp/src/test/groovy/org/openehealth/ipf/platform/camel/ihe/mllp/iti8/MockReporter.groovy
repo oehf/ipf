@@ -16,21 +16,20 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import zipkin2.reporter.Reporter
+import brave.handler.MutableSpan
+import brave.handler.SpanHandler
+import brave.propagation.TraceContext
 
 /**
  * @author Christian Ohr
  */
-class MockReporter implements Reporter<zipkin2.Span> {
+class MockReporter extends SpanHandler {
 
-    private List<zipkin2.Span> spans = new ArrayList<>();
+    List<MutableSpan> spans = new ArrayList<>();
 
     @Override
-    void report(zipkin2.Span span) {
+    boolean end(TraceContext context, MutableSpan span, Cause cause) {
         spans.add(span);
-    }
-
-    List<zipkin2.Span> getSpans() {
-        return spans
+        return super.end(context, span, cause)
     }
 }

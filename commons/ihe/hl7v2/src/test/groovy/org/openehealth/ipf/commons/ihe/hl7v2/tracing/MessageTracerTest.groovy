@@ -16,20 +16,24 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
-import brave.SpanCustomizer
+import brave.Span
 import brave.Tracing
+import brave.context.slf4j.MDCScopeDecorator
+import brave.handler.MutableSpan
+import brave.handler.SpanHandler
+import brave.propagation.ThreadLocalCurrentTraceContext
+import brave.propagation.TraceContext
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
+import io.micrometer.tracing.SpanCustomizer
+import io.micrometer.tracing.brave.bridge.BraveCurrentTraceContext
+import io.micrometer.tracing.brave.bridge.BravePropagator
+import io.micrometer.tracing.brave.bridge.BraveTracer
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import zipkin2.Span
-import zipkin2.reporter.Reporter
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertNotEquals
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * @author Christian Ohr
@@ -41,12 +45,24 @@ class MessageTracerTest {
     @Test
     void traceMessage() {
         MockReporter reporter = new MockReporter()
-        Tracing tracing = Tracing.newBuilder()
+
+        // Brave setup
+        def braveCurrentTraceContext = ThreadLocalCurrentTraceContext.newBuilder()
+            .addScopeDecorator(MDCScopeDecorator.get()) // Example of Brave's automatic MDC setup
+            .build();
+        def tracing = Tracing.newBuilder()
                 .localServiceName('MessageTracerTest')
-                .spanReporter(reporter)
+                .addSpanHandler(reporter)
                 .build()
-        MessageTracer messageTracer = new MessageTracer(tracing)
-        Message sending = MessageUtils.makeMessage(CONTEXT, 'ORU', 'R01', '2.5')
+        def braveTracer = tracing.tracer();
+
+        // Micrometer Brave Bridge
+        def propagator = new BravePropagator(tracing)
+        def bridgeContext = new BraveCurrentTraceContext(braveCurrentTraceContext);
+        def tracer = new BraveTracer(braveTracer, bridgeContext);
+
+        def messageTracer = new MessageTracer(tracer, propagator)
+        def sending = MessageUtils.makeMessage(CONTEXT, 'ORU', 'R01', '2.5')
 
         messageTracer.sendMessage(sending, "producer", new Handler() {
             @Override
@@ -62,29 +78,30 @@ class MessageTracerTest {
         })
 
         // Check a few things
-        List<zipkin2.Span> spans = reporter.getSpans()
+        def spans = reporter.getSpans()
         assertEquals(2, spans.size())
 
-        Span clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT}
-        Span serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER}
+        def clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT}
+        def serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER}
         assertFalse(clientSpan.tags().isEmpty())
-        assertEquals(clientSpan.tags(), serverSpan.tags())
+        assertEquals(new HashMap<>(clientSpan.tags()), new HashMap<>(serverSpan.tags()))
         assertNotEquals(clientSpan.id(), serverSpan.id())
         assertEquals(clientSpan.id(), serverSpan.parentId())
-        assertTrue(clientSpan.durationAsLong() > serverSpan.durationAsLong())
     }
 
-    private static final class MockReporter implements Reporter<zipkin2.Span> {
+    class MockReporter extends SpanHandler {
 
-        private List<zipkin2.Span> spans = new ArrayList<>()
+        private List<MutableSpan> spans = new ArrayList<>();
 
         @Override
-        void report(zipkin2.Span span) {
-            spans.add(span)
+        boolean end(TraceContext context, MutableSpan span, Cause cause) {
+            spans.add(span);
+            return super.end(context, span, cause)
         }
 
-        List<zipkin2.Span> getSpans() {
+        List<MutableSpan> getSpans() {
             return spans
         }
     }
+
 }

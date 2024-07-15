@@ -16,15 +16,12 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
-import brave.Span
-import brave.Tracer
-import brave.Tracing
-import brave.propagation.Propagation
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.AbstractMessage
 import ca.uhn.hl7v2.model.Message
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.micrometer.tracing.Span
+import io.micrometer.tracing.Tracer
+import io.micrometer.tracing.propagation.Propagator
 
 /**
  * Helper class that injects and extracts tracing information from HL7 messages
@@ -34,66 +31,55 @@ import org.slf4j.LoggerFactory
  */
 class MessageTracer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MessageTracer.class)
-
     private static final String HL7_SENDING_APPLICATION = "MSH-3"
     private static final String HL7_SENDING_FACILITY = "MSH-4"
     private static final String HL7_MESSAGE_TYPE = "MSH-9-1"
     private static final String HL7_TRIGGER_EVENT = "MSH-9-2"
     private static final String HL7_PROCESSING_ID = "MSH-11"
 
-    private final Tracing tracing
+    private final Tracer tracer
     private final boolean removeSegment
     private final String segmentName
-    private final Propagation.Setter<Message, String> setter
-    private final Propagation.Getter<Message, String> getter
+    private final Propagator propagator;
+    private final Propagator.Setter<Message> setter
+    private final Propagator.Getter<Message> getter
 
     /**
-     * @param tracing Tracing instance
+     * @param tracer Tracer instance, e.g. BraveTracer
+     * @param propagator Propagator instance, e.g. BravePropagator
      * @param segmentName name of the segment with the propagated tracing information (default: ZTR)
      * @param removeSegment whether the segment with the propagated tracing information is removed (default: true)
      */
-    MessageTracer(Tracing tracing, String segmentName = 'ZTR', boolean removeSegment = true) {
-        this.tracing = tracing
+    MessageTracer(Tracer tracer, Propagator propagator, String segmentName = 'ZTR', boolean removeSegment = true) {
+        this.tracer = tracer
         this.removeSegment = removeSegment
         this.segmentName = segmentName
         this.setter = new Hl7MessageSetter(segmentName)
         this.getter = new Hl7MessageGetter(segmentName)
+        this.propagator = propagator;
     }
 
     void sendMessage(Message msg, String name, Handler sender) {
-        Tracer tracer = tracing.tracer()
-        Span span = startSpan(tracer.nextSpan(), Span.Kind.CLIENT, name, msg)
+        def span = startSpan(tracer.spanBuilder(), Span.Kind.CLIENT, name, msg)
         msg.addNonstandardSegment(segmentName)
-        tracing.propagation()
-                .injector(setter)
-                .inject(span.context(), msg)
-        Tracer.SpanInScope ws = tracer.withSpanInScope(span)
-        try {
+        try (def ws = this.tracer.withSpan(span)) {
+            propagator.inject(span.context(), msg, setter)
             sender.accept(msg, span)
         } catch (Throwable t) {
             span.error(t)
             throw t
         } finally {
-            ws?.close()
-            span?.finish()
+            span.end()
         }
     }
 
     void receiveMessage(Message msg, String name, Handler receiver) {
-        Tracer tracer = tracing.tracer()
-        Span span = startSpan(tracer.nextSpan(
-                tracing.propagation()
-                        .extractor(getter)
-                        .extract(msg)),
-                Span.Kind.SERVER, name, msg)
-        Tracer.SpanInScope ws = tracer.withSpanInScope(span)
-        try {
+        def span = startSpan(propagator.extract(msg, getter), Span.Kind.SERVER, name, msg)
+        try (def ws = tracer.withSpan(span)) {
             if (removeSegment && msg instanceof AbstractMessage) {
                 try {
                     msg.removeRepetition(segmentName, 0)
                 } catch (HL7Exception ignored) {
-                    // TODO LOG something?
                 }
             }
             receiver.accept(msg, span)
@@ -101,21 +87,20 @@ class MessageTracer {
             span.error(t)
             throw t
         } finally {
-            ws?.close()
-            span?.finish()
+            span.end()
         }
     }
 
-    private static Span startSpan(Span span, Span.Kind kind, String name, Message msg) {
-        span.kind(kind)
-                .name(name)
-                .tag(HL7_SENDING_APPLICATION, msg.MSH[3]?.value ?: '')
-                .tag(HL7_SENDING_FACILITY, msg.MSH[4]?.value ?: '')
-                .tag(HL7_MESSAGE_TYPE, msg.MSH[9][1]?.value ?: '')
-                .tag(HL7_TRIGGER_EVENT, msg.MSH[9][2]?.value ?: '')
-                .tag(HL7_PROCESSING_ID, msg.MSH[11]?.value ?: '')
-        // ExtraFieldPropagation.set(span.context(), 'messageId', msg.MSH[11]?.value ?: '')
-        span.start()
+    private static Span startSpan(Span.Builder spanBuilder, Span.Kind kind, String name, Message msg) {
+        spanBuilder
+            .name(name)
+            .kind(kind)
+            .tag(HL7_SENDING_APPLICATION, msg.MSH[3]?.value ?: '')
+            .tag(HL7_SENDING_FACILITY, msg.MSH[4]?.value ?: '')
+            .tag(HL7_MESSAGE_TYPE, msg.MSH[9][1]?.value ?: '')
+            .tag(HL7_TRIGGER_EVENT, msg.MSH[9][2]?.value ?: '')
+            .tag(HL7_PROCESSING_ID, msg.MSH[11]?.value ?: '')
+            .start()
     }
 
 }

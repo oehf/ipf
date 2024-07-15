@@ -16,9 +16,10 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
-import brave.propagation.Propagation
+
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Message
+import io.micrometer.tracing.propagation.Propagator
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Christian Ohr
  */
-class Hl7MessageSetter implements Propagation.Setter<Message, String> {
+class Hl7MessageSetter implements Propagator.Setter<Message> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Hl7MessageSetter)
 
@@ -43,12 +44,13 @@ class Hl7MessageSetter implements Propagation.Setter<Message, String> {
     }
 
     @Override
-    void put(Message msg, String key, String value) {
+    void set(Message msg, String key, String value) {
         if (msg && key) {
             def qip = Composite.QIP(msg) //, [segmentFieldName: key, values: value ?: ''])
             qip[1] = key
             qip[2] = value ?: ''
-            def varies = nextRepetition(msg.get(segmentName)[1])
+            def seg = msg.get(segmentName)
+            def varies = nextRepetition(seg[1])
             varies.data = qip
 
             if (LOG.isDebugEnabled()) {

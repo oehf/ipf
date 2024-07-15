@@ -16,8 +16,9 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
-import brave.propagation.Propagation
+
 import ca.uhn.hl7v2.model.AbstractMessage
+import io.micrometer.tracing.propagation.Propagator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -26,7 +27,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Christian Ohr
  */
-class Hl7MessageGetter implements Propagation.Getter<AbstractMessage, String> {
+class Hl7MessageGetter implements Propagator.Getter<AbstractMessage> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Hl7MessageGetter)
     private final String segmentName

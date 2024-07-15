@@ -58,7 +58,7 @@
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging-jvm</artifactId>
-            <version>${kotlin.logging.version}</version>
+            <version>${kotlin-logging-version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.jetbrains.kotlin</groupId>
@@ -132,7 +132,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
+                <version>${kotlin-version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -164,7 +164,7 @@
                     <plugin>
                         <groupId>org.jetbrains.dokka</groupId>
                         <artifactId>dokka-maven-plugin</artifactId>
-                        <version>${kotlin.dokka.version}</version>
+                        <version>${kotlin-dokka-version}</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>

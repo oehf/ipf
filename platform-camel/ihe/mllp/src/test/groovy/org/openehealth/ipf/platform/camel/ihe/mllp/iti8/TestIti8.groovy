@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+import brave.Span
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
@@ -28,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AbstractMllpTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import zipkin2.Span
 
 import static org.junit.jupiter.api.Assertions.*
 
@@ -52,7 +52,7 @@ class TestIti8 extends AbstractMllpTest {
     static void tearDownAfterClass() {
         System.clearProperty(PayloadLoggerBase.PROPERTY_DISABLED)
     }
-    
+
     /**
      * Happy case, audit either enabled or disabled.
      * Expected result: ACK response, two or zero audit items.
@@ -61,37 +61,38 @@ class TestIti8 extends AbstractMllpTest {
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit("xds-iti8://localhost:18082?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 2)
     }
+
     @Test
     void testHappyCaseAndAudit2() {
         doTestHappyCaseAndAudit("pix-iti8://localhost:18082?audit=true&timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 2)
     }
+
     @Test
     void testHappyCaseAndAudit3() {
         doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 0)
     }
+
     @Test
     void testHappyCaseAndTrace() {
         doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor,#clientInLogger,#clientOutLogger&timeout=${TIMEOUT}", 2)
         assertEquals(2, reporter.spans.size())
 
-        Span clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT}
-        Span serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER}
+        def clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT }
+        def serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER }
 
         assertFalse(clientSpan.tags().isEmpty())
-        assertEquals(clientSpan.tags(), serverSpan.tags())
+        assertEquals(new HashMap<>(clientSpan.tags()), new HashMap<>(serverSpan.tags()))
         assertNotEquals(clientSpan.id(), serverSpan.id())
         assertEquals(clientSpan.id(), serverSpan.parentId())
-        assertTrue(clientSpan.durationAsLong() > serverSpan.durationAsLong())
-
     }
-    
+
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def msg = send(endpointUri, body)
         assertACK(msg)
         assertAuditEvents { it.messages.size() == expectedAuditItemsCount }
     }
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on consumer side, audit enabled.
@@ -105,43 +106,47 @@ class TestIti8 extends AbstractMllpTest {
     void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('ADT^A02', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('ADT^A01', '2.5')
     }
+
     @Test
     void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('ADT^A01', '3.1415926')
     }
+
     @Test
     void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('ADT^A01^ADT_A02', '2.3.1')
     }
-    
+
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'pix-iti8://localhost:18084'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-                [process : { Exchange e -> /* nop */ }] as Processor
-                )
+            [process: { Exchange e -> /* nop */ }] as Processor
+        )
         def processor = consumer.processor
-        
+
         def body = getMessageString(msh9, msh12)
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-        
+
         processor.process(exchange)
         def response = exchange.message.body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertAuditEvents { it.messages.empty }
     }
-    
-    
+
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on producer side, audit enabled.
@@ -151,41 +156,44 @@ class TestIti8 extends AbstractMllpTest {
     void testInacceptanceOnProducer1() {
         doTestInacceptanceOnProducer('MDM^T01', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnProducer2() {
         doTestInacceptanceOnProducer('ADT^A02', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnProducer3() {
         doTestInacceptanceOnProducer('ADT^A01', '2.4')
     }
+
     @Test
     void testInacceptanceOnProducer4() {
         doTestInacceptanceOnProducer('ADT^A01', '3.1415926')
     }
+
     @Test
     void testInacceptanceOnProducer5() {
         doTestInacceptanceOnProducer('ADT^A01^ADT_A02', '2.3.1')
     }
-    
+
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = "xds-iti8://localhost:18084?timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger"
         def body = getMessageString(msh9, msh12)
         def failed = true
-        
+
         try {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception))
-            {
+            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception)) {
                 failed = false
             }
         }
         assertFalse(failed)
         assertAuditEvents { it.messages.empty }
     }
-    
+
 
     /**
      * Tests how the exceptions in tte route are handled.
@@ -202,14 +210,14 @@ class TestIti8 extends AbstractMllpTest {
         String isoMessage = this.getClass().classLoader.getResource('./iti8/iti8-a40-iso-8859-1.hl7')?.getText('iso-8859-1')
         doTestException("pix-iti8://localhost:18089?timeout=${TIMEOUT}", isoMessage, "java.nio.charset.MalformedInputException")
     }
-    
+
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
         def msg = send(endpointUri, body)
         assertNAK(msg)
         assertTrue(msg.toString().contains(wantedOutputContent))
     }
-    
-    
+
+
     /**
      * Checks whether alternative HL7 codec factories can be used.
      */

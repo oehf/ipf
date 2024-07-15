@@ -16,8 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
-import brave.SpanCustomizer
 import ca.uhn.hl7v2.model.Message
+import io.micrometer.tracing.SpanCustomizer
 
 /**
  * @author Christian Ohr

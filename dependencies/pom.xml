@@ -10,30 +10,29 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.78</bouncycastle-version>
-        <brave-version>5.18.1</brave-version>
         <camel-version>4.4.3</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
         <cxf-version>4.0.4</cxf-version>
         <commons-io-version>2.16.1</commons-io-version>
         <commons-compress-version>1.26.1</commons-compress-version>
-        <equinox-app.version>1.3.200-v20130910-1609</equinox-app.version>
-        <equinox-common.version>3.6.200-v20130402-1505</equinox-common.version>
-        <groovy-version>4.0.21</groovy-version>
+        <equinox-app-version>1.3.200-v20130910-1609</equinox-app-version>
+        <equinox-common-version>3.6.200-v20130402-1505</equinox-common-version>
+        <groovy-version>4.0.22</groovy-version>
         <hapi-version>2.5.1</hapi-version>
         <hapi-fhir-version>7.2.1</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0.0</ipf-gazelle-version>
         <httpclient5-version>5.3.1</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <!-- hapi-fhir already require jackson 2.15 while spring-boot is on 2.13 -->
-        <jackson-version>2.16.2</jackson-version>
+        <jackson-version>2.17.1</jackson-version>
         <jaxb-version>4.0.5</jaxb-version>
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
-        <kotlin.dokka.version>1.9.20</kotlin.dokka.version>
-        <kotlin.version>1.9.24</kotlin.version>
-        <kotlin.logging.version>3.0.5</kotlin.logging.version>
+        <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
+        <kotlin-version>1.9.24</kotlin-version>
+        <kotlin-logging-version>3.0.5</kotlin-logging-version>
+        <micrometer-version>1.3.2</micrometer-version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>
@@ -43,7 +42,7 @@
         <spring-boot-version>3.3.1</spring-boot-version>
         <velocity-version>2.3</velocity-version>
         <vibur-version>25.0</vibur-version>
-        <woodstox-version>6.6.2</woodstox-version>
+        <woodstox-version>7.0.0</woodstox-version>
         <xmlsec-version>4.0.2</xmlsec-version>
 
 
@@ -56,6 +55,13 @@
     <dependencyManagement>
 
         <dependencies>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bom</artifactId>
+                <version>${micrometer-version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
@@ -325,31 +331,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave</artifactId>
-                <version>${brave-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-spring-beans</artifactId>
-                <version>${brave-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-context-slf4j</artifactId>
-                <version>${brave-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-httpclient</artifactId>
-                <version>${brave-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.brave</groupId>
-                <artifactId>brave-instrumentation-servlet</artifactId>
-                <version>${brave-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.github.mizosoft.methanol</groupId>
                 <artifactId>methanol</artifactId>
                 <version>${methanol-version}</version>
@@ -366,7 +347,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-integration-tracing-brave</artifactId>
+                <artifactId>cxf-integration-tracing-micrometer</artifactId>
                 <version>${cxf.version}</version>
             </dependency>
             <dependency>
@@ -413,7 +394,7 @@
             <dependency>
                 <groupId>org.eclipse.equinox</groupId>
                 <artifactId>app</artifactId>
-                <version>${equinox-app.version}</version>
+                <version>${equinox-app-version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.equinox</groupId>
@@ -424,7 +405,7 @@
             <dependency>
                 <groupId>org.eclipse.equinox</groupId>
                 <artifactId>common</artifactId>
-                <version>${equinox-common.version}</version>
+                <version>${equinox-common-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.mdht</groupId>

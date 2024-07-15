@@ -54,12 +54,13 @@
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <easymock-version>5.2.0</easymock-version>
+        <brave-version>6.0.0</brave-version>
+        <easymock-version>5.3.0</easymock-version>
         <guava-version>33.0.0-jre</guava-version>
-        <lombok-version>1.18.32</lombok-version>
+        <lombok-version>1.18.34</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.25</tomcat-version>
+        <tomcat-version>10.1.26</tomcat-version>
         <xbean-spring-version>4.25</xbean-spring-version>
     </properties>
 
@@ -212,7 +213,24 @@
                 </exclusions>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave</artifactId>
+                <version>${brave-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-spring-beans</artifactId>
+                <version>${brave-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-context-slf4j</artifactId>
+                <version>${brave-version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>net.java.quickcheck</groupId>
                 <artifactId>quickcheck</artifactId>

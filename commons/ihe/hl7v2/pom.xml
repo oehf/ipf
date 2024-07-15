@@ -58,9 +58,14 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>

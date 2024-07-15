@@ -36,9 +36,9 @@ class Hl7MessageSetterGetterTest {
         Message r01 = MessageUtils.makeMessage(CONTEXT, 'ORU', 'R01','2.5')
         r01.addNonstandardSegment('ZTR')
         Hl7MessageSetter setter = new Hl7MessageSetter()
-        setter.put(r01, 'key1', 'value1')
-        setter.put(r01, 'key2', 'value2')
-        setter.put(r01, 'key3', 'value~with^reserved|characters')
+        setter.set(r01, 'key1', 'value1')
+        setter.set(r01, 'key2', 'value2')
+        setter.set(r01, 'key3', 'value~with^reserved|characters')
 
         assertNotNull(r01.get('ZTR'))
 
