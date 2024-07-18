@@ -13,7 +13,7 @@
         <camel-version>4.4.3</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
-        <cxf-version>4.0.4</cxf-version>
+        <cxf-version>4.0.5</cxf-version>
         <commons-io-version>2.16.1</commons-io-version>
         <commons-compress-version>1.26.1</commons-compress-version>
         <equinox-app-version>1.3.200-v20130910-1609</equinox-app-version>

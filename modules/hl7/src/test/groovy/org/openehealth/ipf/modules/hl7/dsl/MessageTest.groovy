@@ -90,25 +90,25 @@ class MessageTest extends groovy.test.GroovyAssert {
     void testCopyMessage1() {
         //def msg1Copy = msg1.empty()
         //Messages.copyMessage(msg1, msg1Copy)
-        def msg1Copy = MessageUtils.copy(msg1)
+        def msg1Copy = MessageUtils.copyMessage(msg1)
         assert msg1.toString() == msg1Copy.toString()
     }
 
     @Test
     void testCopyMessage2() {
-        def msg2Copy = MessageUtils.copy(msg2)
+        def msg2Copy = MessageUtils.copyMessage(msg2)
         assert msg2.toString() == msg2Copy.toString()
     }
 
     @Test
     void testCopyMessageWithNonStandardSegments1() {
-        def msg3Copy = MessageUtils.copy(msg3)
+        def msg3Copy = MessageUtils.copyMessage(msg3)
         assert msg3.toString() == msg3Copy.toString()
     }
 
     @Test
     void testCopyMessageWithNonStandardSegments2() {
-        def msg4Copy = MessageUtils.copy(msg4)
+        def msg4Copy = MessageUtils.copyMessage(msg4)
         assert msg4.toString() == msg4Copy.toString()
     }
 }

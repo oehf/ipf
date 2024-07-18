@@ -700,8 +700,8 @@ class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    static Message copy(Message delegate) {
-        MessageUtils.copy(delegate)
+    static Message copyMessage(Message delegate) {
+        MessageUtils.copyMessage(delegate)
     }
 
     /**

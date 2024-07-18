@@ -211,7 +211,12 @@ class MessageUtils {
         newInstance(message, message.parser.hapiContext.modelClassFactory)
     }
 
-    static Message copy(Message source) {
+    /**
+     * Copies the message by rendering and reparsing it. Consider using {@link AbstractMessage#copy()} for copying using reflection
+     * @param source message
+     * @return message copy
+     */
+    static Message copyMessage(Message source) {
         source.parser.parse(source.encode())
     }
 
@@ -225,7 +230,7 @@ class MessageUtils {
     }
 
     private static Group newInstance(Group group) {
-        group.class.newInstance()
+        group.class.getConstructor().newInstance()
     }
 
     /**

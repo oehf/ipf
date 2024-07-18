@@ -72,7 +72,7 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport {
 
         // Put the original message into the headers. Make a copy if requested
         try {
-            inMessage.setHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, copyOriginalMessage ? MessageUtils.copy(originalMessage) : originalMessage);
+            inMessage.setHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, copyOriginalMessage ? MessageUtils.copyMessage(originalMessage) : originalMessage);
         } catch (Exception e) {
             // this exception will occur when the message structure (MSH-9-3) of
             // the original adapter is wrong or when unknown segments are present

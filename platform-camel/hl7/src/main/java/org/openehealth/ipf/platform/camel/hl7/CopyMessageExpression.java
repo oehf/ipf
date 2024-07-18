@@ -33,7 +33,7 @@ class CopyMessageExpression implements Expression {
     public <T> T evaluate(Exchange exchange, Class<T> type) {
         try {
             var msg = HL7v2.bodyMessage(exchange);
-            var result = MessageUtils.copy(msg);
+            var result = MessageUtils.copyMessage(msg);
             return type.cast(result);
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);

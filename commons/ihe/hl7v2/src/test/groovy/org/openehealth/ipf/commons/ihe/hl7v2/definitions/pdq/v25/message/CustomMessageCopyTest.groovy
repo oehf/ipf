@@ -47,16 +47,16 @@ class CustomMessageCopyTest {
 
     @Test
     void testCopyDefaultQBP() throws HL7Exception {
-        ca.uhn.hl7v2.model.v25.message.QBP_Q21 QBP_Q21_copy = new PipeParser().parse(msg).copy()
-        assertTrue(QBP_Q21_copy.getQPD() instanceof ca.uhn.hl7v2.model.v25.segment.QPD)
+        ca.uhn.hl7v2.model.v25.message.QBP_Q21 copy = new PipeParser().parse(msg).copyMessage()
+        assertTrue(copy.getQPD() instanceof ca.uhn.hl7v2.model.v25.segment.QPD)
     }
 
     @Test
     void testCopyCustomQBP(){
-        QBP_Q21 QBP_Q21_copy = PARSER.parse(msg).copy()
-        assertTrue(QBP_Q21_copy.getQPD() instanceof QPD)
-        assertEquals(PARSER, QBP_Q21_copy.getParser())
-        assertEquals(PARSER.getFactory(), QBP_Q21_copy.getParser().getFactory())
+        QBP_Q21 copy = PARSER.parse(msg).copyMessage()
+        assertTrue(copy.getQPD() instanceof QPD)
+        assertEquals(PARSER, copy.getParser())
+        assertEquals(PARSER.getFactory(), copy.getParser().getFactory())
     }
 
 }

@@ -78,7 +78,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
             return render(nakFactory.createDefaultNak(e));
         }
 
-        var originalRequest = MessageUtils.copy(msg);
+        var originalRequest = MessageUtils.copyMessage(msg);
 
         // play the route, handle its outcomes and check response acceptance
         try {
