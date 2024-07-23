@@ -32,9 +32,9 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
  */
 class Iti56TestRouteBuilder extends RouteBuilder {
 
-    static final AtomicInteger responseCount = new AtomicInteger()  
+    static final AtomicInteger responseCount = new AtomicInteger()
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
-    
+
     static final String RESPONSE = StandardTestContainer.readFile('iti56/iti56-sample-response.xml')
 
     final CountDownLatch countDownLatch, asyncCountDownLatch
@@ -45,15 +45,13 @@ class Iti56TestRouteBuilder extends RouteBuilder {
         countDownLatch      = new CountDownLatch(TASKS_COUNT)
         asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
     }
-    
+
     @Override
     public void configure() throws Exception {
 
         // receiver of asynchronous responses
         from('xcpd-iti56-async-response:iti56service-response' +
-                '?correlator=#correlator' +
-                '&inInterceptors=#inLogInterceptor' +
-                '&outInterceptors=#outLogInterceptor')
+                '?correlator=#correlator')
             .process(iti56ResponseValidator())
             .process {
                 if (! it.in.body.contains('<soap:Fault')) {
@@ -66,9 +64,7 @@ class Iti56TestRouteBuilder extends RouteBuilder {
 
 
         // responding route
-        from('xcpd-iti56:iti56service' +
-                '?inInterceptors=#inLogInterceptor' +
-                '&outInterceptors=#outLogInterceptor')
+        from('xcpd-iti56:iti56service')
             .process(iti56RequestValidator())
             .process {
                 it.message.body = RESPONSE
@@ -79,9 +75,7 @@ class Iti56TestRouteBuilder extends RouteBuilder {
 
 
         // responding route for testing errors
-        from('xcpd-iti56:iti56service-error' +
-                '?inInterceptors=#inLogInterceptor' +
-                '&outInterceptors=#outLogInterceptor')
+        from('xcpd-iti56:iti56service-error')
             .throwException(new RuntimeException("abcd"))
     }
 
