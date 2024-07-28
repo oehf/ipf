@@ -16,13 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
-import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.DefaultAuditContext;
-import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.*;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
@@ -57,15 +51,16 @@ public class IpfAtnaAutoConfiguration {
                                      AuditMetadataProvider auditMetadataProvider,
                                      AuditExceptionHandler auditExceptionHandler,
                                      AuditMessagePostProcessor auditMessagePostProcessor,
+                                     WsAuditDatasetEnricher wsAuditDatasetEnricher,
                                      @Value("${spring.application.name}") String appName) {
         if (config.getBalp() != null) {
             return balpConfiguration(defaultContextConfiguration(new DefaultBalpAuditContext(), config,
                 auditTransmissionProtocol, auditMessageQueue, tlsParameters, auditMetadataProvider,
-                auditExceptionHandler, auditMessagePostProcessor, appName), config);
+                auditExceptionHandler, auditMessagePostProcessor, wsAuditDatasetEnricher, appName), config);
         } else {
             return defaultContextConfiguration(new DefaultAuditContext(), config, auditTransmissionProtocol,
                 auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
-                auditMessagePostProcessor, appName);
+                auditMessagePostProcessor, wsAuditDatasetEnricher, appName);
         }
     }
 
@@ -77,6 +72,7 @@ public class IpfAtnaAutoConfiguration {
                                              AuditMetadataProvider auditMetadataProvider,
                                              AuditExceptionHandler auditExceptionHandler,
                                              AuditMessagePostProcessor auditMessagePostProcessor,
+                                             WsAuditDatasetEnricher wsAuditDatasetEnricher,
                                              @Value("${spring.application.name}") String appName) {
 
         auditContext.setAuditEnabled(config.isAuditEnabled());
@@ -97,6 +93,11 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditMessageQueue(auditMessageQueue);
         auditContext.setAuditExceptionHandler(auditExceptionHandler);
         auditContext.setAuditMessagePostProcessor(auditMessagePostProcessor);
+
+        if (wsAuditDatasetEnricher != WsAuditDatasetEnricher.NONE) {
+            auditContext.setWsAuditDatasetEnricher(wsAuditDatasetEnricher);
+        }
+
         return auditContext;
     }
 
@@ -211,6 +212,15 @@ public class IpfAtnaAutoConfiguration {
     @ConditionalOnMissingBean
     public TlsParameters tlsParameters() {
         return TlsParameters.getDefault();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public WsAuditDatasetEnricher wsAuditDatasetEnricher(IpfAtnaConfigurationProperties config) throws Exception {
+        if (config.getWsAuditDatasetEnricherClass() != null) {
+            return config.getWsAuditDatasetEnricherClass().getConstructor().newInstance();
+        }
+        return WsAuditDatasetEnricher.NONE;
     }
 
     // Some audit event listeners

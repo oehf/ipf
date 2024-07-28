@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.swissepr
+package org.openehealth.ipf.commons.ihe.ws.cxf.audit
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
@@ -21,14 +21,10 @@ import org.apache.cxf.binding.soap.Soap11
 import org.apache.cxf.binding.soap.Soap12
 import org.apache.cxf.binding.soap.SoapMessage
 import org.apache.cxf.headers.Header
-import org.apache.cxf.message.Message
 import org.apache.cxf.staxutils.StaxUtils
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDatasetEnricher
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -37,9 +33,11 @@ import org.w3c.dom.NodeList
 import javax.xml.namespace.QName
 
 /**
+ * WS audit dataset enricher which fulfills IHE requirements on propagating XUA attributes to ATNA records.
+ *
  * @author Dmytro Rud
  */
-class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
+class XuaWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
 
     /**
      * If a SAML assertion is stored under this key in the Web Service context,
@@ -53,22 +51,20 @@ class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
     static final String WSSE_NS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
     static final String SAML20_NS = "urn:oasis:names:tc:SAML:2.0:assertion"
 
-    static final String SWISS_USER_POU_OID  = '2.16.756.5.30.1.127.3.10.5'
-    static final String SWISS_USER_ROLE_OID = '2.16.756.5.30.1.127.3.10.6'
-
     static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = 'urn:oasis:names:tc:xspa:1.0:subject:purposeofuse'
     static final String SUBJECT_NAME_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xspa:1.0:subject:subject-id'
     static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = 'urn:oasis:names:tc:xacml:2.0:subject:role'
     static final String PATIENT_ID_ATTRIBUTE_NAME     = 'urn:oasis:names:tc:xacml:2.0:resource:resource-id'
 
-
     @Override
     void enrichAuditDataset(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
-        extractXuaTokenElements(message, headerDirection, auditDataset)
-        extractW3cTraceContextId(message, auditDataset)
+        GPathResult xuaToken = extractXuaToken(message, headerDirection)
+        if (xuaToken != null) {
+            extractXuaTokenElements(xuaToken, auditDataset)
+        }
     }
 
-    private static void extractXuaTokenElements(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+    protected static GPathResult extractXuaToken(SoapMessage message, Header.Direction headerDirection) {
         Element assertion = null
 
         // check whether someone has already parsed the SAML2 assertion
@@ -82,25 +78,11 @@ class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
             assertion = extractAssertionFromCxfMessage(message, headerDirection) ?: extractAssertionFromDom(message)
         }
         if (assertion == null) {
-            return
+            return null
         }
 
         message.getExchange().put(XUA_SAML_ASSERTION, assertion)
-        def gpath = new XmlSlurper(false, true).parseText(StaxUtils.toString(assertion))
-
-        // extract purpose of use, patient id, etc.
-        def purposesOfUse = []
-        for (pou in gpath.AttributeStatement.Attribute.findAll { it.@Name == PURPOSE_OF_USE_ATTRIBUTE_NAME }.AttributeValue.PurposeOfUse) {
-            purposesOfUse << PurposeOfUse.of(pou.@code.text(), pou.@codeSystem.text(), pou.@displayName.text())
-        }
-        auditDataset.purposesOfUse = purposesOfUse as PurposeOfUse[]
-        auditDataset.xuaPatientId = gpath.AttributeStatement.Attribute.find { it.@Name == PATIENT_ID_ATTRIBUTE_NAME }.AttributeValue[0].text()
-
-        // extract data related to human users
-        def iheUser = createIheUser(gpath)
-        def mainEpdUser = createMainEpdUser(gpath, iheUser)
-        def additionalEpdUser = createAdditionalEpdUser(gpath, iheUser, purposesOfUse)
-        auditDataset.humanUsers.addAll([iheUser, mainEpdUser, additionalEpdUser].findAll { !it.isEmpty() })
+        return new XmlSlurper(false, true).parseText(StaxUtils.toString(assertion))
     }
 
     private static Element extractAssertionFromCxfMessage(SoapMessage message, Header.Direction headerDirection) {
@@ -132,6 +114,25 @@ class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
         return (nodeList.getLength() > 0) ? (Element) nodeList.item(0) : null
     }
 
+    protected static void extractXuaTokenElements(GPathResult xuaToken, WsAuditDataset auditDataset) {
+        def purposesOfUse = []
+        for (attr in xuaToken.AttributeStatement.Attribute) {
+            switch (attr.@Name) {
+                case PURPOSE_OF_USE_ATTRIBUTE_NAME:
+                    for (pou in attr.AttributeValue.PurposeOfUse) {
+                        purposesOfUse << PurposeOfUse.of(pou.@code.text(), pou.@codeSystem.text(), pou.@displayName.text())
+                    }
+                    break
+                case PATIENT_ID_ATTRIBUTE_NAME:
+                    auditDataset.xuaPatientId = attr.AttributeValue[0].text()
+                    break
+            }
+        }
+        auditDataset.purposesOfUse = purposesOfUse
+
+        conditionallyAddHumanUser(createIheUser(xuaToken), auditDataset)
+    }
+
     private static HumanUser createIheUser(GPathResult gpath) {
         def user = new HumanUser()
         String userName     = gpath.Subject.NameID[0].text()
@@ -148,42 +149,9 @@ class SwissEprWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
         return user
     }
 
-    private static HumanUser createMainEpdUser(GPathResult gpath, HumanUser iheUser) {
-        def user = new HumanUser()
-        user.id = gpath.Subject.NameID[0].text()
-        user.name = gpath.AttributeStatement.Attribute.find { it.@Name == SUBJECT_NAME_ATTRIBUTE_NAME }.AttributeValue[0].text()
-        user.roles.addAll(iheUser.roles)
-        return user
-    }
-
-    private static HumanUser createAdditionalEpdUser(GPathResult gpath, HumanUser iheUser, List<PurposeOfUse> purposesOfUse) {
-        def user = new HumanUser()
-        user.id = gpath.Subject.SubjectConfirmation.NameID[0].text()
-        user.name = gpath.Subject.SubjectConfirmation.SubjectConfirmationData.AttributeStatement.Attribute.find { it.@Name == SUBJECT_NAME_ATTRIBUTE_NAME }.AttributeValue[0].text()
-        switch (iheUser.roles.find { it.codeSystemName == SWISS_USER_ROLE_OID }?.code) {
-            case 'HCP':
-                if (purposesOfUse.find { (it.codeSystemName == SWISS_USER_POU_OID) && it.code.contains('AUTO') }) {
-                    user.roles << ActiveParticipantRoleId.of('TCU', SWISS_USER_ROLE_OID, 'Technical User')
-                } else {
-                    user.roles << ActiveParticipantRoleId.of('ASS', SWISS_USER_ROLE_OID, 'Assistant')
-                }
-                break
-            case 'PAT':
-                user.roles << ActiveParticipantRoleId.of('REP', SWISS_USER_ROLE_OID, 'Representative')
-                break
-        }
-        return user
-    }
-
-    private static void extractW3cTraceContextId(SoapMessage message, WsAuditDataset auditDataset) {
-        def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
-        if (httpHeaders != null) {
-            for (String headerName : httpHeaders.keySet()) {
-                if (headerName.toLowerCase(Locale.ROOT) == 'traceparent') {
-                    auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
-                    break
-                }
-            }
+    protected static void conditionallyAddHumanUser(HumanUser humanUser, WsAuditDataset auditDataset) {
+        if (!humanUser.empty) {
+            auditDataset.humanUsers << humanUser
         }
     }
 

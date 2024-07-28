@@ -90,6 +90,11 @@ public interface AuditContext {
     TlsParameters getTlsParameters();
 
     /**
+     * @return Audit dataset enricher for Web Service based transactions.
+     */
+    <T extends WsAuditDatasetEnricher> T getWsAuditDatasetEnricher();
+
+    /**
      * @return a post-processor for audit messages (defaults to a NO-OP implementation
      */
     default AuditMessagePostProcessor getAuditMessagePostProcessor() {

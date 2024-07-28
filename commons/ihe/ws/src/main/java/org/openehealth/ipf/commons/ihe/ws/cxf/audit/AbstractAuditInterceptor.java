@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
@@ -26,7 +25,6 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.core.config.Lookup;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
@@ -54,13 +52,6 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      * Key used to store audit datasets in Web Service contexts.
      */
     public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
-
-    /**
-     * Additional (e.g. specific to a regulatory domain) enricher of audit datasets.
-     */
-    @Getter
-    @Setter
-    private static WsAuditDatasetEnricher wsAuditDatasetEnricher = Lookup.lookup(WsAuditDatasetEnricher.class).orElse(WsAuditDatasetEnricher.NOOP);
 
     /**
      * Audit strategy associated with this interceptor.
@@ -170,11 +161,15 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      * @param headerDirection direction of SOAP headers.
      * @param auditDataset    target ATNA audit dataset.
      */
-    protected static void enrichAuditDataset(
+    protected void enrichAuditDataset(
             SoapMessage message,
             Header.Direction headerDirection,
-            WsAuditDataset auditDataset) {
-        wsAuditDatasetEnricher.enrichAuditDataset(message, headerDirection, auditDataset);
+            WsAuditDataset auditDataset)
+    {
+        WsAuditDatasetEnricher enricher = auditContext.getWsAuditDatasetEnricher();
+        if (enricher != null) {
+            enricher.enrichAuditDataset(message, headerDirection, auditDataset);
+        }
     }
 
 

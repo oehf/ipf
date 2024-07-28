@@ -37,6 +37,9 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="auditEnabled" value="true"/>
         <property name="auditMessageQueue" ref="mockedSender"/>
         <property name="auditSourceId" value="sourceId"/>
+        <property name="wsAuditDatasetEnricher">
+            <bean class="org.openehealth.ipf.commons.ihe.ws.cxf.audit.SwissEprWsAuditDatasetEnricher"/>
+        </property>
     </bean>
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>

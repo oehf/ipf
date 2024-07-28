@@ -101,6 +101,9 @@ public class DefaultAuditContext implements AuditContext {
     @Setter
     private String auditValueIfMissing = "UNKNOWN";
 
+    @Setter
+    private WsAuditDatasetEnricher wsAuditDatasetEnricher;
+
     public String getAuditRepositoryTransport() {
         return auditTransmissionProtocol.getTransportName();
     }
@@ -136,4 +139,11 @@ public class DefaultAuditContext implements AuditContext {
             throw new RuntimeException(e);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends WsAuditDatasetEnricher> T getWsAuditDatasetEnricher() {
+        return (T) wsAuditDatasetEnricher;
+    }
+
 }

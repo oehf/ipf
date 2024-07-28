@@ -62,12 +62,6 @@
             <type>test-jar</type>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-swissepr</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
             <scope>test</scope>

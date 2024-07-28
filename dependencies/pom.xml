@@ -599,16 +599,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-xua</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-swissepr</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-map</artifactId>
                 <version>${project.version}</version>
             </dependency>

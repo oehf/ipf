@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.atna;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
@@ -100,6 +101,12 @@ public class IpfAtnaConfigurationProperties {
 
     @Getter @Setter
     private String auditValueIfMissing = "UNKNOWN";
+
+    /**
+     * Class of the optional audit dataset enricher for Web Service based transactions.
+     */
+    @Getter @Setter
+    private Class<? extends WsAuditDatasetEnricher> wsAuditDatasetEnricherClass;
 
     @Getter @Setter
     private Balp balp;
