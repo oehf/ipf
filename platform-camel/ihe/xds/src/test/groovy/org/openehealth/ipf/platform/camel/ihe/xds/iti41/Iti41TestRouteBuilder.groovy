@@ -75,7 +75,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
             .process {
                 boolean hasExtraMetadata = it.in.getHeader(XdsJaxbDataBinding.SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.class)
                 def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
-                Exchanges.resultMessage(it).body = response
+                it.message.body = response
             }
 
         // route which ends with a SOAP Fault
@@ -115,7 +115,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
                     }
 
                     // create response, inclusive SOAP and HTTP headers
-                    Message message = Exchanges.resultMessage(it)
+                    Message message = it.message
                     message.body = new Response(status: SUCCESS)
                     message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                             ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
@@ -185,6 +185,6 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
         }
 
         def response = new Response(status)
-        Exchanges.resultMessage(exchange).body = response
+        exchange.message.body = response
     }
 }

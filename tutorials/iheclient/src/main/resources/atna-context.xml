@@ -39,8 +39,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="auditSource">
             <value type="org.openehealth.ipf.commons.audit.codes.AuditSourceType">ApplicationServerProcess</value>
         </property>
-        <!-- Sending Application for SYSLOG frame. Default is "IPF" -->
-        <property name="sendingApplication" value="demo"/>
 
         <!-- Advanced -->
 
@@ -63,6 +61,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         </property>
         -->
 
+    </bean>
+    <bean id="auditMetadataProvider" factory-bean="auditContext" factory-method="getAuditMetadataProvider">
+        <!-- Sending Application for SYSLOG frame. Default is "IPF" -->
+        <property name="sendingApplication" value="demo"/>
     </bean>
 
 

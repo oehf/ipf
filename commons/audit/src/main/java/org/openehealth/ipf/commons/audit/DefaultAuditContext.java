@@ -126,14 +126,6 @@ public class DefaultAuditContext implements AuditContext {
         return getAuditMetadataProvider().getSendingApplication();
     }
 
-    /**
-     * @deprecated use {@link AuditMetadataProvider#setSendingApplication(String)}
-     */
-    @Deprecated
-    public void setSendingApplication(String sendingApplication) {
-        this.getAuditMetadataProvider().setSendingApplication(sendingApplication);
-    }
-
     @Override
     public InetAddress getAuditRepositoryAddress() {
         try {

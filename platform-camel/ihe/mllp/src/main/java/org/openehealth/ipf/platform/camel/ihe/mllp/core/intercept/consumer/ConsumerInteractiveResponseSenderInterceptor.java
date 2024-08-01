@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
@@ -45,7 +44,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
 
 
 /**
- * Consumer-side interceptor for interactive continuation support 
+ * Consumer-side interceptor for interactive continuation support
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
@@ -120,8 +119,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             getWrappedProcessor().process(exchange);
             return;
         }
-        
-        // check whether the request is acceptable; if not -- pass it to the route, let the user decide 
+
+        // check whether the request is acceptable; if not -- pass it to the route, let the user decide
         var continuationPointer = requestTerser.get("DSC-1");
         if (isEmpty(continuationPointer)) {
             continuationPointer = null;
@@ -132,7 +131,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             getWrappedProcessor().process(exchange);
             return;
         }
-        
+
         final var queryTag = requestTerser.get("QPD-2");
         if (isEmpty(queryTag)) {
             LOG.warn("Cannot perform interactive continuation: empty query tag in QPD-2");
@@ -155,13 +154,13 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         } else {
             // no fragment found --> run the route and create fragments if necessary
             getWrappedProcessor().process(exchange);
-            var response = Exchanges.resultMessage(exchange).getBody(Message.class);
+            var response = exchange.getMessage().getBody(Message.class);
             responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
-        Exchanges.resultMessage(exchange).setBody(parser.encode(responseMessage));
+        exchange.getMessage().setBody(parser.encode(responseMessage));
     }
-     
-    
+
+
     /**
      * Checks whether the given response message should and can be fragmented.
      * <br>
@@ -182,14 +181,14 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
             		 "present in the response message returned from the route");
             return responseMessage;
         }
-        
+
         // determine data record boundaries in the response
         var segments = splitString(responseMessage.toString(), '\r');
         var recordBoundaries = getRecordBoundaries(segments);
         if (recordBoundaries.size() - 1 <= threshold) {
             return responseMessage;
         }
-        
+
         // prepare header and footer segment groups
         var headerSegments = joinSegments(segments, 0, recordBoundaries.get(0));
         var footerSegments = joinSegments(
@@ -197,12 +196,12 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
 
         // determine count of resulting fragments
         final var fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold;
-        
+
         // create a new chain of fragments
         var parser = getHl7v2TransactionConfiguration().getParser();
         String continuationPointer = null;
         for (var currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
-            // create the current fragment as String 
+            // create the current fragment as String
             var startRecordIndex = currentFragmentIndex * threshold;
             var endRecordIndex = Math.min(startRecordIndex + threshold, recordBoundaries.size() - 1);
             int startSegmentIndex = recordBoundaries.get(startRecordIndex);
@@ -236,7 +235,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         return responseMessage;
     }
 
-    
+
     /**
      * Determines boundaries for data records among the given segments' list.
      * For N data records there will be N+1 boundaries.

@@ -67,17 +67,6 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
         return true;
     }
 
-
-    @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(Object response) {
-        return null;
-    }
-
-    @Override
-    public String getEventOutcomeDescription(Object response) {
-        return null;
-    }
-
     @Override
     public boolean isAuditableResponse(Object response) {
         return true;

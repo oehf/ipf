@@ -58,32 +58,6 @@ public class AuditLogUsedBuilder extends BaseAuditMessageBuilder<AuditLogUsedBui
      * @param altUserId The Active Participant's Alternate UserID
      * @param userName  The Active Participant's UserName
      * @param networkId The Active Participant's Network Access Point ID
-     *
-     * @deprecated use {@link #addAccessingParticipant(String, String, String, boolean, List, String)}
-     */
-    @Deprecated
-    public AuditLogUsedBuilder addAccessingParticipant(String userId,
-                                                       String altUserId,
-                                                       String userName,
-                                                       boolean userIsRequestor,
-                                                       String networkId) {
-        return addAccessingParticipant(
-                userId,
-                altUserId,
-                userName,
-                userIsRequestor,
-                Collections.emptyList(),
-                networkId);
-    }
-
-    /**
-     * Adds the Active Participant of the User or System that accessed the log
-     *
-     * @param userId    The person or process accessing the audit trail. If both are known,
-     *                  then two active participants shall be included (both the person and the process).
-     * @param altUserId The Active Participant's Alternate UserID
-     * @param userName  The Active Participant's UserName
-     * @param networkId The Active Participant's Network Access Point ID
      */
     public AuditLogUsedBuilder addAccessingParticipant(String userId,
                                                        String altUserId,

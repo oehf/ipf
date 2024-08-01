@@ -25,7 +25,6 @@ import org.apache.camel.support.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.HapiClientAuditInterceptor;
 
 import java.util.List;
@@ -107,7 +106,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         }
 
         var result = executableClient.execute();
-        var resultMessage = Exchanges.resultMessage(exchange);
+        var resultMessage = exchange.getMessage();
         resultMessage.setBody(result);
     }
 

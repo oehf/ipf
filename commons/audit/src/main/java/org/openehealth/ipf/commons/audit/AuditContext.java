@@ -49,12 +49,6 @@ public interface AuditContext {
     boolean isAuditEnabled();
 
     /**
-     * @param auditEnabled enable or disable auditing
-     */
-    @Deprecated(forRemoval = true)
-    void setAuditEnabled(boolean auditEnabled);
-
-    /**
      * @return hostname of the audit repository
      */
     String getAuditRepositoryHostName();

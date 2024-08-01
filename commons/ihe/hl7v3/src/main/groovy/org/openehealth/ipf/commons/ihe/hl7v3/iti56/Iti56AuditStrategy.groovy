@@ -51,7 +51,7 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
      *      response message as {@link GPathResult}.
      */
     @Override
-    EventOutcomeIndicator getEventOutcomeIndicator(Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset,Object gpath) {
         try {
             return ((gpath.name() == 'PatientLocationQueryResponse') &&
                     (gpath.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?

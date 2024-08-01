@@ -349,15 +349,6 @@ public abstract class AbstractWsEndpoint<
     }
 
     /**
-     * Returns custom interceptors configured for this endpoint.
-     * @deprecated use {@link #getCustomCxfInterceptors()}
-     */
-    @Deprecated
-    public InterceptorProvider getCustomInterceptors() {
-        return getCustomCxfInterceptors();
-    }
-
-    /**
      * @return homeCommunityId of this endpoint.
      */
     @ManagedAttribute(description = "HomeCommunityId")

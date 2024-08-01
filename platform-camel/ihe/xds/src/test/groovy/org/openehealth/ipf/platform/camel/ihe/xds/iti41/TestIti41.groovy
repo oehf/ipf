@@ -31,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.xml.XmlUtils
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
@@ -243,7 +242,7 @@ class TestIti41 extends XdsStandardTestContainer {
 
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
-        def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
+        def resultMessage = producerTemplate.send(endpointUri, requestExchange).message
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti41TestRouteBuilder.ASYNC_DELAY)
 
