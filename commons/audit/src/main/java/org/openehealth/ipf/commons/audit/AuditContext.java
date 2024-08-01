@@ -95,6 +95,11 @@ public interface AuditContext {
     <T extends WsAuditDatasetEnricher> T getWsAuditDatasetEnricher();
 
     /**
+     * @return Audit dataset enricher for FHIR based transactions.
+     */
+    <T extends FhirAuditDatasetEnricher> T getFhirAuditDatasetEnricher();
+
+    /**
      * @return a post-processor for audit messages (defaults to a NO-OP implementation
      */
     default AuditMessagePostProcessor getAuditMessagePostProcessor() {

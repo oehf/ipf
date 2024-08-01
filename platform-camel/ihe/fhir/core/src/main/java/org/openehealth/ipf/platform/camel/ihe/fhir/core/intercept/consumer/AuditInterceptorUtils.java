@@ -17,8 +17,10 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDatasetEnricher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,4 +77,12 @@ public abstract class AuditInterceptorUtils {
         }
         return Optional.empty();
     }
+
+    public static void enrichAuditDataset(AuditDataset auditDataset, AuditContext auditContext, Exchange exchange) {
+        if (auditContext.getFhirAuditDatasetEnricher() != null) {
+            FhirAuditDatasetEnricher enricher = auditContext.getFhirAuditDatasetEnricher();
+            enricher.enrichAuditDataset(auditDataset, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+        }
+    }
+
 }

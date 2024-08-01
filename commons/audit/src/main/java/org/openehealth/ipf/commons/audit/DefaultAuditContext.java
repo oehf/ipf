@@ -104,6 +104,9 @@ public class DefaultAuditContext implements AuditContext {
     @Setter
     private WsAuditDatasetEnricher wsAuditDatasetEnricher;
 
+    @Setter
+    private FhirAuditDatasetEnricher fhirAuditDatasetEnricher;
+
     public String getAuditRepositoryTransport() {
         return auditTransmissionProtocol.getTransportName();
     }
@@ -144,6 +147,12 @@ public class DefaultAuditContext implements AuditContext {
     @Override
     public <T extends WsAuditDatasetEnricher> T getWsAuditDatasetEnricher() {
         return (T) wsAuditDatasetEnricher;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends FhirAuditDatasetEnricher> T getFhirAuditDatasetEnricher() {
+        return (T) fhirAuditDatasetEnricher;
     }
 
 }

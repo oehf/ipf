@@ -106,6 +106,7 @@ class Iti68ConsumerAuditInterceptor
 
             // TODO Also extract basic auth user?
             AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
+            AuditInterceptorUtils.enrichAuditDataset(auditDataset, auditContext, exchange);
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {

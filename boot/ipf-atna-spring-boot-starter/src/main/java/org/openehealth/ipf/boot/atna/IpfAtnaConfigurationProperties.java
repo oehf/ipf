@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.atna;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
@@ -107,6 +108,12 @@ public class IpfAtnaConfigurationProperties {
      */
     @Getter @Setter
     private Class<? extends WsAuditDatasetEnricher> wsAuditDatasetEnricherClass;
+
+    /**
+     * Class of the optional audit dataset enricher for FHIR based transactions.
+     */
+    @Getter @Setter
+    private Class<? extends FhirAuditDatasetEnricher> fhirAuditDatasetEnricherClass;
 
     @Getter @Setter
     private Balp balp;

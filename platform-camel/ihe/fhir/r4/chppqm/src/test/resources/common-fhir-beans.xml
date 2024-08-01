@@ -41,6 +41,9 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="auditMessageQueue" ref="mockedSender"/>
         <property name="auditSourceId" value="IPF"/>
         <property name="auditEnterpriseSiteId" value="IPF"/>
+        <property name="fhirAuditDatasetEnricher">
+            <bean class="org.openehealth.ipf.commons.ihe.fhir.audit.SwissEprFhirAuditDatasetEnricher"/>
+        </property>
     </bean>
 
     <bean id="mockedSender" class="org.openehealth.ipf.commons.audit.queue.RecordingAuditMessageQueue"/>

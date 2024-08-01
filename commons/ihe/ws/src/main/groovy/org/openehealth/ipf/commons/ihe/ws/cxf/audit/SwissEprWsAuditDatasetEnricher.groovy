@@ -38,9 +38,11 @@ class SwissEprWsAuditDatasetEnricher extends XuaWsAuditDatasetEnricher {
         GPathResult xuaToken = extractXuaToken(message, headerDirection)
         if (xuaToken != null) {
             extractXuaTokenElements(xuaToken, auditDataset)
-            def iheUser = auditDataset.humanUsers[0]
-            conditionallyAddHumanUser(createMainEprUser(xuaToken, iheUser), auditDataset)
-            conditionallyAddHumanUser(createAdditionalEprUser(xuaToken, iheUser, auditDataset.purposesOfUse), auditDataset)
+            if (!auditDataset.humanUsers.empty) {
+                def iheUser = auditDataset.humanUsers[0]
+                conditionallyAddHumanUser(createMainEprUser(xuaToken, iheUser), auditDataset)
+                conditionallyAddHumanUser(createAdditionalEprUser(xuaToken, iheUser, auditDataset.purposesOfUse), auditDataset)
+            }
         }
 
         extractW3cTraceContextId(message, auditDataset)

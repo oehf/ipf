@@ -56,7 +56,6 @@ public abstract class ChPpq3AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
             case "DELETE":
                 auditDataset.setAction(EventActionCode.Delete);
                 auditDataset.getPolicyAndPolicySetIds().add((String) request);
-                // TODO: take patient ID from XUA/IUA token
                 break;
             default:
                 log.error("Unsupported HTTP method '{}'", method);

@@ -52,15 +52,17 @@ public class IpfAtnaAutoConfiguration {
                                      AuditExceptionHandler auditExceptionHandler,
                                      AuditMessagePostProcessor auditMessagePostProcessor,
                                      WsAuditDatasetEnricher wsAuditDatasetEnricher,
+                                     FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
                                      @Value("${spring.application.name}") String appName) {
         if (config.getBalp() != null) {
             return balpConfiguration(defaultContextConfiguration(new DefaultBalpAuditContext(), config,
                 auditTransmissionProtocol, auditMessageQueue, tlsParameters, auditMetadataProvider,
-                auditExceptionHandler, auditMessagePostProcessor, wsAuditDatasetEnricher, appName), config);
+                auditExceptionHandler, auditMessagePostProcessor, wsAuditDatasetEnricher,
+                fhirAuditDatasetEnricher, appName), config);
         } else {
             return defaultContextConfiguration(new DefaultAuditContext(), config, auditTransmissionProtocol,
                 auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
-                auditMessagePostProcessor, wsAuditDatasetEnricher, appName);
+                auditMessagePostProcessor, wsAuditDatasetEnricher, fhirAuditDatasetEnricher, appName);
         }
     }
 
@@ -73,6 +75,7 @@ public class IpfAtnaAutoConfiguration {
                                              AuditExceptionHandler auditExceptionHandler,
                                              AuditMessagePostProcessor auditMessagePostProcessor,
                                              WsAuditDatasetEnricher wsAuditDatasetEnricher,
+                                             FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
                                              @Value("${spring.application.name}") String appName) {
 
         auditContext.setAuditEnabled(config.isAuditEnabled());
@@ -96,6 +99,9 @@ public class IpfAtnaAutoConfiguration {
 
         if (wsAuditDatasetEnricher != WsAuditDatasetEnricher.NONE) {
             auditContext.setWsAuditDatasetEnricher(wsAuditDatasetEnricher);
+        }
+        if (fhirAuditDatasetEnricher != FhirAuditDatasetEnricher.NONE) {
+            auditContext.setFhirAuditDatasetEnricher(fhirAuditDatasetEnricher);
         }
 
         return auditContext;
@@ -221,6 +227,15 @@ public class IpfAtnaAutoConfiguration {
             return config.getWsAuditDatasetEnricherClass().getConstructor().newInstance();
         }
         return WsAuditDatasetEnricher.NONE;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FhirAuditDatasetEnricher fhirAuditDatasetEnricher(IpfAtnaConfigurationProperties config) throws Exception {
+        if (config.getFhirAuditDatasetEnricherClass() != null) {
+            return config.getFhirAuditDatasetEnricherClass().getConstructor().newInstance();
+        }
+        return FhirAuditDatasetEnricher.NONE;
     }
 
     // Some audit event listeners

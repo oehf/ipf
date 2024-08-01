@@ -112,6 +112,8 @@ public class ChPpq3Test extends FhirTestContainer {
 
     @Test
     public void testUpdate2() throws Exception {
+        String traceContextId = "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01";
+
         Consent consent = create201Consent(createUuid(), "123456789012345678");
         consent.setId(createUuid());
 
@@ -122,11 +124,17 @@ public class ChPpq3Test extends FhirTestContainer {
                 .withAdditionalHeader("Header2", "Value2")
                 .withAdditionalHeader("Authorization", "Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw==")
                 .withAdditionalHeader("Header2", "Value3")
+                .withAdditionalHeader("TraceParent", traceContextId)
                 .withAdditionalHeader("Header2", "Value1")
                 .execute();
 
         List<AuditMessage> auditMessages = auditSender.getMessages();
         assertEquals(1, auditMessages.size());
+
+        AuditMessage auditMessage = auditMessages.get(0);
+        assertEquals(3, auditMessage.getParticipantObjectIdentifications().size());
+        assertEquals(traceContextId, auditMessage.getParticipantObjectIdentifications().get(0).getParticipantObjectID());
+
         log.info("");
     }
 

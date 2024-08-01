@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer.AuditInterceptorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,6 +110,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         try {
             var auditDataset = strategy.createAuditDataset();
             auditDataset.setSourceUserId(auditContext.getAuditValueIfMissing());
+            AuditInterceptorUtils.enrichAuditDataset(auditDataset, auditContext, exchange);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);
