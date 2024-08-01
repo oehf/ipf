@@ -18,17 +18,12 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import jakarta.xml.bind.annotation.XmlEnum;
-import jakarta.xml.bind.annotation.XmlType;
-
 import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingSystemIds;
 
 /**
  * @author Dmytro Rud
  */
 @AllArgsConstructor
-@XmlType(name = "SubjectRole", namespace = "http://www.openehealth.org/ipf/ppq")
-@XmlEnum
 public enum SubjectRole {
     PATIENT       (new CE("PAT",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Patient")),
     PROFESSIONAL  (new CE("HCP",  CodingSystemIds.SWISS_SUBJECT_ROLE, "eHealth Suisse EPD Akteure", "Healthcare Professional")),

@@ -18,15 +18,10 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import jakarta.xml.bind.annotation.XmlEnum;
-import jakarta.xml.bind.annotation.XmlType;
-
 /**
  * @author Dmytro Rud
  */
 @AllArgsConstructor
-@XmlType(name = "NameQualifier", namespace = "http://www.openehealth.org/ipf/ppq")
-@XmlEnum()
 public enum NameQualifier {
     PATIENT("urn:e-health-suisse:2015:epr-spid"),
     PROFESSIONAL("urn:gs1:gln"),

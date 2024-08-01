@@ -17,40 +17,17 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
 
 /**
  * @author Dmytro Rud
  */
-@XmlType(name = "CX", namespace = "http://www.openehealth.org/ipf/ppq")
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class CX {
 
-    private String id;
-    private String assigningAuthorityId;
-
-    @XmlAttribute(required = true)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @XmlAttribute(required = true)
-    public String getAssigningAuthorityId() {
-        return assigningAuthorityId;
-    }
-
-    public void setAssigningAuthorityId(String assigningAuthorityId) {
-        this.assigningAuthorityId = assigningAuthorityId;
-    }
+    @Getter private final String id;
+    @Getter private final String assigningAuthorityId;
 
     public String toHl7String() {
         return id + "^^^&" + assigningAuthorityId + "&ISO";

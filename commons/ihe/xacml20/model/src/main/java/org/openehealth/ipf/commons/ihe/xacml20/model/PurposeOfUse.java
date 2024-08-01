@@ -18,17 +18,12 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import jakarta.xml.bind.annotation.XmlEnum;
-import jakarta.xml.bind.annotation.XmlType;
-
 import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingSystemIds;
 
 /**
  * @author Dmytro Rud
  */
 @AllArgsConstructor
-@XmlType(name = "PurposeOfUse", namespace = "http://www.openehealth.org/ipf/ppq")
-@XmlEnum
 public enum PurposeOfUse {
     NORMAL    (new CE("NORM",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Normal access")),
     EMERGENCY (new CE("EMER",       CodingSystemIds.SWISS_PURPOSE_OF_USE, "eHealth Suisse Verwendungszweck", "Emergency access")),
