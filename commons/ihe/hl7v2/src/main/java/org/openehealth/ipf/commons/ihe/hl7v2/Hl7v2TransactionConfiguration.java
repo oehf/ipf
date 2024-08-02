@@ -34,6 +34,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 import java.util.*;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.Validate.*;
 
 /**
@@ -53,7 +54,7 @@ public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDat
             this.auditable = auditable;
             this.responseContinuable = responseContinuable;
         }
-        
+
         boolean isAllowedTriggerEvent(String triggerEvent) {
             return triggerEvents.contains("*") || triggerEvents.contains(triggerEvent);
         }
@@ -122,15 +123,15 @@ public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDat
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
 
-        notNull(hl7Versions);
-        notNull(sendingApplication);
-        notNull(sendingFacility);
+        requireNonNull(hl7Versions);
+        requireNonNull(sendingApplication);
+        requireNonNull(sendingFacility);
 
         noNullElements(allowedRequestMessageTypes);
         noNullElements(allowedRequestTriggerEvents);
         noNullElements(allowedResponseMessageTypes);
         noNullElements(allowedResponseTriggerEvents);
-        notNull(hapiContext);
+        requireNonNull(hapiContext);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
@@ -372,7 +373,7 @@ public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDat
             var bothAreEqual = messageStructure.equals(expectedMessageStructure);
             var bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure != null && expectedMessageStructure.startsWith("ACK"));
             if (!(bothAreEqual || bothAreAcks)) {
-                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure + 
+                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure +
                         ", must be " + expectedMessageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
             }
         }

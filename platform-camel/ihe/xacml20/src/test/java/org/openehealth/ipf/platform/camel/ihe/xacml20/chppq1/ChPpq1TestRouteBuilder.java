@@ -46,11 +46,11 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                     var assertionRequest = (AssertionBasedRequestType) request;
                     var response = new EprPolicyRepositoryResponse();
                     response.setStatus(PpqConstants.StatusCode.SUCCESS);
-                    exchange.getOut().setBody(response);
+                    exchange.getMessage().setBody(response);
                     var marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                     var writer = new StringWriter();
-                    marshaller.marshal(exchange.getOut().getBody(), writer);
+                    marshaller.marshal(exchange.getMessage().getBody(), writer);
                     log.debug("PPQ output message:\n{}", writer.toString());
                 })
                 .process(chPpq1ResponseValidator());
