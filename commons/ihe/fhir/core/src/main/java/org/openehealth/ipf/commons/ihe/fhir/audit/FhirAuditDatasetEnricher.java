@@ -27,6 +27,22 @@ import java.util.Map;
  */
 public interface FhirAuditDatasetEnricher extends org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher {
 
-    void enrichAuditDataset(AuditDataset auditDataset, Object request, Map<String, Object> parameters);
+    /**
+     * Enriches the given audit dataset with elements from the given FHIR request message.
+     *
+     * @param auditDataset target ATNA audit dataset.
+     * @param request      payload of the request message.
+     * @param parameters   Camel headers of the response message.
+     */
+    void enrichAuditDatasetFromRequest(AuditDataset auditDataset, Object request, Map<String, Object> parameters);
+
+    /**
+     * Enriches the given audit dataset with elements from the given FHIR response message.
+     *
+     * @param auditDataset target ATNA audit dataset.
+     * @param response     payload of the response message.
+     * @param parameters   Camel headers of the response message.
+     */
+    void enrichAuditDatasetFromResponse(AuditDataset auditDataset, Object response, Map<String, Object> parameters);
 
 }

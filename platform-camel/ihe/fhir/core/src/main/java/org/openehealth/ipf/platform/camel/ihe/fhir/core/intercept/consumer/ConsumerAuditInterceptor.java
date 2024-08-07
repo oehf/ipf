@@ -68,6 +68,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
                 try {
                     var result = exchange.getMessage().getBody();
                     failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result, auditContext);
+                    AuditInterceptorUtils.enrichAuditDatasetFromResponse(auditDataset, auditContext, exchange);
                 } catch (Exception e) {
                     log.error("Error while enriching audit dataset from response", e);
                 }
@@ -114,7 +115,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             // TODO Also extract basic auth user?
             AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
             AuditInterceptorUtils.extractAuthorizationHeader(exchange).ifPresent(auditDataset::setAuthorization);
-            AuditInterceptorUtils.enrichAuditDataset(auditDataset, auditContext, exchange);
+            AuditInterceptorUtils.enrichAuditDatasetFromRequest(auditDataset, auditContext, exchange);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

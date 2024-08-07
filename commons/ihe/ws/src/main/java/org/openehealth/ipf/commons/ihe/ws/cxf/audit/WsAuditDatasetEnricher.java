@@ -27,18 +27,21 @@ import org.apache.cxf.headers.Header;
 public interface WsAuditDatasetEnricher extends org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher {
 
     /**
-     * Enriches the given audit dataset with elements from the given CXF message.
+     * Enriches the given audit dataset with elements from the given CXF request message.
      *
-     * @param message
-     *      source CXF message.
-     * @param headerDirection
-     *      direction of SOAP headers.
-     * @param auditDataset
-     *      target ATNA audit dataset.
+     * @param message         CXF request message.
+     * @param headerDirection direction of SOAP headers.
+     * @param auditDataset    target ATNA audit dataset.
      */
-    void enrichAuditDataset(
-            SoapMessage message,
-            Header.Direction headerDirection,
-            WsAuditDataset auditDataset);
+    void enrichAuditDatasetFromRequest(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset);
+
+    /**
+     * Enriches the given audit dataset with elements from the given CXF response message.
+     *
+     * @param message         CXF response  message.
+     * @param headerDirection direction of SOAP headers.
+     * @param auditDataset    target ATNA audit dataset.
+     */
+    void enrichAuditDatasetFromResponse(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset);
 
 }

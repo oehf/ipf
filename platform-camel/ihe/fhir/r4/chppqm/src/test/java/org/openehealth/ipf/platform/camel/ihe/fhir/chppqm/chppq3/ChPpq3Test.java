@@ -139,6 +139,31 @@ public class ChPpq3Test extends FhirTestContainer {
     }
 
     @Test
+    public void testUpdate3() throws Exception {
+        Consent consent = create201Consent(createUuid(), "123456789012345678");
+        consent.setId(createUuid());
+
+        MethodOutcome methodOutcome = client.update()
+            .resource(consent)
+            .conditional()
+            .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))
+            .withAdditionalHeader("Header2", "Value2")
+            .withAdditionalHeader("Authorization", "Bearer d2h5IGFyZSB5b3UgcmVhZGluZyB0aGlzPw==")
+            .withAdditionalHeader("Header2", "Value3")
+            .withAdditionalHeader("Header2", "Value1")
+            .execute();
+
+        List<AuditMessage> auditMessages = auditSender.getMessages();
+        assertEquals(1, auditMessages.size());
+
+        AuditMessage auditMessage = auditMessages.get(0);
+        assertEquals(3, auditMessage.getParticipantObjectIdentifications().size());
+        assertEquals(ChPpq3TestRouteBuilder.TRACE_CONTEXT_ID, auditMessage.getParticipantObjectIdentifications().get(0).getParticipantObjectID());
+
+        log.info("");
+    }
+
+    @Test
     @Disabled
     public void testDelete1() throws Exception {
         MethodOutcome methodOutcome = client.delete()

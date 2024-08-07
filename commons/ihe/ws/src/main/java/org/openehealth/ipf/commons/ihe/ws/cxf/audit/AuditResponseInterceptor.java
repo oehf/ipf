@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import org.apache.cxf.headers.Header;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -132,12 +133,11 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
             auditDataset = getAuditDataset(message);
         }
 
+        boolean isClient = isClient(asyncReceiver, serverSide);
+        enrichAuditDatasetFromResponse(message, isClient ? Header.Direction.DIRECTION_IN : Header.Direction.DIRECTION_OUT, auditDataset);
+
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)
-        extractUserIdFromWSAddressing(
-                message,
-                isClient(asyncReceiver, serverSide),
-                serverSide, 
-                auditDataset);
+        extractUserIdFromWSAddressing(message, isClient, serverSide, auditDataset);
 
         // check whether the response POJO is available and
         // perform transaction-specific enrichment of the audit dataset
@@ -150,7 +150,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         } else {
             auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response, getAuditContext());
         }
-        
+
         // perform transaction-specific auditing
         auditStrategy.doAudit(getAuditContext(), auditDataset);
     }

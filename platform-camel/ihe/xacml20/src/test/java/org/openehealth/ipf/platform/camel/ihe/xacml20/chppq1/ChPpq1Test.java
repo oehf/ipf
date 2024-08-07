@@ -80,25 +80,27 @@ public class ChPpq1Test extends StandardTestContainer {
     }
 
     @Test
-    public void testAddPolicySuccess() throws Exception {
-        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success);
+    public void testAddPolicySuccess1() throws Exception {
+        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, null);
+    }
+
+    @Test
+    public void testAddPolicySuccess2() throws Exception {
+        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, UUID.randomUUID().toString());
     }
 
     @Test
     public void testAddPolicyFailure() throws Exception {
-        testAddPolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure);
+        testAddPolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, UUID.randomUUID().toString());
     }
 
-    @Test
-    public void testAddPolicyPPQ1Success() throws Exception {
-        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success);
-    }
-
-    private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator) throws Exception {
-        var traceParentId = UUID.randomUUID().toString();
+    private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, String traceContextId) throws Exception {
+        var httpHeaders = (traceContextId != null)
+            ? Map.of(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.of("TraceParent", traceContextId))
+            : null;
         var response = (EprPolicyRepositoryResponse) send(getUri(suffix), loadFile("add-request-ppq.xml"),
             EprPolicyRepositoryResponse.class,
-            Map.of(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.of("TraceParent", traceParentId)));
+            httpHeaders);
         assertEquals(statusCode, response.getStatus());
 
         List<AuditMessage> messages = getAuditSender().getMessages();
@@ -125,7 +127,7 @@ public class ChPpq1Test extends StandardTestContainer {
             var participant = message.getParticipantObjectIdentifications().get(0);
             assertEquals(ParticipantObjectTypeCode.Other, participant.getParticipantObjectTypeCode());
             assertEquals(ParticipantObjectTypeCodeRole.ProcessingElement, participant.getParticipantObjectTypeCodeRole());
-            assertEquals(traceParentId, participant.getParticipantObjectID());
+            assertEquals((traceContextId != null) ? traceContextId : ChPpq1TestRouteBuilder.TRACE_CONTEXT_ID, participant.getParticipantObjectID());
 
             participant = message.getParticipantObjectIdentifications().get(1);
             assertEquals(ParticipantObjectTypeCode.System, participant.getParticipantObjectTypeCode());

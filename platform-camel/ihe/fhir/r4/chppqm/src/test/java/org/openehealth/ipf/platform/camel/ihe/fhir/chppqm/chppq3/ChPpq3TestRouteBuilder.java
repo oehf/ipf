@@ -31,6 +31,8 @@ import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidato
 
 public class ChPpq3TestRouteBuilder extends RouteBuilder {
 
+    public static final String TRACE_CONTEXT_ID = "00-0af7651916cd43dd8448eb211c80319c-1111111111111111-01";
+
     @Override
     public void configure() throws Exception {
         from("ch-ppq3:stub")
@@ -45,6 +47,7 @@ public class ChPpq3TestRouteBuilder extends RouteBuilder {
                     //Consent request = exchange.getMessage().getMandatoryBody(Consent.class);
                     log.info("Method = {}", exchange.getMessage().getHeader(Constants.HTTP_METHOD));
                     exchange.getMessage().setBody(new MethodOutcome(new IdType(UUID.randomUUID().toString())));
+                    exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of("TraceParent", List.of(TRACE_CONTEXT_ID)));
                 })
                 .process(itiResponseValidator());
     }

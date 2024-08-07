@@ -155,20 +155,30 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
 
 
     /**
-     * Enriches the given audit dataset with elements from the given CXF message.
+     * Enriches the given audit dataset with elements from the given CXF request message.
      *
-     * @param message         source CXF message.
+     * @param message         CXF request message.
      * @param headerDirection direction of SOAP headers.
      * @param auditDataset    target ATNA audit dataset.
      */
-    protected void enrichAuditDataset(
-            SoapMessage message,
-            Header.Direction headerDirection,
-            WsAuditDataset auditDataset)
-    {
+    protected void enrichAuditDatasetFromRequest(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         WsAuditDatasetEnricher enricher = auditContext.getWsAuditDatasetEnricher();
         if (enricher != null) {
-            enricher.enrichAuditDataset(message, headerDirection, auditDataset);
+            enricher.enrichAuditDatasetFromRequest(message, headerDirection, auditDataset);
+        }
+    }
+
+    /**
+     * Enriches the given audit dataset with elements from the given CXF response message.
+     *
+     * @param message         CXF response message.
+     * @param headerDirection direction of SOAP headers.
+     * @param auditDataset    target ATNA audit dataset.
+     */
+    protected void enrichAuditDatasetFromResponse(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+        WsAuditDatasetEnricher enricher = auditContext.getWsAuditDatasetEnricher();
+        if (enricher != null) {
+            enricher.enrichAuditDatasetFromResponse(message, headerDirection, auditDataset);
         }
     }
 

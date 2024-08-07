@@ -73,6 +73,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
                 try {
                     var result = exchange.getMessage().getBody();
                     failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+                    AuditInterceptorUtils.enrichAuditDatasetFromResponse(auditDataset, auditContext, exchange);
                 } catch (Exception e) {
                     log.error("Error while enriching audit dataset from response", e);
                 }
@@ -110,7 +111,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         try {
             var auditDataset = strategy.createAuditDataset();
             auditDataset.setSourceUserId(auditContext.getAuditValueIfMissing());
-            AuditInterceptorUtils.enrichAuditDataset(auditDataset, auditContext, exchange);
+            AuditInterceptorUtils.enrichAuditDatasetFromRequest(auditDataset, auditContext, exchange);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

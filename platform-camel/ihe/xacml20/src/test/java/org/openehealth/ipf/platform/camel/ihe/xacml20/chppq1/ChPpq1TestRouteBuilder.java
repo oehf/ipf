@@ -19,12 +19,16 @@ import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 
 import jakarta.xml.bind.Marshaller;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+
 import java.io.StringWriter;
+import java.util.Map;
 
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq1RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq1ResponseValidator;
@@ -35,6 +39,8 @@ import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidat
  */
 public class ChPpq1TestRouteBuilder extends RouteBuilder {
 
+    public static final String TRACE_CONTEXT_ID = "00-0af7651916cd43dd8448eb211c80319c-1111111111111111-01";
+
     @Override
     public void configure() throws Exception {
 
@@ -43,7 +49,10 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                 .process(chPpq1RequestValidator())
                 .process(exchange -> {
                     var request = exchange.getIn().getBody();
-                    var assertionRequest = (AssertionBasedRequestType) request;
+                    if (request instanceof AddPolicyRequest) {
+                        exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.of("TRACEPARENT", TRACE_CONTEXT_ID));
+                    }
+
                     var response = new EprPolicyRepositoryResponse();
                     response.setStatus(PpqConstants.StatusCode.SUCCESS);
                     exchange.getMessage().setBody(response);
@@ -51,7 +60,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                     var writer = new StringWriter();
                     marshaller.marshal(exchange.getMessage().getBody(), writer);
-                    log.debug("PPQ output message:\n{}", writer.toString());
+                    log.debug("PPQ output message:\n{}", writer);
                 })
                 .process(chPpq1ResponseValidator());
 

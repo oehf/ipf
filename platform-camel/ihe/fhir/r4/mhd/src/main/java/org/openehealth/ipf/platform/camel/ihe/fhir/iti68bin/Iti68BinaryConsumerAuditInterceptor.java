@@ -72,6 +72,9 @@ class Iti68BinaryConsumerAuditInterceptor
         try {
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
+            if ((!failed) && (auditDataset != null)) {
+                AuditInterceptorUtils.enrichAuditDatasetFromResponse(auditDataset, auditContext, exchange);
+            }
             // Do not check the body, because it's a stream
         } catch (Exception e) {
             if (auditDataset != null) {
@@ -105,7 +108,7 @@ class Iti68BinaryConsumerAuditInterceptor
 
             // TODO Also extract basic auth user?
             AuditInterceptorUtils.extractClientCertificateCommonName(exchange, auditDataset);
-            AuditInterceptorUtils.enrichAuditDataset(auditDataset, auditContext, exchange);
+            AuditInterceptorUtils.enrichAuditDatasetFromRequest(auditDataset, auditContext, exchange);
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {

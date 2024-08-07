@@ -32,20 +32,30 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_OUTGOING_HEADE
 public class SwissEprFhirAuditDatasetEnricher implements FhirAuditDatasetEnricher {
 
     @Override
-    public void enrichAuditDataset(AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        // the outbound value, whenever present, shall override the incoming one
-        extractW3cTraceContextId(parameters, HTTP_INCOMING_HEADERS, auditDataset);
+    public void enrichAuditDatasetFromRequest(AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
+        enrichAuditDataset(auditDataset, parameters);
+    }
+
+    @Override
+    public void enrichAuditDatasetFromResponse(AuditDataset auditDataset, Object response, Map<String, Object> parameters) {
+        enrichAuditDataset(auditDataset, parameters);
+    }
+
+    private static void enrichAuditDataset(AuditDataset auditDataset, Map<String, Object> parameters) {
         extractW3cTraceContextId(parameters, HTTP_OUTGOING_HEADERS, auditDataset);
+        extractW3cTraceContextId(parameters, HTTP_INCOMING_HEADERS, auditDataset);
     }
 
     private static void extractW3cTraceContextId(Map<String, Object> parameters, String key, AuditDataset auditDataset) {
-        Object value = parameters.get(key);
-        if (value != null) {
-            Map<String, List<String>> headers = (Map<String, List<String>>) value;
-            for (String name : headers.keySet()) {
-                if ("traceparent".equalsIgnoreCase(name)) {
-                    auditDataset.setW3cTraceContextId(headers.get(name).get(0));
-                    return;
+        if (auditDataset.getW3cTraceContextId() == null) {
+            Object value = parameters.get(key);
+            if (value != null) {
+                Map<String, List<String>> headers = (Map<String, List<String>>) value;
+                for (String name : headers.keySet()) {
+                    if ("traceparent".equalsIgnoreCase(name)) {
+                        auditDataset.setW3cTraceContextId(headers.get(name).get(0));
+                        return;
+                    }
                 }
             }
         }

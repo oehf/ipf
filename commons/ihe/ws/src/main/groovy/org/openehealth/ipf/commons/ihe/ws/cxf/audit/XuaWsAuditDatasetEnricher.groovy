@@ -57,11 +57,16 @@ class XuaWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
     static final String PATIENT_ID_ATTRIBUTE_NAME     = 'urn:oasis:names:tc:xacml:2.0:resource:resource-id'
 
     @Override
-    void enrichAuditDataset(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+    void enrichAuditDatasetFromRequest(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         GPathResult xuaToken = extractXuaToken(message, headerDirection)
         if (xuaToken != null) {
             extractXuaTokenElements(xuaToken, auditDataset)
         }
+    }
+
+    @Override
+    void enrichAuditDatasetFromResponse(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+        // nop
     }
 
     protected static GPathResult extractXuaToken(SoapMessage message, Header.Direction headerDirection) {

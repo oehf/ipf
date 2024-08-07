@@ -34,7 +34,7 @@ class SwissEprWsAuditDatasetEnricher extends XuaWsAuditDatasetEnricher {
     static final String SWISS_USER_ROLE_OID = '2.16.756.5.30.1.127.3.10.6'
 
     @Override
-    void enrichAuditDataset(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
+    void enrichAuditDatasetFromRequest(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         GPathResult xuaToken = extractXuaToken(message, headerDirection)
         if (xuaToken != null) {
             extractXuaTokenElements(xuaToken, auditDataset)
@@ -45,6 +45,11 @@ class SwissEprWsAuditDatasetEnricher extends XuaWsAuditDatasetEnricher {
             }
         }
 
+        extractW3cTraceContextId(message, auditDataset)
+    }
+
+    @Override
+    void enrichAuditDatasetFromResponse(SoapMessage message, Header.Direction headerDirection, WsAuditDataset auditDataset) {
         extractW3cTraceContextId(message, auditDataset)
     }
 
@@ -76,12 +81,14 @@ class SwissEprWsAuditDatasetEnricher extends XuaWsAuditDatasetEnricher {
     }
 
     private static void extractW3cTraceContextId(SoapMessage message, WsAuditDataset auditDataset) {
-        def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
-        if (httpHeaders != null) {
-            for (String headerName : httpHeaders.keySet()) {
-                if ('traceparent'.equalsIgnoreCase(headerName)) {
-                    auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
-                    break
+        if (auditDataset.w3cTraceContextId == null) {
+            def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
+            if (httpHeaders != null) {
+                for (String headerName : httpHeaders.keySet()) {
+                    if ('traceparent'.equalsIgnoreCase(headerName)) {
+                        auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
+                        break
+                    }
                 }
             }
         }

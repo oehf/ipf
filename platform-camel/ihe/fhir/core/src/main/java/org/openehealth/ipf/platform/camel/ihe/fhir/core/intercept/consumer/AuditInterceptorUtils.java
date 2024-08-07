@@ -78,10 +78,17 @@ public abstract class AuditInterceptorUtils {
         return Optional.empty();
     }
 
-    public static void enrichAuditDataset(AuditDataset auditDataset, AuditContext auditContext, Exchange exchange) {
+    public static void enrichAuditDatasetFromRequest(AuditDataset auditDataset, AuditContext auditContext, Exchange exchange) {
         if (auditContext.getFhirAuditDatasetEnricher() != null) {
             FhirAuditDatasetEnricher enricher = auditContext.getFhirAuditDatasetEnricher();
-            enricher.enrichAuditDataset(auditDataset, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+            enricher.enrichAuditDatasetFromRequest(auditDataset, exchange.getIn().getBody(), exchange.getIn().getHeaders());
+        }
+    }
+
+    public static void enrichAuditDatasetFromResponse(AuditDataset auditDataset, AuditContext auditContext, Exchange exchange) {
+        if (auditContext.getFhirAuditDatasetEnricher() != null) {
+            FhirAuditDatasetEnricher enricher = auditContext.getFhirAuditDatasetEnricher();
+            enricher.enrichAuditDatasetFromResponse(auditDataset, exchange.getIn().getBody(), exchange.getIn().getHeaders());
         }
     }
 

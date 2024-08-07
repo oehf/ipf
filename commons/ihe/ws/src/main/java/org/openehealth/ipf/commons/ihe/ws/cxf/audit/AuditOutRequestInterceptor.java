@@ -65,7 +65,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
         var auditDataset = getAuditDataset(message);
         auditDataset.setRemoteAddress((String) message.get(Message.ENDPOINT_ADDRESS));
         auditDataset.setDestinationUserId((String) message.get(Message.ENDPOINT_ADDRESS));
-        enrichAuditDataset(message, Header.Direction.DIRECTION_OUT, auditDataset);
+        enrichAuditDatasetFromRequest(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
         var request = extractPojo(message);
 
