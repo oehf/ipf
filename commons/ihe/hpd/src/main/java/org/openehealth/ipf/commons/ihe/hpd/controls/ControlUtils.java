@@ -17,15 +17,19 @@ package org.openehealth.ipf.commons.ihe.hpd.controls;
 
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.NotImplementedException;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.ControlStrategy;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.PaginationControlStrategy;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.SortControlStrategy;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.SortResponseControlStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResponse;
 
 import javax.naming.ldap.*;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Methods for mapping of Controls to and from DSMLv2 and Strings.
@@ -36,16 +40,27 @@ import java.util.List;
 @UtilityClass
 public class ControlUtils {
 
+    /**
+     * Map from control OIDs to control strategies.  Applications can extend this map.
+     */
+    private static final Map<String, ControlStrategy> STRATEGIES = new HashMap<>();
+
+    static {
+        STRATEGIES.put(PagedResultsControl.OID, new PaginationControlStrategy());
+        STRATEGIES.put(SortControl.OID, new SortControlStrategy());
+        STRATEGIES.put(SortResponseControl.OID, new SortResponseControlStrategy());
+    }
+
+    public static Map<String, ControlStrategy> getStrategies() {
+        return STRATEGIES;
+    }
+
     public static <T extends BasicControl> T extractControl(byte[] berBytes, String type, boolean criticality) throws IOException {
-        switch (type) {
-            case PagedResultsControl.OID:
-                return (T) new PagedResultsResponseControl(PagedResultsResponseControl.OID, criticality, berBytes);
-            case SortControl.OID:
-                return (T) new SortControl2(berBytes, criticality);
-            case SortResponseControl.OID:
-                return (T) new SortResponseControl2(berBytes, criticality);
-            default:
-                throw new NotImplementedException("Cannot handle control type " + type);
+        ControlStrategy strategy = STRATEGIES.get(type);
+        if (strategy != null) {
+            return (T) strategy.deserializeDsml2(berBytes, criticality);
+        } else {
+            throw new NotImplementedException("Cannot handle control type " + type);
         }
     }
 
