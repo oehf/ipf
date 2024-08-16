@@ -22,11 +22,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.ControlStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
 
-import javax.naming.ldap.*;
+import javax.naming.ldap.BasicControl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,22 +53,11 @@ public class ControlListDeserializer extends JsonDeserializer<List> {
     }
 
     private static BasicControl deserializeControl(JsonNode node) throws IOException {
-        switch (node.get("type").textValue()) {
-            case PagedResultsControl.OID:
-                return new PagedResultsControl(node.get("size").intValue(), node.get("cookie").binaryValue(), node.get("critical").booleanValue());
-            case SortControl.OID:
-                ArrayList<SortKey> keys = new ArrayList<>();
-                JsonNode keysNode = node.get("keys");
-                Iterator<JsonNode> keyNodes = keysNode.elements();
-                while (keyNodes.hasNext()) {
-                    JsonNode keyNode = keyNodes.next();
-                    keys.add(new SortKey(keyNode.get("attrId").textValue(), keyNode.get("ascending").booleanValue(), keyNode.get("matchingRuleId").textValue()));
-                }
-                return new SortControl2(node.get("critical").asBoolean(), keys.toArray(new SortKey[0]));
-            case SortResponseControl.OID:
-                return new SortResponseControl2(node.get("resultCode").intValue(), node.get("failedAttrId").asText(), node.get("critical").booleanValue());
-            default:
-                throw new NotImplementedException("Cannot handle control type " + node.get("type").asText());
+        ControlStrategy strategy = ControlUtils.getStrategies().get(node.get("type").textValue());
+        if (strategy != null) {
+            return strategy.deserializeJson(node);
+        } else {
+            throw new NotImplementedException("Cannot handle control type " + node.get("type").asText());
         }
     }
 

@@ -20,11 +20,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
-import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
+import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.ControlStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
 
-import javax.naming.ldap.*;
+import javax.naming.ldap.BasicControl;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,41 +43,17 @@ public class ControlListSerializer extends StdSerializer<List> {
         gen.writeStartArray(list);
         for (Object object : list) {
             Control dsmlcontrol = (Control) object;
-            BasicControl control = ControlUtils.extractControl((byte[]) dsmlcontrol.getControlValue(), dsmlcontrol.getType(), dsmlcontrol.isCriticality());
-            gen.writeStartObject();
-            gen.writeStringField("type", control.getID());
-            gen.writeBooleanField("critical", control.isCritical());
-            switch (dsmlcontrol.getType()) {
-                case PagedResultsControl.OID:
-                    PagedResultsResponseControl paginationControl = (PagedResultsResponseControl) control;
-                    gen.writeNumberField("size", paginationControl.getResultSize());
-                    if (paginationControl.getCookie() != null) {
-                        gen.writeBinaryField("cookie", paginationControl.getCookie());
-                    }
-                    break;
-                case SortControl.OID:
-                    SortControl2 sortControl = (SortControl2) control;
-                    gen.writeArrayFieldStart("keys");
-                    for (SortKey sortKey : sortControl.getKeys()) {
-                        gen.writeStartObject();
-                        gen.writeStringField("attrId", sortKey.getAttributeID());
-                        gen.writeStringField("matchingRuleId", sortKey.getMatchingRuleID());
-                        gen.writeBooleanField("ascending", sortKey.isAscending());
-                        gen.writeEndObject();
-                    }
-                    gen.writeEndArray();
-                    break;
-                case SortResponseControl.OID:
-                    SortResponseControl2 sortResponseControl = (SortResponseControl2) control;
-                    gen.writeNumberField("resultCode", sortResponseControl.getResultCode());
-                    if (sortResponseControl.getFailedAttributeName() != null) {
-                        gen.writeStringField("failedAttrId", sortResponseControl.getFailedAttributeName());
-                    }
-                    break;
-                default:
-                    throw new NotImplementedException("Cannot handle control type " + dsmlcontrol.getType());
+            ControlStrategy strategy = ControlUtils.getStrategies().get(dsmlcontrol.getType());
+            if (strategy != null) {
+                BasicControl control = strategy.deserializeDsml2((byte[]) dsmlcontrol.getControlValue(), dsmlcontrol.isCriticality());
+                gen.writeStartObject();
+                gen.writeStringField("type", control.getID());
+                gen.writeBooleanField("critical", control.isCritical());
+                strategy.serializeJson(control, gen);
+                gen.writeEndObject();
+            } else {
+                throw new NotImplementedException("Cannot handle control type " + dsmlcontrol.getType());
             }
-            gen.writeEndObject();
         }
         gen.writeEndArray();
     }
