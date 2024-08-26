@@ -39,6 +39,7 @@ class TestIti43 extends XdsStandardTestContainer {
     
     def SERVICE1 = "xds-iti43://localhost:${port}/xds-iti43-service1"
     def SERVICE2 = "xds-iti43://localhost:${port}/xds-iti43-service2"
+    def SERVICE3 = "xds-iti43://localhost:${port}/xds-iti43-service3?outInterceptors=#customUrlParametersClientOutInterceptor"
     
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti43-service2"
     
@@ -72,6 +73,12 @@ class TestIti43 extends XdsStandardTestContainer {
         assert auditSender.messages.size() == 4
         
         checkAudit(EventOutcomeIndicator.Success, 'service 2')
+    }
+
+    @Test
+    void testIti43WithUriParam() {
+        def response3 = sendIt(SERVICE3, 'service 3')
+        assert SUCCESS == response3.status
     }
     
     @Test

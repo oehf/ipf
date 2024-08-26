@@ -15,13 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
+import jakarta.activation.DataHandler
 import org.apache.camel.builder.RouteBuilder
+import org.apache.cxf.interceptor.Fault
+import org.apache.cxf.message.Message
+import org.apache.cxf.phase.AbstractPhaseInterceptor
+import org.apache.cxf.phase.Phase
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-
-import jakarta.activation.DataHandler
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -40,7 +43,10 @@ class Iti43TestRouteBuilder extends RouteBuilder {
             .process(iti43ResponseValidator())
     
         from('xds-iti43:xds-iti43-service2')
-            .process { checkValue(it, 'service 2') } 
+            .process { checkValue(it, 'service 2') }
+
+        from('xds-iti43:xds-iti43-service3?inInterceptors=#customUrlParametersCheckServerInterceptor')
+            .process { checkValue(it, 'service 3') }
     }
 
     void checkValue(exchange, expected) {
@@ -64,5 +70,17 @@ class Iti43TestRouteBuilder extends RouteBuilder {
         }
 
         exchange.message.body = response
+    }
+
+    private static class CustomParamsInterceptor extends AbstractPhaseInterceptor<Message> {
+
+        CustomParamsInterceptor() {
+            super(Phase.RECEIVE)
+        }
+
+        @Override
+        void handleMessage(Message message) throws Fault {
+            assert message.get(Message.QUERY_STRING)
+        }
     }
 }
