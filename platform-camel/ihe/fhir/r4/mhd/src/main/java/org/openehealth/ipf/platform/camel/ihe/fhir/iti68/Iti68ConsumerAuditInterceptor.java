@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.http.common.HttpMessage;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -26,8 +27,6 @@ import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer.AuditInterceptorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Audit Interceptor for ITI-68. Note that the ParticipantObjectIdentificationType for the document
@@ -102,7 +101,7 @@ class Iti68ConsumerAuditInterceptor
         try {
             var auditDataset = strategy.createAuditDataset();
 
-            var request = exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
+            var request = exchange.getMessage(HttpMessage.class).getRequest();
             auditDataset.setSourceUserId("unknown");
             auditDataset.setDestinationUserId(request.getRequestURL().toString());
             auditDataset.setRemoteAddress(request.getRemoteAddr());

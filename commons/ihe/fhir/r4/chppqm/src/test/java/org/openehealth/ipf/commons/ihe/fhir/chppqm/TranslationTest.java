@@ -66,7 +66,7 @@ public class TranslationTest {
         Xacml20Utils.initializeHerasaf();
     }
 
-    private static void doTest(String templateId, Consent consent, String httpMethod, String expectedError) throws Exception {
+    private static void doTest(String templateId, Consent consent, String httpMethod, String expectedError) {
         log.debug("Consent:\n{}", PARSER.encodeResourceToString(consent));
 
         consent.getIdentifier().stream()
@@ -105,47 +105,47 @@ public class TranslationTest {
     }
 
     @Test
-    public void testConsent201Creation1() throws Exception {
+    public void testConsent201Creation1()  {
         Consent consent = create201Consent(createUuid(), "123456789012345678");
         doTest("201", consent, "POST", null);
     }
 
     @Test
-    public void testConsent202Creation1() throws Exception {
+    public void testConsent202Creation1() {
         Consent consent = create202Consent(createUuid(), "123456789012345678",
                 "urn:e-health-suisse:2015:policies:access-level:normal");
         doTest("202", consent, "POST", null);
     }
 
     @Test
-    public void testConsent203Creation1() throws Exception {
+    public void testConsent203Creation1() {
         Consent consent = create203Consent(createUuid(), "123456789012345678",
                 "urn:e-health-suisse:2015:policies:provide-level:restricted");
         doTest("203", consent, "POST", null);
     }
 
     @Test
-    public void testConsent301Creation1() throws Exception {
+    public void testConsent301Creation1() {
         Consent consent = create301Consent(createUuid(), "123456789012345678", "3210987654321",
                 "urn:e-health-suisse:2015:policies:access-level:normal", null, new Date());
         doTest("301", consent, "POST", null);
     }
 
     @Test
-    public void testConsent302Creation1() throws Exception {
+    public void testConsent302Creation1() {
         Consent consent = create302Consent(createUuid(), "123456789012345678", "urn:oid:1.2.3.4.5",
                 "urn:e-health-suisse:2015:policies:access-level:restricted", null, new Date());
         doTest("302", consent, "POST", null);
     }
 
     @Test
-    public void testConsent303Creation1() throws Exception {
+    public void testConsent303Creation1() {
         Consent consent = create303Consent(createUuid(), "123456789012345678", "rep123", null, null);
         doTest("303", consent, "POST", null);
     }
 
     @Test
-    public void testConsent304Creation1() throws Exception {
+    public void testConsent304Creation1() {
         Consent consent = create304Consent(createUuid(), "123456789012345678", "3210987654321",
             "urn:e-health-suisse:2015:policies:access-level:delegation-and-normal", null, new Date());
         doTest("304", consent, "POST", null);

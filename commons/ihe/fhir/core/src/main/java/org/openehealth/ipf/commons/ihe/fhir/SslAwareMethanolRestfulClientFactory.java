@@ -117,7 +117,7 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
     protected synchronized Methanol getNativeHttpClient() {
         if (httpClient == null) {
             var builder = httpClientBuilder()
-                    .version(HttpClient.Version.HTTP_2)
+                    .version(HttpClient.Version.HTTP_1_1)
                     .followRedirects(HttpClient.Redirect.NORMAL)
                     .priority(1)
                     .cookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_NONE))

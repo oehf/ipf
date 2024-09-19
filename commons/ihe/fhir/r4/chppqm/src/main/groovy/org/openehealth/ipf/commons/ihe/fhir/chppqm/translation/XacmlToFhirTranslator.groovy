@@ -228,7 +228,8 @@ class XacmlToFhirTranslator {
     static Bundle translatePpq1To4Response(
             Bundle ppq4Request,
             AssertionBasedRequestType ppq1Request,
-            EprPolicyRepositoryResponse ppq1Response)
+            EprPolicyRepositoryResponse ppq1Response,
+            String baseUrl = "http://localhost/fhir")
     {
         if (ppq1Response.status == 'urn:e-health-suisse:2015:response-status:success') {
             Bundle ppq4Response = new Bundle(
@@ -244,7 +245,7 @@ class XacmlToFhirTranslator {
                     consentId = ChPpqmUtils.extractConsentIdFromUrl(ppq4RequestEntry.request.url)
                 }
                 ppq4Response.entry << new Bundle.BundleEntryComponent(
-                        fullUrl: 'Consent?identifier=' + consentId,
+                        fullUrl: "$baseUrl/Consent?identifier=$consentId",
                         response: new Bundle.BundleEntryResponseComponent(
                                 status: (ppq1Request instanceof AddPolicyRequest) ? '201' : '200',
                         ),
