@@ -50,7 +50,7 @@
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
         <release-plugin-version>3.0.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
-        <sources-plugin-version>3.3.1</sources-plugin-version>
+        <sources-plugin-version>3.2.1</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
