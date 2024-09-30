@@ -15,83 +15,49 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters;
 
-import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02Type;
-import net.ihe.gazelle.hl7v3.prpain201310UV02.PRPAIN201310UV02Type;
 import org.apache.camel.Converter;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.responses.PixV3QueryResponse;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests.PixV3QueryRequestTransformer;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.responses.PixV3QueryResponseTransformer;
 
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 
 /**
- * Camel type converters for HL7 PRPA models in ITI-45 transaction.
+ * Camel type converters for simplified ITI-45 data model.
  *
  * @author Quentin Ligier
  * @since 4.1
  */
 @Converter(generateLoader = true)
-public class Iti45Converters extends Hl7v3ConvertersBase {
+public class Iti45Converters {
 
     private static final PixV3QueryRequestTransformer SIMPLE_REQUEST_TRANSFORMER = new PixV3QueryRequestTransformer();
     private static final PixV3QueryResponseTransformer SIMPLE_RESPONSE_TRANSFORMER = new PixV3QueryResponseTransformer();
 
-    private static final JAXBContext JAXB_CONTEXT_PRPA_REQUEST;
-    private static final JAXBContext JAXB_CONTEXT_PRPA_RESPONSE;
-    static {
-        try {
-            JAXB_CONTEXT_PRPA_REQUEST = JAXBContext.newInstance(PRPAIN201309UV02Type.class);
-            JAXB_CONTEXT_PRPA_RESPONSE = JAXBContext.newInstance(PRPAIN201310UV02Type.class);
-        } catch (final JAXBException e) {
-            throw new ExceptionInInitializerError(e);
-        }
-    }
-
-
     /* --------------------- Requests --------------------- */
 
     @Converter
-    public static PRPAIN201309UV02Type xmlToPrpaRequest(final String xml) throws JAXBException {
-        return fromXml(xml, JAXB_CONTEXT_PRPA_REQUEST);
+    public static String simpleRequestToXml(final PixV3QueryRequest simpleRequest) throws JAXBException {
+        return JaxbHl7v3Converters.PRPAIN201309UV02toXml(SIMPLE_REQUEST_TRANSFORMER.toPrpa(simpleRequest));
     }
 
     @Converter
-    public static String prpaRequestToXml(final PRPAIN201309UV02Type request) throws JAXBException {
-        return toXml(request, JAXB_CONTEXT_PRPA_REQUEST);
-    }
-
-    @Converter
-    public static String xmlToSimpleRequest(final PixV3QueryRequest simpleRequest) throws JAXBException {
-        return prpaRequestToXml(SIMPLE_REQUEST_TRANSFORMER.toPrpa(simpleRequest));
-    }
-
-    @Converter
-    public static PixV3QueryRequest simpleRequestToXml(final String xml) throws JAXBException {
-        return SIMPLE_REQUEST_TRANSFORMER.fromPrpa(xmlToPrpaRequest(xml));
+    public static PixV3QueryRequest xmlToSimpleRequest(final String xml) throws JAXBException {
+        return SIMPLE_REQUEST_TRANSFORMER.fromPrpa(JaxbHl7v3Converters.xmlToPRPAIN201309UV02(xml));
     }
 
 
     /* --------------------- Responses --------------------- */
 
     @Converter
-    public static PRPAIN201310UV02Type xmlToPrpaResponse(final String xml) throws JAXBException {
-        return fromXml(xml, JAXB_CONTEXT_PRPA_RESPONSE);
+    public static String simpleResponseToXml(final PixV3QueryResponse simpleResponse) throws JAXBException {
+        return JaxbHl7v3Converters.PRPAIN201310UV02toXml(SIMPLE_RESPONSE_TRANSFORMER.toPrpa(simpleResponse));
     }
 
     @Converter
-    public static String prpaResponseToXml(final PRPAIN201310UV02Type response) throws JAXBException {
-        return toXml(response, JAXB_CONTEXT_PRPA_RESPONSE);
+    public static PixV3QueryResponse xmlToSimpleResponse(final String xml) throws JAXBException {
+        return SIMPLE_RESPONSE_TRANSFORMER.fromPrpa(JaxbHl7v3Converters.xmlToPRPAIN201310UV02(xml));
     }
 
-    @Converter
-    public static String xmlToSimpleResponse(final PixV3QueryResponse simpleResponse) throws JAXBException {
-        return prpaResponseToXml(SIMPLE_RESPONSE_TRANSFORMER.toPrpa(simpleResponse));
-    }
-
-    @Converter
-    public static PixV3QueryResponse simpleResponseToXml(final String xml) throws JAXBException {
-        return SIMPLE_RESPONSE_TRANSFORMER.fromPrpa(xmlToPrpaResponse(xml));
-    }
 }
