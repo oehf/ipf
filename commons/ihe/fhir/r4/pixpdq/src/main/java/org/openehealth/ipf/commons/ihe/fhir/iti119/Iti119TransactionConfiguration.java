@@ -36,7 +36,7 @@ public class Iti119TransactionConfiguration extends FhirTransactionConfiguration
                 new Iti119ClientAuditStrategy(),
                 new Iti119ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                new Iti119ResourceProvider(),                    // Consumer side. accept patient searches
+                new Iti119ResourceProvider(),                    // Consumer side. Accept patient searches
                 new Iti119ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);
         setSupportsLazyLoading(true);

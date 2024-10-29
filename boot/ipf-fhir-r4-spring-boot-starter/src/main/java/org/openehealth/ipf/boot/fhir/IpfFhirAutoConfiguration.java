@@ -47,6 +47,7 @@ import org.springframework.web.filter.CorsFilter;
 import jakarta.servlet.Filter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
 
@@ -151,6 +152,16 @@ public class IpfFhirAutoConfiguration {
         fhirServlet.setDefaultPageSize(servletProperties.getDefaultPageSize());
         if (narrativeGenerator != null) {
             fhirServlet.setNarrativeGenerator(narrativeGenerator);
+        }
+        // Register server interceptor for ITI-119 if on classpath
+        try {
+            var clazz = Class.forName("org.openehealth.ipf.commons.ihe.fhir.iti119.MatchGradeEnumInterceptor");
+            fhirServlet.registerInterceptor(clazz.getConstructor().newInstance());
+        } catch (ClassNotFoundException e) {
+            // ok
+        } catch (Exception e) {
+            // should never happen
+            throw new RuntimeException(e);
         }
         return fhirServlet;
     }

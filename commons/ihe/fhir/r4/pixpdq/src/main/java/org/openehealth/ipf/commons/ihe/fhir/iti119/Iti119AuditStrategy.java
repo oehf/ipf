@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
@@ -54,7 +53,7 @@ class Iti119AuditStrategy extends FhirQueryAuditStrategy {
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        if (request instanceof Parameters p) {
+        if (request instanceof Parameters p && auditDataset.getFhirContext() != null) {
             dataset.setQueryString(auditDataset.getFhirContext().newJsonParser().encodeToString(p));
         }
         return dataset;

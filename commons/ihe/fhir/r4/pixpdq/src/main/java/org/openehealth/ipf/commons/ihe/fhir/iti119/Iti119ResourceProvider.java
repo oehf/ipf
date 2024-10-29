@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.valueset.BundleTypeEnum;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
@@ -26,7 +27,10 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.BooleanType;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.PositiveIntType;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 
@@ -57,24 +61,19 @@ public class Iti119ResourceProvider extends AbstractPlainProvider {
      * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
-    @Operation(name = PDQM_MATCH_OPERATION_NAME, type = PdqPatient.class)
+    @Operation(name = PDQM_MATCH_OPERATION_NAME, type = PdqPatient.class, bundleType = BundleTypeEnum.SEARCHSET)
     public IBundleProvider pdqmMatch(
         @OperationParam(name = RESOURCE, type = Patient.class) Patient resource,
-        @OperationParam(name = ONLY_CERTAIN_MATCHES, type = BooleanType.class) Boolean onlyCertainMatches,
-        @OperationParam(name = COUNT, type = IntegerType.class) Integer count,
+        @OperationParam(name = ONLY_CERTAIN_MATCHES, type = BooleanType.class) BooleanType onlyCertainMatches,
+        @OperationParam(name = COUNT, type = PositiveIntType.class) PositiveIntType count,
         @Sort SortSpec sortSpec,
         @IncludeParam Set<Include> includeSpec,
         RequestDetails requestDetails,
         HttpServletRequest httpServletRequest,
         HttpServletResponse httpServletResponse) {
 
-        var inParams = new Parameters();
-        inParams.addParameter().setResource(resource);
-        inParams.addParameter().setName(ONLY_CERTAIN_MATCHES).setValue(new BooleanType(onlyCertainMatches));
-        inParams.addParameter().setName(COUNT).setValue(new IntegerType(count));
-
         // Run down the route
-        return requestBundleProvider(inParams, null, ResourceType.Patient.name(),
+        return requestBundleProvider(requestDetails.getResource(), null, ResourceType.Patient.name(),
             httpServletRequest, httpServletResponse, requestDetails);
     }
 

@@ -64,11 +64,9 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
                     .map(Parameters.ParametersParameterComponent::getValue)
                     .findFirst().orElseThrow(() -> new RuntimeException("No sourceIdentifier in PIX query"));
 
-            if (sourceIdentifier instanceof Identifier) {
-                var identifier = (Identifier) sourceIdentifier;
+            if (sourceIdentifier instanceof Identifier identifier) {
                 dataset.getPatientIds().add(String.format("%s|%s", identifier.getSystem(), identifier.getValue()));
-            } else if (sourceIdentifier instanceof StringType) {
-                var identifier = (StringType) sourceIdentifier;
+            } else if (sourceIdentifier instanceof StringType identifier) {
                 dataset.getPatientIds().add(identifier.getValue());
             } else {
                 dataset.getPatientIds().add(sourceIdentifier.toString());

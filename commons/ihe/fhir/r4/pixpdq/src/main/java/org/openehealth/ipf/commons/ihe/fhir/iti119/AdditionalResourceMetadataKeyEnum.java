@@ -16,12 +16,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum;
-import ca.uhn.fhir.model.primitive.DecimalDt;
-import ca.uhn.fhir.model.valueset.BundleEntryTransactionMethodEnum;
+import org.hl7.fhir.r4.model.codesystems.MatchGrade;
 
 public abstract class AdditionalResourceMetadataKeyEnum {
 
-    public static final ResourceMetadataKeyEnum<BundleEntryTransactionMethodEnum> SEARCH_SCORE =
-        new ResourceMetadataKeyEnum<>("SEARCH_SCORE", DecimalDt.class) {};
+    public static final ResourceMetadataKeyEnum<MatchGrade> ENTRY_MATCH_GRADE =
+        new ResourceMetadataKeyEnum<>("ENTRY_MATCH_GRADE", MatchGrade.class) {};
 
 }

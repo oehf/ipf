@@ -22,6 +22,7 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants;
+import org.openehealth.ipf.commons.ihe.fhir.iti119.MatchGradeEnumInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 /**
@@ -31,6 +32,7 @@ abstract class AbstractTestIti119 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor, boolean secure) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
+        servlet.registerInterceptor(new MatchGradeEnumInterceptor());
         startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, "FhirServlet");
     }
 

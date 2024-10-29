@@ -16,22 +16,20 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti119;
 
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Parameters;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.ResourceType;
+import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.codesystems.MatchGrade;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 
-import java.nio.charset.StandardCharsets;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.COUNT;
+import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.RESOURCE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti119.MatchGradeEnumInterceptor.MATCH_GRADE_EXTENSION_URL;
 
 /**
  *
@@ -55,7 +53,12 @@ public class TestIti119Success extends AbstractTestIti119 {
     public void testSendManualPdqmMatch() {
 
         var p = new Parameters();
-        p.addParameter().setResource(new Patient());
+        p.addParameter()
+            .setName(RESOURCE)
+            .setResource(new Patient().addName(new HumanName().setFamily("Test")));
+        p.addParameter()
+            .setName(COUNT)
+            .setValue(new IntegerType(1));
         var result = sendManually(p);
 
         // printAsXML(result);
@@ -63,11 +66,13 @@ public class TestIti119Success extends AbstractTestIti119 {
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertTrue(result.hasEntry());
-
+        var entry = result.getEntryFirstRep();
+        assertEquals(Bundle.SearchEntryMode.MATCH, entry.getSearch().getMode());
+        assertEquals(MatchGrade.PROBABLE.toCode(), ((Coding)entry.getSearch().getExtensionByUrl(MATCH_GRADE_EXTENSION_URL).getValue()).getCode());
 
         var patient = (Patient)result.getEntry().get(0).getResource();
         assertEquals("Test", patient.getName().get(0).getFamily());
-        assertEquals("http://localhost:8999/Patient/4711", p.getId());
+        assertEquals("http://localhost:8999/Patient/4711", patient.getId());
 
 
         // Check ATNA Audit
@@ -84,7 +89,7 @@ public class TestIti119Success extends AbstractTestIti119 {
                 EventActionCode.Execute,
                 event.getEventIdentification().getEventActionCode());
         assertEquals(EventIdCode.Query, event.getEventIdentification().getEventID());
-        assertEquals(FhirEventTypeCode.MobilePatientDemographicsQuery, event.getEventIdentification().getEventTypeCode().get(0));
+        assertEquals(FhirEventTypeCode.PatientDemographicsMatch, event.getEventIdentification().getEventTypeCode().get(0));
 
         // ActiveParticipant Source
         var source = event.getActiveParticipants().get(0);
@@ -95,7 +100,7 @@ public class TestIti119Success extends AbstractTestIti119 {
         // ActiveParticipant Destination
         var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
-        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$match", destination.getUserID());
         assertEquals(AuditUtils.getLocalIPAddress(), destination.getNetworkAccessPointID());
 
         // Audit Source
@@ -107,8 +112,6 @@ public class TestIti119Success extends AbstractTestIti119 {
         var query = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
-        assertEquals("family=Test&_format=xml",
-                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         assertEquals(FhirParticipantObjectIdTypeCode.PatientDemographicsMatch, query.getParticipantObjectIDTypeCode());
 
@@ -120,7 +123,12 @@ public class TestIti119Success extends AbstractTestIti119 {
     @Test
     public void testSendEndpointParametersResource() {
         var p = new Parameters();
-        p.addParameter().setResource(new Patient());
+        p.addParameter()
+            .setName(RESOURCE)
+            .setResource(new Patient().addName(new HumanName().setFamily("Test")));
+        p.addParameter()
+            .setName(COUNT)
+            .setValue(new IntegerType(1));
         var result = sendViaProducer(p);
         // printAsXML(result);
 
@@ -144,7 +152,7 @@ public class TestIti119Success extends AbstractTestIti119 {
         // ActiveParticipant Destination
         var destination = event.getActiveParticipants().get(1);
         assertFalse(destination.isUserIsRequestor());
-        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$match", destination.getUserID());
         assertEquals("localhost", destination.getNetworkAccessPointID());
         assertEquals(NetworkAccessPointTypeCode.MachineName, destination.getNetworkAccessPointTypeCode());
 
@@ -152,8 +160,6 @@ public class TestIti119Success extends AbstractTestIti119 {
         var query = event.getParticipantObjectIdentifications().get(0);
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
-        assertEquals("family=Test",
-                new String(query.getParticipantObjectQuery(), StandardCharsets.UTF_8));
 
         // Audit Source
         var sourceIdentificationType = event.getAuditSourceIdentification();
