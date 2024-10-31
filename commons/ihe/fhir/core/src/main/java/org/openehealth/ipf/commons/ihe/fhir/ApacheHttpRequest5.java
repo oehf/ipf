@@ -51,7 +51,7 @@ public class ApacheHttpRequest5 extends BaseHttpRequest implements IHttpRequest 
         var responseStopWatch = new StopWatch();
         try {
             // BaseClient will close the response stream for us
-            ClassicHttpResponse response = httpClient.executeOpen(RoutingSupport.determineHost(request), request, null);
+            var response = httpClient.executeOpen(RoutingSupport.determineHost(request), request, null);
             return new ApacheHttpResponse5(response, responseStopWatch);
         } catch (HttpException e) {
             throw new IOException(e);
