@@ -37,6 +37,7 @@
         <module>core</module>
         <module>hpd</module>
         <module>xacml20</module>
+        <module>svs</module>
     </modules>
 
 </project>

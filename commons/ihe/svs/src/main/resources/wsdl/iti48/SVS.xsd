@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="urn:ihe:iti:svs:2008" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:hl7="urn:hl7-org:v3"
+           targetNamespace="urn:ihe:iti:svs:2008" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <xs:simpleType name="valueSetIdType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-2](\.(0|[1-9][0-9]*))*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ConceptListType">
+        <xs:sequence>
+            <xs:element name="Concept" minOccurs="1" maxOccurs="unbounded" type="CD"/>
+        </xs:sequence>
+        <xs:attribute ref="xml:lang" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="ValueSetType" abstract="true">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="version" use="optional" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="ValueSetRequestType">
+        <xs:complexContent>
+            <xs:extension base="ValueSetType">
+                <xs:attribute ref="xml:lang" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ValueSetExtendedType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="ValueSetType">
+                <xs:sequence>
+                    <xs:element name="ConceptList" type="ConceptListType" minOccurs="1"
+                                maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="displayName" use="optional" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ValueSetResponseType">
+        <xs:complexContent>
+            <xs:restriction base="ValueSetExtendedType">
+                <xs:sequence>
+                    <xs:element name="ConceptList" type="ConceptListType" minOccurs="1"
+                                maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="displayName" use="required" type="xs:string"/>
+                <xs:attribute name="version" use="optional" type="xs:string"/>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="RetrieveValueSetRequestType">
+        <xs:sequence>
+            <xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ValueSetRequestType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RetrieveValueSetResponseType">
+        <xs:sequence>
+            <xs:element name="ValueSet" minOccurs="1" maxOccurs="1" type="ValueSetResponseType"/>
+        </xs:sequence>
+        <xs:attribute name="cacheExpirationHint" use="optional" type="xs:dateTime"/>
+    </xs:complexType>
+    <xs:element name="RetrieveValueSetRequest" type="RetrieveValueSetRequestType"/>
+    <xs:element name="RetrieveValueSetResponse" type="RetrieveValueSetResponseType"/>
+    <xs:complexType name="CD">
+        <xs:attribute name="code" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The plain code symbol defined by the code system.
+                    For example, "784.0" is the code symbol of the ICD-9
+                    code "784.0" for headache.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="codeSystem" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    Specifies the code system that defines the code.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="codeSystemVersion" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    If applicable, a version descriptor defined
+                    specifically for the given code system.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="displayName" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    A name or title for the code, under which the sending
+                    system shows the code value to its users.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>
