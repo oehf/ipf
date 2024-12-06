@@ -10,20 +10,20 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.78</bouncycastle-version>
-        <camel-version>4.8.1</camel-version>
+        <camel-version>4.8.2</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
         <cxf-version>4.0.5</cxf-version>
-        <commons-io-version>2.17.0</commons-io-version>
+        <commons-io-version>2.18.0</commons-io-version>
         <commons-compress-version>1.27.1</commons-compress-version>
         <equinox-app-version>1.3.200-v20130910-1609</equinox-app-version>
         <equinox-common-version>3.6.200-v20130402-1505</equinox-common-version>
-        <groovy-version>4.0.23</groovy-version>
+        <groovy-version>4.0.24</groovy-version>
         <hapi-version>2.5.1</hapi-version>
-        <hapi-fhir-version>7.4.5</hapi-fhir-version>
+        <hapi-fhir-version>7.6.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.0.0</ipf-gazelle-version>
-        <httpclient5-version>5.3.1</httpclient5-version>
+        <httpclient5-version>5.4.1</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jackson-version>2.17.2</jackson-version>
         <jaxb-version>4.0.5</jaxb-version>
@@ -39,11 +39,11 @@
         <ph-commons-version>11.1.0</ph-commons-version>
         <saxon-he-version>12.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>3.3.5</spring-boot-version>
+        <spring-boot-version>3.4.0</spring-boot-version>
         <velocity-version>2.3</velocity-version>
         <vibur-version>25.0</vibur-version>
-        <woodstox-version>7.0.0</woodstox-version>
-        <xmlsec-version>4.0.2</xmlsec-version>
+        <woodstox-version>7.1.0</woodstox-version>
+        <xmlsec-version>4.0.3</xmlsec-version>
 
 
     </properties>

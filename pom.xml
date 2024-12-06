@@ -27,7 +27,7 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.3.1</surefire-plugin-version>
+        <surefire-plugin-version>3.5.2</surefire-plugin-version>
         <jxr-plugin-version>3.3.2</jxr-plugin-version>
         <project-info-reports-plugin-version>3.5.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
@@ -55,12 +55,12 @@
 
         <!-- Dependency version properties -->
         <brave-version>6.0.0</brave-version>
-        <easymock-version>5.4.0</easymock-version>
+        <easymock-version>5.5.0</easymock-version>
         <guava-version>33.3.0-jre</guava-version>
-        <lombok-version>1.18.34</lombok-version>
+        <lombok-version>1.18.36</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.31</tomcat-version>
+        <tomcat-version>10.1.33</tomcat-version>
         <xbean-spring-version>4.25</xbean-spring-version>
     </properties>
 
