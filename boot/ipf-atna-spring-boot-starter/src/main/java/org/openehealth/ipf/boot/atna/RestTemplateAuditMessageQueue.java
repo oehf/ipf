@@ -25,7 +25,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import static java.util.Objects.requireNonNull;
@@ -62,19 +61,19 @@ public class RestTemplateAuditMessageQueue extends AbstractAuditMessageQueue {
         this.restTemplateBuilder = restTemplateBuilder
                 .defaultHeader(
                         CONTENT_TYPE,
-                        new MediaType("text", "xml", StandardCharsets.UTF_8).toString());
+                        MediaType.TEXT_XML.toString());
         initRestTemplate();
     }
 
     @Override
     protected void handle(AuditContext auditContext, String auditRecord) {
         try {
-            HttpHeaders httpHeaders = new HttpHeaders();
+            var httpHeaders = new HttpHeaders();
             httpHeaders.add(X_IPF_ATNA_TIMESTAMP, auditContext.getAuditMetadataProvider().getTimestamp());
             httpHeaders.add(X_IPF_ATNA_HOSTNAME, auditContext.getAuditMetadataProvider().getHostname());
             httpHeaders.add(X_IPF_ATNA_PROCESSID, auditContext.getAuditMetadataProvider().getProcessID());
             httpHeaders.add(X_IPF_ATNA_APPLICATION, auditContext.getAuditMetadataProvider().getSendingApplication());
-            HttpEntity<String> entity = new HttpEntity<>(auditRecord, httpHeaders);
+            var entity = new HttpEntity<>(auditRecord, httpHeaders);
             restTemplate.postForEntity(uri, entity, Void.class);
         } catch (RestClientException e) {
             auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecord);
@@ -94,10 +93,10 @@ public class RestTemplateAuditMessageQueue extends AbstractAuditMessageQueue {
     private synchronized void initRestTemplate() {
         var builder = this.restTemplateBuilder;
         if (connectTimeout >= 0) {
-            builder = builder.setConnectTimeout(Duration.ofMillis(connectTimeout));
+            builder = builder.connectTimeout(Duration.ofMillis(connectTimeout));
         }
         if (readTimeout >= 0) {
-            builder = builder.setReadTimeout(Duration.ofMillis(readTimeout));
+            builder = builder.readTimeout(Duration.ofMillis(readTimeout));
         }
         if (user != null && !user.isEmpty() && password != null && !password.isEmpty()) {
             builder = builder.basicAuthentication(user, password);

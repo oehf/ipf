@@ -53,9 +53,9 @@ public class ConsumerPaginationHandler extends ConsumerHpdHandler {
         // responses computed locally, i.e. not obtained from the route
         JAXBElement<?>[] localResponses = new JAXBElement[batchRequest.getBatchRequests().size()];
 
-        for (int position = batchRequest.getBatchRequests().size() - 1; position >= 0; --position) {
-            DsmlMessage request = batchRequest.getBatchRequests().get(position);
-            String requestId = StringUtils.trimToNull(request.getRequestID());
+        for (var position = batchRequest.getBatchRequests().size() - 1; position >= 0; --position) {
+            var request = batchRequest.getBatchRequests().get(position);
+            var requestId = StringUtils.trimToNull(request.getRequestID());
 
             if (requestId == null) {
                 log.warn("Request ID is missing in {} --> cannot handle, pass to the route as is", request.getClass().getSimpleName());
@@ -74,12 +74,12 @@ public class ConsumerPaginationHandler extends ConsumerHpdHandler {
                             log.debug("Initial pagination control in request with ID {} --> pass it to the route and handle response", requestId);
                             controls.put(requestId, pagination);
                         } else {
-                            PaginationStorage.TakeResult take = paginationStorage.take(pagination);
+                            var take = paginationStorage.take(pagination);
                             if (take.getEntries().isEmpty()) {
                                 log.debug("Cannot serve request with ID {} from the storage --> pass it to the route", requestId);
                             } else {
                                 log.debug("Serve request with ID {} from the storage", requestId);
-                                SearchResponse response = new SearchResponse();
+                                var response = new SearchResponse();
                                 response.setRequestID(requestId);
                                 response.getSearchResultEntry().addAll(take.getEntries());
                                 response.setSearchResultDone(new LDAPResult());
@@ -109,25 +109,24 @@ public class ConsumerPaginationHandler extends ConsumerHpdHandler {
             return aggregateResponse(batchRequest, new BatchResponse(), localResponses);
         }
 
-        BatchResponse batchResponse = getWrappedHandler().handle(batchRequest);
+        var batchResponse = getWrappedHandler().handle(batchRequest);
 
-        for (int position = batchResponse.getBatchResponses().size() - 1; position >= 0; --position) {
-            JAXBElement<?> jaxbElement = batchResponse.getBatchResponses().get(position);
-            Object value = jaxbElement.getValue();
-            String requestId = StringUtils.trimToNull(HpdUtils.extractResponseRequestId(value));
+        for (var position = batchResponse.getBatchResponses().size() - 1; position >= 0; --position) {
+            var jaxbElement = batchResponse.getBatchResponses().get(position);
+            var value = jaxbElement.getValue();
+            var requestId = StringUtils.trimToNull(HpdUtils.extractResponseRequestId(value));
 
-            if (value instanceof SearchResponse) {
-                SearchResponse searchResponse = (SearchResponse) value;
-                PagedResultsResponseControl pagination = (requestId == null) ? null : controls.get(requestId);
+            if (value instanceof SearchResponse searchResponse) {
+                var pagination = (requestId == null) ? null : controls.get(requestId);
 
                 if (pagination == null) {
                     log.debug("No pagination was requested for request with ID {} --> return response as is", requestId);
 
                 } else {
                     try {
-                        List<SearchResultEntry> entries = searchResponse.getSearchResultEntry();
-                        int entriesCount = entries.size();
-                        int requestedCount = pagination.getResultSize();
+                        var entries = searchResponse.getSearchResultEntry();
+                        var entriesCount = entries.size();
+                        var requestedCount = pagination.getResultSize();
 
                         if (entriesCount <= requestedCount) {
                             log.debug("Pagination of request with ID {} finished", requestId);
@@ -137,7 +136,7 @@ public class ConsumerPaginationHandler extends ConsumerHpdHandler {
                                     requestId, requestedCount, entriesCount - requestedCount);
 
                             List<SearchResultEntry> entriesToStore = new ArrayList<>(entries.subList(requestedCount, entriesCount));
-                            byte[] cookie = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
+                            var cookie = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
                             paginationStorage.store(cookie, entriesToStore);
 
                             List<SearchResultEntry> entriesToDeliver = new ArrayList<>(entries.subList(0, requestedCount));

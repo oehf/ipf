@@ -23,7 +23,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.routing.RoutingSupport;
 import org.apache.hc.core5.http.ClassicHttpRequest;
-import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpException;
 

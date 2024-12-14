@@ -23,11 +23,9 @@ import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtDataSet;
 import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtParser;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DCM_SYSTEM_NAME;
@@ -43,9 +41,9 @@ public class BalpJwtUtils {
     public static <D extends BaseAuditMessageBuilder<D>> void addJwtParticipant(D delegate,
                                                                                 FhirAuditDataset auditDataset,
                                                                                 AuditContext auditContext) {
-        BalpJwtExtractorProperties balpJwtExtractorProperties = (auditContext instanceof BalpAuditContext)?
+        var balpJwtExtractorProperties = (auditContext instanceof BalpAuditContext)?
             ((BalpAuditContext)auditContext).getBalpJwtExtractorProperties() : DEFAULT_BALP_JWT_EXTRACTOR_PROPERTIES;
-        Optional<BalpJwtDataSet> balpDataSet = BalpJwtParser.parseAuthorizationToBalpDataSet(
+        var balpDataSet = BalpJwtParser.parseAuthorizationToBalpDataSet(
             auditDataset.getAuthorization(), balpJwtExtractorProperties);
         balpDataSet.ifPresent(dataSet -> {
             if (isNotBlank(dataSet.getIheBppcPatientId())) {
@@ -56,7 +54,7 @@ public class BalpJwtUtils {
                     null);
             }
             if (isNotBlank(dataSet.getIheIuaSubjectOrganizationId())) {
-                ActiveParticipantType ap = new ActiveParticipantType(dataSet.getIheIuaSubjectOrganizationId(), true);
+                var ap = new ActiveParticipantType(dataSet.getIheIuaSubjectOrganizationId(), true);
                 ap.setUserName(dataSet.getIheIuaSubjectOrganization());
                 ap.getRoleIDCodes().add(
                     ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getIheIuaSubjectOrganizationId(),
@@ -64,7 +62,7 @@ public class BalpJwtUtils {
                 delegate.addActiveParticipant(ap);
             }
             if (isNotBlank(dataSet.getJwtId())) {
-                ActiveParticipantType ap = new ActiveParticipantType(dataSet.getSubject(), true);
+                var ap = new ActiveParticipantType(dataSet.getSubject(), true);
                 ap.getRoleIDCodes().add(
                     ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getJwtId(),
                         OUSER_AGENT_TYPE_SYSTEM_NAME, "oAuth Token ID")));
@@ -84,7 +82,7 @@ public class BalpJwtUtils {
                 }
                 delegate.addActiveParticipant(ap);
                 if (isNotBlank(dataSet.getClientId())) {
-                    ActiveParticipantType clientAp = new ActiveParticipantType(
+                    var clientAp = new ActiveParticipantType(
                         dataSet.getClientId(), !auditDataset.isServerSide());
                     clientAp.getRoleIDCodes().add(
                         ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getClientId(),
@@ -92,7 +90,7 @@ public class BalpJwtUtils {
                     delegate.addActiveParticipant(clientAp);
                 }
             } else if (isNotBlank(dataSet.getOpaqueJwt())) {
-                ActiveParticipantType ap = new ActiveParticipantType(dataSet.getSubject(), true);
+                var ap = new ActiveParticipantType(dataSet.getSubject(), true);
                 ap.getRoleIDCodes().add(
                     ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getOpaqueJwt(),
                         OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME, "oAuth Opaque Token")));

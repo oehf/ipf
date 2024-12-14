@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.ldap.LdapName;
-import javax.security.cert.X509Certificate;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,14 +36,14 @@ import java.util.Optional;
  */
 public abstract class AuditInterceptorUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuditInterceptorUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditInterceptorUtils.class);
 
     public static void extractClientCertificateCommonName(Exchange exchange, AuditDataset auditDataset) {
         var certificates = (X509Certificate[]) exchange.getIn().getHeader(Constants.HTTP_X509_CERTIFICATES);
         if (certificates != null && certificates.length > 0) {
             try {
                 var certificate = certificates[0];
-                var principal = certificate.getSubjectDN();
+                var principal = certificate.getSubjectX500Principal();
                 var dn = principal.getName();
                 var ldapDN = new LdapName(dn);
                 for (var rdn : ldapDN.getRdns()) {
@@ -53,7 +53,7 @@ public abstract class AuditInterceptorUtils {
                     }
                 }
             } catch (Exception e) {
-                LOG.info("Could not extract CN from client certificate", e);
+                log.info("Could not extract CN from client certificate", e);
             }
         }
     }
@@ -64,7 +64,7 @@ public abstract class AuditInterceptorUtils {
             if (!httpHeaders.isEmpty()
                 && httpHeaders.keySet().stream().anyMatch(Constants.HTTP_AUTHORIZATION::equalsIgnoreCase)) {
 
-                List<String> values = httpHeaders.entrySet().stream()
+                var values = httpHeaders.entrySet().stream()
                     .filter(entry -> Constants.HTTP_AUTHORIZATION.equalsIgnoreCase(entry.getKey()))
                     .findFirst()
                     .map(Map.Entry::getValue)

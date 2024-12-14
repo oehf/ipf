@@ -230,8 +230,7 @@ public abstract class MllpEndpoint<
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof MllpEndpoint) {
-            var that = (MllpEndpoint<?, ?, ?>) object;
+        if (object instanceof MllpEndpoint<?, ?, ?> that) {
             return wrappedEndpoint.equals(that.getWrappedEndpoint());
         }
         return false;

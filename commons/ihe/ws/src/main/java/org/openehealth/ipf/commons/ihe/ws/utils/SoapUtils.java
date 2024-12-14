@@ -34,7 +34,7 @@ import java.util.Set;
  * @author Dmytro Rud
  */
 public abstract class SoapUtils {
-    private static final transient Logger LOG = LoggerFactory.getLogger(SoapUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(SoapUtils.class);
 
     private SoapUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
@@ -109,7 +109,7 @@ public abstract class SoapUtils {
             return soapEnvelope.substring(pos4 + 1, pos1);
 
         } catch(Exception e) {
-            LOG.error("Invalid contents, probably not a SOAP Envelope in the parameter", e);
+            log.error("Invalid contents, probably not a SOAP Envelope in the parameter", e);
             return soapEnvelope;
         }
     }

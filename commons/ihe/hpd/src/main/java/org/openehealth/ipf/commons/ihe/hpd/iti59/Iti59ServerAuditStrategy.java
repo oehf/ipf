@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
@@ -38,7 +38,7 @@ public class Iti59ServerAuditStrategy extends Iti59AuditStrategy {
 
     @Override
     protected AuditMessage makeAuditMessage(AuditContext auditContext, Iti59AuditDataset auditDataset, Iti59AuditDataset.RequestItem requestItem) {
-        PHIImportBuilder builder = new PHIImportBuilder<>(
+        var builder = new DefaultPHIImportBuilder(
                 auditContext,
                 auditDataset,
                 requestItem.getOutcomeCode(),

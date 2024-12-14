@@ -21,6 +21,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -38,6 +39,7 @@ import java.util.Objects;
 @XmlType(name = "CXiAssigningAuthority", propOrder = {"namespaceId"})
 public class CXiAssigningAuthority extends AssigningAuthority {
 
+    @Serial
     private static final long serialVersionUID = 264032769452660318L;
 
     public CXiAssigningAuthority() {

@@ -21,7 +21,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
  * @author Dmytro Rud
  */
 public class Hl7v2AdaptingException extends RuntimeException {
-    private static final long serialVersionUID = -5822677733242792712L;
 
     public Hl7v2AdaptingException(String message) {
         super(message);

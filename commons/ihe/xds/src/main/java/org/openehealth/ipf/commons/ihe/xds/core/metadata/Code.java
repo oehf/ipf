@@ -24,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -36,6 +37,7 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "Code", propOrder = {"code", "schemeName", "displayName"})
 public class Code extends Hl7v2Based<CE> {
+    @Serial
     private static final long serialVersionUID = 7603534956639945984L;
 
     private LocalizedString localizedString;

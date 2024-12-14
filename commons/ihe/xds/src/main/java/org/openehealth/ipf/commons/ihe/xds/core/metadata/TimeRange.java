@@ -23,6 +23,8 @@ import lombok.ToString;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -34,6 +36,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class TimeRange implements Serializable {
+    @Serial
     private static final long serialVersionUID = -5468726370729209318L;
 
     @Getter private Timestamp from;

@@ -160,7 +160,7 @@ public final class HL7v2 {
      *
      * @param exchange exchange
      * @return HAPI message
-     * @throws ca.uhn.hl7v2.HL7Exception
+     * @throws HL7Exception HL7 Exception
      */
     public static Message bodyMessage(Exchange exchange) throws HL7Exception {
         var body = exchange.getIn().getBody();

@@ -61,8 +61,8 @@ public enum AuditTransmissionChannel {
     }
 
     public AuditTransmissionProtocol makeInstance(TlsParameters tlsParameters) {
-        ServiceLoader<AuditTransmissionProtocolProvider> loader = ServiceLoader.load(AuditTransmissionProtocolProvider.class);
-        for (AuditTransmissionProtocolProvider provider : loader) {
+        var loader = ServiceLoader.load(AuditTransmissionProtocolProvider.class);
+        for (var provider : loader) {
             if (protocolClass.equals(provider.getClass().getName())) {
                 return provider.createAuditTransmissionProtocol(tlsParameters);
             }

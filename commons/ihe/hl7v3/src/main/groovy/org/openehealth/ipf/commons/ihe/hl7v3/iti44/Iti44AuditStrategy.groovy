@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.AuditException
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPatientRecordEventBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
@@ -90,7 +90,7 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
         String patientId = newPatientId ?
                 (auditDataset.patientIds?.length > 0 ? auditDataset.patientIds.head() : null) :
                 auditDataset.oldPatientId
-        return new PatientRecordEventBuilder<>(auditContext, auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
+        return new DefaultPatientRecordEventBuilder(auditContext, auditDataset, eventActionCode, Hl7v3EventTypeCode.PatientIdentityFeed, auditDataset.purposesOfUse)
 
         // Type=II (the literal string), Value=the value of the message ID (from the message content, base64 encoded)
                 .addPatients("II", auditDataset.messageId, patientId)

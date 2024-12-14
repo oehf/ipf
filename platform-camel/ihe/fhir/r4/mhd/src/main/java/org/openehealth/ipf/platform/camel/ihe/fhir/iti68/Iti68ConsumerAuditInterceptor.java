@@ -41,7 +41,7 @@ class Iti68ConsumerAuditInterceptor
         extends InterceptorSupport
         implements AuditInterceptor<Iti68AuditDataset> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti68ConsumerAuditInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti68ConsumerAuditInterceptor.class);
 
     private final AuditContext auditContext;
 
@@ -112,7 +112,7 @@ class Iti68ConsumerAuditInterceptor
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from request", e);
+            log.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }

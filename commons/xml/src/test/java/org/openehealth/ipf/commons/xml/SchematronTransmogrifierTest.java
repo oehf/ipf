@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,19 +29,19 @@ public class SchematronTransmogrifierTest {
     private SchematronTransmogrifier<String> svi;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         svi = new SchematronTransmogrifier<>(String.class);
     }
 
     @Test
-    public void testConvert() throws IOException {
+    public void testConvert() {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
         var result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertFalse(result.contains("svrl:failed-assert"));
     }
 
     @Test
-    public void testConvertFail() throws IOException {
+    public void testConvertFail() {
         Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
         var result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertTrue(result.contains("<svrl:failed-assert")); // 3 occurrences

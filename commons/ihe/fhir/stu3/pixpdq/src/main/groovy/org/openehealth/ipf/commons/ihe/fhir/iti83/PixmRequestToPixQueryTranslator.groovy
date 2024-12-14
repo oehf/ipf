@@ -88,9 +88,9 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
             map.put(part.name, part.value)
         }
 
-        handleSourceIdentifier(qry, map[Constants.SOURCE_IDENTIFIER_NAME])
+        handleSourceIdentifier(qry, map[Constants.SOURCE_IDENTIFIER_NAME] as Identifier)
 
-        UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
+        UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME] as UriType
         if (requestedDomain) {
             if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
                 // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI, Error Case 5

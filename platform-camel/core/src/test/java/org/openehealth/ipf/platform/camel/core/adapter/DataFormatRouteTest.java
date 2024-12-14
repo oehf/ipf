@@ -27,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DataFormatRouteTest extends AbstractRouteTest {
 
 	@Test
-	public void testUnmarshal() throws Exception {
+	public void testUnmarshal() {
 		var result = (String) producerTemplate.sendBody("direct:external",
 				ExchangePattern.InOut, "message");
 		assertEquals("stream: message", result);
 	}
 
 	@Test
-	public void testMarshal() throws Exception {
+	public void testMarshal() {
 		var result = (String) producerTemplate.sendBody("direct:internal",
 				ExchangePattern.InOut, "message");
 		assertEquals("message", result);

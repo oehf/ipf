@@ -45,7 +45,7 @@ import static java.util.Objects.requireNonNull;
  */
 abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
 
 
     /**
@@ -91,7 +91,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
-                LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
+                log.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
             }
             message.getExchange().put(DATASET_CONTEXT_KEY, auditDataset);
@@ -148,7 +148,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             }
         }
         if (auditDataset.getSourceUserId() == null) {
-            LOG.info("Missing WS-Addressing headers");
+            log.info("Missing WS-Addressing headers");
             auditDataset.setSourceUserId("unknown");
         }
     }
@@ -208,7 +208,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             if (certificates != null && certificates.length > 0) {
                 try {
                     var certificate = (X509Certificate) certificates[0];
-                    var principal = certificate.getSubjectDN();
+                    var principal = certificate.getSubjectX500Principal();
                     var dn = principal.getName();
                     var ldapDN = new LdapName(dn);
                     for (var rdn : ldapDN.getRdns()) {
@@ -218,7 +218,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
                         }
                     }
                 } catch (Exception e) {
-                    LOG.info("Could not extract CN from client certificate", e);
+                    log.info("Could not extract CN from client certificate", e);
                 }
             }
         }

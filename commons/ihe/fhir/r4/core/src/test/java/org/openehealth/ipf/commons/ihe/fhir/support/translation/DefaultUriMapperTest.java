@@ -29,42 +29,41 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class DefaultUriMapperTest {
 
-    private BidiMappingService mappingService;
     private DefaultUriMapper uriMapper;
 
     @BeforeEach
     public void setup() {
-        mappingService = new BidiMappingService();
+        BidiMappingService mappingService = new BidiMappingService();
         mappingService.setMappingScript(getClass().getResource("/mapping.map"));
         uriMapper = new DefaultUriMapper(mappingService, "uriToOid", "uriToNamespace");
     }
 
     @Test
-    public void testTranslateOidUrn() throws Exception {
+    public void testTranslateOidUrn() {
         var oid = "1.2.3.4.5.6.7.8.9";
-        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).get());
+        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).orElse(null));
     }
 
     @Test
-    public void testTranslateUriToOid() throws Exception {
+    public void testTranslateUriToOid() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("1.2.3.4", uriMapper.uriToOid(uri).get());
+        assertEquals("1.2.3.4", uriMapper.uriToOid(uri).orElse(null));
     }
 
     @Test
-    public void testTranslateUriToOidFails() throws Exception {
+    public void testTranslateUriToOidFails() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
         assertFalse(uriMapper.uriToOid(uri).isPresent());
     }
 
     @Test
-    public void testTranslatePinUrn() throws Exception {
+    public void testTranslatePinUrn() {
         var namespace = "namespace";
-        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).get());
+        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).orElse(null));
     }
 
     @Test
-    public void testTranslateUriToNamespace() throws Exception {
+    public void testTranslateUriToNamespace() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertEquals("fhir1", uriMapper.uriToNamespace(uri).get());
         uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
@@ -72,7 +71,7 @@ public class DefaultUriMapperTest {
     }
 
     @Test
-    public void testTranslateNamespaceToUri() throws Exception {
+    public void testTranslateNamespaceToUri() {
         var namespace = "fhir1";
         assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri(namespace));
     }

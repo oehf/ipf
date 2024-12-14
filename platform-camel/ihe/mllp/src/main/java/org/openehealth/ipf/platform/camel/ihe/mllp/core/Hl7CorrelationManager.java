@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Hl7CorrelationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(Hl7CorrelationManager.class);
 
-    private PipeParser parser;
+    private final PipeParser parser;
 
     public Hl7CorrelationManager(HapiContext hapiContext) {
         this.parser = hapiContext.getPipeParser();
@@ -44,7 +44,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
         try {
             Message message = getMessage(request);
             var msgId = new Terser(message).get("/MSH-10");
-            LOG.debug("Recorded request with msg id {}", msgId);
+            log.debug("Recorded request with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
@@ -56,7 +56,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
         try {
             Message message = getMessage(response);
             var msgId = new Terser(message).get("/MSA-2");
-            LOG.debug("Recorded response with msg id {}", msgId);
+            log.debug("Recorded response with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);

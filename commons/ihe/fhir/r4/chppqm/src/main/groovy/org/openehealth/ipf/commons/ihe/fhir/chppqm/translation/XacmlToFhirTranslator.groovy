@@ -219,7 +219,7 @@ class XacmlToFhirTranslator {
      * Rethrows a UnknownPolicySetIdFault as a FHIR exception.
      */
     static void translateUnknownPolicySetIdFault(UnknownPolicySetIdFaultMessage fault) {
-        throw new ResourceNotFoundException("Unknown policy set " + fault.getFaultInfo().getMessage());
+        throw new ResourceNotFoundException("Unknown policy set " + fault.getFaultInfo().getMessage())
     }
 
     /**

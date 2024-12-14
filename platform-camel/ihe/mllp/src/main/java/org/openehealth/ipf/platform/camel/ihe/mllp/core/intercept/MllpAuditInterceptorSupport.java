@@ -43,7 +43,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpAuditDataset> extends InterceptorSupport
         implements AuditInterceptor<AuditDatasetType> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MllpAuditInterceptorSupport.class);
+    private static final Logger log = LoggerFactory.getLogger(MllpAuditInterceptorSupport.class);
     private final AuditContext auditContext;
 
     public MllpAuditInterceptorSupport(AuditContext auditContext) {
@@ -83,7 +83,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
                         EventOutcomeIndicator.Success);
                 getAuditStrategy().doAudit(auditContext, auditDataset);
             } else {
-                LOG.warn("Audit dataset is not initialized, no auditing happens");
+                log.warn("Audit dataset is not initialized, no auditing happens");
             }
         }
     }
@@ -108,7 +108,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             return getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.warn("Exception when enriching audit dataset from request", e);
+            log.warn("Exception when enriching audit dataset from request", e);
             return auditDataset;
         }
     }
@@ -121,7 +121,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
         try {
             getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, msg, auditContext);
         } catch (Exception e) {
-            LOG.warn("Exception when enriching audit dataset from response", e);
+            log.warn("Exception when enriching audit dataset from response", e);
         }
     }
 
@@ -137,7 +137,7 @@ public abstract class MllpAuditInterceptorSupport<AuditDatasetType extends MllpA
                     !StringUtils.isNotEmpty(terser.get("DSC-1"))) &&
                     getEndpoint(MllpTransactionEndpoint.class).getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
-            LOG.warn("Exception when determining message auditability, no audit will be performed", e);
+            log.warn("Exception when determining message auditability, no audit will be performed", e);
             return false;
         }
     }

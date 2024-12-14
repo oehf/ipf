@@ -26,7 +26,6 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
 import javax.naming.ldap.SortKey;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmytro Rud
@@ -68,7 +67,6 @@ public class SearchResponseSorter {
      *
      * @param searchResponse search response whose contents will be sorted <b>in-place</b>
      * @param control        sorting control
-     * @return sorting response control
      */
     public static void sort(SearchResponse searchResponse, SortControl2 control) throws IOException {
         String requestId = searchResponse.getRequestID();
@@ -105,7 +103,7 @@ public class SearchResponseSorter {
                 while (iterator.hasNext()) {
                     DsmlAttr attr = iterator.next();
                     if (key.getAttributeID().equalsIgnoreCase(attr.getName())) {
-                        values.addAll(attr.getValue().stream().map(Object::toString).collect(Collectors.toList()));
+                        values.addAll(attr.getValue().stream().map(Object::toString).toList());
                         iterator.remove();
                     }
                 }

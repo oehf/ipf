@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Christian Ohr
  */
 public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates> implements Transmogrifier<Source, T> {
-    private static final Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
+    private static final Logger log = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
     private static final ConcurrentMap<String, Loader<Templates>> XSLT_CACHE = new ConcurrentHashMap<>();
 
@@ -142,7 +142,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
             return;
         }
         for (var entry : param.entrySet()) {
-            LOG.debug("Add new parameter for transformer: {}", entry.getKey());
+            log.debug("Add new parameter for transformer: {}", entry.getKey());
             transformer.setParameter(entry.getKey(), entry.getValue());
         }
     }

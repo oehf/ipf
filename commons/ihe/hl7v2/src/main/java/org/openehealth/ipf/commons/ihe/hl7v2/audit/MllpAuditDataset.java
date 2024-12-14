@@ -20,6 +20,7 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import java.util.List;
  */
 public abstract class MllpAuditDataset extends AuditDataset {
 
+    @Serial
     private static final long serialVersionUID = -4427222097816361541L;
 
     /**

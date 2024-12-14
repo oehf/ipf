@@ -43,7 +43,7 @@ public class DocumentTest {
     private DataHandler someData;
     
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         var somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
         someData = SampleData.createDataHandler();
         docEntry = SampleData.createDocumentEntry(somePatientID);
@@ -59,13 +59,13 @@ public class DocumentTest {
     @Test
     public final void constructor() {
         var doc = new Document(docEntry, someData);
-        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
+        assertEquals(someData, doc.getContent(DataHandler.class));
     }
     
     @Test
     public final void getContentsClassOfDataHandler() {
         var doc = new Document(docEntry, someData);
-        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
+        assertEquals(someData, doc.getContent(DataHandler.class));
     }
     
     @Test
@@ -79,7 +79,7 @@ public class DocumentTest {
     public final void addContents() {
         var doc = new Document(docEntry, null);
         assertNull(doc.setContent(DataHandler.class, someData));
-        assertTrue(someData.equals(doc.getContent(DataHandler.class)));
+        assertEquals(someData, doc.getContent(DataHandler.class));
     }
     
     @Test
@@ -137,6 +137,6 @@ public class DocumentTest {
         var doc1 = new Document(docEntry, someData);
         var doc2 = new Document(docEntry, null);
         doc2.setContent(DataHandler.class, someData);
-        assertTrue(doc1.equals(doc2));
+        assertEquals(doc1, doc2);
     }
 }

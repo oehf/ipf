@@ -521,7 +521,7 @@ public class QuerySlotHelper {
         if (list == null) {
             return null;
         }
-        String trimmed = list.trim();
+        var trimmed = list.trim();
         if (trimmed.startsWith("(")) {
             trimmed = trimmed.substring(1);
         }

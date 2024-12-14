@@ -47,7 +47,7 @@ public class Pharm5ClientRequestFactory implements ClientRequestFactory<IOperati
         }
 
         if (parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            final Pharm5SearchParameters searchParameters = (Pharm5SearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+            final var searchParameters = (Pharm5SearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
             urlParameters = searchParameters.toParameters();
             operation = searchParameters.getOperation().getOperation();
         } else if (requestData instanceof Parameters) {

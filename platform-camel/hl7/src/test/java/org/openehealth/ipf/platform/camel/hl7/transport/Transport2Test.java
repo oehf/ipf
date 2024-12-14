@@ -38,15 +38,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 @ContextConfiguration(locations = { "/config/context-transport2.xml" })
-public class TransportTest2 {
+public class Transport2Test {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TransportTest2.class);
+    private static final Logger log = LoggerFactory.getLogger(Transport2Test.class);
 
     @Test
     public void testMessage01() throws Exception {
         var message = inputMessage("message/msg-01.hl7");
 
-        var socket = new Socket("localhost", 8888);
+        var socket = new Socket("localhost", 8889);
         var out = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
         final var in = new BufferedInputStream(new DataInputStream(socket.getInputStream()));
 
@@ -61,8 +61,8 @@ public class TransportTest2 {
                     if (response == 28) {
                         response = in.read(); // read second end byte
                         if (response == 13) {
-                            LOG.debug("Received response");
-                            LOG.debug(s.toString().replace('\r', '\n'));
+                            log.debug("Received response");
+                            log.debug(s.toString().replace('\r', '\n'));
                             s.setLength(0);
                             latch.countDown();
                         }
@@ -101,7 +101,7 @@ public class TransportTest2 {
     }
 
     private static String inputMessage(String resource) {
-        return new Scanner(TransportTest2.class.getResourceAsStream("/" + resource)).useDelimiter("\\A").next();
+        return new Scanner(Transport2Test.class.getResourceAsStream("/" + resource)).useDelimiter("\\A").next();
     }
     
 }

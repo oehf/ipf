@@ -31,7 +31,7 @@ public class URNTest {
     }
 
     @Test
-    public void testCorrectUUID() throws URISyntaxException {
+    public void testCorrectUUID() {
         var uuid = UUID.randomUUID();
         var urn = new URN(uuid);
         assertEquals("uuid", urn.getNamespaceId());
@@ -77,6 +77,6 @@ public class URNTest {
     @Test
     public void testFromOid() throws GSSException, URISyntaxException {
         var oid = "2.999.2.3.2.43.54";
-        assertEquals(URN.create("urn:oid:" + oid), new URN(new Oid(oid)));
+        assertEquals(new URN(new Oid(oid)), URN.create("urn:oid:" + oid));
     }
 }

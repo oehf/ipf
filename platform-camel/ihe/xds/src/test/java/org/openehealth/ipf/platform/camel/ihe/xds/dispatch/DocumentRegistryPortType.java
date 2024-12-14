@@ -53,11 +53,11 @@ public interface DocumentRegistryPortType {
     @Action(input = "urn:ihe:iti:2007:RegistryStoredQuery",
             output = "urn:ihe:iti:2007:RegistryStoredQueryResponse")
     @WebMethod(operationName = "DocumentRegistry_RegistryStoredQuery")
-    public AdhocQueryResponse documentRegistryRegistryStoredQuery(
-            @WebParam(partName = "body",
-                    name = "AdhocQueryRequest",
-                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryRequest body
+    AdhocQueryResponse documentRegistryRegistryStoredQuery(
+        @WebParam(partName = "body",
+            name = "AdhocQueryRequest",
+            targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+        AdhocQueryRequest body
     );
 
     /**
@@ -72,11 +72,11 @@ public interface DocumentRegistryPortType {
     @Action(input = "urn:ihe:iti:2007:RegisterDocumentSet-b",
             output = "urn:ihe:iti:2007:RegisterDocumentSet-bResponse")
     @WebMethod(operationName = "DocumentRegistry_RegisterDocumentSet-b")
-    public RegistryResponseType documentRegistryRegisterDocumentSetB(
-            @WebParam(partName = "body",
-                    name = "SubmitObjectsRequest",
-                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-            SubmitObjectsRequest body
+    RegistryResponseType documentRegistryRegisterDocumentSetB(
+        @WebParam(partName = "body",
+            name = "SubmitObjectsRequest",
+            targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
+        SubmitObjectsRequest body
     );
 
     /**
@@ -91,10 +91,10 @@ public interface DocumentRegistryPortType {
     @Action(input = "urn:ihe:pharm:cmpd:2010:QueryPharmacyDocuments",
             output = "urn:ihe:pharm:cmpd:2010:QueryPharmacyDocumentsResponse")
     @WebMethod(operationName = "CommunityPharmacyManager_QueryPharmacyDocuments")
-    public AdhocQueryResponse communityPharmacyManagerQueryPharmacyDocuments(
-            @WebParam(partName = "body",
-                    name = "AdhocQueryRequest",
-                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryRequest body
+    AdhocQueryResponse communityPharmacyManagerQueryPharmacyDocuments(
+        @WebParam(partName = "body",
+            name = "AdhocQueryRequest",
+            targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+        AdhocQueryRequest body
     );
 }

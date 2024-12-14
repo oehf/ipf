@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
-import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 
@@ -42,7 +41,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
     public static final String TRACE_CONTEXT_ID = "00-0af7651916cd43dd8448eb211c80319c-1111111111111111-01";
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         // sends a correct response with status "success"
         from("ch-ppq1:ch-ppq-success")

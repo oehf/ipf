@@ -21,8 +21,6 @@ import org.hl7.fhir.dstu3.model.ResourceType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.ServletException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +32,7 @@ public class TestIti78Paging extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-paging.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }

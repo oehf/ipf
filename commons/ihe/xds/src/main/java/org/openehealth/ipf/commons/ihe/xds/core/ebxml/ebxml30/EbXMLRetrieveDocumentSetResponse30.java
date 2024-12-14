@@ -138,6 +138,6 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
         var list = value.getRegistryError();
         list.addAll(errors.stream()
                 .map(error -> ((EbXMLRegistryError30) error).getInternal())
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

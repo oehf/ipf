@@ -37,8 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @since 3.6
@@ -83,11 +82,17 @@ public class Iti81SearchParameters extends FhirSearchAndSortParameters<AuditEven
     }
 
     private static final Comparator<AuditEvent> CP_DATE = nullsLast(comparing(AuditEvent::getRecorded));
-    private static final Comparator<AuditEvent> CP_ADDRESS = nullsLast(comparing(auditEvent -> {
-        if (!auditEvent.hasAgent()) return null;
-        var agent = auditEvent.getAgentFirstRep();
-        if (!agent.hasNetwork()) return null;
-        return agent.getNetwork().getAddressElement().getValueNotNull();
-    }));
+    private static final Comparator<AuditEvent> CP_ADDRESS = comparing(
+        Iti81SearchParameters::getNetworkAddress, nullsLast(naturalOrder()));
+
+    private static String getNetworkAddress(AuditEvent auditEvent) {
+        if (auditEvent.hasAgent()) {
+            var agent = auditEvent.getAgentFirstRep();
+            if (agent.hasNetwork()) {
+                return agent.getNetwork().getAddressElement().getValueNotNull();
+            }
+        }
+        return null;
+    }
 
 }

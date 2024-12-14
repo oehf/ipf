@@ -98,20 +98,17 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
         for (var i = 0; i < batchRequest.getBatchRequests().size(); ++i) {
             var dsmlMessage = batchRequest.getBatchRequests().get(i);
 
-            if (dsmlMessage instanceof AddRequest) {
-                var addRequest = (AddRequest) dsmlMessage;
+            if (dsmlMessage instanceof AddRequest addRequest) {
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(addRequest.getRequestID()), EventActionCode.Create);
                 requestItems[i].setParticipantObjectDataLifeCycle(Origination);
                 enrichAuditItem(requestItems[i], addRequest.getDn());
 
-            } else if (dsmlMessage instanceof ModifyRequest) {
-                var modifyRequest = (ModifyRequest) dsmlMessage;
+            } else if (dsmlMessage instanceof ModifyRequest modifyRequest) {
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyRequest.getRequestID()), EventActionCode.Update);
                 requestItems[i].setParticipantObjectDataLifeCycle(Amendment);
                 enrichAuditItem(requestItems[i], modifyRequest.getDn());
 
-            } else if (dsmlMessage instanceof ModifyDNRequest) {
-                var modifyDNRequest = (ModifyDNRequest) dsmlMessage;
+            } else if (dsmlMessage instanceof ModifyDNRequest modifyDNRequest) {
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(modifyDNRequest.getRequestID()), EventActionCode.Execute);
                 requestItems[i].setParticipantObjectDataLifeCycle(Translation);
                 enrichAuditItem(requestItems[i], modifyDNRequest.getDn());
@@ -125,8 +122,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                     log.debug("Cannot parse new Rdn", e);
                 }
 
-            } else if (dsmlMessage instanceof DelRequest) {
-                var delRequest = (DelRequest) dsmlMessage;
+            } else if (dsmlMessage instanceof DelRequest delRequest) {
                 requestItems[i] = new Iti59AuditDataset.RequestItem(trimToNull(delRequest.getRequestID()), EventActionCode.Delete);
                 requestItems[i].setParticipantObjectDataLifeCycle(PermanentErasure);
                 enrichAuditItem(requestItems[i], delRequest.getDn());
@@ -166,15 +162,13 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
 
         for (var i = 0; i < batchResponse.getBatchResponses().size(); ++i) {
             var value = batchResponse.getBatchResponses().get(i).getValue();
-            if (value instanceof LDAPResult) {
-                var ldapResult = (LDAPResult) value;
+            if (value instanceof LDAPResult ldapResult) {
                 if (isEmpty(ldapResult.getRequestID())) {
                     byNumber[i] = ldapResult;
                 } else {
                     byRequestId.put(ldapResult.getRequestID(), ldapResult);
                 }
-            } else if (value instanceof ErrorResponse) {
-                var errorResponse = (ErrorResponse) value;
+            } else if (value instanceof ErrorResponse errorResponse) {
                 if (isEmpty(errorResponse.getRequestID())) {
                     byNumber[i] = errorResponse;
                 } else {
@@ -208,8 +202,7 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
     }
 
     private static void setOutcomeCode(Iti59AuditDataset.RequestItem requestItem, Object value, String failureLogMessage, Object... failureLogArgs) {
-        if (value instanceof LDAPResult) {
-            var ldapResult = (LDAPResult) value;
+        if (value instanceof LDAPResult ldapResult) {
             requestItem.setOutcomeCode((ldapResult.getResultCode() != null) && (ldapResult.getResultCode().getCode() == 0)
                     ? EventOutcomeIndicator.Success
                     : EventOutcomeIndicator.SeriousFailure);

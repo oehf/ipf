@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -37,6 +39,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FindFoldersQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+    @Serial
     private static final long serialVersionUID = 4156643982985304259L;
 
     @Getter @Setter private List<AvailabilityStatus> status;

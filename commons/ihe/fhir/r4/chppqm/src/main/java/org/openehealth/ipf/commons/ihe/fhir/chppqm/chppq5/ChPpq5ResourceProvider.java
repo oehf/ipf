@@ -38,7 +38,7 @@ public class ChPpq5ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse)
     {
-        ChPpq5SearchParameters searchParameters = new ChPpq5SearchParameters(getFhirContext(), patientId, consentId);
+        var searchParameters = new ChPpq5SearchParameters(getFhirContext(), patientId, consentId);
         return requestBundleProvider(null, searchParameters, ResourceType.Consent.name(),
                 httpServletRequest, httpServletResponse, requestDetails);
     }

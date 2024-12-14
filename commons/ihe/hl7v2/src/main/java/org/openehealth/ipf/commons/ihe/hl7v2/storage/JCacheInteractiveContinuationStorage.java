@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class JCacheInteractiveContinuationStorage implements InteractiveContinuationStorage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JCacheInteractiveContinuationStorage.class);
+    private static final Logger log = LoggerFactory.getLogger(JCacheInteractiveContinuationStorage.class);
     private final Cache<String, InteractiveContinuationChain> cache;
 
 
@@ -48,7 +48,7 @@ public class JCacheInteractiveContinuationStorage implements InteractiveContinua
     public void put(String continuationPointer, String chainId, Message fragment) {
         var chain = cache.get(chainId);
         if (chain == null) {
-            LOG.debug("Create chain for storage key {}", chainId);
+            log.debug("Create chain for storage key {}", chainId);
             chain = new InteractiveContinuationChain();
             cache.put(chainId, chain);
         }

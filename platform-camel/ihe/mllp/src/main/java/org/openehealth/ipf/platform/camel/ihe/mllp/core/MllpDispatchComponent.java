@@ -60,7 +60,7 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     }
 
     @Override
-    protected MllpDispatchEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpDispatchEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) {
         return new MllpDispatchEndpointConfiguration(this, uri, parameters);
     }
 

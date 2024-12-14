@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,14 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
  * @author Dmytro Rud
  */
 public class XdsNonconstructiveDocumentSetRequestAuditDataset extends XdsAuditDataset {
+    @Serial
     private static final long serialVersionUID = -8776033207572005899L;
 
     public enum Status {SUCCESSFUL, NOT_SUCCESSFUL}
 
     @AllArgsConstructor
     public static class Document implements Serializable {
+        @Serial
         private static final long serialVersionUID = -2386699338508892135L;
 
         @Getter private final String documentUniqueId;

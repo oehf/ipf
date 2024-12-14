@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpPHIExportBuilder;
@@ -46,7 +45,7 @@ public class Iti68BinaryServerAuditStrategy extends AuditStrategySupport<FhirAud
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirAuditDataset auditDataset) {
-        BalpPHIExportBuilder builder = new BalpPHIExportBuilder(auditContext, auditDataset,
+        var builder = new BalpPHIExportBuilder(auditContext, auditDataset,
                 EventActionCode.Create,
                 FhirEventTypeCode.MobileDocumentRetrieval)
                 .setPatient(auditDataset.getPatientId());

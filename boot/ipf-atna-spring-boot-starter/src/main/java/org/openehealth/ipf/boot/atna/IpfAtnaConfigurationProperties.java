@@ -30,9 +30,6 @@ import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- *
- */
 @ConfigurationProperties(prefix = "ipf.atna")
 public class IpfAtnaConfigurationProperties {
 

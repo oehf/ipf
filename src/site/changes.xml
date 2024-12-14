@@ -23,7 +23,24 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="" description="" date="">
+        <release version="5.0.0" description="" date="">
+            <action issue="460" dev="unixoid" type="fix">
+                Added missing type converter for PDQ continuation protocol
+            </action>
+            <action issue="457" dev="stanojevic-boris" type="update">
+                Add the possibility to use custom additional URL parameters on a ITI SOAP calls
+            </action>
+            <action issue="454" dev="ohr" type="update">
+                MessageUtils.copy has been renamed to copyMessage because there was a
+                conflict in more recent versions of the HAPI HL7 library
+            </action>
+            <action issue="453" dev="ohr" type="update">
+                Use micrometer-tracing for distributed tracing instead of brave
+            </action>
+            <action issue="452" dev="ohr" type="fix">
+                If a FhirContext is provided as parameter to a Fhir Producer, other client-side
+                parameters must be disregarded
+            </action>
             <action issue="451" dev="unixoid" type="fix">
                 Improved translation between DSMLv2 and JSON
             </action>

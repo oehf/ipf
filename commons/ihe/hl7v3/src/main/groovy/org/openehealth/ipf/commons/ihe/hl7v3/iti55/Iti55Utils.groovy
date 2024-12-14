@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory
  * @author Dmytro Rud
  */
 abstract class Iti55Utils {
-    private static final transient Logger LOG = LoggerFactory.getLogger(Iti55Utils.class)
+    private static final transient Logger log = LoggerFactory.getLogger(Iti55Utils.class)
 
     private Iti55Utils() {
         throw new IllegalStateException('cannot instantiate helper class')

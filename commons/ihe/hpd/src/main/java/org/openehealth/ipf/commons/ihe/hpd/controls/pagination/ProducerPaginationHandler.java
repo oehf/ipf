@@ -84,8 +84,7 @@ public class ProducerPaginationHandler extends ProducerHandlerBase<BatchRequest,
                 String requestId = HpdUtils.extractResponseRequestId(value);
                 expectedPaginationResponses.remove(requestId);
 
-                if (value instanceof SearchResponse) {
-                    SearchResponse searchResponse = (SearchResponse) value;
+                if (value instanceof SearchResponse searchResponse) {
                     PagedResultsResponseControl pagination = ControlUtils.extractControl(searchResponse, PagedResultsResponseControl.OID);
 
                     Integer resultCode = ((searchResponse.getSearchResultDone() != null) && (searchResponse.getSearchResultDone().getResultCode() != null))

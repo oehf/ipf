@@ -18,12 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm;
 
 import ca.uhn.fhir.context.FhirContext;
 import lombok.experimental.UtilityClass;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Consent;
-import org.hl7.fhir.r4.model.Identifier;
 import org.openehealth.ipf.commons.ihe.fhir.IgBasedFhirContextSupplier;
 
 import java.io.IOException;
@@ -33,7 +30,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author Dmytro Rud
- * @since
  */
 @UtilityClass
 public class ChPpqmUtils {
@@ -73,18 +69,18 @@ public class ChPpqmUtils {
     }
 
     public static class CodingSystems {
-        public static String CONSENT_IDENTIFIER_TYPE = "http://fhir.ch/ig/ch-epr-fhir/CodeSystem/PpqmConsentIdentifierType";
-        public static String GLN = "urn:oid:2.51.1.3";
+        public static final String CONSENT_IDENTIFIER_TYPE = "http://fhir.ch/ig/ch-epr-fhir/CodeSystem/PpqmConsentIdentifierType";
+        public static final String GLN = "urn:oid:2.51.1.3";
     }
 
     public static class ConsentIdTypes {
-        public static String POLICY_SET_ID = "policySetId";
-        public static String TEMPLATE_ID = "templateId";
+        public static final String POLICY_SET_ID = "policySetId";
+        public static final String TEMPLATE_ID = "templateId";
     }
 
     public static String extractConsentId(Consent consent, String idType) {
-        for (Identifier identifier : consent.getIdentifier()) {
-            for (Coding coding : identifier.getType().getCoding()) {
+        for (var identifier : consent.getIdentifier()) {
+            for (var coding : identifier.getType().getCoding()) {
                 if (ChPpqmUtils.CodingSystems.CONSENT_IDENTIFIER_TYPE.equalsIgnoreCase(coding.getSystem()) &&
                         idType.equals(coding.getCode()))
                 {
@@ -102,8 +98,8 @@ public class ChPpqmUtils {
         if (url.contains("#")) {
             url = url.substring(0, url.indexOf('#'));
         }
-        List<NameValuePair> params = URLEncodedUtils.parse(url, StandardCharsets.UTF_8);
-        for (NameValuePair param : params) {
+        var params = URLEncodedUtils.parse(url, StandardCharsets.UTF_8);
+        for (var param : params) {
             if (Consent.SP_IDENTIFIER.equals(param.getName())) {
                 return param.getValue();
             }
@@ -131,12 +127,12 @@ public class ChPpqmUtils {
     }
 
     public static Bundle createPpq4SubmitRequestBundle(Collection<Consent> consents, Bundle.HTTPVerb httpMethod) {
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Profiles.FEED_REQUEST_BUNDLE);
-        for (Consent consent : consents) {
-            Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
+        for (var consent : consents) {
+            var entry = new Bundle.BundleEntryComponent();
             entry.getRequest().setMethod(httpMethod);
             entry.setResource(consent);
             switch (httpMethod) {
@@ -156,12 +152,12 @@ public class ChPpqmUtils {
     }
 
     public static Bundle createPpq4DeleteRequestBundle(Collection<String> consentIds) {
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.TRANSACTION);
         bundle.getMeta().addProfile(Profiles.FEED_REQUEST_BUNDLE);
-        for (String consentId : consentIds) {
-            Bundle.BundleEntryComponent entry = new Bundle.BundleEntryComponent();
+        for (var consentId : consentIds) {
+            var entry = new Bundle.BundleEntryComponent();
             entry.getRequest().setMethod(Bundle.HTTPVerb.DELETE);
             entry.getRequest().setUrl(createUrl(consentId));
             bundle.getEntry().add(entry);

@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Dmytro Rud
@@ -76,7 +77,7 @@ public class ChPpq1Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test

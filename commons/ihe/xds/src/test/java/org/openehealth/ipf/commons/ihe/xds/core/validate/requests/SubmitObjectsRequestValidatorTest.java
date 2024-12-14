@@ -267,8 +267,7 @@ public class SubmitObjectsRequestValidatorTest {
         ebXML.getExtrinsicObjects().get(0).getClassifications().stream()
                 .filter(x -> !isAuthorClassification(x))
                 .findAny()
-                .get()
-                .setNodeRepresentation("");
+                .ifPresent(ebXMLClassification -> ebXMLClassification.setNodeRepresentation(""));
         expectFailure(NODE_REPRESENTATION_MISSING, ebXML);
     }
 

@@ -29,7 +29,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * A simple collector of Syslog events
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
  */
 public class SyslogEventCollector implements Consumer<Map<String, Object>> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SyslogEventCollector.class);
+    private static final Logger log = LoggerFactory.getLogger(SyslogEventCollector.class);
     private static final AuditParser PARSER = new DICOMAuditParser();
     private final Collection<Map<String, Object>> syslogMaps = new ConcurrentLinkedQueue<>();
 
@@ -85,7 +84,7 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
 
     @Override
     public void accept(Map<String, Object> syslogMap) {
-        LOG.debug("Collecting syslog event {}", syslogMap);
+        log.debug("Collecting syslog event {}", syslogMap);
         syslogMaps.add(syslogMap);
     }
 
@@ -96,7 +95,7 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
     public Collection<Map<String, Object>> getSyslogEvents(Predicate<Map<String, Object>> predicate) {
         return syslogMaps.stream()
                 .filter(predicate)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     public void reset() {

@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.hpd.iti59;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hpd.audit.codes.HpdParticipantObjectIdTypeCode;
 
@@ -40,7 +40,7 @@ public class Iti59ClientAuditStrategy extends Iti59AuditStrategy {
     protected AuditMessage makeAuditMessage(AuditContext auditContext,
                                             Iti59AuditDataset auditDataset,
                                             Iti59AuditDataset.RequestItem requestItem) {
-        PHIExportBuilder builder = new PHIExportBuilder<>(
+        var builder = new DefaultPHIExportBuilder(
                 auditContext,
                 auditDataset,
                 requestItem.getOutcomeCode(),

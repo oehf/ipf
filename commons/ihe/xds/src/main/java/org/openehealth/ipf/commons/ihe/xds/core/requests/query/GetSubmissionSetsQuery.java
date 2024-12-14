@@ -22,6 +22,8 @@ import lombok.ToString;
 
 import jakarta.xml.bind.annotation.*;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query for GetSubmissionSets.
  * @author Jens Riemschneider
@@ -32,6 +34,7 @@ import jakarta.xml.bind.annotation.*;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetSubmissionSetsQuery extends GetByUuidQuery {
+    @Serial
     private static final long serialVersionUID = 2089514690641582428L;
 
     @Getter @Setter private Integer metadataLevel;

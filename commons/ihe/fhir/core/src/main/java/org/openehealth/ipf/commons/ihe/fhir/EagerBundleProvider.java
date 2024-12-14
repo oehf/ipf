@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import lombok.NonNull;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class EagerBundleProvider extends AbstractBundleProvider {
     }
 
     @Override
-    public List<IBaseResource> getResources(int fromIndex, int toIndex) {
+    public @NonNull List<IBaseResource> getResources(int fromIndex, int toIndex) {
         var resources = fetchResources();
         return resources.subList(fromIndex, Math.min(toIndex, resources.size()));
     }

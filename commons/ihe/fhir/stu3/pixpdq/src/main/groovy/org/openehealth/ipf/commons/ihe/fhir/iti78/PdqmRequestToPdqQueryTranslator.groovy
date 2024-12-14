@@ -135,7 +135,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
 
 
         // Handle identifiers
-        List<String> requestedDomainOids
+        List<String> requestedDomainOids = null
         Optional<CompositeIdentifier> searchIdentifier = Optional.empty()
 
         TokenParam resourceIdParam = searchParameters._id
@@ -155,8 +155,9 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
 
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
-            requestedDomainOids = identifiers?.findAll { it.isPresent() && it.get().hasOnlySystem() }
-                    ?.collect { it.get().oid }
+            requestedDomainOids = identifiers?.findAll {
+                it.isPresent() && it.get().hasOnlySystem()
+            }?.collect { it.get().oid }
         }
 
         // If requestedDomains is set but the pdqSupplierResourceIdentifierOid is not part of it, add it.
@@ -200,7 +201,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String convertBirthDate(DateAndListParam birthDateParam) {
-        Date birthDate = firstOrNull(searchDateList(birthDateParam))
+        def birthDate = firstOrNull(searchDateList(birthDateParam))
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 
@@ -218,7 +219,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         param?.valuesAsQueryTokens?.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
-    protected List<String> searchDateList(DateAndListParam param) {
+    protected List<Date> searchDateList(DateAndListParam param) {
         param?.valuesAsQueryTokens?.collect { searchDate(it.valuesAsQueryTokens.find()) }
     }
 

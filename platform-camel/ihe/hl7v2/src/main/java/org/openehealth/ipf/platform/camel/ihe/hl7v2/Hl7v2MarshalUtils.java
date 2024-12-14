@@ -91,7 +91,6 @@ public class Hl7v2MarshalUtils {
      * @param message     Camel message
      * @param charsetName charset name
      * @return string
-     * @throws Exception
      */
     public static String convertBodyToString(
             Message message,
@@ -160,7 +159,6 @@ public class Hl7v2MarshalUtils {
      * @param body HL7 object
      * @param charsetName charset name
      * @return byte array
-     * @throws Exception
      */
     public static byte[] convertBodyToByteArray(
             Object body,
@@ -212,19 +210,19 @@ public class Hl7v2MarshalUtils {
     // Guess charset from configuration. If the message contains something different in MSH-18, it will be
     // again converted using this charset.
     private static String toString(byte[] bytes, String defaultCharsetName) throws Exception {
-        String guessed = new String(bytes, defaultCharsetName);
-        String msh18 = PreParser.getFields(guessed, "MSH-18")[0];
-        HL7Charset hl7Charset = HL7Charset.getHL7Charset(msh18);
-        String hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
+        var guessed = new String(bytes, defaultCharsetName);
+        var msh18 = PreParser.getFields(guessed, "MSH-18")[0];
+        var hl7Charset = HL7Charset.getHL7Charset(msh18);
+        var hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
         return hl7CharsetName.equals(defaultCharsetName) ?
                 guessed :
                 new String(bytes, hl7CharsetName);
     }
 
     private static byte[] toByteArray(String s, String defaultCharsetName) throws Exception {
-        String msh18 = PreParser.getFields(s, "MSH-18")[0];
-        HL7Charset hl7Charset = HL7Charset.getHL7Charset(msh18);
-        String hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
+        var msh18 = PreParser.getFields(s, "MSH-18")[0];
+        var hl7Charset = HL7Charset.getHL7Charset(msh18);
+        var hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
         return s.getBytes(hl7CharsetName);
     }
 

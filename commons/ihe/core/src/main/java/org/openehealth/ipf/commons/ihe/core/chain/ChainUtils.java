@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class ChainUtils {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(ChainUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(ChainUtils.class);
 
     /**
      * Extends an initial chain with elements from a custom collection.
@@ -59,7 +59,7 @@ public class ChainUtils {
 
                 // check whether element with this ID is already in the chain
                 if (chainIds.contains(cid)) {
-                    LOG.debug("Element {} is already in the chain, ignore it", cid);
+                    log.debug("Element {} is already in the chain, ignore it", cid);
                     iter.remove();
                     successful = true;
                     continue;
@@ -73,10 +73,10 @@ public class ChainUtils {
                                 (c.getBefore().contains(other.getId()) && !(other.getAfter().contains(cid))) ||
                                 (c.getAfter().contains(other.getId()) && !(other.getBefore().contains(cid)))
                         )
-                        .collect(Collectors.toList());
+                        .toList();
 
                 if (!unprocessedDependencies.isEmpty()) {
-                    LOG.debug("Element {} depends on {}", cid,
+                    log.debug("Element {} depends on {}", cid,
                             unprocessedDependencies.stream()
                                     .map(Chainable::getId)
                                     .collect(Collectors.joining(" ")));
@@ -91,12 +91,12 @@ public class ChainUtils {
                 var beforeIndices = c.getBefore().stream()
                         .map(chainIds::indexOf)
                         .filter(value -> value >= 0)
-                        .collect(Collectors.toList());
+                        .toList();
 
                 var afterIndices = c.getAfter().stream()
                         .map(chainIds::indexOf)
                         .filter(value -> value >= 0)
-                        .collect(Collectors.toList());
+                        .toList();
 
                 var minBeforePosition = 0;
                 var maxAfterPosition = 0;
@@ -123,12 +123,12 @@ public class ChainUtils {
                 chain.add(position, c);
                 chainIds.add(position, cid);
                 iter.remove();
-                LOG.debug("Inserted element {} at position {}", cid, position);
+                log.debug("Inserted element {} at position {}", cid, position);
                 successful = true;
             }
 
             if (successful) {
-                LOG.debug("Iteration result: {} elements in the chain, {} elements left", chain.size(), unprocessed.size());
+                log.debug("Iteration result: {} elements in the chain, {} elements left", chain.size(), unprocessed.size());
             } else {
                 throw new ChainException("Cannot build a chain, probably there is a dependency loop");
             }

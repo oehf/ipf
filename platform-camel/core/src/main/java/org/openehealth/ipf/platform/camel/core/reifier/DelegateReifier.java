@@ -57,7 +57,6 @@ public abstract class DelegateReifier<T extends DelegateDefinition> extends Proc
      * Creates a {@link Processor} for this DSL element.
      *
      * @return a {@link Processor} instance.
-     * @throws Exception
      */
     protected abstract Processor doCreateDelegate();
 

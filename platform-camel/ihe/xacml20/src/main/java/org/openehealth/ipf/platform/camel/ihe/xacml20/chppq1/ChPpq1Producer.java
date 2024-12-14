@@ -37,14 +37,11 @@ public class ChPpq1Producer extends AbstractWsProducer<ChPpqAuditDataset, WsTran
     @Override
     protected EprPolicyRepositoryResponse callService(Object clientObject, AssertionBasedRequestType body) throws Exception {
         var client = (ChPpq1PortType) clientObject;
-        if (body instanceof AddPolicyRequest) {
-            var request = (AddPolicyRequest) body;
+        if (body instanceof AddPolicyRequest request) {
             return client.addPolicy(request);
-        } else if (body instanceof UpdatePolicyRequest) {
-            var request = (UpdatePolicyRequest) body;
+        } else if (body instanceof UpdatePolicyRequest request) {
             return client.updatePolicy(request);
-        } else if (body instanceof DeletePolicyRequest) {
-            var request = (DeletePolicyRequest) body;
+        } else if (body instanceof DeletePolicyRequest request) {
             return client.deletePolicy(request);
         } else {
             throw new RuntimeException("Cannot dispatch request of the type " + ClassUtils.getSimpleName(body, "<null>"));

@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
-import org.hl7.fhir.r4.model.Bundle;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 /**

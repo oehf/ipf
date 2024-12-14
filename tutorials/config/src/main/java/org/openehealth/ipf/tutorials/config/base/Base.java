@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Base {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Base.class);
+    private static final Logger log = LoggerFactory.getLogger(Base.class);
 
     private static String descriptorList = "base-context.xml;extender-context.xml";
 
@@ -21,18 +21,18 @@ public class Base {
             if (Base.class.getClassLoader().getResource(customContext) != null) {
                 customContextFiles.append(customContext).append(";");
             } else {
-                LOG.warn("Did not find {} on the classpath.", customContext);
+                log.warn("Did not find {} on the classpath.", customContext);
             }
         }
         descriptorList = customContextFiles + descriptorList;
 
         try {
-            LOG.info("Starting base application with descriptor list:\n{}", descriptorList);
+            log.info("Starting base application with descriptor list:\n{}", descriptorList);
             Main.main("-ac", descriptorList);
         } catch (Exception e) {
-            LOG.error("An error occurred", e);
+            log.error("An error occurred", e);
         } finally {
-            LOG.info("Shutdown");
+            log.info("Shutdown");
         }
     }
 }

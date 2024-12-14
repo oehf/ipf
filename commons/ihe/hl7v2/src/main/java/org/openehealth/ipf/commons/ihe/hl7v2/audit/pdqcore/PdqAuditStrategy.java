@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 
@@ -63,7 +63,7 @@ public abstract class PdqAuditStrategy extends AuditStrategySupport<QueryAuditDa
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder(auditContext, auditDataset, eventTypeCode)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, eventTypeCode)
                 .setQueryParameters(
                         auditDataset.getMessageControlId(),
                         participantObjectIdType,

@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Dmytro Rud
  */
 public class MyRejectionHandlingStrategy extends AbstractWsRejectionHandlingStrategy {
-    private static final Logger LOG = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
+    private static final Logger log = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 

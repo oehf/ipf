@@ -23,6 +23,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ import java.util.List;
 @ToString(doNotUseGetters = true)
 public class RetrieveSeries implements Serializable
 {
+    @Serial
     private static final long serialVersionUID = 8999352499981099421L;
 
     protected String seriesInstanceUID;

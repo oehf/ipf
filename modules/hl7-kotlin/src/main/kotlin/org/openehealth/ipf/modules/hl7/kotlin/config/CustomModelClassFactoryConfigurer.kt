@@ -17,7 +17,7 @@
 package org.openehealth.ipf.modules.hl7.kotlin.config
 
 import ca.uhn.hl7v2.parser.ModelClassFactory
-import mu.KLogging
+import io.github.oshai.kotlinlogging.KLogging
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.modules.hl7.kotlin.parser.CustomModelClassFactory

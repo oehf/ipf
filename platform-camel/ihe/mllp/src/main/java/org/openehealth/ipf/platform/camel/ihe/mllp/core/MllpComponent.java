@@ -47,7 +47,7 @@ import java.util.Map;
 public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration, AuditDatasetType extends MllpAuditDataset>
         extends NettyComponent implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
+    private static final Logger log = LoggerFactory.getLogger(MllpComponent.class);
 
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
 
@@ -114,9 +114,9 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             nettyParameters.put("requestTimeout", getAndRemoveParameter(parameters, "timeout", Long.class, 30000L));
         }
         if (!nettyParameters.containsKey("needClientAuth")) {
-            String clientAuthTypeString = getAndRemoveParameter(parameters, "clientAuth", String.class);
+            var clientAuthTypeString = getAndRemoveParameter(parameters, "clientAuth", String.class);
             if (clientAuthTypeString != null) {
-                ClientAuthType clientAuthType = ClientAuthType.valueOf(clientAuthTypeString);
+                var clientAuthType = ClientAuthType.valueOf(clientAuthTypeString);
                 nettyParameters.put("needClientAuth", clientAuthType == ClientAuthType.MUST);
             }
         }
@@ -147,13 +147,13 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             var decoders = nettyConfiguration.getDecodersAsList();
             if (decoders.isEmpty()) {
                 decoders.add(decoder);
-                LOG.warn("No HL7 decoder factory found, creating new default instance {}", decoder);
+                log.warn("No HL7 decoder factory found, creating new default instance {}", decoder);
             } else {
                 decoder = (HL7MLLPNettyDecoderFactory)decoders.iterator().next();
             }
             charset = decoder.getCharset();
         } catch (ClassCastException cce) {
-            LOG.warn("Unsupported HL7 decoder factory type {}, using default character set", decoder.getClass().getName());
+            log.warn("Unsupported HL7 decoder factory type {}, using default character set", decoder.getClass().getName());
         }
         if (charset == null) {
             charset = Charset.defaultCharset();

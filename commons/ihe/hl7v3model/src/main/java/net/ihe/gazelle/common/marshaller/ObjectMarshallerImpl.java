@@ -21,7 +21,7 @@ public class ObjectMarshallerImpl<T> implements ObjectMarshaller<T> {
 	/**
 	 * The kind of class to be marshalled.
 	 */
-	private Class<T> c;
+	private final Class<T> c;
 
 	/**
 	 * Create an object marshaller.

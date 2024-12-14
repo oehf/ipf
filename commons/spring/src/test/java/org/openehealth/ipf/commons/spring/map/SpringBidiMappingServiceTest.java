@@ -69,8 +69,6 @@ public class SpringBidiMappingServiceTest {
                 new ClassPathResource("example3.map")
         );
         mappingService.setIgnoreResourceNotFound(false);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            mappingService.setMappingResources(resources);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> mappingService.setMappingResources(resources));
     }
 }

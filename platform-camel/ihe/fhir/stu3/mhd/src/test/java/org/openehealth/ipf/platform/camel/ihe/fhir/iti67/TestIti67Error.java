@@ -21,8 +21,6 @@ import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.ServletException;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -33,7 +31,7 @@ public class TestIti67Error extends AbstractTestIti67 {
     private static final String CONTEXT_DESCRIPTOR = "iti-67-error.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

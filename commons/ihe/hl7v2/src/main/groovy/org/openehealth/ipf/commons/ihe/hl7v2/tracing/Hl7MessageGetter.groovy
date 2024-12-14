@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory
  */
 class Hl7MessageGetter implements Propagator.Getter<AbstractMessage> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Hl7MessageGetter)
+    private static final Logger log = LoggerFactory.getLogger(Hl7MessageGetter)
     private final String segmentName
 
     Hl7MessageGetter(String segmentName = 'ZTR') {
@@ -43,8 +43,8 @@ class Hl7MessageGetter implements Propagator.Getter<AbstractMessage> {
         def qip = qips ? qips().find { q -> q[1].value == key } : null
         String value = qip ? qip[2]?.value : null
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Extracted trace context with key [{}] and value [{}]", key, value)
+        if (log.isDebugEnabled()) {
+            log.debug("Extracted trace context with key [{}] and value [{}]", key, value)
         }
         value
     }

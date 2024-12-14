@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -27,9 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -44,15 +41,15 @@ public class IpfAtnaBalpAutoConfigurationTest {
     private AuditContext auditContext;
 
     @Test
-    public void testAtnaWithBalpSettings() throws Exception {
-        assertTrue(auditContext instanceof BalpAuditContext);
+    public void testAtnaWithBalpSettings() {
+        assertInstanceOf(BalpAuditContext.class, auditContext);
 
         assertEquals("atna-test", auditContext.getAuditSourceId());
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
         assertEquals(1342, auditContext.getAuditRepositoryPort());
         assertEquals("FHIR-REST-TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
-        assertTrue(auditContext.getAuditMessageQueue() instanceof AsynchronousAuditMessageQueue);
+        assertInstanceOf(AsynchronousAuditMessageQueue.class, auditContext.getAuditMessageQueue());
 
         assertEquals("fhir", ((BalpAuditContext)auditContext).getAuditRepositoryContextPath());
         assertArrayEquals(new String[]{"cid","client-id","my-client-id-path"},

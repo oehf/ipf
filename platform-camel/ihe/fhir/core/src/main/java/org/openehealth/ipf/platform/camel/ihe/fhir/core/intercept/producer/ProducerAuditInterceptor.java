@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
@@ -38,12 +37,11 @@ import static java.util.Objects.requireNonNull;
  * @author Christian Ohr
  * @since 3.1
  */
-@Slf4j
 public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         extends InterceptorSupport
         implements AuditInterceptor<AuditDatasetType> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProducerAuditInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ProducerAuditInterceptor.class);
 
     private final AuditContext auditContext;
 
@@ -114,7 +112,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             AuditInterceptorUtils.enrichAuditDatasetFromRequest(auditDataset, auditContext, exchange);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from request", e);
+            log.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }

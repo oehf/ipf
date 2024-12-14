@@ -26,6 +26,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -46,6 +47,7 @@ import java.util.Objects;
         "familyName", "suffix", "degree"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "type")
 public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
+    @Serial
     private static final long serialVersionUID = -3455779057944896901L;
 
     public Name() {
@@ -78,7 +80,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     /**
      * Copy all name properties from the given name to this object.
      * 
-     * @param name
+     * @param name name to be copied
      */
     protected void copyFrom(Name name) {
         setDegree(name.getDegree());
@@ -111,8 +113,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Name)) return false;
-        var that = (Name<?>) o;
+        if (!(o instanceof Name<?> that)) return false;
         return Objects.equals(getFamilyName(), that.getFamilyName()) &&
                 Objects.equals(getGivenName(), that.getGivenName()) &&
                 Objects.equals(getSecondAndFurtherGivenNames(), that.getSecondAndFurtherGivenNames()) &&

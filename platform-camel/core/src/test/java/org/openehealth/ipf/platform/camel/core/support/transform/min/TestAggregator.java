@@ -30,7 +30,7 @@ public class TestAggregator implements Aggregator<String, String> {
         for (var s : object) {
             buffer.append(":").append(s);
         }
-        if (buffer.length() > 0) {
+        if (!buffer.isEmpty()) {
             buffer.deleteCharAt(0);
         }
         return buffer.toString();

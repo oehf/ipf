@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
@@ -31,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 abstract class AbstractTestIti83 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti83.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestIti83.class);
 
     public static void startServer(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);

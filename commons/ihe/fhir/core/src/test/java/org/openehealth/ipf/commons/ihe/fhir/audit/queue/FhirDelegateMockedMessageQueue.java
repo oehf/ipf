@@ -5,7 +5,6 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
-import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 
 import java.util.List;
 

@@ -28,8 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -171,8 +170,8 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
         }
 
         if (this.getSortSpec() != null) {
-            SortSpec sort = this.getSortSpec();
-            boolean first = true;
+            var sort = this.getSortSpec();
+            var first = true;
             final var b = new StringBuilder();
             while (sort != null) {
                 if (!first) {
@@ -188,7 +187,7 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
             parameters.addParameter(ca.uhn.fhir.rest.api.Constants.PARAM_SORT, new StringType(b.toString()));
         }
         if (this.getIncludeSpec() != null) {
-            for (final Include nextInclude : this.getIncludeSpec()) {
+            for (final var nextInclude : this.getIncludeSpec()) {
                 final var b = new StringBuilder();
                 b.append(UrlUtil.escapeUrlParam(nextInclude.getParamType()));
                 b.append(':');
@@ -208,23 +207,25 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
         return parameters;
     }
 
-    private static final Comparator<DocumentReference> CP_DATE = nullsLast(comparing(DocumentReference::getDate));
+    private static final Comparator<DocumentReference> CP_DATE = comparing(
+        DocumentReference::getDate, nullsLast(naturalOrder()));
 
-    private static final Comparator<DocumentReference> CP_AUTHOR = nullsLast(comparing(documentReference -> {
+    private static final Comparator<DocumentReference> CP_AUTHOR = comparing(
+        Pharm5SearchParameters::getAuthorName, nullsLast(naturalOrder()));
+
+    private static String getAuthorName(DocumentReference documentReference) {
         if (!documentReference.hasAuthor()) return null;
         var author = documentReference.getAuthorFirstRep();
-        if (author.getResource() instanceof PractitionerRole) {
-            var practitionerRole = (PractitionerRole) author.getResource();
+        if (author.getResource() instanceof PractitionerRole practitionerRole) {
             if (!practitionerRole.hasPractitioner()) return null;
             author = practitionerRole.getPractitioner();
         }
         if (author.getResource() == null) return null;
-        if (author.getResource() instanceof Practitioner) {
-            var practitioner = (Practitioner) author.getResource();
+        if (author.getResource() instanceof Practitioner practitioner) {
             if (!practitioner.hasName()) return null;
             var name = practitioner.getNameFirstRep();
             return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
         }
         return null;
-    }));
+    }
 }

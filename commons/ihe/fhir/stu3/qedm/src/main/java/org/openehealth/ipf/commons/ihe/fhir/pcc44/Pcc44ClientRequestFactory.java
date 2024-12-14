@@ -46,7 +46,7 @@ public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bu
         } else if (requestData instanceof ICriterion[]) {
             query = client.search()
                     .forResource(queriedResourceType);
-            ICriterion<?>[] criteria = (ICriterion<?>[]) requestData;
+            var criteria = (ICriterion<?>[]) requestData;
             if (criteria.length > 0) {
                 query = query.where(criteria[0]);
                 if (criteria.length > 1) {

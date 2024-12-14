@@ -53,7 +53,6 @@ class GroupTest {
         assertTrue(message["MSH"] is Segment)
         assertTrue(message["PATIENT_RESULT"](0) is Group)
         assertTrue(message["PATIENT_RESULT", 0] is Group)
-        assertTrue(message["PATIENT_RESULT"]() is Array)
         assertTrue(message["PATIENT_RESULT"]["PATIENT"]["PID"] is Segment)
 
         // alternative notation does not exist in Kotlin

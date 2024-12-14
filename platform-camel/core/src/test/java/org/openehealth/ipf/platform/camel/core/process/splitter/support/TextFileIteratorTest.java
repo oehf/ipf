@@ -44,7 +44,7 @@ public class TextFileIteratorTest {
     }
     
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         assertTrue(file.delete());      // If this fails the last test did not
                                         // close the FileReader in the 
                                         // TextFileIterator
@@ -116,7 +116,7 @@ public class TextFileIteratorTest {
     public void testRemoveNotSupported() throws Exception {
         var iterator = new TextFileIterator(file.getAbsolutePath());
         try {
-            assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
+            assertThrows(UnsupportedOperationException.class, iterator::remove);
         }
         finally {
             assertTrue(iterator.isClosed());
@@ -132,7 +132,7 @@ public class TextFileIteratorTest {
     public void testSafeAbortOfIteration() throws Exception {
         var iterator = new TextFileIterator(file.getAbsolutePath());
         iterator.close();
-        assertThrows(IllegalStateException.class, () -> iterator.next());
+        assertThrows(IllegalStateException.class, iterator::next);
     }
 }
 

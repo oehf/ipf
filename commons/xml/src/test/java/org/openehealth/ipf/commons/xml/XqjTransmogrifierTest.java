@@ -62,9 +62,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapMissingParameter() {
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            transformer.zap(source("/xquery/string.xml"), "/xquery/string-q2.xq");
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> transformer.zap(source("/xquery/string.xml"), "/xquery/string-q2.xq"));
     }
 
     @Test

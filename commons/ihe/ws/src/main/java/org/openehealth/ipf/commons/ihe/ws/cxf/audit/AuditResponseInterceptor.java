@@ -39,7 +39,7 @@ import org.w3c.dom.Element;
  * @author Dmytro Rud
  */
 public class AuditResponseInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
-    private static final transient Logger LOG = LoggerFactory.getLogger(AuditResponseInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditResponseInterceptor.class);
 
     private final AsynchronyCorrelator<T> correlator;
     private final boolean asyncReceiver;
@@ -126,14 +126,14 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
                 auditDataset = correlator.getAuditDataset(messageId);
                 // message.getExchange().put(CXF_EXCHANGE_KEY, auditDataset);
             } else {
-                LOG.error("Cannot determine WSA message ID");
+                log.error("Cannot determine WSA message ID");
             }
         }
         if (auditDataset == null) {
             auditDataset = getAuditDataset(message);
         }
 
-        boolean isClient = isClient(asyncReceiver, serverSide);
+        var isClient = isClient(asyncReceiver, serverSide);
         enrichAuditDatasetFromResponse(message, isClient ? Header.Direction.DIRECTION_IN : Header.Direction.DIRECTION_OUT, auditDataset);
 
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)

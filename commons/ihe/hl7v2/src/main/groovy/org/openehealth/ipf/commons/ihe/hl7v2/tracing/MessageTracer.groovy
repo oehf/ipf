@@ -40,7 +40,7 @@ class MessageTracer {
     private final Tracer tracer
     private final boolean removeSegment
     private final String segmentName
-    private final Propagator propagator;
+    private final Propagator propagator
     private final Propagator.Setter<Message> setter
     private final Propagator.Getter<Message> getter
 
@@ -56,7 +56,7 @@ class MessageTracer {
         this.segmentName = segmentName
         this.setter = new Hl7MessageSetter(segmentName)
         this.getter = new Hl7MessageGetter(segmentName)
-        this.propagator = propagator;
+        this.propagator = propagator
     }
 
     void sendMessage(Message msg, String name, Handler sender) {

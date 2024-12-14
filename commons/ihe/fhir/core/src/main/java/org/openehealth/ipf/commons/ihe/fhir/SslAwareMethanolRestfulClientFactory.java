@@ -126,7 +126,7 @@ public class SslAwareMethanolRestfulClientFactory extends SslAwareAbstractRestfu
                     .autoAcceptEncoding(true)
                     .proxy(proxy != null ? ProxySelector.of(proxy) : ProxySelector.getDefault());
             if (executor != null) {
-                builder = builder.executor(executor);
+                builder.executor(executor);
             }
             // Chance to override or instrument
             httpClient = customizeHttpClientBuilder(builder).build();

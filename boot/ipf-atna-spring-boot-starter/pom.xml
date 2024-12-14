@@ -57,6 +57,11 @@
             <artifactId>spring-security-web</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- dependencies for test -->
         <dependency>
@@ -64,13 +69,6 @@
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>test</scope>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

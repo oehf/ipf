@@ -83,12 +83,12 @@ public class Iti78SearchParameters extends FhirSearchAndSortParameters<PdqPatien
 
     @Override
     public Optional<Comparator<PdqPatient>> comparatorFor(String paramName) {
-        switch (paramName) {
-            case PdqPatient.SP_BIRTHDATE : return Optional.of(CP_DATE);
-            case PdqPatient.SP_FAMILY: return Optional.of(CP_FAMILY);
-            case PdqPatient.SP_GIVEN: return Optional.of(CP_GIVEN);
-        }
-        return Optional.empty();
+        return switch (paramName) {
+            case PdqPatient.SP_BIRTHDATE -> Optional.of(CP_DATE);
+            case PdqPatient.SP_FAMILY -> Optional.of(CP_FAMILY);
+            case PdqPatient.SP_GIVEN -> Optional.of(CP_GIVEN);
+            default -> Optional.empty();
+        };
     }
 
     private static final Comparator<PdqPatient> CP_DATE = nullsLast(comparing(PdqPatient::getBirthDate));

@@ -26,7 +26,6 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
 
-import jakarta.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +38,7 @@ public class TestIti67Success extends AbstractTestIti67 {
     private static final String CONTEXT_DESCRIPTOR = "iti-67.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 

@@ -20,7 +20,6 @@ import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.util.ElementUtil;
-import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ListResource;
@@ -64,7 +63,7 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
     }
 
     public CodeableConcept addDesignationType() {
-        CodeableConcept codeableConcept = new CodeableConcept();
+        var codeableConcept = new CodeableConcept();
         addDesignationType(codeableConcept);
         return codeableConcept;
     }
@@ -92,7 +91,7 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
     public boolean hasDesignationType() {
         if (this.designationType == null)
             return false;
-        for (CodeableConcept item : this.designationType)
+        for (var item : this.designationType)
             if (!item.isEmpty())
                 return true;
         return false;
@@ -111,10 +110,10 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
     @Override
     public void copyValues(ListResource dst) {
         super.copyValues(dst);
-        MhdList<T> mhdList = (MhdList<T>) dst;
+        var mhdList = (MhdList<T>) dst;
         if (designationType != null) {
             mhdList.designationType = new ArrayList<>();
-            for (CodeableConcept i : designationType)
+            for (var i : designationType)
                 mhdList.designationType.add(i.copy());
         }
     }
@@ -125,7 +124,7 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
             return false;
         if (!(other_ instanceof MhdList))
             return false;
-        MhdList<T> o = (MhdList<T>) other_;
+        var o = (MhdList<T>) other_;
         return compareDeep(designationType, o.designationType, true);
     }
 

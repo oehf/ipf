@@ -33,24 +33,22 @@ public class ChPpq3RequestFactory implements ClientRequestFactory<IClientExecuta
             Object requestData,
             Map<String, Object> parameters)
     {
-        String method = (String) parameters.get(Constants.HTTP_METHOD);
-        switch (method) {
-            case "POST":
-                return client.create().resource((Consent) requestData);
-            case "PUT":
-                Consent consent = (Consent) requestData;
-                String consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID);
-                return client.update()
-                        .resource(consent)
-                        .conditional()
-                        .where(Consent.IDENTIFIER.exactly().identifier(consentId));
-            case "DELETE":
-                return client.delete()
-                        .resourceConditionalByType(Consent.class)
-                        .where(Consent.IDENTIFIER.exactly().identifier((String) requestData));
-            default:
-                throw new RuntimeException("Unknown method: " + method);
-        }
+        var method = (String) parameters.get(Constants.HTTP_METHOD);
+        return switch (method) {
+            case "POST" -> client.create().resource((Consent) requestData);
+            case "PUT" -> {
+                var consent = (Consent) requestData;
+                var consentId = ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID);
+                yield client.update()
+                    .resource(consent)
+                    .conditional()
+                    .where(Consent.IDENTIFIER.exactly().identifier(consentId));
+            }
+            case "DELETE" -> client.delete()
+                .resourceConditionalByType(Consent.class)
+                .where(Consent.IDENTIFIER.exactly().identifier((String) requestData));
+            default -> throw new RuntimeException("Unknown method: " + method);
+        };
     }
 
 }

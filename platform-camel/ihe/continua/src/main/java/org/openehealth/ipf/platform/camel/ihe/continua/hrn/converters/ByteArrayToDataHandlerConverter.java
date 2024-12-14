@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
+import lombok.NonNull;
 import org.apache.cxf.attachment.ByteDataSource;
 import org.springframework.core.convert.converter.Converter;
 import jakarta.activation.DataHandler;
@@ -25,7 +26,7 @@ import jakarta.activation.DataHandler;
 public class ByteArrayToDataHandlerConverter implements Converter<byte[], DataHandler> {
 
     @Override
-    public DataHandler convert(byte[] source) {
+    public DataHandler convert(byte @NonNull [] source) {
         return new DataHandler(new ByteDataSource(source));
     }
 }

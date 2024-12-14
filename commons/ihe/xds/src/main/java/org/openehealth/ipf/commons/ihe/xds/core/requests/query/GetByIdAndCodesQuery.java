@@ -26,6 +26,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -43,6 +45,7 @@ import java.util.List;
 public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery
         implements DocumentEntryTypeAwareStoredQuery
 {
+    @Serial
     private static final long serialVersionUID = -8311996966550912396L;
 
     @XmlElement(name = "confidentialityCode")

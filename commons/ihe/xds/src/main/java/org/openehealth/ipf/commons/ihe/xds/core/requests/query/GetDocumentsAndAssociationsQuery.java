@@ -22,6 +22,8 @@ import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetDocumentsAndAssociationsQuery extends GetByIdQuery implements Serializable {
+    @Serial
     private static final long serialVersionUID = 7120944927521427681L;
 
     @XmlElement(name = "associationStatus")

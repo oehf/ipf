@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class JmsAuditMessageQueueTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
 
     private static final String JMS_BROKER_URL = "tcp://localhost:61616";
     private static final String JMS_QUEUE_NAME = "atna";
@@ -105,7 +105,7 @@ public class JmsAuditMessageQueueTest {
     }
 
     private void sendAudit() {
-        LOG.debug("Sending audit record");
+        log.debug("Sending audit record");
         auditContext.audit(
                 new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
                         .setAuditSource(auditContext)

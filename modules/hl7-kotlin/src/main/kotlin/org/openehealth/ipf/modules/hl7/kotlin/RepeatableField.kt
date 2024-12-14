@@ -53,7 +53,7 @@ internal class RepeatableField (
     }
 
     override fun encode(): String =
-        elements.map { it.encode() }.joinToString(getSeparator().toString())
+        elements.joinToString(getSeparator().toString()) { it.encode() }
 
 
     override fun getExtraComponents(): ExtraComponents = elementAt(0).extraComponents

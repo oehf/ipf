@@ -46,7 +46,7 @@ public class ErrorHandlingTest extends TestSupport {
     private MockEndpoint error;
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         output.reset();
         inter.reset();
         check.reset();

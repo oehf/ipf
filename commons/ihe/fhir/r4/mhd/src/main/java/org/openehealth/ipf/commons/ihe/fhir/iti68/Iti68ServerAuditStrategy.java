@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpPHIExportBuilder;
 
@@ -46,7 +45,7 @@ public class Iti68ServerAuditStrategy extends AuditStrategySupport<Iti68AuditDat
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti68AuditDataset auditDataset) {
-        BalpPHIExportBuilder builder = new BalpPHIExportBuilder(auditContext, auditDataset,
+        var builder = new BalpPHIExportBuilder(auditContext, auditDataset,
                 EventActionCode.Create,
                 FhirEventTypeCode.MobileDocumentRetrieval)
                 .setPatient(auditDataset.getPatientId());

@@ -58,13 +58,10 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
 
 
     private static String getPhase(PayloadType payloadType) {
-        switch (payloadType) {
-            case HTTP:
-                return Phase.RECEIVE;
-            case SOAP_BODY:
-                return Phase.PRE_STREAM;
-        }
-        throw new IllegalArgumentException("Unknown payload type " + payloadType);
+        return switch (payloadType) {
+            case HTTP -> Phase.RECEIVE;
+            case SOAP_BODY -> Phase.PRE_STREAM;
+        };
     }
 
 

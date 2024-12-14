@@ -32,8 +32,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -60,14 +59,12 @@ public class EncounterSearchParameters extends Pcc44CommonSearchParameters<Encou
 
     @Override
     protected Optional<Comparator<Encounter>> comparatorFor(String paramName) {
-        if (Encounter.SP_DATE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_PERIOD));
-        }
-        return Optional.empty();
+        return Encounter.SP_DATE.equals(paramName) ?
+            Optional.of(CP_PERIOD) :
+            Optional.empty();
     }
 
-    private static final Comparator<Encounter> CP_PERIOD = nullsLast(comparing(encounter -> {
-        if (!encounter.hasPeriod()) return null;
-        return encounter.getPeriod().getStart();
-    }));
+    private static final Comparator<Encounter> CP_PERIOD = comparing(
+        encounter -> !encounter.hasPeriod() ? null : encounter.getPeriod().getStart(),
+        nullsLast(naturalOrder()));
 }

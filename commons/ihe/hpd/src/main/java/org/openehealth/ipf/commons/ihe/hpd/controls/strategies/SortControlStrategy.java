@@ -23,7 +23,6 @@ import javax.naming.ldap.BasicControl;
 import javax.naming.ldap.SortKey;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * @author Dmytro Rud
@@ -37,11 +36,11 @@ public class SortControlStrategy implements ControlStrategy {
 
     @Override
     public BasicControl deserializeJson(JsonNode node) throws IOException {
-        ArrayList<SortKey> keys = new ArrayList<>();
-        JsonNode keysNode = node.get("keys");
-        Iterator<JsonNode> keyNodes = keysNode.elements();
+        var keys = new ArrayList<SortKey>();
+        var keysNode = node.get("keys");
+        var keyNodes = keysNode.elements();
         while (keyNodes.hasNext()) {
-            JsonNode keyNode = keyNodes.next();
+            var keyNode = keyNodes.next();
             keys.add(new SortKey(keyNode.get("attrId").textValue(), keyNode.get("ascending").booleanValue(), keyNode.get("matchingRuleId").textValue()));
         }
         return new SortControl2(node.get("critical").asBoolean(), keys.toArray(new SortKey[0]));
@@ -49,9 +48,9 @@ public class SortControlStrategy implements ControlStrategy {
 
     @Override
     public void serializeJson(BasicControl control, JsonGenerator gen) throws IOException {
-        SortControl2 sortControl = (SortControl2) control;
+        var sortControl = (SortControl2) control;
         gen.writeArrayFieldStart("keys");
-        for (SortKey sortKey : sortControl.getKeys()) {
+        for (var sortKey : sortControl.getKeys()) {
             gen.writeStartObject();
             gen.writeStringField("attrId", sortKey.getAttributeID());
             gen.writeStringField("matchingRuleId", sortKey.getMatchingRuleID());

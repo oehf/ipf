@@ -35,8 +35,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -63,13 +62,16 @@ public class ProcedureSearchParameters extends Pcc44CommonSearchParameters<Proce
 
     @Override
     protected Optional<Comparator<Procedure>> comparatorFor(String paramName) {
-        if (Procedure.SP_DATE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_PERFORMED));
-        }
-        return Optional.empty();
+        return Procedure.SP_DATE.equals(paramName) ?
+            Optional.of(CP_PERFORMED) :
+            Optional.empty();
     }
 
-    private static final Comparator<Procedure> CP_PERFORMED = nullsLast(comparing(procedure -> {
+    private static final Comparator<Procedure> CP_PERFORMED = comparing(
+        ProcedureSearchParameters::getPerformedStartTime,
+        nullsLast(naturalOrder()));
+
+    private static String getPerformedStartTime(Procedure procedure) {
         if (!procedure.hasPerformed()) return null;
         var performed = procedure.getPerformed();
         if (performed instanceof DateTimeType) {
@@ -81,5 +83,5 @@ public class ProcedureSearchParameters extends Pcc44CommonSearchParameters<Proce
         } else  {
             return null;
         }
-    }));
+    }
 }

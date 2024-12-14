@@ -32,7 +32,7 @@ class ChPpqPolicySetCreator {
     static {
         Properties velocityProperties = new Properties()
         velocityProperties.setProperty('resource.loaders', 'classpath')
-        velocityProperties.setProperty('resource.loader.classpath.class', ClasspathResourceLoader.class.getName());
+        velocityProperties.setProperty('resource.loader.classpath.class', ClasspathResourceLoader.class.getName())
         VELOCITY = new VelocityEngine(velocityProperties)
         VELOCITY.init()
         POLICY_SET_TEMPLATES = ['201', '202', '203', '301', '302', '303', '304'].collectEntries { templateId ->

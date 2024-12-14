@@ -16,9 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xacml20.chadr;
 
 import lombok.extern.slf4j.Slf4j;
-import org.herasaf.xacml.core.context.impl.AttributeType;
-import org.herasaf.xacml.core.context.impl.ResourceType;
-import org.herasaf.xacml.core.context.impl.ResultType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
@@ -27,7 +24,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
@@ -59,7 +56,7 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChAdrAuditDataset auditDataset) {
-        var builder = new QueryInformationBuilder<>(auditContext, auditDataset, Xacml20EventTypeCodes.AuthorizationDecisionsQueryAdr, auditDataset.getPurposesOfUse());
+        var builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Xacml20EventTypeCodes.AuthorizationDecisionsQueryAdr, auditDataset.getPurposesOfUse());
         builder.setQueryParameters(
                 auditDataset.getSubjectId(),
                 auditDataset.getSubjectRole(),
@@ -68,7 +65,7 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
                 ParticipantObjectTypeCodeRole.SecurityUserEntity,
                 Collections.emptyList());
 
-        for (Map.Entry<String, String> entry : auditDataset.getDecisionsByResourceIds().entrySet()) {
+        for (var entry : auditDataset.getDecisionsByResourceIds().entrySet()) {
             builder.setQueryParameters(
                 entry.getKey(),
                 Xacml20ParticipantIdType.AuthorizationDecisionsQueryAdr,
@@ -87,7 +84,7 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
     public ChAdrAuditDataset enrichAuditDatasetFromRequest(ChAdrAuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         var query = (XACMLAuthzDecisionQueryType) requestObject;
         var authzRequest = Xacml20Utils.extractAuthzRequest(query);
-        for (AttributeType attribute : authzRequest.getSubjects().get(0).getAttributes()) {
+        for (var attribute : authzRequest.getSubjects().get(0).getAttributes()) {
             switch (attribute.getAttributeId()) {
                 case PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID:
                     auditDataset.setSubjectId(Xacml20Utils.extractStringAttributeValue(attribute));
@@ -100,18 +97,18 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
                     break;
             }
         }
-        for (ResourceType resource : authzRequest.getResources()) {
-            for (AttributeType attribute : resource.getAttributes()) {
+        for (var resource : authzRequest.getResources()) {
+            for (var attribute : resource.getAttributes()) {
                 if (PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID.equals(attribute.getAttributeId())) {
-                    String resourceId = Xacml20Utils.extractStringAttributeValue(attribute);
+                    var resourceId = Xacml20Utils.extractStringAttributeValue(attribute);
                     auditDataset.getDecisionsByResourceIds().put(resourceId, null);
                     break;
                 }
             }
         }
-        for (AttributeType attribute : authzRequest.getAction().getAttributes()) {
+        for (var attribute : authzRequest.getAction().getAttributes()) {
             if (PpqConstants.AttributeIds.XACML_1_0_ACTION_ID.equals(attribute.getAttributeId())) {
-                String action = Xacml20Utils.extractStringAttributeValue(attribute);
+                var action = Xacml20Utils.extractStringAttributeValue(attribute);
                 if (action != null) {
                     switch (action) {
                         case PpqConstants.ActionIds.ITI_18:
@@ -146,7 +143,7 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
                 var assertion = (AssertionType) response.getAssertionOrEncryptedAssertion().get(0);
                 var statement = (XACMLAuthzDecisionStatementType) assertion.getStatementOrAuthnStatementOrAuthzDecisionStatement().get(0);
-                for (ResultType result : statement.getResponse().getResults()) {
+                for (var result : statement.getResponse().getResults()) {
                     auditDataset.getDecisionsByResourceIds().put(result.getResourceId(), result.getDecision().value());
                 }
             } else {

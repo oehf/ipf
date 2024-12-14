@@ -16,20 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hpd.controls.pagination;
 
 import lombok.extern.slf4j.Slf4j;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
-import org.openehealth.ipf.commons.xml.XmlUtils;
 
 import javax.cache.Cache;
-import javax.naming.ldap.PagedResultsResponseControl;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Ehcache-based pagination storage.

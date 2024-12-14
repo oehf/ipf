@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.Map;

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 
@@ -42,59 +42,31 @@ public class Iti31AuditStrategy extends AuditStrategySupport<FeedAuditDataset> {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FeedAuditDataset auditDataset) {
-        switch (auditDataset.getMessageType()) {
-            case "A01":
-            case "A04":
-            case "A05":
-                return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Create, true)
-                };
-            case "A02":
-            case "A03":
-            case "A06":
-            case "A07":
-            case "A08":
-            case "A09":
-            case "A10":
-            case "A12":
-            case "A13":
-            case "A14":
-            case "A15":
-            case "A16":
-            case "A25":
-            case "A26":
-            case "A27":
-            case "A32":
-            case "A33":
-            case "A38":
-            case "A44":
-            case "A52":
-            case "A53":
-            case "A54":
-            case "A55":
-            case "Z99":
-                return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
-                };
-            case "A40":
-                return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, false),
-                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
-                };
-            case "A41":
-                return new AuditMessage[]{
-                        patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, true)
-                };
-            default:
+        return switch (auditDataset.getMessageType()) {
+            case "A01", "A04", "A05" -> new AuditMessage[]{
+                patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Create, true)
+            };
+            case "A02", "A03", "A06", "A07", "A08", "A09", "A10", "A12", "A13", "A14", "A15", "A16", "A25", "A26",
+                 "A27", "A32", "A33", "A38", "A44", "A52", "A53", "A54", "A55", "Z99" -> new AuditMessage[]{
+                patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
+            };
+            case "A40" -> new AuditMessage[]{
+                patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, false),
+                patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Update, true)
+            };
+            case "A41" -> new AuditMessage[]{
+                patientRecordAuditMessage(auditContext, auditDataset, EventActionCode.Delete, true)
+            };
+            default ->
                 throw new AuditException("Cannot create audit message for event " + auditDataset.getMessageType());
-        }
+        };
     }
 
     protected AuditMessage patientRecordAuditMessage(AuditContext auditContext,
                                                      final FeedAuditDataset auditDataset,
                                                      EventActionCode eventActionCode,
                                                      boolean newPatientId) {
-        return new PatientRecordEventBuilder<>(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityManagement)
+        return new DefaultPatientRecordEventBuilder(auditContext, auditDataset, eventActionCode, MllpEventTypeCode.PatientIdentityManagement)
 
                 // Type=MSH-10 (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
                 .addPatients(

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * 
  */
 @Disabled
-public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
+public class QAPcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
@@ -64,7 +64,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
     
     @Disabled
     @Test
-    public void testMissingOBX2_filledOBX11() throws HL7Exception {
+    public void testMissingOBX2_filledOBX11() {
         // The check "OBX-2 must be valued if the value of OBX-11 is not X" seems to be too restrictive
         // add the checkOBX2WhenOBX11NotX in PCD01Validator to switch on the check. 
         assertThrows(ValidationException.class, () ->

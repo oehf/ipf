@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <surefire-plugin-version>3.5.2</surefire-plugin-version>
-        <jxr-plugin-version>3.3.2</jxr-plugin-version>
+        <jxr-plugin-version>3.6.0</jxr-plugin-version>
         <project-info-reports-plugin-version>3.5.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
@@ -41,20 +41,20 @@
         <build-helper-version>3.6.0</build-helper-version>
         <compiler-plugin-version>3.13.0</compiler-plugin-version>
         <enforcer-plugin-version>3.5.0</enforcer-plugin-version>
-        <gmavenplus-plugin-version>3.0.2</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>4.0.1</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.4.2</jar-plugin-version>
-        <javadoc-plugin-version>3.6.3</javadoc-plugin-version>
+        <javadoc-plugin-version>3.11.1</javadoc-plugin-version>
         <jaxb-plugin-version>3.2.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
-        <release-plugin-version>3.0.1</release-plugin-version>
+        <release-plugin-version>3.1.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
         <sources-plugin-version>3.2.1</sources-plugin-version>
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <brave-version>6.0.0</brave-version>
+        <brave-version>6.0.3</brave-version>
         <easymock-version>5.5.0</easymock-version>
         <guava-version>33.3.0-jre</guava-version>
         <lombok-version>1.18.36</lombok-version>

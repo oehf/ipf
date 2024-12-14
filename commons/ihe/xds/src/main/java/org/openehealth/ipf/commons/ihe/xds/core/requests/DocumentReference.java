@@ -22,6 +22,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -37,6 +39,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class DocumentReference implements Serializable {
+    @Serial
     private static final long serialVersionUID = 7147966094676034661L;
     
     private String repositoryUniqueId;

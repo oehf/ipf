@@ -16,14 +16,13 @@
 package org.openehealth.ipf.commons.ihe.xacml20.iti79;
 
 import lombok.extern.slf4j.Slf4j;
-import org.herasaf.xacml.core.context.impl.AttributeType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
@@ -53,7 +52,7 @@ public class Iti79AuditStrategy extends AuditStrategySupport<Iti79AuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, Iti79AuditDataset auditDataset) {
-        var builder = new QueryInformationBuilder<>(auditContext, auditDataset, Xacml20EventTypeCodes.AuthorizationDecisionsQueryIhe, auditDataset.getPurposesOfUse());
+        var builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Xacml20EventTypeCodes.AuthorizationDecisionsQueryIhe, auditDataset.getPurposesOfUse());
         return builder
             .setQueryParameters(
                 auditDataset.getRequesterId(),
@@ -78,7 +77,7 @@ public class Iti79AuditStrategy extends AuditStrategySupport<Iti79AuditDataset> 
     public Iti79AuditDataset enrichAuditDatasetFromRequest(Iti79AuditDataset auditDataset, Object requestObject, Map<String, Object> parameters) {
         var query = (XACMLAuthzDecisionQueryType) requestObject;
         var request = Xacml20Utils.extractAuthzRequest(query);
-        for (AttributeType attribute : request.getSubjects().get(0).getAttributes()) {
+        for (var attribute : request.getSubjects().get(0).getAttributes()) {
             if (PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID.equals(attribute.getAttributeId())) {
                 auditDataset.setRequesterId(Xacml20Utils.extractStringAttributeValue(attribute));
             }

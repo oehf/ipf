@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
@@ -40,7 +40,7 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientDemographicsQuery)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobilePatientDemographicsQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         "MobilePatientDemographicsQuery",
@@ -53,8 +53,7 @@ class Iti78AuditStrategy extends FhirQueryAuditStrategy {
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        if (request instanceof IdType) {
-            var idType = (IdType) request;
+        if (request instanceof IdType idType) {
             dataset.getPatientIds().add(idType.getValue());
         }
         return dataset;

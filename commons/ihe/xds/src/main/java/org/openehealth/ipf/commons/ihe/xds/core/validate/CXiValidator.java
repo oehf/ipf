@@ -72,7 +72,7 @@ public class CXiValidator implements ValueValidator {
     }
 
     private static boolean isCP1292ValidationEnabled() {
-        String cp1292Value = System.getProperty(XDS_VALIDATION_CP_1292_PROPERTY, "false");
+        var cp1292Value = System.getProperty(XDS_VALIDATION_CP_1292_PROPERTY, "false");
         return BooleanUtils.toBoolean(cp1292Value);
     }
 

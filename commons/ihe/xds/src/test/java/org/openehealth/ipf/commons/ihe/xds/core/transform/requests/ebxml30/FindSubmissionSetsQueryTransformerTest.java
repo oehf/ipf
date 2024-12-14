@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -25,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindSubmissionSetsQueryTransformer;

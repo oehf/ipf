@@ -20,6 +20,7 @@ import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
 import com.google.common.collect.TreeRangeSet;
+import lombok.NonNull;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_TO_INDEX;
  */
 public class LazyBundleProvider extends AbstractBundleProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LazyBundleProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(LazyBundleProvider.class);
 
     private final boolean cacheResults;
     private int size = -1;
@@ -84,27 +85,27 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     }
 
     @Override
-    public List<IBaseResource> getResources(int fromIndex, int toIndex) {
+    public @NonNull List<IBaseResource> getResources(int fromIndex, int toIndex) {
         if (!cacheResults) {
             var result = getPartialResult(fromIndex, toIndex);
             sortIfApplicable(result);
             return result;
         }
-        LOG.debug("Cached results contain the following ranges: {}. Requesting resources from index {} to {}", resultRanges, fromIndex, toIndex);
+        log.debug("Cached results contain the following ranges: {}. Requesting resources from index {} to {}", resultRanges, fromIndex, toIndex);
         var wanted = Range.closedOpen(fromIndex, toIndex);
         var needed = resultRanges.required(wanted);
-        LOG.debug("Requiring the following ranges {}", needed);
+        log.debug("Requiring the following ranges {}", needed);
         for (var requiredRange : needed.asDescendingSetOfRanges()) {
-            LOG.debug("Now requesting the following range {}", requiredRange);
+            log.debug("Now requesting the following range {}", requiredRange);
             var results = getPartialResult(requiredRange.lowerEndpoint(), requiredRange.upperEndpoint());
-            LOG.debug("Got back a list of size {}", results.size());
+            log.debug("Got back a list of size {}", results.size());
             if (!results.isEmpty()) {
                 cacheAll(requiredRange.lowerEndpoint(), results);
                 // Take care, potentially less elements than requested have been retrieved
                 resultRanges.add(Range.closedOpen(requiredRange.lowerEndpoint(), requiredRange.lowerEndpoint() + results.size()));
             }
         }
-        LOG.debug("Cached results now contain the following ranges: {}", resultRanges);
+        log.debug("Cached results now contain the following ranges: {}", resultRanges);
 
         // Everything went OK, return whatever we got
         return cachedResults.subList(fromIndex, Math.min(cachedResults.size(), Math.min(cachedResults.size(), toIndex)));
@@ -130,7 +131,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     private void cacheAll(int fromIndex, List<IBaseResource> resources) {
         if (cachedResults.size() <= fromIndex) {
             for (var i = cachedResults.size(); i < fromIndex; i++) {
-                LOG.debug("Adding null for index {}", i);
+                log.debug("Adding null for index {}", i);
                 cachedResults.add(null);
             }
             cachedResults.addAll(resources);

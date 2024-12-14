@@ -41,7 +41,7 @@ public class Pharm5TestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .toF("cmpd-pharm5:localhost:%d?fhirContext=#fhirContext", FhirTestContainer.DEMO_APP_PORT);

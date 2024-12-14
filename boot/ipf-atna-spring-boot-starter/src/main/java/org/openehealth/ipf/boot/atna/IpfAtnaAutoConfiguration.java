@@ -35,9 +35,6 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-/**
- *
- */
 @Configuration
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
 public class IpfAtnaAutoConfiguration {

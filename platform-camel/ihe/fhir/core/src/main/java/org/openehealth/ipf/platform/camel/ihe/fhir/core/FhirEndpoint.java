@@ -74,7 +74,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @param consumer FhirConsumer
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) {
-        for (FhirProvider provider : getResourceProviders()) {
+        for (var provider : getResourceProviders()) {
             // Make consumer known to provider
             provider.setConsumer(consumer);
             fhirComponent.connect(consumer, provider);
@@ -86,10 +86,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is stopped. Unregisters the resource provider
      *
      * @param consumer FhirConsumer
-     * @throws Exception if resource provider could not be unregistered
      */
-    public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        for (FhirProvider provider : getResourceProviders()) {
+    public void disconnect(FhirConsumer<AuditDatasetType> consumer) {
+        for (var provider : getResourceProviders()) {
             provider.unsetConsumer(consumer);
             fhirComponent.disconnect(consumer, provider);
         }

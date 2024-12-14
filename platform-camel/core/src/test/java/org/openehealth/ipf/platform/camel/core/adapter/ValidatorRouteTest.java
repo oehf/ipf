@@ -20,6 +20,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronValidationException;
@@ -28,7 +29,6 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -41,12 +41,12 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     protected MockEndpoint error;
 
     @AfterEach
-    public void tearDownError() throws Exception {
+    public void tearDownError() {
         error.reset();
     }
 
     @Test
-    public void testValidator1() throws InterruptedException {
+    public void testValidator1() {
         var result = (String) producerTemplate.sendBody(
                 "direct:validator-test", ExchangePattern.InOut, "correct");
         assertEquals("correct", result);
@@ -62,7 +62,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     }
 
     @Test
-    public void testValidator3() throws InterruptedException, IOException {
+    public void testValidator3() throws IOException {
         final var xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"), Charset.defaultCharset());
         var response = (String)producerTemplate.sendBody(
         		"direct:validator-xml-test", ExchangePattern.InOut, xml);
@@ -78,12 +78,12 @@ public class ValidatorRouteTest extends AbstractRouteTest {
         assertEquals(ValidationException.class, exchange.getException()
                 .getClass());
         var e = (ValidationException) exchange.getException();
-        assertTrue(e.getCauses().length >= 5);
+        Assertions.assertTrue(e.getCauses().length >= 5);
         error.assertIsSatisfied(2000);
     }
 
     @Test
-    public void testValidator5() throws InterruptedException, IOException {
+    public void testValidator5() throws IOException {
         final var xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"), Charset.defaultCharset());
         var response = (String)producerTemplate.sendBody(
         		"direct:validator-schematron-test", ExchangePattern.InOut, xml);

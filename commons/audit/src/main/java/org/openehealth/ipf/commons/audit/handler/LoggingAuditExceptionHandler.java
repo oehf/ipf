@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
  */
 public class LoggingAuditExceptionHandler implements AuditExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LoggingAuditExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(LoggingAuditExceptionHandler.class);
 
     @Override
     public void handleException(AuditContext auditContext, Throwable throwable, String auditMessage) {
-        LOG.warn("Failed to send ATNA audit event to destination {}:{} ({})",
+        log.warn("Failed to send ATNA audit event to destination {}:{} ({})",
                 auditContext.getAuditRepositoryHostName(),
                 auditContext.getAuditRepositoryPort(),
                 auditContext.getAuditRepositoryAddress().getHostAddress(),

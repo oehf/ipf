@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.core.extend;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.xml.sax.SAXException;
 
 import javax.xml.transform.dom.DOMResult;
 import java.io.IOException;
@@ -236,7 +235,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     @Test
     public void testXqueryDedicatedTransmogrifier()
             throws InterruptedException,
-            IOException, SAXException {
+            IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input24", content("/xquery/labreport.xml"));
         assertXqueryOutput("someid");
@@ -244,7 +243,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testXqueryTransmogrifier() throws InterruptedException,
-            IOException, SAXException {
+            IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input25", content("/xquery/labreport.xml"));
         assertXqueryOutput("headerId");
@@ -252,7 +251,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testXqueryTransmogrifierReturningInputStream()
-            throws InterruptedException, IOException, SAXException {
+            throws InterruptedException, IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input26", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
@@ -274,7 +273,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testXqueryTransmogrifierExternalRessource()
-            throws InterruptedException, IOException, SAXException {
+            throws InterruptedException, IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input28", content("/xquery/labreport.xml"));
         assertXqueryOutput("mapid");
@@ -282,7 +281,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testXqueryTransmogrifierExternalSourceParam()
-            throws InterruptedException, IOException, SAXException {
+            throws InterruptedException, IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input29", content("/xquery/labreport.xml"));
         assertXqueryOutput("externalid");
@@ -290,7 +289,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testXqueryWithHeaderParams()
-            throws InterruptedException, IOException, SAXException {
+            throws InterruptedException, IOException {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input30", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();

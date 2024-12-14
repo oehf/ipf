@@ -29,14 +29,14 @@ abstract public class HpdService extends AbstractWebService {
         var result = process(request);
         var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             return errorMessage(request, exception);
         }
         return result.getMessage().getBody(BatchResponse.class);
     }
 
     private BatchResponse errorMessage(BatchRequest batchRequest, Exception exception) {
-        BatchResponse batchResponse = new BatchResponse();
+        var batchResponse = new BatchResponse();
         batchResponse.setRequestID(batchRequest.getRequestID());
         batchResponse.getBatchResponses().add(HpdUtils.errorResponse(exception, batchRequest.getRequestID()));
         return batchResponse;

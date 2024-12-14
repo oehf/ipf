@@ -34,8 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import jakarta.xml.bind.JAXBElement;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -74,7 +73,7 @@ public class ChPpq2Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test

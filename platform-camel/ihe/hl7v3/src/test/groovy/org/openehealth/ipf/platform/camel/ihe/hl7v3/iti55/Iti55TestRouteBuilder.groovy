@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory
  * @author Dmytro Rud
  */
 class Iti55TestRouteBuilder extends RouteBuilder {
-    private static final transient LOG = LoggerFactory.getLogger(Iti55TestRouteBuilder.class)
+    private static final transient log = LoggerFactory.getLogger(Iti55TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()
 
@@ -66,7 +66,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error('', e)
+                    log.error('', e)
                 }
             }
             .delay(ASYNC_DELAY)
@@ -90,7 +90,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error('', e)
+                    log.error('', e)
                 }
             }
             .delay(ASYNC_DELAY)
@@ -109,7 +109,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error('', e)
+                    log.error('', e)
                 }
 
                 // create response, inclusive SOAP and HTTP headers

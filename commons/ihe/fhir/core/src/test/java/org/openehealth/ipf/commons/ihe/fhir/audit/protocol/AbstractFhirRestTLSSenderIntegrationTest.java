@@ -25,7 +25,7 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
 
     protected DefaultBalpAuditContext auditContext;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractFhirRestTLSSenderIntegrationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractFhirRestTLSSenderIntegrationTest.class);
 
     @BeforeEach
     public void setup() {
@@ -55,9 +55,9 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
 
     @AfterEach
     public void tearDown() {
-        LOG.info("FhirAuditRepository size: " + FhirAuditRepository.getAuditEvents().size() + ". Cleanup....");
+        log.info("FhirAuditRepository size: {}. Cleanup....", FhirAuditRepository.getAuditEvents().size());
         FhirAuditRepository.clearAuditEvents();
-        LOG.info("FhirAuditRepository size: " + FhirAuditRepository.getAuditEvents().size());
+        log.info("FhirAuditRepository size: {}", FhirAuditRepository.getAuditEvents().size());
     }
 
     @Test
@@ -74,7 +74,7 @@ public abstract class AbstractFhirRestTLSSenderIntegrationTest {
     }
 
     void sendAudit(String userName) {
-        LOG.debug("Sending audit record");
+        log.debug("Sending audit record");
         auditContext.audit(
             new ApplicationActivityBuilder.ApplicationStop(EventOutcomeIndicator.Success)
                 .setAuditSource(auditContext)

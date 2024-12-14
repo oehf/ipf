@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti105;
 
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.hl7.fhir.r4.model.DocumentReference;

@@ -49,7 +49,7 @@ public class BatchResponseIntermediary {
      * Transforms this intermediary representation into a proper JAXB POJO.
      */
     public BatchResponse toBatchResponse() {
-        BatchResponse batchResponse = new BatchResponse();
+        var batchResponse = new BatchResponse();
         batchResponse.setRequestID(requestID);
         if (batchResponses != null) {
             for (Object response : batchResponses) {
@@ -59,8 +59,7 @@ public class BatchResponseIntermediary {
                     batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseSearchResponse((SearchResponse) response));
                 } else if (response instanceof ErrorResponse) {
                     batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseErrorResponse((ErrorResponse) response));
-                } else if (response instanceof LDAPResult) {
-                    LDAPResult ldapResult = (LDAPResult) response;
+                } else if (response instanceof LDAPResult ldapResult) {
                     switch (ldapResult.getElementName()) {
                         case "modDNResponse":
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseModDNResponse(ldapResult));

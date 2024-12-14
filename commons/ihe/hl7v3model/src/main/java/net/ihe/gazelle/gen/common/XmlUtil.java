@@ -17,8 +17,7 @@ public class XmlUtil {
 		builderFactory.setNamespaceAware(true);
 
 		DocumentBuilder builder = builderFactory.newDocumentBuilder();
-		Document documentDOM = builder.parse(bais);
-		return documentDOM;
+        return builder.parse(bais);
 	}
 
 }

@@ -73,7 +73,7 @@ public class Iti79Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test
@@ -100,9 +100,7 @@ public class Iti79Test extends StandardTestContainer {
         List<AuditMessage> messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (var object : messages) {
-            var message = (AuditMessage) object;
-
+        for (var message : messages) {
             var event = message.getEventIdentification();
             assertEquals(EventActionCode.Execute, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());

@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class DynamicExtensionConfigurer<R extends Registry> extends
         OrderedConfigurer<DynamicExtension, R> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DynamicExtensionConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(DynamicExtensionConfigurer.class);
 
     public DynamicExtensionConfigurer() {
         setOrder(2);
@@ -52,7 +52,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     @Override
     public void configure(DynamicExtension extension) {
         if (extension != null) {
-            LOG.info("Registering new extension module {} defined in class {}",
+            log.info("Registering new extension module {} defined in class {}",
                     extension.getModuleName(), extension.getClass());
             var module = DynamicExtensionModule.newModule(extension);
             addExtensionMethods(module);
@@ -76,7 +76,7 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
             } else {
                 ((MetaClassRegistryImpl)metaClassRegistry).getInstanceMethods().add(metaMethod);
             }
-            LOG.debug("registered method: {}", metaMethod);
+            log.debug("registered method: {}", metaMethod);
         }
         for (var cachedClassEntry : classMap.entrySet()) {
             cachedClassEntry.getKey().addNewMopMethods(cachedClassEntry.getValue());

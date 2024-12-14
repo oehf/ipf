@@ -207,9 +207,9 @@ public abstract class AbstractWsEndpoint<
 
     /**
      * Returns a new instance of a service class.
-     * Overwrite this method if a simple call to {@link Class#newInstance()} is not sufficient.
+     * Overwrite this method if a simple call to {@link java.lang.reflect.Constructor#newInstance(Object...)} is not sufficient.
      *
-     * @param endpoint this endpoint as paramater
+     * @param endpoint this endpoint as parameter
      * @return service class instance
      */
     protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint) {

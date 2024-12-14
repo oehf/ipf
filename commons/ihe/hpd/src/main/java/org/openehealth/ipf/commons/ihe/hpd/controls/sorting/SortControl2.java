@@ -60,25 +60,26 @@ public class SortControl2 extends BasicControl {
     }
 
     private static SortKey[] decode(byte[] berBytes) throws IOException {
-        ASN1InputStream inputStream = new ASN1InputStream(berBytes);
-        ASN1Sequence sequence = (ASN1Sequence) inputStream.readObject();
-        SortKey[] sortKeys = new SortKey[sequence.size()];
-        for (int i = 0; i < sequence.size(); ++i) {
-            ASN1Sequence item = (ASN1Sequence) sequence.getObjectAt(i);
-            String attributeName = decodeString(item.getObjectAt(0));
-            String matchingRuleId = null;
-            boolean ascendingOrder = true;
-            for (int j = 1; j < item.size(); ++j) {
-                DLTaggedObject tagged = (DLTaggedObject) item.getObjectAt(j);
-                if (tagged.getTagNo() == 0) {
-                    matchingRuleId = decodeString(tagged.getBaseObject());
-                } else if (tagged.getTagNo() == 1) {
-                    ascendingOrder = decodeBoolean(tagged.getBaseObject());
+        try (var inputStream = new ASN1InputStream(berBytes)) {
+            var sequence = (ASN1Sequence) inputStream.readObject();
+            var sortKeys = new SortKey[sequence.size()];
+            for (var i = 0; i < sequence.size(); ++i) {
+                var item = (ASN1Sequence) sequence.getObjectAt(i);
+                var attributeName = decodeString(item.getObjectAt(0));
+                String matchingRuleId = null;
+                var ascendingOrder = true;
+                for (var j = 1; j < item.size(); ++j) {
+                    var tagged = (DLTaggedObject) item.getObjectAt(j);
+                    if (tagged.getTagNo() == 0) {
+                        matchingRuleId = decodeString(tagged.getBaseObject());
+                    } else if (tagged.getTagNo() == 1) {
+                        ascendingOrder = decodeBoolean(tagged.getBaseObject());
+                    }
                 }
+                sortKeys[i] = new SortKey(attributeName, ascendingOrder, matchingRuleId);
             }
-            sortKeys[i] = new SortKey(attributeName, ascendingOrder, matchingRuleId);
+            return sortKeys;
         }
-        return sortKeys;
     }
 
     private static String decodeString(ASN1Encodable asn1) {
@@ -104,7 +105,7 @@ public class SortControl2 extends BasicControl {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SortControl2 that = (SortControl2) o;
+        var that = (SortControl2) o;
         return toString().equals(that.toString());
     }
 

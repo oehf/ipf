@@ -21,7 +21,7 @@ import org.apache.hc.client5.http.impl.auth.CredentialsProviderBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
 import org.apache.hc.core5.http.HttpHost;
 
 import java.util.function.Consumer;
@@ -69,8 +69,8 @@ public class HttpClient5Builder {
             .build();
     }
 
-    void setSSLSocketFactory(SSLConnectionSocketFactory sslSocketFactory) {
-        connectionManagerBuilder.setSSLSocketFactory(sslSocketFactory);
+    public void setSSLSocketFactory(TlsSocketStrategy tlsSocketStrategy) {
+        connectionManagerBuilder.setTlsSocketStrategy(tlsSocketStrategy);
     }
 
 }

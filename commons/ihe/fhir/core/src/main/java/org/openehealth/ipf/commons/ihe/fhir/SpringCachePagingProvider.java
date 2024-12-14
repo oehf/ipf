@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.SimpleBundleProvider;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -82,7 +83,7 @@ public class SpringCachePagingProvider implements IPagingProvider {
     }
 
     @Override
-    public IBundleProvider retrieveResultList(RequestDetails requestDetails, String id) {
+    public IBundleProvider retrieveResultList(RequestDetails requestDetails, @NonNull String id) {
         return distributed ?
                 deserialize(cache.get(id, List.class)) :
                 cache.get(id, IBundleProvider.class);

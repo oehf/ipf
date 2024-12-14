@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AsynchronousAuditMessageQueue.class);
+    private static final Logger log = LoggerFactory.getLogger(AsynchronousAuditMessageQueue.class);
 
     private ExecutorService executorService;
     private int shutdownTimeoutSeconds = 30;
@@ -106,11 +106,11 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
             executorService.shutdown();
             try {
                 if (!executorService.awaitTermination(shutdownTimeoutSeconds, TimeUnit.SECONDS)) {
-                    LOG.warn("Timeout occurred when flushing Audit events, some events might have been lost");
+                    log.warn("Timeout occurred when flushing Audit events, some events might have been lost");
                     executorService.shutdownNow();
                 }
             } catch (InterruptedException e) {
-                LOG.warn("Thread interrupt when flushing ATNA events, some events might have been lost", e);
+                log.warn("Thread interrupt when flushing ATNA events, some events might have been lost", e);
             }
         }
     }

@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.hl7.converter;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import jakarta.jms.*;
+import lombok.NonNull;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 
@@ -47,11 +48,9 @@ public class HL7MessageConverter implements MessageConverter {
      * @param o       incoming object, can be either String or {@link ca.uhn.hl7v2.model.Message}
      * @param session JMS session
      * @return a {@link jakarta.jms.TextMessage} instance containing the HL7 message as string
-     * @throws JMSException
-     * @throws MessageConversionException
      */
     @Override
-    public Message toMessage(Object o, Session session) throws JMSException, MessageConversionException {
+    public @NonNull Message toMessage(@NonNull Object o, @NonNull Session session) throws JMSException, MessageConversionException {
         if (o instanceof String) {
             return session.createTextMessage((String)o);
         }
@@ -70,11 +69,9 @@ public class HL7MessageConverter implements MessageConverter {
      *
      * @param message JMS {@link jakarta.jms.ObjectMessage} or {@link jakarta.jms.TextMessage}
      * @return a {@link ca.uhn.hl7v2.model.Message} built from the JMS message type
-     * @throws JMSException
-     * @throws MessageConversionException
      */
     @Override
-    public Object fromMessage(Message message) throws JMSException, MessageConversionException {
+    public Object fromMessage(@NonNull Message message) throws JMSException, MessageConversionException {
         if (message instanceof ObjectMessage) {
             var msg = (ca.uhn.hl7v2.model.Message) ((ObjectMessage) message).getObject();
             msg.setParser(hapiContext.getGenericParser());

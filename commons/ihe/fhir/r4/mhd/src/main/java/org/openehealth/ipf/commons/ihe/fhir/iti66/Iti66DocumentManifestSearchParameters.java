@@ -30,8 +30,7 @@ import org.hl7.fhir.r4.model.PractitionerRole;
 
 import java.util.*;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @since 3.6
@@ -92,23 +91,25 @@ public class Iti66DocumentManifestSearchParameters extends Iti66SearchParameters
     }
 
 
-    private static final Comparator<DocumentManifest> CP_CREATED = nullsLast(comparing(DocumentManifest::getCreated));
+    private static final Comparator<DocumentManifest> CP_CREATED = comparing(
+        DocumentManifest::getCreated, nullsLast(naturalOrder()));
 
-    private static final Comparator<DocumentManifest> CP_AUTHOR = nullsLast(comparing(documentManifest -> {
+    private static final Comparator<DocumentManifest> CP_AUTHOR = comparing(
+        Iti66DocumentManifestSearchParameters::getAuthorName, nullsLast(naturalOrder()));
+
+    private static String getAuthorName(DocumentManifest documentManifest) {
         if (!documentManifest.hasAuthor()) return null;
         var author = documentManifest.getAuthorFirstRep();
-        if (author.getResource() instanceof PractitionerRole) {
-            var practitionerRole = (PractitionerRole) author.getResource();
+        if (author.getResource() instanceof PractitionerRole practitionerRole) {
             if (!practitionerRole.hasPractitioner()) return null;
             author = practitionerRole.getPractitioner();
         }
         if (author.getResource() == null) return null;
-        if (author.getResource() instanceof Practitioner) {
-            var practitioner = (Practitioner) author.getResource();
+        if (author.getResource() instanceof Practitioner practitioner) {
             if (!practitioner.hasName()) return null;
             var name = practitioner.getNameFirstRep();
             return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
         }
         return null;
-    }));
+    }
 }

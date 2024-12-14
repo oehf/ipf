@@ -18,15 +18,14 @@ package org.openehealth.ipf.commons.ihe.hl7v3.pcc1
 import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.QueryExistingData
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
-
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.QueryExistingData
 /**
  * @author Dmytro Rud
  */
@@ -49,7 +48,8 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
         // patient IDs from request
         def patientIds = [] as Set<String>
         addPatientIds(qbp.parameterList.patientId.value, patientIds)
-        auditDataset.setPatientIds(patientIds.toArray(new String[patientIds.size()]) ?: null)
+        String[] patientIdArray = patientIds.toArray(new String[patientIds.size()])
+        auditDataset.setPatientIds(patientIdArray ?: null)
 
         // dump of the "queryByParameter" element
         auditDataset.requestPayload = render(qbp)
@@ -58,7 +58,7 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData, auditDataset.getPurposesOfUse())
+        new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData, auditDataset.getPurposesOfUse())
                 .setQueryParameters(auditDataset.messageId, QueryExistingData, auditDataset.requestPayload)
                 .addPatients(auditDataset.patientIds)
                 .getMessages()

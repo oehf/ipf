@@ -35,11 +35,11 @@ import java.util.Collection;
 public class ContextFacade {
 
     private static Registry instance;
-    private static final Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
+    private static final Logger log = LoggerFactory.getLogger(ContextFacade.class);
 
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))
-            LOG.info("Re-initializing the registry");
+            log.info("Re-initializing the registry");
         instance = registry;
     }
 

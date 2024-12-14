@@ -23,6 +23,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVERSAL_ID_TYPE_OID;
@@ -46,6 +47,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVE
 @XmlAccessorType()
 @XmlType(name = "AssigningAuthority", propOrder = {"universalId", "universalIdType"})
 public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
+    @Serial
     private static final long serialVersionUID = 5350057820250191032L;
 
     public AssigningAuthority() {

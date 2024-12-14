@@ -154,8 +154,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 .flatMap(Collection::stream)
                 .map(Bundle.BundleEntryComponent::getResource)
                 .forEach(resource -> {
-                    if (resource instanceof DocumentManifest) {
-                        var dm = (DocumentManifest) resource;
+                    if (resource instanceof DocumentManifest dm) {
                         for (var content : dm.getContent()) {
                             try {
                                 expectedReferenceFullUrls.add(content.getPReference().getReference());
@@ -163,8 +162,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             }
                         }
                         patientReferences.add(getSubjectReference(resource, r -> dm.getSubject()));
-                    } else if (resource instanceof DocumentReference) {
-                        var dr = (DocumentReference) resource;
+                    } else if (resource instanceof DocumentReference dr) {
                         for (var content : dr.getContent()) {
                             var url = content.getAttachment().getUrl();
                             if (!url.startsWith("http")) {

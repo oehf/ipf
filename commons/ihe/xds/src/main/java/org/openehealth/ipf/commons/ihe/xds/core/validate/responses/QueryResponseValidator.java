@@ -79,7 +79,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse<?>, 
     }
 
     private String checkForMultiplePatientIds(String patientId, String id, List<? extends EbXMLRegistryObject> entries) {
-        for (EbXMLRegistryObject entry : entries) {
+        for (var entry : entries) {
             var patientIdEntry = entry.getExternalIdentifierValue(id);
             patientId = patientId == null ? patientIdEntry : patientId;
             metaDataAssert(patientId.equals(patientIdEntry), RESULT_NOT_SINGLE_PATIENT);

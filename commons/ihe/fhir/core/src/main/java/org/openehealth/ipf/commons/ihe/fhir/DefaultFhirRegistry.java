@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultFhirRegistry implements FhirRegistry {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultFhirRegistry.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultFhirRegistry.class);
 
     private static final Map<String, FhirRegistry> registries = new ConcurrentHashMap<>();
 
@@ -67,7 +67,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
                     servlet.registerProvider(resourceProvider);
                 }
             } else {
-                LOG.info("Resource Provider {} was already registered. Ignored registration.", resourceProvider);
+                log.info("Resource Provider {} was already registered. Ignored registration.", resourceProvider);
             }
         }
     }
@@ -80,14 +80,14 @@ public class DefaultFhirRegistry implements FhirRegistry {
                     provider.unregisterProvider(resourceProvider);
                 }
             } else {
-                LOG.info("Resource Provider {} was not registered. Ignored deregistration.", resourceProvider);
+                log.info("Resource Provider {} was not registered. Ignored deregistration.", resourceProvider);
             }
         }
     }
 
     @Override
     public void register(RestfulServer servlet) {
-        LOG.debug("Registering FHIR servlet with name {}. Providers registered so far: {}",
+        log.debug("Registering FHIR servlet with name {}. Providers registered so far: {}",
                 servlet.getServletName(), resourceProviders.size());
         servlets.add(servlet);
         servlet.registerProviders(resourceProviders);
@@ -95,7 +95,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     @Override
     public void unregister(RestfulServer servlet) {
-        LOG.debug("Unregistering FHIR Servlet with name {} and {} connected providers",
+        log.debug("Unregistering FHIR Servlet with name {} and {} connected providers",
                 servlet.getServletName(), resourceProviders.size());
         servlets.remove(servlet);
         servlet.unregisterProviders(resourceProviders);

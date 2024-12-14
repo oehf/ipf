@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class BalpJwtClaimsExtractor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BalpJwtClaimsExtractor.class);
+    private static final Logger log = LoggerFactory.getLogger(BalpJwtClaimsExtractor.class);
 
     public Optional<String> extractId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
         return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getIdPath()));
@@ -82,31 +82,31 @@ public class BalpJwtClaimsExtractor {
     }
 
     private String extractStringClaimFromJWT(JWT jwt, String[] expressions){
-        Optional<ClaimSetPair> finalClaimForExpression = getFinalClaimSet(jwt, expressions);
+        var finalClaimForExpression = getFinalClaimSet(jwt, expressions);
         if (finalClaimForExpression.isPresent()) {
-            JWTClaimsSet claimsSet = finalClaimForExpression.get().jwtClaimsSet();
-            String expression = finalClaimForExpression.get().expression();
+            var claimsSet = finalClaimForExpression.get().jwtClaimsSet();
+            var expression = finalClaimForExpression.get().expression();
             try {
                 return claimsSet.getStringClaim(expression);
             } catch (ParseException pe) {
-                LOG.warn("Not string claims present for expression key '" + expression + "'", pe);
+                log.warn("Not string claims present for expression key '{}'", expression, pe);
             }
         }
         return null;
     }
 
     private Set<String> extractListClaimFromJWT(JWT jwt, String[] expressions){
-        Optional<ClaimSetPair> finalClaimForExpression = getFinalClaimSet(jwt, expressions);
+        var finalClaimForExpression = getFinalClaimSet(jwt, expressions);
         if (finalClaimForExpression.isPresent()) {
-            JWTClaimsSet claimsSet = finalClaimForExpression.get().jwtClaimsSet();
-            String expression = finalClaimForExpression.get().expression();
+            var claimsSet = finalClaimForExpression.get().jwtClaimsSet();
+            var expression = finalClaimForExpression.get().expression();
             try {
-                List<Object> values = claimsSet.getListClaim(expression);
+                var values = claimsSet.getListClaim(expression);
                 if (values != null && !values.isEmpty()) {
                     return values.stream().map(Objects::toString).collect(Collectors.toSet());
                 }
             } catch (ParseException pe) {
-                LOG.warn("Not list claims present for expression key '" + expression + "'", pe);
+                log.warn("Not list claims present for expression key '{}'", expression, pe);
             }
         }
         return null;
@@ -119,8 +119,8 @@ public class BalpJwtClaimsExtractor {
         for (var expression: expressions) {
             try {
                 if (expression.contains(":")) {
-                    JWTClaimsSet extracted = jwt.getJWTClaimsSet();
-                    List<String> structure = List.of(expression.split("\\:"));
+                    var extracted = jwt.getJWTClaimsSet();
+                    var structure = List.of(expression.split("\\:"));
                     Iterator<String> structureIterator = structure.listIterator();
                     String subExpression = null;
                     while (structureIterator.hasNext()) {
@@ -142,7 +142,7 @@ public class BalpJwtClaimsExtractor {
                     }
                 }
             } catch (ParseException pe) {
-                LOG.debug("Not claimset present for expression key: " + pe.getMessage());
+                log.debug("Not claimset present for expression key: {}", pe.getMessage());
             }
         }
         return Optional.empty();

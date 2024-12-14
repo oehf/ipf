@@ -53,7 +53,7 @@ public class SortResponseControl2 extends BasicControl {
     }
 
     private static byte[] encode(int resultCode, String failedAttributeName) throws IOException {
-        ASN1EncodableVector vector = new ASN1EncodableVector();
+        var vector = new ASN1EncodableVector();
         vector.add(new ASN1Enumerated(resultCode));
         if (failedAttributeName != null) {
             vector.add(new DERTaggedObject(false, 0, new DERUTF8String(failedAttributeName)));
@@ -74,7 +74,7 @@ public class SortResponseControl2 extends BasicControl {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SortResponseControl2 that = (SortResponseControl2) o;
+        var that = (SortResponseControl2) o;
         return (getResultCode() == that.getResultCode()) &&
                StringUtils.equals(getFailedAttributeName(), that.getFailedAttributeName());
     }

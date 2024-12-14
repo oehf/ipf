@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.audit.server.support.SyslogEventDICOMP
  */
 public class AuditRecordServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuditRecordServer.class);
+    private static final Logger log = LoggerFactory.getLogger(AuditRecordServer.class);
 
     private static Optional<SyslogServer<?>> getSyslogServer(
             String channel,
@@ -52,11 +52,11 @@ public class AuditRecordServer {
     public static void main(String... args) throws Exception {
 
         if (args.length < 2) {
-            LOG.error("Usage: AuditRecordServer <TLS-Port> <UDP-Port> (-1 for not launching channel, 0 for using a random port)");
+            log.error("Usage: AuditRecordServer <TLS-Port> <UDP-Port> (-1 for not launching channel, 0 for using a random port)");
         } else {
             final var tlsSyslogServer = getSyslogServer("TLS", TlsSyslogServer::new, Integer.parseInt(args[0]));
             final var udpSyslogServer = getSyslogServer("UDP", UdpSyslogServer::new, Integer.parseInt(args[1]));
-            LOG.info("Waiting for requests...");
+            log.info("Waiting for requests...");
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 tlsSyslogServer.ifPresent(SyslogServer::stop);
                 udpSyslogServer.ifPresent(SyslogServer::stop);

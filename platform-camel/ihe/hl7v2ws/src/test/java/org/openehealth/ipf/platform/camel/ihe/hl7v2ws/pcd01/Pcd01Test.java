@@ -72,7 +72,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCase() throws Exception {
+    public void testHappyCase() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -80,7 +80,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCaseInboundValidation() throws Exception {
+    public void testHappyCaseInboundValidation() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -88,7 +88,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testHappyCaseInboundAndOutboundValidation() throws Exception {
+    public void testHappyCaseInboundAndOutboundValidation() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
@@ -96,7 +96,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInacceptableRequestOnProducer() throws Exception {
+    public void testInacceptableRequestOnProducer() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         assertThrows(Hl7v2AcceptanceException.class, ()->
             requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"))
@@ -120,7 +120,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testApplicationError() throws Exception {
+    public void testApplicationError() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_throws_exception";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
@@ -130,7 +130,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundValidation() throws Exception {
+    public void testInboundValidation() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
@@ -139,7 +139,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundValidationError() throws Exception {
+    public void testInboundValidationError() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         //this must be a validation error
         var invalidMSG = PCD_01_SPEC_REQUEST.replace("|1.0.1|", "||");
@@ -151,7 +151,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testInboundAndOutboundValidationError() throws Exception {
+    public void testInboundAndOutboundValidationError() {
         var uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         //this must be a validation error
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);
@@ -161,7 +161,7 @@ public class Pcd01Test extends StandardTestContainer {
     }
 
     @Test
-    public void testDefaultAcceptedResponse() throws Exception {
+    public void testDefaultAcceptedResponse() {
         var uri = "pcd-pcd01://localhost:" + getPort()
                 + "/route_unacceptable_response";
         var response = requestBody(uri, PCD_01_SPEC_REQUEST);

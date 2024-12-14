@@ -23,6 +23,8 @@ import lombok.ToString;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +37,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class StoredQuery extends Query {
+    @Serial
     private static final long serialVersionUID = -8296981156625412818L;
 
     @Getter @Setter private String homeCommunityId;

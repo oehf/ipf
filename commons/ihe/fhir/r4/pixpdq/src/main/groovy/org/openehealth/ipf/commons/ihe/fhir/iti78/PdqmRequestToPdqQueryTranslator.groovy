@@ -201,7 +201,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String convertBirthDate(DateAndListParam birthDateParam) {
-        var birthDate = firstOrNull(searchDateList(birthDateParam))
+        def birthDate = firstOrNull(searchDateList(birthDateParam))
         return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
     }
 

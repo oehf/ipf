@@ -116,7 +116,7 @@ public class CommonOperations {
 		return value.matches(reg);
 	}
 	public Boolean matchesValueSet(String oidparam, String code, String codeSystem, String codeSystemName, String displayName){
-		return this.getValuesetChecker().matchesValueSet(oidparam, code, codeSystem, codeSystemName, displayName);
+		return getValuesetChecker().matchesValueSet(oidparam, code, codeSystem, codeSystemName, displayName);
 	}
 
 	public Boolean isXCN(String value){
@@ -170,7 +170,7 @@ public class CommonOperations {
 			String oi = mm.group(15);
 			String aa = mm.group(9);
 			String aat = mm.group(10);
-			if ((oi != null) && (!"".equals(oi)) && !this.isOID(oi)){
+			if ((oi != null) && (!oi.isEmpty()) && !this.isOID(oi)){
 				res = res && (!"".equals(aa)) && (!"".equals(aat));
 			}
 		}
@@ -186,11 +186,11 @@ public class CommonOperations {
 	}
 
 	public Boolean matchesValueSetWithDisplayName(String oidparam, String code, String codeSystem, String codeSystemName, String displayName){
-		return this.getValuesetChecker().matchesValueSetWithDisplayName(oidparam, code, codeSystem, codeSystemName, displayName);
+		return getValuesetChecker().matchesValueSetWithDisplayName(oidparam, code, codeSystem, codeSystemName, displayName);
 	}
 	
 	public Boolean matchesCodeToValueSet(String oidparam, String code){
-		return this.getValuesetChecker().matchesCodeToValueSet(oidparam, code);
+		return getValuesetChecker().matchesCodeToValueSet(oidparam, code);
 	}
 
 }

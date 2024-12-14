@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Kingsley Nwaigbo
  * 
  */
-public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
+public class QAPcd01DataTypesTest extends AbstractPCD01ValidatorTest {
 
     // ################ Data types ###############################
 
@@ -136,7 +136,7 @@ public class QA_Pcd01DataTypesTest extends AbstractPCD01ValidatorTest {
     }
 
     @Test
-    public void testMissingXTN2() throws HL7Exception {
+    public void testMissingXTN2() {
         assertThrows(HL7Exception.class, () -> validate(maxMsgReplace("^PRN^PH^^^^123456",
                 "^^PH^wan@continua.com^001^760^123456^02^Any text^GA")));
     }

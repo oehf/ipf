@@ -56,7 +56,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Base64;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.audit.XMLNames.*;
 
@@ -202,7 +201,7 @@ public class DICOMAuditParser implements AuditParser {
         container.addAll(
                 element.getChildren(name).stream()
                         .map(mapper)
-                        .collect(Collectors.toList()));
+                        .toList());
     }
 
     private EventId eventId(Element codedValueElement) {

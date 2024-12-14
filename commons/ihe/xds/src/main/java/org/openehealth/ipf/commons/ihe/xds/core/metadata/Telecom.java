@@ -20,6 +20,8 @@ import ca.uhn.hl7v2.model.v25.datatype.XTN;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -37,6 +39,7 @@ import java.util.Objects;
 @XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode",
         "areaCityCode", "localNumber", "extension", "unformattedPhoneNumber"})
 public class Telecom extends Hl7v2Based<XTN> {
+    @Serial
     private static final long serialVersionUID = 526836203236101658L;
 
     public Telecom() {

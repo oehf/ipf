@@ -50,7 +50,7 @@ public class Iti78SecureTestRouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .toF("pdqm-iti78:localhost:%d?sslContextParameters=#myContext", FhirTestContainer.DEMO_APP_PORT);

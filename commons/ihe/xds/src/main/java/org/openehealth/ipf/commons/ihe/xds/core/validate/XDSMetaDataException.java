@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
  * @author Jens Riemschneider
  */
 public class XDSMetaDataException extends ValidationException {
-    private static final long serialVersionUID = -394009702858390335L;
 
     private final ValidationMessage validationMessage;
 

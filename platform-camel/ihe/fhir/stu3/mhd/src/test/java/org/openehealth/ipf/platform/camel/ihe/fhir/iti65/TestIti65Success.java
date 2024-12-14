@@ -25,8 +25,6 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 
-import jakarta.servlet.ServletException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -37,7 +35,7 @@ public class TestIti65Success extends AbstractTestIti65 {
     private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
@@ -100,6 +98,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
     }
 
+    @Test
     @Disabled
     public void testSendEndpointMhd() throws Exception {
         var result = producerTemplate.requestBody("direct:input", provideAndRegister(), MethodOutcome.class);

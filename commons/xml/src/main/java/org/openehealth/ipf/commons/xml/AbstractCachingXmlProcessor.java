@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -86,8 +87,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
             return (String) params[0];
         } else if (params[0] instanceof Map) {
             return (String) ((Map<?, ?>) params[0]).get(RESOURCE_LOCATION);
-        } else if (params[0] instanceof SchematronProfile) {
-            var p = (SchematronProfile) params[0];
+        } else if (params[0] instanceof SchematronProfile p) {
             return p.getRules();
         }
         throw new IllegalStateException("Cannot extract resource location");
@@ -116,8 +116,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
     protected Map<String, Object> resourceParameters(Object... params) {
         if (params[0] instanceof Map) {
             return (Map<String, Object>) params[0];
-        } else if (params[0] instanceof SchematronProfile) {
-            var p = (SchematronProfile) params[0];
+        } else if (params[0] instanceof SchematronProfile p) {
             return p.getParameters();
         } else if (params.length > 1 && params[1] instanceof Map) {
             return (Map<String, Object>) params[1];
@@ -135,7 +134,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
      *
      * @param params validator/transmogrifier parameters.
      * @return resource instance.
-     * @throws Exception
+     * @throws Exception exception
      */
     protected T resource(final Object... params) throws Exception {
         var key = resourceCacheKey(params);
@@ -184,8 +183,10 @@ abstract public class AbstractCachingXmlProcessor<T> {
                     if (url == null) throw new IOException("Location not found");
                 }
             }
-            return new StreamSource(url.openStream(), url.toExternalForm());
-        } catch (IOException e) {
+            return new StreamSource(
+                Objects.requireNonNull(url).openStream(),
+                url.toExternalForm());
+        } catch (Exception e) {
             throw new IllegalArgumentException("The resource " + location + " is not valid", e);
         }
     }

@@ -27,7 +27,7 @@ import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidato
 public class ChPpq4TestRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("ch-ppq4:stub")
                 .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, constant(true))
                 .setHeader(VALIDATION_MODE, constant(MODEL))

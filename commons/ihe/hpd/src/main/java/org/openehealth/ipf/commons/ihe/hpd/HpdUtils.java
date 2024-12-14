@@ -34,10 +34,10 @@ public class HpdUtils {
     public static final ObjectFactory DSMLV2_OBJECT_FACTORY = new ObjectFactory();
 
     public static JAXBElement<ErrorResponse> errorResponse(Exception exception, String requestId) {
-        ErrorResponse error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
+        var error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
         error.setMessage(exception.getMessage());
         error.setRequestID(requestId);
-        ErrorResponse.ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorResponse.ErrorType.OTHER;
+        var errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorResponse.ErrorType.OTHER;
         error.setType(errorType);
         return DSMLV2_OBJECT_FACTORY.createBatchResponseErrorResponse(error);
     }

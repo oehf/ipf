@@ -95,8 +95,7 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
             return;
         }
 
-        if (header instanceof SoapHeader) {
-            var soapHeader = (SoapHeader) header;
+        if (header instanceof SoapHeader soapHeader) {
             soapHeader.setMustUnderstand(true);
             return;
         }

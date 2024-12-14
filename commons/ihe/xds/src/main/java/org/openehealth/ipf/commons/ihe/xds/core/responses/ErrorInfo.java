@@ -21,6 +21,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -35,6 +37,7 @@ import lombok.ToString;
 @XmlType(name = "ErrorInfo", propOrder = {"errorCode", "codeContext", "severity", "location", "customErrorCode"})
 @ToString(doNotUseGetters = true)
 public class ErrorInfo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 7615868122051414551L;
 
     private ErrorCode errorCode;

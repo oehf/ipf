@@ -40,7 +40,7 @@ import javax.net.ssl.SSLContext;
  */
 class CustomServerInitializerFactory extends ServerInitializerFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomServerInitializerFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomServerInitializerFactory.class);
 
     private NettyConsumer consumer;
     private SSLContext sslContext;
@@ -56,7 +56,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
         try {
             this.sslContext = createSSLContext(consumer.getContext(), consumer.getConfiguration());
             if (sslContext != null) {
-                LOG.info("Created SslContext {}", sslContext);
+                log.info("Created SslContext {}", sslContext);
             }
         } catch (Exception e) {
             throw RuntimeCamelException.wrapRuntimeCamelException(e);
@@ -70,7 +70,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
 
         var sslHandler = configureServerSSLOnDemand();
         if (sslHandler != null) {
-            LOG.debug("Server SSL handler configured and added as an interceptor against the ChannelPipeline: {}", sslHandler);
+            log.debug("Server SSL handler configured and added as an interceptor against the ChannelPipeline: {}", sslHandler);
             addToPipeline("ssl", channelPipeline, sslHandler);
         }
 
@@ -103,7 +103,7 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             addToPipeline("handler", channelPipeline, new ServerChannelHandler(consumer));
 
         }
-        LOG.trace("Created ChannelPipeline: {}", channelPipeline);
+        log.trace("Created ChannelPipeline: {}", channelPipeline);
     }
 
     private void addToPipeline(String name, ChannelPipeline pipeline, ChannelHandler handler) {
@@ -127,13 +127,13 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             answer = configuration.getSslContextParameters().createSSLContext(camelContext);
         } else {
             if (configuration.getKeyStoreFile() == null && configuration.getKeyStoreResource() == null) {
-                LOG.debug("keystorefile is null");
+                log.debug("keystore file is null");
             }
             if (configuration.getTrustStoreFile() == null && configuration.getTrustStoreResource() == null) {
-                LOG.debug("truststorefile is null");
+                log.debug("truststore file is null");
             }
             if (configuration.getPassphrase() == null) {
-                LOG.debug("passphrase is null");
+                log.debug("passphrase is null");
             }
 
             SSLEngineFactory sslEngineFactory;

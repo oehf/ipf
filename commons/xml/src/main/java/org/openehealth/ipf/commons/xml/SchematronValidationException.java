@@ -24,7 +24,6 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public class SchematronValidationException extends ValidationException {
-    private static final long serialVersionUID = 5786460480736649392L;
 
     private final SchematronOutput svrl;
 

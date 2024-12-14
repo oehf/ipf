@@ -41,7 +41,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmissionProtocol {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UDPSyslogSenderImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UDPSyslogSenderImpl.class);
     private static final int MAX_DATAGRAM_PACKET_SIZE = 65479;
 
     public UDPSyslogSenderImpl() {
@@ -64,7 +64,7 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
             try (var socket = new DatagramSocket()) {
                 var msgBytes = getTransportPayload(auditMetadataProvider, auditMessage);
                 var inetAddress = auditContext.getAuditRepositoryAddress();
-                LOG.debug("Auditing {} bytes to {}:{} ({})",
+                log.debug("Auditing {} bytes to {}:{} ({})",
                         msgBytes.length,
                         auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort(),
@@ -75,8 +75,8 @@ public class UDPSyslogSenderImpl extends RFC5424Protocol implements AuditTransmi
                         inetAddress,
                         auditContext.getAuditRepositoryPort());
                 socket.send(packet);
-                if (LOG.isTraceEnabled()) {
-                    LOG.trace(new String(msgBytes, StandardCharsets.UTF_8));
+                if (log.isTraceEnabled()) {
+                    log.trace(new String(msgBytes, StandardCharsets.UTF_8));
                 }
             }
         }

@@ -330,13 +330,13 @@ class MessageUtils {
         if (!c) {
             throw new HL7Exception("Can't instantiate Type $name")
         }
-        Composite composite = c.newInstance([message]as Object[])
+        Composite composite = c.newInstance([message]as Object[]) as Composite
         map?.each { k, v ->
             Type type = composite."$k"
             if ((type instanceof Primitive) && (v instanceof String)) {
                 type.setValue(v)
             } else {
-                DeepCopy.copy(v, type)
+                DeepCopy.copy(v as Type, type)
             }
         }
         composite

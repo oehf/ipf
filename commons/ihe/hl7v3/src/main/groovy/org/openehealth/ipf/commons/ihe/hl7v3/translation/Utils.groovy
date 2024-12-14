@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 class Utils {
 
     public static final String HL7V2_NULL = '""'
-    private static final Pattern OID_PATTERN = Pattern.compile("[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+");
+    private static final Pattern OID_PATTERN = Pattern.compile("[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+")
 
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.

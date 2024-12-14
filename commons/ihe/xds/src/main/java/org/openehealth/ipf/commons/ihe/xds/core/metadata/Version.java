@@ -21,6 +21,8 @@ import lombok.ToString;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,6 +30,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class Version implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4876325465142352011L;
 
     protected String versionName;

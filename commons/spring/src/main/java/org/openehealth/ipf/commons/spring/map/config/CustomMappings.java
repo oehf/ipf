@@ -53,7 +53,7 @@ import java.util.Collections;
  */
 public class CustomMappings implements MappingResourceHolder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomMappings.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomMappings.class);
 
     private Collection<Resource> mappingResources = new ArrayList<>();
 
@@ -67,7 +67,7 @@ public class CustomMappings implements MappingResourceHolder {
         if (mappingResource.exists() && mappingResource.isReadable()) {
             mappingResources.add(mappingResource);
         } else {
-            LOG.warn("Could not read mapping script {}", mappingResource.getFilename());
+            log.warn("Could not read mapping script {}", mappingResource.getFilename());
         }
     }
 

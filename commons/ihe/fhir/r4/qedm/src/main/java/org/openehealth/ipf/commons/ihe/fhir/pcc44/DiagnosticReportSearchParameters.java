@@ -34,8 +34,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -69,13 +68,15 @@ public class DiagnosticReportSearchParameters extends Pcc44CommonSearchParameter
 
     @Override
     protected Optional<Comparator<DiagnosticReport>> comparatorFor(String paramName) {
-        if (DiagnosticReport.SP_DATE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_EFFECTIVE));
-        }
-        return Optional.empty();
+        return DiagnosticReport.SP_DATE.equals(paramName) ?
+            Optional.of(CP_EFFECTIVE) :
+            Optional.empty();
     }
 
-    private static final Comparator<DiagnosticReport> CP_EFFECTIVE = nullsLast(comparing(diagnosticReport -> {
+    private static final Comparator<DiagnosticReport> CP_EFFECTIVE = comparing(
+        DiagnosticReportSearchParameters::getEffectiveStartTime, nullsLast(naturalOrder()));
+
+    private static String getEffectiveStartTime(DiagnosticReport diagnosticReport) {
         if (!diagnosticReport.hasEffective()) return null;
         var effective = diagnosticReport.getEffective();
         if (effective instanceof DateTimeType) {
@@ -83,5 +84,5 @@ public class DiagnosticReportSearchParameters extends Pcc44CommonSearchParameter
         } else {
             return diagnosticReport.getEffectivePeriod().getStartElement().getValueAsString();
         }
-    }));
+    }
 }

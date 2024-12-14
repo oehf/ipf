@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import lombok.NonNull;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -27,9 +28,6 @@ import org.springframework.context.event.ContextClosedEvent;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- *
- */
 public class ApplicationStopEventListener implements ApplicationListener<ContextClosedEvent> {
 
     private final AuditContext auditContext;
@@ -42,7 +40,7 @@ public class ApplicationStopEventListener implements ApplicationListener<Context
     }
 
     @Override
-    public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
+    public void onApplicationEvent(@NonNull ContextClosedEvent contextClosedEvent) {
         if (contextClosedEvent.getApplicationContext() == applicationContext) {
             auditContext.audit(
                     new ApplicationActivityBuilder.ApplicationStop(EventOutcomeIndicator.Success)

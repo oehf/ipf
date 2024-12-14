@@ -26,7 +26,7 @@ import org.apache.camel.Processor;
  */
 public class ExceptionProcessor  implements Processor {
 
-    private Map<String, Exception> exceptions;
+    private final Map<String, Exception> exceptions;
 
     public ExceptionProcessor() {
         this.exceptions = new HashMap<>();

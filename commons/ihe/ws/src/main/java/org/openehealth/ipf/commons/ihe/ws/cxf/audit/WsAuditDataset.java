@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  */
 public class WsAuditDataset extends AuditDataset {
 
+    @Serial
     private static final long serialVersionUID = 7940196804508126576L;
 
     /**

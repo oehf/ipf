@@ -34,6 +34,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ import java.util.UUID;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
+    @Serial
     private static final long serialVersionUID = -1193012076778493996L;
     
     @Getter @Setter private AvailabilityStatus availabilityStatus;

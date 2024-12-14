@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DICOMAuditParserTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DICOMAuditParser.class);
+    private static final Logger log = LoggerFactory.getLogger(DICOMAuditParserTest.class);
 
     @Test
     public void roundtrip() throws IOException, URISyntaxException {
@@ -28,7 +28,7 @@ public class DICOMAuditParserTest {
         var parser = new DICOMAuditParser();
         var files = getAllFilesFromResource("audit");
         for (var file : files) {
-            LOG.debug("Parsing {}", file);
+            log.debug("Parsing {}", file);
             var read = Files.readString(file, StandardCharsets.UTF_8);
             var auditMessage = parser.parse(read, true);
             var written = Current.INSTANCE.marshal(auditMessage, true);
@@ -46,10 +46,9 @@ public class DICOMAuditParserTest {
     private List<Path> getAllFilesFromResource(String folder) throws URISyntaxException, IOException {
         var classLoader = getClass().getClassLoader();
         var resource = classLoader.getResource(folder);
-        var collect = Files.walk(Paths.get(resource.toURI()))
+
+        return Files.walk(Paths.get(resource.toURI()))
                 .filter(Files::isRegularFile)
                 .collect(Collectors.toList());
-
-        return collect;
     }
 }

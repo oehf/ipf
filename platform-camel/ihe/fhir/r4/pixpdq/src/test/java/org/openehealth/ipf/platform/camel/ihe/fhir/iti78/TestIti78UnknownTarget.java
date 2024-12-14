@@ -22,8 +22,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.ServletException;
-
 /**
  *
  */
@@ -32,7 +30,7 @@ public class TestIti78UnknownTarget extends AbstractTestIti78 {
     private static final String CONTEXT_DESCRIPTOR = "iti-78-unknown-target.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR, false);
         startClient();
     }

@@ -34,7 +34,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
     
 
     @Override
@@ -60,7 +60,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
         
         // when MSH-14 is already present -- send the message unmodified and return
         if ((mshFields.size() >= 14) && isNotEmpty(mshFields.get(13))) {
-            LOG.warn("MSH-14 is not empty, cannot perform automatic message fragmentation");
+            log.warn("MSH-14 is not empty, cannot perform automatic message fragmentation");
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -70,7 +70,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
         if (segments.get(segments.size() - 1).startsWith("DSC")) {
             var dscFields = splitString(segments.get(segments.size() - 1), request.charAt(3));
             if ((dscFields.size() >= 2) && isNotEmpty(dscFields.get(1))) {
-                LOG.warn("DSC-1 is not empty, cannot perform automatic message fragmentation");
+                log.warn("DSC-1 is not empty, cannot perform automatic message fragmentation");
                 getWrappedProcessor().process(exchange);
                 return;
             }
@@ -111,7 +111,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
                   .append(fieldSeparator)
                   .append("F\r");
 
-                LOG.debug("Send next fragment, continuation pointer = {}", continuationPointer);
+                log.debug("Send next fragment, continuation pointer = {}", continuationPointer);
             }
             
             // send the generated fragment to the receiver
@@ -136,7 +136,7 @@ public class ProducerRequestFragmenterInterceptor extends InterceptorSupport {
                     }
                 } else {
                     // NAKs will go to the route
-                    LOG.debug("Got NAK response for fragment with control ID {}", controlId); 
+                    log.debug("Got NAK response for fragment with control ID {}", controlId); 
                     break;
                 }
     

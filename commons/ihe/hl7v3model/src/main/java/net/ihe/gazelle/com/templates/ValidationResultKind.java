@@ -4,9 +4,9 @@ public enum ValidationResultKind {
 	
 	ERROR("Error"), REPORT("Report"), WARNING("Warning"), MISSING("Missing");
 	
-	private String kind;
+	private final String kind;
 	
-	private ValidationResultKind(String kind) {
+	ValidationResultKind(String kind) {
 		this.kind = kind;
 	}
 	

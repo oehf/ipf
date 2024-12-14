@@ -23,7 +23,7 @@ import org.apache.camel.Processor;
  */
 public class ConstantTransformer implements Processor {
 
-    private Object constant;
+    private final Object constant;
     
     public ConstantTransformer(Object constant) {
         this.constant = constant;

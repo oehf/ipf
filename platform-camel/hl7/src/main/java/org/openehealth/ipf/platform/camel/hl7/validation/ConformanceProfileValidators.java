@@ -126,9 +126,9 @@ public final class ConformanceProfileValidators {
      * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly
      * using
      *
-     * @param exchange
+     * @param exchange Camel exchange
      * @return HAPI message
-     * @throws HL7Exception
+     * @throws HL7Exception HL7 exception
      */
     private static Message bodyMessage(Exchange exchange) throws HL7Exception {
         var body = exchange.getIn().getBody();

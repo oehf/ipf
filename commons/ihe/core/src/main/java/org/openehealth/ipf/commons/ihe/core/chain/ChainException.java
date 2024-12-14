@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.core.chain;
  * @author Dmytro Rud
  */
 public class ChainException extends RuntimeException {
-    private static final long serialVersionUID = 8260494759500343474L;
 
     public ChainException(String message) {
         super(message);

@@ -37,11 +37,7 @@ public final class FhirCamelTranslators {
     }
 
     /**
-     * Returns a processor for translating FHIR messages to Hl7v2
-     * using the given translator instance. 
-     */
-    /**
-     * Returns a processor for translating FHIR messages to XDS
+     * Returns a processor for translating FHIR messages
      * using the given translator instance.
      */
     public static Processor translateFhir(final FhirTranslator<?> translator) {

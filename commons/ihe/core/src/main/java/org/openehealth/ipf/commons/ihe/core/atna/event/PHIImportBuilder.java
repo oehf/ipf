@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  * @author Christian Ohr
  * @since 3.5
  */
-public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMessageBuilder<T, DataImportBuilder> {
+public abstract class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMessageBuilder<T, DataImportBuilder> {
 
 
     public PHIImportBuilder(AuditContext auditContext,
@@ -119,8 +119,4 @@ public class PHIImportBuilder<T extends PHIImportBuilder<T>> extends IHEAuditMes
         return self();
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-    }
 }

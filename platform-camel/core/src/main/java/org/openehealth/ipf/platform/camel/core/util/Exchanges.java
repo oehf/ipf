@@ -106,7 +106,6 @@ public class Exchanges {
      * @param source source exchange.
      * @param target target exchange.
      *
-     * @see #resultMessage(Exchange)
      */
     public static void copyExchange(Exchange source, Exchange target) {
         if (source == target) {

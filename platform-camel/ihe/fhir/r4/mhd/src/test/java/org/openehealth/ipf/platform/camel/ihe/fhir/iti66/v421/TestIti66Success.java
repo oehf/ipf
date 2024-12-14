@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66.v421;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.DocumentManifest;
 import org.hl7.fhir.r4.model.ListResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.junit.jupiter.api.BeforeAll;

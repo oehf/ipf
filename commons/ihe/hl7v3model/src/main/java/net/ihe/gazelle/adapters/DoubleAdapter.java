@@ -12,10 +12,9 @@ public class DoubleAdapter extends XmlAdapter<String, Double>{
 	 *
 	 * @param v the double to be marshalled
 	 * @return the marshaling
-	 * @throws Exception the exception thrown if problem during marshalling
-	 */
+     */
 	@Override
-	public String marshal(final Double v) throws Exception {
+	public String marshal(final Double v) {
 		if ((v != null) && !Double.isInfinite(v) && !Double.isNaN(v)) {
 			return String.valueOf(v.doubleValue());
 		}
@@ -27,10 +26,9 @@ public class DoubleAdapter extends XmlAdapter<String, Double>{
 	 *
 	 * @param v the String to be unmarshalled.
 	 * @return the double, result of unmarshalling.
-	 * @throws Exception thrown if problem of unmarshalling.
-	 */
+     */
 	@Override
-	public Double unmarshal(final String v) throws Exception {
+	public Double unmarshal(final String v) {
 		if ((v == null) || (v.isEmpty())){
 			return null;
 		}

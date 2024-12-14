@@ -39,7 +39,7 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final boolean autoCancel;
     @Getter private final boolean copyOriginalMessage;
 
-    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration, ? extends MllpAuditDataset> component, String uri, Map<String, Object> parameters) {
         super(component, uri, parameters);
 
         copyOriginalMessage = component.getAndRemoveParameter(

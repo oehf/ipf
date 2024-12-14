@@ -23,6 +23,8 @@ import lombok.ToString;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -40,6 +42,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class Recipient implements Serializable {
+    @Serial
     private static final long serialVersionUID = -8192511869759795939L;
 
     @Getter @Setter private Person person;

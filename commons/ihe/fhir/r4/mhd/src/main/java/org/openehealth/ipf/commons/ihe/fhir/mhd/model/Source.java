@@ -19,7 +19,6 @@ import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.util.ElementUtil;
-import lombok.Getter;
 import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.Reference;
 
@@ -66,9 +65,8 @@ public class Source extends Reference {
     public boolean equalsDeep(Base other_) {
         if (!super.equalsDeep(other_))
             return false;
-        if (!(other_ instanceof Source))
+        if (!(other_ instanceof Source o))
             return false;
-        Source o = (Source) other_;
         return compareDeep(authorOrg, o.authorOrg, true);
     }
 

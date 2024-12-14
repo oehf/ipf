@@ -16,9 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.LDAPResult;
@@ -41,14 +39,14 @@ public class JaxbElementListSerializer extends StdSerializer<List> {
     @Override
     public void serialize(List list, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartArray(list);
-        for (Object object : list) {
-            JAXBElement<?> jaxbElement = (JAXBElement<?>) object;
-            Object value = jaxbElement.getValue();
+        for (var object : list) {
+            var jaxbElement = (JAXBElement<?>) object;
+            var value = jaxbElement.getValue();
             if (value instanceof LDAPResult) {
                 ((LDAPResult) value).setElementName(jaxbElement.getName().getLocalPart());
             }
-            JsonSerializer<Object> valueSerializer = provider.findValueSerializer(value.getClass());
-            TypeSerializer typeSerializer = provider.findTypeSerializer(SimpleType.constructUnsafe(value.getClass()));
+            var valueSerializer = provider.findValueSerializer(value.getClass());
+            var typeSerializer = provider.findTypeSerializer(SimpleType.constructUnsafe(value.getClass()));
             valueSerializer.serializeWithType(value, gen, provider, typeSerializer);
         }
         gen.writeEndArray();
